@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美股深度分析（SEC財報 + AI分析）</title>
+<script>
+// 錯誤顯示器：任何 JS 錯誤(含瀏覽器不支援新語法)直接在畫面頂端跳紅字
+window.onerror = function(msg, src, line, col, err){
+  var b = document.getElementById('jsErrBar') || (function(){
+    var d=document.createElement('div'); d.id='jsErrBar';
+    d.style.cssText='position:fixed;top:0;left:0;right:0;z-index:9999;background:#f85149;color:#fff;padding:10px 14px;font:13px sans-serif;line-height:1.5;white-space:pre-wrap';
+    if(document.body) document.body.appendChild(d); else window.addEventListener('DOMContentLoaded',function(){document.body.appendChild(d)});
+    return d;
+  })();
+  b.textContent = '⚠️ 網頁程式錯誤（請把這行告訴客服）：\n' + msg + '  [行 ' + line + ']';
+  return false;
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#0d1117; --bg2:#161b22; --bg3:#21262d; --border:#30363d;
+  --text:#e6edf3; --text2:#8b949e; --blue:#58a6ff; --green:#3fb950;
+  --red:#f85149; --yellow:#d29922; --purple:#bc8cff; --orange:#ffa657;
+}
+body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; min-height:100vh; }
+.header { background:var(--bg2); border-bottom:1px solid var(--border); padding:14px 20px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:100; flex-wrap:wrap; }
+.logo { font-size:18px; font-weight:700; color:var(--blue); white-space:nowrap; }
+.search-wrap { flex:1; min-width:200px; max-width:460px; position:relative; }
+.search-wrap input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:9px 14px 9px 36px; color:var(--text); font-size:14px; outline:none; }
+.search-wrap input:focus { border-color:var(--blue); }
+.search-icon { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--text2); }
+.search-btn { background:var(--blue); color:#0d1117; border:none; border-radius:8px; padding:9px 18px; font-weight:600; cursor:pointer; font-size:14px; white-space:nowrap; }
+.settings-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); border-radius:8px; padding:9px 12px; cursor:pointer; font-size:15px; }
+
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:200; align-items:center; justify-content:center; }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; width:500px; max-width:95vw; }
+.modal h2 { font-size:17px; margin-bottom:6px; }
+.modal .sub { font-size:12px; color:var(--text2); margin-bottom:8px; line-height:1.6; }
+.steps { background:var(--bg3); border-radius:8px; padding:12px 14px; font-size:12px; line-height:1.9; color:var(--text2); margin-top:8px; }
+.steps a { color:var(--blue); } .steps b { color:var(--text); }
+.modal label { display:block; font-size:12px; color:var(--text2); margin:14px 0 5px; }
+.modal input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:7px; padding:9px 12px; color:var(--text); font-size:13px; outline:none; font-family:monospace; }
+.modal input:focus { border-color:var(--blue); }
+.modal-btns { display:flex; gap:8px; margin-top:20px; justify-content:flex-end; }
+.btn-sec { background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:7px; padding:9px 16px; cursor:pointer; font-size:13px; }
+.btn-pri { background:var(--blue); color:#0d1117; border:none; border-radius:7px; padding:9px 16px; font-weight:600; cursor:pointer; font-size:13px; }
+
+.main { max-width:1180px; margin:0 auto; padding:28px 20px; }
+.welcome { text-align:center; padding:54px 0; }
+.welcome h1 { font-size:30px; font-weight:700; margin-bottom:10px; }
+.welcome p { color:var(--text2); font-size:15px; }
+.free-tag { display:inline-block; background:rgba(63,185,80,.15); color:var(--green); border:1px solid rgba(63,185,80,.3); border-radius:14px; padding:4px 12px; font-size:12px; margin-top:12px; }
+.chips { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:18px; }
+.chip { background:var(--bg3); border:1px solid var(--border); border-radius:18px; padding:6px 14px; font-size:13px; cursor:pointer; }
+.chip:hover { border-color:var(--blue); color:var(--blue); }
+
+.log-panel { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:16px 18px; margin-bottom:20px; display:none; }
+.log-panel h3 { font-size:13px; color:var(--text2); margin-bottom:10px; }
+.log-item { display:flex; align-items:center; gap:10px; padding:5px 0; font-size:13px; border-bottom:1px solid rgba(48,54,61,.4); }
+.log-item:last-child { border-bottom:none; }
+.log-spin { width:14px; height:14px; border:2px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin .7s linear infinite; flex-shrink:0; }
+.log-ok { color:var(--green); font-size:15px; flex-shrink:0; }
+.log-err { color:var(--red); font-size:15px; flex-shrink:0; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+.results { display:none; }
+.co-head { display:flex; align-items:flex-start; gap:16px; margin-bottom:20px; padding:20px; background:var(--bg2); border:1px solid var(--border); border-radius:12px; flex-wrap:wrap; }
+.co-logo { width:56px; height:56px; border-radius:10px; background:var(--bg3); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; color:var(--blue); flex-shrink:0; }
+.co-info { flex:1; min-width:160px; }
+.co-info h1 { font-size:22px; font-weight:700; }
+.co-ticker { font-size:13px; color:var(--text2); margin-top:2px; }
+.lynch-badge { display:inline-block; padding:4px 10px; border-radius:6px; font-size:12px; font-weight:600; margin-top:8px; background:var(--bg3); color:var(--text2); }
+.co-price { text-align:right; margin-left:auto; }
+.price-val { font-size:26px; font-weight:700; }
+.price-chg { font-size:13px; margin-top:3px; }
+.up { color:var(--green); } .down { color:var(--red); }
+
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+@media(max-width:720px) { .g2 { grid-template-columns:1fr; } }
+.card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:18px; }
+.card.mb { margin-bottom:16px; }
+.ct { font-size:12px; font-weight:600; color:var(--text2); text-transform:uppercase; letter-spacing:.5px; margin-bottom:14px; }
+
+.dt { width:100%; border-collapse:collapse; font-size:13px; }
+.dt th { text-align:left; padding:7px 10px; color:var(--text2); font-weight:500; border-bottom:1px solid var(--border); white-space:nowrap; }
+.dt td { padding:7px 10px; border-bottom:1px solid rgba(48,54,61,.4); }
+.dt tr:last-child td { border-bottom:none; }
+.g { color:var(--green); } .r { color:var(--red); } .y { color:var(--yellow); }
+
+.chart-wrap { position:relative; height:250px; }
+.vr { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(48,54,61,.4); font-size:13px; }
+.vr:last-child { border-bottom:none; }
+.vl { color:var(--text2); } .vn { font-weight:600; }
+.ai { font-size:13.5px; line-height:1.85; color:var(--text); }
+.ai strong { color:var(--blue); }
+.ai-loading { display:flex; align-items:center; gap:8px; color:var(--text2); font-size:13px; }
+.ai-dot { width:6px; height:6px; border-radius:50%; background:var(--blue); animation:pulse 1.2s infinite; }
+.ai-dot:nth-child(2){animation-delay:.2s} .ai-dot:nth-child(3){animation-delay:.4s}
+@keyframes pulse { 0%,80%,100%{opacity:.2} 40%{opacity:1} }
+.verdict { background:linear-gradient(135deg,rgba(63,185,80,.1),rgba(88,166,255,.1)); border:1px solid rgba(88,166,255,.3); }
+.vscore { font-size:30px; font-weight:800; margin:6px 0 10px; }
+.s-buy{color:var(--green)} .s-hold{color:var(--yellow)} .s-sell{color:var(--red)}
+.err-box { background:rgba(248,81,73,.1); border:1px solid rgba(248,81,73,.3); border-radius:9px; padding:18px; color:var(--red); font-size:13px; line-height:1.7; }
+.note { font-size:11px; color:var(--text2); margin-top:6px; line-height:1.5; }
+.retry-btn { background:var(--blue); color:#0d1117; border:none; border-radius:7px; padding:8px 16px; font-weight:600; cursor:pointer; font-size:13px; margin-top:12px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">📊 美股深度分析</div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="代碼或公司名，例如 AAPL / 台積電 / 諾和諾德 / Apple" onkeydown="if(event.key==='Enter')doSearch()">
+  </div>
+  <button class="search-btn" onclick="doSearch()">分析</button>
+  <button class="settings-btn" onclick="openSettings()" title="AI 金鑰設定">⚙️</button>
+</div>
+
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <h2>⚙️ AI 分析金鑰（OpenRouter，免費）</h2>
+    <p class="sub">財務數據(毛利率/營收等)用美國 SEC 官方資料、不需金鑰。但<b style="color:var(--text)">彼得林區分類、競爭對手、護城河、CEO展望、買入建議</b>需要 AI 判讀，使用 OpenRouter 的免費模型（金鑰格式單純、可直接用，不像 Google 新金鑰卡在 OAuth）。</p>
+    <div class="steps">
+      <b>取得免費 OpenRouter 金鑰（不需信用卡，1分鐘）：</b><br>
+      1. 前往 <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a><br>
+      2. 用 Google 帳號登入 → 點 <b>Create Key</b><br>
+      3. 複製那串 <b>sk-or-...</b> 開頭的金鑰，貼到下方
+    </div>
+    <label>OpenRouter API Key（sk-or-...）</label>
+    <input type="text" id="gmKey" placeholder="貼上你的 sk-or-... 金鑰">
+    <p class="note">金鑰只存在你瀏覽器(localStorage)，不會外傳到我方。使用免費模型，日常分析免費。</p>
+    <div class="modal-btns">
+      <button class="btn-sec" onclick="closeSettings()">取消</button>
+      <button class="btn-pri" onclick="saveSettings()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div id="welcome" class="welcome">
+    <h1>美股深度分析工具</h1>
+    <p>10年財務指標 · 營收成長 · 彼得林區分類 · 護城河 · 競爭對手 · 買入建議</p>
+    <div class="free-tag">✅ 財務數據免費(SEC官方) · AI分析用免費 Gemini</div>
+    <div class="chips">
+      <div class="chip" onclick="quickSearch('AAPL')">🍎 AAPL</div>
+      <div class="chip" onclick="quickSearch('NVDA')">🎮 NVDA</div>
+      <div class="chip" onclick="quickSearch('MSFT')">🪟 MSFT</div>
+      <div class="chip" onclick="quickSearch('TSLA')">⚡ TSLA</div>
+      <div class="chip" onclick="quickSearch('AMZN')">📦 AMZN</div>
+      <div class="chip" onclick="quickSearch('GOOGL')">🔍 GOOGL</div>
+    </div>
+  </div>
+
+  <div id="logPanel" class="log-panel"><h3>🔄 載入進度</h3><div id="logItems"></div></div>
+  <div id="results" class="results"></div>
+</div>
+
+<script>
+// 自動選擇代理：本機(file://或localhost)用 proxy.ps1；線上(Vercel)用 /api/proxy
+const PROXY = (location.protocol==='file:' || ['localhost','127.0.0.1',''].indexOf(location.hostname)>-1)
+  ? 'http://localhost:8765/?url='
+  : '/api/proxy?url=';
+// 多個免費模型，依序嘗試直到有一個成功（免費模型偶爾忙碌/故障）
+const OR_MODELS = [
+  'openai/gpt-oss-120b:free',
+  'nvidia/nemotron-3-super-120b-a12b:free',
+  'meta-llama/llama-3.3-70b-instruct:free',
+  'qwen/qwen3-next-80b-a3b-instruct:free',
+  'google/gemma-4-31b-it:free'
+];
+
+// localStorage 在 data:/某些預覽環境會被停用，包一層安全存取（讀不到就用記憶體）
+var memKey = '';
+function safeGet(){ try{ return localStorage.getItem('gm_key')||memKey||''; }catch(e){ return memKey; } }
+function safeSet(v){ memKey=v; try{ localStorage.setItem('gm_key', v); }catch(e){} }
+function getGmKey(){ return safeGet(); }
+function openSettings(){ try{ document.getElementById('gmKey').value=getGmKey(); }catch(e){} document.getElementById('settingsModal').classList.add('open'); }
+function closeSettings(){ document.getElementById('settingsModal').classList.remove('open'); }
+function saveSettings(){ safeSet(document.getElementById('gmKey').value.trim()); closeSettings(); alert('✅ 已儲存'); }
+document.getElementById('settingsModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeSettings(); });
+
+async function fetchJson(url) {
+  let r;
+  try { r = await fetch(PROXY + encodeURIComponent(url)); }
+  catch(e) { throw new Error('PROXY_DOWN'); }
+  if (!r.ok) throw new Error('UPSTREAM_' + r.status);
+  let data; try { data = await r.json(); } catch(e){ throw new Error('UPSTREAM_PARSE'); }
+  if (data && data.error) throw new Error('UPSTREAM');
+  return data;
+}
+
+function logPanel(s){ document.getElementById('logPanel').style.display=s?'block':'none'; }
+function logAdd(k,m){ const c=document.getElementById('logItems'); const d=document.createElement('div'); d.className='log-item'; d.id='log_'+k; d.innerHTML=`<div class="log-spin"></div><span>${m}</span>`; c.appendChild(d); }
+function logOk(k,m){ const el=document.getElementById('log_'+k); if(el) el.innerHTML=`<span class="log-ok">✓</span><span>${m}</span>`; }
+function logErr(k,m){ const el=document.getElementById('log_'+k); if(el) el.innerHTML=`<span class="log-err">✗</span><span style="color:var(--red)">${m}</span>`; }
+function quickSearch(s){ document.getElementById('searchInput').value=s; doSearch(); }
+
+// ── SEC ──
+// 常用中文／別名 → 美股代碼（找不到代碼時先查這裡）
+const ALIASES={
+  '台積電':'TSM','臺積電':'TSM','台積':'TSM','TSMC':'TSM',
+  '諾和諾德':'NVO','novo nordisk':'NVO',
+  '蘋果':'AAPL','apple':'AAPL',
+  '輝達':'NVDA','英偉達':'NVDA','nvidia':'NVDA',
+  '微軟':'MSFT','microsoft':'MSFT',
+  '特斯拉':'TSLA','tesla':'TSLA',
+  '亞馬遜':'AMZN','amazon':'AMZN',
+  '谷歌':'GOOGL','google':'GOOGL','字母':'GOOGL','alphabet':'GOOGL',
+  '臉書':'META','meta':'META','facebook':'META',
+  '阿里巴巴':'BABA','阿里':'BABA','alibaba':'BABA',
+  '輝瑞':'PFE','可口可樂':'KO','百事':'PEP','麥當勞':'MCD','星巴克':'SBUX',
+  '迪士尼':'DIS','耐吉':'NKE','耐克':'NKE','nike':'NKE','沃爾瑪':'WMT','好市多':'COST','costco':'COST',
+  '波音':'BA','英特爾':'INTC','intel':'INTC','超微':'AMD','amd':'AMD','高通':'QCOM',
+  '博通':'AVGO','美光':'MU','輝達半導體':'NVDA','摩根大通':'JPM','視覺':'V','萬事達':'MA',
+  '網飛':'NFLX','netflix':'NFLX','奇異':'GE','禮來':'LLY','eli lilly':'LLY',
+  '聯合健康':'UNH','嬌生':'JNJ','寶僑':'PG','艾司摩爾':'ASML','asml':'ASML',
+  '京東':'JD','拼多多':'PDD','百度':'BIDU','台達電':'DELL','戴爾':'DELL','dell':'DELL',
+  '帕蘭泰爾':'PLTR','palantir':'PLTR','超微電腦':'SMCI','美超微':'SMCI'
+};
+let tickerMap=null;
+function findCompany(raw){
+  const q=raw.trim(); const U=q.toUpperCase();
+  if(tickerMap[U]) return {symbol:U, co:tickerMap[U]};                 // 1. 直接是代碼
+  if(ALIASES[q]) { const t=ALIASES[q]; if(tickerMap[t]) return {symbol:t,co:tickerMap[t]}; }   // 2. 中文/別名(原樣)
+  const ql=q.toLowerCase();
+  for(const a in ALIASES){ if(a.toLowerCase()===ql){ const t=ALIASES[a]; if(tickerMap[t]) return {symbol:t,co:tickerMap[t]}; } } // 別名(英文不分大小寫)
+  let best=null;                                                        // 3. 英文公司名包含比對
+  for(const tk in tickerMap){ const ti=tickerMap[tk].title; if(ti && ti.toUpperCase().indexOf(U)>-1){ best={symbol:tk,co:tickerMap[tk]}; break; } }
+  return best;
+}
+async function loadTickerMap(){
+  if(tickerMap) return tickerMap;
+  const data=await fetchJson('https://www.sec.gov/files/company_tickers.json');
+  tickerMap={}; Object.values(data).forEach(c=>{ tickerMap[c.ticker]={cik:String(c.cik_str).padStart(10,'0'),title:c.title}; });
+  return tickerMap;
+}
+async function concept(cik,tag,tax){
+  try{ const d=await fetchJson(`https://data.sec.gov/api/xbrl/companyconcept/CIK${cik}/${tax||'us-gaap'}/${tag}.json`); return d?.units; }
+  catch(e){ if(e.message==='PROXY_DOWN') throw e; return null; }
+}
+// 挑選數值單位：優先 USD，否則取第一個非 shares 的幣別（外國公司如 TWD/EUR），最後才 shares
+function pickUnit(units){
+  if(!units) return {arr:[],cur:null};
+  if(units.USD) return {arr:units.USD,cur:'USD'};
+  const keys=Object.keys(units);
+  const k=keys.find(x=>x!=='shares')||keys[0];
+  return {arr:k?units[k]:[],cur:k||null};
+}
+function isAnnualForm(f){ return !!f && (f.indexOf('10-K')===0 || f.indexOf('20-F')===0); } // 美國10-K + 外國20-F
+function extractAnnual(units, instant){
+  const pu=pickUnit(units), m={};
+  for(const u of pu.arr){
+    if(!isAnnualForm(u.form)) continue;
+    if(!u.end) continue;
+    if(!instant){ if(!u.start) continue; const d=(new Date(u.end)-new Date(u.start))/86400000; if(d<350||d>380) continue; }
+    m[+u.end.slice(0,4)]=u.val;
+  }
+  return {map:m,cur:pu.cur};
+}
+// 標籤可寫 "ifrs-full/Revenue" 指定 taxonomy（預設 us-gaap）
+async function mergeAll(cik,tags,instant){
+  const merged={}; let cur=null;
+  for(const t of tags){
+    let tax='us-gaap', tag=t;
+    if(t.indexOf('/')>-1){ const p=t.split('/'); tax=p[0]; tag=p.slice(1).join('/'); }
+    const units=await concept(cik,tag,tax);
+    const ex=extractAnnual(units,instant);
+    if(ex.cur && !cur && Object.keys(ex.map).length) cur=ex.cur;
+    for(const yr in ex.map){ if(merged[yr]==null) merged[yr]=ex.map[yr]; }
+  }
+  return {map:merged,cur:cur};
+}
+
+// ── Main ──
+async function doSearch(){
+  const raw=document.getElementById('searchInput').value.trim();
+  if(!raw) return;
+  let symbol;
+  window.__guidanceReal=false;
+  document.getElementById('welcome').style.display='none';
+  document.getElementById('results').style.display='none';
+  document.getElementById('results').innerHTML='';
+  document.getElementById('logItems').innerHTML='';
+  logPanel(true);
+
+  try{
+    logAdd('cik','查詢公司...');
+    await loadTickerMap();
+    const found=findCompany(raw);
+    if(!found) throw new Error(`找不到「${raw}」，請輸入美股代碼(如 AAPL)或公司名(如 台積電 / Apple)`);
+    symbol=found.symbol;
+    const co=found.co;
+    logOk('cik',`找到：${co.title}（${symbol}）`);
+
+    logAdd('fin','載入 SEC 官方財報...');
+    const [rev,gp,ni,eq,sh]=await Promise.all([
+      mergeAll(co.cik,['RevenueFromContractWithCustomerExcludingAssessedTax','Revenues','SalesRevenueNet','RevenueFromContractWithCustomerIncludingAssessedTax','RevenuesNetOfInterestExpense','ifrs-full/Revenue','ifrs-full/RevenueFromContractsWithCustomers'],false),
+      mergeAll(co.cik,['GrossProfit','ifrs-full/GrossProfit'],false),
+      mergeAll(co.cik,['NetIncomeLoss','ProfitLoss','ifrs-full/ProfitLoss'],false),
+      mergeAll(co.cik,['StockholdersEquity','StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest','ifrs-full/EquityAttributableToOwnersOfParent','ifrs-full/Equity'],true),
+      mergeAll(co.cik,['WeightedAverageNumberOfDilutedSharesOutstanding','WeightedAverageNumberOfSharesOutstandingBasic','ifrs-full/WeightedAverageShares'],false),
+    ]);
+    const revM=rev.map,gpM=gp.map,niM=ni.map,eqM=eq.map,shM=sh.map,curr=rev.cur||'USD';
+    if(!Object.keys(revM).length) throw new Error('此公司在 SEC 沒有可解析的年度營收（可能是金融股或非標準申報）');
+    logOk('fin','財報載入完成');
+
+    logAdd('price','載入即時股價...');
+    let priceInfo=null;
+    try{ const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=1d`); const meta=ch?.chart?.result?.[0]?.meta; if(meta) priceInfo={price:meta.regularMarketPrice,prev:(meta.previousClose??meta.chartPreviousClose)}; logOk('price','股價載入完成'); }
+    catch(e){ logErr('price','股價載入失敗（不影響財務數據）'); }
+
+    logAdd('render','繪製財務圖表...');
+    document.getElementById('results').style.display='block';
+    const ctx=renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr);
+    logOk('render','財務完成');
+    fillYahooLatest(symbol);  // 最新財報補充（不阻塞）
+    fillGuidance(co.cik);     // SEC 官方最新法說會指引（不阻塞，找到就覆蓋AI展望）
+
+    // AI 分析
+    const gmKey=getGmKey();
+    if(!gmKey){
+      setAllAI(`<div class="ai" style="color:var(--text2)">需要免費 OpenRouter 金鑰才能產生此分析。<br><button class="retry-btn" onclick="openSettings()">⚙️ 設定免費金鑰</button></div>`);
+      logPanel(false);
+    } else {
+      logAdd('ai','AI 深度分析中（彼得林區/護城河/競爭對手/買入建議）...');
+      try{ const ai=await callGemini(ctx, gmKey); renderAI(ai); logOk('ai','AI 分析完成'); }
+      catch(e){ logErr('ai','AI 失敗：'+e.message); setAllAI(`<div class="err-box">AI 分析失敗：${esc(e.message)}<br>請確認 OpenRouter 金鑰正確（⚙️），或稍後重試。</div>`); }
+      setTimeout(()=>logPanel(false),1200);
+    }
+  }catch(e){
+    console.error(e);
+    ['cik','fin','price','render','ai'].forEach(k=>{ const el=document.getElementById('log_'+k); if(el&&el.querySelector('.log-spin')) logErr(k,e.message); });
+    document.getElementById('results').style.display='block';
+    if(e.message==='PROXY_DOWN'){
+      document.getElementById('results').innerHTML=`<div class="err-box">⚠️ <b>連不到本機資料代理</b><br><br>請先雙擊資料夾裡的 <b>啟動.bat</b>，跳出綠字小視窗後保持開著，再按重試。<br><button class="retry-btn" onclick="doSearch()">🔄 重試</button></div>`;
+    } else {
+      document.getElementById('results').innerHTML=`<div class="err-box">⚠️ ${esc(e.message)}<br><button class="retry-btn" onclick="doSearch()">🔄 重試</button></div>`;
+    }
+  }
+}
+
+function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr){
+  curr=curr||'USD';
+  const usd=(curr==='USD');
+  const cs=({USD:'$',TWD:'NT$',EUR:'€',GBP:'£',JPY:'¥',CNY:'¥',HKD:'HK$',KRW:'₩'})[curr]||(curr+' ');
+  const years=Object.keys(revM).map(Number).sort((a,b)=>a-b).slice(-10);
+  const rows=years.map((yr,i)=>{
+    const rev=revM[yr]??null, gp=gpM[yr]??null, ni=niM[yr]??null, eq=eqM[yr]??null;
+    const gm=(rev&&gp!=null)?gp/rev*100:null;
+    const nm=(rev&&ni!=null)?ni/rev*100:null;
+    const roe=(eq&&ni!=null&&eq!==0)?ni/eq*100:null;
+    const prev=i>0?revM[years[i-1]]:null;
+    const gr=(prev&&rev!=null)?(rev-prev)/Math.abs(prev)*100:null;
+    return {yr,rev,gm,nm,roe,gr};
+  });
+  const last=rows[rows.length-1]||{};
+  const lastYr=last.yr;
+  const shares=shM[lastYr]??null;
+  // EPS/P/E 自算只在「美國公司(USD申報)」有效；外國ADR會因換股比例與幣別不同而失真，故略過
+  const eps=(usd&&last.rev!=null&&niM[lastYr]!=null&&shares)?niM[lastYr]/shares:null;
+  const price=priceInfo?.price??null;
+  const prevC=priceInfo?.prev??null;
+  const chg=(price!=null&&prevC!=null)?price-prevC:null;
+  const pct=(chg!=null&&prevC)?chg/prevC*100:null;
+  const pe=(usd&&price!=null&&eps&&eps>0)?price/eps:null;
+
+  document.getElementById('results').innerHTML=`
+<div class="co-head">
+  <div class="co-logo">${symbol[0]||'?'}</div>
+  <div class="co-info">
+    <h1>${esc(co.title)}</h1>
+    <div class="co-ticker">${symbol} · 美股 · SEC EDGAR + Yahoo</div>
+    <div class="lynch-badge" id="lynchBadge">🔄 AI 分類中...</div>
+  </div>
+  <div class="co-price">
+    <div class="price-val">${price!=null?'$'+(+price).toFixed(2):'—'}</div>
+    ${chg!=null?`<div class="price-chg ${chg>=0?'up':'down'}">${chg>=0?'▲':'▼'} ${Math.abs(chg).toFixed(2)} (${pct>=0?'+':''}${pct.toFixed(2)}%)</div>`:''}
+  </div>
+</div>
+
+<div class="g2">
+  <div class="card">
+    <div class="ct">📊 近${rows.length}年財務指標</div>
+    <table class="dt"><tr><th>年份</th><th>毛利率</th><th>淨利率</th><th>ROE</th></tr>
+    ${rows.map(r=>`<tr><td><strong>${r.yr}</strong></td>
+      <td class="${cc(r.gm,30,20)}">${r.gm!=null?r.gm.toFixed(1)+'%':'—'}</td>
+      <td class="${cc(r.nm,15,5)}">${r.nm!=null?r.nm.toFixed(1)+'%':'—'}</td>
+      <td class="${cc(r.roe,20,10)}">${r.roe!=null?r.roe.toFixed(1)+'%':'—'}</td></tr>`).join('')}
+    </table>
+    <div class="note">綠=優異 / 黃=普通 / 紅=偏低</div>
+  </div>
+  <div class="card"><div class="ct">💰 年營收 &amp; 成長率</div><div class="chart-wrap"><canvas id="revChart"></canvas></div></div>
+</div>
+
+<div class="card mb">
+  <div class="ct">📈 年營收明細與成長率（財政年度）</div>
+  <table class="dt"><tr><th>年份</th><th>年營收</th><th>較前年成長率</th></tr>
+  ${rows.map(r=>`<tr><td><strong>${r.yr}</strong></td><td>${r.rev!=null?cs+fmtB(r.rev):'—'}</td>
+    <td class="${r.gr!=null?(r.gr>=0?'g':'r'):''}">${r.gr!=null?(r.gr>=0?'▲':'▼')+' '+Math.abs(r.gr).toFixed(1)+'%':'—'}</td></tr>`).join('')}
+  </table>
+</div>
+
+<div class="card mb">
+  <div class="ct">📅 最新財報補充（Yahoo，含最新季度）</div>
+  <div id="yahooLatest">${aiLoading()}</div>
+</div>
+
+<div class="g2">
+  <div class="card"><div class="ct">🏷️ 彼得林區六大分類</div><div id="ai_lynch">${aiLoading()}</div></div>
+  <div class="card"><div class="ct">🏭 產品與服務（營收來源）</div><div id="ai_products">${aiLoading()}</div></div>
+</div>
+<div class="g2">
+  <div class="card"><div class="ct">⚔️ 前三大競爭對手 &amp; 世界排名</div><div id="ai_competitors">${aiLoading()}</div></div>
+  <div class="card"><div class="ct">🎤 法說會 CEO 前景展望</div><div id="ai_guidance">${aiLoading()}</div></div>
+</div>
+<div class="g2">
+  <div class="card"><div class="ct">🌪️ 未來利多 &amp; 利空風險</div><div id="ai_risks">${aiLoading()}</div></div>
+  <div class="card"><div class="ct">🏰 護城河分析</div><div id="ai_moat">${aiLoading()}</div></div>
+</div>
+<div class="g2">
+  <div class="card">
+    <div class="ct">💹 估值與股價（第8項）</div>
+    <div class="vr"><span class="vl">本益比 P/E（自算）</span><span class="vn">${pe!=null?pe.toFixed(1)+'x':'—'}</span></div>
+    <div class="vr"><span class="vl">每股盈餘 EPS（自算）</span><span class="vn">${eps!=null?'$'+eps.toFixed(2):'—'}</span></div>
+    <div class="vr"><span class="vl">最新年度淨利</span><span class="vn">${niM[lastYr]!=null?cs+fmtB(niM[lastYr]):'—'}</span></div>
+    ${!usd?`<div class="note">⚠️ 此為外國公司，財報以 ${esc(curr)} 申報。毛利率/淨利率/ROE/成長率為比率不受影響；但 EPS/P/E 自算因 ADR 換股比例不同而略過。</div>`:''}
+    <div class="vr"><span class="vl">目前股價</span><span class="vn">${price!=null?'$'+(+price).toFixed(2):'—'}</span></div>
+    <div style="margin-top:12px" id="ai_valuation">${aiLoading()}</div>
+  </div>
+  <div class="card verdict">
+    <div class="ct">🎯 投資總結（第9項）</div>
+    <div id="ai_verdict">${aiLoading()}</div>
+  </div>
+</div>
+
+<div class="note" style="text-align:center;margin-top:8px">財務數據：美國 SEC EDGAR 官方10-K年報；股價：Yahoo Finance；質化分析：Google Gemini AI。<b>僅供參考，不構成投資建議。</b></div>`;
+
+  drawChart(rows);
+
+  // 給 AI 的上下文
+  const finText=rows.map(r=>`${r.yr}: 營收${cs}${fmtB(r.rev)}, 成長${r.gr!=null?r.gr.toFixed(1)+'%':'NA'}, 毛利率${r.gm!=null?r.gm.toFixed(1)+'%':'NA'}, 淨利率${r.nm!=null?r.nm.toFixed(1)+'%':'NA'}, ROE${r.roe!=null?r.roe.toFixed(1)+'%':'NA'}`).join('\n');
+  return { name:co.title, symbol, price, pe, eps, finText };
+}
+
+function aiLoading(){ return `<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>AI 分析中...</span></div>`; }
+function setAllAI(html){ ['ai_lynch','ai_products','ai_competitors','ai_guidance','ai_risks','ai_moat','ai_valuation','ai_verdict'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=html; }); const lb=document.getElementById('lynchBadge'); if(lb) lb.textContent='（需 AI 金鑰）'; }
+function setAI(id,html){ const el=document.getElementById(id); if(el) el.innerHTML=html; }
+
+// ── Gemini ──
+async function callGemini(ctx, key){
+  const prompt=`你是專業美股分析師。根據以下公司資料，用繁體中文回答，並「只」回傳 JSON（不要任何其他文字、不要 markdown 標記）。
+
+公司：${ctx.name} (${ctx.symbol})
+目前股價：${ctx.price!=null?'$'+ctx.price:'未知'}
+本益比P/E：${ctx.pe!=null?ctx.pe.toFixed(1):'未知'}
+近年財務：
+${ctx.finText}
+
+請回傳此 JSON 結構（value 為繁體中文，可用 <br> 換行、<strong> 標重點）：
+{
+ "lynch_type":"六大分類擇一：快速成長股/穩定成長股/緩慢成長股/景氣循環股/轉機股/資產股",
+ "lynch_reason":"判斷理由 2-3 句",
+ "products":"主要產品或服務及各自營收佔比（3-5項，用<br>分行）",
+ "competitors":"前三大競爭對手各一行說明威脅，最後一行給出該公司全球該產業排名",
+ "guidance":"最近一次法說會/財報管理層對未來12-24個月的展望與營收成長指引（含具體數字若有）",
+ "catalysts":"未來利多3點，每點🟢開頭，<br>分行",
+ "risks":"未來利空風險3點，每點🔴開頭，<br>分行",
+ "moat":"護城河3-4點，每點🏰開頭：名稱+說明，<br>分行",
+ "valuation":"目前股價是否被低估/高估？本益比合理性 2-3 句",
+ "verdict":"是否值得買進？三年內是否可能翻倍？明確結論與理由 4-5 句",
+ "rating":"買入 或 觀望 或 避開",
+ "double":"高 或 中 或 低"
+}`;
+  let lastErr='未知錯誤';
+  for(const model of OR_MODELS){
+    try{
+      const r=await fetch('https://openrouter.ai/api/v1/chat/completions',{ method:'POST',
+        headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+key },
+        body:JSON.stringify({ model, messages:[{role:'user',content:prompt}], temperature:0.4 }) });
+      const data=await r.json();
+      if(!r.ok || data.error){ lastErr=data?.error?.message||('HTTP '+r.status); continue; }
+      const txt=data?.choices?.[0]?.message?.content;
+      if(!txt){ lastErr='AI 無回應內容'; continue; }
+      const j=txt.match(/\{[\s\S]*\}/); if(!j){ lastErr='AI 回傳格式錯誤'; continue; }
+      return JSON.parse(j[0]);
+    }catch(e){ lastErr=e.message; }
+  }
+  throw new Error(lastErr+'（已試多個免費模型，請稍後重試）');
+}
+
+function renderAI(ai){
+  const lc={'快速成長股':'🚀','穩定成長股':'🏛️','緩慢成長股':'🐢','景氣循環股':'🔄','轉機股':'🔁','資產股':'🏗️'};
+  const icon=lc[ai.lynch_type]||'📌';
+  const lb=document.getElementById('lynchBadge'); if(lb) lb.textContent=`${icon} ${ai.lynch_type||''}`;
+  setAI('ai_lynch',`<div class="ai"><div style="font-size:16px;font-weight:700;margin-bottom:6px">${icon} ${esc(ai.lynch_type||'')}</div>${esc(ai.lynch_reason||'').replace(/\n/g,'<br>')}</div>`);
+  setAI('ai_products',`<div class="ai">${norm(ai.products)}</div>`);
+  setAI('ai_competitors',`<div class="ai">${norm(ai.competitors)}</div>`);
+  if(!window.__guidanceReal) setAI('ai_guidance',`<div class="ai">${norm(ai.guidance)}<div class="note">（AI 推估，非即時。最新官方指引若有會自動覆蓋）</div></div>`);
+  setAI('ai_risks',`<div class="ai">${norm(ai.catalysts)}<br><br>${norm(ai.risks)}</div>`);
+  setAI('ai_moat',`<div class="ai">${norm(ai.moat)}</div>`);
+  setAI('ai_valuation',`<div class="ai" style="font-size:13px;color:var(--text2)">${esc(ai.valuation||'—')}</div>`);
+  const rc={'買入':'s-buy','觀望':'s-hold','避開':'s-sell'}[ai.rating]||'s-hold';
+  const ri={'買入':'✅','觀望':'⏳','避開':'❌'}[ai.rating]||'⏳';
+  const dc={'高':'g','中':'y','低':'r'}[ai.double]||'y';
+  setAI('ai_verdict',`<div class="vscore ${rc}">${ri} ${esc(ai.rating||'')}</div><div style="font-size:13px;margin-bottom:8px">三年翻倍機率：<strong class="${dc}">${esc(ai.double||'')}</strong></div><div class="ai">${esc(ai.verdict||'').replace(/\n/g,'<br>')}</div>`);
+}
+
+// 從 SEC 6-K/8-K 最新財報新聞稿抓「真實法說會指引」（免費）。找到就覆蓋 AI 的舊展望。
+async function fillGuidance(cik){
+  const el=document.getElementById('ai_guidance'); if(!el) return;
+  try{
+    const sub=await fetchJson(`https://data.sec.gov/submissions/CIK${cik}.json`);
+    const f=sub.filings.recent; const cands=[];
+    for(let i=0;i<f.form.length && cands.length<20;i++){
+      if(f.form[i]==='6-K'||f.form[i]==='8-K') cands.push({acc:f.accessionNumber[i].replace(/-/g,''),date:f.filingDate[i]});
+    }
+    const docRe=/(q[1-4].*e|earnings|result|guidance|press|ex.?99|financ)/i;  // 像新聞稿的檔名
+    // 擷取指引起點，後面用固定視窗+去尾雜訊（避免被 US$39.0 的小數點截斷）
+    const prRe=/((?:management expects|Based on the Company|Based on its current|We (?:currently )?expect|The Company expects)[\s\S]{40,650})/i;
+    const trimRe=/\(Unit:|consolidated results|All figures|TSMC.{0,4}s 20\d\d|This (?:press|announcement)|About TSMC|Conference Call|Safe Harbor/i;
+    let fetches=0;
+    for(const c of cands){
+      if(fetches>=14) break;
+      let idx; try{ idx=await fetchJson(`https://www.sec.gov/Archives/edgar/data/${+cik}/${c.acc}/index.json`); }catch(e){ continue; }
+      const docs=((idx&&idx.directory&&idx.directory.item)||[]).map(x=>x.name)
+        .filter(n=>/\.html?$/i.test(n) && !/index|headers|^R\d/i.test(n) && docRe.test(n));
+      for(const fn of docs){
+        if(fetches>=14) break;
+        fetches++;
+        const url=`https://www.sec.gov/Archives/edgar/data/${+cik}/${c.acc}/${fn}`;
+        let txt; try{ const r=await fetch(PROXY+encodeURIComponent(url)); txt=await r.text(); }catch(e){ continue; }
+        txt=txt.replace(/<[^>]+>/g,' ').replace(/&#?[a-z0-9]+;/gi,' ').replace(/\s+/g,' ');
+        // 先找含「營收」的財測句，沒有再用一般指引句
+        const prRev=/((?:we expect|management expects|the company expects|we are guiding|revenue is expected)[\s\S]{0,40}?revenue[\s\S]{0,220}?(?:billion|million|US\$[\d.,]+|between[\s\S]{0,80}?%))/i;
+        let m=txt.match(prRev)||txt.match(prRe);
+        if(m && /expected to be|expect.{0,60}(revenue|between)|revenue[\s\S]{0,60}(expect|between)/i.test(m[1])){
+          let g=m[1].split(trimRe)[0].trim();
+          window.__guidanceReal=true;
+          el.innerHTML=`<div class="ai"><div style="color:var(--green);font-size:12px;margin-bottom:6px">✅ 來自 SEC 官方財報新聞稿（${c.date}）— 真實指引</div>${esc(g).replace(/(US\$[\d.,]+ ?(?:billion|million)?|[\d.]+%)/g,'<strong>$1</strong>')}<div class="note"><a href="${esc(url)}" target="_blank" style="color:var(--blue)">查看原始文件 ↗</a></div></div>`;
+          return true;
+        }
+      }
+    }
+  }catch(e){}
+  return false;
+}
+
+// 從 Yahoo 抓最新年度+最新季度（免費、補 SEC 申報延遲）
+async function fillYahooLatest(symbol){
+  const el=document.getElementById('yahooLatest'); if(!el) return;
+  try{
+    const now=Math.floor(Date.now()/1000), p1=now-60*60*24*365*3;
+    const types='annualTotalRevenue,annualGrossProfit,annualNetIncome,quarterlyTotalRevenue,quarterlyGrossProfit,quarterlyNetIncome';
+    const d=await fetchJson(`https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/${symbol}?symbol=${symbol}&type=${types}&period1=${p1}&period2=${now}`);
+    const res=d?.timeseries?.result||[];
+    const S=t=>{ const s=res.find(x=>x.meta?.type?.[0]===t); const m={}; (s?.[t]||[]).forEach(p=>{ if(p&&p.asOfDate) m[p.asOfDate]=p.reportedValue?.raw; }); return m; };
+    const ar=S('annualTotalRevenue'),ag=S('annualGrossProfit'),an=S('annualNetIncome');
+    const qr=S('quarterlyTotalRevenue'),qg=S('quarterlyGrossProfit'),qn=S('quarterlyNetIncome');
+    const ak=Object.keys(ar).sort(), qk=Object.keys(qr).sort();
+    if(!ak.length && !qk.length){ el.innerHTML='<div class="ai" style="color:var(--text2)">Yahoo 無補充資料。</div>'; return; }
+    const pctTxt=(v)=>v==null?'—':`<span class="${v>=0?'g':'r'}">${v>=0?'▲':'▼'} ${Math.abs(v).toFixed(1)}%</span>`;
+    let html='<table class="dt"><tr><th>期間</th><th>營收</th><th>年增率</th><th>毛利率</th><th>淨利率</th></tr>';
+    // 最新年度
+    if(ak.length){ const y=ak[ak.length-1], py=ak[ak.length-2];
+      const rev=ar[y], gm=ag[y]&&rev?ag[y]/rev*100:null, nm=an[y]&&rev?an[y]/rev*100:null;
+      const yoy=(py&&ar[py])?(rev-ar[py])/Math.abs(ar[py])*100:null;
+      html+=`<tr><td><strong>${y.slice(0,4)} 全年</strong></td><td>${fmtB(rev)}</td><td>${pctTxt(yoy)}</td><td class="${cc(gm,30,20)}">${gm!=null?gm.toFixed(1)+'%':'—'}</td><td class="${cc(nm,15,5)}">${nm!=null?nm.toFixed(1)+'%':'—'}</td></tr>`;
+    }
+    // 最新季度（年增 = 對比四季前）
+    if(qk.length){ const q=qk[qk.length-1], pyq=qk[qk.length-5];
+      const rev=qr[q], gm=qg[q]&&rev?qg[q]/rev*100:null, nm=qn[q]&&rev?qn[q]/rev*100:null;
+      const yoy=(pyq&&qr[pyq])?(rev-qr[pyq])/Math.abs(qr[pyq])*100:null;
+      const mo=q.slice(5,7), qn2={'03':'Q1','06':'Q2','09':'Q3','12':'Q4'}[mo]||q.slice(5,7);
+      html+=`<tr><td><strong>${q.slice(0,4)} ${qn2} 最新季</strong></td><td>${fmtB(rev)}</td><td>${pctTxt(yoy)}</td><td class="${cc(gm,30,20)}">${gm!=null?gm.toFixed(1)+'%':'—'}</td><td class="${cc(nm,15,5)}">${nm!=null?nm.toFixed(1)+'%':'—'}</td></tr>`;
+    }
+    html+='</table><div class="note">來源：Yahoo Finance（補 SEC 申報延遲）。營收金額為公司財報原始幣別；毛利率/淨利率/年增率為比率，不受幣別影響。</div>';
+    el.innerHTML=html;
+  }catch(e){ el.innerHTML='<div class="ai" style="color:var(--text2)">Yahoo 補充載入失敗（不影響其他資料）。</div>'; }
+}
+
+function drawChart(rows){
+  const el=document.getElementById('revChart'); if(!el) return;
+  new Chart(el.getContext('2d'),{ type:'bar',
+    data:{ labels:rows.map(r=>r.yr), datasets:[
+      {label:'年營收(B)',data:rows.map(r=>r.rev?+(r.rev/1e9).toFixed(2):0),backgroundColor:'rgba(88,166,255,.3)',borderColor:'rgba(88,166,255,.8)',borderWidth:1,borderRadius:3,yAxisID:'y'},
+      {label:'成長率%',data:rows.map(r=>r.gr!=null?+r.gr.toFixed(1):null),type:'line',borderColor:'#3fb950',backgroundColor:'rgba(63,185,80,.1)',pointBackgroundColor:'#3fb950',borderWidth:2,tension:.3,yAxisID:'y1',spanGaps:true}
+    ]},
+    options:{ responsive:true,maintainAspectRatio:false, plugins:{legend:{labels:{color:'#8b949e',font:{size:11}}}},
+      scales:{ x:{ticks:{color:'#8b949e',font:{size:10}},grid:{color:'rgba(48,54,61,.5)'}},
+        y:{ticks:{color:'#8b949e',font:{size:10},callback:v=>'$'+v+'B'},grid:{color:'rgba(48,54,61,.3)'}},
+        y1:{position:'right',ticks:{color:'#3fb950',font:{size:10},callback:v=>v+'%'},grid:{display:false}} } }
+  });
+}
+
+// AI 欄位可能回傳字串或陣列，統一轉成 HTML（陣列以 <br> 分行）
+function norm(v){
+  if(v==null) return '—';
+  if(Array.isArray(v)) return v.map(x=>String(x)).join('<br>');
+  return String(v).replace(/\n/g,'<br>');
+}
+function cc(v,good,mid){ if(v==null) return ''; return v>=good?'g':v>=mid?'y':'r'; }
+function fmtB(v){ if(!v&&v!==0) return '0'; const a=Math.abs(v); if(a>=1e12) return (v/1e12).toFixed(2)+'T'; if(a>=1e9) return (v/1e9).toFixed(2)+'B'; if(a>=1e6) return (v/1e6).toFixed(1)+'M'; return v.toString(); }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>
