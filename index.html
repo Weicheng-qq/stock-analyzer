@@ -321,15 +321,17 @@ async function doSearch(){
     fillYahooLatest(symbol);  // 最新財報補充（不阻塞）
     fillGuidance(co.cik);     // SEC 官方最新法說會指引（不阻塞，找到就覆蓋AI展望）
 
-    // AI 分析
+    // AI 分析：優先用使用者自己的金鑰；沒有時，若是線上版就用伺服器共用金鑰(/api/ai)
     const gmKey=getGmKey();
-    if(!gmKey){
+    const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1);
+    const useServer=!gmKey && !isLocal;   // 線上且未填個人金鑰 → 走伺服器共用金鑰
+    if(!gmKey && !useServer){
       setAllAI(`<div class="ai" style="color:var(--text2)">需要免費 OpenRouter 金鑰才能產生此分析。<br><button class="retry-btn" onclick="openSettings()">⚙️ 設定免費金鑰</button></div>`);
       logPanel(false);
     } else {
       logAdd('ai','AI 深度分析中（彼得林區/護城河/競爭對手/買入建議）...');
-      try{ const ai=await callGemini(ctx, gmKey); renderAI(ai); logOk('ai','AI 分析完成'); }
-      catch(e){ logErr('ai','AI 失敗：'+e.message); setAllAI(`<div class="err-box">AI 分析失敗：${esc(e.message)}<br>請確認 OpenRouter 金鑰正確（⚙️），或稍後重試。</div>`); }
+      try{ const ai=await callGemini(ctx, gmKey, useServer); renderAI(ai); logOk('ai','AI 分析完成'); }
+      catch(e){ logErr('ai','AI 失敗：'+e.message); setAllAI(`<div class="err-box">AI 分析失敗：${esc(e.message)}<br>${useServer?'伺服器 AI 忙碌或未設定，請稍後重試。':'請確認 OpenRouter 金鑰正確（⚙️），或稍後重試。'}</div>`); }
       setTimeout(()=>logPanel(false),1200);
     }
   }catch(e){
@@ -452,7 +454,7 @@ function setAllAI(html){ ['ai_lynch','ai_products','ai_competitors','ai_guidance
 function setAI(id,html){ const el=document.getElementById(id); if(el) el.innerHTML=html; }
 
 // ── Gemini ──
-async function callGemini(ctx, key){
+async function callGemini(ctx, key, useServer){
   const prompt=`你是專業美股分析師。根據以下公司資料，用繁體中文回答，並「只」回傳 JSON（不要任何其他文字、不要 markdown 標記）。
 
 公司：${ctx.name} (${ctx.symbol})
@@ -479,8 +481,9 @@ ${ctx.finText}
   let lastErr='未知錯誤';
   for(const model of OR_MODELS){
     try{
-      const r=await fetch('https://openrouter.ai/api/v1/chat/completions',{ method:'POST',
-        headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+key },
+      const endpoint = useServer ? '/api/ai' : 'https://openrouter.ai/api/v1/chat/completions';
+      const headers = useServer ? { 'Content-Type':'application/json' } : { 'Content-Type':'application/json', 'Authorization':'Bearer '+key };
+      const r=await fetch(endpoint,{ method:'POST', headers,
         body:JSON.stringify({ model, messages:[{role:'user',content:prompt}], temperature:0.4 }) });
       const data=await r.json();
       if(!r.ok || data.error){ lastErr=data?.error?.message||('HTTP '+r.status); continue; }
