@@ -309,6 +309,13 @@ async function doSearch(){
     if(!Object.keys(revM).length) throw new Error('此公司在 SEC 沒有可解析的年度營收（可能是金融股或非標準申報）');
     logOk('fin','財報載入完成');
 
+    // 補上 SEC 還沒申報的最新年度（例如外國公司年報延遲）：從 Yahoo 抓年度數字並用重疊年份換算比例補齊
+    const secMaxYr=Math.max(...Object.keys(revM).map(Number));
+    logAdd('gap','檢查是否有更新的年度（Yahoo補充）...');
+    let gapEstimated=false;
+    try{ gapEstimated=await fillLatestYearGap(symbol, revM, gpM, niM); logOk('gap','已檢查最新年度'); }
+    catch(e){ logErr('gap','略過（不影響其他資料）'); }
+
     logAdd('price','載入即時股價...');
     let priceInfo=null;
     try{ const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=1d`); const meta=ch?.chart?.result?.[0]?.meta; if(meta) priceInfo={price:meta.regularMarketPrice,prev:(meta.previousClose??meta.chartPreviousClose)}; logOk('price','股價載入完成'); }
@@ -316,7 +323,7 @@ async function doSearch(){
 
     logAdd('render','繪製財務圖表...');
     document.getElementById('results').style.display='block';
-    const ctx=renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr);
+    const ctx=renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr,gapEstimated);
     logOk('render','財務完成');
     fillYahooLatest(symbol);  // 最新財報補充（不阻塞）
     fillGuidance(co.cik);     // SEC 官方最新法說會指引（不阻塞，找到就覆蓋AI展望）
@@ -346,7 +353,7 @@ async function doSearch(){
   }
 }
 
-function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr){
+function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr,gapEstimated){
   curr=curr||'USD';
   const usd=(curr==='USD');
   const cs=({USD:'$',TWD:'NT$',EUR:'€',GBP:'£',JPY:'¥',CNY:'¥',HKD:'HK$',KRW:'₩'})[curr]||(curr+' ');
@@ -402,9 +409,10 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr){
 <div class="card mb">
   <div class="ct">📈 年營收明細與成長率（財政年度）</div>
   <table class="dt"><tr><th>年份</th><th>年營收</th><th>較前年成長率</th></tr>
-  ${rows.map(r=>`<tr><td><strong>${r.yr}</strong></td><td>${r.rev!=null?cs+fmtB(r.rev):'—'}</td>
-    <td class="${r.gr!=null?(r.gr>=0?'g':'r'):''}">${r.gr!=null?(r.gr>=0?'▲':'▼')+' '+Math.abs(r.gr).toFixed(1)+'%':'—'}</td></tr>`).join('')}
+  ${rows.map(r=>{ const isGap=secMaxYr!=null&&r.yr>secMaxYr; const amtPrefix=(isGap&&gapEstimated)?'≈':''; return `<tr><td><strong>${r.yr}</strong>${isGap?' <span title="SEC尚未正式申報，來自Yahoo補充" style="color:var(--yellow)">†</span>':''}</td><td>${r.rev!=null?amtPrefix+cs+fmtB(r.rev):'—'}</td>
+    <td class="${r.gr!=null?(r.gr>=0?'g':'r'):''}">${r.gr!=null?(r.gr>=0?'▲':'▼')+' '+Math.abs(r.gr).toFixed(1)+'%':'—'}</td></tr>`; }).join('')}
   </table>
+  <div class="note">† 標示的年度為 SEC 尚未正式申報，以 Yahoo Finance 補齊；金額前綴 ≈ 代表因幣別換算所得的估計值（毛利率/淨利率/成長率不受影響，仍精確）。</div>
 </div>
 
 <div class="card mb">
@@ -551,6 +559,39 @@ async function fillGuidance(cik){
     }
   }catch(e){}
   return false;
+}
+
+// 用 Yahoo 補上 SEC 尚未申報的最新年度（例如外國公司年報延遲一年），直接合併進主表格用的 revM/gpM/niM
+// Yahoo 的年度數字可能跟 SEC 選用的幣別不同（例如 SEC 用美元換算版、Yahoo 用原幣別）。
+// 解法：用「重疊年份」算出換算比例，套用到新年度上 —— 毛利率/淨利率/成長率永遠精確（比例換算不影響比率），
+// 只有絕對金額是換算估計值，會加註「≈」標示。回傳有無使用估計換算，供表格加註。
+async function fillLatestYearGap(symbol, revM, gpM, niM){
+  const years=Object.keys(revM).map(Number);
+  if(!years.length) return false;
+  const maxYr=Math.max(...years);
+  const now=Math.floor(Date.now()/1000), p1=now-60*60*24*365*4;
+  const types='annualTotalRevenue,annualGrossProfit,annualNetIncome';
+  const d=await fetchJson(`https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/${symbol}?symbol=${symbol}&type=${types}&period1=${p1}&period2=${now}`);
+  const res=d?.timeseries?.result||[];
+  const S=t=>{ const s=res.find(x=>x.meta?.type?.[0]===t); const m={}; (s?.[t]||[]).forEach(p=>{ if(p&&p.asOfDate) m[+p.asOfDate.slice(0,4)]=p.reportedValue?.raw; }); return m; };
+  const ar=S('annualTotalRevenue'), ag=S('annualGrossProfit'), an=S('annualNetIncome');
+  const newYears=Object.keys(ar).map(Number).filter(y=>y>maxYr);
+  if(!newYears.length) return false;
+
+  let scale=1, estimated=false;
+  if(ar[maxYr]!=null && revM[maxYr]) {
+    const ratio=ar[maxYr]/revM[maxYr];
+    if(ratio<0.9 || ratio>1.1){ scale=1/ratio; estimated=true; }  // 幣別/單位不同，用重疊年份換算比例
+  } else {
+    return false; // 無重疊年份可核對，為求準確寧可不補
+  }
+
+  for(const y of newYears){
+    if(ar[y]!=null) revM[y]=ar[y]*scale;
+    if(ag[y]!=null) gpM[y]=ag[y]*scale;
+    if(an[y]!=null) niM[y]=an[y]*scale;
+  }
+  return estimated;
 }
 
 // 從 Yahoo 抓最新年度+最新季度（免費、補 SEC 申報延遲）
