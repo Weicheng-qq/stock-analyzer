@@ -281,7 +281,7 @@ async function doSearch(){
   const raw=document.getElementById('searchInput').value.trim();
   if(!raw) return;
   let symbol;
-  window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__guidanceData=null;
+  window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__guidanceData=null;
   document.getElementById('welcome').style.display='none';
   document.getElementById('results').style.display='none';
   document.getElementById('results').innerHTML='';
@@ -538,6 +538,8 @@ ${window.__guidanceData?'最新官方法說會指引（'+window.__guidanceData.d
 
 ${window.__productsData?'公司最新年報（'+window.__productsData.date+'）官方產品/營收結構原文（products 欄位必須「僅」根據這段官方原文整理，包含最新產品/製程世代，禁止用舊記憶臆測）：\n'+window.__productsData.text:'（未取得官方年報產品原文，products 請依你所知並註明「非官方來源」）'}
 
+${window.__competitionData?'公司最新年報（'+window.__competitionData.date+'）官方「競爭」段落原文（competitors 欄位請優先根據這段官方描述整理，可補充你所知的產業排名並註明）：\n'+window.__competitionData.text:''}
+
 重要原則：本分析嚴格遵循彼得林區「以事實為依據」。所有陳述必須基於上方提供的真實數據或官方指引原文；不知道的事實請說「無公開資料」，嚴禁編造數字、嚴禁用舊記憶臆測未來展望。產品介紹請以你所知最新狀況描述並註明時間點（例如最新量產製程世代），不確定的請標註。
 
 請回傳此 JSON 結構（value 為繁體中文，可用 <br> 換行、<strong> 標重點）：
@@ -582,7 +584,9 @@ function renderAI(ai){
   setAI('ai_products',`<div class="ai">${norm(ai.products)}`
     +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）整理　<a href="${esc(window.__productsData.url)}" target="_blank" style="color:var(--blue)">原始文件 ↗</a></div>`:`<div class="note">（未取得官方年報原文，內容為 AI 一般認知，僅供參考）</div>`)
     +`</div>`);
-  setAI('ai_competitors',`<div class="ai">${norm(ai.competitors)}</div>`);
+  setAI('ai_competitors',`<div class="ai">${norm(ai.competitors)}`
+    +(window.__competitionData?`<div class="note" style="color:var(--green)">✅ 參考公司官方年報（${esc(window.__competitionData.date)}）競爭段落　<a href="${esc(window.__competitionData.url)}" target="_blank" style="color:var(--blue)">原始文件 ↗</a></div>`:`<div class="note">（產業排名為 AI 一般認知，僅供參考）</div>`)
+    +`</div>`);
   // 法說會展望：有官方指引 → 顯示中文翻譯(忠實翻譯官方原文)+來源；無 → 不顯示臆測內容
   if(window.__guidanceReal && window.__guidanceData){
     const gd=window.__guidanceData;
@@ -655,6 +659,9 @@ async function fillProductsSource(cik){
     let html; try{ const r=await fetch(PROXY+encodeURIComponent(url)); html=await r.text(); }catch(e){ return false; }
     const txt=html.replace(/<[^>]+>/g,' ').replace(/&#?[a-z0-9]+;/gi,' ').replace(/\s+/g,' ');
     const grab=(re,before,len)=>{ const m=txt.match(re); if(!m) return null; const i=txt.indexOf(m[0]); return txt.substr(Math.max(0,i-(before||0)),len); };
+    // 同一份年報：擷取「競爭」段落（Item 1 Competition），供 AI 以官方描述整理競爭對手
+    const compRe=/(The markets? for[\s\S]{0,60}(?:highly )?competitive|principal competitors (?:include|are)|Our (?:principal )?competitors|We (?:face|compete) (?:with|against)|highly competitive[\s\S]{0,40}(?:competitors|competition)|Competition The)/i;
+    { const cm=txt.match(compRe); if(cm){ const ci=txt.indexOf(cm[0]); window.__competitionData={ text:txt.substr(Math.max(0,ci-40),1400), date, url }; } }
     let chunks=[];
     // 錨點A：產品/營收拆解表（依優先序，取第一個命中）
     const revList=[
