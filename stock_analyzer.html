@@ -281,7 +281,7 @@ async function doSearch(){
   const raw=document.getElementById('searchInput').value.trim();
   if(!raw) return;
   let symbol;
-  window.__guidanceReal=false; window.__guidanceData=null;
+  window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__guidanceData=null;
   document.getElementById('welcome').style.display='none';
   document.getElementById('results').style.display='none';
   document.getElementById('results').innerHTML='';
@@ -346,10 +346,10 @@ async function doSearch(){
     const ctx=renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr,gapEstimated,cum,peInfo);
     logOk('render','財務完成');
 
-    // 先擷取 SEC 官方最新法說會指引（真實文字），供 AI 翻譯與納入分析依據（最多等12秒）
-    logAdd('guid','擷取最新法說會官方指引（SEC）...');
-    try{ await Promise.race([fillGuidance(co.cik), new Promise(r=>setTimeout(r,12000))]); }catch(e){}
-    logOk('guid', window.__guidanceData?'已取得官方指引（'+window.__guidanceData.date+'）':'此公司未找到結構化指引');
+    // 先擷取 SEC 官方最新法說會指引 + 年報產品/營收結構原文，供 AI 以事實為依據（最多各等12秒，並行）
+    logAdd('guid','擷取官方指引與年報產品結構（SEC）...');
+    try{ await Promise.race([Promise.all([fillGuidance(co.cik), fillProductsSource(co.cik)]), new Promise(r=>setTimeout(r,20000))]); }catch(e){}
+    logOk('guid', (window.__guidanceData?'官方指引✓':'無指引')+' / '+(window.__productsData?'年報產品結構✓':'無產品原文'));
 
     // AI 分析：優先用使用者自己的金鑰；沒有時，若是線上版就用伺服器共用金鑰(/api/ai)
     const gmKey=getGmKey();
@@ -536,13 +536,15 @@ ${ctx.chkText}
 
 ${window.__guidanceData?'最新官方法說會指引（'+window.__guidanceData.date+'，來自SEC官方文件，這是唯一可信的未來展望，回答guidance相關內容必須以此為準）：\n'+window.__guidanceData.text:'（本次未能取得官方指引文件，guidance_zh 請回傳空字串，不要編造展望）'}
 
+${window.__productsData?'公司最新年報（'+window.__productsData.date+'）官方產品/營收結構原文（products 欄位必須「僅」根據這段官方原文整理，包含最新產品/製程世代，禁止用舊記憶臆測）：\n'+window.__productsData.text:'（未取得官方年報產品原文，products 請依你所知並註明「非官方來源」）'}
+
 重要原則：本分析嚴格遵循彼得林區「以事實為依據」。所有陳述必須基於上方提供的真實數據或官方指引原文；不知道的事實請說「無公開資料」，嚴禁編造數字、嚴禁用舊記憶臆測未來展望。產品介紹請以你所知最新狀況描述並註明時間點（例如最新量產製程世代），不確定的請標註。
 
 請回傳此 JSON 結構（value 為繁體中文，可用 <br> 換行、<strong> 標重點）：
 {
  "lynch_type":"六大分類擇一：快速成長股/穩定成長股/緩慢成長股/景氣循環股/轉機股/資產股（優先遵循上方規則）",
  "lynch_reason":"判斷理由 2-3 句，需引用上方實際成長率數字",
- "products":"主要產品或服務及各自營收佔比（3-5項，用<br>分行，註明資訊時間點）",
+ "products":"根據上方官方年報原文，整理主要產品/服務及各自營收金額或佔比（3-5項，用<br>分行；若原文有金額請引用實際數字；包含最新製程/產品世代）",
  "competitors":"前三大競爭對手各一行說明威脅，最後一行給出該公司全球該產業排名",
  "competitor_tickers":["前三大競爭對手中有美股上市者的股票代碼，例如 INTC、AMD，最多3個，無則空陣列"],
  "guidance_zh":"${window.__guidanceData?'將上方官方指引原文完整翻譯成繁體中文（忠實翻譯，保留所有數字），這是官方原文翻譯不可添加內容':'回傳空字串'}",
@@ -577,7 +579,9 @@ function renderAI(ai){
   const icon=lc[ai.lynch_type]||'📌';
   const lb=document.getElementById('lynchBadge'); if(lb) lb.textContent=`${icon} ${ai.lynch_type||''}`;
   setAI('ai_lynch',`<div class="ai"><div style="font-size:16px;font-weight:700;margin-bottom:6px">${icon} ${esc(ai.lynch_type||'')}</div>${esc(ai.lynch_reason||'').replace(/\n/g,'<br>')}</div>`);
-  setAI('ai_products',`<div class="ai">${norm(ai.products)}</div>`);
+  setAI('ai_products',`<div class="ai">${norm(ai.products)}`
+    +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）整理　<a href="${esc(window.__productsData.url)}" target="_blank" style="color:var(--blue)">原始文件 ↗</a></div>`:`<div class="note">（未取得官方年報原文，內容為 AI 一般認知，僅供參考）</div>`)
+    +`</div>`);
   setAI('ai_competitors',`<div class="ai">${norm(ai.competitors)}</div>`);
   // 法說會展望：有官方指引 → 顯示中文翻譯(忠實翻譯官方原文)+來源；無 → 不顯示臆測內容
   if(window.__guidanceReal && window.__guidanceData){
@@ -637,6 +641,38 @@ async function fillGuidance(cik){
     }
   }catch(e){}
   return false;
+}
+
+// 從最新 10-K/20-F 官方年報擷取「產品/營收結構」原文，供 AI 以事實為依據整理（免費）
+async function fillProductsSource(cik){
+  try{
+    const sub=await fetchJson(`https://data.sec.gov/submissions/CIK${cik}.json`);
+    const f=sub.filings.recent;
+    let acc=null,doc=null,date=null;
+    for(let i=0;i<f.form.length;i++){ if(f.form[i]==='10-K'||f.form[i]==='20-F'){ acc=f.accessionNumber[i].replace(/-/g,''); doc=f.primaryDocument[i]; date=f.filingDate[i]; break; } }
+    if(!acc||!doc) return false;
+    const url=`https://www.sec.gov/Archives/edgar/data/${+cik}/${acc}/${doc}`;
+    let html; try{ const r=await fetch(PROXY+encodeURIComponent(url)); html=await r.text(); }catch(e){ return false; }
+    const txt=html.replace(/<[^>]+>/g,' ').replace(/&#?[a-z0-9]+;/gi,' ').replace(/\s+/g,' ');
+    const grab=(re,before,len)=>{ const m=txt.match(re); if(!m) return null; const i=txt.indexOf(m[0]); return txt.substr(Math.max(0,i-(before||0)),len); };
+    let chunks=[];
+    // 錨點A：產品/營收拆解表（依優先序，取第一個命中）
+    const revList=[
+      /net sales by category/i, /Products and Services Performance/i,
+      /Disaggregation of [Rr]evenue/i, /revenue disaggregat/i,
+      /[Nn]et [Rr]evenue by (?:platform|technology|geograph)/i, /Revenue by (?:platform|segment|product)/i,
+      /of (?:total )?wafer revenue/i, /accounted for [\d.]+ ?% of/i, /by reportable segment/i ];
+    for(const re of revList){ const c=grab(re,20,1500); if(c){ chunks.push(c); break; } }
+    // 錨點B：最新製程/產品世代（半導體看先進製程 2/3/5nm；一般看產品線）
+    const revFirst = chunks.length ? txt.indexOf(chunks[0].trim().slice(0,30)) : -1;
+    const techList=[ /(?:2|3|5)-?nanometer/i,
+      /entered (?:volume|risk) production/i, /principal products (?:and services )?(?:are|include)/i,
+      /The Company['’]?s (?:products|principal products)/i ];
+    for(const re of techList){ const m=txt.match(re); if(m){ const i=txt.indexOf(m[0]); if(revFirst<0||Math.abs(i-revFirst)>1600){ chunks.push(txt.substr(Math.max(0,i-80),900)); } break; } }
+    if(!chunks.length) return false;
+    window.__productsData={ text:chunks.join(' …… ').slice(0,2400), date, url };
+    return true;
+  }catch(e){ return false; }
 }
 
 // 一次載入 Yahoo 免費財務數據：年度/季度損益 + 真實本益比（現值與歷史季度）
