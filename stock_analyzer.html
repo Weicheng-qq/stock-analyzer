@@ -166,6 +166,7 @@ const PROXY = (location.protocol==='file:' || ['localhost','127.0.0.1',''].index
   ? 'http://localhost:8765/?url='
   : '/api/proxy?url=';
 // 多個免費模型，依序嘗試直到有一個成功（免費模型偶爾忙碌/故障）
+let SEARCH_GEN = 0;   // 搜尋序號（防止舊搜尋的非同步結果覆蓋新搜尋）
 const OR_MODELS = [
   'openai/gpt-oss-120b:free',
   'nvidia/nemotron-3-super-120b-a12b:free',
@@ -281,6 +282,7 @@ async function doSearch(){
   const raw=document.getElementById('searchInput').value.trim();
   if(!raw) return;
   let symbol;
+  const gen=++SEARCH_GEN;   // 本次搜尋序號：避免上一次(較慢)的非同步回應蓋掉這次結果
   window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__guidanceData=null;
   document.getElementById('welcome').style.display='none';
   document.getElementById('results').style.display='none';
@@ -348,7 +350,8 @@ async function doSearch(){
 
     // 先擷取 SEC 官方最新法說會指引 + 年報產品/營收結構原文，供 AI 以事實為依據（最多各等12秒，並行）
     logAdd('guid','擷取官方指引與年報產品結構（SEC）...');
-    try{ await Promise.race([Promise.all([fillGuidance(co.cik), fillProductsSource(co.cik)]), new Promise(r=>setTimeout(r,20000))]); }catch(e){}
+    try{ await Promise.race([Promise.all([fillGuidance(co.cik,gen), fillProductsSource(co.cik,gen)]), new Promise(r=>setTimeout(r,20000))]); }catch(e){}
+    if(gen!==SEARCH_GEN) return;   // 已有更新的搜尋，放棄本次
     logOk('guid', (window.__guidanceData?'官方指引✓':'無指引')+' / '+(window.__productsData?'年報產品結構✓':'無產品原文'));
 
     // AI 分析：優先用使用者自己的金鑰；沒有時，若是線上版就用伺服器共用金鑰(/api/ai)
@@ -360,7 +363,7 @@ async function doSearch(){
       logPanel(false);
     } else {
       logAdd('ai','AI 深度分析中（彼得林區/護城河/競爭對手/買入建議）...');
-      try{ const ai=await callGemini(ctx, gmKey, useServer); renderAI(ai); fillCompetitorPe(ai, peInfo); logOk('ai','AI 分析完成'); }
+      try{ const ai=await callGemini(ctx, gmKey, useServer); if(gen!==SEARCH_GEN) return; renderAI(ai); fillCompetitorPe(ai, peInfo, gen); logOk('ai','AI 分析完成'); }
       catch(e){ logErr('ai','AI 失敗：'+e.message); setAllAI(`<div class="err-box">AI 分析失敗：${esc(e.message)}<br>${useServer?'伺服器 AI 忙碌或未設定，請稍後重試。':'請確認 OpenRouter 金鑰正確（⚙️），或稍後重試。'}</div>`); }
       setTimeout(()=>logPanel(false),1200);
     }
@@ -607,7 +610,7 @@ function renderAI(ai){
 }
 
 // 從 SEC 6-K/8-K 最新財報新聞稿抓「真實法說會指引」（免費）。找到就覆蓋 AI 的舊展望。
-async function fillGuidance(cik){
+async function fillGuidance(cik, gen){
   const el=document.getElementById('ai_guidance'); if(!el) return;
   try{
     const sub=await fetchJson(`https://data.sec.gov/submissions/CIK${cik}.json`);
@@ -635,6 +638,7 @@ async function fillGuidance(cik){
         const prRev=/((?:we expect|management expects|the company expects|we are guiding|revenue is expected)[\s\S]{0,40}?revenue[\s\S]{0,220}?(?:billion|million|US\$[\d.,]+|between[\s\S]{0,80}?%))/i;
         let m=txt.match(prRev)||txt.match(prRe);
         if(m && /expected to be|expect.{0,60}(revenue|between)|revenue[\s\S]{0,60}(expect|between)/i.test(m[1])){
+          if(gen!=null && gen!==SEARCH_GEN) return false;   // 已被新搜尋取代
           let g=m[1].split(trimRe)[0].trim();
           window.__guidanceReal=true;
           window.__guidanceData={ text:g, date:c.date, url:url };  // 供 AI 翻譯與分析引用
@@ -648,7 +652,7 @@ async function fillGuidance(cik){
 }
 
 // 從最新 10-K/20-F 官方年報擷取「產品/營收結構」原文，供 AI 以事實為依據整理（免費）
-async function fillProductsSource(cik){
+async function fillProductsSource(cik, gen){
   try{
     const sub=await fetchJson(`https://data.sec.gov/submissions/CIK${cik}.json`);
     const f=sub.filings.recent;
@@ -657,6 +661,7 @@ async function fillProductsSource(cik){
     if(!acc||!doc) return false;
     const url=`https://www.sec.gov/Archives/edgar/data/${+cik}/${acc}/${doc}`;
     let html; try{ const r=await fetch(PROXY+encodeURIComponent(url)); html=await r.text(); }catch(e){ return false; }
+    if(gen!=null && gen!==SEARCH_GEN) return false;   // 已被新搜尋取代
     const txt=html.replace(/<[^>]+>/g,' ').replace(/&#?[a-z0-9]+;/gi,' ').replace(/\s+/g,' ');
     const grab=(re,before,len)=>{ const m=txt.match(re); if(!m) return null; const i=txt.indexOf(m[0]); return txt.substr(Math.max(0,i-(before||0)),len); };
     // 同一份年報：擷取「競爭」段落（Item 1 Competition），供 AI 以官方描述整理競爭對手
@@ -727,7 +732,7 @@ function computeCumQuarters(yf, scale){
 }
 
 // AI 回傳競爭對手美股代碼後，抓「真實」本益比做比較（Yahoo trailingPeRatio）
-async function fillCompetitorPe(ai, peInfo){
+async function fillCompetitorPe(ai, peInfo, gen){
   const el=document.getElementById('peCompetitors'); if(!el) return;
   const tickers=(Array.isArray(ai?.competitor_tickers)?ai.competitor_tickers:[]).filter(t=>/^[A-Z.]{1,6}$/.test(String(t||''))).slice(0,3);
   if(!tickers.length){ el.innerHTML='<div class="note">（AI 未提供可查詢的美股競爭對手代碼）</div>'; return; }
@@ -741,6 +746,7 @@ async function fillCompetitorPe(ai, peInfo){
       lines.push(`<div class="vr"><span class="vl">${esc(t)}（競爭對手）</span><span class="vn">${pe!=null?pe.toFixed(1)+'x':'—'}</span></div>`);
     }catch(e){ lines.push(`<div class="vr"><span class="vl">${esc(t)}</span><span class="vn">—</span></div>`); }
   }
+  if(gen!=null && gen!==SEARCH_GEN) return;   // 已被新搜尋取代
   const self=peInfo?.current!=null?peInfo.current.toFixed(1)+'x':'—';
   el.innerHTML=`<div class="vr"><span class="vl"><strong>本公司</strong></span><span class="vn"><strong>${self}</strong></span></div>`+lines.join('')+`<div class="note">競爭對手本益比為 Yahoo 即時實際數據（僅美股上市者可查）。</div>`;
 }
