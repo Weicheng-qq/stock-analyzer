@@ -412,11 +412,11 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   const overallUp=rows.length>=2 && rows[rows.length-1].rev!=null && rows[0].rev!=null && rows[rows.length-1].rev>rows[0].rev;
   const last3g=growths.slice(-3);
   const fastGrower=last3g.length===3 && last3g.every(g=>g>20);
-  // 彼得林區分類：不用平均值（單一離群年份會扭曲判斷），改用「多數決」— 每年獨立判斷級距，取多數的級距
-  const bucketOf=g=>g==null?null:g>20?'快速成長股':g>=10?'穩定成長股':g>=2?'緩慢成長股':'低成長/待判斷';
-  const majorityBucket=arr=>{ const bs=arr.map(bucketOf).filter(Boolean); if(!bs.length) return null; const cnt={}; bs.forEach(b=>cnt[b]=(cnt[b]||0)+1); let best=null,bestN=0; for(const k in cnt){ if(cnt[k]>bestN||(cnt[k]===bestN&&arr.indexOf(k)>-1)){bestN=cnt[k];best=k;} } return {type:best,counts:cnt,n:bs.length}; };
-  const maj3=majorityBucket(last3g);
-  const lynchRule = maj3?maj3.type:null;
+  // 彼得林區分類：以「最近兩年」判定，且「每年都要達標」才算該類（取兩年較低者決定級距）
+  // >=20% 快速成長股 / 10~19% 穩定成長股 / <10% 緩慢成長股
+  const bucketOf=g=>g==null?null:g>=20?'快速成長股':g>=10?'穩定成長股':'緩慢成長股';
+  const last2g=growths.slice(-2);
+  const lynchRule = last2g.length ? bucketOf(Math.min(...last2g)) : null;  // 每年都達標 → 取較低者
   const avg3=last3g.length?last3g.reduce((s,g)=>s+g,0)/last3g.length:null; // 僅供參考顯示，非分類依據
   const checklist=[
     {label:'稅後淨利率 > 40%', pass:last.nm!=null?last.nm>40:null, val:last.nm!=null?last.nm.toFixed(1)+'%':'無資料'},
@@ -517,13 +517,13 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
     +(cum?`\n${cum.label}(累計季度): 營收${cs}${fmtB(cum.rev)}, 年增${cum.yoy!=null?cum.yoy.toFixed(1)+'%':'NA'}, 毛利率${cum.gm!=null?cum.gm.toFixed(1)+'%':'NA'}, 淨利率${cum.nm!=null?cum.nm.toFixed(1)+'%':'NA'}`:'');
   const chkText=checklist.map(c=>`${c.pass===true?'通過':c.pass===false?'未達標':'無資料'}｜${c.label}（實際:${c.val}）`).join('\n');
   const peRangeText = pe5?`${pe5.min.toFixed(1)}x~${pe5.max.toFixed(1)}x${pePos!=null?'（目前'+pePos.toFixed(0)+'%位置）':''}`:'無';
-  const growths5 = rows.map(r=>r.gr).filter(g=>g!=null).slice(-5);
-  const maj5=majorityBucket(growths5);
-  const lynch5 = maj5?maj5.type:null;
-  const avg5 = growths5.length?growths5.reduce((s,g)=>s+g,0)/growths5.length:null; // 僅供參考顯示，非分類依據
-  const bucketsText=arr=>arr.map(g=>`${g.toFixed(1)}%(${bucketOf(g)})`).join(' / ');
-  return { name:co.title, symbol, price, pe, peRangeText, finText, lynchRule, avg3, avg5, lynch5, lynch5Counts:maj5?maj5.counts:null, lynch3Counts:maj3?maj3.counts:null,
-    growths5:bucketsText(growths5), last3g:bucketsText(last3g), chkText, passCount, chkTotal:checklist.length };
+  const bucketsText=arr=>arr.map((g,i,a)=>{const yr=rows.filter(r=>r.gr!=null).slice(-arr.length)[i]; return `${yr?yr.yr+'年 ':''}${g.toFixed(1)}%（${bucketOf(g)}）`;}).join('｜');
+  // 判斷是否每年都達標（給AI參考趨勢用）
+  const bothFast = last2g.length===2 && last2g.every(g=>g>=20);
+  const priorYears = rows.map(r=>r.gr).filter(g=>g!=null).slice(-5,-2);  // 更早的3年供趨勢比較
+  return { name:co.title, symbol, price, pe, peRangeText, finText, lynchRule,
+    last2Text:bucketsText(last2g), priorText:priorYears.length?bucketsText(priorYears):'無', bothFast,
+    last3g:bucketsText(last3g), chkText, passCount, chkTotal:checklist.length };
 }
 
 function aiLoading(){ return `<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>AI 分析中...</span></div>`; }
@@ -540,11 +540,12 @@ async function callGemini(ctx, key, useServer){
 近年財務（真實SEC/Yahoo數據）：
 ${ctx.finText}
 
-彼得林區分類（重要：請勿使用平均值判斷，平均值會被單一離群年份扭曲。以下是「每年獨立判斷級距後，取多數級距」的結果，為客觀計算，非AI判斷）：
-- 近5年各年成長率與各自級距：${ctx.growths5||'無資料'} → 5年多數決分類為「${ctx.lynch5||'無法判斷'}」${ctx.lynch5Counts?'（級距分布：'+Object.entries(ctx.lynch5Counts).map(([k,v])=>k+'×'+v).join('、')+'）':''}
-- 近3年各年成長率與各自級距：${ctx.last3g||'無資料'} → 3年多數決分類為「${ctx.lynchRule||'無法判斷'}」${ctx.lynch3Counts?'（級距分布：'+Object.entries(ctx.lynch3Counts).map(([k,v])=>k+'×'+v).join('、')+'）':''}
-lynch_type 請採用上方「5年多數決分類」結果；lynch_reason 請逐年點出每年數字與級距（不要只講平均），說明為何多數年份落在此級距。
-lynch_trend：比較3年多數決與5年多數決是否不同（轉強/轉弱/穩定），並具體點出是哪一年開始轉變、該年數字是多少；若近3年每年級距都不同、忽高忽低找不出多數，請說明呈現「不穩定/景氣循環」特徵。
+彼得林區分類（重要：以「最近兩年」判定，且「每年都要達到門檻」才算該類；規則：每年>=20%→快速成長股、每年10~19%→穩定成長股、每年<10%→緩慢成長股。此為客觀計算，非AI判斷）：
+- 最近兩年各年成長率與級距：${ctx.last2Text||'無資料'}
+- 依上述規則（取兩年較低者）分類結果為：「${ctx.lynchRule||'無法判斷'}」
+- 更早幾年供趨勢參考：${ctx.priorText||'無'}
+lynch_type 請「必須」採用上方分類結果「${ctx.lynchRule||''}」，不要自行更改；lynch_reason 請具體點出最近兩年各是哪一年、成長率多少、各屬哪一級距，並說明「因兩年中較低的一年落在此級距，故整體判為此類」。
+lynch_trend：比較「最近兩年」與「更早幾年」的級距是否改變（轉強/轉弱/穩定），引用實際數字，1-2句。
 
 使用者選股準則檢核結果（實際數據自動檢核）：
 ${ctx.chkText}
