@@ -283,7 +283,7 @@ async function doSearch(){
   if(!raw) return;
   let symbol;
   const gen=++SEARCH_GEN;   // 本次搜尋序號：避免上一次(較慢)的非同步回應蓋掉這次結果
-  window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__capexData=null; window.__guidanceData=null;
+  window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__capexData=null; window.__wikiData=null; window.__guidanceData=null;
   document.getElementById('welcome').style.display='none';
   document.getElementById('results').style.display='none';
   document.getElementById('results').innerHTML='';
@@ -351,7 +351,7 @@ async function doSearch(){
 
     // 先擷取 SEC 官方最新法說會指引 + 年報產品/營收結構原文，供 AI 以事實為依據（最多各等12秒，並行）
     logAdd('guid','擷取官方指引與年報產品結構（SEC）...');
-    try{ await Promise.race([Promise.all([fillGuidance(co.cik,gen), fillProductsSource(co.cik,gen)]), new Promise(r=>setTimeout(r,20000))]); }catch(e){}
+    try{ await Promise.race([Promise.all([fillGuidance(co.cik,gen), fillProductsSource(co.cik,gen), fetchWikipedia(co.title, symbol)]), new Promise(r=>setTimeout(r,20000))]); }catch(e){}
     if(gen!==SEARCH_GEN) return;   // 已有更新的搜尋，放棄本次
     logOk('guid', (window.__guidanceData?'官方指引✓':'無指引')+' / '+(window.__productsData?'年報產品結構✓':'無產品原文'));
 
@@ -558,6 +558,8 @@ ${window.__competitionData?'公司最新年報（'+window.__competitionData.date
 
 ${window.__capexData?'公司最新年報（'+window.__capexData.date+'）官方「資本支出/成長動能」段落原文（capex_zh 欄位請將此段忠實翻譯成繁體中文，保留所有數字，這是官方成長訊號）：\n'+window.__capexData.text:''}
 
+${window.__wikiData?'【維基百科最新公開資料（持續更新，比你的訓練記憶新，請以此為準判斷「最新產品/近期發展/最新製程或藥物」）—— 條目「'+window.__wikiData.title+'」】：\n'+window.__wikiData.text+'\n（products、moat、competitors、catalysts 等欄位若涉及最新產品或近期發展，必須以上方維基與官方年報為準，嚴禁使用你可能過時的舊記憶；若維基提到而年報未提到的新產品也要納入）':''}
+
 重要原則：本分析嚴格遵循彼得林區「以事實為依據」。所有陳述必須基於上方提供的真實數據或官方指引原文；不知道的事實請說「無公開資料」，嚴禁編造數字、嚴禁用舊記憶臆測未來展望。產品介紹請以你所知最新狀況描述並註明時間點（例如最新量產製程世代），不確定的請標註。
 
 請回傳此 JSON 結構（value 為繁體中文，可用 <br> 換行、<strong> 標重點）：
@@ -611,7 +613,8 @@ function renderAI(ai){
     goEl.innerHTML=`<div class="vr"><span class="vl">${mk} 法說會成長動能（CEO 對未來展望）</span><span class="vn ${cl}">${esc(go)}</span></div>`
       +(ai.growth_outlook_reason?`<div class="note" style="margin-top:2px">${esc(ai.growth_outlook_reason)}</div>`:''); }
   setAI('ai_products',`<div class="ai">${norm(ai.products)}`
-    +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）整理　<a href="${esc(window.__productsData.url)}" target="_blank" style="color:var(--blue)">原始文件 ↗</a></div>`:`<div class="note">（未取得官方年報原文，內容為 AI 一般認知，僅供參考）</div>`)
+    +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理　<a href="${esc(window.__productsData.url)}" target="_blank" style="color:var(--blue)">官方文件 ↗</a>${window.__wikiData?` ｜ <a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
+      :(window.__wikiData?`<div class="note" style="color:var(--green)">✅ 依維基百科最新公開資料（持續更新）整理　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a></div>`:`<div class="note">（未取得官方或維基資料，內容為 AI 一般認知，僅供參考）</div>`))
     +`</div>`);
   setAI('ai_competitors',`<div class="ai">${norm(ai.competitors)}`
     +(window.__competitionData?`<div class="note" style="color:var(--green)">✅ 參考公司官方年報（${esc(window.__competitionData.date)}）競爭段落　<a href="${esc(window.__competitionData.url)}" target="_blank" style="color:var(--blue)">原始文件 ↗</a></div>`:`<div class="note">（產業排名為 AI 一般認知，僅供參考）</div>`)
@@ -722,6 +725,35 @@ async function fillProductsSource(cik, gen){
     window.__productsData={ text:chunks.join(' …… ').slice(0,2400), date, url };
     return true;
   }catch(e){ return false; }
+}
+
+// 從維基全文濃縮出「簡介 + 最新/產品相關重點」，控制長度又保留最新資訊(如最新藥物/製程)
+function condenseWiki(extract){
+  const intro=extract.split(/\n\n+/)[0].slice(0,1400);
+  let sents=[]; try{ sents=extract.split(/(?<=[.!?])\s+|\n+/); }catch(e){ sents=extract.split(/\n+/); }
+  const kw=/\b20(2[3-9]|3\d)\b|approv|launch|unveil|introduc|pipeline|next-gen|nanometer|\d\s?nm\b|\bN[2-9]\b|GLP-1|semaglutide|Wegovy|Ozempic|Rybelsus|oral |obesity|CagriSema|revenue|market share|largest|leading|world'?s|flagship|latest/i;
+  let extra='';
+  for(const s of sents){ const t=s.trim(); if(t.length<20) continue; if(kw.test(t) && intro.indexOf(t.slice(0,25))<0){ extra+=t+' '; if(extra.length>3600) break; } }
+  return (intro+(extra?('\n\n【最新/產品重點摘錄】：'+extra):'')).slice(0,5200);
+}
+
+// 維基百科（免費、自帶CORS、內容持續更新）：抓公司最新事實(產品/近期發展)，補 AI 舊記憶與 SEC 年報延遲
+async function fetchWikipedia(name, symbol){
+  const clean=String(name||'').replace(/\b(A\s?S|A\/S|INC|CORP(?:ORATION)?|LTD|LIMITED|PLC|CO|COMPANY|HOLDINGS?|GROUP|N\s?V|S\s?A|AG|CLASS [A-C]|THE)\b\.?/gi,'').replace(/[,\.]/g,' ').replace(/\s+/g,' ').trim();
+  for(const q of [clean, name, symbol]){
+    if(!q) continue;
+    try{
+      const url=`https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(q)}&gsrlimit=1&prop=extracts|info&explaintext=1&inprop=url&format=json&origin=*`;
+      const r=await fetch(url); if(!r.ok) continue;
+      const d=await r.json(); const pages=d&&d.query&&d.query.pages;
+      if(!pages) continue;
+      const p=Object.values(pages)[0];
+      if(!p||!p.extract||p.extract.length<200) continue;
+      window.__wikiData={ title:p.title, text:condenseWiki(p.extract), url:p.fullurl||('https://en.wikipedia.org/wiki/'+encodeURIComponent(p.title)) };
+      return true;
+    }catch(e){}
+  }
+  return false;
 }
 
 // 一次載入 Yahoo 免費財務數據：年度/季度損益 + 真實本益比（現值與歷史季度）
