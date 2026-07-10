@@ -416,11 +416,15 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   const overallUp=rows.length>=2 && rows[rows.length-1].rev!=null && rows[0].rev!=null && rows[rows.length-1].rev>rows[0].rev;
   const last3g=growths.slice(-3);
   const fastGrower=last3g.length===3 && last3g.every(g=>g>20);
-  // 彼得林區分類：以「最近兩年」判定，且「每年都要達標」才算該類（取兩年較低者決定級距）
-  // >=20% 快速成長股 / 10~19% 穩定成長股 / <10% 緩慢成長股
+  // 彼得林區分類：以「最近五年」判定，每年獨立看都須達標，但允許排除1年例外（可能一次性因素）
+  // 即 5 年中至少 4 年 >=20% → 快速成長股；至少 4 年 >=10% → 穩定成長股；否則緩慢成長股
   const bucketOf=g=>g==null?null:g>=20?'快速成長股':g>=10?'穩定成長股':'緩慢成長股';
   const last2g=growths.slice(-2);
-  const lynchRule = last2g.length ? bucketOf(Math.min(...last2g)) : null;  // 每年都達標 → 取較低者
+  const last5g=growths.slice(-5);
+  const n5=last5g.length, need5=Math.max(1,n5-1);   // 允許 1 年例外
+  const lynchRule = n5 ? (last5g.filter(g=>g>=20).length>=need5?'快速成長股'
+                        : last5g.filter(g=>g>=10).length>=need5?'穩定成長股'
+                        : '緩慢成長股') : null;
   const avg3=last3g.length?last3g.reduce((s,g)=>s+g,0)/last3g.length:null; // 僅供參考顯示，非分類依據
   const checklist=[
     {label:'稅後淨利率 > 40%', pass:last.nm!=null?last.nm>40:null, val:last.nm!=null?last.nm.toFixed(1)+'%':'無資料'},
@@ -524,11 +528,14 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   // 年份配對修正：直接用 {年份,成長率} 物件配對，避免「較早期間」被貼上最近年份
   const grRows=rows.filter(r=>r.gr!=null);                        // [{yr, gr}, ...] 年份與成長率一一對應
   const fmtGr=arr=>arr.map(r=>`${r.yr}年 ${r.gr.toFixed(1)}%（${bucketOf(r.gr)}）`).join('｜');
-  const last2R=grRows.slice(-2), priorR=grRows.slice(-5,-2);
-  // 判斷是否每年都達標（給AI參考趨勢用）
-  const bothFast = last2g.length===2 && last2g.every(g=>g>=20);
+  const last2R=grRows.slice(-2), priorR=grRows.slice(-5,-2), last5R=grRows.slice(-5);
+  // 找出被排除的例外年（未達判定級距門檻的那一年，最多1年）
+  const th = lynchRule==='快速成長股'?20 : lynchRule==='穩定成長股'?10 : null;
+  const outlierR = th!=null ? last5R.filter(r=>r.gr<th) : [];
+  const outlierText = outlierR.length ? outlierR.map(r=>`${r.yr}年 ${r.gr.toFixed(1)}%`).join('、') : '無';
   return { name:co.title, symbol, price, pe, peRangeText, finText, lynchRule,
-    last2Text:fmtGr(last2R), priorText:priorR.length?fmtGr(priorR):'無', bothFast,
+    last5Text:fmtGr(last5R), outlierText,
+    last2Text:fmtGr(last2R), priorText:priorR.length?fmtGr(priorR):'無',
     last3g:fmtGr(grRows.slice(-3)), chkText, passCount, chkTotal:checklist.length };
 }
 
@@ -546,12 +553,12 @@ async function callGemini(ctx, key, useServer){
 近年財務（真實SEC/Yahoo數據）：
 ${ctx.finText}
 
-彼得林區分類（重要：以「最近兩年」判定，且「每年都要達到門檻」才算該類；規則：每年>=20%→快速成長股、每年10~19%→穩定成長股、每年<10%→緩慢成長股。此為客觀計算，非AI判斷）：
-- 最近兩年各年成長率與級距：${ctx.last2Text||'無資料'}
-- 依上述規則（取兩年較低者）分類結果為：「${ctx.lynchRule||'無法判斷'}」
-- 更早幾年供趨勢參考：${ctx.priorText||'無'}
-lynch_type 請「必須」採用上方分類結果「${ctx.lynchRule||''}」，不要自行更改；lynch_reason 請具體點出最近兩年各是哪一年、成長率多少、各屬哪一級距，並說明「因兩年中較低的一年落在此級距，故整體判為此類」。
-lynch_trend：比較「最近兩年」與「更早幾年」的級距是否改變（轉強/轉弱/穩定），引用實際數字，1-2句。
+彼得林區分類（重要規則：以「最近五年」判定，每年獨立看都須達標，但允許排除1年例外（可能因一次性因素）；即5年中至少4年>=20%→快速成長股、至少4年>=10%→穩定成長股、否則緩慢成長股。此為客觀計算，非AI判斷）：
+- 最近五年各年成長率與級距：${ctx.last5Text||'無資料'}
+- 被排除的例外年：${ctx.outlierText||'無'}
+- 依上述規則分類結果為：「${ctx.lynchRule||'無法判斷'}」
+lynch_type 請「必須」採用上方分類結果「${ctx.lynchRule||''}」，不要自行更改；lynch_reason 請逐年點出五年各自的年份/成長率/級距，若有例外年請說明「僅該年未達標、依規則排除（可能為一次性因素），其餘各年皆達標，故判為此類」。
+lynch_trend：比較「最近兩年 ${ctx.last2Text||''}」與「更早期間 ${ctx.priorText||''}」的級距是否改變（轉強/轉弱/穩定），引用實際數字並正確對應年份，1-2句。
 
 使用者選股準則檢核結果（實際數據自動檢核）：
 ${ctx.chkText}
