@@ -297,6 +297,7 @@ async function doSearch(){
     if(!found) throw new Error(`找不到「${raw}」，請輸入美股代碼(如 AAPL)或公司名(如 台積電 / Apple)`);
     symbol=found.symbol;
     const co=found.co;
+    window.__coNameForLinks=co.title;   // 供法說會口頭Q&A直達連結使用
     logOk('cik',`找到：${co.title}（${symbol}）`);
 
     logAdd('fin','載入 SEC 官方財報...');
@@ -621,6 +622,12 @@ function renderAI(ai){
     +(window.__competitionData?`<div class="note" style="color:var(--green)">✅ 參考公司官方年報（${esc(window.__competitionData.date)}）競爭段落　<a href="${esc(window.__competitionData.url)}" target="_blank" style="color:var(--blue)">原始文件 ↗</a></div>`:`<div class="note">（產業排名為 AI 一般認知，僅供參考）</div>`)
     +`</div>`);
   // 法說會展望：有官方指引 → 顯示中文翻譯(忠實翻譯官方原文)+來源；無 → 不顯示臆測內容
+  // 法說會口頭 Q&A 直達連結（官方逐字稿/影片為一手來源，一鍵可查）
+  const coName=(window.__coNameForLinks||'').trim();
+  const linksBlock = coName ? `<div class="note" style="margin-top:10px;border-top:1px solid var(--border);padding-top:8px">🎧 想看 CEO 口頭 Q&A？一鍵直達一手來源：
+    <a href="https://www.google.com/search?q=${encodeURIComponent(coName+' earnings call transcript 逐字稿')}" target="_blank" style="color:var(--blue)">官方逐字稿搜尋 ↗</a>
+    <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(coName+' earnings call')}" target="_blank" style="color:var(--blue)">YouTube 法說影片 ↗</a>
+    <a href="https://www.google.com/search?q=${encodeURIComponent(coName+' investor relations')}" target="_blank" style="color:var(--blue)">公司投資人關係頁 ↗</a></div>` : '';
   // 資本支出/成長動能（官方年報，若有）
   const capexZh=(ai.capex_zh&&String(ai.capex_zh).trim())?ai.capex_zh:(window.__capexData?window.__capexData.text:null);
   const capexBlock = window.__capexData ? `<div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px"><div style="color:var(--orange);font-size:12px;margin-bottom:4px">🏗️ 資本支出與成長動能（官方年報 ${esc(window.__capexData.date)}）</div>${norm(capexZh)}</div>` : '';
@@ -630,11 +637,11 @@ function renderAI(ai){
     setAI('ai_guidance',`<div class="ai"><div style="color:var(--green);font-size:12px;margin-bottom:6px">✅ 來自公司向 SEC 申報的官方財報新聞稿（${esc(gd.date)}）— 真實指引</div>`
       +(zh?`${norm(zh)}`:`<span style="color:var(--text2)">（翻譯失敗，顯示原文）</span><br>${esc(gd.text)}`)
       +capexBlock
-      +`<div class="note"><a href="${esc(gd.url)}" target="_blank" style="color:var(--blue)">查看官方原始文件 ↗</a></div></div>`);
+      +`<div class="note"><a href="${esc(gd.url)}" target="_blank" style="color:var(--blue)">查看官方原始文件 ↗</a></div>`+linksBlock+`</div>`);
   } else if(window.__capexData){
-    setAI('ai_guidance',`<div class="ai">${capexBlock}<div class="note"><a href="${esc(window.__capexData.url)}" target="_blank" style="color:var(--blue)">查看官方原始文件 ↗</a></div></div>`);
+    setAI('ai_guidance',`<div class="ai">${capexBlock}<div class="note"><a href="${esc(window.__capexData.url)}" target="_blank" style="color:var(--blue)">查看官方原始文件 ↗</a></div>`+linksBlock+`</div>`);
   } else {
-    setAI('ai_guidance',`<div class="ai" style="color:var(--text2)">此公司未能從官方申報文件擷取到結構化的未來展望指引。<br>依「以事實為依據」原則，此處不提供 AI 臆測的展望。</div>`);
+    setAI('ai_guidance',`<div class="ai" style="color:var(--text2)">此公司未能從官方申報文件擷取到結構化的未來展望指引。<br>依「以事實為依據」原則，此處不提供 AI 臆測的展望。${linksBlock}</div>`);
   }
   setAI('ai_risks',`<div class="ai">${norm(ai.catalysts)}<br><br>${norm(ai.risks)}</div>`);
   setAI('ai_moat',`<div class="ai">${norm(ai.moat)}</div>`);
