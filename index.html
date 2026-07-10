@@ -167,15 +167,16 @@ const PROXY = (location.protocol==='file:' || ['localhost','127.0.0.1',''].index
   : '/api/proxy?url=';
 // 多個免費模型，依序嘗試直到有一個成功（免費模型偶爾忙碌/故障）
 let SEARCH_GEN = 0;   // 搜尋序號（防止舊搜尋的非同步結果覆蓋新搜尋）
+// 順序：快速的「指令型」模型優先（可用時 5-10 秒），再退到較慢但強的「推理型」模型
 const OR_MODELS = [
-  'openai/gpt-oss-120b:free',
-  'nvidia/nemotron-3-super-120b-a12b:free',
-  'openai/gpt-oss-20b:free',
-  'nvidia/nemotron-3-nano-30b-a3b:free',
   'meta-llama/llama-3.3-70b-instruct:free',
   'qwen/qwen3-next-80b-a3b-instruct:free',
   'google/gemma-4-31b-it:free',
-  'nousresearch/hermes-3-llama-3.1-405b:free'
+  'nousresearch/hermes-3-llama-3.1-405b:free',
+  'qwen/qwen3-coder:free',
+  'openai/gpt-oss-120b:free',
+  'nvidia/nemotron-3-super-120b-a12b:free',
+  'openai/gpt-oss-20b:free'
 ];
 
 // localStorage 在 data:/某些預覽環境會被停用，包一層安全存取（讀不到就用記憶體）
