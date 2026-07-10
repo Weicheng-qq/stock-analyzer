@@ -1,6 +1,6 @@
 # US Stock Analyzer - Local Data Proxy (Windows PowerShell, ASCII only)
-# Lets stock_analyzer.html read SEC EDGAR + Yahoo data from the browser.
-# Run: double-click start.bat  (or right-click this file -> Run with PowerShell)
+# Concurrent version: handles many parallel requests (like the online Vercel proxy).
+# Run: double-click 啟動.bat  (or right-click -> Run with PowerShell)
 
 $port = 8765
 $listener = New-Object System.Net.HttpListener
@@ -20,42 +20,57 @@ Write-Host "   Press Ctrl + C to stop." -ForegroundColor Green
 Write-Host "  =====================================================" -ForegroundColor Green
 Write-Host ""
 
-while ($listener.IsListening) {
+# Runspace pool so parallel browser requests are handled concurrently (not one-by-one)
+$pool = [RunspaceFactory]::CreateRunspacePool(1, 16)
+$pool.Open()
+
+$worker = {
+    param($ctx)
+    $res = $ctx.Response
     try {
-        $ctx = $listener.GetContext()
-        $req = $ctx.Request
-        $res = $ctx.Response
         $res.AddHeader("Access-Control-Allow-Origin", "*")
         $res.AddHeader("Access-Control-Allow-Headers", "*")
-
-        $target = $req.QueryString["url"]
+        $target = $ctx.Request.QueryString["url"]
         if ([string]::IsNullOrEmpty($target)) {
             $res.StatusCode = 400
             $b = [System.Text.Encoding]::UTF8.GetBytes('{"error":"missing url"}')
-            $res.OutputStream.Write($b,0,$b.Length); $res.Close(); continue
+            $res.OutputStream.Write($b,0,$b.Length); $res.Close(); return
         }
-        # whitelist: SEC + Yahoo only
         if ($target -notmatch '^https://(data\.sec\.gov|www\.sec\.gov|query[12]\.finance\.yahoo\.com)/') {
             $res.StatusCode = 403
             $b = [System.Text.Encoding]::UTF8.GetBytes('{"error":"host not allowed"}')
-            $res.OutputStream.Write($b,0,$b.Length); $res.Close(); continue
+            $res.OutputStream.Write($b,0,$b.Length); $res.Close(); return
         }
         try {
-            # SEC requires a descriptive User-Agent with contact info
             $data = Invoke-WebRequest -Uri $target -UseBasicParsing -TimeoutSec 25 `
                     -UserAgent "StockAnalyzer/1.0 (personal use; contact@example.com)" `
                     -Headers @{ "Accept-Encoding" = "gzip, deflate" }
             $res.ContentType = "application/json; charset=utf-8"
             $b = [System.Text.Encoding]::UTF8.GetBytes($data.Content)
             $res.OutputStream.Write($b,0,$b.Length)
-            Write-Host ("  OK  " + $target.Substring(0,[Math]::Min(75,$target.Length))) -ForegroundColor Gray
         } catch {
             $res.StatusCode = 502
-            $msg = '{"error":"' + ($_.Exception.Message -replace '"','') + '"}'
-            $b = [System.Text.Encoding]::UTF8.GetBytes($msg)
+            $b = [System.Text.Encoding]::UTF8.GetBytes('{"error":"' + ($_.Exception.Message -replace '"','') + '"}')
             $res.OutputStream.Write($b,0,$b.Length)
-            Write-Host ("  ERR " + $_.Exception.Message) -ForegroundColor Red
         }
         $res.Close()
+    } catch { try { $res.Close() } catch {} }
+}
+
+$jobs = New-Object System.Collections.ArrayList
+while ($listener.IsListening) {
+    try {
+        $ctx = $listener.GetContext()          # blocks until a request arrives
+        $ps = [PowerShell]::Create()
+        $ps.RunspacePool = $pool
+        [void]$ps.AddScript($worker).AddArgument($ctx)
+        $h = $ps.BeginInvoke()
+        [void]$jobs.Add([pscustomobject]@{ ps=$ps; h=$h })
+        # tidy finished jobs occasionally
+        if ($jobs.Count -gt 24) {
+            for ($i=$jobs.Count-1; $i -ge 0; $i--) {
+                if ($jobs[$i].h.IsCompleted) { try { $jobs[$i].ps.EndInvoke($jobs[$i].h); $jobs[$i].ps.Dispose() } catch {}; $jobs.RemoveAt($i) }
+            }
+        }
     } catch { }
 }
