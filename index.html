@@ -654,10 +654,10 @@ async function fillGuidance(cik, gen){
     for(let i=0;i<f.form.length && cands.length<20;i++){
       if(f.form[i]==='6-K'||f.form[i]==='8-K') cands.push({acc:f.accessionNumber[i].replace(/-/g,''),date:f.filingDate[i]});
     }
-    const docRe=/(q[1-4].*e|earnings|result|guidance|press|ex.?99|financ)/i;  // 像新聞稿的檔名
+    const docRe=/(q[1-4]|earnings|result|guidance|press|ex.?99|financ|announc|interim|outlook|caq|6k|report)/i;  // 像新聞稿/財報的檔名
     // 擷取指引起點，後面用固定視窗+去尾雜訊（避免被 US$39.0 的小數點截斷）
     const prRe=/((?:management expects|Based on the Company|Based on its current|We (?:currently )?expect|The Company expects)[\s\S]{40,650})/i;
-    const trimRe=/\(Unit:|consolidated results|All figures|TSMC.{0,4}s 20\d\d|This (?:press|announcement)|About TSMC|Conference Call|Safe Harbor/i;
+    const trimRe=/\(Unit:|consolidated results|All figures|TSMC.{0,4}s 20\d\d|This (?:press|announcement)|About (?:TSMC|Novo)|Conference Call|Safe Harbor|PROFIT AND LOSS|DKK million|Financial calendar|Forward-looking/i;
     let fetches=0;
     for(const c of cands){
       if(fetches>=14) break;
@@ -670,10 +670,12 @@ async function fillGuidance(cik, gen){
         const url=`https://www.sec.gov/Archives/edgar/data/${+cik}/${c.acc}/${fn}`;
         let txt; try{ const r=await fetch(PROXY+encodeURIComponent(url)); txt=await r.text(); }catch(e){ continue; }
         txt=txt.replace(/<[^>]+>/g,' ').replace(/&#?[a-z0-9]+;/gi,' ').replace(/\s+/g,' ');
-        // 先找含「營收」的財測句，沒有再用一般指引句
+        // 三種語法：① 歐洲藥廠成長率展望(Outlook...growth expected to be X% at CER) ② 營收金額財測 ③ 一般指引句
+        const prOutlook=/((?:full[- ]year \d{4} outlook|\d{4} outlook is|Outlook[\s\S]{0,60}?(?:20\d\d )?outlook)[\s\S]{0,120}?(?:sales growth|is now expected|expected to be)[\s\S]{0,500}?operating profit growth[\s\S]{0,120}?%[^.]{0,120}\.)/i;
+        const prGrow=/((?:sales growth|Adjusted sales growth)[\s\S]{0,60}?(?:is )?(?:now )?expected to be[\s\S]{0,120}?%[\s\S]{0,300}?operating profit growth[\s\S]{0,120}?%[^.]{0,60}\.)/i;
         const prRev=/((?:we expect|management expects|the company expects|we are guiding|revenue is expected)[\s\S]{0,40}?revenue[\s\S]{0,220}?(?:billion|million|US\$[\d.,]+|between[\s\S]{0,80}?%))/i;
-        let m=txt.match(prRev)||txt.match(prRe);
-        if(m && /expected to be|expect.{0,60}(revenue|between)|revenue[\s\S]{0,60}(expect|between)/i.test(m[1])){
+        let m=txt.match(prOutlook)||txt.match(prGrow)||txt.match(prRev)||txt.match(prRe);
+        if(m && /expected to (?:be|grow)|expect.{0,60}(revenue|between)|revenue[\s\S]{0,60}(expect|between)|sales growth[\s\S]{0,40}%/i.test(m[1])){
           if(gen!=null && gen!==SEARCH_GEN) return false;   // 已被新搜尋取代
           let g=m[1].split(trimRe)[0].trim();
           window.__guidanceReal=true;
