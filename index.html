@@ -521,13 +521,15 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
     +(cum?`\n${cum.label}(累計季度): 營收${cs}${fmtB(cum.rev)}, 年增${cum.yoy!=null?cum.yoy.toFixed(1)+'%':'NA'}, 毛利率${cum.gm!=null?cum.gm.toFixed(1)+'%':'NA'}, 淨利率${cum.nm!=null?cum.nm.toFixed(1)+'%':'NA'}`:'');
   const chkText=checklist.map(c=>`${c.pass===true?'通過':c.pass===false?'未達標':'無資料'}｜${c.label}（實際:${c.val}）`).join('\n');
   const peRangeText = pe5?`${pe5.min.toFixed(1)}x~${pe5.max.toFixed(1)}x${pePos!=null?'（目前'+pePos.toFixed(0)+'%位置）':''}`:'無';
-  const bucketsText=arr=>arr.map((g,i,a)=>{const yr=rows.filter(r=>r.gr!=null).slice(-arr.length)[i]; return `${yr?yr.yr+'年 ':''}${g.toFixed(1)}%（${bucketOf(g)}）`;}).join('｜');
+  // 年份配對修正：直接用 {年份,成長率} 物件配對，避免「較早期間」被貼上最近年份
+  const grRows=rows.filter(r=>r.gr!=null);                        // [{yr, gr}, ...] 年份與成長率一一對應
+  const fmtGr=arr=>arr.map(r=>`${r.yr}年 ${r.gr.toFixed(1)}%（${bucketOf(r.gr)}）`).join('｜');
+  const last2R=grRows.slice(-2), priorR=grRows.slice(-5,-2);
   // 判斷是否每年都達標（給AI參考趨勢用）
   const bothFast = last2g.length===2 && last2g.every(g=>g>=20);
-  const priorYears = rows.map(r=>r.gr).filter(g=>g!=null).slice(-5,-2);  // 更早的3年供趨勢比較
   return { name:co.title, symbol, price, pe, peRangeText, finText, lynchRule,
-    last2Text:bucketsText(last2g), priorText:priorYears.length?bucketsText(priorYears):'無', bothFast,
-    last3g:bucketsText(last3g), chkText, passCount, chkTotal:checklist.length };
+    last2Text:fmtGr(last2R), priorText:priorR.length?fmtGr(priorR):'無', bothFast,
+    last3g:fmtGr(grRows.slice(-3)), chkText, passCount, chkTotal:checklist.length };
 }
 
 function aiLoading(){ return `<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>AI 分析中...</span></div>`; }
