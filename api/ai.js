@@ -22,7 +22,8 @@ export default async function handler(req, res) {
       try {
         const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 30000);
         const reqBody = { model: gm, messages: body.messages, temperature: body.temperature != null ? body.temperature : 0.4 };
-        if (gm.indexOf('gpt-oss') > -1) reqBody.reasoning_effort = 'high';  // Groq硬體極快，high也能在20秒內回應，內容更完整（使用者要求品質優先於速度）
+        // 完整分析prompt很大(15個欄位+官方年報原文,約5000+ tokens)，high effort容易思考超過30秒逾時、掉回較弱模型，medium是實測穩定且內容仍豐富的甜蜜點
+        if (gm.indexOf('gpt-oss') > -1) reqBody.reasoning_effort = 'medium';
         const gr = await fetch('https://api.groq.com/openai/v1/chat/completions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey },
