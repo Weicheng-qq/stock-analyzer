@@ -15,16 +15,21 @@ export default async function handler(req, res) {
   const groqKey = process.env.GROQ_KEY;
   const orKey = process.env.OPENROUTER_KEY;
 
-  // 1) 優先 Groq（快、額度大）。用固定的高品質快速模型，逐一嘗試。
+  // 1) 優先 Groq（快、額度大）。gpt-oss-120b 有推理能力、內容品質較好排第一；純指令型模型當備援。
   if (groqKey) {
-    const groqModels = ['llama-3.3-70b-versatile', 'openai/gpt-oss-120b', 'moonshotai/kimi-k2-instruct', 'llama-3.1-8b-instant'];
+    const groqModels = ['openai/gpt-oss-120b', 'llama-3.3-70b-versatile', 'moonshotai/kimi-k2-instruct', 'llama-3.1-8b-instant'];
     for (const gm of groqModels) {
       try {
+        const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 25000);
+        const reqBody = { model: gm, messages: body.messages, temperature: body.temperature != null ? body.temperature : 0.4 };
+        if (gm.indexOf('gpt-oss') > -1) reqBody.reasoning_effort = 'medium';  // gpt-oss 在 Groq 上支援 reasoning_effort，拉高思考深度、內容更豐富
         const gr = await fetch('https://api.groq.com/openai/v1/chat/completions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey },
-          body: JSON.stringify({ model: gm, messages: body.messages, temperature: body.temperature != null ? body.temperature : 0.4 })
+          signal: ctl.signal,
+          body: JSON.stringify(reqBody)
         });
+        clearTimeout(to);
         const gt = await gr.text();
         if (gr.ok && gt.indexOf('"choices"') > -1 && gt.indexOf('"content"') > -1) {
           res.setHeader('Content-Type', 'application/json; charset=utf-8');
