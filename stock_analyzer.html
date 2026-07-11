@@ -909,8 +909,11 @@ async function fillProductsSource(cik, gen){
       /principal products (?:and services )?(?:are|include)/i,
       /The Company['’]?s (?:products|principal products)/i ];
     for(const re of techList){ const m=txt.match(re); if(m){ const i=txt.indexOf(m[0]); if(revFirst<0||Math.abs(i-revFirst)>1600){ chunks.push(txt.substr(Math.max(0,i-90),1000)); break; } } }  // 只在真的採用該段時才break，避免第一個候選離營收表太近被濾掉時,連後面含「最新製程已量產」的候選都沒機會試
+    // 錨點C：最新製程「已量產」明確宣示（獨立於錨點B之外額外抓，因為錨點B常被營收佔比表搶先命中，這句最新事實才不會被擠掉）
+    const volRe=/\b(?:1|2|3)-?nanometer[\w\s]{0,30}(?:entered|enter[ed]?|is in|began|begun|start(?:ed|ing))\s+(?:volume|mass)\s+production/i;
+    { const vm=txt.match(volRe); if(vm){ const vi=txt.indexOf(vm[0]); const already=chunks.some(c=>c.indexOf(vm[0].slice(0,20))>-1); if(!already) chunks.push(txt.substr(Math.max(0,vi-30),260)); } }
     if(!chunks.length) return false;
-    window.__productsData={ text:chunks.join(' …… ').slice(0,2400), date, url };
+    window.__productsData={ text:chunks.join(' …… ').slice(0,2600), date, url };
     return true;
   }catch(e){ return false; }
 }
