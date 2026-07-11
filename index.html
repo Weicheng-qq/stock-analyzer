@@ -2,8 +2,16 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>美股深度分析（SEC財報 + AI分析）</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0d1117">
+<link rel="icon" href="/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="美股分析">
+<meta name="mobile-web-app-capable" content="yes">
 <script>
 // 錯誤顯示器：任何 JS 錯誤(含瀏覽器不支援新語法)直接在畫面頂端跳紅字
 window.onerror = function(msg, src, line, col, err){
@@ -1065,6 +1073,11 @@ window.addEventListener('load', function(){
   var inp=document.getElementById('searchInput');
   if(inp && !inp.value){ inp.value='台積電'; setTimeout(function(){ doSearch(); }, 300); }
 });
+
+// PWA：註冊 Service Worker（只在線上 https 環境註冊，本機開發用 file:// 或 localhost 不需要）
+if('serviceWorker' in navigator && location.protocol==='https:'){
+  window.addEventListener('load', function(){ navigator.serviceWorker.register('/sw.js').catch(function(){}); });
+}
 </script>
 </body>
 </html>
