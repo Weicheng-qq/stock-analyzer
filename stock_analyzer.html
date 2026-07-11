@@ -380,13 +380,11 @@ async function doSearch(){
         } else aiErr=e;
       }
       if(gen!==SEARCH_GEN) return;
+      window.__lastAI={ctx, peInfo, gen};   // 供「只重試 AI」使用，不必重抓 SEC/Yahoo
       if(ai){ renderAI(ai); fillCompetitorPe(ai, peInfo, gen); logOk('ai', usedServer&&gmKey?'AI 分析完成（你的金鑰已失效，本次已自動改用伺服器金鑰，建議 ⚙️ 更新）':'AI 分析完成'); }
       else{
         logErr('ai','AI 失敗：'+aiErr.message);
-        const isKey=aiErr.message==='KEY_INVALID';
-        setAllAI(`<div class="err-box">AI 分析失敗：${esc(isKey?'OpenRouter 金鑰無效（User not found）':aiErr.message)}<br>${
-          isKey?'你儲存的金鑰已被刪除或失效。請點 ⚙️ 到 openrouter.ai/keys 重新建立金鑰貼上；或把金鑰欄清空存檔後改用線上版（免金鑰）。'
-          :(usedServer?'伺服器 AI 忙碌或未設定，請稍後重試。':'請確認 OpenRouter 金鑰正確（⚙️），或稍後重試。')}</div>`);
+        showAIFail(aiErr, usedServer);
       }
       setTimeout(()=>logPanel(false),1200);
     }
@@ -578,7 +576,40 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 }
 
 function aiLoading(){ return `<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>AI 分析中...</span></div>`; }
-function setAllAI(html){ ['ai_lynch','ai_products','ai_competitors','ai_guidance','ai_risks','ai_moat','ai_valuation','ai_verdict'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=html; }); const lb=document.getElementById('lynchBadge'); if(lb) lb.textContent='（需 AI 金鑰）'; }
+function setAllAI(html){ ['ai_lynch','ai_products','ai_competitors','ai_guidance','ai_risks','ai_moat','ai_valuation','ai_verdict'].forEach(id=>{ const el=document.getElementById(id); if(!el) return;
+  // 官方指引是真實資料，AI 失敗/重試時不可蓋掉，只把「翻譯載入中」改成說明
+  if(id==='ai_guidance' && window.__guidanceData && el.innerHTML.indexOf('真實指引')>-1){ el.innerHTML=el.innerHTML.replace('（中文翻譯載入中...）','（AI 忙碌，暫以官方原文顯示）'); return; }
+  el.innerHTML=html; }); const lb=document.getElementById('lynchBadge'); if(lb) lb.textContent='（需 AI 金鑰）'; }
+
+function showAIFail(aiErr, usedServer){
+  const isKey=aiErr.message==='KEY_INVALID';
+  setAllAI(`<div class="err-box">AI 分析失敗：${esc(isKey?'OpenRouter 金鑰無效（User not found）':aiErr.message)}<br>${
+    isKey?'你儲存的金鑰已被刪除或失效。請點 ⚙️ 到 openrouter.ai/keys 重新建立金鑰貼上；或把金鑰欄清空存檔後改用線上版（免金鑰）。'
+    :(usedServer?'伺服器 AI 忙碌，請稍後重試。':'請確認 OpenRouter 金鑰正確（⚙️），或稍後重試。')}<br><button class="retry-btn" onclick="retryAI()">🔁 只重試 AI 分析（財務數據不必重抓）</button></div>`);
+}
+
+// 只重跑 AI 分析：沿用 doSearch 已抓好的財務/指引/維基資料（免費模型壅塞時常用）
+async function retryAI(){
+  const st=window.__lastAI;
+  if(!st || st.gen!==SEARCH_GEN){ doSearch(); return; }
+  const gmKey=getGmKey();
+  const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1);
+  const useServer=!gmKey && !isLocal;
+  if(!gmKey && !useServer){ openSettings(); return; }
+  setAllAI(aiLoading());
+  const old=document.getElementById('log_ai'); if(old) old.remove();
+  logPanel(true); logAdd('ai','AI 重試中（彼得林區/護城河/競爭對手/買入建議）...');
+  let ai=null, aiErr=null, usedServer=useServer;
+  try{ ai=await callGemini(st.ctx, gmKey, useServer); }
+  catch(e){
+    if(e.message==='KEY_INVALID' && !isLocal){ usedServer=true; try{ ai=await callGemini(st.ctx,'',true); }catch(e2){ aiErr=e2; } }
+    else aiErr=e;
+  }
+  if(st.gen!==SEARCH_GEN) return;
+  if(ai){ renderAI(ai); fillCompetitorPe(ai, st.peInfo, st.gen); logOk('ai','AI 分析完成'); }
+  else{ logErr('ai','AI 失敗：'+aiErr.message); showAIFail(aiErr, usedServer); }
+  setTimeout(()=>logPanel(false),1200);
+}
 function setAI(id,html){ const el=document.getElementById(id); if(el) el.innerHTML=html; }
 
 // ── Gemini ──
