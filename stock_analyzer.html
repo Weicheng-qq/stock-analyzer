@@ -145,7 +145,8 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   <div id="welcome" class="welcome">
     <h1>美股深度分析工具</h1>
     <p>10年財務指標 · 營收成長 · 彼得林區分類 · 護城河 · 競爭對手 · 買入建議</p>
-    <div class="free-tag">✅ 財務數據免費(SEC官方) · AI分析用免費 Gemini</div>
+    <div class="free-tag">✅ 財務數據免費(SEC官方) · AI分析用免費模型</div>
+    <p style="color:var(--text2);font-size:13px;margin-top:10px">↓ 以下為「台積電」範例，讓你先看到內容長怎樣，可直接在上方搜尋你要的公司</p>
     <div class="chips">
       <div class="chip" onclick="quickSearch('AAPL')">🍎 AAPL</div>
       <div class="chip" onclick="quickSearch('NVDA')">🎮 NVDA</div>
@@ -1027,6 +1028,13 @@ function norm(v){
 function cc(v,good,mid){ if(v==null) return ''; return v>=good?'g':v>=mid?'y':'r'; }
 function fmtB(v){ if(!v&&v!==0) return '0'; const a=Math.abs(v); if(a>=1e12) return (v/1e12).toFixed(2)+'T'; if(a>=1e9) return (v/1e9).toFixed(2)+'B'; if(a>=1e6) return (v/1e6).toFixed(1)+'M'; return v.toString(); }
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// 開啟頁面時自動載入「台積電」範例，讓使用者先看到內容長怎樣（每個瀏覽器分頁只自動跑一次，重整不重複觸發以節省AI額度）
+window.addEventListener('load', function(){
+  try{ if(sessionStorage.getItem('demo_done')) return; sessionStorage.setItem('demo_done','1'); }catch(e){}
+  var inp=document.getElementById('searchInput');
+  if(inp && !inp.value){ inp.value='台積電'; setTimeout(function(){ doSearch(); }, 300); }
+});
 </script>
 </body>
 </html>
