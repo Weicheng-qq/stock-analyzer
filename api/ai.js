@@ -1,7 +1,8 @@
 // Vercel Serverless Function — 伺服器端 AI 代理
-// 優先用 Groq（免費、極快、每日額度大）；沒設或失敗才退回 OpenRouter。
-// 環境變數：GROQ_KEY（建議，去 console.groq.com 免費申請）、OPENROUTER_KEY（備援）。
-// 兩把金鑰都存在 Vercel 伺服器端，不會外流到瀏覽器。
+// 品質優先的三層備援：Gemini 2.5 Flash（品質最好）→ Groq（快）→ OpenRouter（備援）。
+// 環境變數：GEMINI_KEY（最優先，去 aistudio.google.com/apikey 免費申請，金鑰 AIza 開頭）、
+//           GROQ_KEY（去 console.groq.com 免費申請，gsk_ 開頭）、OPENROUTER_KEY（備援，sk-or 開頭）。
+// 三把金鑰都存在 Vercel 伺服器端，不會外流到瀏覽器。任一把沒設就自動跳過、往下一層試。
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -12,10 +13,35 @@ export default async function handler(req, res) {
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) {} }
   if (!body || !body.messages) { res.status(400).json({ error: 'bad body' }); return; }
 
+  const geminiKey = process.env.GEMINI_KEY;
   const groqKey = process.env.GROQ_KEY;
   const orKey = process.env.OPENROUTER_KEY;
 
-  // 1) 優先 Groq（快、額度大）。gpt-oss-120b 有推理能力、內容品質較好排第一；純指令型模型當備援。
+  // 0) 最優先 Gemini（Google 免費層，品質最好、每日1500次）。用 OpenAI 相容端點，回應格式與 OpenAI 相同。
+  if (geminiKey) {
+    const geminiModels = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+    for (const gm of geminiModels) {
+      try {
+        const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 30000);
+        const gr = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + geminiKey },
+          signal: ctl.signal,
+          body: JSON.stringify({ model: gm, messages: body.messages, temperature: body.temperature != null ? body.temperature : 0.4 })
+        });
+        clearTimeout(to);
+        const gt = await gr.text();
+        if (gr.ok && gt.indexOf('"choices"') > -1 && gt.indexOf('"content"') > -1) {
+          res.setHeader('Content-Type', 'application/json; charset=utf-8');
+          res.status(200).send(gt);
+          return;
+        }
+      } catch (e) {}
+    }
+    // Gemini 全失敗（如當日1500次用完）→ 往下用 Groq
+  }
+
+  // 1) 次選 Groq（快、額度大）。gpt-oss-120b 有推理能力、內容品質較好排第一；純指令型模型當備援。
   if (groqKey) {
     const groqModels = ['openai/gpt-oss-120b', 'llama-3.3-70b-versatile', 'moonshotai/kimi-k2-instruct', 'llama-3.1-8b-instant'];
     for (const gm of groqModels) {
@@ -44,7 +70,7 @@ export default async function handler(req, res) {
 
   // 2) 退回 OpenRouter（用 client 指定的 model 與參數）
   if (!orKey) {
-    res.status(500).json({ error: groqKey ? 'Groq 暫時失敗且未設 OPENROUTER_KEY 備援' : '伺服器尚未設定 GROQ_KEY 或 OPENROUTER_KEY' });
+    res.status(500).json({ error: (geminiKey || groqKey) ? '上層 AI 暫時失敗且未設 OPENROUTER_KEY 備援' : '伺服器尚未設定 GEMINI_KEY / GROQ_KEY / OPENROUTER_KEY' });
     return;
   }
   try {
