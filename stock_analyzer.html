@@ -246,6 +246,16 @@ function inAppBrowserName(){
   if(/Twitter/i.test(ua)) return 'X(Twitter)';
   return null;
 }
+// Android上App內建瀏覽器(LINE等)可用intent://跳轉，強制改用手機真正的瀏覽器打開(不用使用者自己點選單)；iOS蘋果系統鎖死沒有對應方法，只能顯示教學
+function tryEscapeInAppBrowserOnAndroid(){
+  if(!inAppBrowserName()) return false;
+  if(!/Android/i.test(navigator.userAgent)) return false;
+  try{
+    const target = location.href.replace(/^https?:\/\//,'');
+    location.href = 'intent://' + target + '#Intent;scheme=https;end;';
+    return true;
+  }catch(e){ return false; }
+}
 window.addEventListener('beforeinstallprompt', function(e){
   e.preventDefault();
   deferredInstallPrompt = e;
@@ -255,8 +265,13 @@ window.addEventListener('appinstalled', function(){
   deferredInstallPrompt = null;
   const b=document.getElementById('installBtn'); if(b) b.style.display='none';
 });
+var __escapingToBrowser = tryEscapeInAppBrowserOnAndroid();  // 一偵測到就馬上嘗試跳轉，越早跳越好
 window.addEventListener('load', function(){
-  if(!isStandaloneApp() && (isIOS() || inAppBrowserName())){ const b=document.getElementById('installBtn'); if(b) b.style.display='inline-block'; }
+  if(__escapingToBrowser) return;  // 正在跳轉真瀏覽器中，畫面即將被取代，不用再做其他事
+  if(!isStandaloneApp() && (isIOS() || inAppBrowserName())){
+    const b=document.getElementById('installBtn'); if(b) b.style.display='inline-block';
+    if(isIOS() && inAppBrowserName()){ handleInstallClick(); }  // iOS的App內建瀏覽器無法自動跳轉，直接主動彈出教學，不用等使用者自己找按鈕
+  }
 });
 async function handleInstallClick(){
   const appName = inAppBrowserName();
