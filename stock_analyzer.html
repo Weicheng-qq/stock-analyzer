@@ -42,6 +42,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .search-icon { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--text2); }
 .search-btn { background:var(--blue); color:#0d1117; border:none; border-radius:8px; padding:9px 18px; font-weight:600; cursor:pointer; font-size:14px; white-space:nowrap; }
 .settings-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); border-radius:8px; padding:9px 12px; cursor:pointer; font-size:15px; }
+.install-btn { background:var(--green); border:none; color:#0d1117; border-radius:8px; padding:9px 14px; cursor:pointer; font-size:13px; font-weight:600; white-space:nowrap; }
 
 .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:200; align-items:center; justify-content:center; }
 .modal-overlay.open { display:flex; }
@@ -126,7 +127,23 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <input type="text" id="searchInput" placeholder="代碼或公司名，例如 AAPL / 台積電 / 諾和諾德 / Apple" onkeydown="if(event.key==='Enter')doSearch()">
   </div>
   <button class="search-btn" onclick="doSearch()">分析</button>
+  <button class="install-btn" id="installBtn" onclick="handleInstallClick()" title="安裝成手機/電腦App" style="display:none">📲 安裝 App</button>
   <button class="settings-btn" onclick="openSettings()" title="AI 金鑰設定">⚙️</button>
+</div>
+
+<div class="modal-overlay" id="iosInstallModal">
+  <div class="modal">
+    <h2>📲 安裝到主畫面</h2>
+    <p class="sub">iPhone/iPad 的 Safari 瀏覽器不支援一鍵自動安裝（蘋果系統限制），請照以下 3 步驟手動加入，一樣會變成桌面 App 圖示：</p>
+    <div class="steps">
+      <b>1.</b> 點畫面最下方（或分享列）的 <b>分享圖示</b>（方框加往上箭頭 ⬆️）<br><br>
+      <b>2.</b> 往下滑選單，找到並點選 <b>「加入主畫面」</b>（Add to Home Screen）<br><br>
+      <b>3.</b> 右上角點 <b>「加入」</b>，桌面就會出現「美股分析」圖示，之後直接點圖示開啟，全螢幕無網址列
+    </div>
+    <div class="modal-btns">
+      <button class="btn-pri" onclick="closeIosInstall()" style="width:100%">知道了</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal-overlay" id="settingsModal">
@@ -218,6 +235,35 @@ function openSettings(){ try{ document.getElementById('gmKey').value=getGmKey();
 function closeSettings(){ document.getElementById('settingsModal').classList.remove('open'); }
 function saveSettings(){ safeSet(document.getElementById('gmKey').value.trim()); closeSettings(); alert('✅ 已儲存'); }
 document.getElementById('settingsModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeSettings(); });
+
+// PWA 安裝按鈕：Android/桌面Chrome/Edge 可一鍵安裝(beforeinstallprompt)；iPhone Safari 沒有此API，只能顯示手動教學
+var deferredInstallPrompt = null;
+function isStandaloneApp(){ return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true; }
+function isIOS(){ return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; }
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  if(!isStandaloneApp()){ const b=document.getElementById('installBtn'); if(b) b.style.display='inline-block'; }
+});
+window.addEventListener('appinstalled', function(){
+  deferredInstallPrompt = null;
+  const b=document.getElementById('installBtn'); if(b) b.style.display='none';
+});
+window.addEventListener('load', function(){
+  if(!isStandaloneApp() && isIOS()){ const b=document.getElementById('installBtn'); if(b) b.style.display='inline-block'; }
+});
+async function handleInstallClick(){
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    try{ await deferredInstallPrompt.userChoice; }catch(e){}
+    deferredInstallPrompt = null;
+    document.getElementById('installBtn').style.display='none';
+  } else if(isIOS()){
+    document.getElementById('iosInstallModal').classList.add('open');
+  }
+}
+function closeIosInstall(){ document.getElementById('iosInstallModal').classList.remove('open'); }
+document.getElementById('iosInstallModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeIosInstall(); });
 
 async function fetchJson(url) {
   let r;
