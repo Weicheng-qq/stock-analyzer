@@ -20,9 +20,9 @@ export default async function handler(req, res) {
     const groqModels = ['openai/gpt-oss-120b', 'llama-3.3-70b-versatile', 'moonshotai/kimi-k2-instruct', 'llama-3.1-8b-instant'];
     for (const gm of groqModels) {
       try {
-        const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 25000);
+        const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 30000);
         const reqBody = { model: gm, messages: body.messages, temperature: body.temperature != null ? body.temperature : 0.4 };
-        if (gm.indexOf('gpt-oss') > -1) reqBody.reasoning_effort = 'medium';  // gpt-oss 在 Groq 上支援 reasoning_effort，拉高思考深度、內容更豐富
+        if (gm.indexOf('gpt-oss') > -1) reqBody.reasoning_effort = 'high';  // Groq硬體極快，high也能在20秒內回應，內容更完整（使用者要求品質優先於速度）
         const gr = await fetch('https://api.groq.com/openai/v1/chat/completions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + groqKey },
