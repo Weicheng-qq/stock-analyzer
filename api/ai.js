@@ -16,10 +16,12 @@ export default async function handler(req, res) {
   const geminiKey = process.env.GEMINI_KEY;
   const groqKey = process.env.GROQ_KEY;
   const orKey = process.env.OPENROUTER_KEY;
+  const DEBUG = req.query && req.query.debugGemini === '1';  // 暫時除錯用，確認Gemini失敗原因後會移除
 
   // 0) 最優先 Gemini（Google 免費層，品質最好、每日1500次）。用 OpenAI 相容端點，回應格式與 OpenAI 相同。
   if (geminiKey) {
     const geminiModels = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+    const geminiErrors = [];
     for (const gm of geminiModels) {
       try {
         const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 30000);
@@ -36,9 +38,15 @@ export default async function handler(req, res) {
           res.status(200).send(gt);
           return;
         }
-      } catch (e) {}
+        geminiErrors.push({ model: gm, status: gr.status, body: gt.slice(0, 500) });
+      } catch (e) {
+        geminiErrors.push({ model: gm, error: String((e && e.message) || e) });
+      }
     }
+    if (DEBUG) { res.status(200).json({ debug: 'gemini_all_failed', geminiErrors }); return; }
     // Gemini 全失敗（如當日1500次用完）→ 往下用 Groq
+  } else if (DEBUG) {
+    res.status(200).json({ debug: 'no_gemini_key_set' }); return;
   }
 
   // 1) 次選 Groq（快、額度大）。gpt-oss-120b 有推理能力、內容品質較好排第一；純指令型模型當備援。
