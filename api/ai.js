@@ -1,8 +1,9 @@
 // Vercel Serverless Function — 伺服器端 AI 代理
-// 品質優先的三層備援：Gemini 2.5 Flash（品質最好）→ Groq（快）→ OpenRouter（備援）。
+// 品質優先的三層備援：Gemini 3.5 Flash（品質最好）→ Groq（快）→ OpenRouter（備援）。
 // 環境變數：GEMINI_KEY（最優先，去 aistudio.google.com/apikey 免費申請，金鑰 AIza 開頭）、
 //           GROQ_KEY（去 console.groq.com 免費申請，gsk_ 開頭）、OPENROUTER_KEY（備援，sk-or 開頭）。
 // 三把金鑰都存在 Vercel 伺服器端，不會外流到瀏覽器。任一把沒設就自動跳過、往下一層試。
+// 注意：Gemini模型名稱會隨世代更新而下架(2.5系列已對新帳號下架，改用3.5/3.1系列)，若整批失效需到 ai.google.dev/gemini-api/docs/models 查目前有效模型。
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -16,12 +17,10 @@ export default async function handler(req, res) {
   const geminiKey = process.env.GEMINI_KEY;
   const groqKey = process.env.GROQ_KEY;
   const orKey = process.env.OPENROUTER_KEY;
-  const DEBUG = req.query && req.query.debugGemini === '1';  // 暫時除錯用，確認Gemini失敗原因後會移除
 
-  // 0) 最優先 Gemini（Google 免費層，品質最好、每日1500次）。用 OpenAI 相容端點，回應格式與 OpenAI 相同。
+  // 0) 最優先 Gemini（Google 免費層，品質最好）。用 OpenAI 相容端點，回應格式與 OpenAI 相同。
   if (geminiKey) {
-    const geminiModels = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
-    const geminiErrors = [];
+    const geminiModels = ['gemini-3.5-flash', 'gemini-3.1-flash-lite'];
     for (const gm of geminiModels) {
       try {
         const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 30000);
@@ -38,15 +37,9 @@ export default async function handler(req, res) {
           res.status(200).send(gt);
           return;
         }
-        geminiErrors.push({ model: gm, status: gr.status, body: gt.slice(0, 500) });
-      } catch (e) {
-        geminiErrors.push({ model: gm, error: String((e && e.message) || e) });
-      }
+      } catch (e) {}
     }
-    if (DEBUG) { res.status(200).json({ debug: 'gemini_all_failed', geminiErrors }); return; }
-    // Gemini 全失敗（如當日1500次用完）→ 往下用 Groq
-  } else if (DEBUG) {
-    res.status(200).json({ debug: 'no_gemini_key_set' }); return;
+    // Gemini 全失敗（如當日額度用完）→ 往下用 Groq
   }
 
   // 1) 次選 Groq（快、額度大）。gpt-oss-120b 有推理能力、內容品質較好排第一；純指令型模型當備援。

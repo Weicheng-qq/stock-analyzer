@@ -124,7 +124,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 <div class="modal-overlay" id="settingsModal">
   <div class="modal">
     <h2>⚙️ AI 分析金鑰（免費）</h2>
-    <p class="sub">財務數據(毛利率/營收等)用美國 SEC 官方資料、不需金鑰。但<b style="color:var(--text)">彼得林區分類、競爭對手、護城河、CEO展望、買入建議</b>需要 AI 判讀。支援三種免費金鑰：<b style="color:var(--blue)">Gemini（推薦，內容品質最好、每日1500次）</b>、Groq（速度最快）或 OpenRouter。</p>
+    <p class="sub">財務數據(毛利率/營收等)用美國 SEC 官方資料、不需金鑰。但<b style="color:var(--text)">彼得林區分類、競爭對手、護城河、CEO展望、買入建議</b>需要 AI 判讀。支援三種免費金鑰：<b style="color:var(--blue)">Gemini（推薦，內容品質最好）</b>、Groq（速度最快）或 OpenRouter。</p>
     <div class="steps">
       <b>推薦：取得免費 Gemini 金鑰（不需信用卡，1分鐘）：</b><br>
       1. 前往 <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a><br>
@@ -194,10 +194,11 @@ const GROQ_MODELS = [
   'moonshotai/kimi-k2-instruct',
   'llama-3.1-8b-instant'
 ];
-// Gemini 免費模型（金鑰以 AIza 開頭時使用；Google 免費層品質最好、每日1500次、用 OpenAI 相容端點、允許瀏覽器直連）
+// Gemini 免費模型（金鑰以 AIza 開頭時使用；Google 免費層品質最好、用 OpenAI 相容端點、允許瀏覽器直連）
+// 注意：2.5系列已對新帳號下架，改用3.5/3.1系列(若又下架，查 ai.google.dev/gemini-api/docs/models 目前有效清單)
 const GEMINI_MODELS = [
-  'gemini-2.5-flash',
-  'gemini-2.5-flash-lite'
+  'gemini-3.5-flash',
+  'gemini-3.1-flash-lite'
 ];
 
 // localStorage 在 data:/某些預覽環境會被停用，包一層安全存取（讀不到就用記憶體）
