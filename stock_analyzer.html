@@ -764,14 +764,14 @@ function renderAI(ai){
   const lc={'快速成長股':'🚀','穩定成長股':'🏛️','緩慢成長股':'🐢','景氣循環股':'🔄','轉機股':'🔁','資產股':'🏗️'};
   const icon=lc[ai.lynch_type]||'📌';
   const lb=document.getElementById('lynchBadge'); if(lb) lb.textContent=`${icon} ${ai.lynch_type||''}`;
-  setAI('ai_lynch',`<div class="ai"><div style="font-size:16px;font-weight:700;margin-bottom:6px">${icon} ${esc(ai.lynch_type||'')}</div>${esc(ai.lynch_reason||'').replace(/\n/g,'<br>')}`
-    +(ai.lynch_trend?`<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span style="color:var(--orange)">📈 近3年趨勢：</span>${esc(ai.lynch_trend).replace(/\n/g,'<br>')}</div>`:'')
+  setAI('ai_lynch',`<div class="ai"><div style="font-size:16px;font-weight:700;margin-bottom:6px">${icon} ${esc(ai.lynch_type||'')}</div>${norm(ai.lynch_reason)}`
+    +(ai.lynch_trend?`<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span style="color:var(--orange)">📈 近3年趨勢：</span>${norm(ai.lynch_trend)}</div>`:'')
     +`</div>`);
   // 成長動能檢核（依官方指引/資本支出）
   const goEl=document.getElementById('chk_outlook');
   if(goEl){ const go=ai.growth_outlook||'無法判斷'; const mk=go==='符合'?'✅':go==='不符合'?'❌':'➖'; const cl=go==='符合'?'g':go==='不符合'?'r':'';
     goEl.innerHTML=`<div class="vr"><span class="vl">${mk} 法說會成長動能（CEO 對未來展望）</span><span class="vn ${cl}">${esc(go)}</span></div>`
-      +(ai.growth_outlook_reason?`<div class="note" style="margin-top:2px">${esc(ai.growth_outlook_reason)}</div>`:''); }
+      +(ai.growth_outlook_reason?`<div class="note" style="margin-top:2px">${norm(ai.growth_outlook_reason)}</div>`:''); }
   setAI('ai_products',`<div class="ai">${norm(ai.products)}`
     +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理　<a href="${esc(window.__productsData.url)}" target="_blank" style="color:var(--blue)">官方文件 ↗</a>${window.__wikiData?` ｜ <a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
       :(window.__wikiData?`<div class="note" style="color:var(--green)">✅ 依維基百科最新公開資料（持續更新）整理　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a></div>`:`<div class="note">（未取得官方或維基資料，內容為 AI 一般認知，僅供參考）</div>`))
@@ -803,11 +803,11 @@ function renderAI(ai){
   }
   setAI('ai_risks',`<div class="ai">${norm(ai.catalysts)}<br><br>${norm(ai.risks)}</div>`);
   setAI('ai_moat',`<div class="ai">${norm(ai.moat)}</div>`);
-  setAI('ai_valuation',`<div class="ai" style="font-size:13px;color:var(--text2)">${esc(ai.valuation||'—')}</div>`);
+  setAI('ai_valuation',`<div class="ai" style="font-size:13px;color:var(--text2)">${norm(ai.valuation)}</div>`);
   const rc={'買入':'s-buy','觀望':'s-hold','避開':'s-sell'}[ai.rating]||'s-hold';
   const ri={'買入':'✅','觀望':'⏳','避開':'❌'}[ai.rating]||'⏳';
   const dc={'高':'g','中':'y','低':'r'}[ai.double]||'y';
-  setAI('ai_verdict',`<div class="vscore ${rc}">${ri} ${esc(ai.rating||'')}</div><div style="font-size:13px;margin-bottom:8px">三年翻倍機率：<strong class="${dc}">${esc(ai.double||'')}</strong></div><div class="ai">${esc(ai.verdict||'').replace(/\n/g,'<br>')}</div>`);
+  setAI('ai_verdict',`<div class="vscore ${rc}">${ri} ${esc(ai.rating||'')}</div><div style="font-size:13px;margin-bottom:8px">三年翻倍機率：<strong class="${dc}">${esc(ai.double||'')}</strong></div><div class="ai">${norm(ai.verdict)}</div>`);
 }
 
 // 從 SEC 6-K/8-K 最新財報新聞稿抓「真實法說會指引」（免費）。找到就覆蓋 AI 的舊展望。
