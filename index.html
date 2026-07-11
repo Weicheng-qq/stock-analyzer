@@ -908,7 +908,7 @@ async function fillProductsSource(cik, gen){
       /(?:2|3)-?nanometer technology entered volume production/i,
       /principal products (?:and services )?(?:are|include)/i,
       /The Company['’]?s (?:products|principal products)/i ];
-    for(const re of techList){ const m=txt.match(re); if(m){ const i=txt.indexOf(m[0]); if(revFirst<0||Math.abs(i-revFirst)>1600){ chunks.push(txt.substr(Math.max(0,i-90),1000)); } break; } }
+    for(const re of techList){ const m=txt.match(re); if(m){ const i=txt.indexOf(m[0]); if(revFirst<0||Math.abs(i-revFirst)>1600){ chunks.push(txt.substr(Math.max(0,i-90),1000)); break; } } }  // 只在真的採用該段時才break，避免第一個候選離營收表太近被濾掉時,連後面含「最新製程已量產」的候選都沒機會試
     if(!chunks.length) return false;
     window.__productsData={ text:chunks.join(' …… ').slice(0,2400), date, url };
     return true;
