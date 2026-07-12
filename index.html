@@ -475,7 +475,7 @@ async function doSearch(){
 
     // 擷取官方指引/年報/維基（財務數據已載完，此時連線不擁塞）；最多等 14 秒
     logAdd('guid','擷取官方指引/年報/維基...');
-    try{ await Promise.race([Promise.all([fillGuidance(co.cik,gen), fillProductsSource(co.cik,gen), fetchWikipedia(co.title, symbol)]), new Promise(r=>setTimeout(r,14000))]); }catch(e){}
+    try{ await Promise.race([Promise.all([fillGuidance(co.cik,gen), fillProductsSource(co.cik,gen), fetchWikipedia(co.title, symbol), fillAnalystTargets(symbol,gen,priceInfo?.price)]), new Promise(r=>setTimeout(r,14000))]); }catch(e){}
     if(gen!==SEARCH_GEN) return;   // 已有更新的搜尋，放棄本次
     logOk('guid', (window.__guidanceData?'官方指引✓':'無指引')+' / '+(window.__productsData?'年報產品✓':(window.__wikiData?'維基✓':'—'))+' / '+(window.__wikiData?'維基✓':'—'));
 
@@ -666,6 +666,12 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
     <div class="note" style="margin:6px 0 12px">前 ${checklist.length} 項為實際數據自動檢核；最後一項「成長動能」依公司官方指引/資本支出判斷。✅=符合 ❌=未達標 ➖=無資料。</div>
     <div id="ai_verdict">${aiLoading()}</div>
   </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <div class="ct">🏦 投資大行目標價</div>
+  <div id="analystTargets"><div class="note">載入中...</div></div>
+  <div class="note" style="margin-top:8px">資料來源：StockAnalysis.com（僅顯示最近5筆分析師動態中，剛好屬於這5家銀行的最新一筆；未在此5筆內則顯示「無最近資料」，不代表該銀行沒有評等，只是不是最近期）。漲跌幅依目前股價自動計算，僅供參考，不構成投資建議。</div>
 </div>
 
 <div class="note" style="text-align:center;margin-top:8px">財務數據：美國 SEC EDGAR 官方10-K年報；股價：Yahoo Finance；質化分析：免費 AI 模型（Gemini / Groq / OpenRouter）。<b>僅供參考，不構成投資建議。</b></div>`;
@@ -1041,6 +1047,50 @@ async function fetchWikipedia(name, symbol){
     }catch(e){}
   }
   return false;
+}
+
+// 投資大行目標價（免費）：StockAnalysis.com 只顯示每檔股票「最近5筆」分析師動態，不保證涵蓋以下5家，
+// 沒出現的顯示「無最近資料」（絕不臆測/編造目標價，只呈現該網站當下實際列出的內容）
+const ANALYST_BANKS=[
+  {key:'jpm',label:'摩根大通',re:/J\.?\s?P\.?\s?Morgan/i},
+  {key:'gs',label:'高盛',re:/Goldman Sachs/i},
+  {key:'ms',label:'摩根士丹利',re:/Morgan Stanley/i},
+  {key:'bac',label:'美國銀行',re:/Bank of America|BofA/i},
+  {key:'c',label:'花旗銀行',re:/Citigroup|\bCiti\b/i},
+];
+async function fillAnalystTargets(symbol, gen, curPrice){
+  const el=document.getElementById('analystTargets'); if(!el) return false;
+  try{
+    const url=`https://stockanalysis.com/stocks/${symbol.toLowerCase()}/forecast/`;
+    const r=await fetch(PROXY+encodeURIComponent(url));
+    const html=await r.text();
+    if(gen!=null && gen!==SEARCH_GEN) return false;
+    const rows=html.match(/<tr[^>]*>[\s\S]*?<\/tr>/g)||[];
+    const found={};
+    for(const row of rows){
+      for(const b of ANALYST_BANKS){
+        if(found[b.key]) continue;   // 資料由新到舊排列，已抓到該行的最新一筆就不再覆蓋
+        if(b.re.test(row)){
+          const pm=row.match(/\$([0-9][0-9,.]*)/);
+          const dm=row.match(/([A-Z][a-z]{2} \d{1,2}, \d{4})/);
+          if(pm && dm) found[b.key]={ target:parseFloat(pm[1].replace(/,/g,'')), date:dm[1] };
+        }
+      }
+    }
+    let out='';
+    for(const b of ANALYST_BANKS){
+      const f=found[b.key];
+      if(f){
+        const upside=(curPrice!=null && curPrice>0)?((f.target-curPrice)/curPrice*100):null;
+        const cls=upside!=null?(upside>0?'g':upside<0?'r':''):'';
+        out+=`<div class="vr"><span class="vl">${b.label}</span><span class="vn ${cls}">$${f.target.toFixed(2)}${upside!=null?`（${upside>=0?'+':''}${upside.toFixed(1)}%）`:''}<span style="color:var(--text2);font-weight:400;font-size:11px;margin-left:6px">${esc(f.date)}</span></span></div>`;
+      } else {
+        out+=`<div class="vr"><span class="vl">${b.label}</span><span class="vn" style="color:var(--text2);font-weight:400">無最近資料</span></div>`;
+      }
+    }
+    el.innerHTML=out;
+    return true;
+  }catch(e){ el.innerHTML='<div class="note">資料載入失敗</div>'; return false; }
 }
 
 // 一次載入 Yahoo 免費財務數據：年度/季度損益 + 真實本益比（現值與歷史季度）
