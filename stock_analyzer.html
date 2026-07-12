@@ -50,6 +50,11 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .modal h2 { font-size:17px; margin-bottom:6px; }
 .modal .sub { font-size:12px; color:var(--text2); margin-bottom:8px; line-height:1.6; }
 .steps { background:var(--bg3); border-radius:8px; padding:12px 14px; font-size:12px; line-height:1.9; color:var(--text2); margin-top:8px; }
+.install-step { display:flex; align-items:center; gap:14px; padding:12px 4px; }
+.install-step + .install-step { border-top:1px solid var(--border); }
+.install-step-num { flex:none; width:30px; height:30px; border-radius:50%; background:var(--blue); color:#0d1117; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; }
+.install-step-icon { font-size:26px; flex:none; }
+.install-step-text { font-size:16px; color:var(--text); line-height:1.4; }
 .steps a { color:var(--blue); } .steps b { color:var(--text); }
 .modal label { display:block; font-size:12px; color:var(--text2); margin:14px 0 5px; }
 .modal input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:7px; padding:9px 12px; color:var(--text); font-size:13px; outline:none; font-family:monospace; }
@@ -281,14 +286,18 @@ async function handleInstallClick(){
     deferredInstallPrompt = null;
     document.getElementById('installBtn').style.display='none';
   } else if(appName){
-    document.getElementById('installModalTitle').textContent = '📲 請先在瀏覽器中開啟';
-    document.getElementById('installModalSub').textContent = `你目前是在 ${appName} 內建的瀏覽器裡開啟，這種內建瀏覽器不支援安裝App（${appName}本身的限制，所有網站都一樣），請先跳出去用手機原生瀏覽器打開：`;
-    document.getElementById('installModalSteps').innerHTML = `<b>1.</b> 點畫面右上角（或右下角）的 <b>「⋮」或「…」選單</b><br><br><b>2.</b> 選擇 <b>「在瀏覽器中開啟」</b>（或 Open in Browser／在Safari中開啟）<br><br><b>3.</b> 用手機原生瀏覽器（Chrome／Safari／Samsung Internet）重新打開後，安裝按鈕就會正常出現`;
+    document.getElementById('installModalTitle').textContent = '📲 兩步驟裝好';
+    document.getElementById('installModalSub').textContent = `你現在是從 ${appName} 打開的，先跳出去：`;
+    document.getElementById('installModalSteps').innerHTML =
+      `<div class="install-step"><div class="install-step-num">1</div><div class="install-step-icon">⋯</div><div class="install-step-text">點右上角選單</div></div>`
+      + `<div class="install-step"><div class="install-step-num">2</div><div class="install-step-icon">🌐</div><div class="install-step-text">選「在瀏覽器開啟」</div></div>`;
     document.getElementById('iosInstallModal').classList.add('open');
   } else if(isIOS()){
-    document.getElementById('installModalTitle').textContent = '📲 安裝到主畫面';
-    document.getElementById('installModalSub').textContent = 'iPhone/iPad 的 Safari 瀏覽器不支援一鍵自動安裝（蘋果系統限制），請照以下 3 步驟手動加入，一樣會變成桌面 App 圖示：';
-    document.getElementById('installModalSteps').innerHTML = `<b>1.</b> 點畫面最下方（或分享列）的 <b>分享圖示</b>（方框加往上箭頭 ⬆️）<br><br><b>2.</b> 往下滑選單，找到並點選 <b>「加入主畫面」</b>（Add to Home Screen）<br><br><b>3.</b> 右上角點 <b>「加入」</b>，桌面就會出現「美股分析」圖示，之後直接點圖示開啟，全螢幕無網址列`;
+    document.getElementById('installModalTitle').textContent = '📲 兩步驟裝好';
+    document.getElementById('installModalSub').textContent = '裝到桌面，之後點圖示就能直接打開：';
+    document.getElementById('installModalSteps').innerHTML =
+      `<div class="install-step"><div class="install-step-num">1</div><div class="install-step-icon">⬆️</div><div class="install-step-text">點下方分享鈕</div></div>`
+      + `<div class="install-step"><div class="install-step-num">2</div><div class="install-step-icon">➕</div><div class="install-step-text">選「加入主畫面」</div></div>`;
     document.getElementById('iosInstallModal').classList.add('open');
   }
 }
