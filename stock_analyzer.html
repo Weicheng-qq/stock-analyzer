@@ -104,6 +104,21 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .dt td { padding:7px 10px; border-bottom:1px solid rgba(48,54,61,.4); }
 .dt tr:last-child td { border-bottom:none; }
 .g { color:var(--green); } .r { color:var(--red); } .y { color:var(--yellow); }
+.wl-row { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid rgba(48,54,61,.4); font-size:13px; }
+.wl-row:last-child { border-bottom:none; }
+.wl-move { display:flex; flex-direction:column; gap:1px; flex:none; }
+.wl-move button { background:none; border:none; color:var(--text2); cursor:pointer; font-size:10px; padding:1px 4px; line-height:1; }
+.wl-move button:hover:not(:disabled) { color:var(--blue); }
+.wl-move button:disabled { opacity:.25; cursor:default; }
+.wl-name { flex:1.3; min-width:0; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.wl-name .sym { display:block; color:var(--text2); font-weight:400; font-size:11px; }
+.wl-price { flex:0.7; text-align:right; font-weight:600; }
+.wl-chg { flex:0.8; text-align:right; font-weight:600; }
+.wl-ai-btn { flex:none; background:var(--blue); color:#0d1117; border:none; border-radius:6px; padding:6px 10px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; }
+.wl-del { flex:none; background:none; border:none; color:var(--text2); cursor:pointer; font-size:16px; padding:0 2px; }
+.wl-del:hover { color:var(--red); }
+.wl-add { display:flex; gap:8px; margin-bottom:12px; }
+.wl-add input { flex:1; background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:9px 12px; font-size:13px; }
 
 .chart-wrap { position:relative; height:250px; }
 .vr { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(48,54,61,.4); font-size:13px; }
@@ -177,6 +192,15 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 </div>
 
 <div class="main">
+  <div class="card" id="watchlistCard" style="margin-bottom:20px">
+    <div class="ct">⭐ 自選股</div>
+    <div class="wl-add">
+      <input type="text" id="watchlistInput" placeholder="輸入代碼或公司名，例如 AAPL / 台積電" onkeydown="if(event.key==='Enter')addToWatchlist()">
+      <button class="search-btn" onclick="addToWatchlist()">+ 加入</button>
+    </div>
+    <div id="watchlistTable"><div class="note">尚未加入任何自選股，在上方輸入後按「加入」</div></div>
+  </div>
+
   <div id="welcome" class="welcome">
     <h1>美股深度分析工具</h1>
     <p>10年財務指標 · 營收成長 · 彼得林區分類 · 護城河 · 競爭對手 · 買入建議</p>
@@ -414,6 +438,79 @@ async function loadTickerMap(){
   const data=await fetchJson('https://www.sec.gov/files/company_tickers.json');
   tickerMap={}; Object.values(data).forEach(c=>{ tickerMap[c.ticker]={cik:String(c.cik_str).padStart(10,'0'),title:c.title}; });
   return tickerMap;
+}
+
+// ⭐ 自選股：存在瀏覽器 localStorage(只存在你自己的裝置)，可新增/刪除/上下移排序；
+// 「AI分析」按鈕直接觸發完整搜尋，帶出這個網站的所有區塊(財務/彼得林區分類/新聞/目標價/投資總結...)
+function getWatchlist(){ try{ return JSON.parse(localStorage.getItem('watchlist')||'[]'); }catch(e){ return []; } }
+function saveWatchlist(list){ try{ localStorage.setItem('watchlist', JSON.stringify(list)); }catch(e){} }
+async function addToWatchlist(){
+  const inp=document.getElementById('watchlistInput');
+  const raw=(inp?.value||'').trim(); if(!raw) return;
+  try{
+    await loadTickerMap();
+    const found=findCompany(raw);
+    if(!found){ alert(`找不到「${raw}」，請輸入美股代碼(如 AAPL)或公司名(如 台積電 / Apple)`); return; }
+    const list=getWatchlist();
+    if(list.some(x=>x.symbol===found.symbol)){ alert(`「${found.symbol}」已經在自選股清單裡了`); inp.value=''; return; }
+    list.push({symbol:found.symbol, name:found.co.title});
+    saveWatchlist(list);
+    inp.value='';
+    renderWatchlist();
+  }catch(e){ alert('查詢失敗，請稍後再試'); }
+}
+function removeFromWatchlist(symbol){
+  saveWatchlist(getWatchlist().filter(x=>x.symbol!==symbol));
+  renderWatchlist();
+}
+function moveWatchlistItem(symbol, dir){
+  const list=getWatchlist();
+  const i=list.findIndex(x=>x.symbol===symbol); if(i<0) return;
+  const j=i+dir; if(j<0||j>=list.length) return;
+  [list[i],list[j]]=[list[j],list[i]];
+  saveWatchlist(list);
+  renderWatchlist();
+}
+function watchlistAnalyze(symbol){
+  const inp=document.getElementById('searchInput'); if(inp) inp.value=symbol;
+  doSearch();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function renderWatchlist(){
+  const el=document.getElementById('watchlistTable'); if(!el) return;
+  const list=getWatchlist();
+  if(!list.length){ el.innerHTML='<div class="note">尚未加入任何自選股，在上方輸入後按「加入」</div>'; return; }
+  el.innerHTML = list.map((it,i)=>`
+    <div class="wl-row">
+      <div class="wl-move">
+        <button onclick="moveWatchlistItem('${esc(it.symbol)}',-1)" ${i===0?'disabled':''} title="上移">▲</button>
+        <button onclick="moveWatchlistItem('${esc(it.symbol)}',1)" ${i===list.length-1?'disabled':''} title="下移">▼</button>
+      </div>
+      <div class="wl-name" title="${esc(it.name)}">${esc(it.name)}<span class="sym">${esc(it.symbol)}</span></div>
+      <div class="wl-price" id="wlp_${esc(it.symbol)}">…</div>
+      <div class="wl-chg" id="wlc_${esc(it.symbol)}">…</div>
+      <button class="wl-ai-btn" onclick="watchlistAnalyze('${esc(it.symbol)}')">📊 AI分析</button>
+      <button class="wl-del" onclick="removeFromWatchlist('${esc(it.symbol)}')" title="刪除">✕</button>
+    </div>`).join('');
+  loadWatchlistPrices(list);
+}
+async function loadWatchlistPrices(list){
+  await Promise.all(list.map(async it=>{
+    const pEl=document.getElementById('wlp_'+it.symbol), cEl=document.getElementById('wlc_'+it.symbol);
+    try{
+      const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${it.symbol}?range=1d&interval=1d`);
+      const meta=ch?.chart?.result?.[0]?.meta;
+      const price=meta?.regularMarketPrice, prev=meta?.previousClose??meta?.chartPreviousClose;
+      if(pEl) pEl.textContent = price!=null?'$'+(+price).toFixed(2):'—';
+      if(cEl){
+        if(price!=null && prev){
+          const pct=(price-prev)/prev*100;
+          cEl.textContent = (pct>=0?'▲':'▼')+Math.abs(pct).toFixed(2)+'%';
+          cEl.className = 'wl-chg '+(pct>=0?'g':'r');
+        } else cEl.textContent='—';
+      }
+    }catch(e){ if(pEl) pEl.textContent='—'; if(cEl) cEl.textContent='—'; }
+  }));
 }
 async function concept(cik,tag,tax){
   try{ const d=await fetchJson(`https://data.sec.gov/api/xbrl/companyconcept/CIK${cik}/${tax||'us-gaap'}/${tag}.json`); return d?.units; }
@@ -1285,6 +1382,8 @@ window.addEventListener('load', function(){
   var inp=document.getElementById('searchInput');
   if(inp && !inp.value){ inp.value='台積電'; setTimeout(function(){ doSearch(); }, 300); }
 });
+// 開啟頁面時渲染自選股清單（每次都要跑，不受上面的 demo_done 限制）
+window.addEventListener('load', function(){ renderWatchlist(); });
 
 // PWA：註冊 Service Worker（只在線上 https 環境註冊，本機開發用 file:// 或 localhost 不需要）
 if('serviceWorker' in navigator && location.protocol==='https:'){
