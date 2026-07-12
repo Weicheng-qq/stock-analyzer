@@ -675,38 +675,39 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   <div class="card"><div class="ct">🌪️ 未來利多 &amp; 利空風險</div><div id="ai_risks">${aiLoading()}</div></div>
   <div class="card"><div class="ct">🏰 護城河分析</div><div id="ai_moat">${aiLoading()}</div></div>
 </div>
-<div class="card">
-  <div class="ct">💹 估值與股價</div>
-  <div class="vr"><span class="vl">本益比 P/E（Yahoo 實際 trailing）</span><span class="vn">${pe!=null?pe.toFixed(1)+'x':'—'}</span></div>
-  <div class="vr"><span class="vl">目前股價</span><span class="vn">${price!=null?'$'+(+price).toFixed(2):'—'}</span></div>
-  <div style="margin-top:14px" class="ct">📊 本益比：與自己歷史相比</div>
-  ${pe5?`
-  <div class="vr"><span class="vl">近5年本益比區間</span><span class="vn">${pe5.min.toFixed(1)}x ~ ${pe5.max.toFixed(1)}x</span></div>
-  <div class="vr"><span class="vl">目前位置</span><span class="vn ${pePos!=null?(pePos<40?'g':pePos>75?'r':'y'):''}">${pe!=null?pe.toFixed(1)+'x':'—'}${pePos!=null?`（區間 ${pePos.toFixed(0)}% 位置）`:''}</span></div>
-  <div class="note">近5年本益比區間，以 Yahoo 現值本益比為基準、配合5年月線股價與年度EPS成長計算（已處理 ADR）。位置越低代表相對越便宜。</div>`:`<div class="note">此股 5 年本益比區間資料不足。</div>`}
-  <div style="margin-top:14px" class="ct">⚔️ 本益比：與競爭對手相比</div>
-  <div id="peCompetitors"><div class="note">等待 AI 提供競爭對手代碼後查詢實際本益比...</div></div>
-  <div style="margin-top:12px" id="ai_valuation">${aiLoading()}</div>
-</div>
-
-<div class="g2" style="margin-top:16px">
+<div class="g2">
+  <div class="card">
+    <div class="ct">💹 估值與股價</div>
+    <div class="vr"><span class="vl">本益比 P/E（Yahoo 實際 trailing）</span><span class="vn">${pe!=null?pe.toFixed(1)+'x':'—'}</span></div>
+    <div class="vr"><span class="vl">目前股價</span><span class="vn">${price!=null?'$'+(+price).toFixed(2):'—'}</span></div>
+    <div style="margin-top:14px" class="ct">📊 本益比：與自己歷史相比</div>
+    ${pe5?`
+    <div class="vr"><span class="vl">近5年本益比區間</span><span class="vn">${pe5.min.toFixed(1)}x ~ ${pe5.max.toFixed(1)}x</span></div>
+    <div class="vr"><span class="vl">目前位置</span><span class="vn ${pePos!=null?(pePos<40?'g':pePos>75?'r':'y'):''}">${pe!=null?pe.toFixed(1)+'x':'—'}${pePos!=null?`（區間 ${pePos.toFixed(0)}% 位置）`:''}</span></div>
+    <div class="note">近5年本益比區間，以 Yahoo 現值本益比為基準、配合5年月線股價與年度EPS成長計算（已處理 ADR）。位置越低代表相對越便宜。</div>`:`<div class="note">此股 5 年本益比區間資料不足。</div>`}
+    <div style="margin-top:14px" class="ct">⚔️ 本益比：與競爭對手相比</div>
+    <div id="peCompetitors"><div class="note">等待 AI 提供競爭對手代碼後查詢實際本益比...</div></div>
+    <div style="margin-top:12px" id="ai_valuation">${aiLoading()}</div>
+  </div>
   <div class="card">
     <div class="ct">📰 最新新聞</div>
     <div id="newsList"><div class="note">載入中...</div></div>
   </div>
+</div>
+
+<div class="g2" style="margin-top:16px">
   <div class="card">
     <div class="ct">🏦 投資大行目標價</div>
     <div id="analystTargets"><div class="note">載入中...</div></div>
     <div class="note" style="margin-top:8px">資料來源：StockAnalysis.com（僅顯示最近5筆分析師動態中，剛好屬於這5家銀行的最新一筆；未在此5筆內的銀行不顯示，不代表該銀行沒有評等，只是不是最近期）。漲跌幅依目前股價自動計算，僅供參考，不構成投資建議。</div>
   </div>
-</div>
-
-<div class="card verdict" style="margin-top:16px">
-  <div class="ct">🎯 投資總結 — 依你的選股準則逐項檢核</div>
-  ${chkHtml}
-  <div id="chk_outlook"><div class="vr"><span class="vl">➖ 法說會成長動能（CEO 對未來展望）</span><span class="vn">分析中...</span></div></div>
-  <div class="note" style="margin:6px 0 12px">前 ${checklist.length} 項為實際數據自動檢核；最後一項「成長動能」依公司官方指引/資本支出判斷。✅=符合 ❌=未達標 ➖=無資料。</div>
-  <div id="ai_verdict">${aiLoading()}</div>
+  <div class="card verdict">
+    <div class="ct">🎯 投資總結 — 依你的選股準則逐項檢核</div>
+    ${chkHtml}
+    <div id="chk_outlook"><div class="vr"><span class="vl">➖ 法說會成長動能（CEO 對未來展望）</span><span class="vn">分析中...</span></div></div>
+    <div class="note" style="margin:6px 0 12px">前 ${checklist.length} 項為實際數據自動檢核；最後一項「成長動能」依公司官方指引/資本支出判斷。✅=符合 ❌=未達標 ➖=無資料。</div>
+    <div id="ai_verdict">${aiLoading()}</div>
+  </div>
 </div>
 
 <div class="note" style="text-align:center;margin-top:8px">財務數據：美國 SEC EDGAR 官方10-K年報；股價：Yahoo Finance；質化分析：免費 AI 模型（Gemini / Groq / OpenRouter）。<b>僅供參考，不構成投資建議。</b></div>`;
