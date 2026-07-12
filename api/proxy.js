@@ -9,8 +9,8 @@ export default async function handler(req, res) {
     res.status(400).json({ error: 'missing url' });
     return;
   }
-  // 只允許代理 SEC 與 Yahoo，避免被當成公開的萬用代理
-  if (!/^https:\/\/(data\.sec\.gov|www\.sec\.gov|query[12]\.finance\.yahoo\.com)\//.test(target)) {
+  // 只允許代理 SEC、Yahoo(含新聞feed)、StockAnalysis(投資大行目標價)，避免被當成公開的萬用代理
+  if (!/^https:\/\/(data\.sec\.gov|www\.sec\.gov|query[12]\.finance\.yahoo\.com|feeds\.finance\.yahoo\.com|stockanalysis\.com)\//.test(target)) {
     res.status(403).json({ error: 'host not allowed' });
     return;
   }
