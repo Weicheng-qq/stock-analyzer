@@ -420,15 +420,18 @@ async function doSearch(){
     logOk('cik',`找到：${co.title}（${symbol}）`);
 
     logAdd('fin','載入 SEC 官方財報...');
-    const [rev,gp,ni,eq,sh]=await Promise.all([
+    const [rev,gp,ni,eq,sh,cost]=await Promise.all([
       mergeAll(co.cik,['RevenueFromContractWithCustomerExcludingAssessedTax','Revenues','SalesRevenueNet','RevenueFromContractWithCustomerIncludingAssessedTax','RevenuesNetOfInterestExpense','ifrs-full/Revenue','ifrs-full/RevenueFromContractsWithCustomers'],false),
       mergeAll(co.cik,['GrossProfit','ifrs-full/GrossProfit'],false),
       mergeAll(co.cik,['NetIncomeLoss','ProfitLoss','ifrs-full/ProfitLoss'],false),
       mergeAll(co.cik,['StockholdersEquity','StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest','ifrs-full/EquityAttributableToOwnersOfParent','ifrs-full/Equity'],true),
       mergeAll(co.cik,['WeightedAverageNumberOfDilutedSharesOutstanding','WeightedAverageNumberOfSharesOutstandingBasic','ifrs-full/WeightedAverageShares'],false),
+      mergeAll(co.cik,['CostOfRevenue','CostOfGoodsAndServicesSold','CostOfGoodsAndServiceExcludingDepreciationDepletionAndAmortization','CostOfGoodsSold','CostOfServices','ifrs-full/CostOfSales'],false),
     ]);
     const revM=rev.map,gpM=gp.map,niM=ni.map,eqM=eq.map,shM=sh.map,curr=rev.cur||'USD';
     if(!Object.keys(revM).length) throw new Error('此公司在 SEC 沒有可解析的年度營收（可能是金融股或非標準申報）');
+    // 有些公司(如GOOGL/LLY)不直接申報「毛利」標籤，但有申報營收與成本，缺的年份用「營收-成本」補算
+    for(const yr in revM){ if(gpM[yr]==null && cost.map[yr]!=null){ gpM[yr]=revM[yr]-cost.map[yr]; } }
     logOk('fin','財報載入完成');
 
     // Yahoo 補充：最新年度(補SEC申報延遲)、本財年累計季度、真實本益比(現值+歷史)
