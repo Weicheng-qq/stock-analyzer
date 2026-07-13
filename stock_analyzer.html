@@ -1316,7 +1316,7 @@ async function fillAnalystTargets(symbol, gen, curPrice){
     for(const f of list){
       const upside=(curPrice!=null && curPrice>0)?((f.target-curPrice)/curPrice*100):null;
       const cls=upside!=null?(upside>0?'g':upside<0?'r':''):'';
-      out+=`<div class="vr"><span class="vl">${esc(f.label)}</span><span class="vn ${cls}">$${f.target.toFixed(2)}${upside!=null?`（${upside>=0?'+':''}${upside.toFixed(1)}%）`:''}<span style="color:var(--text2);font-weight:400;font-size:11px;margin-left:6px">${esc(f.date)}</span></span></div>`;
+      out+=`<div class="vr"><span class="vl">${esc(f.label)}</span><span class="vn ${cls}">$${Math.round(f.target)}${upside!=null?`（${upside>=0?'+':''}${upside.toFixed(1)}%）`:''}<span style="color:var(--text2);font-weight:400;font-size:11px;margin-left:6px">${esc(f.date)}</span></span></div>`;
     }
     el.innerHTML = out || '<div class="note">目前查無分析師動態資料</div>';
     return true;
