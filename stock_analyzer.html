@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>美股深度分析（SEC財報 + AI分析）</title>
+<title>美股AI深度分析（SEC財報 + AI分析）</title>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#0d1117">
 <link rel="icon" href="/icons/favicon-32.png" sizes="32x32">
@@ -146,7 +146,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 <body>
 
 <div class="header">
-  <div class="logo">📊 美股深度分析</div>
+  <div class="logo"><svg width="26" height="26" viewBox="0 0 192 192" style="vertical-align:-6px;margin-right:2px"><rect width="192" height="192" rx="40" fill="#0d1117"/><rect x="34" y="118" width="24" height="40" rx="6" fill="#58a6ff"/><rect x="74" y="94" width="24" height="64" rx="6" fill="#58a6ff"/><rect x="114" y="70" width="24" height="88" rx="6" fill="#58a6ff"/><rect x="154" y="34" width="24" height="124" rx="6" fill="#3fb950"/></svg> 美股AI深度分析</div>
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
     <input type="text" id="searchInput" placeholder="代碼或公司名，例如 AAPL / 台積電 / 諾和諾德 / Apple" onkeydown="if(event.key==='Enter')doSearch()">
@@ -202,7 +202,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
 
   <div id="welcome" class="welcome">
-    <h1>美股深度分析工具</h1>
+    <h1>美股AI深度分析工具</h1>
     <p>10年財務指標 · 營收成長 · 彼得林區分類 · 護城河 · 競爭對手 · 買入建議</p>
     <div class="free-tag">✅ 財務數據免費(SEC官方) · AI分析用免費模型</div>
     <p style="color:var(--text2);font-size:13px;margin-top:10px">↓ 以下為「台積電」範例，讓你先看到內容長怎樣，可直接在上方搜尋你要的公司</p>
@@ -471,7 +471,7 @@ async function loadTickerMap(){
 
 // ⭐ 自選股：存在瀏覽器 localStorage(只存在你自己的裝置)，可新增/刪除/上下移排序；
 // 「AI分析」按鈕直接觸發完整搜尋，帶出這個網站的所有區塊(財務/彼得林區分類/新聞/目標價/投資總結...)
-function getWatchlist(){ try{ return JSON.parse(localStorage.getItem('watchlist')||'[]'); }catch(e){ return []; } }
+function getWatchlist(){ try{ const raw=localStorage.getItem('watchlist'); if(raw===null) return [{symbol:'TSM',name:'台積電'},{symbol:'NVO',name:'諾和諾德'}]; return JSON.parse(raw); }catch(e){ return []; } }
 function saveWatchlist(list){ try{ localStorage.setItem('watchlist', JSON.stringify(list)); }catch(e){} }
 async function translateCompanyName(enName){
   try{
