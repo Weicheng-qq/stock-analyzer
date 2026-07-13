@@ -798,7 +798,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   <div class="card">
     <div class="ct">🏦 投資大行目標價</div>
     <div id="analystTargets"><div class="note">載入中...</div></div>
-    <div class="note" style="margin-top:8px">資料來源：StockAnalysis.com（僅顯示最近5筆分析師動態中，剛好屬於這5家銀行的最新一筆；未在此5筆內的銀行不顯示，不代表該銀行沒有評等，只是不是最近期）。漲跌幅依目前股價自動計算，僅供參考，不構成投資建議。</div>
+    <div class="note" style="margin-top:8px">資料來源：StockAnalysis.com。優先顯示摩根大通/高盛/摩根士丹利/美國銀行/花旗銀行這5家指定銀行的最新評等；若其中幾家最近沒有動態，改用其他分析師的最新目標價補滿到5筆（會標示實際發布銀行/機構名稱）。漲跌幅依目前股價自動計算，僅供參考，不構成投資建議。</div>
   </div>
 </div>
 
@@ -1278,26 +1278,31 @@ async function fillAnalystTargets(symbol, gen, curPrice){
     const html=await r.text();
     if(gen!=null && gen!==SEARCH_GEN) return false;
     const rows=html.match(/<tr[^>]*>[\s\S]*?<\/tr>/g)||[];
-    const found={};
+    // 先把每一列都解析成通用資料(任何分析師都算，不限5大銀行)，供指定銀行缺席時補位用
+    const parsed=[];
     for(const row of rows){
-      for(const b of ANALYST_BANKS){
-        if(found[b.key]) continue;   // 資料由新到舊排列，已抓到該行的最新一筆就不再覆蓋
-        if(b.re.test(row)){
-          const pm=row.match(/\$([0-9][0-9,.]*)/);
-          const dm=row.match(/([A-Z][a-z]{2} \d{1,2}, \d{4})/);
-          if(pm && dm) found[b.key]={ target:parseFloat(pm[1].replace(/,/g,'')), date:dm[1] };
-        }
-      }
+      const fm=row.match(/<td[^>]*max-w-\[120px\][^>]*>([^<]+)<\/td>/);
+      const pm=row.match(/\$([0-9][0-9,.]*)/);
+      const dm=row.match(/([A-Z][a-z]{2} \d{1,2}, \d{4})/);
+      if(!fm||!pm||!dm) continue;
+      const firm=fm[1].trim();
+      const bank=ANALYST_BANKS.find(b=>b.re.test(firm));
+      parsed.push({ firm, label:bank?bank.label:firm, key:bank?bank.key:null, target:parseFloat(pm[1].replace(/,/g,'')), date:dm[1] });
     }
+    // 第一輪：依指定順序，找5大銀行各自最新一筆
+    const found={};
+    for(const p of parsed){ if(p.key && !found[p.key]) found[p.key]=p; }
+    const list=[]; const used=new Set();
+    for(const b of ANALYST_BANKS){ if(found[b.key]){ list.push(found[b.key]); used.add(found[b.key]); } }
+    // 第二輪：5大銀行沒湊滿5筆時，用其他分析師的最新動態補滿到5筆(維持原本新到舊順序)
+    for(const p of parsed){ if(list.length>=5) break; if(used.has(p)) continue; list.push(p); used.add(p); }
     let out='';
-    for(const b of ANALYST_BANKS){
-      const f=found[b.key];
-      if(!f) continue;   // 這5家裡沒出現在最近5筆的，直接不顯示(不代表沒有目標價，只是不是最近期)
+    for(const f of list){
       const upside=(curPrice!=null && curPrice>0)?((f.target-curPrice)/curPrice*100):null;
       const cls=upside!=null?(upside>0?'g':upside<0?'r':''):'';
-      out+=`<div class="vr"><span class="vl">${b.label}</span><span class="vn ${cls}">$${f.target.toFixed(2)}${upside!=null?`（${upside>=0?'+':''}${upside.toFixed(1)}%）`:''}<span style="color:var(--text2);font-weight:400;font-size:11px;margin-left:6px">${esc(f.date)}</span></span></div>`;
+      out+=`<div class="vr"><span class="vl">${esc(f.label)}</span><span class="vn ${cls}">$${f.target.toFixed(2)}${upside!=null?`（${upside>=0?'+':''}${upside.toFixed(1)}%）`:''}<span style="color:var(--text2);font-weight:400;font-size:11px;margin-left:6px">${esc(f.date)}</span></span></div>`;
     }
-    el.innerHTML = out || '<div class="note">這5家銀行目前都不在最近5筆分析師動態內</div>';
+    el.innerHTML = out || '<div class="note">目前查無分析師動態資料</div>';
     return true;
   }catch(e){ el.innerHTML='<div class="note">資料載入失敗</div>'; return false; }
 }
