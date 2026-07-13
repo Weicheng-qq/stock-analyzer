@@ -371,7 +371,23 @@ async function handleInstallClick(){
     deferredInstallPrompt = null;
     document.getElementById('installBtn').style.display='none';
   } else if(appName){
-    const step12 = `<div class="install-step"><div class="install-step-num">1</div><div class="install-step-icon">⋯</div><div class="install-step-text">點右上角選單</div></div>`
+    const step1Visual = `<div class="install-step" style="align-items:flex-start">
+      <div class="install-step-num">1</div>
+      <div style="flex:1">
+        <div class="install-step-text" style="margin-bottom:8px">點右下角<b style="color:var(--blue)">選單</b></div>
+        <svg viewBox="0 0 300 108" style="width:100%;max-width:280px;display:block;border-radius:10px;overflow:visible">
+          <rect x="4" y="30" width="292" height="62" rx="14" fill="#f2f2f4"/>
+          <circle cx="245" cy="61" r="27" fill="var(--blue)" opacity="0.16"/>
+          <circle cx="245" cy="61" r="27" fill="none" stroke="var(--blue)" stroke-width="2.5"/>
+          <circle cx="245" cy="50" r="3.2" fill="#1c1c1e"/>
+          <circle cx="245" cy="61" r="3.2" fill="#1c1c1e"/>
+          <circle cx="245" cy="72" r="3.2" fill="#1c1c1e"/>
+          <path d="M245 8 L237 22 L253 22 Z" fill="var(--blue)"/>
+          <text x="245" y="16" text-anchor="middle" font-size="13" font-weight="700" fill="var(--blue)">點這裡 👆</text>
+        </svg>
+      </div>
+    </div>`;
+    const step12 = step1Visual
       + `<div class="install-step"><div class="install-step-num">2</div><div class="install-step-icon">🌐</div><div class="install-step-text">選「在瀏覽器開啟」</div></div>`;
     if(isIOS()){
       // iOS從App內建瀏覽器打開：4步驟一次教完(1,2跳出瀏覽器；3,4加入主畫面)，不用使用者跳出去後再點一次按鈕
