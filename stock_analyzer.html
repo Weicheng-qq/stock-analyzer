@@ -267,9 +267,10 @@ function saveSettings(){ safeSet(document.getElementById('gmKey').value.trim());
 document.getElementById('settingsModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeSettings(); });
 
 // iPhone Safari「加入主畫面」視覺化教學：直接畫出手機畫面示意圖、圈出要點的按鈕，比純文字更直覺好懂
-const IOS_INSTALL_VISUAL_STEPS = `
+function iosVisualSteps(n1, n2){
+  return `
 <div class="install-step" style="align-items:flex-start">
-  <div class="install-step-num">1</div>
+  <div class="install-step-num">${n1}</div>
   <div style="flex:1">
     <div class="install-step-text" style="margin-bottom:8px">點下方工具列的<b style="color:var(--blue)">分享鈕</b></div>
     <svg viewBox="0 0 300 108" style="width:100%;max-width:280px;display:block;border-radius:10px;overflow:visible">
@@ -290,7 +291,7 @@ const IOS_INSTALL_VISUAL_STEPS = `
   </div>
 </div>
 <div class="install-step" style="align-items:flex-start">
-  <div class="install-step-num">2</div>
+  <div class="install-step-num">${n2}</div>
   <div style="flex:1">
     <div class="install-step-text" style="margin-bottom:8px">選單裡點<b style="color:var(--blue)">「加入主畫面」</b></div>
     <svg viewBox="0 0 300 150" style="width:100%;max-width:280px;display:block;border-radius:10px;overflow:visible">
@@ -318,6 +319,8 @@ const IOS_INSTALL_VISUAL_STEPS = `
     </svg>
   </div>
 </div>`;
+}
+const IOS_INSTALL_VISUAL_STEPS = iosVisualSteps(1, 2);
 
 // PWA 安裝按鈕：Android/桌面Chrome/Edge 可一鍵安裝(beforeinstallprompt)；iPhone Safari 沒有此API，只能顯示手動教學；
 // LINE/FB/IG/微信等App內建瀏覽器(WebView)兩者都不支援，得先引導使用者跳出去用手機原生瀏覽器開啟
@@ -368,11 +371,18 @@ async function handleInstallClick(){
     deferredInstallPrompt = null;
     document.getElementById('installBtn').style.display='none';
   } else if(appName){
-    document.getElementById('installModalTitle').textContent = '📲 兩步驟裝好';
-    document.getElementById('installModalSub').textContent = `你現在是從 ${appName} 打開的，先跳出去：`;
-    document.getElementById('installModalSteps').innerHTML =
-      `<div class="install-step"><div class="install-step-num">1</div><div class="install-step-icon">⋯</div><div class="install-step-text">點右上角選單</div></div>`
+    const step12 = `<div class="install-step"><div class="install-step-num">1</div><div class="install-step-icon">⋯</div><div class="install-step-text">點右上角選單</div></div>`
       + `<div class="install-step"><div class="install-step-num">2</div><div class="install-step-icon">🌐</div><div class="install-step-text">選「在瀏覽器開啟」</div></div>`;
+    if(isIOS()){
+      // iOS從App內建瀏覽器打開：4步驟一次教完(1,2跳出瀏覽器；3,4加入主畫面)，不用使用者跳出去後再點一次按鈕
+      document.getElementById('installModalTitle').textContent = '📲 四步驟裝好';
+      document.getElementById('installModalSub').textContent = `你現在是從 ${appName} 打開的，照下面4個步驟操作：`;
+      document.getElementById('installModalSteps').innerHTML = step12 + iosVisualSteps(3,4);
+    } else {
+      document.getElementById('installModalTitle').textContent = '📲 兩步驟裝好';
+      document.getElementById('installModalSub').textContent = `你現在是從 ${appName} 打開的，先跳出去：`;
+      document.getElementById('installModalSteps').innerHTML = step12;
+    }
     document.getElementById('iosInstallModal').classList.add('open');
   } else if(isIOS()){
     document.getElementById('installModalTitle').textContent = '📲 兩步驟裝好';
