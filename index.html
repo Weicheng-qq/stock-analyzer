@@ -703,7 +703,7 @@ async function doSearch(){
       }
       if(gen!==SEARCH_GEN) return;
       window.__lastAI={ctx, peInfo, gen};   // 供「只重試 AI」使用，不必重抓 SEC/Yahoo
-      if(ai){ renderAI(ai); fillCompetitorPe(ai, peInfo, gen); logOk('ai', usedServer&&gmKey?'AI 分析完成（你的金鑰已失效，本次已自動改用伺服器金鑰，建議 ⚙️ 更新）':'AI 分析完成'); }
+      if(ai){ renderAI(ai); fillCompetitorPe(ai, peInfo, gen); runIndependentAiAnalysis(); logOk('ai', usedServer&&gmKey?'AI 分析完成（你的金鑰已失效，本次已自動改用伺服器金鑰，建議 ⚙️ 更新）':'AI 分析完成'); }
       else{
         logErr('ai','AI 失敗：'+(aiErr.message==='DAILY_LIMIT'?'免費 AI 每日額度已用完（明早 8 點重置）':aiErr.message));
         showAIFail(aiErr, usedServer);
@@ -851,17 +851,13 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 </div>
 
 <div class="card verdict" style="margin-top:16px">
-  <div class="ct" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-    <span>🎯 投資總結 — 以下為版主選股準則</span>
-    <button class="wl-ai-btn" style="font-size:12px;padding:7px 12px" onclick="runIndependentAiAnalysis()">🤖 AI分析</button>
-  </div>
+  <div class="ct">🎯 投資總結 — 以下為版主選股準則</div>
   ${chkHtml}
   <div id="chk_outlook"><div class="vr"><span class="vl">➖ 法說會成長動能（CEO 對未來展望）</span><span class="vn">分析中...</span></div></div>
   <div class="note" style="margin:6px 0 12px">前 ${checklist.length} 項為實際數據自動檢核；最後一項「成長動能」依公司官方指引/資本支出判斷。✅=符合 ❌=未達標 ➖=無資料。</div>
-  <div id="ai_verdict">${aiLoading()}</div>
-  <div id="ai_independent_box" style="display:none;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
-    <div style="font-size:13px;color:var(--text2);margin-bottom:8px">🤖 AI 獨立分析（不受上方版主選股準則限制，依 AI 自己的專業判斷）</div>
-    <div id="ai_independent"></div>
+  <div id="ai_independent_box" style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+    <div style="font-size:13px;color:var(--text2);margin-bottom:8px">🤖 AI 獨立分析（依 AI 自己的專業判斷，不受上方版主選股準則限制）</div>
+    <div id="ai_independent">${aiLoading()}</div>
   </div>
 </div>
 
@@ -879,7 +875,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 }
 
 function aiLoading(){ return `<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>AI 分析中...</span></div>`; }
-function setAllAI(html){ ['ai_lynch','ai_products','ai_competitors','ai_guidance','ai_risks','ai_moat','ai_valuation','ai_verdict'].forEach(id=>{ const el=document.getElementById(id); if(!el) return;
+function setAllAI(html){ ['ai_lynch','ai_products','ai_competitors','ai_guidance','ai_risks','ai_moat','ai_valuation'].forEach(id=>{ const el=document.getElementById(id); if(!el) return;
   // 官方指引是真實資料，AI 失敗/重試時不可蓋掉，只把「翻譯載入中」改成說明
   if(id==='ai_guidance' && window.__guidanceData && el.innerHTML.indexOf('真實指引')>-1){ el.innerHTML=el.innerHTML.replace('（中文翻譯載入中...）','（AI 忙碌，暫以官方原文顯示）'); return; }
   el.innerHTML=html; }); const lb=document.getElementById('lynchBadge'); if(lb) lb.textContent='（需 AI 金鑰）'; }
@@ -926,7 +922,7 @@ async function retryAI(){
     else aiErr=e;
   }
   if(st.gen!==SEARCH_GEN) return;
-  if(ai){ renderAI(ai); fillCompetitorPe(ai, st.peInfo, st.gen); logOk('ai','AI 分析完成'); }
+  if(ai){ renderAI(ai); fillCompetitorPe(ai, st.peInfo, st.gen); runIndependentAiAnalysis(); logOk('ai','AI 分析完成'); }
   else{ logErr('ai','AI 失敗：'+(aiErr.message==='DAILY_LIMIT'?'免費 AI 每日額度已用完（明早 8 點重置）':aiErr.message)); showAIFail(aiErr, usedServer); }
   setTimeout(()=>logPanel(false),1200);
 }
@@ -1133,10 +1129,8 @@ function renderAI(ai){
   setAI('ai_risks',`<div class="ai">${norm(ai.catalysts)}<br><br>${norm(ai.risks)}</div>`);
   setAI('ai_moat',`<div class="ai">${norm(ai.moat)}</div>`);
   setAI('ai_valuation',`<div class="ai" style="font-size:13px;color:var(--text2)">${norm(ai.valuation)}</div>`);
-  const rc={'買入':'s-buy','觀望':'s-hold','避開':'s-sell'}[ai.rating]||'s-hold';
-  const ri={'買入':'✅','觀望':'⏳','避開':'❌'}[ai.rating]||'⏳';
-  const dc={'高':'g','中':'y','低':'r'}[ai.double]||'y';
-  setAI('ai_verdict',`<div class="vscore ${rc}">${ri} ${esc(ai.rating||'')}</div><div style="font-size:13px;margin-bottom:8px">三年翻倍機率：<strong class="${dc}">${esc(ai.double||'')}</strong></div><div class="ai">${norm(ai.verdict)}</div>`);
+  // 註：原本這裡會渲染ai.rating/ai.double/ai.verdict到#ai_verdict(依版主選股準則檢核出的AI結論)，
+  // 現在改成不顯示，投資總結最下面改為自動觸發的獨立AI分析(見doSearch/retryAI呼叫runIndependentAiAnalysis())
 }
 
 // 從 SEC 6-K/8-K 最新財報新聞稿抓「真實法說會指引」（免費）。找到就覆蓋 AI 的舊展望。
