@@ -1313,14 +1313,30 @@ async function fillAnalystTargets(symbol, gen, curPrice){
     // 第二輪：5大銀行沒湊滿5筆時，用其他分析師的最新動態補滿到5筆(維持原本新到舊順序)
     for(const p of parsed){ if(list.length>=5) break; if(used.has(p)) continue; list.push(p); used.add(p); }
     let out='';
-    for(const f of list){
+    list.forEach((f,i)=>{
       const upside=(curPrice!=null && curPrice>0)?((f.target-curPrice)/curPrice*100):null;
       const cls=upside!=null?(upside>0?'g':upside<0?'r':''):'';
-      out+=`<div class="vr"><span class="vl">${esc(f.label)}</span><span class="vn ${cls}">$${Math.round(f.target)}${upside!=null?`（${upside>=0?'+':''}${upside.toFixed(1)}%）`:''}<span style="color:var(--text2);font-weight:400;font-size:11px;margin-left:6px">${esc(f.date)}</span></span></div>`;
-    }
+      out+=`<div class="vr"><span class="vl" id="wta_label_${i}">${esc(f.label)}</span><span class="vn ${cls}">$${Math.round(f.target)}${upside!=null?`（${upside>=0?'+':''}${upside.toFixed(1)}%）`:''}<span style="color:var(--text2);font-weight:400;font-size:11px;margin-left:6px">${esc(f.date)}</span></span></div>`;
+    });
     el.innerHTML = out || '<div class="note">目前查無分析師動態資料</div>';
+    // 補位用的其他分析師機構名稱(不在5大銀行名單內)還是英文，背景翻譯成中文後就地替換
+    const toTranslate = list.map((f,i)=>({i,label:f.label})).filter(x=>!list[x.i].key);
+    if(toTranslate.length) translateAnalystFirmNames(toTranslate, gen);
     return true;
   }catch(e){ el.innerHTML='<div class="note">資料載入失敗</div>'; return false; }
+}
+async function translateAnalystFirmNames(items, gen){
+  const prompt=`Translate each of these ${items.length} investment research/brokerage firm names into their commonly-used Traditional Chinese (繁體中文) short name, the way Taiwanese financial media would refer to them (e.g. "Morgan Stanley" -> 摩根士丹利). If a firm has no common Chinese name, keep it as the original English name. Reply with ONLY a JSON array of ${items.length} strings in the same order, no other text, no markdown.\n\n`+items.map((x,idx)=>`${idx+1}. ${x.label}`).join('\n');
+  try{
+    const r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'meta-llama/llama-3.3-70b-instruct:free',messages:[{role:'user',content:prompt}],temperature:0.2})});
+    const data=await r.json();
+    if(gen!=null && gen!==SEARCH_GEN) return;
+    const raw=(data?.choices?.[0]?.message?.content||'').trim();
+    const jm=raw.match(/\[[\s\S]*\]/); if(!jm) return;
+    const arr=JSON.parse(jm[0]);
+    if(!Array.isArray(arr)||arr.length!==items.length) return;
+    items.forEach((x,idx)=>{ const el=document.getElementById('wta_label_'+x.i); if(el && arr[idx]) el.textContent=arr[idx]; });
+  }catch(e){}   // 翻譯失敗就維持英文原文，不影響功能
 }
 
 // 最新新聞（免費）：Yahoo Finance RSS，先顯示英文原文(立即可見)，背景呼叫AI翻譯標題成繁中後就地替換
