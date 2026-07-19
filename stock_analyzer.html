@@ -167,6 +167,17 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
 </div>
 
+<div class="modal-overlay" id="docTranslateModal">
+  <div class="modal" style="max-width:560px">
+    <h2 id="docTranslateTitle">🌐 原文中文翻譯</h2>
+    <p class="sub" style="color:var(--text2)">AI 忠實翻譯官方原文段落，數字/百分比皆與原文一致，僅供快速閱讀，正式查證請點下方英文原文連結。</p>
+    <div class="steps" id="docTranslateBody" style="max-height:50vh;overflow-y:auto;line-height:1.8"></div>
+    <div class="modal-btns">
+      <button class="btn-sec" onclick="closeDocTranslate()">關閉</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="settingsModal">
   <div class="modal">
     <h2>⚙️ AI 分析金鑰（免費）</h2>
@@ -265,6 +276,37 @@ function openSettings(){ try{ document.getElementById('gmKey').value=getGmKey();
 function closeSettings(){ document.getElementById('settingsModal').classList.remove('open'); }
 function saveSettings(){ safeSet(document.getElementById('gmKey').value.trim()); closeSettings(); alert('✅ 已儲存'); }
 document.getElementById('settingsModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeSettings(); });
+
+// 官方原文段落中文翻譯（點連結彈窗，AI忠實逐字翻譯已擷取的原文段落，數字/百分比不可更動）
+function closeDocTranslate(){ document.getElementById('docTranslateModal').classList.remove('open'); }
+document.getElementById('docTranslateModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeDocTranslate(); });
+async function openTranslatedDoc(key, title){
+  const src = key==='products' ? window.__productsData : key==='competition' ? window.__competitionData
+            : key==='guidance' ? window.__guidanceData : key==='capex' ? window.__capexData : null;
+  const modal=document.getElementById('docTranslateModal'), body=document.getElementById('docTranslateBody'), titleEl=document.getElementById('docTranslateTitle');
+  titleEl.textContent='🌐 '+title;
+  if(!src || !src.text){ body.innerHTML='<div class="note">找不到原文段落</div>'; modal.classList.add('open'); return; }
+  body.innerHTML='<div class="note">翻譯中，請稍候（約5-10秒）...</div>';
+  modal.classList.add('open');
+  try{
+    const gmKey=getGmKey();
+    const isLocal=(location.hostname==='localhost'||location.hostname==='127.0.0.1');
+    const useServer=!gmKey && !isLocal;
+    const prompt=`Translate the following official filing excerpt into Traditional Chinese (繁體中文). This is for fact verification, so translate faithfully — do NOT change, round, or omit any numbers, percentages, dates, or currency units. Do NOT add commentary or explanation. Reply with ONLY the translated Chinese text, no markdown, no preamble.\n\n${src.text}`;
+    const data = await (async ()=>{
+      const endpoint = useServer ? '/api/ai' : (gmKey.indexOf('AIza')===0 ? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' : gmKey.indexOf('gsk_')===0 ? 'https://api.groq.com/openai/v1/chat/completions' : 'https://openrouter.ai/api/v1/chat/completions');
+      const headers = useServer ? {'Content-Type':'application/json'} : {'Content-Type':'application/json','Authorization':'Bearer '+gmKey};
+      const model = useServer ? undefined : (gmKey.indexOf('AIza')===0 ? GEMINI_MODELS[0] : gmKey.indexOf('gsk_')===0 ? GROQ_MODELS[0] : OR_MODELS[0]);
+      const r=await fetch(endpoint,{method:'POST',headers,body:JSON.stringify({model,messages:[{role:'user',content:prompt}],temperature:0.2})});
+      return r.json();
+    })();
+    const zh=(data?.choices?.[0]?.message?.content||'').trim();
+    if(!zh) throw new Error('empty');
+    body.innerHTML=`<div>${esc(zh).replace(/\n+/g,'<br><br>')}</div><div class="note" style="margin-top:12px;border-top:1px solid var(--border);padding-top:8px">來源：${esc(src.date||'')}　<a href="${esc(src.url)}" target="_blank" style="color:var(--blue)">查看英文原文 ↗</a></div>`;
+  }catch(e){
+    body.innerHTML=`<div class="note">翻譯失敗（可能免費AI額度已用完，請稍後再試，或直接查看英文原文）</div><div class="note" style="margin-top:8px"><a href="${esc(src.url)}" target="_blank" style="color:var(--blue)">查看英文原文 ↗</a></div>`;
+  }
+}
 
 // iPhone Safari「加入主畫面」視覺化教學：直接畫出手機畫面示意圖、圈出要點的按鈕，比純文字更直覺好懂
 function iosVisualSteps(n1, n2){
@@ -1099,18 +1141,18 @@ function renderAI(ai){
     goEl.innerHTML=`<div class="vr"><span class="vl">${mk} 法說會成長動能（CEO 對未來展望）</span><span class="vn ${cl}">${esc(go)}</span></div>`
       +(ai.growth_outlook_reason?`<div class="note" style="margin-top:2px">${norm(ai.growth_outlook_reason)}</div>`:''); }
   setAI('ai_products',`<div class="ai">${norm(ai.products)}`
-    +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理　<a href="${esc(zhLink(window.__productsData.url))}" target="_blank" style="color:var(--blue)">官方文件（中文翻譯）↗</a>${window.__wikiData?` ｜ <a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
+    +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理　<a href="javascript:void(0)" onclick="openTranslatedDoc('products','產品與服務原文段落')" style="color:var(--blue)">原文段落中文翻譯 ↗</a>　<a href="${esc(window.__productsData.url)}" target="_blank" style="color:var(--text2)">(英文原文)</a>${window.__wikiData?` ｜ <a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
       :(window.__wikiData?`<div class="note" style="color:var(--green)">✅ 依維基百科最新公開資料（持續更新）整理　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a></div>`:`<div class="note">（未取得官方或維基資料，內容為 AI 一般認知，僅供參考）</div>`))
     +`</div>`);
   setAI('ai_competitors',`<div class="ai">${norm(ai.competitors)}`
-    +(window.__competitionData?`<div class="note" style="color:var(--green)">✅ 參考公司官方年報（${esc(window.__competitionData.date)}）競爭段落　<a href="${esc(zhLink(window.__competitionData.url))}" target="_blank" style="color:var(--blue)">原始文件（中文翻譯）↗</a></div>`:`<div class="note">（產業排名為 AI 一般認知，僅供參考）</div>`)
+    +(window.__competitionData?`<div class="note" style="color:var(--green)">✅ 參考公司官方年報（${esc(window.__competitionData.date)}）競爭段落　<a href="javascript:void(0)" onclick="openTranslatedDoc('competition','競爭對手原文段落')" style="color:var(--blue)">原文段落中文翻譯 ↗</a>　<a href="${esc(window.__competitionData.url)}" target="_blank" style="color:var(--text2)">(英文原文)</a></div>`:`<div class="note">（產業排名為 AI 一般認知，僅供參考）</div>`)
     +`</div>`);
   // 法說會展望：有官方指引 → 顯示中文翻譯(忠實翻譯官方原文)+來源；無 → 不顯示臆測內容
   // 法說會口頭 Q&A 直達連結（官方逐字稿/影片為一手來源，一鍵可查）
   const coName=(window.__coNameForLinks||'').trim();
   const irPage=IR_QUARTERLY_PAGE[window.__symbolForLinks];
   const linksBlock = coName ? `<div class="note" style="margin-top:10px;border-top:1px solid var(--border);padding-top:8px">🎧 想看 CEO 口頭 Q&A？一鍵直達一手來源：
-    ${irPage?`<a href="${esc(zhLink(irPage))}" target="_blank" style="color:var(--blue)">官方法說會專區（含逐字稿PDF）↗</a>`:`<a href="https://www.google.com/search?q=${encodeURIComponent(coName+' earnings call transcript 逐字稿')}" target="_blank" style="color:var(--blue)">官方逐字稿搜尋 ↗</a>`}
+    ${irPage?`<a href="${esc(irPage)}" target="_blank" style="color:var(--blue)">官方法說會專區（含逐字稿PDF）↗</a>`:`<a href="https://www.google.com/search?q=${encodeURIComponent(coName+' earnings call transcript 逐字稿')}" target="_blank" style="color:var(--blue)">官方逐字稿搜尋 ↗</a>`}
     <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(coName+' earnings call')}" target="_blank" style="color:var(--blue)">YouTube 法說影片 ↗</a>
     <a href="https://www.google.com/search?q=${encodeURIComponent(coName+' investor relations')}" target="_blank" style="color:var(--blue)">公司投資人關係頁 ↗</a></div>` : '';
   // 資本支出/成長動能（官方年報，若有）
@@ -1122,9 +1164,9 @@ function renderAI(ai){
     setAI('ai_guidance',`<div class="ai"><div style="color:var(--green);font-size:12px;margin-bottom:6px">✅ 來自公司向 SEC 申報的官方財報新聞稿（${esc(gd.date)}）— 真實指引</div>`
       +(zh?`${norm(zh)}`:`<span style="color:var(--text2)">（翻譯失敗，顯示原文）</span><br>${esc(gd.text)}`)
       +capexBlock
-      +`<div class="note"><a href="${esc(zhLink(gd.url))}" target="_blank" style="color:var(--blue)">查看官方原始文件（中文翻譯）↗</a></div>`+linksBlock+`</div>`);
+      +`<div class="note"><a href="javascript:void(0)" onclick="openTranslatedDoc('guidance','法說會官方指引原文')" style="color:var(--blue)">查看官方原始文件中文翻譯 ↗</a>　<a href="${esc(gd.url)}" target="_blank" style="color:var(--text2)">(英文原文)</a></div>`+linksBlock+`</div>`);
   } else if(window.__capexData){
-    setAI('ai_guidance',`<div class="ai">${capexBlock}<div class="note"><a href="${esc(zhLink(window.__capexData.url))}" target="_blank" style="color:var(--blue)">查看官方原始文件（中文翻譯）↗</a></div>`+linksBlock+`</div>`);
+    setAI('ai_guidance',`<div class="ai">${capexBlock}<div class="note"><a href="javascript:void(0)" onclick="openTranslatedDoc('capex','資本支出原文段落')" style="color:var(--blue)">查看官方原始文件中文翻譯 ↗</a>　<a href="${esc(window.__capexData.url)}" target="_blank" style="color:var(--text2)">(英文原文)</a></div>`+linksBlock+`</div>`);
   } else {
     setAI('ai_guidance',`<div class="ai" style="color:var(--text2)">此公司未能從官方申報文件擷取到結構化的未來展望指引。<br>依「以事實為依據」原則，此處不提供 AI 臆測的展望。${linksBlock}</div>`);
   }
@@ -1184,7 +1226,7 @@ async function fillGuidance(cik, gen){
           let g=m[1].split(trimRe)[0].trim();
           window.__guidanceReal=true;
           window.__guidanceData={ text:g, date:pf.c.date, url:url };
-          el.innerHTML=`<div class="ai"><div style="color:var(--green);font-size:12px;margin-bottom:6px">✅ 來自 SEC 官方財報新聞稿（${pf.c.date}）— 真實指引（中文翻譯載入中...）</div>${esc(g).replace(/(US\$[\d.,]+ ?(?:billion|million)?|[\d.]+%)/g,'<strong>$1</strong>')}<div class="note"><a href="${esc(zhLink(url))}" target="_blank" style="color:var(--blue)">查看原始文件（中文翻譯）↗</a></div></div>`;
+          el.innerHTML=`<div class="ai"><div style="color:var(--green);font-size:12px;margin-bottom:6px">✅ 來自 SEC 官方財報新聞稿（${pf.c.date}）— 真實指引（中文翻譯載入中...）</div>${esc(g).replace(/(US\$[\d.,]+ ?(?:billion|million)?|[\d.]+%)/g,'<strong>$1</strong>')}<div class="note"><a href="${esc(url)}" target="_blank" style="color:var(--blue)">查看原始文件 ↗</a></div></div>`;
           return true;
         }
       }
