@@ -229,24 +229,9 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 
   <div id="logPanel" class="log-panel"><h3>🔄 載入進度</h3><div id="logItems"></div></div>
   <div id="results" class="results"></div>
-  <div id="dbgBadge" style="margin-top:24px;padding:8px 12px;font-size:11px;color:#8b949e;font-family:monospace;border-top:1px solid #30363d;white-space:pre-wrap;word-break:break-all"></div>
 </div>
 
 <script>
-// ==== 臨時偵錯：記錄本頁被載入幾次+時間戳+導頁/卸載事件(存sessionStorage跨重載保留)，用完會移除 ====
-(function(){
-  try{
-    var log = JSON.parse(sessionStorage.getItem('__dbg')||'[]');
-    var navType=(performance.getEntriesByType('navigation')[0]||{}).type||'?';
-    log.push({ev:'LOAD',t:new Date().toLocaleTimeString(),navType:navType, ms:Math.round(performance.now())});
-    sessionStorage.setItem('__dbg', JSON.stringify(log.slice(-20)));
-    function render(){ var b=document.getElementById('dbgBadge'); if(b){ b.textContent='[偵錯] 本分頁事件記錄(截圖給工程師)：\n'+JSON.parse(sessionStorage.getItem('__dbg')||'[]').map(function(x){return x.ev+' '+x.t+(x.navType?(' ['+x.navType+']'):'')+(x.why?(' '+x.why):'');}).join('\n'); } }
-    ['beforeunload','pagehide','unload'].forEach(function(evn){ window.addEventListener(evn,function(){ try{ var l=JSON.parse(sessionStorage.getItem('__dbg')||'[]'); l.push({ev:evn.toUpperCase(),t:new Date().toLocaleTimeString(),ms:Math.round(performance.now())}); sessionStorage.setItem('__dbg',JSON.stringify(l.slice(-20))); }catch(e){} }); });
-    window.addEventListener('load', render);
-    document.addEventListener('DOMContentLoaded', render);
-    window.__dbgRender=render;
-  }catch(e){}
-})();
 // 自動選擇代理：本機(file://或localhost)用 proxy.ps1；線上(Vercel)用 /api/proxy
 const PROXY = (location.protocol==='file:' || ['localhost','127.0.0.1',''].indexOf(location.hostname)>-1)
   ? 'http://localhost:8765/?url='
@@ -1167,9 +1152,7 @@ function renderAI(ai){
   const coName=(window.__coNameForLinks||'').trim();
   const irPage=IR_QUARTERLY_PAGE[window.__symbolForLinks];
   const linksBlock = coName ? `<div class="note" style="margin-top:10px;border-top:1px solid var(--border);padding-top:8px">🎧 想看 CEO 口頭 Q&A？一鍵直達一手來源：
-    ${irPage?`<a href="${esc(irPage)}" target="_blank" style="color:var(--blue)">官方法說會專區（含逐字稿PDF）↗</a>`:`<a href="https://www.google.com/search?q=${encodeURIComponent(coName+' earnings call transcript 逐字稿')}" target="_blank" style="color:var(--blue)">官方逐字稿搜尋 ↗</a>`}
-    <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(coName+' earnings call')}" target="_blank" style="color:var(--blue)">YouTube 法說影片 ↗</a>
-    <a href="https://www.google.com/search?q=${encodeURIComponent(coName+' investor relations')}" target="_blank" style="color:var(--blue)">公司投資人關係頁 ↗</a></div>` : '';
+    ${irPage?`<a href="${esc(irPage)}" target="_blank" style="color:var(--blue)">官方法說會專區（含逐字稿PDF）↗</a>`:`<a href="https://www.google.com/search?q=${encodeURIComponent(coName+' earnings call transcript 逐字稿')}" target="_blank" style="color:var(--blue)">官方逐字稿搜尋 ↗</a>`}</div>` : '';
   // 資本支出/成長動能（官方年報，若有）
   const capexZh=(ai.capex_zh&&String(ai.capex_zh).trim())?ai.capex_zh:(window.__capexData?window.__capexData.text:null);
   const capexBlock = window.__capexData ? `<div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px"><div style="color:var(--orange);font-size:12px;margin-bottom:4px">🏗️ 資本支出與成長動能（官方年報 ${esc(window.__capexData.date)}）</div>${norm(capexZh)}</div>` : '';
