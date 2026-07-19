@@ -1115,7 +1115,11 @@ function renderAI(ai){
   // 資本支出/成長動能（官方年報，若有）
   const capexZh=(ai.capex_zh&&String(ai.capex_zh).trim())?ai.capex_zh:(window.__capexData?window.__capexData.text:null);
   const capexBlock = window.__capexData ? `<div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px"><div style="color:var(--orange);font-size:12px;margin-bottom:4px">🏗️ 資本支出與成長動能（官方年報 ${esc(window.__capexData.date)}）</div>${norm(capexZh)}</div>` : '';
-  if(window.__guidanceReal && window.__guidanceData){
+  // 若有「官方法說會逐字稿人工判讀摘要」(目前TSM)，優先且完整顯示它(內容比SEC新聞稿的季度財測更完整)，其餘公司走原本SEC擷取邏輯
+  const manualCall=IR_CALL_SUMMARY[window.__symbolForLinks];
+  if(manualCall){
+    setAI('ai_guidance',`<div class="ai">${manualCall.html}<div class="note" style="margin-top:8px">來源：${esc(manualCall.quarter)} 台積電官方法人說明會逐字稿＋簡報</div>`+linksBlock+`</div>`);
+  } else if(window.__guidanceReal && window.__guidanceData){
     const gd=window.__guidanceData;
     const zh=(ai.guidance_zh&&String(ai.guidance_zh).trim())?ai.guidance_zh:null;
     setAI('ai_guidance',`<div class="ai"><div style="color:var(--green);font-size:12px;margin-bottom:6px">✅ 來自公司向 SEC 申報的官方財報新聞稿（${esc(gd.date)}）— 真實指引</div>`
@@ -1340,6 +1344,34 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
 const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results' };
+// 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
+// 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
+const IR_CALL_SUMMARY = {
+  'TSM': {
+    quarter: '2026 第二季（2026/07/16）',
+    source: 'https://investor.tsmc.com/chinese/quarterly-results/2026/q2',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依台積電官方法人說明會<b>逐字稿＋簡報</b>人工判讀整理（2026/07/16 法說會，數字均為官方原文，非AI臆測）</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
+• 上修 <b>2026 全年美元營收成長預期至「略高於 40%」</b>（年增，較先前展望調高），受惠 AI 大趨勢與 3/5 奈米強勁需求。<br>
+• AI 需求極為強勁，管理層對多年 AI 大趨勢信心很高；董事長魏哲家對 AI 相關營收五年成長率（先前為 mid-to-high 50% CAGR）表示「比之前更強」，需求看好延續到 2029～2030 年。<br>
+• 第三季（3Q26）展望：營收 <b>446～458 億美元</b>（中值季增 12%、年增 37%）、毛利率 65～67%、營業利益率 56～58%。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 資本支出（大幅上修）</b><br>
+• <b>2026 全年資本預算上修至 600～640 億美元</b>（US$60～64B），持續大額投資支應客戶成長。<br>
+• 配置：70～80% 用於先進製程、約 10% 特殊製程、10～20% 先進封裝／測試／光罩。<br>
+• 第二季資本支出 157 億美元（約新台幣 4,960 億元）。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🇺🇸 美國投資</b><br>
+• 宣布<b>在美國亞利桑那額外投資 1,000 億美元</b>（US$100B），興建更多 2 奈米及以下邏輯晶圓廠與先進封裝廠；<b>亞利桑那總投資額達 2,650 億美元</b>（US$265B）。<br>
+• 同時未來數年在台灣興建 13 座先進製程與先進封裝廠。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 技術進展</b><br>
+• 2 奈米（N2）2025 年進入量產，第三季起陡峭放量。<br>
+• A14 製程（第二代 nanosheet）較 N2 速度提升 10～15%（同功耗）或功耗改善 25～30%（同速度）、晶片密度提升近 20%；2027 年風險試產、2028 量產。A13／A12 為 A14 延伸。<br>
+• 3 奈米全球擴建：台灣、亞利桑那、日本各再增一座。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">💰 股利／⚠️ 毛利率提醒</b><br>
+• 2026 年每股現金股利 NT$24（年增 33%）。<br>
+• 毛利率稀釋：2 奈米陡峭放量下半年稀釋約 3～4 個百分點；海外廠擴產稀釋初期 2～3%、後期擴大至 3～4%。</div>`
+  }
+};
 function newsItemHtml(title, link, pub){
   let dateStr='';
   try{ const d=new Date(pub); if(!isNaN(d)) dateStr=d.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}); }catch(e){}
