@@ -1162,9 +1162,9 @@ function renderAI(ai){
     setAI('ai_guidance',`<div class="ai"><div style="color:var(--green);font-size:12px;margin-bottom:6px">✅ 來自公司向 SEC 申報的官方財報新聞稿（${esc(gd.date)}）— 真實指引</div>`
       +(zh?`${norm(zh)}`:`<span style="color:var(--text2)">（翻譯失敗，顯示原文）</span><br>${esc(gd.text)}`)
       +capexBlock
-      +`<div class="note"><a href="javascript:void(0)" onclick="openTranslatedDoc('guidance','法說會官方指引原文')" style="color:var(--blue)">查看官方原始文件中文翻譯 ↗</a>　<a href="${esc(gd.url)}" target="_blank" style="color:var(--text2)">(英文原文)</a></div>`+linksBlock+`</div>`);
+      +linksBlock+`</div>`);
   } else if(window.__capexData){
-    setAI('ai_guidance',`<div class="ai">${capexBlock}<div class="note"><a href="javascript:void(0)" onclick="openTranslatedDoc('capex','資本支出原文段落')" style="color:var(--blue)">查看官方原始文件中文翻譯 ↗</a>　<a href="${esc(window.__capexData.url)}" target="_blank" style="color:var(--text2)">(英文原文)</a></div>`+linksBlock+`</div>`);
+    setAI('ai_guidance',`<div class="ai">${capexBlock}`+linksBlock+`</div>`);
   } else {
     setAI('ai_guidance',`<div class="ai" style="color:var(--text2)">此公司未能從官方申報文件擷取到結構化的未來展望指引。<br>依「以事實為依據」原則，此處不提供 AI 臆測的展望。${linksBlock}</div>`);
   }
