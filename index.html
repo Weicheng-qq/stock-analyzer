@@ -196,7 +196,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <h1>美股AI深度分析工具</h1>
     <p>10年財務指標 · 營收成長 · 彼得林區分類 · 護城河 · 競爭對手 · 買入建議</p>
     <div class="free-tag">✅ 財務數據免費(SEC官方) · AI分析用免費模型</div>
-    <p style="color:var(--text2);font-size:13px;margin-top:10px">↓ 以下為「台積電」範例，讓你先看到內容長怎樣，可直接在上方搜尋你要的公司</p>
+    <p style="color:var(--text2);font-size:13px;margin-top:10px">在上方搜尋框輸入、或點下方按鈕，即可查看任一美股的完整分析（開啟時預設顯示台積電範例）</p>
     <div class="chips">
       <div class="chip" onclick="quickSearch('AAPL')">🍎 AAPL</div>
       <div class="chip" onclick="quickSearch('NVDA')">🎮 NVDA</div>
@@ -605,7 +605,7 @@ async function doSearch(){
   let symbol;
   const gen=++SEARCH_GEN;   // 本次搜尋序號：避免上一次(較慢)的非同步回應蓋掉這次結果
   window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__capexData=null; window.__wikiData=null; window.__guidanceData=null;
-  document.getElementById('welcome').style.display='none';
+  // 網站介紹(#welcome)永久釘在標題與自選股之間、不隱藏；只清空/切換下方的分析結果
   document.getElementById('results').style.display='none';
   document.getElementById('results').innerHTML='';
   document.getElementById('logItems').innerHTML='';
