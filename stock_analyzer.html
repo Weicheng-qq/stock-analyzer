@@ -1540,9 +1540,8 @@ function cc(v,good,mid){ if(v==null) return ''; return v>=good?'g':v>=mid?'y':'r
 function fmtB(v){ if(!v&&v!==0) return '0'; const a=Math.abs(v); if(a>=1e12) return (v/1e12).toFixed(2)+'T'; if(a>=1e9) return (v/1e9).toFixed(2)+'B'; if(a>=1e6) return (v/1e6).toFixed(1)+'M'; return v.toString(); }
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-// 開啟頁面時自動載入「台積電」範例，讓使用者先看到內容長怎樣（每個瀏覽器分頁只自動跑一次，重整不重複觸發以節省AI額度）
+// 開啟頁面時自動載入「台積電」範例，讓使用者每次一打開就直接看到內容長怎樣
 window.addEventListener('load', function(){
-  try{ if(sessionStorage.getItem('demo_done')) return; sessionStorage.setItem('demo_done','1'); }catch(e){}
   var inp=document.getElementById('searchInput');
   if(inp && !inp.value){ inp.value='台積電'; setTimeout(function(){ doSearch(); }, 300); }
 });
