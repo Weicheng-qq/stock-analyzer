@@ -618,6 +618,7 @@ async function doSearch(){
     symbol=found.symbol;
     const co=found.co;
     window.__coNameForLinks=co.title;   // 供法說會口頭Q&A直達連結使用
+    window.__symbolForLinks=symbol;     // 供法說會口頭Q&A直達連結對照已知官方IR頁面
     logOk('cik',`找到：${co.title}（${symbol}）`);
 
     logAdd('fin','載入 SEC 官方財報...');
@@ -1098,17 +1099,18 @@ function renderAI(ai){
     goEl.innerHTML=`<div class="vr"><span class="vl">${mk} 法說會成長動能（CEO 對未來展望）</span><span class="vn ${cl}">${esc(go)}</span></div>`
       +(ai.growth_outlook_reason?`<div class="note" style="margin-top:2px">${norm(ai.growth_outlook_reason)}</div>`:''); }
   setAI('ai_products',`<div class="ai">${norm(ai.products)}`
-    +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理　<a href="${esc(window.__productsData.url)}" target="_blank" style="color:var(--blue)">官方文件 ↗</a>${window.__wikiData?` ｜ <a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
+    +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理　<a href="${esc(zhLink(window.__productsData.url))}" target="_blank" style="color:var(--blue)">官方文件（中文翻譯）↗</a>${window.__wikiData?` ｜ <a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
       :(window.__wikiData?`<div class="note" style="color:var(--green)">✅ 依維基百科最新公開資料（持續更新）整理　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a></div>`:`<div class="note">（未取得官方或維基資料，內容為 AI 一般認知，僅供參考）</div>`))
     +`</div>`);
   setAI('ai_competitors',`<div class="ai">${norm(ai.competitors)}`
-    +(window.__competitionData?`<div class="note" style="color:var(--green)">✅ 參考公司官方年報（${esc(window.__competitionData.date)}）競爭段落　<a href="${esc(window.__competitionData.url)}" target="_blank" style="color:var(--blue)">原始文件 ↗</a></div>`:`<div class="note">（產業排名為 AI 一般認知，僅供參考）</div>`)
+    +(window.__competitionData?`<div class="note" style="color:var(--green)">✅ 參考公司官方年報（${esc(window.__competitionData.date)}）競爭段落　<a href="${esc(zhLink(window.__competitionData.url))}" target="_blank" style="color:var(--blue)">原始文件（中文翻譯）↗</a></div>`:`<div class="note">（產業排名為 AI 一般認知，僅供參考）</div>`)
     +`</div>`);
   // 法說會展望：有官方指引 → 顯示中文翻譯(忠實翻譯官方原文)+來源；無 → 不顯示臆測內容
   // 法說會口頭 Q&A 直達連結（官方逐字稿/影片為一手來源，一鍵可查）
   const coName=(window.__coNameForLinks||'').trim();
+  const irPage=IR_QUARTERLY_PAGE[window.__symbolForLinks];
   const linksBlock = coName ? `<div class="note" style="margin-top:10px;border-top:1px solid var(--border);padding-top:8px">🎧 想看 CEO 口頭 Q&A？一鍵直達一手來源：
-    <a href="https://www.google.com/search?q=${encodeURIComponent(coName+' earnings call transcript 逐字稿')}" target="_blank" style="color:var(--blue)">官方逐字稿搜尋 ↗</a>
+    ${irPage?`<a href="${esc(zhLink(irPage))}" target="_blank" style="color:var(--blue)">官方法說會專區（含逐字稿PDF）↗</a>`:`<a href="https://www.google.com/search?q=${encodeURIComponent(coName+' earnings call transcript 逐字稿')}" target="_blank" style="color:var(--blue)">官方逐字稿搜尋 ↗</a>`}
     <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(coName+' earnings call')}" target="_blank" style="color:var(--blue)">YouTube 法說影片 ↗</a>
     <a href="https://www.google.com/search?q=${encodeURIComponent(coName+' investor relations')}" target="_blank" style="color:var(--blue)">公司投資人關係頁 ↗</a></div>` : '';
   // 資本支出/成長動能（官方年報，若有）
@@ -1120,9 +1122,9 @@ function renderAI(ai){
     setAI('ai_guidance',`<div class="ai"><div style="color:var(--green);font-size:12px;margin-bottom:6px">✅ 來自公司向 SEC 申報的官方財報新聞稿（${esc(gd.date)}）— 真實指引</div>`
       +(zh?`${norm(zh)}`:`<span style="color:var(--text2)">（翻譯失敗，顯示原文）</span><br>${esc(gd.text)}`)
       +capexBlock
-      +`<div class="note"><a href="${esc(gd.url)}" target="_blank" style="color:var(--blue)">查看官方原始文件 ↗</a></div>`+linksBlock+`</div>`);
+      +`<div class="note"><a href="${esc(zhLink(gd.url))}" target="_blank" style="color:var(--blue)">查看官方原始文件（中文翻譯）↗</a></div>`+linksBlock+`</div>`);
   } else if(window.__capexData){
-    setAI('ai_guidance',`<div class="ai">${capexBlock}<div class="note"><a href="${esc(window.__capexData.url)}" target="_blank" style="color:var(--blue)">查看官方原始文件 ↗</a></div>`+linksBlock+`</div>`);
+    setAI('ai_guidance',`<div class="ai">${capexBlock}<div class="note"><a href="${esc(zhLink(window.__capexData.url))}" target="_blank" style="color:var(--blue)">查看官方原始文件（中文翻譯）↗</a></div>`+linksBlock+`</div>`);
   } else {
     setAI('ai_guidance',`<div class="ai" style="color:var(--text2)">此公司未能從官方申報文件擷取到結構化的未來展望指引。<br>依「以事實為依據」原則，此處不提供 AI 臆測的展望。${linksBlock}</div>`);
   }
@@ -1182,7 +1184,7 @@ async function fillGuidance(cik, gen){
           let g=m[1].split(trimRe)[0].trim();
           window.__guidanceReal=true;
           window.__guidanceData={ text:g, date:pf.c.date, url:url };
-          el.innerHTML=`<div class="ai"><div style="color:var(--green);font-size:12px;margin-bottom:6px">✅ 來自 SEC 官方財報新聞稿（${pf.c.date}）— 真實指引（中文翻譯載入中...）</div>${esc(g).replace(/(US\$[\d.,]+ ?(?:billion|million)?|[\d.]+%)/g,'<strong>$1</strong>')}<div class="note"><a href="${esc(url)}" target="_blank" style="color:var(--blue)">查看原始文件 ↗</a></div></div>`;
+          el.innerHTML=`<div class="ai"><div style="color:var(--green);font-size:12px;margin-bottom:6px">✅ 來自 SEC 官方財報新聞稿（${pf.c.date}）— 真實指引（中文翻譯載入中...）</div>${esc(g).replace(/(US\$[\d.,]+ ?(?:billion|million)?|[\d.]+%)/g,'<strong>$1</strong>')}<div class="note"><a href="${esc(zhLink(url))}" target="_blank" style="color:var(--blue)">查看原始文件（中文翻譯）↗</a></div></div>`;
           return true;
         }
       }
@@ -1335,12 +1337,15 @@ async function translateAnalystFirmNames(items, gen){
 
 // 最新新聞（免費）：Yahoo Finance RSS，先顯示英文原文(立即可見)，背景呼叫AI翻譯標題成繁中後就地替換
 function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'"); }
+// 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
+function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
+// 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results' };
 function newsItemHtml(title, link, pub){
   let dateStr='';
   try{ const d=new Date(pub); if(!isNaN(d)) dateStr=d.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}); }catch(e){}
   // 點連結用 Google 翻譯包一層，開啟後整篇原文網頁自動翻成繁體中文(免費、免金鑰)
-  const zhLink=`https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(link)}`;
-  return `<div class="news-item"><a href="${esc(zhLink)}" target="_blank" rel="noopener">${esc(title)}</a><div class="note">${esc(dateStr)}</div></div>`;
+  return `<div class="news-item"><a href="${esc(zhLink(link))}" target="_blank" rel="noopener">${esc(title)}</a><div class="note">${esc(dateStr)}</div></div>`;
 }
 async function fillNews(symbol, gen){
   const el=document.getElementById('newsList'); if(!el) return false;
