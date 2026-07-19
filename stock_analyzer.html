@@ -167,17 +167,6 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
 </div>
 
-<div class="modal-overlay" id="docTranslateModal">
-  <div class="modal" style="max-width:560px">
-    <h2 id="docTranslateTitle">🌐 原文中文翻譯</h2>
-    <p class="sub" style="color:var(--text2)">AI 忠實翻譯官方原文段落，數字/百分比皆與原文一致，僅供快速閱讀，正式查證請點下方英文原文連結。</p>
-    <div class="steps" id="docTranslateBody" style="max-height:50vh;overflow-y:auto;line-height:1.8"></div>
-    <div class="modal-btns">
-      <button class="btn-sec" onclick="closeDocTranslate()">關閉</button>
-    </div>
-  </div>
-</div>
-
 <div class="modal-overlay" id="settingsModal">
   <div class="modal">
     <h2>⚙️ AI 分析金鑰（免費）</h2>
@@ -277,36 +266,6 @@ function closeSettings(){ document.getElementById('settingsModal').classList.rem
 function saveSettings(){ safeSet(document.getElementById('gmKey').value.trim()); closeSettings(); alert('✅ 已儲存'); }
 document.getElementById('settingsModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeSettings(); });
 
-// 官方原文段落中文翻譯（點連結彈窗，AI忠實逐字翻譯已擷取的原文段落，數字/百分比不可更動）
-function closeDocTranslate(){ document.getElementById('docTranslateModal').classList.remove('open'); }
-document.getElementById('docTranslateModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeDocTranslate(); });
-async function openTranslatedDoc(key, title){
-  const src = key==='products' ? window.__productsData : key==='competition' ? window.__competitionData
-            : key==='guidance' ? window.__guidanceData : key==='capex' ? window.__capexData : null;
-  const modal=document.getElementById('docTranslateModal'), body=document.getElementById('docTranslateBody'), titleEl=document.getElementById('docTranslateTitle');
-  titleEl.textContent='🌐 '+title;
-  if(!src || !src.text){ body.innerHTML='<div class="note">找不到原文段落</div>'; modal.classList.add('open'); return; }
-  body.innerHTML='<div class="note">翻譯中，請稍候（約5-10秒）...</div>';
-  modal.classList.add('open');
-  try{
-    const gmKey=getGmKey();
-    const isLocal=(location.hostname==='localhost'||location.hostname==='127.0.0.1');
-    const useServer=!gmKey && !isLocal;
-    const prompt=`Translate the following official filing excerpt into Traditional Chinese (繁體中文). This is for fact verification, so translate faithfully — do NOT change, round, or omit any numbers, percentages, dates, or currency units. Do NOT add commentary or explanation. Reply with ONLY the translated Chinese text, no markdown, no preamble.\n\n${src.text}`;
-    const data = await (async ()=>{
-      const endpoint = useServer ? '/api/ai' : (gmKey.indexOf('AIza')===0 ? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' : gmKey.indexOf('gsk_')===0 ? 'https://api.groq.com/openai/v1/chat/completions' : 'https://openrouter.ai/api/v1/chat/completions');
-      const headers = useServer ? {'Content-Type':'application/json'} : {'Content-Type':'application/json','Authorization':'Bearer '+gmKey};
-      const model = useServer ? undefined : (gmKey.indexOf('AIza')===0 ? GEMINI_MODELS[0] : gmKey.indexOf('gsk_')===0 ? GROQ_MODELS[0] : OR_MODELS[0]);
-      const r=await fetch(endpoint,{method:'POST',headers,body:JSON.stringify({model,messages:[{role:'user',content:prompt}],temperature:0.2})});
-      return r.json();
-    })();
-    const zh=(data?.choices?.[0]?.message?.content||'').trim();
-    if(!zh) throw new Error('empty');
-    body.innerHTML=`<div>${esc(zh).replace(/\n+/g,'<br><br>')}</div><div class="note" style="margin-top:12px;border-top:1px solid var(--border);padding-top:8px">來源：${esc(src.date||'')}　<a href="${esc(src.url)}" target="_blank" style="color:var(--blue)">查看英文原文 ↗</a></div>`;
-  }catch(e){
-    body.innerHTML=`<div class="note">翻譯失敗（可能免費AI額度已用完，請稍後再試，或直接查看英文原文）</div><div class="note" style="margin-top:8px"><a href="${esc(src.url)}" target="_blank" style="color:var(--blue)">查看英文原文 ↗</a></div>`;
-  }
-}
 
 // iPhone Safari「加入主畫面」視覺化教學：直接畫出手機畫面示意圖、圈出要點的按鈕，比純文字更直覺好懂
 function iosVisualSteps(n1, n2){
@@ -1141,11 +1100,11 @@ function renderAI(ai){
     goEl.innerHTML=`<div class="vr"><span class="vl">${mk} 法說會成長動能（CEO 對未來展望）</span><span class="vn ${cl}">${esc(go)}</span></div>`
       +(ai.growth_outlook_reason?`<div class="note" style="margin-top:2px">${norm(ai.growth_outlook_reason)}</div>`:''); }
   setAI('ai_products',`<div class="ai">${norm(ai.products)}`
-    +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理　<a href="javascript:void(0)" onclick="openTranslatedDoc('products','產品與服務原文段落')" style="color:var(--blue)">原文段落中文翻譯 ↗</a>　<a href="${esc(window.__productsData.url)}" target="_blank" style="color:var(--text2)">(英文原文)</a>${window.__wikiData?` ｜ <a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
+    +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理${window.__wikiData?`　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
       :(window.__wikiData?`<div class="note" style="color:var(--green)">✅ 依維基百科最新公開資料（持續更新）整理　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a></div>`:`<div class="note">（未取得官方或維基資料，內容為 AI 一般認知，僅供參考）</div>`))
     +`</div>`);
   setAI('ai_competitors',`<div class="ai">${norm(ai.competitors)}`
-    +(window.__competitionData?`<div class="note" style="color:var(--green)">✅ 參考公司官方年報（${esc(window.__competitionData.date)}）競爭段落　<a href="javascript:void(0)" onclick="openTranslatedDoc('competition','競爭對手原文段落')" style="color:var(--blue)">原文段落中文翻譯 ↗</a>　<a href="${esc(window.__competitionData.url)}" target="_blank" style="color:var(--text2)">(英文原文)</a></div>`:`<div class="note">（產業排名為 AI 一般認知，僅供參考）</div>`)
+    +(window.__competitionData?`<div class="note" style="color:var(--green)">✅ 參考公司官方年報（${esc(window.__competitionData.date)}）競爭段落</div>`:`<div class="note">（產業排名為 AI 一般認知，僅供參考）</div>`)
     +`</div>`);
   // 法說會展望：有官方指引 → 顯示中文翻譯(忠實翻譯官方原文)+來源；無 → 不顯示臆測內容
   // 法說會口頭 Q&A 直達連結（官方逐字稿/影片為一手來源，一鍵可查）
