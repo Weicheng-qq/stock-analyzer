@@ -1099,10 +1099,16 @@ function renderAI(ai){
   if(goEl){ const go=ai.growth_outlook||'無法判斷'; const mk=go==='符合'?'✅':go==='不符合'?'❌':'➖'; const cl=go==='符合'?'g':go==='不符合'?'r':'';
     goEl.innerHTML=`<div class="vr"><span class="vl">${mk} 法說會成長動能（CEO 對未來展望）</span><span class="vn ${cl}">${esc(go)}</span></div>`
       +(ai.growth_outlook_reason?`<div class="note" style="margin-top:2px">${norm(ai.growth_outlook_reason)}</div>`:''); }
-  setAI('ai_products',`<div class="ai">${norm(ai.products)}`
-    +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理${window.__wikiData?`　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
-      :(window.__wikiData?`<div class="note" style="color:var(--green)">✅ 依維基百科最新公開資料（持續更新）整理　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a></div>`:`<div class="note">（未取得官方或維基資料，內容為 AI 一般認知，僅供參考）</div>`))
-    +`</div>`);
+  // 產品/營收結構：若有最新一季法說會官方數據(目前TSM)優先用它(比年報新)；否則走AI依年報整理
+  const manualProd=IR_PRODUCTS_SUMMARY[window.__symbolForLinks];
+  if(manualProd){
+    setAI('ai_products',`<div class="ai">${manualProd.html}<div class="note" style="color:var(--green);margin-top:8px">✅ 依台積電官方法人說明會簡報（${esc(manualProd.quarter)}）最新一季數據整理，非AI臆測</div></div>`);
+  } else {
+    setAI('ai_products',`<div class="ai">${norm(ai.products)}`
+      +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理${window.__wikiData?`　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
+        :(window.__wikiData?`<div class="note" style="color:var(--green)">✅ 依維基百科最新公開資料（持續更新）整理　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a></div>`:`<div class="note">（未取得官方或維基資料，內容為 AI 一般認知，僅供參考）</div>`))
+      +`</div>`);
+  }
   setAI('ai_competitors',`<div class="ai">${norm(ai.competitors)}`
     +(window.__competitionData?`<div class="note" style="color:var(--green)">✅ 參考公司官方年報（${esc(window.__competitionData.date)}）競爭段落</div>`:`<div class="note">（產業排名為 AI 一般認知，僅供參考）</div>`)
     +`</div>`);
@@ -1370,6 +1376,22 @@ const IR_CALL_SUMMARY = {
 <div style="margin-bottom:10px"><b style="color:var(--orange)">💰 股利／⚠️ 毛利率提醒</b><br>
 • 2026 年每股現金股利 NT$24（年增 33%）。<br>
 • 毛利率稀釋：2 奈米陡峭放量下半年稀釋約 3～4 個百分點；海外廠擴產稀釋初期 2～3%、後期擴大至 3～4%。</div>`
+  }
+};
+// 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
+const IR_PRODUCTS_SUMMARY = {
+  'TSM': {
+    quarter: '2026 第二季（2026/07/16）',
+    source: 'https://investor.tsmc.com/chinese/quarterly-results/2026/q2',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">依平台別營收佔比（2026 第二季）</b></div>
+高效能運算(HPC)（佔營收 66%，季增 20%）<br>
+智慧型手機(Smartphone)（佔營收 22%）<br>
+物聯網(IoT)（佔營收 5%）<br>
+車用電子(Automotive)（佔營收 4%）<br>
+數位消費性電子(DCE)（佔營收 1%）<br>
+其他（佔營收 2%）<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">依製程別晶圓營收佔比（2026 第二季）</b><br>
+先進製程（7 奈米及以下）合計佔晶圓營收 <b>77%</b>；其中 3 奈米 30%、5 奈米 33%、7 奈米 11%、2 奈米 3%（2 奈米 2025 年進入量產、第三季起陡峭放量）。</div>`
   }
 };
 function newsItemHtml(title, link, pub){
