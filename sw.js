@@ -1,5 +1,5 @@
 // Service Worker：網頁本身(HTML)用「網路優先」確保永遠拿到最新版本；圖示等靜態資源用「快取優先」加速；API資料一律不快取
-const CACHE_NAME = 'stock-app-shell-v2';
+const CACHE_NAME = 'stock-app-shell-v3';
 const APP_SHELL = ['/icons/icon-192.png', '/icons/icon-512.png'];
 
 self.addEventListener('install', (e) => {

@@ -1542,13 +1542,15 @@ function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,
 
 // 開啟頁面時自動載入「台積電」範例，讓使用者每次一打開就直接看到內容長怎樣
 // 判斷條件改用「歡迎畫面仍顯示 + 結果區為空」，不依賴輸入框內容——避免瀏覽器重整時還原了輸入框的殘留值(導致 !inp.value 為 false)而漏跑範例
+var __demoRan=false;   // 一次性旗標：確保範例只會自動跑一次，避免 load+pageshow 或重複事件觸發第二次 doSearch(第二次會在開頭清空結果，造成「內容閃一下就消失」)
 function maybeRunDemo(){
+  if(__demoRan) return;
   var welcome=document.getElementById('welcome');
   var results=document.getElementById('results');
   if(!welcome || getComputedStyle(welcome).display==='none') return;   // 已經在跑/看某支股票，別打斷
   if(results && results.innerHTML.trim()) return;                       // 已有結果(含錯誤框)，別重跑
   var inp=document.getElementById('searchInput');
-  if(inp){ inp.value='台積電'; setTimeout(function(){ doSearch(); }, 300); }
+  if(inp){ __demoRan=true; inp.value='台積電'; setTimeout(function(){ doSearch(); }, 300); }
 }
 window.addEventListener('load', maybeRunDemo);
 window.addEventListener('pageshow', function(e){ if(e.persisted) maybeRunDemo(); });   // 從返回快取(bfcache)回到頁面時 load 不會再觸發，改由 pageshow 補跑
