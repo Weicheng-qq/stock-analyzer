@@ -894,7 +894,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 </div>
 
 <div class="card verdict" style="margin-top:16px">
-  <div class="ct">🎯 投資總結 — 以下為版主選股準則(以合理低估價格,買入擁有強大護城河的公司)</div>
+  <div class="ct">🎯 投資總結 — 以下為版主選股準則(以合理低估價格,買入擁有強大護城河公司)</div>
   ${chkHtml}
   <div id="chk_outlook"><div class="vr"><span class="vl">➖ 法說會成長動能（CEO 對未來展望）</span><span class="vn">分析中...</span></div></div>
   <div class="note" style="margin:6px 0 12px">前 ${checklist.length} 項為實際數據自動檢核；最後一項「成長動能」依公司官方指引/資本支出判斷。✅=符合 ❌=未達標 ➖=無資料。</div>
@@ -1555,9 +1555,14 @@ window.addEventListener('pageshow', function(e){ if(e.persisted) maybeRunDemo();
 // 開啟頁面時渲染自選股清單（每次都要跑，不受上面的 demo_done 限制）
 window.addEventListener('load', function(){ renderWatchlist(); });
 
-// PWA：註冊 Service Worker（只在線上 https 環境註冊，本機開發用 file:// 或 localhost 不需要）
-if('serviceWorker' in navigator && location.protocol==='https:'){
-  window.addEventListener('load', function(){ navigator.serviceWorker.register('/sw.js').catch(function(){}); });
+// ⚠️ 暫時停用 Service Worker 註冊：先前的 SW 在部分裝置(桌面Chrome/Edge、Android PWA)造成整頁重載迴圈。
+// 不再主動註冊；已有舊 SW 的裝置，瀏覽器會自動抓到已改成 kill-switch 的 sw.js 並自我清除(清快取+unregister)，迴圈即中止。
+// 額外保險：主動把殘留的 SW 全部註銷 + 清掉所有快取，確保徹底乾淨。
+if('serviceWorker' in navigator){
+  try{
+    navigator.serviceWorker.getRegistrations().then(function(rs){ rs.forEach(function(r){ r.unregister(); }); }).catch(function(){});
+    if(window.caches && caches.keys){ caches.keys().then(function(ks){ ks.forEach(function(k){ caches.delete(k); }); }).catch(function(){}); }
+  }catch(e){}
 }
 </script>
 </body>

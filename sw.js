@@ -1,24 +1,25 @@
-// Service Worker（極簡版）：只快取圖示以支援「安裝到主畫面」，完全不介入 HTML/資料請求。
-// 重要：不呼叫 clients.claim()，避免新版 SW 更新時「接管已開啟的頁面」而觸發整頁重新載入
-// (實測診斷確認：舊版含 clients.claim() 會讓桌面瀏覽器/Android PWA 在 SW 更新時自動 reload，造成畫面內容閃一下就消失)。
-const CACHE_NAME = 'stock-icons-v4';
-const ICONS = ['/icons/icon-192.png', '/icons/icon-512.png'];
-
-self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE_NAME).then((c) => c.addAll(ICONS)));
-  self.skipWaiting();   // 讓新版 SW 在「下一次載入」就生效（但不接管當前已開啟頁面）
+// ⚠️ Kill-switch Service Worker：專門用來「解除」先前卡死/造成重載迴圈的舊版 Service Worker。
+// 一旦被瀏覽器抓到(sw.js 一律走網路、不受舊 SW 快取影響)，就會：清掉所有快取 → 自我註銷 → 讓頁面改用純網路最新版。
+// 之後全站不再有 Service Worker 介入頁面，杜絕任何 SW/快取造成的重載迴圈或舊版殘留。
+self.addEventListener('install', () => {
+  self.skipWaiting();   // 立刻進入 activate，不等舊 SW 釋放
 });
 
 self.addEventListener('activate', (e) => {
-  // 清掉舊版快取名稱（含舊的 stock-app-shell-v2/v3，那些會攔截 HTML）
-  e.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))));
-  // 刻意不呼叫 clients.claim()：不主動接管已開啟頁面，杜絕控制權變更觸發的重新載入
+  e.waitUntil((async () => {
+    try {
+      // 1) 清掉所有快取(含舊的 stock-app-shell-v1/v2/v3、stock-icons-v4 等)
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+      // 2) 接管目前所有頁面，才能把它們導回乾淨的網路版本
+      await self.clients.claim();
+      // 3) 自我註銷：解除這個 SW 對本網站的控制
+      await self.registration.unregister();
+      // 4) 讓所有開著的分頁重新載入一次(此時已無 SW、無快取 → 拿到純網路最新版，迴圈就此中止)
+      const clients = await self.clients.matchAll({ type: 'window' });
+      clients.forEach((c) => { try { c.navigate(c.url); } catch (err) {} });
+    } catch (err) {}
+  })());
 });
 
-self.addEventListener('fetch', (e) => {
-  const url = new URL(e.request.url);
-  // 只有 App 圖示走快取(加速安裝後啟動)；HTML、API、Yahoo/SEC 資料等一律「不呼叫 respondWith」→ 瀏覽器用預設網路行為，SW 完全不碰頁面
-  if (e.request.method === 'GET' && ICONS.some((p) => url.pathname === p)) {
-    e.respondWith(caches.match(e.request).then((c) => c || fetch(e.request)));
-  }
-});
+// 刻意不註冊 fetch 事件：這個 SW 完全不攔截任何請求，頁面/資料一律走瀏覽器預設網路。
