@@ -229,9 +229,24 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 
   <div id="logPanel" class="log-panel"><h3>🔄 載入進度</h3><div id="logItems"></div></div>
   <div id="results" class="results"></div>
+  <div id="dbgBadge" style="margin-top:24px;padding:8px 12px;font-size:11px;color:#8b949e;font-family:monospace;border-top:1px solid #30363d;white-space:pre-wrap;word-break:break-all"></div>
 </div>
 
 <script>
+// ==== 臨時偵錯：記錄本頁被載入幾次+時間戳+導頁/卸載事件(存sessionStorage跨重載保留)，用完會移除 ====
+(function(){
+  try{
+    var log = JSON.parse(sessionStorage.getItem('__dbg')||'[]');
+    var navType=(performance.getEntriesByType('navigation')[0]||{}).type||'?';
+    log.push({ev:'LOAD',t:new Date().toLocaleTimeString(),navType:navType, ms:Math.round(performance.now())});
+    sessionStorage.setItem('__dbg', JSON.stringify(log.slice(-20)));
+    function render(){ var b=document.getElementById('dbgBadge'); if(b){ b.textContent='[偵錯] 本分頁事件記錄(截圖給工程師)：\n'+JSON.parse(sessionStorage.getItem('__dbg')||'[]').map(function(x){return x.ev+' '+x.t+(x.navType?(' ['+x.navType+']'):'')+(x.why?(' '+x.why):'');}).join('\n'); } }
+    ['beforeunload','pagehide','unload'].forEach(function(evn){ window.addEventListener(evn,function(){ try{ var l=JSON.parse(sessionStorage.getItem('__dbg')||'[]'); l.push({ev:evn.toUpperCase(),t:new Date().toLocaleTimeString(),ms:Math.round(performance.now())}); sessionStorage.setItem('__dbg',JSON.stringify(l.slice(-20))); }catch(e){} }); });
+    window.addEventListener('load', render);
+    document.addEventListener('DOMContentLoaded', render);
+    window.__dbgRender=render;
+  }catch(e){}
+})();
 // 自動選擇代理：本機(file://或localhost)用 proxy.ps1；線上(Vercel)用 /api/proxy
 const PROXY = (location.protocol==='file:' || ['localhost','127.0.0.1',''].indexOf(location.hostname)>-1)
   ? 'http://localhost:8765/?url='
