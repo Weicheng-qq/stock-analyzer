@@ -1133,7 +1133,7 @@ function renderAI(ai){
   // 產品/營收結構：若有最新一季法說會官方數據(目前TSM)優先用它(比年報新)；否則走AI依年報整理
   const manualProd=IR_PRODUCTS_SUMMARY[window.__symbolForLinks];
   if(manualProd){
-    setAI('ai_products',`<div class="ai">${manualProd.html}<div class="note" style="color:var(--green);margin-top:8px">✅ 依台積電官方法人說明會簡報（${esc(manualProd.quarter)}）最新一季數據整理，非AI臆測</div></div>`);
+    setAI('ai_products',`<div class="ai">${manualProd.html}<div class="note" style="color:var(--green);margin-top:8px">✅ 依公司官方投資人簡報／法說會（${esc(manualProd.quarter)}）最新一季資料整理，非AI臆測</div></div>`);
   } else {
     setAI('ai_products',`<div class="ai">${norm(ai.products)}`
       +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理${window.__wikiData?`　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
@@ -1155,7 +1155,7 @@ function renderAI(ai){
   // 若有「官方法說會逐字稿人工判讀摘要」(目前TSM)，優先且完整顯示它(內容比SEC新聞稿的季度財測更完整)，其餘公司走原本SEC擷取邏輯
   const manualCall=IR_CALL_SUMMARY[window.__symbolForLinks];
   if(manualCall){
-    setAI('ai_guidance',`<div class="ai">${manualCall.html}<div class="note" style="margin-top:8px">來源：${esc(manualCall.quarter)} 台積電官方法人說明會逐字稿＋簡報</div>`+linksBlock+`</div>`);
+    setAI('ai_guidance',`<div class="ai">${manualCall.html}<div class="note" style="margin-top:8px">來源：${esc(manualCall.quarter)} 公司官方投資人簡報／法說會逐字稿</div>`+linksBlock+`</div>`);
   } else if(window.__guidanceReal && window.__guidanceData){
     const gd=window.__guidanceData;
     const zh=(ai.guidance_zh&&String(ai.guidance_zh).trim())?ai.guidance_zh:null;
@@ -1380,7 +1380,7 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 // 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
-const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results' };
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html' };
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
 const IR_CALL_SUMMARY = {
@@ -1407,6 +1407,22 @@ const IR_CALL_SUMMARY = {
 <div style="margin-bottom:10px"><b style="color:var(--orange)">💰 股利／⚠️ 毛利率提醒</b><br>
 • 2026 年每股現金股利 NT$24（年增 33%）。<br>
 • 毛利率稀釋：2 奈米陡峭放量下半年稀釋約 3～4 個百分點；海外廠擴產稀釋初期 2～3%、後期擴大至 3～4%。</div>`
+  },
+  'NVO': {
+    quarter: '2026 第一季（2026/05/06）',
+    source: 'https://www.novonordisk.com/investors/financial-results.html',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依諾和諾德官方<b>投資人簡報＋公司公告</b>人工判讀整理（2026/05/06 Q1 2026 財報，CEO Mike Doustdar，數字均為官方原文，非AI臆測）</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望（2026 全年上修）</b><br>
+• <b>2026 全年展望上修</b>（主因 GLP-1 產品銷售預期增加）：調整後銷售成長 <b>-4% 至 -12%</b>（固定匯率CER）、調整後營業利益成長 <b>-4% 至 -12%</b>（CER）——較 2/3 前次展望（-5%～-13%）上修。<br>
+• 註：調整後數字已排除美國 340B 藥價計畫撥備沖銷的一次性非現金影響（US$42 億）；若以未調整基礎，2026 銷售與營業利益成長中值分別約 <b>+1%、+12%</b>（CER）。<br>
+• 第一季（Q1 2026）調整後：銷售成長 -4%、營業利益成長 -6%（CER，主因美國定價逆風、部分由 GLP-1 銷量成長抵銷）；調整後毛利率 80.6%、營業利益率 46.9%；淨利 DKK 486 億、自由現金流 DKK 128 億。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 資本支出</b><br>
+• 2026 資本支出約 <b>DKK 550 億</b>；自由現金流預期 DKK 360～460 億；有效稅率 21～23%。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">💊 成長動能／管線</b><br>
+• GLP-1 週注射針劑銷量市占約 <b>55%</b>（市場龍頭）；Wegovy 已在 55+ 國上市。<br>
+• <b>口服 Wegovy 藥丸（口服 semaglutide 25mg）</b>美國上市，週處方量約 207k、稱「同級最佳上市」，上市以來已觸及超過 100 萬人；下半年將於部分市場上市、歐盟已提交審查。<br>
+• CagriSema（下一代減重複方）美國已提交減重適應症；Wegovy 7.2mg 高劑量美國、歐盟獲批；Awiqli（每週一次胰島素）美國獲批。</div>`
   }
 };
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
@@ -1423,6 +1439,22 @@ const IR_PRODUCTS_SUMMARY = {
 其他（佔營收 2%）<br>
 <div style="margin-top:8px"><b style="color:var(--orange)">依製程別晶圓營收佔比（2026 第二季）</b><br>
 先進製程（7 奈米及以下）合計佔晶圓營收 <b>77%</b>；其中 3 奈米 30%、5 奈米 33%、7 奈米 11%、2 奈米 3%（2 奈米 2025 年進入量產、第三季起陡峭放量）。</div>`
+  },
+  'NVO': {
+    quarter: '2026 第一季（2026/05/06）',
+    source: 'https://www.novonordisk.com/investors/financial-results.html',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">依治療領域（諾和諾德以糖尿病與肥胖症 GLP-1 為核心）</b></div>
+GLP-1 糖尿病（Ozempic®、Rybelsus®）<br>
+肥胖症照護 Obesity care（Wegovy®、Saxenda®）<br>
+胰島素 Insulin<br>
+罕見疾病 Rare disease（血友病、內分泌等）<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">最新上市／重點產品（2026 第一季）</b><br>
+• <b>口服 Wegovy 藥丸（口服 semaglutide 25mg）</b>：美國已上市，週處方量約 207k，官方稱「同級最佳上市」，上市以來已觸及超過 <b>100 萬人</b>；2026 下半年將於部分市場上市、歐盟已提交審查。<br>
+• 美國 Wegovy® 週處方量合計約 475k；GLP-1 週注射針劑銷量市占約 55%，Wegovy® 已在 55+ 國上市。<br>
+• Wegovy® 7.2mg 高劑量：美國、歐盟獲批（單劑量裝置英國獲批）。<br>
+• Ozempic® 2.0mg：英、德、荷上市。<br>
+• Awiqli®（每週一次胰島素 icodec）：美國獲批。<br>
+• 管線：CagriSema（美國已提交減重）、amycretin、Zenagamtide、UBT251（三重促效劑）、Etavopivat（罕見血液疾病）等。</div>`
   }
 };
 function newsItemHtml(title, link, pub){
