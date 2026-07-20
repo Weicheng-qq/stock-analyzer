@@ -573,14 +573,27 @@ function pickUnit(units){
   const k=keys.find(x=>x!=='shares')||keys[0];
   return {arr:k?units[k]:[],cur:k||null};
 }
-function isAnnualForm(f){ return !!f && (f.indexOf('10-K')===0 || f.indexOf('20-F')===0); } // 美國10-K + 外國20-F
+// 年度值來源：美國10-K、外國20-F/40-F，以及外國公司早年常用來申報年度結果的6-K。
+// （NVO/TSM等外國公司開始用20-F報XBRL之前的年度，只在6-K裡；不納入6-K會少抓好幾年→表格變成7年而非10年）
+function isAnnualForm(f){ return !!f && (f.indexOf('10-K')===0 || f.indexOf('20-F')===0 || f.indexOf('40-F')===0 || f.indexOf('6-K')===0); }
 function extractAnnual(units, instant){
   const pu=pickUnit(units), m={};
+  // 先篩候選：損益類要「全年期間」(350~380天)才算年度值；時點類(權益)要是實際申報的時點值。6-K的季度/期中資料會在此被過濾。
+  const rows=[];
   for(const u of pu.arr){
-    if(!isAnnualForm(u.form)) continue;
-    if(!u.end) continue;
+    if(!isAnnualForm(u.form) || !u.end) continue;
     if(!instant){ if(!u.start) continue; const d=(new Date(u.end)-new Date(u.start))/86400000; if(d<350||d>380) continue; }
-    m[+u.end.slice(0,4)]=u.val;
+    rows.push(u);
+  }
+  if(instant){
+    // 時點值(如股東權益)只取「會計年度結束日」，避免6-K期中資產負債表被誤當年度值。
+    // 年度結束的月日 = 所有時點值中最常出現的 MM-DD（每年都有年底，只有部分年份多了季底）。
+    const md=u=>u.end.slice(5);
+    const freq={}; rows.forEach(u=>{ freq[md(u)]=(freq[md(u)]||0)+1; });
+    const yEnd=Object.keys(freq).sort((a,b)=>freq[b]-freq[a])[0];
+    for(const u of rows){ if(md(u)===yEnd) m[+u.end.slice(0,4)]=u.val; }
+  } else {
+    for(const u of rows){ m[+u.end.slice(0,4)]=u.val; }
   }
   return {map:m,cur:pu.cur};
 }
