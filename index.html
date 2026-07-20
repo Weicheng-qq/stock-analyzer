@@ -110,7 +110,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-move button { background:none; border:none; color:var(--text2); cursor:pointer; font-size:10px; padding:1px 4px; line-height:1; }
 .wl-move button:hover:not(:disabled) { color:var(--blue); }
 .wl-move button:disabled { opacity:.25; cursor:default; }
-.wl-name { flex:1.3; min-width:0; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.wl-name { flex:1.8; min-width:0; font-weight:600; overflow-wrap:anywhere; word-break:break-word; line-height:1.25; }
 .wl-name .sym { display:block; color:var(--text2); font-weight:400; font-size:11px; }
 .wl-price { flex:0.7; text-align:right; font-weight:600; }
 .wl-chg { flex:0.8; text-align:right; font-weight:600; }
@@ -446,7 +446,7 @@ const ALIASES={
   '博通':'AVGO','美光':'MU','輝達半導體':'NVDA','摩根大通':'JPM','視覺':'V','萬事達':'MA',
   '網飛':'NFLX','netflix':'NFLX','奇異':'GE','禮來':'LLY','eli lilly':'LLY',
   '聯合健康':'UNH','嬌生':'JNJ','寶僑':'PG','艾司摩爾':'ASML','asml':'ASML',
-  '京東':'JD','拼多多':'PDD','百度':'BIDU','台達電':'DELL','戴爾':'DELL','dell':'DELL',
+  '京東':'JD','拼多多':'PDD','百度':'BIDU','戴爾':'DELL','dell':'DELL',
   '帕蘭泰爾':'PLTR','palantir':'PLTR','超微電腦':'SMCI','美超微':'SMCI'
 };
 // 代碼→中文名反查表(挑ALIASES裡最長的中文別名當正式名稱，例如台積電優先於台積)，供自選股顯示中文公司名用
@@ -519,6 +519,10 @@ function watchlistAnalyze(symbol){
 function renderWatchlist(){
   const el=document.getElementById('watchlistTable'); if(!el) return;
   const list=getWatchlist();
+  // 自我修正：若儲存的中文名與我方權威字典(TICKER_ZH)不同(例如舊資料把 DELL 誤存成台達電)，同步成字典的正確名(戴爾)
+  let __namefix=false;
+  list.forEach(it=>{ const canon=TICKER_ZH[it.symbol]; if(canon && it.name!==canon){ it.name=canon; __namefix=true; } });
+  if(__namefix) saveWatchlist(list);
   if(!list.length){ el.innerHTML='<div class="note">尚未加入任何自選股，在上方輸入後按「加入」</div>'; return; }
   el.innerHTML = list.map((it,i)=>`
     <div class="wl-row">
