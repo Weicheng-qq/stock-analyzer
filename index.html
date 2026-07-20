@@ -117,6 +117,15 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-ai-btn { flex:none; background:var(--blue); color:#0d1117; border:none; border-radius:6px; padding:6px 10px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; }
 .wl-del { flex:none; background:none; border:none; color:var(--text2); cursor:pointer; font-size:16px; padding:0 2px; }
 .wl-del:hover { color:var(--red); }
+/* 手機：名稱給更多空間、AI鈕只留圖示、價格漲跌幅收窄，避免長中文名被擠到換太多行 */
+@media(max-width:560px){
+  .wl-name { flex:2.4; }
+  .wl-price { flex:none; width:64px; font-size:12px; }
+  .wl-chg { flex:none; width:56px; font-size:12px; }
+  .wl-ai-btn .wl-ai-label { display:none; }
+  .wl-ai-btn { padding:6px 8px; font-size:15px; }
+  .wl-row { gap:6px; }
+}
 .wl-add { display:flex; gap:8px; margin-bottom:12px; }
 .wl-add input { flex:1; background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:9px 12px; font-size:13px; }
 
@@ -533,7 +542,7 @@ function renderWatchlist(){
       <div class="wl-name" title="${esc(it.name)}">${esc(it.name)}<span class="sym">${esc(it.symbol)}</span></div>
       <div class="wl-price" id="wlp_${esc(it.symbol)}">…</div>
       <div class="wl-chg" id="wlc_${esc(it.symbol)}">…</div>
-      <button class="wl-ai-btn" onclick="watchlistAnalyze('${esc(it.symbol)}')">📊 AI分析</button>
+      <button class="wl-ai-btn" onclick="watchlistAnalyze('${esc(it.symbol)}')">📊<span class="wl-ai-label"> AI分析</span></button>
       <button class="wl-del" onclick="removeFromWatchlist('${esc(it.symbol)}')" title="刪除">✕</button>
     </div>`).join('');
   loadWatchlistPrices(list);
