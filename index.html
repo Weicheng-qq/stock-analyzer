@@ -566,18 +566,35 @@ async function concept(cik,tag,tax){
   catch(e){ if(e.message==='PROXY_DOWN') throw e; return null; }
 }
 // 挑選數值單位：優先 USD，否則取第一個非 shares 的幣別（外國公司如 TWD/EUR），最後才 shares
-function pickUnit(units){
+// 計算某幣別陣列裡「年度值」筆數（損益類=全年期間、時點類=時點值），用來挑最完整的幣別
+function annualEntryCount(arr, instant){
+  let n=0;
+  for(const u of (arr||[])){
+    if(!u || !u.end) continue;
+    if(instant){ if(!u.start) n++; }
+    else if(u.start){ const d=(new Date(u.end)-new Date(u.start))/86400000; if(d>=350&&d<=380) n++; }
+  }
+  return n;
+}
+// 挑幣別：選「年度資料最完整」的幣別，而非盲目優先 USD。
+// （台積電同時申報 TWD(2015起) 與 USD(2017起)，若硬選 USD 會少抓 2015/2016 → 表格變9年而非10年；改選筆數最多的 TWD 才完整。）
+// 筆數相同時優先 USD（顯示較直覺）。所有指標各自選最完整幣別；因公司各報表科目的幣別涵蓋一致，會一致選到同一幣別，比率(毛利率/ROE)不受影響。
+function pickUnit(units, instant){
   if(!units) return {arr:[],cur:null};
-  if(units.USD) return {arr:units.USD,cur:'USD'};
-  const keys=Object.keys(units);
-  const k=keys.find(x=>x!=='shares')||keys[0];
-  return {arr:k?units[k]:[],cur:k||null};
+  const keys=Object.keys(units).filter(k=>k!=='shares');
+  if(!keys.length){ return units.shares ? {arr:units.shares,cur:'shares'} : {arr:[],cur:null}; }
+  let best=keys[0], bestN=-1;
+  for(const k of keys){
+    const n=annualEntryCount(units[k], instant);
+    if(n>bestN || (n===bestN && k==='USD')){ best=k; bestN=n; }
+  }
+  return {arr:units[best],cur:best};
 }
 // 年度值來源：美國10-K、外國20-F/40-F，以及外國公司早年常用來申報年度結果的6-K。
 // （NVO/TSM等外國公司開始用20-F報XBRL之前的年度，只在6-K裡；不納入6-K會少抓好幾年→表格變成7年而非10年）
 function isAnnualForm(f){ return !!f && (f.indexOf('10-K')===0 || f.indexOf('20-F')===0 || f.indexOf('40-F')===0 || f.indexOf('6-K')===0); }
 function extractAnnual(units, instant){
-  const pu=pickUnit(units), m={};
+  const pu=pickUnit(units, instant), m={};
   // 先篩候選：損益類要「全年期間」(350~380天)才算年度值；時點類(權益)要是實際申報的時點值。6-K的季度/期中資料會在此被過濾。
   const rows=[];
   for(const u of pu.arr){
