@@ -604,11 +604,12 @@ function extractAnnual(units, instant){
   }
   if(instant){
     // 時點值(如股東權益)只取「會計年度結束日」，避免6-K期中資產負債表被誤當年度值。
-    // 年度結束的月日 = 所有時點值中最常出現的 MM-DD（每年都有年底，只有部分年份多了季底）。
-    const md=u=>u.end.slice(5);
-    const freq={}; rows.forEach(u=>{ freq[md(u)]=(freq[md(u)]||0)+1; });
-    const yEnd=Object.keys(freq).sort((a,b)=>freq[b]-freq[a])[0];
-    for(const u of rows){ if(md(u)===yEnd) m[+u.end.slice(0,4)]=u.val; }
+    // 年度結束「月份」= 所有時點值中最常出現的 MM（每年都有年底、季底月份不同）。
+    // 用「月份」而非「月日」：52/53週會計年度公司(如蘋果9月底、每年日期不同9/24~9/30)月份固定、日期會變，用月日會誤刪多數年份導致ROE算不出來。
+    const mo=u=>u.end.slice(5,7);
+    const freq={}; rows.forEach(u=>{ freq[mo(u)]=(freq[mo(u)]||0)+1; });
+    const yEndMo=Object.keys(freq).sort((a,b)=>freq[b]-freq[a])[0];
+    for(const u of rows){ if(mo(u)===yEndMo) m[+u.end.slice(0,4)]=u.val; }
   } else {
     for(const u of rows){ m[+u.end.slice(0,4)]=u.val; }
   }
