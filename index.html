@@ -1393,7 +1393,7 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 // 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
-const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/' };
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/' };
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
 const IR_CALL_SUMMARY = {
@@ -1507,6 +1507,18 @@ const IR_CALL_SUMMARY = {
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務動能</b><br>
 • <b>Google Cloud 明顯加速：營收年增 63% 至 200 億美元</b>（AI 需求帶動）。<br>
 • Google Services 營收 896 億美元（年增 16%）：搜尋 +19%、YouTube 廣告 +11%。</div>`
+  },
+  'AAPL': {
+    quarter: 'FY2026 第二季（官網 investor.apple.com 財報）',
+    source: 'https://investor.apple.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依蘋果官網 Q2 FY2026 財報新聞稿＋合併財務報表人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能／展望</b><br>
+• 第二季（FY2026 Q2，季末 2026/03/28）：營收 <b>1,112 億美元、年增 17%</b>（史上最佳三月季，各地區皆雙位數成長）；稀釋 EPS $2.01（年增 22%）。<br>
+• <b>服務(Services)營收創歷史新高</b>（約 310 億美元）。<br>
+• 資本回饋：季度股利 $0.27（+4%）；董事會新增 <b>1,000 億美元</b>庫藏股回購授權。<br>
+• CEO Tim Cook：史上最佳三月季表現。<br>
+<span style="color:var(--text2)">（註：蘋果不對外公布書面財測，未來營收/毛利率展望由管理層於法說會口頭提供，可點下方官方法說會連結收聽。）</span></div>`
   }
 };
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
@@ -1597,6 +1609,17 @@ GLP-1 糖尿病（Ozempic®、Rybelsus®）<br>
 <div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q1 2026）</b><br>
 • 全面 AI 化：搜尋導入 AI 體驗帶動使用量、查詢量創新高；Gemini 模型與雲端 AI 產品驅動 Cloud 加速。<br>
 • 資本支出 357 億美元投入 AI 基礎建設；另宣布 847.5 億美元股權募資擴充 AI 運算。</div>`
+  },
+  'AAPL': {
+    quarter: 'FY2026 第二季（官網 investor.apple.com 財報）',
+    source: 'https://investor.apple.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">依產品類別營收（FY2026 Q2，總營收 1,112 億美元）</b></div>
+<b>iPhone</b>：570 億美元（最大單一產品）<br>
+<b>服務 Services</b>（App Store、iCloud、Apple Music、廣告、支付等）：約 <b>310 億美元（歷史新高）</b><br>
+Wearables/家庭/配件：79 億美元｜Mac：84 億美元｜iPad：69 億美元<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">地區別營收（FY2026 Q2）</b><br>
+美洲 451 億｜歐洲 281 億｜大中華區 205 億｜日本 84 億｜亞太其他 91 億美元（各地區皆雙位數成長）。<br>
+服務業務創新高、生態系黏著度持續提升為核心成長動能。</div>`
   }
 };
 function newsItemHtml(title, link, pub){
