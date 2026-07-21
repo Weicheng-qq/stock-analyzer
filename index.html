@@ -1393,7 +1393,7 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 // 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
-const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html' };
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results' };
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
 const IR_CALL_SUMMARY = {
@@ -1436,6 +1436,22 @@ const IR_CALL_SUMMARY = {
 • GLP-1 週注射針劑銷量市占約 <b>55%</b>（市場龍頭）；Wegovy 已在 55+ 國上市。<br>
 • <b>口服 Wegovy 藥丸（口服 semaglutide 25mg）</b>美國上市，週處方量約 207k、稱「同級最佳上市」，上市以來已觸及超過 100 萬人；下半年將於部分市場上市、歐盟已提交審查。<br>
 • CagriSema（下一代減重複方）美國已提交減重適應症；Wegovy 7.2mg 高劑量美國、歐盟獲批；Awiqli（每週一次胰島素）美國獲批。</div>`
+  },
+  'INTC': {
+    quarter: '2026 第一季（2026/04/23）',
+    source: 'https://www.intc.com/financial-info/financial-results',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依英特爾官方<b>法說會逐字稿(Prepared Remarks)＋財報簡報</b>人工判讀整理（2026/04/23 Q1 2026 財報，數字均為官方原文，非AI臆測）</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
+• 第二季（Q2 2026）展望：營收 <b>138～148 億美元</b>（季增 2～9%）、非GAAP 毛利率 39%（中值）、稅率 11%、EPS $0.20；DCAI（資料中心）季增雙位數。<br>
+• 全年：預期 PC 市場總量（TAM）年減低雙位數（下半年 PC 需求轉弱）；<b>伺服器 CPU 產業與英特爾皆雙位數出貨成長</b>，動能延續至 2027；AI 基礎建設帶動 CPU 需求信心提升。<br>
+• 第一季（Q1）：營收 <b>136 億美元</b>（超財測中值 14 億）、非GAAP 毛利率 41%（超財測約 650bps）、EPS $0.29；<b>AI 相關業務合計佔營收 60%、年增 40%</b>；連續第 6 季超財測。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 資本支出</b><br>
+• 2026 資本支出預期<b>與 2025 持平</b>（較先前「持平至下降」上修，反映擴產以支應已承諾需求）；排除 Fab 34 合資收購後，全年調整後自由現金流為正。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 技術／晶圓代工進展</b><br>
+• Intel 3 的 Xeon 6、Intel 18A 的 Core Series 3 均進入全速量產（近 5 年最快的新產品爬升）；<b>18A 良率超越內部預期</b>。<br>
+• Intel 14A 成熟度／良率／效能<b>超越同期的 18A</b>；預期 2026 下半年起出現早期設計承諾、延伸至 2027 上半年；先進封裝背光增加、宣布馬來西亞後段廠擴建（2027 起轉為營收）。<br>
+• Intel Foundry Q1 營收 54 億美元（季增 20%，外部代工 1.74 億）、營業損失 24 億（隨 18A 放量與良率改善，全年可望收斂）。</div>`
   }
 };
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
@@ -1468,6 +1484,18 @@ GLP-1 糖尿病（Ozempic®、Rybelsus®）<br>
 • Ozempic® 2.0mg：英、德、荷上市。<br>
 • Awiqli®（每週一次胰島素 icodec）：美國獲批。<br>
 • 管線：CagriSema（美國已提交減重）、amycretin、Zenagamtide、UBT251（三重促效劑）、Etavopivat（罕見血液疾病）等。</div>`
+  },
+  'INTC': {
+    quarter: '2026 第一季（2026/04/23）',
+    source: 'https://www.intc.com/financial-info/financial-results',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">依事業群營收（2026 第一季，總營收 136 億美元）</b></div>
+客戶運算事業群 CCG（PC 處理器）：77 億美元（AI PC 已佔客戶端 CPU 逾 60%）<br>
+資料中心與 AI 事業群 DCAI（Xeon 伺服器 CPU、ASIC）：51 億美元（年增 22%，ASIC 營收年增近 1 倍）<br>
+晶圓代工 Intel Foundry（先進製程代工＋先進封裝）：54 億美元（季增 20%，其中外部客戶代工 1.74 億）<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／製程重點（2026 第一季）</b><br>
+• AI 相關業務合計佔營收 <b>60%</b>、年增 40%。<br>
+• Intel 3 的 Xeon 6、Intel 18A 的 Core Series 3 全速量產（近 5 年最快爬升）；18A 良率超內部預期。<br>
+• 下一代 Intel 14A 效能／良率超越同期 18A，2026 下半年起有早期設計承諾；先進封裝擴建（馬來西亞後段廠）。</div>`
   }
 };
 function newsItemHtml(title, link, pub){
