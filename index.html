@@ -1393,7 +1393,7 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 // 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
-const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results' };
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information' };
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
 const IR_CALL_SUMMARY = {
@@ -1452,6 +1452,47 @@ const IR_CALL_SUMMARY = {
 • Intel 3 的 Xeon 6、Intel 18A 的 Core Series 3 均進入全速量產（近 5 年最快的新產品爬升）；<b>18A 良率超越內部預期</b>。<br>
 • Intel 14A 成熟度／良率／效能<b>超越同期的 18A</b>；預期 2026 下半年起出現早期設計承諾、延伸至 2027 上半年；先進封裝背光增加、宣布馬來西亞後段廠擴建（2027 起轉為營收）。<br>
 • Intel Foundry Q1 營收 54 億美元（季增 20%，外部代工 1.74 億）、營業損失 24 億（隨 18A 放量與良率改善，全年可望收斂）。</div>`
+  },
+  'LLY': {
+    quarter: '2026 第一季（2026/04/30）',
+    source: 'https://investor.lilly.com/financial-information/quarterly-results',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依禮來官方 Q1 2026 財報新聞稿（向 SEC 申報）人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望（2026 全年上修）</b><br>
+• <b>2026 全年營收展望上修至 820～850 億美元</b>（原 800～830 億），反映第一季強勁表現；獲利率（Performance Margin）上修至 47.0～48.5%；<b>非GAAP EPS 上修至 $35.50～37.00</b>（原 $33.50～35.00）；稅率 18～19% 不變。<br>
+• 第一季（Q1 2026）：全球營收 <b>198 億美元、年增 56%</b>（銷量 +65%、價格 -13%）；核心產品營收 134 億（由 Mounjaro、Zepbound 領軍）；非GAAP EPS $8.55（年增 156%）、毛利率約 82%。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">💊 成長動能／管線</b><br>
+• GLP-1 雙引擎：Mounjaro（第二型糖尿病）Q1 營收 86.6 億美元、Zepbound（減重）持續放量。<br>
+• <b>口服 GLP-1「orforglipron（Foundayo）」</b>第三型糖尿病＋肥胖/心血管風險 Phase 3 陽性結果；retatrutide（三重促效劑）第二型糖尿病 Phase 3 陽性；Taltz＋Zepbound 合併用於乾癬＋肥胖。<br>
+• 免疫、腫瘤、神經科學核心產品營收年增 160%（Kisunla 阿茲海默、Ebglyss、Omvoh、Jaypirca 等）；併購 Orna Therapeutics、Centessa 等強化管線。</div>`
+  },
+  'NVDA': {
+    quarter: 'FY2027 第一季（2026/05/20）',
+    source: 'https://investor.nvidia.com/financial-info/quarterly-results/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依輝達官方 Q1 FY2027 財報新聞稿＋財務長評論（向 SEC 申報）人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
+• <b>第二季（Q2 FY2027）展望：營收 910 億美元 ±2%</b>（展望中不假設任何來自中國的資料中心運算營收）；GAAP／非GAAP 毛利率 74.9%／75.0% ±50bps。<br>
+• 第一季（Q1 FY2027）：營收 <b>816 億美元、年增 85%</b>（季增 20%）；毛利率 74.9%／75.0%；淨利 583 億美元、稀釋 EPS $2.39（年增 214%）。<br>
+• 全年 FY2027 稅率預估 16～18%。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">💰 股東回報</b><br>
+• 新增 <b>800 億美元</b>庫藏股授權；第一季以買回＋股利回饋股東約 200 億美元（創新高）。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 產品／技術</b><br>
+• <b>資料中心（Data Center）為絕對主力：Q1 營收 752 億美元、年增 92%</b>，佔總營收逾九成。<br>
+• Blackwell GPU 廣泛採用（推論效能最高提升 7 倍）；發表次世代 <b>Rubin 平台</b>（含專為 agentic AI 打造的 Vera CPU、BlueField-4 儲存加速）。</div>`
+  },
+  'MU': {
+    quarter: 'FY2026 第三季（2026/06/24，季末 5/28）',
+    source: 'https://investors.micron.com/financial-information',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依美光官方 財季 Q3 FY2026 財報新聞稿（向 SEC 申報）人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
+• <b>財季 Q4 FY2026 展望：營收 500 億美元 ±10 億</b>、毛利率約 <b>86%</b>、營業費用約 16.5～18.6 億、非GAAP EPS $31.00 ±1.00（GAAP $30.73 ±1.00）。<br>
+• 財季 Q3（季末 2026/05/28）：營收 <b>414.6 億美元</b>（前季 238.6 億、去年同期 93 億，AI 記憶體需求爆發）；GAAP 淨利 282.4 億、EPS $24.67（非GAAP $25.11）；營運現金流 253.9 億。<br>
+• 執行長 Sanjay Mehrotra：創紀錄的 Q3 與更強的 Q4 展望，反映「記憶體在 AI 時代的策略價值」。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 產品／技術</b><br>
+• <b>HBM4（建於 1-beta DRAM）已對主力客戶平台高量出貨</b>，並向多家終端客戶送樣；HBM 為 AI 資料中心關鍵零組件。<br>
+• 1-gamma 16Gb LPDDR5X 於領先智慧型手機 OEM 高量爬升；NAND 已通過主力客戶驗證。</div>`
   }
 };
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
@@ -1496,6 +1537,41 @@ GLP-1 糖尿病（Ozempic®、Rybelsus®）<br>
 • AI 相關業務合計佔營收 <b>60%</b>、年增 40%。<br>
 • Intel 3 的 Xeon 6、Intel 18A 的 Core Series 3 全速量產（近 5 年最快爬升）；18A 良率超內部預期。<br>
 • 下一代 Intel 14A 效能／良率超越同期 18A，2026 下半年起有早期設計承諾；先進封裝擴建（馬來西亞後段廠）。</div>`
+  },
+  'LLY': {
+    quarter: '2026 第一季（2026/04/30）',
+    source: 'https://investor.lilly.com/financial-information/quarterly-results',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">主要產品／治療領域（2026 第一季，全球營收 198 億美元）</b></div>
+<b>代謝（GLP-1，核心成長引擎）</b>：Mounjaro®（第二型糖尿病）Q1 營收 86.6 億美元；Zepbound®（減重）持續放量；核心產品合計 134 億。<br>
+<b>腫瘤</b>：Verzenio®、Jaypirca® 等。<br>
+<b>免疫</b>：Taltz®、Ebglyss®、Omvoh® 等。<br>
+<b>神經科學</b>：Kisunla®（阿茲海默症）等。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">重點管線（2026 第一季）</b><br>
+• <b>orforglipron（Foundayo，口服 GLP-1）</b>：第二型糖尿病＋肥胖/心血管風險 Phase 3 陽性。<br>
+• retatrutide（三重促效劑）第二型糖尿病 Phase 3 陽性；Taltz＋Zepbound 合併用於乾癬＋肥胖。<br>
+• 免疫／腫瘤／神經科學核心產品營收年增 160%。</div>`
+  },
+  'NVDA': {
+    quarter: 'FY2027 第一季（2026/05/20）',
+    source: 'https://investor.nvidia.com/financial-info/quarterly-results/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">依業務營收（Q1 FY2027，總營收 816 億美元）</b></div>
+<b>資料中心 Data Center</b>：752 億美元（年增 92%，佔總營收逾九成）——AI 加速運算絕對主力。<br>
+遊戲（Gaming）、專業視覺化（Pro Visualization）、車用與機器人（Automotive/Robotics）為其餘。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／技術重點（Q1 FY2027）</b><br>
+• <b>Blackwell GPU</b>：廣泛全球採用，推論效能最高提升 7 倍。<br>
+• 發表次世代 <b>Rubin 平台</b>：含全球首款專為 agentic AI 打造的 Vera CPU、BlueField-4 儲存加速。<br>
+• 毛利率 74.9%／75.0%，展現 AI 運算平台的高附加價值。</div>`
+  },
+  'MU': {
+    quarter: 'FY2026 第三季（2026/06/24，季末 5/28）',
+    source: 'https://investors.micron.com/financial-information',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">產品組合（記憶體與儲存，Q3 FY2026 營收 414.6 億美元）</b></div>
+<b>DRAM</b>（含 <b>HBM 高頻寬記憶體</b>，AI 資料中心關鍵）、<b>NAND 快閃記憶體</b>、行動與車用/嵌入式記憶體。<br>
+四大事業群：雲端／運算與網路、行動、車用與嵌入式、儲存。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／技術重點（Q3 FY2026）</b><br>
+• <b>HBM4（建於 1-beta DRAM）</b>已對主力客戶平台高量出貨、並向多家終端客戶送樣——AI 記憶體需求爆發是本季營收翻倍主因。<br>
+• 1-gamma 16Gb LPDDR5X 於領先智慧型手機 OEM 高量爬升；NAND 通過主力客戶驗證。<br>
+• 毛利率展望約 86%，反映 AI 帶動的記憶體漲價與高階產品組合。</div>`
   }
 };
 function newsItemHtml(title, link, pub){
