@@ -1393,7 +1393,7 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 // 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
-const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information' };
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/' };
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
 const IR_CALL_SUMMARY = {
@@ -1493,6 +1493,20 @@ const IR_CALL_SUMMARY = {
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 產品／技術</b><br>
 • <b>HBM4（建於 1-beta DRAM）已對主力客戶平台高量出貨</b>，並向多家終端客戶送樣；HBM 為 AI 資料中心關鍵零組件。<br>
 • 1-gamma 16Gb LPDDR5X 於領先智慧型手機 OEM 高量爬升；NAND 已通過主力客戶驗證。</div>`
+  },
+  'GOOGL': {
+    quarter: '2026 第一季（官網 abc.xyz 財報）',
+    source: 'https://abc.xyz/investor/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Alphabet 官網 Q1 2026 財報新聞稿＋簡報人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長動能／展望</b><br>
+• <b>大舉投資 AI 基礎建設</b>：宣布 800 億美元（上修並定價至 <b>847.5 億美元</b>）股權募資，用於擴充 AI 基礎建設與運算。<br>
+• 第一季（Q1 2026）：總營收 <b>1,099 億美元、年增 22%</b>；營業利益年增 30%、營業利益率擴大 2 個百分點至 36.1%；淨利 626 億、稀釋 EPS $5.17。<br>
+• 資本支出（購置不動產與設備）大增至 <b>357 億美元</b>（去年同期 172 億、逾倍增），主要投入 AI 運算。<br>
+• CEO Sundar Pichai：AI 投資點亮各業務，搜尋因 AI 體驗帶動使用、查詢量創新高。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務動能</b><br>
+• <b>Google Cloud 明顯加速：營收年增 63% 至 200 億美元</b>（AI 需求帶動）。<br>
+• Google Services 營收 896 億美元（年增 16%）：搜尋 +19%、YouTube 廣告 +11%。</div>`
   }
 };
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
@@ -1572,6 +1586,17 @@ GLP-1 糖尿病（Ozempic®、Rybelsus®）<br>
 • <b>HBM4（建於 1-beta DRAM）</b>已對主力客戶平台高量出貨、並向多家終端客戶送樣——AI 記憶體需求爆發是本季營收翻倍主因。<br>
 • 1-gamma 16Gb LPDDR5X 於領先智慧型手機 OEM 高量爬升；NAND 通過主力客戶驗證。<br>
 • 毛利率展望約 86%，反映 AI 帶動的記憶體漲價與高階產品組合。</div>`
+  },
+  'GOOGL': {
+    quarter: '2026 第一季（官網 abc.xyz 財報）',
+    source: 'https://abc.xyz/investor/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">依業務營收（Q1 2026，總營收 1,099 億美元）</b></div>
+<b>Google Services</b>：896 億美元（年增 16%）——搜尋及其他（+19%）、YouTube 廣告（+11%）、訂閱/平台/裝置。<br>
+<b>Google Cloud</b>：200 億美元（年增 63%，AI 需求帶動明顯加速）。<br>
+<b>Other Bets</b>（Waymo 等其他事業）。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q1 2026）</b><br>
+• 全面 AI 化：搜尋導入 AI 體驗帶動使用量、查詢量創新高；Gemini 模型與雲端 AI 產品驅動 Cloud 加速。<br>
+• 資本支出 357 億美元投入 AI 基礎建設；另宣布 847.5 億美元股權募資擴充 AI 運算。</div>`
   }
 };
 function newsItemHtml(title, link, pub){
