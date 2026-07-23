@@ -1393,7 +1393,7 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 // 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
-const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/' };
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/' };
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
 const IR_CALL_SUMMARY = {
@@ -1758,6 +1758,43 @@ const IR_CALL_SUMMARY = {
 • 串流（Disney+）SVOD 獲利持續改善為重點。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 三大部門</b><br>
 • 娛樂(Entertainment，影視/串流)：營業利益 13.4 億；體育(Sports，ESPN)：營收 46 億（+2%）；體驗(Experiences，樂園/郵輪)：營收 95 億（+7%）——樂園與郵輪為獲利支柱。</div>`
+  },
+  'MAR': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://marriott.gcs-web.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依萬豪國際(Marriott)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
+• <b>2026 全年展望：全球 RevPAR（每房平均營收）成長 1.5～2.5%（固定匯率）、淨房間數成長 4.5～5%</b>；全年總管理費收入 <b>59.25～59.85 億美元</b>。<br>
+• 第一季（Q1 2026）：<b>全球 RevPAR 年增 4.2%</b>（美加 +4.0%、國際 +4.6%）；淨利 6.48 億、調整後淨利 7.26 億；<b>調整後 EPS $2.72</b>；淨房間數年增 4.5%。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務模式</b><br>
+• <b>輕資產「管理與加盟」模式</b>（收取管理費/加盟費，不自持大量房產）；開發管線創新高、逾 4,100 家、約 <b>618,000 間客房</b>（43% 興建中），成長能見度高。</div>`
+  },
+  'IHG': {
+    quarter: '2026 第一季營運更新（官網 ihgplc.com）',
+    source: 'https://www.ihgplc.com/en/investors',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依洲際酒店集團(IHG)官網 Q1 2026 營運更新(Trading Update)人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
+• <b>對達成市場共識的成長與獲利預期有信心</b>；開發動能延續（簽約與開業皆優於去年）。<br>
+• 第一季（Q1 2026）：<b>全球 RevPAR 年增 4.4%</b>（團體 +7%、商務 +6%、休閒 +1%；平均房價 ADR +2%）；<b>淨系統客房數年增 5.0%</b>，全球達 103.6 萬間客房（7,014 家飯店）。<br>
+• 開發管線 34.3 萬間客房（+6.6% YoY）；2026 年 9.5 億美元庫藏股計畫已完成 2.4 億。<br>
+<span style="color:var(--text2)">（IHG 財務損益採半年報，2026 上半年完整財報將於 2026/08/11 公布；Q1 為營運指標更新。）</span></div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務模式</b><br>
+• <b>輕資產「管理與加盟」模式</b>，收取管理費/加盟費；忠誠計畫會員逾 1.6 億人。</div>`
+  },
+  'SKHY': {
+    quarter: '2026 第一季（官網 news.skhynix.com 財報）',
+    source: 'https://news.skhynix.com/en/tag/quarterly-earnings/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 SK海力士(SK hynix)官網 1Q26 財報新聞稿人工判讀整理（單位：韓元），數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
+• 展望：AI 從大型模型訓練走向<b>agentic AI 即時推論</b>，記憶體需求擴及 DRAM 與 NAND；預期 <b>DRAM 與 NAND 價格續維持有利</b>。<br>
+• 第一季（Q1 2026）：<b>營收 52.58 兆韓元（季度首度突破 50 兆、創新高）</b>；營業利益 37.61 兆韓元、<b>營業利益率 72%（創新高、季增近倍）</b>；淨利 40.35 兆韓元（淨利率 77%）。<br>
+• 財務穩健：季末淨現金部位達 35 兆韓元。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 產品／技術</b><br>
+• <b>高附加價值產品帶動創紀錄獲利：HBM 高頻寬記憶體、高容量伺服器 DRAM 模組、企業級 SSD(eSSD)</b>——AI 基礎建設投資強勁。<br>
+• SK海力士為 AI GPU 用 HBM 的領先供應商，持續推出新一代先進產品。</div>`
   }
 };
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
@@ -2051,6 +2088,33 @@ Q1 訂房間夜數年增 6%、總訂單金額（Gross Bookings）年增 15%。<b
 <b>體育 Sports</b>（ESPN）：46 億美元（+2%）。<br>
 <div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q2 FY2026）</b><br>
 • <b>Disney+ 串流(SVOD)獲利改善</b>為重點；持續投入原創內容、樂園擴建與郵輪船隊。</div>`
+  },
+  'MAR': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://marriott.gcs-web.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務模式（Q1 2026，調整後 EPS $2.72）</b></div>
+全球最大飯店集團，採<b>輕資產「管理與加盟」模式</b>：品牌授權加盟＋代管，收取<b>管理費/加盟費</b>（高毛利、低資本），旗下 30+ 品牌（萬豪、麗思卡爾頓、萬麗、St. Regis、W 等）橫跨豪華到中價。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">重點（Q1 2026）</b><br>
+• 全球 RevPAR +4.2%、淨房間數 +4.5%；<b>開發管線創新高（約 618,000 間客房、43% 興建中）</b>。<br>
+• 常旅客計畫 Marriott Bonvoy 會員生態、信用卡與直訂比例提升為護城河。</div>`
+  },
+  'IHG': {
+    quarter: '2026 第一季營運更新（官網 ihgplc.com）',
+    source: 'https://www.ihgplc.com/en/investors',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務模式（Q1 2026 營運更新）</b></div>
+全球大型飯店集團，採<b>輕資產「管理與加盟」模式</b>：品牌授權與代管、收取管理費/加盟費（低資本、高毛利）。旗下品牌含洲際(InterContinental)、Kimpton、Six Senses、皇冠假日(Crowne Plaza)、假日酒店(Holiday Inn)、Ruby 等，橫跨豪華到中價。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">重點（Q1 2026）</b><br>
+• 全球 RevPAR +4.4%、淨系統客房 +5.0%（達 103.6 萬間）；開發管線 34.3 萬間客房。<br>
+• 忠誠計畫 IHG One Rewards 會員逾 1.6 億人；持續透過加盟輕資產擴張。</div>`
+  },
+  'SKHY': {
+    quarter: '2026 第一季（官網 news.skhynix.com 財報）',
+    source: 'https://news.skhynix.com/en/tag/quarterly-earnings/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">產品組合（Q1 2026，營收 52.58 兆韓元）</b></div>
+記憶體大廠，主力為 <b>DRAM</b>（含 <b>HBM 高頻寬記憶體</b>——AI GPU 關鍵零組件、SK海力士為領先供應商）、<b>NAND 快閃記憶體</b>（含企業級 eSSD）。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／技術重點（Q1 2026）</b><br>
+• <b>創紀錄獲利由高附加價值產品帶動</b>：HBM、高容量伺服器 DRAM 模組、eSSD——AI 基礎建設投資強勁。<br>
+• agentic AI 即時推論擴大 DRAM 與 NAND 需求；DRAM/NAND 價格看好、持續推出新一代先進製程產品。</div>`
   }
 };
 function newsItemHtml(title, link, pub){
