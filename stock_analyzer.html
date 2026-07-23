@@ -1393,7 +1393,7 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 // 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
-const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/' };
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/' };
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
 const IR_CALL_SUMMARY = {
@@ -1690,6 +1690,74 @@ const IR_CALL_SUMMARY = {
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 兩大業務</b><br>
 • <b>創新製藥 Innovative Medicine</b>：164 億美元（年增 7.8%）——腫瘤、免疫、神經科學等（Darzalex、Tremfya 等）。<br>
 • <b>醫療科技 MedTech</b>：89 億美元（年增 4.5%）——手術、骨科、心血管、視力保健。</div>`
+  },
+  'PFE': {
+    quarter: '2026 第一季（官網財報，官網同一份財報新聞稿）',
+    source: 'https://www.pfizer.com/investors',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依輝瑞(Pfizer)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
+• <b>重申(reaffirm) 2026 全年財測</b>各項目。<br>
+• 第一季（Q1 2026）：營收 <b>145 億美元、營運成長 2%</b>（排除新冠產品貢獻）；GAAP EPS $0.47、調整後 EPS $0.75。<br>
+• <b>新上市與併購產品營運營收年增 22%</b>，成為擺脫新冠依賴後的核心成長來源；CEO Albert Bourla。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務重組</b><br>
+• 重整為腫瘤(Oncology)、醫院與生物相似藥(Hospital & Biosimilars) 等產品組合，聚焦創新藥與營運效率。</div>`
+  },
+  'COST': {
+    quarter: 'FY2026 第三季（官網財報，2026/05/28）',
+    source: 'https://investor.costco.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依好市多(Costco)官方 財季 Q3 FY2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 財季 Q3（季末約 2026/05）：<b>淨銷售額年增 11.6% 至 691.5 億美元</b>（去年同期 619.6 億）。<br>
+• <b>會員費收入持續成長</b>（高續約率、高毛利，是獲利穩定基石）；倉儲會員模式＋自有品牌 Kirkland 撐起穩健同店成長。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 商業模式</b><br>
+• 全球倉儲式量販龍頭，靠低價、高周轉＋會員費獲利；電商與物流持續擴張。</div>`
+  },
+  'DELL': {
+    quarter: 'FY2027 第一季（官網財報，2026/05/28）',
+    source: 'https://investors.delltechnologies.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依戴爾(Dell)官方 Q1 FY2027 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
+• <b>2027 全年營收展望上修至中值 1,670 億美元、年增近 50%</b>（AI 伺服器帶動）；上調 AI 伺服器營收預期。<br>
+• 第一季（Q1 FY2027）：營收 <b>438 億美元、年增 88%（創新高）</b>；GAAP EPS $5.24（+282%）、非GAAP EPS $4.86；本季認列 <b>161 億美元 AI 伺服器營收</b>。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務結構</b><br>
+• <b>基礎設施解決方案(ISG)：營收 290 億、年增 181%</b>（AI 伺服器＋儲存）、營業利益 31 億（+206%）——為爆發成長主引擎。<br>
+• 客戶端解決方案(CSG，PC)：146 億（+17%），商用 PC 創高。</div>`
+  },
+  'KO': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investors.coca-colacompany.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依可口可樂(Coca-Cola)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季（Q1 2026）：淨營收年增 12% 至約 <b>120 億美元</b>；<b>有機營收(organic)年增 10%</b>（濃縮液銷量 +8%、價格/組合 +2%）。<br>
+• <b>比較後 EPS 年增 18% 至 $0.86</b>；非GAAP 營業利益率 34.5%（優於去年 33.8%）。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務動能</b><br>
+• 全球飲料龍頭，品牌組合（可樂、無糖、水、運動/能量、咖啡）＋定價能力＋全球裝瓶網路，展現強定價力與利潤擴張。</div>`
+  },
+  'SBUX': {
+    quarter: 'FY2026 第二季（官網財報）',
+    source: 'https://investor.starbucks.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依星巴克(Starbucks)官方 Q2 FY2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望（上修）</b><br>
+• <b>上修 2026 全年同店銷售成長與非GAAP EPS 財測</b>。<br>
+• 第二季（Q2 FY2026）：營收年增 9% 至 <b>95 億美元</b>；<b>同店銷售 +6.2%</b>（來客數 +3.8%、客單價 +2.4%）；GAAP 營業利益率擴大 180bps 至 8.7%；GAAP EPS $0.45、非GAAP EPS $0.50。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 區域動能</b><br>
+• 北美同店 +7.1%（來客回升，「回到星巴克 Back to Starbucks」改革見效）；中國同店 +0.5%（轉為正成長）。</div>`
+  },
+  'DIS': {
+    quarter: 'FY2026 第二季（官網財報）',
+    source: 'https://thewaltdisneycompany.com/investor-relations/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依迪士尼(Disney)官方 Q2 FY2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第二季（FY2026 Q2）：總營收 <b>252 億美元、年增 7%</b>；各部門營業利益略優於先前財測；GAAP EPS $1.27、<b>調整後 EPS 升至 $1.57</b>（去年 $1.45）。<br>
+• 串流（Disney+）SVOD 獲利持續改善為重點。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 三大部門</b><br>
+• 娛樂(Entertainment，影視/串流)：營業利益 13.4 億；體育(Sports，ESPN)：營收 46 億（+2%）；體驗(Experiences，樂園/郵輪)：營收 95 億（+7%）——樂園與郵輪為獲利支柱。</div>`
   }
 };
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
@@ -1929,6 +1997,60 @@ Q1 訂房間夜數年增 6%、總訂單金額（Gross Bookings）年增 15%。<b
 <div style="margin-top:8px"><b style="color:var(--orange)">重點（Q2 2026）</b><br>
 • 多元化醫療龍頭，製藥＋醫材雙引擎；2026 營收上修、可望首破 1,000 億美元。<br>
 • 持續投入新藥管線與醫材創新（機器人手術、電生理等）。</div>`
+  },
+  'PFE': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://www.pfizer.com/investors',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，營收 145 億美元）</b></div>
+全球製藥龍頭，重整為<b>腫瘤(Oncology)</b>、<b>醫院與生物相似藥</b>、疫苗與內科等產品組合。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q1 2026）</b><br>
+• <b>新上市與併購產品營運營收年增 22%</b>（擺脫新冠依賴）；腫瘤（併購 Seagen 後 ADC 產品線）為成長主軸。<br>
+• 聚焦創新藥管線與成本／營運效率。</div>`
+  },
+  'COST': {
+    quarter: 'FY2026 第三季（官網財報）',
+    source: 'https://investor.costco.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">商業模式（財季 Q3 FY2026，淨銷售 691.5 億美元）</b></div>
+全球倉儲式量販龍頭：靠<b>會員費</b>（高續約率、高毛利）＋商品低價高周轉獲利；<b>自有品牌 Kirkland Signature</b> 為差異化核心。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">重點（Q3 FY2026）</b><br>
+• 淨銷售年增 11.6%；電商、生鮮與物流持續擴張，會員基礎穩固帶來可預期的獲利成長。</div>`
+  },
+  'DELL': {
+    quarter: 'FY2027 第一季（官網財報）',
+    source: 'https://investors.delltechnologies.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">依事業群營收（Q1 FY2027，總營收 438 億美元）</b></div>
+<b>基礎設施解決方案 ISG</b>：290 億美元（年增 181%）——<b>AI 伺服器（本季認列 161 億）</b>＋傳統伺服器＋儲存，為爆發成長主引擎。<br>
+<b>客戶端解決方案 CSG</b>：146 億美元（年增 17%）——商用/消費 PC（商用 PC 創高）。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q1 FY2027）</b><br>
+• AI 伺服器需求爆發、訂單強勁，全年 AI 伺服器營收預期上調；企業 AI 基礎建設（伺服器＋儲存＋網路）一站式方案。</div>`
+  },
+  'KO': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investors.coca-colacompany.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，淨營收約 120 億美元）</b></div>
+全球飲料龍頭，品牌組合涵蓋：<b>汽水</b>（可口可樂、無糖可樂、雪碧、芬達）、<b>水/運動/咖啡/茶</b>、果汁乳飲等；透過全球裝瓶夥伴銷售濃縮液與成品。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q1 2026）</b><br>
+• 有機營收 +10%（濃縮液銷量 +8%、定價/組合 +2%）——<b>強定價力</b>；非GAAP 營業利益率提升至 34.5%。<br>
+• 無糖/健康化、小包裝與高端化策略持續推進。</div>`
+  },
+  'SBUX': {
+    quarter: 'FY2026 第二季（官網財報）',
+    source: 'https://investor.starbucks.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q2 FY2026，營收 95 億美元）</b></div>
+全球連鎖咖啡龍頭，營收來自<b>直營門市</b>（北美為主）＋<b>授權門市</b>＋通路產品（即飲/咖啡豆）。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q2 FY2026）</b><br>
+• 同店銷售 +6.2%（來客數 +3.8% 回升）；「<b>回到星巴克</b>」改革（縮短等候、店內體驗、菜單精簡）見效。<br>
+• 北美同店 +7.1%、中國同店回正 +0.5%；數位會員與客製化飲品持續帶動客單。</div>`
+  },
+  'DIS': {
+    quarter: 'FY2026 第二季（官網財報）',
+    source: 'https://thewaltdisneycompany.com/investor-relations/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">依三大部門營收（Q2 FY2026，總營收 252 億美元）</b></div>
+<b>體驗 Experiences</b>（樂園、度假村、郵輪、消費品）：95 億美元（+7%）——集團<b>獲利支柱</b>。<br>
+<b>娛樂 Entertainment</b>（影視、串流 Disney+/Hulu、影城）：營業利益 13.4 億，串流獲利持續改善。<br>
+<b>體育 Sports</b>（ESPN）：46 億美元（+2%）。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q2 FY2026）</b><br>
+• <b>Disney+ 串流(SVOD)獲利改善</b>為重點；持續投入原創內容、樂園擴建與郵輪船隊。</div>`
   }
 };
 function newsItemHtml(title, link, pub){
