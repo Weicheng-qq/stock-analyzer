@@ -452,7 +452,7 @@ const ALIASES={
   '輝瑞':'PFE','可口可樂':'KO','百事':'PEP','麥當勞':'MCD','星巴克':'SBUX',
   '迪士尼':'DIS','耐吉':'NKE','耐克':'NKE','nike':'NKE','沃爾瑪':'WMT','好市多':'COST','costco':'COST',
   '波音':'BA','英特爾':'INTC','intel':'INTC','超微':'AMD','amd':'AMD','高通':'QCOM',
-  '博通':'AVGO','美光':'MU','輝達半導體':'NVDA','摩根大通':'JPM','視覺':'V','萬事達':'MA',
+  '博通':'AVGO','美光':'MU','輝達半導體':'NVDA','摩根大通':'JPM','威士卡':'V','Visa':'V','萬事達':'MA',
   '網飛':'NFLX','netflix':'NFLX','奇異':'GE','禮來':'LLY','eli lilly':'LLY',
   '聯合健康':'UNH','嬌生':'JNJ','寶僑':'PG','艾司摩爾':'ASML','asml':'ASML',
   '京東':'JD','拼多多':'PDD','百度':'BIDU','戴爾':'DELL','dell':'DELL',
@@ -1393,7 +1393,7 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 // 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
-const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/' };
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/', 'GS': 'https://www.goldmansachs.com/investor-relations/', 'BAC': 'https://investor.bankofamerica.com/', 'MS': 'https://www.morganstanley.com/about-us-ir', 'ORCL': 'https://investor.oracle.com/', 'PLTR': 'https://investors.palantir.com/', 'IBM': 'https://www.ibm.com/investor' };
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
 const IR_CALL_SUMMARY = {
@@ -1795,6 +1795,74 @@ const IR_CALL_SUMMARY = {
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 產品／技術</b><br>
 • <b>高附加價值產品帶動創紀錄獲利：HBM 高頻寬記憶體、高容量伺服器 DRAM 模組、企業級 SSD(eSSD)</b>——AI 基礎建設投資強勁。<br>
 • SK海力士為 AI GPU 用 HBM 的領先供應商，持續推出新一代先進產品。</div>`
+  },
+  'GS': {
+    quarter: '2026 第二季（官網財報）',
+    source: 'https://www.goldmansachs.com/investor-relations/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依高盛(Goldman Sachs)官方 2Q26 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測（銀行股無毛利率概念）</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第二季（2Q26）：淨營收 <b>203.4 億美元、淨利 66.3 億美元</b>；<b>EPS $20.98、ROE 23.5%</b>；每股淨值 $367.67。<br>
+• 上半年累計：淨營收 375.7 億、淨利 122.6 億。投行與交易受惠市場活動熱絡。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務板塊</b><br>
+• 全球銀行與市場(Global Banking & Markets)：投資銀行、FICC/股票交易——核心引擎；資產與財富管理(Asset & Wealth Management)：資產管理費與財富管理。</div>`
+  },
+  'BAC': {
+    quarter: '2026 第二季（官網財報）',
+    source: 'https://investor.bankofamerica.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依美國銀行(Bank of America)官方 2Q26 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測（銀行股無毛利率概念）</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第二季（2Q26）：<b>營收年增 15%、淨利雙位數成長、ROE 強勁</b>；深化既有客戶關係並拓展新客。<br>
+• 淨利息收入(NII)約 160 億美元；平均存款約 9,570 億美元。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務板塊</b><br>
+• 消費金融(Consumer Banking)：淨利 33 億、營收 113 億（+5%）；環球市場(Global Markets)：淨利 26 億、銷售交易營收約 70 億；另有全球財富與投資管理(GWIM)、全球銀行(Global Banking)。</div>`
+  },
+  'MS': {
+    quarter: '2026 第二季（官網財報）',
+    source: 'https://www.morganstanley.com/about-us-ir',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依摩根士丹利(Morgan Stanley)官方 2Q26 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測（銀行股無毛利率概念）</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第二季（2Q26）：<b>淨營收 213 億美元</b>（去年同期 168 億，年增 27%）；<b>EPS $3.46、ROTCE 26.6%</b>。<br>
+• <b>財富管理淨新增資產創紀錄 1,480 億美元</b>；投資管理 AUM 達 10 兆美元里程碑。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 三大板塊</b><br>
+• 機構證券(Institutional Securities)：投行＋交易（股票業務領先）；財富管理(Wealth Management)：龐大客戶資產與經常性費收；投資管理(Investment Management)。</div>`
+  },
+  'ORCL': {
+    quarter: 'FY2026 第四季（官網財報）',
+    source: 'https://investor.oracle.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依甲骨文(Oracle)官方 Q4 FY2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
+• <b>第一季（Q1 FY2027）展望：總營收年增 27～29%</b>；全年 EPS 指引 $8.05（+18%）。<br>
+• <b>剩餘履約義務(RPO)暴增至 6,380 億美元、年增 363%</b>（單季增 850 億）——AI 與雲端基礎建設需求帶動的龐大 backlog。<br>
+• 第四季（Q4 FY2026）：總營收 <b>192 億美元、年增 21%</b>；GAAP 營業利益 61 億（+20%）、非GAAP 86 億創新高；雲端營收創高。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務動能</b><br>
+• <b>甲骨文雲端基礎建設(OCI)＋雲端應用(Cloud Applications)</b>為成長主軸；OCI 承接大量 AI 訓練/推論運算需求。</div>`
+  },
+  'PLTR': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investors.palantir.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依帕蘭泰爾(Palantir)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望（大幅上修）</b><br>
+• <b>營收年增 104%</b>；<b>上修 2026 全年營收成長指引至 71%</b>（較上季再拉高 10 個百分點）。<br>
+• 美國營收年增 104% 至 12.82 億美元；<b>美國商業營收年增 133% 至 5.95 億</b>——AI 平台(AIP)需求爆發。<br>
+• 「40 法則(Rule of 40)」分數飆至 145%；每季 GAAP 營業利益與淨利皆為正。CEO Alex Karp。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 產品動能</b><br>
+• <b>AIP（AI 平台）</b>將大型語言模型落地到政府與企業實際營運，帶動美國商業客戶爆發成長。</div>`
+  },
+  'IBM': {
+    quarter: '2026 第二季（官網財報，2026/07/22）',
+    source: 'https://www.ibm.com/investor',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 IBM 官方 Q2 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
+• 重申全年展望；<b>全年自由現金流預計年增約 10 億美元</b>。<br>
+• 第二季（Q2 2026）：<b>軟體(Software)營收 78 億美元、年增 5%</b>（Hybrid Cloud／Red Hat 成長）；諮詢(Consulting)53 億（持平、固定匯率 +1%）；基礎架構(Infrastructure，Power/Storage)創新高速度成長。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務結構</b><br>
+• <b>軟體（Red Hat 混合雲、自動化、資料/AI watsonx、交易處理）</b>為核心；諮詢＋基礎架構（主機/伺服器/儲存）；聚焦企業 AI 與混合雲。</div>`
   }
 };
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
@@ -2115,6 +2183,63 @@ Q1 訂房間夜數年增 6%、總訂單金額（Gross Bookings）年增 15%。<b
 <div style="margin-top:8px"><b style="color:var(--orange)">產品／技術重點（Q1 2026）</b><br>
 • <b>創紀錄獲利由高附加價值產品帶動</b>：HBM、高容量伺服器 DRAM 模組、eSSD——AI 基礎建設投資強勁。<br>
 • agentic AI 即時推論擴大 DRAM 與 NAND 需求；DRAM/NAND 價格看好、持續推出新一代先進製程產品。</div>`
+  },
+  'GS': {
+    quarter: '2026 第二季（官網財報）',
+    source: 'https://www.goldmansachs.com/investor-relations/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務板塊（2Q26，淨營收 203.4 億美元）</b></div>
+<b>全球銀行與市場(Global Banking & Markets)</b>：投資銀行（併購/承銷）＋FICC 與股票交易——核心引擎。<br>
+<b>資產與財富管理(Asset & Wealth Management)</b>：資產管理、財富管理與另類投資。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">重點（2Q26）</b><br>
+• 頂尖投行與交易平台，ROE 23.5%、每股淨值 $367.67；市場活動熱絡帶動獲利。</div>`
+  },
+  'BAC': {
+    quarter: '2026 第二季（官網財報）',
+    source: 'https://investor.bankofamerica.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">四大業務板塊（2Q26，營收年增 15%）</b></div>
+<b>消費金融(Consumer Banking)</b>：零售存放款、信用卡（淨利 33 億、營收 113 億 +5%）。<br>
+<b>環球市場(Global Markets)</b>：交易（淨利 26 億、銷售交易營收約 70 億）。<br>
+<b>全球財富與投資管理(GWIM)</b>＋<b>全球銀行(Global Banking)</b>。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">重點（2Q26）</b><br>
+• 龐大存款基礎（約 9,570 億）＋淨利息收入約 160 億；淨利雙位數成長。</div>`
+  },
+  'MS': {
+    quarter: '2026 第二季（官網財報）',
+    source: 'https://www.morganstanley.com/about-us-ir',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">三大業務板塊（2Q26，淨營收 213 億美元）</b></div>
+<b>機構證券(Institutional Securities)</b>：投資銀行＋交易（股票業務全球領先）。<br>
+<b>財富管理(Wealth Management)</b>：龐大客戶資產與經常性費收（本季淨新增資產創紀錄 1,480 億）。<br>
+<b>投資管理(Investment Management)</b>：資產管理 AUM 達 10 兆美元。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">重點（2Q26）</b><br>
+• 財富＋投資管理提供穩定費收，ROTCE 26.6%；整合型模式強化交叉銷售。</div>`
+  },
+  'ORCL': {
+    quarter: 'FY2026 第四季（官網財報）',
+    source: 'https://investor.oracle.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q4 FY2026，總營收 192 億美元）</b></div>
+<b>雲端基礎建設(OCI)</b>：AI 訓練/推論運算需求爆發，為成長主引擎；<b>雲端應用(Cloud Applications，Fusion/NetSuite ERP 等 SaaS)</b>；另有授權與支援。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／技術重點（Q4 FY2026）</b><br>
+• <b>剩餘履約義務(RPO)暴增至 6,380 億美元（+363%）</b>——反映大量 AI 雲端長約 backlog。<br>
+• 與大型 AI 業者簽署龐大運算合約，持續擴建資料中心。</div>`
+  },
+  'PLTR': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investors.palantir.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，營收年增 104%）</b></div>
+<b>政府(Government)</b>：Gotham 平台供國防/情報單位；<b>商業(Commercial)</b>：Foundry＋<b>AIP（AI 平台）</b>供企業。<br>
+美國商業營收年增 133% 至 5.95 億、美國營收 12.82 億——AIP 帶動爆發成長。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／技術重點（Q1 2026）</b><br>
+• <b>AIP</b>把大型語言模型落地到實際營運決策，客戶採用速度快；「40 法則」達 145%、獲利同步擴張。</div>`
+  },
+  'IBM': {
+    quarter: '2026 第二季（官網財報）',
+    source: 'https://www.ibm.com/investor',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">三大業務板塊（Q2 2026）</b></div>
+<b>軟體 Software</b>：78 億美元（+5%）——Red Hat 混合雲、自動化、資料與 AI(watsonx)、交易處理，為核心與最高毛利。<br>
+<b>諮詢 Consulting</b>：53 億（持平）——數位轉型與 AI 導入服務。<br>
+<b>基礎架構 Infrastructure</b>：主機(zSystems)、Power、儲存（本季創高速度成長）。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／技術重點（Q2 2026）</b><br>
+• 聚焦<b>企業 AI(watsonx)＋混合雲(Red Hat)</b>；主機新平台帶動基礎架構成長。</div>`
   }
 };
 function newsItemHtml(title, link, pub){
