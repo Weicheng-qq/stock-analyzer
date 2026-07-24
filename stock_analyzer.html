@@ -1393,7 +1393,7 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 // 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
-const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/', 'GS': 'https://www.goldmansachs.com/investor-relations/', 'BAC': 'https://investor.bankofamerica.com/', 'MS': 'https://www.morganstanley.com/about-us-ir', 'ORCL': 'https://investor.oracle.com/', 'PLTR': 'https://investors.palantir.com/', 'IBM': 'https://www.ibm.com/investor' };
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/', 'GS': 'https://www.goldmansachs.com/investor-relations/', 'BAC': 'https://investor.bankofamerica.com/', 'MS': 'https://www.morganstanley.com/about-us-ir', 'ORCL': 'https://investor.oracle.com/', 'PLTR': 'https://investors.palantir.com/', 'IBM': 'https://www.ibm.com/investor', 'V': 'https://investor.visa.com/', 'MA': 'https://investor.mastercard.com/', 'WMT': 'https://stock.walmart.com/', 'PEP': 'https://www.pepsico.com/investors', 'MCD': 'https://www.investor.mcdonalds.com/', 'XOM': 'https://investor.exxonmobil.com/' };
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
 const IR_CALL_SUMMARY = {
@@ -1862,6 +1862,72 @@ const IR_CALL_SUMMARY = {
 • 第二季（Q2 2026）：<b>軟體(Software)營收 78 億美元、年增 5%</b>（Hybrid Cloud／Red Hat 成長）；諮詢(Consulting)53 億（持平、固定匯率 +1%）；基礎架構(Infrastructure，Power/Storage)創新高速度成長。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務結構</b><br>
 • <b>軟體（Red Hat 混合雲、自動化、資料/AI watsonx、交易處理）</b>為核心；諮詢＋基礎架構（主機/伺服器/儲存）；聚焦企業 AI 與混合雲。</div>`
+  },
+  'V': {
+    quarter: 'FY2026 第二季（官網財報）',
+    source: 'https://investor.visa.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Visa 官方 Q2 FY2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測（支付網路無傳統毛利率）</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第二季（Q2 FY2026）：<b>淨營收 112 億美元、年增 17%（2022 年以來最高）</b>；GAAP EPS $3.14、非GAAP EPS $3.31（+20%）；非GAAP 淨利 63 億。<br>
+• <b>支付金額、跨境交易量、處理交易筆數皆強勁</b>；消費支出具韌性；持續回購與配息。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務模式</b><br>
+• 全球最大支付網路，靠刷卡金額抽成的<b>輕資產、高毛利、強網路效應</b>模式；跨境與加值服務(VAS)為成長動能。</div>`
+  },
+  'MA': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investor.mastercard.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依萬事達卡(Mastercard)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季（Q1 2026）：<b>淨營收 84 億美元、年增 16%</b>；<b>加值服務與解決方案年增 22%</b>；營業利益 49 億；調整後 EPS $4.35、調整後淨利 41 億。<br>
+• 總刷卡金額(GDV) +7%、消費金額 +9%（當地貨幣）；跨境交易強勁。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務模式</b><br>
+• 全球第二大支付網路；<b>加值服務(資安、數據、洞察、諮詢)為高速成長引擎</b>，強化網路效應與護城河。</div>`
+  },
+  'WMT': {
+    quarter: 'FY2027 第一季（官網財報）',
+    source: 'https://stock.walmart.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依沃爾瑪(Walmart)官方 Q1 FY2027 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
+• <b>第二季（Q2 FY2027）展望：淨銷售固定匯率成長 4.0～5.0%</b>。<br>
+• 第一季（Q1 FY2027）：總營收（固定匯率）<b>1,754 億美元、年增 5.9%</b>；<b>電商淨銷售年增 26%</b>（佔總淨銷售 23%）；調整後營業利益 79 億、調整後 EPS $0.68；會員與其他收入成長。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務動能</b><br>
+• 全球零售龍頭，<b>電商、廣告、會員(Walmart+)與物流</b>為高毛利成長動能，帶動獲利成長快於營收。</div>`
+  },
+  'PEP': {
+    quarter: '2026 第二季（官網財報，2026/07/09）',
+    source: 'https://www.pepsico.com/investors',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依百事(PepsiCo)官方 Q2 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
+• <b>重申 2026 全年財務財測</b>。<br>
+• 第二季（Q2 2026）：<b>淨營收年增 6.4%、有機營收成長 2.4%</b>；核心 EPS 年增 4%。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務結構</b><br>
+• <b>全球食品(Frito-Lay 洋芋片/零食)＋全球飲料(PBNA 北美飲料等)</b>雙引擎；品牌組合廣、定價力強，健康化與國際市場為成長方向。</div>`
+  },
+  'MCD': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://www.investor.mcdonalds.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依麥當勞(McDonald's)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季（Q1 2026）：<b>全球同店銷售 +3.8%</b>（美國 +3.9%、國際自營市場 +3.9%）；營收年增 9%（固定匯率 +4%）；系統銷售 +11%。<br>
+• 營業利益 +12%；EPS $2.78（+7%）。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務模式</b><br>
+• 全球最大速食連鎖，<b>95% 加盟的輕資產模式</b>（收租金與權利金）；價值餐、數位/得來速/外送與忠誠計畫帶動來客。</div>`
+  },
+  'XOM': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investor.exxonmobil.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依艾克森美孚(ExxonMobil)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季（Q1 2026）：<b>獲利 42 億美元、EPS $1.00</b>（受不利的估計時序效應影響，排除相關項目後較高、EPS 約 $2.09）。<br>
+• 上游圭亞那(Guyana)產量提升；<b>Golden Pass LNG Train 1 首批 LNG 出貨</b>，擴大美國 LNG 出口。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務結構</b><br>
+• <b>上游(Upstream，油氣探勘生產)</b>＋<b>產品解決方案(Product Solutions，煉油與化學品)</b>；聚焦圭亞那、二疊紀盆地與 LNG 等低成本高產出資產，並發展低碳事業。</div>`
   }
 };
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
@@ -2238,6 +2304,60 @@ Q1 訂房間夜數年增 6%、總訂單金額（Gross Bookings）年增 15%。<b
 <b>基礎架構 Infrastructure</b>：主機(zSystems)、Power、儲存（本季創高速度成長）。<br>
 <div style="margin-top:8px"><b style="color:var(--orange)">產品／技術重點（Q2 2026）</b><br>
 • 聚焦<b>企業 AI(watsonx)＋混合雲(Red Hat)</b>；主機新平台帶動基礎架構成長。</div>`
+  },
+  'V': {
+    quarter: 'FY2026 第二季（官網財報）',
+    source: 'https://investor.visa.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務模式（Q2 FY2026，淨營收 112 億美元）</b></div>
+全球最大支付網路，營收來自<b>刷卡金額抽成</b>：服務費、資料處理費、國際交易(跨境)費，另有加值服務(VAS)。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q2 FY2026）</b><br>
+• 支付金額、<b>跨境交易量</b>、處理交易筆數皆強勁成長；淨營收 +17% 為 2022 年來最高。<br>
+• 拓展加值服務、新型支付流(Visa Direct)、代幣化與資安，強化網路效應。</div>`
+  },
+  'MA': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investor.mastercard.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務模式（Q1 2026，淨營收 84 億美元）</b></div>
+全球第二大支付網路，營收來自<b>刷卡金額抽成</b>（交易處理、跨境）＋<b>加值服務與解決方案</b>（資安、數據分析、諮詢、忠誠）。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q1 2026）</b><br>
+• <b>加值服務年增 22%</b>——高速成長引擎；總刷卡金額 +7%、消費金額 +9%。<br>
+• 跨境交易、代幣化、即時支付與 B2B 為擴張方向。</div>`
+  },
+  'WMT': {
+    quarter: 'FY2027 第一季（官網財報）',
+    source: 'https://stock.walmart.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 FY2027，總營收約 1,754 億美元）</b></div>
+全球零售龍頭：<b>沃爾瑪美國、沃爾瑪國際、山姆會員店(Sam's Club)</b>三大板塊，以量制價的大型量販/超市。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q1 FY2027）</b><br>
+• <b>電商淨銷售 +26%</b>（佔總淨銷售 23%）；<b>廣告、會員(Walmart+)、市集與物流(第三方履約)</b>為高毛利成長引擎。<br>
+• 全通路(店取/宅配)＋供應鏈自動化提升效率，獲利成長快於營收。</div>`
+  },
+  'PEP': {
+    quarter: '2026 第二季（官網財報）',
+    source: 'https://www.pepsico.com/investors',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q2 2026）</b></div>
+食品飲料龍頭，雙引擎：<b>全球食品(Frito-Lay：洋芋片、玉米片、樂事、多力多滋等零食)</b>＋<b>全球飲料(PBNA：百事可樂、開特力、純品康納等)</b>。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q2 2026）</b><br>
+• 有機營收 +2.4%、核心 EPS +4%；靠<b>強品牌組合與定價力</b>維持成長。<br>
+• 健康化(減糖/機能)、國際市場擴張與生產力提升為方向。</div>`
+  },
+  'MCD': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://www.investor.mcdonalds.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務模式（Q1 2026，全球同店 +3.8%）</b></div>
+全球最大速食連鎖，<b>約 95% 為加盟店的輕資產模式</b>：主要收租金與權利金（高毛利、穩定現金流），少數自營店。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q1 2026）</b><br>
+• 全球同店 +3.8%（美國 +3.9%、國際自營 +3.9%）；系統銷售 +11%。<br>
+• <b>價值餐、數位 App/忠誠計畫、得來速與外送</b>帶動來客；持續展店。</div>`
+  },
+  'XOM': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investor.exxonmobil.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，獲利 42 億美元）</b></div>
+綜合能源龍頭：<b>上游 Upstream</b>（油氣探勘與生產，聚焦圭亞那、二疊紀盆地、LNG）＋<b>產品解決方案 Product Solutions</b>（煉油與化學品）。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q1 2026）</b><br>
+• 圭亞那(Guyana)產量提升；<b>Golden Pass LNG Train 1 首批 LNG 出貨</b>、擴大美國 LNG 出口。<br>
+• 聚焦低成本高產出資產＋煉化一體化；同步發展碳捕捉、氫能等低碳事業。</div>`
   }
 };
 function newsItemHtml(title, link, pub){
