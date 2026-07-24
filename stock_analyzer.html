@@ -1393,7 +1393,7 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 // 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
-const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/', 'GS': 'https://www.goldmansachs.com/investor-relations/', 'BAC': 'https://investor.bankofamerica.com/', 'MS': 'https://www.morganstanley.com/about-us-ir', 'ORCL': 'https://investor.oracle.com/', 'PLTR': 'https://investors.palantir.com/', 'IBM': 'https://www.ibm.com/investor', 'V': 'https://investor.visa.com/', 'MA': 'https://investor.mastercard.com/', 'WMT': 'https://stock.walmart.com/', 'PEP': 'https://www.pepsico.com/investors', 'MCD': 'https://www.investor.mcdonalds.com/', 'XOM': 'https://investor.exxonmobil.com/' };
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/', 'GS': 'https://www.goldmansachs.com/investor-relations/', 'BAC': 'https://investor.bankofamerica.com/', 'MS': 'https://www.morganstanley.com/about-us-ir', 'ORCL': 'https://investor.oracle.com/', 'PLTR': 'https://investors.palantir.com/', 'IBM': 'https://www.ibm.com/investor', 'V': 'https://investor.visa.com/', 'MA': 'https://investor.mastercard.com/', 'WMT': 'https://stock.walmart.com/', 'PEP': 'https://www.pepsico.com/investors', 'MCD': 'https://www.investor.mcdonalds.com/', 'XOM': 'https://investor.exxonmobil.com/', 'CRWD': 'https://ir.crowdstrike.com/', 'PANW': 'https://investors.paloaltonetworks.com/', 'ANET': 'https://investors.arista.com/', 'MRVL': 'https://investor.marvell.com/', 'SMCI': 'https://ir.supermicro.com/' };
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
 const IR_CALL_SUMMARY = {
@@ -1928,6 +1928,66 @@ const IR_CALL_SUMMARY = {
 • 上游圭亞那(Guyana)產量提升；<b>Golden Pass LNG Train 1 首批 LNG 出貨</b>，擴大美國 LNG 出口。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 業務結構</b><br>
 • <b>上游(Upstream，油氣探勘生產)</b>＋<b>產品解決方案(Product Solutions，煉油與化學品)</b>；聚焦圭亞那、二疊紀盆地與 LNG 等低成本高產出資產，並發展低碳事業。</div>`
+  },
+  'CRWD': {
+    quarter: '2027 財年第一季（官網財報，FY2027 Q1）',
+    source: 'https://ir.crowdstrike.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 CrowdStrike 官方 FY2027 Q1 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季（截至 2026/4/30）：<b>總營收 13.9 億美元、年增 26%</b>；<b>年度經常性收入(ARR) 55.1 億美元、年增 24%</b>，其中本季<b>淨新增 ARR 2.56 億美元</b>。<br>
+• 訂閱毛利率約 78%；<b>營運現金流 5.91 億、自由現金流 4.68 億美元</b>（均創同季高）。<br>
+• <b>上修 FY2027 全年淨新增 ARR 成長率財測（較先前加約 520 個基點）</b>，反映客戶度過去年事件後回穩、平台整併加速。<br>
+• 宣布<b>1 股拆為 4 股（4-for-1 股票分割）</b>。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• Falcon 單一代理平台＋Charlotte AI 代理式資安需求強勁；模組交叉銷售與 Flex 訂閱推升採用率。</div>`
+  },
+  'PANW': {
+    quarter: '2026 財年第三季（官網財報，FY2026 Q3）',
+    source: 'https://investors.paloaltonetworks.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Palo Alto Networks 官方 FY2026 Q3 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第三季：<b>總營收 30 億美元、年增 31%</b>；<b>剩餘履約義務(RPO) 184 億美元、年增 36%</b>。<br>
+• <b>次世代安全 ARR(NGS ARR) 81 億美元、年增 60%</b>，平台化(Platformization)策略持續放量。<br>
+• 完成 <b>CyberArk（身分安全）</b>與 <b>Chronosphere（可觀測性）</b>等併購，強化平台廣度。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 三大平台（網路安全 Strata、雲端安全 Prisma Cloud、資安維運 Cortex）＋AI 安全，續推整併與 AI 化。</div>`
+  },
+  'ANET': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investors.arista.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Arista Networks 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季：<b>營收 27.09 億美元、年增 35.1%</b>；<b>非 GAAP 營業利益率 47.8%</b>（GAAP 42.7%）。<br>
+• 雲端與 AI 資料中心網路需求強勁，超大規模客戶擴建 AI 叢集帶動高速乙太網交換器出貨。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 以單一 EOS 軟體平台橫跨資料中心、AI 後端網路、園區與路由；AI 網路營收持續放量。</div>`
+  },
+  'MRVL': {
+    quarter: '2027 財年第一季（官網財報，FY2027 Q1）',
+    source: 'https://investor.marvell.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Marvell 官方 FY2027 Q1 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季：<b>營收 24.18 億美元、年增 28%</b>，高於財測中值；<b>非 GAAP 毛利率 58.9%</b>。<br>
+• 資料中心（AI 客製化晶片、光電、交換）為主要成長引擎；<b>第二季財測約 27 億美元</b>。<br>
+• 完成 <b>Celestial AI</b>、<b>XConn</b> 等併購，強化 AI 互連與客製化運算佈局。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 客製化 XPU 與 XPU-attach（AI 加速器）、電光互連、交換器；資料中心佔比持續上升。</div>`
+  },
+  'SMCI': {
+    quarter: '2026 財年第四季（官網初步業績，FY2026 Q4）',
+    source: 'https://ir.supermicro.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Super Micro 官方 FY2026 Q4 初步業績公告人工判讀整理，數字均為官方原文（正式財報 8/11 公布），非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第四季（初步）：<b>營收接近 110–125 億美元財測區間下緣（約 110 億美元）</b>；<b>毛利率約 15–17%</b>（較前季改善）。<br>
+• 本季<b>接獲逾 600 億美元新訂單</b>，反映 AI 伺服器與液冷需求強勁。<br>
+• 完整財報將於 <b>2026/8/11</b> 公布。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• AI／企業運算、儲存、5G-Edge 全方位方案；資料中心整櫃(DCBBS)與直接液冷(DLC)為成長主軸。</div>`
   }
 };
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
@@ -2358,6 +2418,51 @@ Q1 訂房間夜數年增 6%、總訂單金額（Gross Bookings）年增 15%。<b
 <div style="margin-top:8px"><b style="color:var(--orange)">產品／策略重點（Q1 2026）</b><br>
 • 圭亞那(Guyana)產量提升；<b>Golden Pass LNG Train 1 首批 LNG 出貨</b>、擴大美國 LNG 出口。<br>
 • 聚焦低成本高產出資產＋煉化一體化；同步發展碳捕捉、氫能等低碳事業。</div>`
+  },
+  'CRWD': {
+    quarter: 'FY2027 Q1（官網財報）',
+    source: 'https://ir.crowdstrike.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（FY2027 Q1，總營收 13.9 億美元／ARR 55.1 億美元）</b></div>
+雲端原生資安平台：以單一輕量 <b>Falcon 代理</b>提供端點偵測回應(EDR/XDR)、雲端安全(CNAPP)、身分保護、次世代 SIEM/資安維運與威脅情報，並以 <b>Charlotte AI</b> 提供代理式(agentic)自動化。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（FY2027 Q1）</b><br>
+• 訂閱制為主，模組交叉銷售＋Flex 彈性訂閱推升採用；ARR 年增 24%。<br>
+• 資安維運(Next-Gen SIEM)、雲端安全、身分保護為高成長模組。</div>`
+  },
+  'PANW': {
+    quarter: 'FY2026 Q3（官網財報）',
+    source: 'https://investors.paloaltonetworks.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（FY2026 Q3，總營收 30 億美元／NGS ARR 81 億美元）</b></div>
+資安平台三大支柱：<b>網路安全(Strata，防火牆/SASE)</b>＋<b>雲端安全(Prisma Cloud)</b>＋<b>資安維運(Cortex，XDR/XSIAM)</b>，並整合 AI 安全與身分安全。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（FY2026 Q3）</b><br>
+• 平台化(Platformization)策略推升 NGS ARR 年增 60%、RPO 184 億。<br>
+• 併入 <b>CyberArk（身分安全）</b>、<b>Chronosphere（可觀測性）</b>擴大平台。</div>`
+  },
+  'ANET': {
+    quarter: 'Q1 2026（官網財報）',
+    source: 'https://investors.arista.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，營收 27.09 億美元）</b></div>
+資料中心與雲端網路領導者：以自研 <b>EOS 作業系統</b>驅動高速乙太網交換器與路由器，橫跨<b>雲端/AI 資料中心後端網路、園區網路、路由</b>。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q1 2026）</b><br>
+• 超大規模與 AI 客戶擴建 AI 叢集，帶動 400G/800G 高速交換器出貨。<br>
+• 軟體與訂閱服務(CloudVision)提升黏著度與毛利。</div>`
+  },
+  'MRVL': {
+    quarter: 'FY2027 Q1（官網財報）',
+    source: 'https://investor.marvell.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（FY2027 Q1，營收 24.18 億美元）</b></div>
+資料基礎設施半導體：<b>資料中心（AI 客製化 XPU、光電 DSP、互連）</b>為主力，另有企業網路、電信基建、消費與車用/工業。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（FY2027 Q1）</b><br>
+• 資料中心佔比續升，AI 客製化晶片與光電互連為成長引擎。<br>
+• 併購 <b>Celestial AI</b>（光互連）、<b>XConn</b> 強化 AI 互連佈局。</div>`
+  },
+  'SMCI': {
+    quarter: 'FY2026 Q4（官網初步業績）',
+    source: 'https://ir.supermicro.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（FY2026 Q4 初步，營收約 110 億美元）</b></div>
+AI／高效能伺服器與資料中心整體方案供應商：以模組化「<b>Building Block</b>」架構提供 GPU 伺服器、儲存、5G/Edge，主打<b>直接液冷(DLC)</b>與整櫃(DCBBS)交付。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（FY2026 Q4）</b><br>
+• 本季接獲逾 600 億美元新訂單，AI 伺服器與液冷需求強勁。<br>
+• 毛利率約 15–17%、較前季改善；完整財報 8/11 公布。</div>`
   }
 };
 function newsItemHtml(title, link, pub){
