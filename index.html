@@ -1393,7 +1393,7 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 // 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
-const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/', 'GS': 'https://www.goldmansachs.com/investor-relations/', 'BAC': 'https://investor.bankofamerica.com/', 'MS': 'https://www.morganstanley.com/about-us-ir', 'ORCL': 'https://investor.oracle.com/', 'PLTR': 'https://investors.palantir.com/', 'IBM': 'https://www.ibm.com/investor', 'V': 'https://investor.visa.com/', 'MA': 'https://investor.mastercard.com/', 'WMT': 'https://stock.walmart.com/', 'PEP': 'https://www.pepsico.com/investors', 'MCD': 'https://www.investor.mcdonalds.com/', 'XOM': 'https://investor.exxonmobil.com/', 'CRWD': 'https://ir.crowdstrike.com/', 'PANW': 'https://investors.paloaltonetworks.com/', 'ANET': 'https://investors.arista.com/', 'MRVL': 'https://investor.marvell.com/', 'SMCI': 'https://ir.supermicro.com/', 'ARM': 'https://investors.arm.com/' };
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/', 'GS': 'https://www.goldmansachs.com/investor-relations/', 'BAC': 'https://investor.bankofamerica.com/', 'MS': 'https://www.morganstanley.com/about-us-ir', 'ORCL': 'https://investor.oracle.com/', 'PLTR': 'https://investors.palantir.com/', 'IBM': 'https://www.ibm.com/investor', 'V': 'https://investor.visa.com/', 'MA': 'https://investor.mastercard.com/', 'WMT': 'https://stock.walmart.com/', 'PEP': 'https://www.pepsico.com/investors', 'MCD': 'https://www.investor.mcdonalds.com/', 'XOM': 'https://investor.exxonmobil.com/', 'CRWD': 'https://ir.crowdstrike.com/', 'PANW': 'https://investors.paloaltonetworks.com/', 'ANET': 'https://investors.arista.com/', 'MRVL': 'https://investor.marvell.com/', 'SMCI': 'https://ir.supermicro.com/', 'ARM': 'https://investors.arm.com/', 'ABNB': 'https://investors.airbnb.com/', 'VRT': 'https://investors.vertiv.com/', 'CVX': 'https://www.chevron.com/investors', 'UNH': 'https://www.unitedhealthgroup.com/investors.html', 'ABBV': 'https://investors.abbvie.com/', 'AMGN': 'https://investors.amgen.com/', 'LRCX': 'https://investor.lamresearch.com/', 'CAT': 'https://investors.caterpillar.com/', 'GE': 'https://www.geaerospace.com/investor-relations', 'T': 'https://investors.att.com/', 'NKE': 'https://investors.nike.com/', 'SPOT': 'https://investors.spotify.com/', 'BA': 'https://investors.boeing.com/', 'SHOP': 'https://investors.shopify.com/', 'PYPL': 'https://investor.pypl.com/' };
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
 const IR_CALL_SUMMARY = {
@@ -2001,6 +2001,178 @@ const IR_CALL_SUMMARY = {
 • <b>FY2027 第一季財測：營收約 14.7 億美元（±5,000 萬）</b>、非 GAAP 營業費用約 7.45 億美元。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
 • Armv9 架構滲透率與 Arm 運算子系統(CSS)採用提升、資料中心 Arm 晶片部署擴大；推出自研 AI 晶片(Arm AGI CPU)。</div>`
+  },
+  'ABNB': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investors.airbnb.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Airbnb 官方 Q1 2026 股東信人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季：<b>營收 27 億美元、年增 18%</b>（排除匯率 +15%）；淨利 1.6 億美元；<b>調整後 EBITDA 5.19 億美元、年增 24%</b>。<br>
+• <b>總訂單金額(GBV) 292 億美元、年增 19%</b>；<b>預訂夜晚與體驗數 1.562 億、年增 9%</b>；自由現金流 17 億美元（過去 12 個月 45 億）。<br>
+• <b>Q2 財測：營收 35.4–36.0 億美元（年增 14–16%）</b>。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 持續拓展 Experiences(體驗)與 Services(服務)新業務，推動 App 全面升級。</div>`
+  },
+  'VRT': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investors.vertiv.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Vertiv 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季：<b>淨銷售額 26.50 億美元、年增 30%</b>；<b>營業利益年增 51%</b>、調整後營業利益率 20.8%（+430 個基點）。<br>
+• <b>上修全年 2026 財測：淨銷售額 135–140 億美元、有機成長 29–31%</b>；調整後稀釋 EPS 6.30–6.40 美元（年增 51%）。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• AI 資料中心電力與散熱（含液冷）需求強勁，訂單與在手訂單(backlog)持續攀升。</div>`
+  },
+  'CVX': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://www.chevron.com/investors',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Chevron 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季：<b>獲利 22.1 億美元；調整後獲利 28 億美元</b>。上游(Upstream) 39.09 億、下游(Downstream) 虧損 8.17 億。<br>
+• <b>季內回饋股東 60 億美元</b>（含股利 35 億）；董事會宣告季配息每股 1.71 美元。<br>
+• 併購 Hess 後產量提升（全球 +15%、美國 +24%），3 月煉油量創高。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 聚焦二疊紀盆地、圭亞那、DJ 盆地等低成本資產，結構性成本下降並維持資本紀律。</div>`
+  },
+  'UNH': {
+    quarter: '2026 第二季（官網財報）',
+    source: 'https://www.unitedhealthgroup.com/investors.html',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 UnitedHealth Group 官方 Q2 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第二季：<b>營收 1,120 億美元、營業利益 80 億美元</b>；<b>EPS $6.04</b>；醫療成本率(MCR) 86.7%。<br>
+• <b>UnitedHealthcare（保險）</b>：服務 4,850 萬人、營收 860 億、獲利 39 億；<b>Optum（健康服務）</b>：服務逾 1.2 億人、營收 657 億、獲利 40 億。<br>
+• <b>全年 2026 EPS 財測約 19.50–20.00 美元</b>（反映年初迄今表現改善）。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 透過產品設計調整、醫療管理強化改善成本率；持續簡化醫療體驗、擴大價值醫療。</div>`
+  },
+  'ABBV': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investors.abbvie.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 AbbVie 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季：<b>淨營收 150.02 億美元</b>；調整後稀釋 EPS $2.65。<br>
+• <b>免疫學組合 72.90 億、年增 16.4%</b>（Skyrizi 44.83 億、Rinvoq 21.19 億、Humira 6.88 億）；<b>神經科學 28.75 億、年增 26.0%</b>；腫瘤 16.31 億、醫美(Aesthetics) 11.86 億。<br>
+• <b>上修全年 2026 調整後稀釋 EPS 財測至 14.08–14.28 美元</b>。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• Skyrizi＋Rinvoq 雙引擎接棒 Humira，成長動能強勁；神經科學與醫美延伸成長。</div>`
+  },
+  'AMGN': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investors.amgen.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Amgen 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季：<b>總營收 86 億美元、年增 6%</b>（產品銷售 +4%）；GAAP EPS $3.34（+4%）、非 GAAP EPS $5.15（+5%）。<br>
+• <b>Repatha（降膽固醇）8.76 億、年增 34%</b>；Prolia 因生物相似藥衝擊年減 34% 至 7.27 億。<br>
+• <b>全年 2026 財測：總營收 371–385 億美元</b>、GAAP EPS 15.62 美元起。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 心血管(Repatha)、骨質、腫瘤、發炎與罕見疾病組合；肥胖新藥 MariTide 等後期管線推進。</div>`
+  },
+  'LRCX': {
+    quarter: '2026 財年第三季（官網財報，FY2026 Q3）',
+    source: 'https://investor.lamresearch.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Lam Research 官方 FY2026 Q3 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第三季（截至 2026/3/29）：<b>營收 58.4 億美元</b>；GAAP 毛利率 49.8%、營業利益率 35.0%、稀釋 EPS $1.45（非 GAAP 相近）。<br>
+• 區域營收：中國 34%、韓國 23%、台灣 23%、日本 8%；<b>下季財測營收約 66 億美元（±4 億）</b>。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 蝕刻與薄膜沉積設備受惠先進製程與 HBM/先進封裝擴產；AI 帶動晶圓設備投資。</div>`
+  },
+  'CAT': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investors.caterpillar.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Caterpillar 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季：<b>營收 174 億美元、年增 22%</b>；<b>每股獲利 $5.47</b>（去年同期 $4.20）。<br>
+• 分部：能源與運輸(Energy) 70.31 億、營建(Construction) 71.61 億、資源(Resource) 37.97 億；在手訂單(backlog)創高。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 資料中心備用發電與電力需求（Solar Turbines）強勁，支撐能源與運輸分部成長動能。</div>`
+  },
+  'GE': {
+    quarter: '2026 第二季（官網財報，GE Aerospace）',
+    source: 'https://www.geaerospace.com/investor-relations',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 GE Aerospace 官方 Q2 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第二季：<b>訂單 165 億美元、年增 17%</b>；<b>營收(GAAP) 133 億、年增 21%</b>（調整後 126 億、+24%）；營業利益 27 億、年增 18%。<br>
+• <b>GAAP EPS $2.30（+23%）、調整後 EPS $2.02（+22%）</b>；自由現金流 30 億、年增 43%。<br>
+• <b>全面上修全年財測</b>。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 商用引擎與服務(CES)＋國防與推進技術(DPT)；售後服務與 LEAP 引擎交付驅動長期成長。</div>`
+  },
+  'T': {
+    quarter: '2026 第二季（官網財報，AT&T）',
+    source: 'https://investors.att.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 AT&T 官方 Q2 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第二季：<b>營收 316 億美元、年增 2.3%</b>；持續營運 EPS $0.66（調整後 $0.65）；營業利益 75 億。<br>
+• 行動(Mobility)、光纖(Fiber)、固定無線同步淨增用戶；重申全年及多年財務財測。<br>
+• <b>2026–2028 計畫回饋股東逾 450 億美元</b>（股利＋加速買回）。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 光纖持續擴建（併入 Lumen 大眾光纖業務）＋5G 融合服務，推動聚合(convergence)成長。</div>`
+  },
+  'NKE': {
+    quarter: '2026 財年第四季（官網財報，FY2026 Q4）',
+    source: 'https://investors.nike.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 NIKE 官方 FY2026 Q4 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第四季：<b>營收 110 億美元、年減 1%（匯率中性 -4%）</b>；<b>毛利率年增 890 個基點至 49.2%</b>（去年同期受庫存出清壓低基期）。<br>
+• 全年 FY2026 營收 464 億美元、大致持平（匯率中性 -2%）；Nike Direct 第四季 41 億、年減 7%。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 「Win Now」策略：清理庫存、重整經典鞋款供給、回歸運動本業與批發夥伴，逐步回穩。</div>`
+  },
+  'SPOT': {
+    quarter: '2026 第一季（官網財報，歐元計價）',
+    source: 'https://investors.spotify.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Spotify 官方 Q1 2026 股東信人工判讀整理，數字均為官方原文（歐元），非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季：<b>總營收 45.33 億歐元</b>（訂閱 41.48 億／廣告 3.85 億）；<b>毛利 14.95 億歐元、營業利益 7.15 億歐元</b>。<br>
+• <b>月活躍用戶(MAU) 7.61 億、付費訂閱戶(Premium) 2.93 億</b>（截至 2026/3/31）。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 訂閱漲價與廣告業務擴張推升毛利；持續投入 AI 推薦與有聲書、Podcast 內容變現。</div>`
+  },
+  'BA': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investors.boeing.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Boeing 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季：<b>營收 222 億美元</b>（交付 143 架商用機）；GAAP 每股虧損 $0.11、核心每股虧損（非 GAAP）$0.20；自由現金流 -15 億美元。<br>
+• <b>總積壓訂單(backlog)創高達 6,950 億美元</b>，含逾 6,100 架商用飛機。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 提升 737 MAX／787 產速、穩定生產與品質體系，逐步改善現金流與交付節奏。</div>`
+  },
+  'SHOP': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investors.shopify.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Shopify 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季：<b>營收 31.70 億美元、年增約 34%</b>（去年同期 23.60 億）；毛利 15.46 億、營業利益 3.82 億；<b>自由現金流 4.76 億（利潤率 15%）</b>。<br>
+• 訂閱方案(Subscription) 7.50 億、商家解決方案(Merchant Solutions) 24.20 億；每月經常性收入(MRR) 2.12 億。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 進入 AI 時代維持強勁且雙位數的獲利成長；持續拓展 B2B、國際與 Shopify Payments。</div>`
+  },
+  'PYPL': {
+    quarter: '2026 第一季（官網財報）',
+    source: 'https://investor.pypl.com/',
+    html: `
+<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 PayPal 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
+• 第一季：<b>淨營收 84 億美元、年增 7%</b>（匯率中性 +5%）；<b>總支付金額(TPV) 4,640 億、年增 11%</b>；支付筆數 65 億、年增 7%。<br>
+• GAAP EPS $1.21（-6%）、非 GAAP EPS $1.34（+1%）；營運現金流 11 億美元。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 聚焦品牌結帳(branded checkout)、Venmo 變現與 Braintree 獲利品質，提升交易利潤(TM$)。</div>`
   }
 };
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
@@ -2486,6 +2658,141 @@ CPU 架構與矽智財(IP)授權龍頭：以 <b>Armv9 架構</b>與 <b>運算子
 • <b>權利金 6.71 億（+11%）</b>：智慧手機、邊緣 AI、實體 AI、雲端 AI；<b>資料中心權利金年增逾一倍</b>。<br>
 • <b>授權及其他 8.19 億（+29%）</b>：Arm 平台需求強勁。<br>
 • 推出自研 AI 晶片(Arm AGI CPU)，跨足終端裝置至資料中心。</div>`
+  },
+  'ABNB': {
+    quarter: 'Q1 2026（官網財報）',
+    source: 'https://investors.airbnb.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，營收 27 億美元）</b></div>
+全球短租住宿與體驗平台：連結房東(host)與旅客，收取訂房服務費；GBV 292 億美元、預訂夜晚與體驗 1.562 億。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q1 2026）</b><br>
+• 核心住宿預訂＋新推 <b>Experiences(體驗)</b> 與 <b>Services(服務)</b>；App 全面改版整合。<br>
+• 調整後 EBITDA 5.19 億（+24%）、自由現金流 17 億，獲利與現金流強勁。</div>`
+  },
+  'VRT': {
+    quarter: 'Q1 2026（官網財報）',
+    source: 'https://investors.vertiv.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，淨銷售 26.50 億美元）</b></div>
+資料中心關鍵基礎設施：<b>電力管理(UPS/配電)、熱管理(散熱/液冷)、機櫃與服務</b>，客戶為超大規模雲端與電信商。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q1 2026）</b><br>
+• AI 伺服器功耗與散熱需求推升訂單，<b>液冷(liquid cooling)</b>為成長主軸。<br>
+• 淨銷售 +30%、調整後營業利益率 20.8%；上修全年財測。</div>`
+  },
+  'CVX': {
+    quarter: 'Q1 2026（官網財報）',
+    source: 'https://www.chevron.com/investors',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，獲利 22.1 億美元）</b></div>
+綜合能源公司：<b>上游 Upstream</b>（油氣探勘生產，聚焦二疊紀盆地、圭亞那、DJ 盆地、哈薩克 TCO）＋<b>下游 Downstream</b>（煉油與化學品）。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q1 2026）</b><br>
+• 完成併購 <b>Hess</b>，取得圭亞那優質油田，產量提升（全球 +15%、美國 +24%）。<br>
+• 季內回饋股東 60 億美元，維持資本紀律與結構性降本。</div>`
+  },
+  'UNH': {
+    quarter: 'Q2 2026（官網財報）',
+    source: 'https://www.unitedhealthgroup.com/investors.html',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q2 2026，營收 1,120 億美元）</b></div>
+美國最大健康照護集團：<b>UnitedHealthcare（健康保險）</b>服務 4,850 萬人、營收 860 億＋<b>Optum（健康服務）</b>（Optum Health 醫療、Optum Rx 藥品福利、Optum Insight 數據）服務逾 1.2 億人、營收 657 億。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q2 2026）</b><br>
+• 醫療成本率(MCR) 86.7%；透過產品設計與醫療管理改善成本。<br>
+• Optum 與 UnitedHealthcare 垂直整合為核心護城河。</div>`
+  },
+  'ABBV': {
+    quarter: 'Q1 2026（官網財報）',
+    source: 'https://investors.abbvie.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，淨營收 150.02 億美元）</b></div>
+大型生物製藥：<b>免疫學 72.90 億</b>（Skyrizi 44.83 億、Rinvoq 21.19 億、Humira 6.88 億）＋<b>神經科學 28.75 億</b>＋腫瘤 16.31 億＋醫美(Aesthetics，Botox) 11.86 億。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q1 2026）</b><br>
+• <b>Skyrizi＋Rinvoq</b> 雙成長引擎（免疫學 +16.4%）接棒專利到期的 Humira。<br>
+• 神經科學 +26%；醫美與腫瘤延伸成長，上修全年 EPS 財測。</div>`
+  },
+  'AMGN': {
+    quarter: 'Q1 2026（官網財報）',
+    source: 'https://investors.amgen.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，總營收 86 億美元）</b></div>
+生物科技製藥龍頭：橫跨<b>心血管(Repatha)、骨質(Prolia/EVENITY)、腫瘤、發炎、罕見疾病</b>（併購 Horizon 取得 TEPEZZA 等）。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q1 2026）</b><br>
+• <b>Repatha 8.76 億（+34%）</b>領軍；Prolia 受生物相似藥衝擊 -34%。<br>
+• 肥胖新藥 <b>MariTide</b> 等後期管線為未來成長關鍵。</div>`
+  },
+  'LRCX': {
+    quarter: 'FY2026 Q3（官網財報）',
+    source: 'https://investor.lamresearch.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（FY2026 Q3，營收 58.4 億美元）</b></div>
+晶圓製造設備(WFE)大廠：主攻<b>蝕刻(Etch)</b>與<b>薄膜沉積(Deposition)</b>設備及製程服務，客戶為記憶體與邏輯晶圓廠。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（FY2026 Q3）</b><br>
+• 區域營收：中國 34%、韓國 23%、台灣 23%、日本 8%。<br>
+• 受惠先進製程、HBM 與先進封裝擴產；下季財測約 66 億美元。</div>`
+  },
+  'CAT': {
+    quarter: 'Q1 2026（官網財報）',
+    source: 'https://investors.caterpillar.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，營收 174 億美元）</b></div>
+全球最大工程與礦業機械商：<b>營建工業(Construction) 71.61 億</b>＋<b>能源與運輸(Energy & Transportation) 70.31 億</b>＋<b>資源工業(Resource) 37.97 億</b>，另有金融服務。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q1 2026）</b><br>
+• <b>資料中心備用發電(Solar Turbines/發電機組)</b>需求強勁，推升能源與運輸分部。<br>
+• 每股獲利 $5.47；在手訂單(backlog)創高。</div>`
+  },
+  'GE': {
+    quarter: 'Q2 2026（官網財報，GE Aerospace）',
+    source: 'https://www.geaerospace.com/investor-relations',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q2 2026，營收 133 億美元）</b></div>
+全球航空引擎龍頭：<b>商用引擎與服務(CES)</b>（LEAP、GEnx 引擎與售後維修）＋<b>國防與推進技術(DPT)</b>。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q2 2026）</b><br>
+• 訂單 165 億（+17%）、售後服務為主要獲利來源；LEAP 引擎交付放量。<br>
+• 自由現金流 30 億（+43%）；全面上修全年財測。</div>`
+  },
+  'T': {
+    quarter: 'Q2 2026（官網財報，AT&T）',
+    source: 'https://investors.att.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q2 2026，營收 316 億美元）</b></div>
+美國電信龍頭：<b>行動通訊(Mobility，後付費手機用戶)</b>＋<b>消費者寬頻(光纖 Fiber／固定無線)</b>＋企業服務。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q2 2026）</b><br>
+• 光纖持續擴建（併入 Lumen 大眾光纖）＋5G，推動融合(convergence)訂閱。<br>
+• 2026–2028 計畫回饋股東逾 450 億美元。</div>`
+  },
+  'NKE': {
+    quarter: 'FY2026 Q4（官網財報）',
+    source: 'https://investors.nike.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（FY2026 Q4，營收 110 億美元）</b></div>
+全球運動鞋服龍頭：<b>Nike／Jordan／Converse</b> 品牌，透過 <b>Nike Direct（自營門市＋App/官網）</b>與批發通路銷售。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（FY2026 Q4）</b><br>
+• Nike Direct 第四季 41 億（-7%）；毛利率回升至 49.2%（+890bps）。<br>
+• 「Win Now」策略清庫存、重整經典鞋款、回歸運動本業與批發夥伴。</div>`
+  },
+  'SPOT': {
+    quarter: 'Q1 2026（官網財報，歐元）',
+    source: 'https://investors.spotify.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，總營收 45.33 億歐元）</b></div>
+全球最大音樂串流平台：<b>訂閱(Premium) 41.48 億歐元</b>＋<b>廣告(Ad-Supported) 3.85 億歐元</b>；MAU 7.61 億、付費戶 2.93 億。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q1 2026）</b><br>
+• 訂閱漲價＋廣告擴張推升毛利至 14.95 億歐元、營業利益 7.15 億歐元。<br>
+• 拓展有聲書、Podcast 與 AI 推薦，提升用戶變現。</div>`
+  },
+  'BA': {
+    quarter: 'Q1 2026（官網財報）',
+    source: 'https://investors.boeing.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，營收 222 億美元）</b></div>
+全球雙雄航太製造商：<b>商用飛機(BCA，737 MAX／787／777X)</b>＋<b>國防太空安全(BDS)</b>＋<b>全球服務(BGS)</b>。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q1 2026）</b><br>
+• 季內交付 143 架商用機；<b>總積壓訂單創高 6,950 億美元</b>（含逾 6,100 架商用機）。<br>
+• 提升 737 MAX／787 產速、穩定品質，逐步改善現金流。</div>`
+  },
+  'SHOP': {
+    quarter: 'Q1 2026（官網財報）',
+    source: 'https://investors.shopify.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，營收 31.70 億美元）</b></div>
+全球電商平台(SaaS)：<b>訂閱方案(Subscription) 7.50 億</b>（月費建站）＋<b>商家解決方案(Merchant Solutions) 24.20 億</b>（金流 Shopify Payments、物流、資本）。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q1 2026）</b><br>
+• 營收年增約 34%、自由現金流利潤率 15%；MRR 2.12 億。<br>
+• 拓展 B2B、國際、POS 與 AI 商務工具。</div>`
+  },
+  'PYPL': {
+    quarter: 'Q1 2026（官網財報）',
+    source: 'https://investor.pypl.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，淨營收 84 億美元）</b></div>
+全球數位支付平台：<b>PayPal 品牌結帳</b>＋<b>Venmo（P2P/社群支付）</b>＋<b>Braintree（未品牌化支付處理）</b>；TPV 4,640 億美元。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q1 2026）</b><br>
+• TPV +11%、支付筆數 65 億；聚焦品牌結帳與 Venmo 變現以提升交易利潤(TM$)。<br>
+• 非 GAAP EPS $1.34（+1%）；營運現金流 11 億。</div>`
   }
 };
 function newsItemHtml(title, link, pub){
