@@ -1469,7 +1469,14 @@ const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-
 // 🎬 法說會影片（keyed by 代碼）：值可為 YouTube 影片 ID(11碼，內嵌可播放/暫停/拉時間軸) 或完整官方重播網址(外開)。
 // 人工逐間驗證後填入官方來源；未填者自動退回「官方法說會線上重播頁」按鈕(IR_QUARTERLY_PAGE，該頁本身即有播放器)。
 const IR_CALL_VIDEO = {
-  // 範例格式：'NVDA': 'abcDEFghij'(YouTube ID) 或 'TSM': 'https://…官方webcast重播'
+  // 值=YouTube 影片 ID(11碼) → 站內內嵌播放器(可播放/暫停/拉時間軸)＋自動繁體中文字幕；未列者退回官方 IR 線上重播。
+  // 逐季人工更新為該公司最新一季法說會影片。優先官方頻道(如 Alphabet IR)，其次乾淨全程錄影(如 EARNMOAR)。
+  'GOOGL': 'LzExSq9DU9w', 'GOOG': 'LzExSq9DU9w',   // 官方 Alphabet Investor Relations，2026 Q2
+  'TSM': 'YOWjn1dXkrA',    // TSMC 2026 Q2 法說全程
+  'AAPL': 'zq6d9_eS-YI',   // Apple 2026 Q1 法說全程
+  'MSFT': 'pcTfnnDcbfk',   // Microsoft FY2026 Q3 法說全程
+  'META': 'tODp-03UIGo',   // Meta 2026 Q1 法說全程
+  'NVDA': 'N_jEzAX7Wb8'    // NVIDIA 2026 法說
 };
 // 產生「法說會影片」區塊(置於法說主旨最上方)：有內嵌影片→可播放/暫停/拖曳時間軸；否則給官方重播按鈕
 function irVideoBlock(sym, coName){
