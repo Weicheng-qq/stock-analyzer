@@ -114,9 +114,9 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-logo { flex:none; width:26px; height:26px; border-radius:6px; object-fit:contain; background:#fff; padding:2px; box-sizing:border-box; }
 .wl-name { flex:1.8; min-width:0; font-weight:600; overflow-wrap:anywhere; word-break:break-word; line-height:1.25; }
 .wl-name .sym { display:block; color:var(--text2); font-weight:400; font-size:11px; }
-.wl-price { flex:0.7; text-align:right; font-weight:600; font-family:ui-monospace,'SF Mono','Consolas','Roboto Mono',monospace; font-variant-numeric:tabular-nums; }
+.wl-price { flex:0.7; text-align:right; font-weight:700; font-family:-apple-system,'Segoe UI','PingFang TC','Microsoft JhengHei',Roboto,sans-serif; font-variant-numeric:tabular-nums; }
 .wl-chg { flex:0.8; text-align:right; }
-.wl-chg .pill { display:inline-block; padding:3px 8px; border-radius:6px; font-weight:700; font-size:12.5px; color:#fff; font-family:ui-monospace,'SF Mono','Consolas','Roboto Mono',monospace; font-variant-numeric:tabular-nums; letter-spacing:.3px; }
+.wl-chg .pill { display:inline-block; padding:3px 8px; border-radius:6px; font-weight:700; font-size:12.5px; color:#fff; font-family:-apple-system,'Segoe UI','PingFang TC','Microsoft JhengHei',Roboto,sans-serif; font-variant-numeric:tabular-nums; letter-spacing:.2px; }
 .wl-chg .pill.up { background:var(--green); }  /* 漲=綠底 */
 .wl-chg .pill.down { background:var(--red); }  /* 跌=紅底 */
 .wl-ai-read { padding:0 0 10px 34px; font-size:12px; line-height:1.5; color:var(--text2); }
@@ -151,6 +151,17 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .tech-opts .dot { width:10px; height:3px; border-radius:2px; display:inline-block; }
 .tech-ai { margin-bottom:12px; padding:12px 14px; background:linear-gradient(135deg,rgba(88,166,255,.08),rgba(63,185,80,.06)); border:1px solid rgba(88,166,255,.25); border-radius:10px; }
 .tech-ai b, .tech-ai strong { color:var(--blue); }
+/* 檢視方式切換：一頁式 / 選單式 */
+.layout-bar { display:flex; gap:8px; align-items:center; margin-bottom:14px; flex-wrap:wrap; }
+.layout-bar .lb-label { font-size:12px; color:var(--text2); }
+.layout-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:6px 12px; font-size:13px; cursor:pointer; }
+.layout-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); font-weight:700; }
+.sec-tabs { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; padding:10px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; }
+.sec-tab { background:var(--bg3); border:1px solid var(--border); color:var(--text2); border-radius:20px; padding:6px 12px; font-size:12.5px; cursor:pointer; white-space:nowrap; }
+.sec-tab:hover { border-color:var(--blue); color:var(--text); }
+.sec-tab.active { background:var(--blue); color:#0d1117; border-color:var(--blue); font-weight:700; }
+.menu-mode .g2 { display:block; }
+.menu-mode .sec-hidden { display:none !important; }
 .vr { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(48,54,61,.4); font-size:13px; }
 .vr:last-child { border-bottom:none; }
 .vl { color:var(--text2); } .vn { font-weight:600; }
@@ -1003,6 +1014,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 
   drawChart(rows);
   loadTechnical(symbol, SEARCH_GEN);
+  renderLayoutControls();
 
   // 給 AI 的上下文
   const finText=rows.map(r=>`${r.yr}: 營收${cs}${fmtB(r.rev)}, 成長${r.gr!=null?r.gr.toFixed(1)+'%':'NA'}, 毛利率${r.gm!=null?r.gm.toFixed(1)+'%':'NA'}, 淨利率${r.nm!=null?r.nm.toFixed(1)+'%':'NA'}, ROE${r.roe!=null?r.roe.toFixed(1)+'%':'NA'}`).join('\n')
@@ -3060,6 +3072,43 @@ function drawChart(rows){
         y:{ticks:{color:'#8b949e',font:{size:10},callback:v=>'$'+v+'B'},grid:{color:'rgba(48,54,61,.3)'}},
         y1:{position:'right',ticks:{color:'#3fb950',font:{size:10},callback:v=>v+'%'},grid:{display:false}} } }
   });
+}
+
+// ── 檢視方式：一頁式 / 選單式（把各架構主旨變成上方選單，點選看單一區塊）──
+let __activeSec=0;
+function getLayoutMode(){ try{ return localStorage.getItem('layoutMode')||'single'; }catch(e){ return 'single'; } }
+function setLayoutMode(m){ try{ localStorage.setItem('layoutMode',m); }catch(e){} renderLayoutControls(); }
+function secTitle(card,i){ const ct=card.querySelector('.ct'); return (ct?ct.textContent:('區塊 '+(i+1))).trim(); }
+function renderLayoutControls(){
+  const res=document.getElementById('results'); const head=res?res.querySelector('.co-head'):null; if(!res||!head) return;
+  res.querySelectorAll('.layout-bar,.sec-tabs').forEach(e=>e.remove());
+  const mode=getLayoutMode();
+  const cards=[...res.querySelectorAll('.card')];
+  const bar=document.createElement('div'); bar.className='layout-bar';
+  bar.innerHTML=`<span class="lb-label">檢視方式：</span>`
+    +`<button class="layout-btn ${mode==='single'?'active':''}" onclick="setLayoutMode('single')">📄 一頁式</button>`
+    +`<button class="layout-btn ${mode==='menu'?'active':''}" onclick="setLayoutMode('menu')">☰ 選單式</button>`;
+  head.parentNode.insertBefore(bar, head.nextSibling);
+  if(mode==='menu'){
+    res.classList.add('menu-mode');
+    if(__activeSec>=cards.length) __activeSec=0;
+    const tabs=document.createElement('div'); tabs.className='sec-tabs';
+    tabs.innerHTML=cards.map((c,i)=>`<button class="sec-tab ${i===__activeSec?'active':''}" onclick="showSec(${i})">${esc(secTitle(c,i))}</button>`).join('');
+    bar.parentNode.insertBefore(tabs, bar.nextSibling);
+    showSec(__activeSec);
+  } else {
+    res.classList.remove('menu-mode');
+    cards.forEach(c=>c.classList.remove('sec-hidden'));
+  }
+}
+function showSec(i){
+  __activeSec=i;
+  const res=document.getElementById('results'); if(!res) return;
+  const cards=[...res.querySelectorAll('.card')];
+  cards.forEach((c,idx)=>c.classList.toggle('sec-hidden', idx!==i));
+  res.querySelectorAll('.sec-tab').forEach((b,idx)=>b.classList.toggle('active', idx===i));
+  // 該區塊若含圖表，顯示後重算尺寸（避免在隱藏狀態下建立而變 0 高度）
+  setTimeout(()=>{ try{ const cv=cards[i]&&cards[i].querySelector('canvas'); if(cv&&window.Chart&&Chart.getChart){ const ch=Chart.getChart(cv); if(ch) ch.resize(); } }catch(e){} }, 40);
 }
 
 // ── 技術分析：股價趨勢圖(可勾選均線/布林軌道) + AI 白話解讀 ──
