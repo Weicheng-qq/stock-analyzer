@@ -1347,16 +1347,14 @@ function renderAI(ai){
   // 產品/營收結構：若有最新一季法說會官方數據(目前TSM)優先用它(比年報新)；否則走AI依年報整理
   const manualProd=IR_PRODUCTS_SUMMARY[window.__symbolForLinks];
   if(manualProd){
-    setAI('ai_products',`<div class="ai">${manualProd.html}<div class="note" style="color:var(--green);margin-top:8px">✅ 依公司官方投資人簡報／法說會（${esc(manualProd.quarter)}）最新一季資料整理，非AI臆測</div></div>`);
+    setAI('ai_products',`<div class="ai">${manualProd.html}</div>`);
   } else {
     setAI('ai_products',`<div class="ai">${norm(ai.products)}`
       +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理${window.__wikiData?`　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
         :(window.__wikiData?`<div class="note" style="color:var(--green)">✅ 依維基百科最新公開資料（持續更新）整理　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a></div>`:`<div class="note">（未取得官方或維基資料，內容為 AI 一般認知，僅供參考）</div>`))
       +`</div>`);
   }
-  setAI('ai_competitors',`<div class="ai">${norm(ai.competitors)}`
-    +(window.__competitionData?`<div class="note" style="color:var(--green)">✅ 參考公司官方年報（${esc(window.__competitionData.date)}）競爭段落</div>`:`<div class="note">（產業排名為 AI 一般認知，僅供參考）</div>`)
-    +`</div>`);
+  setAI('ai_competitors',`<div class="ai">${norm(ai.competitors)}</div>`);
   // 法說會展望：有官方指引 → 顯示中文翻譯(忠實翻譯官方原文)+來源；無 → 不顯示臆測內容
   // 法說會口頭 Q&A 直達連結（官方逐字稿/影片為一手來源，一鍵可查）
   const coName=(window.__coNameForLinks||'').trim();
