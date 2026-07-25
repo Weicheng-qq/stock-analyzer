@@ -106,20 +106,26 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .g { color:var(--green); } .r { color:var(--red); } .y { color:var(--yellow); }
 .wl-item { border-bottom:1px solid rgba(48,54,61,.4); }
 .wl-item:last-child { border-bottom:none; }
-.wl-row { display:flex; align-items:center; gap:10px; padding:10px 0 4px; font-size:13px; }
+.wl-row { display:flex; align-items:center; gap:10px; padding:12px 0 4px; font-size:15.5px; }
 .wl-move { display:flex; flex-direction:column; gap:1px; flex:none; }
 .wl-move button { background:none; border:none; color:var(--text2); cursor:pointer; font-size:10px; padding:1px 4px; line-height:1; }
 .wl-move button:hover:not(:disabled) { color:var(--blue); }
 .wl-move button:disabled { opacity:.25; cursor:default; }
-.wl-logo { flex:none; width:26px; height:26px; border-radius:6px; object-fit:contain; background:#fff; padding:2px; box-sizing:border-box; }
-.wl-name { flex:1.8; min-width:0; font-weight:600; overflow-wrap:anywhere; word-break:break-word; line-height:1.25; }
-.wl-name .sym { display:block; color:var(--text2); font-weight:400; font-size:11px; }
-.wl-price { flex:0.7; text-align:right; font-weight:600; }
-.wl-chg { flex:0.8; text-align:right; }
-.wl-chg .pill { display:inline-block; padding:3px 8px; border-radius:6px; font-weight:700; font-size:12.5px; color:#fff; font-family:-apple-system,'Segoe UI','PingFang TC','Microsoft JhengHei',Roboto,sans-serif; font-variant-numeric:tabular-nums; letter-spacing:.2px; }
+.wl-logo { flex:none; width:34px; height:34px; border-radius:7px; object-fit:contain; background:#fff; padding:2px; box-sizing:border-box; }
+.wl-name { flex:1.3; min-width:0; font-weight:700; font-size:15.5px; overflow-wrap:anywhere; word-break:break-word; line-height:1.2; }
+.wl-name .sym { display:block; color:var(--text2); font-weight:400; font-size:12px; }
+.wl-spark { flex:none; width:70px; height:26px; }
+.wl-pc { flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:3px; }
+.wl-price { text-align:right; font-weight:700; font-size:15.5px; }
+.wl-chg { text-align:right; }
+.wl-chg .pill { display:inline-block; padding:3px 9px; border-radius:6px; font-weight:700; font-size:13.5px; color:#fff; font-family:-apple-system,'Segoe UI','PingFang TC','Microsoft JhengHei',Roboto,sans-serif; font-variant-numeric:tabular-nums; letter-spacing:.2px; }
 .wl-chg .pill.up { background:var(--green); }  /* 漲=綠底 */
 .wl-chg .pill.down { background:var(--red); }  /* 跌=紅底 */
-.wl-ai-read { padding:0 0 10px 34px; font-size:12px; line-height:1.5; color:var(--text2); }
+.wl-ext { text-align:right; font-size:11.5px; color:var(--text2); padding:0 2px 8px 0; }
+.wl-ext .lbl { opacity:.85; }
+.wl-ext .up { color:var(--green); font-weight:700; }
+.wl-ext .down { color:var(--red); font-weight:700; }
+.wl-ai-read { padding:0 0 12px 40px; font-size:12px; line-height:1.5; color:var(--text2); }
 .wl-ai-read b { color:var(--blue); font-weight:600; }
 .wl-ai-read .muted { opacity:.7; }
 .ir-video { position:relative; width:100%; padding-top:56.25%; margin-bottom:12px; border-radius:10px; overflow:hidden; background:#000; }
@@ -128,19 +134,20 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .ir-video-links a { color:var(--blue); text-decoration:none; }
 .ir-video-links a:hover { text-decoration:underline; }
 .ir-video-links a.muted { color:var(--text2); }
-.wl-ai-btn { flex:none; background:var(--blue); color:#0d1117; border:none; border-radius:6px; padding:6px 10px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; }
-.wl-del { flex:none; background:none; border:none; color:var(--text2); cursor:pointer; font-size:16px; padding:0 2px; }
+.wl-ai-btn { flex:none; background:var(--blue); color:#0d1117; border:none; border-radius:7px; padding:8px 13px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; }
+.wl-del { flex:none; background:none; border:none; color:var(--text2); cursor:pointer; font-size:18px; padding:0 2px; }
 .wl-del:hover { color:var(--red); }
 /* 手機：名稱給更多空間、AI鈕只留圖示、價格漲跌幅收窄，避免長中文名被擠到換太多行 */
 @media(max-width:560px){
-  .wl-row { gap:5px; }
-  .wl-logo { width:22px; height:22px; }
-  .wl-name { flex:1.2; font-size:12px; }
-  .wl-price { flex:none; width:auto; font-size:12px; }
-  .wl-chg { flex:none; width:auto; }
-  .wl-chg .pill { font-size:11px; padding:2px 6px; }
-  .wl-ai-btn { flex:none; padding:5px 9px; font-size:12px; }
-  .wl-del { flex:none; }
+  .wl-row { gap:7px; font-size:14.5px; }
+  .wl-logo { width:30px; height:30px; }
+  .wl-name { flex:1.1; font-size:14.5px; }
+  .wl-name .sym { font-size:11px; }
+  .wl-spark { width:52px; height:24px; }
+  .wl-price { font-size:14.5px; }
+  .wl-chg .pill { font-size:12.5px; padding:2px 7px; }
+  .wl-ai-btn { padding:7px 10px; font-size:13px; }
+  .wl-ai-read { padding-left:36px; }
 }
 .wl-add { display:flex; gap:8px; margin-bottom:12px; }
 .wl-add input { flex:1; background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:9px 12px; font-size:13px; }
@@ -189,17 +196,17 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 #ai_guidance .ai, #ai_products .ai { line-height:1.95; }
 #ai_guidance .ai > div:not(.ir-video):not(.note), #ai_products .ai > div:not(.note) { margin-bottom:14px; padding-bottom:13px; border-bottom:1px solid rgba(48,54,61,.6); }
 #ai_guidance .ai > div:not(.ir-video):not(.note):last-child, #ai_products .ai > div:not(.note):last-child { border-bottom:none; padding-bottom:0; margin-bottom:0; }
-/* 美股四大指數列（放在自選股下面，字放大、卡片樣式） */
+/* 美股四大指數（放在自選股上面）：桌機4欄、手機2×2，全部一次顯示、不用橫向捲動 */
 .index-title { font-size:15px; font-weight:800; color:var(--blue); margin:0 0 10px; }
-.index-bar { display:flex; gap:0; overflow-x:auto; background:var(--bg2); border:1px solid var(--border); border-radius:12px; font-size:15px; margin-bottom:20px; -webkit-overflow-scrolling:touch; }
-.index-bar .ix { flex:1 0 auto; min-width:172px; display:flex; align-items:center; justify-content:center; gap:10px; padding:13px 16px; border-right:1px solid rgba(48,54,61,.5); white-space:nowrap; }
-.index-bar .ix:last-child { border-right:none; }
-.index-bar .ix-name { color:var(--text2); font-size:14px; }
-.index-bar .ix-val { font-weight:700; color:var(--text); font-size:15.5px; }
-.index-bar .ix-chg { font-weight:700; font-size:14.5px; }
+.index-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:20px; }
+.index-bar .ix { background:var(--bg2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:11px 6px; text-align:center; min-width:0; }
+.index-bar .ix-name { color:var(--text2); font-size:13px; }
+.index-bar .ix-line { display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; justify-content:center; }
+.index-bar .ix-val { font-weight:700; color:var(--text); font-size:15px; }
+.index-bar .ix-chg { font-weight:700; font-size:13.5px; }
 .index-bar .ix-chg.up { color:var(--green); }
 .index-bar .ix-chg.down { color:var(--red); }
-@media(max-width:560px){ .index-bar { font-size:14px; } .index-bar .ix { min-width:150px; padding:11px 12px; gap:8px; } }
+@media(max-width:560px){ .index-bar { grid-template-columns:repeat(2,1fr); } .index-bar .ix { padding:9px 5px; } .index-bar .ix-name{ font-size:12px; } .index-bar .ix-val{ font-size:14px; } .index-bar .ix-chg{ font-size:12.5px; } }
 /* 估值小結：用不同顏色(黃)＋左側色條，讓使用者一眼知道這是小結 */
 .val-summary { margin-top:12px; padding:12px 14px; background:rgba(210,153,34,.1); border-left:3px solid var(--yellow); border-radius:8px; font-size:13px; color:var(--text); line-height:1.85; }
 .val-summary-tag { display:block; color:var(--yellow); font-weight:800; font-size:12px; margin-bottom:6px; letter-spacing:.5px; }
@@ -288,6 +295,9 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     </div>
   </div>
 
+  <div class="index-title">📊 美股四大指數</div>
+  <div id="indexBar" class="index-bar"></div>
+
   <div class="card" id="watchlistCard" style="margin-bottom:20px">
     <div class="ct">⭐ 自選股</div>
     <div class="wl-add">
@@ -296,9 +306,6 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     </div>
     <div id="watchlistTable"><div class="note">尚未加入任何自選股，在上方輸入後按「加入」</div></div>
   </div>
-
-  <div class="index-title">📊 美股四大指數</div>
-  <div id="indexBar" class="index-bar"></div>
 
   <div id="logPanel" class="log-panel"><h3>🔄 載入進度</h3><div id="logItems"></div></div>
   <div id="results" class="results"></div>
@@ -556,7 +563,7 @@ async function loadTickerMap(){
 
 // ⭐ 自選股：存在瀏覽器 localStorage(只存在你自己的裝置)，可新增/刪除/上下移排序；
 // 「AI分析」按鈕直接觸發完整搜尋，帶出這個網站的所有區塊(財務/彼得林區分類/新聞/目標價/投資總結...)
-function getWatchlist(){ try{ const raw=localStorage.getItem('watchlist'); if(raw===null) return [{symbol:'TSM',name:'台積電'},{symbol:'NVO',name:'諾和諾德'}]; return JSON.parse(raw); }catch(e){ return []; } }
+function getWatchlist(){ try{ const raw=localStorage.getItem('watchlist'); if(raw===null) return [{symbol:'TSM',name:'台積電'},{symbol:'NVDA',name:'輝達'},{symbol:'INTC',name:'英特爾'},{symbol:'MU',name:'美光'},{symbol:'NVO',name:'諾和諾德'}]; return JSON.parse(raw); }catch(e){ return []; } }
 function saveWatchlist(list){ try{ localStorage.setItem('watchlist', JSON.stringify(list)); }catch(e){} }
 async function translateCompanyName(enName){
   try{
@@ -618,14 +625,19 @@ function renderWatchlist(){
       <img class="wl-logo" src="https://financialmodelingprep.com/image-stock/${esc(it.symbol)}.png" alt="" loading="lazy"
            onerror="if(this.dataset.fb){this.style.display='none'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(it.symbol)}')}">
       <div class="wl-name" title="${esc(it.name)}">${esc(it.name)}<span class="sym">${esc(it.symbol)}</span></div>
-      <div class="wl-price" id="wlp_${esc(it.symbol)}">…</div>
-      <div class="wl-chg" id="wlc_${esc(it.symbol)}">…</div>
+      <svg class="wl-spark" id="wls_${esc(it.symbol)}" viewBox="0 0 72 26" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <div class="wl-pc">
+        <div class="wl-price" id="wlp_${esc(it.symbol)}">…</div>
+        <div class="wl-chg" id="wlc_${esc(it.symbol)}">…</div>
+      </div>
       <button class="wl-ai-btn" onclick="watchlistAnalyze('${esc(it.symbol)}')">AI</button>
       <button class="wl-del" onclick="removeFromWatchlist('${esc(it.symbol)}')" title="刪除">✕</button>
     </div>
-    <div class="wl-ai-read" id="wlr_${esc(it.symbol)}"><span class="muted">💡 AI 漲跌解讀載入中…</span></div>
+    <div class="wl-ext" id="wle_${esc(it.symbol)}"></div>
+    <div class="wl-ai-read" id="wlr_${esc(it.symbol)}"><span class="muted">💡 漲跌解讀載入中…</span></div>
     </div>`).join('');
   loadWatchlistPrices(list);
+  loadWatchlistSpark(list);
   loadWatchlistInsights(list);
   // 舊資料若名稱還是英文(尚未翻譯過)，背景翻譯成中文後就地更新，不用使用者手動處理
   list.forEach(it=>{
@@ -655,7 +667,37 @@ async function loadWatchlistPrices(list){
     }catch(e){ if(pEl) pEl.textContent='—'; if(cEl) cEl.textContent='—'; }
   }));
 }
-// 💡 自選股「AI 漲跌解讀」：抓最近5日漲跌幅 + 官方新聞標題，請 AI 用一句話解讀近期漲跌原因。
+// 自選股：當日盤中走勢線(名稱右邊) + 盤前/盤後行情(股價下方小字)
+async function loadWatchlistSpark(list){
+  await Promise.all(list.map(async it=>{
+    const sEl=document.getElementById('wls_'+it.symbol), eEl=document.getElementById('wle_'+it.symbol);
+    try{
+      const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${it.symbol}?range=1d&interval=5m&includePrePost=true`);
+      const res=ch?.chart?.result?.[0]; if(!res) return;
+      const meta=res.meta, ts=res.timestamp||[], cl=res.indicators?.quote?.[0]?.close||[];
+      const per=meta?.currentTradingPeriod?.regular, regStart=per?.start, regEnd=per?.end;
+      const pts=[]; for(let i=0;i<ts.length;i++){ if(cl[i]==null) continue; if(regStart&&regEnd&&(ts[i]<regStart||ts[i]>regEnd)) continue; pts.push(cl[i]); }
+      if(sEl && pts.length>=2){
+        const mn=Math.min(...pts), mx=Math.max(...pts), rng=(mx-mn)||1, W=70, H=26, pad=3;
+        const d=pts.map((v,idx)=>`${(idx/(pts.length-1)*(W-pad*2)+pad).toFixed(1)},${(H-pad-(v-mn)/rng*(H-pad*2)).toFixed(1)}`).join(' ');
+        const up=pts[pts.length-1]>=pts[0]; const col=up?'#3fb950':'#f85149';
+        sEl.innerHTML=`<polyline points="${d}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+      }
+      if(eEl){
+        let li=-1; for(let i=ts.length-1;i>=0;i--){ if(cl[i]!=null){ li=i; break; } }
+        const reg=meta?.regularMarketPrice, prevC=meta?.previousClose??meta?.chartPreviousClose;
+        let label=null, base=null, cur=null;
+        if(li>=0 && regEnd && ts[li]>regEnd && reg!=null){ label='盤後'; base=reg; cur=cl[li]; }
+        else if(li>=0 && regStart && ts[li]<regStart && prevC!=null){ label='盤前'; base=prevC; cur=cl[li]; }
+        if(label && base && cur!=null && Math.abs(cur-base)/base>0.0002){
+          const pct=(cur-base)/base*100, up=pct>=0;
+          eEl.innerHTML=`<span class="lbl">${label} $${cur.toFixed(2)}</span> <span class="${up?'up':'down'}">${up?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span>`;
+        } else eEl.innerHTML='';
+      }
+    }catch(e){}
+  }));
+}
+// 💡 自選股「漲跌解讀」：抓最近5日漲跌幅 + 官方新聞標題，請 AI 用一句話解讀近期漲跌原因。
 //   - 只根據真實新聞標題解讀、附「僅供參考」，不臆測未提供的數字（遵守以事實為依據原則）
 //   - 每檔快取 6 小時於 localStorage，序列化呼叫避免免費模型速率限制
 async function loadWatchlistInsights(list){
@@ -671,7 +713,7 @@ async function loadWatchlistInsights(list){
       const c=JSON.parse(localStorage.getItem('wlinsight2_'+it.symbol)||'null');
       if(c && (Date.now()-c.t)<TTL && c.html){ rEl.innerHTML=c.html; continue; }
     }catch(e){}
-    if(!canAI){ rEl.innerHTML='<span class="muted">💡 AI 漲跌解讀需在 ⚙️ 設定免費 AI 金鑰後顯示</span>'; continue; }
+    if(!canAI){ rEl.innerHTML='<span class="muted">💡 漲跌解讀需在 ⚙️ 設定免費 AI 金鑰後顯示</span>'; continue; }
     try{
       // 近5日漲跌幅
       let pct5=null;
@@ -693,13 +735,13 @@ async function loadWatchlistInsights(list){
 ${titles.map((t,i)=>(i+1)+'. '+t).join('\n')}`;
       let reason='';
       try{ const out=await callAIWithPrompt(prompt, gmKey, useServer); reason=(out&&out.reason||'').trim(); }
-      catch(e){ rEl.innerHTML='<span class="muted">💡 AI 漲跌解讀暫時無法取得（免費模型壅塞，稍後自動重試）</span>'; continue; }
+      catch(e){ rEl.innerHTML='<span class="muted">💡 漲跌解讀暫時無法取得（免費模型壅塞，稍後自動重試）</span>'; continue; }
       if(!reason){ rEl.innerHTML='<span class="muted">💡 暫無解讀</span>'; continue; }
-      const html=`💡 <b>AI漲跌解讀</b>：${esc(reason)}`;
+      const html=`💡 <b>漲跌解讀</b>：${esc(reason)}`;
       rEl.innerHTML=html;
       try{ localStorage.setItem('wlinsight2_'+it.symbol, JSON.stringify({t:Date.now(), html})); }catch(e){}
       await new Promise(r=>setTimeout(r,800));   // 序列化：降低免費模型速率限制風險
-    }catch(e){ rEl.innerHTML='<span class="muted">💡 AI 漲跌解讀暫時無法取得</span>'; }
+    }catch(e){ rEl.innerHTML='<span class="muted">💡 漲跌解讀暫時無法取得</span>'; }
   }
 }
 async function concept(cik,tag,tax){
@@ -3285,7 +3327,7 @@ async function loadIndexBar(){
     try{
       const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(x.s)}?range=1d&interval=1d`);
       const m=ch?.chart?.result?.[0]?.meta; const p=m?.regularMarketPrice, prev=m?.previousClose??m?.chartPreviousClose;
-      if(p!=null&&prev){ const pct=(p-prev)/prev*100; cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-val">${p.toLocaleString('en-US',{maximumFractionDigits:2})}</span><span class="ix-chg ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span>`; }
+      if(p!=null&&prev){ const pct=(p-prev)/prev*100; cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-line"><span class="ix-val">${p.toLocaleString('en-US',{maximumFractionDigits:2})}</span><span class="ix-chg ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span></span>`; }
       else cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-val">—</span>`;
     }catch(e){ cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-val">—</span>`; }
   }));
