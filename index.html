@@ -1022,7 +1022,6 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
       <td class="${cc(cum.nm,15,5)}">${cum.nm!=null?cum.nm.toFixed(1)+'%':'—'}</td>
       <td>—</td></tr>`:''}
     </table>
-    <div class="note">綠=優異 / 黃=普通 / 紅=偏低${cum?'；† = 本財年最新累計季度（Yahoo，未經年度審計）':''}</div>
   </div>
   <div class="card"><div class="ct">💰 年營收 &amp; 成長率</div><div class="chart-wrap"><canvas id="revChart"></canvas></div></div>
 </div>
