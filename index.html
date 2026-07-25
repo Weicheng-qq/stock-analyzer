@@ -114,7 +114,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-logo { flex:none; width:26px; height:26px; border-radius:6px; object-fit:contain; background:#fff; padding:2px; box-sizing:border-box; }
 .wl-name { flex:1.8; min-width:0; font-weight:600; overflow-wrap:anywhere; word-break:break-word; line-height:1.25; }
 .wl-name .sym { display:block; color:var(--text2); font-weight:400; font-size:11px; }
-.wl-price { flex:0.7; text-align:right; font-weight:700; font-family:-apple-system,'Segoe UI','PingFang TC','Microsoft JhengHei',Roboto,sans-serif; font-variant-numeric:tabular-nums; }
+.wl-price { flex:0.7; text-align:right; font-weight:600; }
 .wl-chg { flex:0.8; text-align:right; }
 .wl-chg .pill { display:inline-block; padding:3px 8px; border-radius:6px; font-weight:700; font-size:12.5px; color:#fff; font-family:-apple-system,'Segoe UI','PingFang TC','Microsoft JhengHei',Roboto,sans-serif; font-variant-numeric:tabular-nums; letter-spacing:.2px; }
 .wl-chg .pill.up { background:var(--green); }  /* 漲=綠底 */
@@ -133,12 +133,14 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-del:hover { color:var(--red); }
 /* 手機：名稱給更多空間、AI鈕只留圖示、價格漲跌幅收窄，避免長中文名被擠到換太多行 */
 @media(max-width:560px){
-  .wl-name { flex:2.4; }
-  .wl-price { flex:none; width:64px; font-size:12px; }
-  .wl-chg { flex:none; width:56px; font-size:12px; }
-  .wl-ai-btn .wl-ai-label { display:none; }
-  .wl-ai-btn { padding:6px 8px; font-size:15px; }
-  .wl-row { gap:6px; }
+  .wl-row { gap:5px; }
+  .wl-logo { width:22px; height:22px; }
+  .wl-name { flex:1.2; font-size:12px; }
+  .wl-price { flex:none; width:auto; font-size:12px; }
+  .wl-chg { flex:none; width:auto; }
+  .wl-chg .pill { font-size:11px; padding:2px 6px; }
+  .wl-ai-btn { flex:none; padding:5px 9px; font-size:12px; }
+  .wl-del { flex:none; }
 }
 .wl-add { display:flex; gap:8px; margin-bottom:12px; }
 .wl-add input { flex:1; background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:9px 12px; font-size:13px; }
@@ -162,6 +164,14 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .sec-tab.active { background:var(--blue); color:#0d1117; border-color:var(--blue); font-weight:700; }
 .menu-mode .g2 { display:block; }
 .menu-mode .sec-hidden { display:none !important; }
+/* 本益比歷史區間視覺化 */
+.pe-gauge { margin:14px 0 6px; }
+.pe-track { position:relative; height:14px; border-radius:8px; background:linear-gradient(90deg,#3fb950 0%,#e3b341 50%,#f85149 100%); }
+.pe-fill { display:none; }
+.pe-marker { position:absolute; top:-4px; width:4px; height:22px; background:#fff; border-radius:2px; transform:translateX(-50%); box-shadow:0 0 4px rgba(0,0,0,.6); }
+.pe-bubble { position:absolute; top:-24px; left:50%; transform:translateX(-50%); background:#fff; color:#0d1117; font-size:11px; font-weight:700; padding:1px 6px; border-radius:6px; white-space:nowrap; }
+.pe-scale { display:flex; justify-content:space-between; margin-top:8px; font-size:11px; color:var(--text2); }
+.pe-scale .pe-tag { font-weight:700; }
 .vr { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(48,54,61,.4); font-size:13px; }
 .vr:last-child { border-bottom:none; }
 .vl { color:var(--text2); } .vn { font-weight:600; }
@@ -239,7 +249,6 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   <div id="welcome" class="welcome">
     <h1>美股AI深度分析工具</h1>
     <p>10年財務指標 · 營收成長 · 彼得林區分類 · 護城河 · 競爭對手 · 買入建議</p>
-    <div class="free-tag">✅ 財務數據免費(SEC官方) · AI分析用免費模型</div>
     <p style="color:var(--text2);font-size:13px;margin-top:10px">在上方搜尋框輸入、或點下方按鈕，即可查看任一美股的完整分析（開啟時預設顯示台積電範例）</p>
     <div class="chips">
       <div class="chip" onclick="quickSearch('AAPL')">🍎 AAPL</div>
@@ -901,6 +910,8 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   ];
   const passCount=checklist.filter(c=>c.pass===true).length;
   const chkHtml=checklist.map(c=>`<div class="vr"><span class="vl">${c.pass===true?'✅':c.pass===false?'❌':'➖'} ${c.label}</span><span class="vn ${c.pass===true?'g':c.pass===false?'r':''}">${esc(c.val)}</span></div>`).join('');
+  // 年營收欄位統一單位：依最大金額自動選 兆／十億／百萬，單位標在欄名右邊，數字乾淨好懂
+  const rUnit = pickRevUnit([...rows.map(r=>r.rev), cum?cum.rev:null]);
 
   document.getElementById('results').innerHTML=`
 <div class="co-head">
@@ -952,10 +963,10 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 <div class="g2">
   <div class="card">
     <div class="ct">📈 年營收明細與成長率（財政年度）</div>
-    <table class="dt"><tr><th>年份</th><th>年營收</th><th>較前年成長率</th></tr>
-    ${rows.map(r=>{ const isGap=secMaxYr!=null&&r.yr>secMaxYr; const amtPrefix=(isGap&&gapEstimated)?'≈':''; return `<tr><td><strong>${r.yr}</strong>${isGap?' <span title="SEC尚未正式申報，來自Yahoo補充" style="color:var(--yellow)">†</span>':''}</td><td>${r.rev!=null?amtPrefix+cs+fmtB(r.rev):'—'}</td>
+    <table class="dt"><tr><th>年份</th><th>年營收 <span style="color:var(--text2);font-weight:400">（${cs}${rUnit.label}）</span></th><th>較前年成長率</th></tr>
+    ${rows.map(r=>{ const isGap=secMaxYr!=null&&r.yr>secMaxYr; const amtPrefix=(isGap&&gapEstimated)?'≈':''; return `<tr><td><strong>${r.yr}</strong>${isGap?' <span title="SEC尚未正式申報，來自Yahoo補充" style="color:var(--yellow)">†</span>':''}</td><td>${r.rev!=null?amtPrefix+(r.rev/rUnit.div).toFixed(2):'—'}</td>
       <td class="${r.gr!=null?(r.gr>=0?'g':'r'):''}">${r.gr!=null?(r.gr>=0?'▲':'▼')+' '+Math.abs(r.gr).toFixed(1)+'%':'—'}</td></tr>`; }).join('')}
-    ${cum?`<tr style="border-top:2px solid var(--border)"><td><strong>${cum.label}</strong> <span style="color:var(--yellow)">†</span></td><td>${gapEstimated?'≈':''}${cs}${fmtB(cum.rev)}</td>
+    ${cum?`<tr style="border-top:2px solid var(--border)"><td><strong>${cum.label}</strong> <span style="color:var(--yellow)">†</span></td><td>${gapEstimated?'≈':''}${(cum.rev/rUnit.div).toFixed(2)}</td>
       <td class="${cum.yoy!=null?(cum.yoy>=0?'g':'r'):''}">${cum.yoy!=null?(cum.yoy>=0?'▲':'▼')+' '+Math.abs(cum.yoy).toFixed(1)+'% (年增)':'—'}</td></tr>`:''}
     </table>
     <div class="note">† = SEC 尚未正式申報之最新年度/本財年累計季度，以 Yahoo Finance 補齊；金額前綴 ≈ 代表幣別換算估計值（毛利率/淨利率/成長率為比率，不受幣別影響、仍精確）。</div>
@@ -988,7 +999,11 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
     ${pe5?`
     <div class="vr"><span class="vl">近5年本益比區間</span><span class="vn">${pe5.min.toFixed(1)}x ~ ${pe5.max.toFixed(1)}x</span></div>
     <div class="vr"><span class="vl">目前位置</span><span class="vn ${pePos!=null?(pePos<40?'g':pePos>75?'r':'y'):''}">${pe!=null?pe.toFixed(1)+'x':'—'}${pePos!=null?`（區間 ${pePos.toFixed(0)}% 位置）`:''}</span></div>
-    <div class="note">近5年本益比區間，以 Yahoo 現值本益比為基準、配合5年月線股價與年度EPS成長計算（已處理 ADR）。位置越低代表相對越便宜。</div>`:`<div class="note">此股 5 年本益比區間資料不足。</div>`}
+    ${pePos!=null?`<div class="pe-gauge">
+      <div class="pe-track"><div class="pe-fill" style="width:${Math.max(2,Math.min(100,pePos)).toFixed(0)}%"></div><div class="pe-marker" style="left:${Math.max(0,Math.min(100,pePos)).toFixed(0)}%"><div class="pe-bubble">${pe.toFixed(1)}x</div></div></div>
+      <div class="pe-scale"><span>${pe5.min.toFixed(1)}x<br><span class="pe-tag" style="color:var(--green)">便宜</span></span><span>${pe5.max.toFixed(1)}x<br><span class="pe-tag" style="color:var(--red)">昂貴</span></span></div>
+    </div>`:''}
+    <div class="note">近5年本益比區間，以 Yahoo 現值本益比為基準、配合5年月線股價與年度EPS成長計算（已處理 ADR）。位置越低（越靠左綠色）代表相對越便宜。</div>`:`<div class="note">此股 5 年本益比區間資料不足。</div>`}
     <div style="margin-top:14px" class="ct">⚔️ 本益比：與競爭對手相比</div>
     <div id="peCompetitors"><div class="note">等待 AI 提供競爭對手代碼後查詢實際本益比...</div></div>
     <div style="margin-top:12px" id="ai_valuation">${aiLoading()}</div>
@@ -2941,13 +2956,13 @@ async function fillNews(symbol, gen){
   const el=document.getElementById('newsList'); if(!el) return false;
   try{
     // 改用 Yahoo finance/search：回傳新聞含縮圖(thumbnail.resolutions)，可在每則新聞右側顯示畫面
-    const ns=await fetchJson(`https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(symbol)}&newsCount=8&quotesCount=0&lang=en-US&region=US`);
+    const ns=await fetchJson(`https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(symbol)}&newsCount=15&quotesCount=0&lang=en-US&region=US`);
     if(gen!=null && gen!==SEARCH_GEN) return false;
     const items=(ns?.news||[]).map(n=>{
       const res=(n.thumbnail&&n.thumbnail.resolutions)||[];
       let img=''; if(res.length){ const pick=res.find(r=>r.tag==='140x140')||res[res.length-1]; img=(pick&&pick.url)||''; }
       return {title:(n.title||'').trim(), link:(n.link||'').trim(), pub:n.providerPublishTime, img};
-    }).filter(x=>x.title && x.link).slice(0,6);
+    }).filter(x=>x.title && x.link).slice(0,10);
     window.__newsData=items;
     if(!items.length){ el.innerHTML='<div class="note">目前沒有相關新聞</div>'; return true; }
     el.innerHTML=items.map(it=>newsItemHtml(it.title,it.link,it.pub,it.img)).join('');
@@ -3195,6 +3210,14 @@ function norm(v){
 function cc(v,good,mid){ if(v==null) return ''; return v>=good?'g':v>=mid?'y':'r'; }
 function fmtB(v){ if(!v&&v!==0) return '0'; const a=Math.abs(v); if(a>=1e12) return (v/1e12).toFixed(2)+'T'; if(a>=1e9) return (v/1e9).toFixed(2)+'B'; if(a>=1e6) return (v/1e6).toFixed(1)+'M'; return v.toString(); }
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+// 依欄位最大金額選一個統一單位（兆/十億/百萬），讓整欄數字一致、乾淨好懂
+function pickRevUnit(vals){
+  const m=Math.max(0,...vals.filter(v=>v!=null).map(v=>Math.abs(v)));
+  if(m>=1e12) return {div:1e12,label:'兆'};
+  if(m>=1e9) return {div:1e9,label:'十億'};
+  if(m>=1e6) return {div:1e6,label:'百萬'};
+  return {div:1,label:''};
+}
 
 // 開啟頁面時自動載入「台積電」範例，讓使用者每次一打開就直接看到內容長怎樣
 // 判斷條件改用「歡迎畫面仍顯示 + 結果區為空」，不依賴輸入框內容——避免瀏覽器重整時還原了輸入框的殘留值(導致 !inp.value 為 false)而漏跑範例
