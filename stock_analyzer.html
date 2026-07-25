@@ -964,9 +964,9 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   <div class="card">
     <div class="ct">📈 年營收明細與成長率（財政年度）</div>
     <table class="dt"><tr><th>年份</th><th>年營收 <span style="color:var(--text2);font-weight:400">（${cs}${rUnit.label}）</span></th><th>較前年成長率</th></tr>
-    ${rows.map(r=>{ const isGap=secMaxYr!=null&&r.yr>secMaxYr; const amtPrefix=(isGap&&gapEstimated)?'≈':''; return `<tr><td><strong>${r.yr}</strong>${isGap?' <span title="SEC尚未正式申報，來自Yahoo補充" style="color:var(--yellow)">†</span>':''}</td><td>${r.rev!=null?amtPrefix+(r.rev/rUnit.div).toFixed(2):'—'}</td>
+    ${rows.map(r=>{ const isGap=secMaxYr!=null&&r.yr>secMaxYr; const amtPrefix=(isGap&&gapEstimated)?'≈':''; return `<tr><td><strong>${r.yr}</strong>${isGap?' <span title="SEC尚未正式申報，來自Yahoo補充" style="color:var(--yellow)">†</span>':''}</td><td>${r.rev!=null?amtPrefix+fmtRev(r.rev,rUnit):'—'}</td>
       <td class="${r.gr!=null?(r.gr>=0?'g':'r'):''}">${r.gr!=null?(r.gr>=0?'▲':'▼')+' '+Math.abs(r.gr).toFixed(1)+'%':'—'}</td></tr>`; }).join('')}
-    ${cum?`<tr style="border-top:2px solid var(--border)"><td><strong>${cum.label}</strong> <span style="color:var(--yellow)">†</span></td><td>${gapEstimated?'≈':''}${(cum.rev/rUnit.div).toFixed(2)}</td>
+    ${cum?`<tr style="border-top:2px solid var(--border)"><td><strong>${cum.label}</strong> <span style="color:var(--yellow)">†</span></td><td>${gapEstimated?'≈':''}${fmtRev(cum.rev,rUnit)}</td>
       <td class="${cum.yoy!=null?(cum.yoy>=0?'g':'r'):''}">${cum.yoy!=null?(cum.yoy>=0?'▲':'▼')+' '+Math.abs(cum.yoy).toFixed(1)+'% (年增)':'—'}</td></tr>`:''}
     </table>
     <div class="note">† = SEC 尚未正式申報之最新年度/本財年累計季度，以 Yahoo Finance 補齊；金額前綴 ≈ 代表幣別換算估計值（毛利率/淨利率/成長率為比率，不受幣別影響、仍精確）。</div>
@@ -974,7 +974,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   <div class="card">
     <div class="ct">🏦 投資大行目標價</div>
     <div id="analystTargets"><div class="note">載入中...</div></div>
-    <div class="note" style="margin-top:8px">資料來源：StockAnalysis.com。優先顯示摩根大通/高盛/摩根士丹利/美國銀行/花旗銀行這5家指定銀行的最新評等；若其中幾家最近沒有動態，改用其他分析師的最新目標價。漲跌幅依目前股價自動計算，僅供參考，不構成投資建議。</div>
+    <div class="note" style="margin-top:8px">資料來源：StockAnalysis.com。<b>摩根大通／高盛／摩根士丹利／美國銀行／花旗銀行</b>這5家指定銀行若有資料一律優先列在最前（不論是不是最新的），其餘用其他分析師的最新動態補滿到共 10 家。漲跌幅依目前股價自動計算，僅供參考，不構成投資建議。</div>
   </div>
 </div>
 
@@ -1475,13 +1475,13 @@ async function fillAnalystTargets(symbol, gen, curPrice){
       const bank=ANALYST_BANKS.find(b=>b.re.test(firm));
       parsed.push({ firm, label:bank?bank.label:firm, key:bank?bank.key:null, target:parseFloat(pm[1].replace(/,/g,'')), date:dm[1] });
     }
-    // 第一輪：依指定順序，找5大銀行各自最新一筆
+    // 第一輪：依指定順序，找5大銀行各自最新一筆，優先列在最前面（不論是不是最新的）
     const found={};
     for(const p of parsed){ if(p.key && !found[p.key]) found[p.key]=p; }
     const list=[]; const used=new Set();
     for(const b of ANALYST_BANKS){ if(found[b.key]){ list.push(found[b.key]); used.add(found[b.key]); } }
-    // 第二輪：5大銀行沒湊滿5筆時，用其他分析師的最新動態補滿到5筆(維持原本新到舊順序)
-    for(const p of parsed){ if(list.length>=5) break; if(used.has(p)) continue; list.push(p); used.add(p); }
+    // 第二輪：用其他分析師的最新動態補滿到 10 筆(維持原本新到舊順序)
+    for(const p of parsed){ if(list.length>=10) break; if(used.has(p)) continue; list.push(p); used.add(p); }
     let out='';
     list.forEach((f,i)=>{
       const upside=(curPrice!=null && curPrice>0)?((f.target-curPrice)/curPrice*100):null;
@@ -3210,14 +3210,16 @@ function norm(v){
 function cc(v,good,mid){ if(v==null) return ''; return v>=good?'g':v>=mid?'y':'r'; }
 function fmtB(v){ if(!v&&v!==0) return '0'; const a=Math.abs(v); if(a>=1e12) return (v/1e12).toFixed(2)+'T'; if(a>=1e9) return (v/1e9).toFixed(2)+'B'; if(a>=1e6) return (v/1e6).toFixed(1)+'M'; return v.toString(); }
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-// 依欄位最大金額選一個統一單位（兆/十億/百萬），讓整欄數字一致、乾淨好懂
+// 依欄位最大金額選一個統一單位，讓整欄用「整數」呈現(不要小數)、且數字大小合理好懂
+// 台灣人習慣：億(1e8)、兆(1e12)。只有≥10兆才用「兆」，否則一律用「億」，數字太小的用「百萬」
 function pickRevUnit(vals){
   const m=Math.max(0,...vals.filter(v=>v!=null).map(v=>Math.abs(v)));
-  if(m>=1e12) return {div:1e12,label:'兆'};
-  if(m>=1e9) return {div:1e9,label:'十億'};
-  if(m>=1e6) return {div:1e6,label:'百萬'};
-  return {div:1,label:''};
+  if(m>=1e13) return {div:1e12,label:'兆'};
+  if(m>=1e10) return {div:1e8,label:'億'};
+  if(m>=1e8)  return {div:1e6,label:'百萬'};
+  return {div:1,label:'元'};
 }
+function fmtRev(v,rUnit){ return Math.round(v/rUnit.div).toLocaleString('en-US'); }
 
 // 開啟頁面時自動載入「台積電」範例，讓使用者每次一打開就直接看到內容長怎樣
 // 判斷條件改用「歡迎畫面仍顯示 + 結果區為空」，不依賴輸入框內容——避免瀏覽器重整時還原了輸入框的殘留值(導致 !inp.value 為 false)而漏跑範例
