@@ -3082,7 +3082,9 @@ async function loadTechnical(symbol, gen){
     const N=Math.min(pts.length,252); const s=pts.length-N;
     const sl=a=>a.slice(s); const lab=pts.slice(s).map(p=>{ const d=new Date(p.t); return (d.getMonth()+1)+'/'+d.getDate(); });
     const el=document.getElementById('techChart'); if(!el) return;
-    if(__techChart){ try{__techChart.destroy();}catch(e){} __techChart=null; }
+    // 一律用 Chart.getChart 找出 canvas 上任何既有圖表並銷毀，避免「Canvas already in use」導致新圖畫不出來
+    try{ const prev=(window.Chart&&Chart.getChart)?Chart.getChart(el):null; if(prev) prev.destroy(); }catch(e){}
+    __techChart=null;
     const mk=(label,data,color,extra)=>Object.assign({label,data:sl(data),borderColor:color,backgroundColor:'transparent',borderWidth:1.4,pointRadius:0,tension:.2,spanGaps:true},extra||{});
     const ds=[
       mk('股價',closes,'#c9d1d9',{borderWidth:1.8}),
