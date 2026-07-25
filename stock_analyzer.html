@@ -610,7 +610,7 @@ async function loadWatchlistInsights(list){
     const rEl=document.getElementById('wlr_'+it.symbol); if(!rEl) continue;
     // 先讀快取
     try{
-      const c=JSON.parse(localStorage.getItem('wlinsight_'+it.symbol)||'null');
+      const c=JSON.parse(localStorage.getItem('wlinsight2_'+it.symbol)||'null');
       if(c && (Date.now()-c.t)<TTL && c.html){ rEl.innerHTML=c.html; continue; }
     }catch(e){}
     if(!canAI){ rEl.innerHTML='<span class="muted">💡 AI 漲跌解讀需在 ⚙️ 設定免費 AI 金鑰後顯示</span>'; continue; }
@@ -637,9 +637,9 @@ ${titles.map((t,i)=>(i+1)+'. '+t).join('\n')}`;
       try{ const out=await callAIWithPrompt(prompt, gmKey, useServer); reason=(out&&out.reason||'').trim(); }
       catch(e){ rEl.innerHTML='<span class="muted">💡 AI 漲跌解讀暫時無法取得（免費模型壅塞，稍後自動重試）</span>'; continue; }
       if(!reason){ rEl.innerHTML='<span class="muted">💡 暫無解讀</span>'; continue; }
-      const html=`💡 <b>AI漲跌解讀</b>：${esc(reason)}<span class="muted">（僅供參考，非投資建議）</span>`;
+      const html=`💡 <b>AI漲跌解讀</b>：${esc(reason)}`;
       rEl.innerHTML=html;
-      try{ localStorage.setItem('wlinsight_'+it.symbol, JSON.stringify({t:Date.now(), html})); }catch(e){}
+      try{ localStorage.setItem('wlinsight2_'+it.symbol, JSON.stringify({t:Date.now(), html})); }catch(e){}
       await new Promise(r=>setTimeout(r,800));   // 序列化：降低免費模型速率限制風險
     }catch(e){ rEl.innerHTML='<span class="muted">💡 AI 漲跌解讀暫時無法取得</span>'; }
   }
@@ -1480,10 +1480,8 @@ function irVideoBlock(sym, coName){
     return `<div class="ir-video"><iframe src="https://www.youtube-nocookie.com/embed/${esc(v)}?rel=0" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
   }
   const watchUrl = (v && /^https?:/.test(v)) ? v : irPage;
-  const ytSearch = `https://www.youtube.com/results?search_query=${encodeURIComponent((coName||sym)+' earnings call webcast')}`;
-  return `<div class="ir-video-links">🎬 <b>法說會影片</b>：`
-    + (watchUrl?`<a href="${esc(watchUrl)}" target="_blank">▶ 官方線上會議／重播（可播放、暫停、拉時間軸）↗</a>`:'')
-    + (watchUrl?' ｜ ':'') + `<a href="${esc(ytSearch)}" target="_blank" class="muted">YouTube 搜尋法說影片 ↗</a></div>`;
+  if(!watchUrl) return '';
+  return `<div class="ir-video-links">🎬 <b>法說會影片</b>：<a href="${esc(watchUrl)}" target="_blank">▶ 官方線上會議／重播（可播放、暫停、拉時間軸）↗</a></div>`;
 }
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
