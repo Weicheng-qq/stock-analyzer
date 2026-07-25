@@ -104,16 +104,30 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .dt td { padding:7px 10px; border-bottom:1px solid rgba(48,54,61,.4); }
 .dt tr:last-child td { border-bottom:none; }
 .g { color:var(--green); } .r { color:var(--red); } .y { color:var(--yellow); }
-.wl-row { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid rgba(48,54,61,.4); font-size:13px; }
-.wl-row:last-child { border-bottom:none; }
+.wl-item { border-bottom:1px solid rgba(48,54,61,.4); }
+.wl-item:last-child { border-bottom:none; }
+.wl-row { display:flex; align-items:center; gap:10px; padding:10px 0 4px; font-size:13px; }
 .wl-move { display:flex; flex-direction:column; gap:1px; flex:none; }
 .wl-move button { background:none; border:none; color:var(--text2); cursor:pointer; font-size:10px; padding:1px 4px; line-height:1; }
 .wl-move button:hover:not(:disabled) { color:var(--blue); }
 .wl-move button:disabled { opacity:.25; cursor:default; }
+.wl-logo { flex:none; width:26px; height:26px; border-radius:6px; object-fit:contain; background:#fff; padding:2px; box-sizing:border-box; }
 .wl-name { flex:1.8; min-width:0; font-weight:600; overflow-wrap:anywhere; word-break:break-word; line-height:1.25; }
 .wl-name .sym { display:block; color:var(--text2); font-weight:400; font-size:11px; }
 .wl-price { flex:0.7; text-align:right; font-weight:600; }
-.wl-chg { flex:0.8; text-align:right; font-weight:600; }
+.wl-chg { flex:0.8; text-align:right; }
+.wl-chg .pill { display:inline-block; padding:3px 7px; border-radius:6px; font-weight:700; font-size:12px; color:#fff; }
+.wl-chg .pill.up { background:var(--red); }   /* 台股慣例：漲=紅底 */
+.wl-chg .pill.down { background:var(--green); } /* 跌=綠底 */
+.wl-ai-read { padding:0 0 10px 34px; font-size:12px; line-height:1.5; color:var(--text2); }
+.wl-ai-read b { color:var(--blue); font-weight:600; }
+.wl-ai-read .muted { opacity:.7; }
+.ir-video { position:relative; width:100%; padding-top:56.25%; margin-bottom:12px; border-radius:10px; overflow:hidden; background:#000; }
+.ir-video iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
+.ir-video-links { font-size:12px; margin-bottom:12px; padding:8px 10px; background:var(--bg3); border:1px solid var(--border); border-radius:8px; line-height:1.6; }
+.ir-video-links a { color:var(--blue); text-decoration:none; }
+.ir-video-links a:hover { text-decoration:underline; }
+.ir-video-links a.muted { color:var(--text2); }
 .wl-ai-btn { flex:none; background:var(--blue); color:#0d1117; border:none; border-radius:6px; padding:6px 10px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; }
 .wl-del { flex:none; background:none; border:none; color:var(--text2); cursor:pointer; font-size:16px; padding:0 2px; }
 .wl-del:hover { color:var(--red); }
@@ -133,11 +147,14 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .vr { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(48,54,61,.4); font-size:13px; }
 .vr:last-child { border-bottom:none; }
 .vl { color:var(--text2); } .vn { font-weight:600; }
-.news-item { padding:9px 0; border-bottom:1px solid rgba(48,54,61,.4); }
+.news-item { display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-bottom:1px solid rgba(48,54,61,.4); }
 .news-item:last-child { border-bottom:none; }
+.news-item .ni-text { flex:1; min-width:0; }
 .news-item a { color:var(--text); font-size:14px; text-decoration:none; line-height:1.4; }
 .news-item a:hover { color:var(--blue); text-decoration:underline; }
 .news-item .note { margin-top:3px; }
+.news-item .ni-thumb { flex:none; width:88px; height:62px; border-radius:8px; object-fit:cover; background:var(--bg3); }
+@media(max-width:560px){ .news-item .ni-thumb { width:72px; height:52px; } }
 .ai { font-size:13.5px; line-height:1.85; color:var(--text); }
 .ai strong { color:var(--blue); }
 .ai-loading { display:flex; align-items:center; gap:8px; color:var(--text2); font-size:13px; }
@@ -534,18 +551,24 @@ function renderWatchlist(){
   if(__namefix) saveWatchlist(list);
   if(!list.length){ el.innerHTML='<div class="note">尚未加入任何自選股，在上方輸入後按「加入」</div>'; return; }
   el.innerHTML = list.map((it,i)=>`
+    <div class="wl-item">
     <div class="wl-row">
       <div class="wl-move">
         <button onclick="moveWatchlistItem('${esc(it.symbol)}',-1)" ${i===0?'disabled':''} title="上移">▲</button>
         <button onclick="moveWatchlistItem('${esc(it.symbol)}',1)" ${i===list.length-1?'disabled':''} title="下移">▼</button>
       </div>
+      <img class="wl-logo" src="https://financialmodelingprep.com/image-stock/${esc(it.symbol)}.png" alt="" loading="lazy"
+           onerror="if(this.dataset.fb){this.style.display='none'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(it.symbol)}')}">
       <div class="wl-name" title="${esc(it.name)}">${esc(it.name)}<span class="sym">${esc(it.symbol)}</span></div>
       <div class="wl-price" id="wlp_${esc(it.symbol)}">…</div>
       <div class="wl-chg" id="wlc_${esc(it.symbol)}">…</div>
       <button class="wl-ai-btn" onclick="watchlistAnalyze('${esc(it.symbol)}')">📊<span class="wl-ai-label"> AI分析</span></button>
       <button class="wl-del" onclick="removeFromWatchlist('${esc(it.symbol)}')" title="刪除">✕</button>
+    </div>
+    <div class="wl-ai-read" id="wlr_${esc(it.symbol)}"><span class="muted">💡 AI 漲跌解讀載入中…</span></div>
     </div>`).join('');
   loadWatchlistPrices(list);
+  loadWatchlistInsights(list);
   // 舊資料若名稱還是英文(尚未翻譯過)，背景翻譯成中文後就地更新，不用使用者手動處理
   list.forEach(it=>{
     if(/[一-鿿]/.test(it.name)) return;
@@ -567,12 +590,59 @@ async function loadWatchlistPrices(list){
       if(cEl){
         if(price!=null && prev){
           const pct=(price-prev)/prev*100;
-          cEl.textContent = (pct>=0?'▲':'▼')+Math.abs(pct).toFixed(2)+'%';
-          cEl.className = 'wl-chg '+(pct>=0?'g':'r');
+          // 台股慣例：漲=紅底、跌=綠底、白字
+          cEl.innerHTML = `<span class="pill ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span>`;
         } else cEl.textContent='—';
       }
     }catch(e){ if(pEl) pEl.textContent='—'; if(cEl) cEl.textContent='—'; }
   }));
+}
+// 💡 自選股「AI 漲跌解讀」：抓最近5日漲跌幅 + 官方新聞標題，請 AI 用一句話解讀近期漲跌原因。
+//   - 只根據真實新聞標題解讀、附「僅供參考」，不臆測未提供的數字（遵守以事實為依據原則）
+//   - 每檔快取 6 小時於 localStorage，序列化呼叫避免免費模型速率限制
+async function loadWatchlistInsights(list){
+  const TTL=6*3600*1000;
+  const gmKey=getGmKey();
+  const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1);
+  const useServer=!gmKey && !isLocal;
+  const canAI = !!gmKey || useServer;   // 本機且無金鑰 → 無法產生解讀
+  for(const it of list){
+    const rEl=document.getElementById('wlr_'+it.symbol); if(!rEl) continue;
+    // 先讀快取
+    try{
+      const c=JSON.parse(localStorage.getItem('wlinsight_'+it.symbol)||'null');
+      if(c && (Date.now()-c.t)<TTL && c.html){ rEl.innerHTML=c.html; continue; }
+    }catch(e){}
+    if(!canAI){ rEl.innerHTML='<span class="muted">💡 AI 漲跌解讀需在 ⚙️ 設定免費 AI 金鑰後顯示</span>'; continue; }
+    try{
+      // 近5日漲跌幅
+      let pct5=null;
+      try{
+        const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${it.symbol}?range=5d&interval=1d`);
+        const q=ch?.chart?.result?.[0]; const cl=(q?.indicators?.quote?.[0]?.close||[]).filter(x=>x!=null);
+        if(cl.length>=2) pct5=(cl[cl.length-1]-cl[0])/cl[0]*100;
+      }catch(e){}
+      // 官方新聞標題
+      let titles=[];
+      try{
+        const ns=await fetchJson(`https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(it.symbol)}&newsCount=6&quotesCount=0&lang=en-US&region=US`);
+        titles=(ns?.news||[]).map(x=>x.title).filter(Boolean).slice(0,6);
+      }catch(e){}
+      if(!titles.length){ rEl.innerHTML='<span class="muted">💡 近期無足夠新聞可解讀</span>'; continue; }
+      const dir = pct5==null?'近期':(pct5>=0?`近5日上漲 ${pct5.toFixed(1)}%`:`近5日下跌 ${Math.abs(pct5).toFixed(1)}%`);
+      const prompt=`你是專業美股分析師。以下是 ${it.name}(${it.symbol}) ${dir} 的相關近期新聞標題。請「只」根據這些標題，用繁體中文一句話（40字內）解讀最近股價變動的可能原因；若標題與股價無明顯關聯，就說明「市場整體氛圍或個別消息帶動、資訊有限」。不要臆測未提供的數字或編造事件。只回傳 JSON：{"reason":"..."}。
+新聞標題：
+${titles.map((t,i)=>(i+1)+'. '+t).join('\n')}`;
+      let reason='';
+      try{ const out=await callAIWithPrompt(prompt, gmKey, useServer); reason=(out&&out.reason||'').trim(); }
+      catch(e){ rEl.innerHTML='<span class="muted">💡 AI 漲跌解讀暫時無法取得（免費模型壅塞，稍後自動重試）</span>'; continue; }
+      if(!reason){ rEl.innerHTML='<span class="muted">💡 暫無解讀</span>'; continue; }
+      const html=`💡 <b>AI漲跌解讀</b>：${esc(reason)}<span class="muted">（僅供參考，非投資建議）</span>`;
+      rEl.innerHTML=html;
+      try{ localStorage.setItem('wlinsight_'+it.symbol, JSON.stringify({t:Date.now(), html})); }catch(e){}
+      await new Promise(r=>setTimeout(r,800));   // 序列化：降低免費模型速率限制風險
+    }catch(e){ rEl.innerHTML='<span class="muted">💡 AI 漲跌解讀暫時無法取得</span>'; }
+  }
 }
 async function concept(cik,tag,tax){
   try{ const d=await fetchJson(`https://data.sec.gov/api/xbrl/companyconcept/CIK${cik}/${tax||'us-gaap'}/${tag}.json`); return d?.units; }
@@ -1166,20 +1236,21 @@ function renderAI(ai){
   const capexZh=(ai.capex_zh&&String(ai.capex_zh).trim())?ai.capex_zh:(window.__capexData?window.__capexData.text:null);
   const capexBlock = window.__capexData ? `<div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px"><div style="color:var(--orange);font-size:12px;margin-bottom:4px">🏗️ 資本支出與成長動能（官方年報 ${esc(window.__capexData.date)}）</div>${norm(capexZh)}</div>` : '';
   // 若有「官方法說會逐字稿人工判讀摘要」(目前TSM)，優先且完整顯示它(內容比SEC新聞稿的季度財測更完整)，其餘公司走原本SEC擷取邏輯
+  const videoBlock = irVideoBlock(window.__symbolForLinks, coName);   // 🎬 法說會影片，置於法說主旨最上方
   const manualCall=IR_CALL_SUMMARY[window.__symbolForLinks];
   if(manualCall){
-    setAI('ai_guidance',`<div class="ai">${manualCall.html}<div class="note" style="margin-top:8px">來源：${esc(manualCall.quarter)} 公司官方投資人簡報／法說會逐字稿</div>`+linksBlock+`</div>`);
+    setAI('ai_guidance',`<div class="ai">${videoBlock}${manualCall.html}<div class="note" style="margin-top:8px">來源：${esc(manualCall.quarter)} 公司官方投資人簡報／法說會逐字稿</div>`+linksBlock+`</div>`);
   } else if(window.__guidanceReal && window.__guidanceData){
     const gd=window.__guidanceData;
     const zh=(ai.guidance_zh&&String(ai.guidance_zh).trim())?ai.guidance_zh:null;
-    setAI('ai_guidance',`<div class="ai"><div style="color:var(--green);font-size:12px;margin-bottom:6px">✅ 來自公司向 SEC 申報的官方財報新聞稿（${esc(gd.date)}）— 真實指引</div>`
+    setAI('ai_guidance',`<div class="ai">${videoBlock}<div style="color:var(--green);font-size:12px;margin-bottom:6px">✅ 來自公司向 SEC 申報的官方財報新聞稿（${esc(gd.date)}）— 真實指引</div>`
       +(zh?`${norm(zh)}`:`<span style="color:var(--text2)">（翻譯失敗，顯示原文）</span><br>${esc(gd.text)}`)
       +capexBlock
       +linksBlock+`</div>`);
   } else if(window.__capexData){
-    setAI('ai_guidance',`<div class="ai">${capexBlock}`+linksBlock+`</div>`);
+    setAI('ai_guidance',`<div class="ai">${videoBlock}${capexBlock}`+linksBlock+`</div>`);
   } else {
-    setAI('ai_guidance',`<div class="ai" style="color:var(--text2)">此公司未能從官方申報文件擷取到結構化的未來展望指引。<br>依「以事實為依據」原則，此處不提供 AI 臆測的展望。${linksBlock}</div>`);
+    setAI('ai_guidance',`<div class="ai">${videoBlock}<span style="color:var(--text2)">此公司未能從官方申報文件擷取到結構化的未來展望指引。<br>依「以事實為依據」原則，此處不提供 AI 臆測的展望。</span>${linksBlock}</div>`);
   }
   setAI('ai_risks',`<div class="ai">${norm(ai.catalysts)}<br><br>${norm(ai.risks)}</div>`);
   setAI('ai_moat',`<div class="ai">${norm(ai.moat)}</div>`);
@@ -1394,6 +1465,26 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
 const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/', 'GS': 'https://www.goldmansachs.com/investor-relations/', 'BAC': 'https://investor.bankofamerica.com/', 'MS': 'https://www.morganstanley.com/about-us-ir', 'ORCL': 'https://investor.oracle.com/', 'PLTR': 'https://investors.palantir.com/', 'IBM': 'https://www.ibm.com/investor', 'V': 'https://investor.visa.com/', 'MA': 'https://investor.mastercard.com/', 'WMT': 'https://stock.walmart.com/', 'PEP': 'https://www.pepsico.com/investors', 'MCD': 'https://www.investor.mcdonalds.com/', 'XOM': 'https://investor.exxonmobil.com/', 'CRWD': 'https://ir.crowdstrike.com/', 'PANW': 'https://investors.paloaltonetworks.com/', 'ANET': 'https://investors.arista.com/', 'MRVL': 'https://investor.marvell.com/', 'SMCI': 'https://ir.supermicro.com/', 'ARM': 'https://investors.arm.com/', 'ABNB': 'https://investors.airbnb.com/', 'VRT': 'https://investors.vertiv.com/', 'CVX': 'https://www.chevron.com/investors', 'UNH': 'https://www.unitedhealthgroup.com/investors.html', 'ABBV': 'https://investors.abbvie.com/', 'AMGN': 'https://investors.amgen.com/', 'LRCX': 'https://investor.lamresearch.com/', 'CAT': 'https://investors.caterpillar.com/', 'GE': 'https://www.geaerospace.com/investor-relations', 'T': 'https://investors.att.com/', 'NKE': 'https://investors.nike.com/', 'SPOT': 'https://investors.spotify.com/', 'BA': 'https://investors.boeing.com/', 'SHOP': 'https://investors.shopify.com/', 'PYPL': 'https://investor.pypl.com/' };
+
+// 🎬 法說會影片（keyed by 代碼）：值可為 YouTube 影片 ID(11碼，內嵌可播放/暫停/拉時間軸) 或完整官方重播網址(外開)。
+// 人工逐間驗證後填入官方來源；未填者自動退回「官方法說會線上重播頁」按鈕(IR_QUARTERLY_PAGE，該頁本身即有播放器)。
+const IR_CALL_VIDEO = {
+  // 範例格式：'NVDA': 'abcDEFghij'(YouTube ID) 或 'TSM': 'https://…官方webcast重播'
+};
+// 產生「法說會影片」區塊(置於法說主旨最上方)：有內嵌影片→可播放/暫停/拖曳時間軸；否則給官方重播按鈕
+function irVideoBlock(sym, coName){
+  const v = IR_CALL_VIDEO[sym];
+  const irPage = IR_QUARTERLY_PAGE[sym];
+  if(v && /^[\w-]{11}$/.test(v)){
+    // 內嵌 YouTube 播放器：原生支援播放/暫停/拉時間軸快轉
+    return `<div class="ir-video"><iframe src="https://www.youtube-nocookie.com/embed/${esc(v)}?rel=0" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+  }
+  const watchUrl = (v && /^https?:/.test(v)) ? v : irPage;
+  const ytSearch = `https://www.youtube.com/results?search_query=${encodeURIComponent((coName||sym)+' earnings call webcast')}`;
+  return `<div class="ir-video-links">🎬 <b>法說會影片</b>：`
+    + (watchUrl?`<a href="${esc(watchUrl)}" target="_blank">▶ 官方線上會議／重播（可播放、暫停、拉時間軸）↗</a>`:'')
+    + (watchUrl?' ｜ ':'') + `<a href="${esc(ytSearch)}" target="_blank" class="muted">YouTube 搜尋法說影片 ↗</a></div>`;
+}
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
 const IR_CALL_SUMMARY = {
@@ -2795,30 +2886,28 @@ CPU 架構與矽智財(IP)授權龍頭：以 <b>Armv9 架構</b>與 <b>運算子
 • 非 GAAP EPS $1.34（+1%）；營運現金流 11 億。</div>`
   }
 };
-function newsItemHtml(title, link, pub){
+function newsItemHtml(title, link, pub, img){
   let dateStr='';
-  try{ const d=new Date(pub); if(!isNaN(d)) dateStr=d.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}); }catch(e){}
+  try{ const d=(typeof pub==='number')?new Date(pub*1000):new Date(pub); if(!isNaN(d)) dateStr=d.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}); }catch(e){}
+  // 右側新聞縮圖，吸引點閱；載入失敗自動隱藏
+  const thumb = img ? `<img class="ni-thumb" src="${esc(img)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
   // 點連結用 Google 翻譯包一層，開啟後整篇原文網頁自動翻成繁體中文(免費、免金鑰)
-  return `<div class="news-item"><a href="${esc(zhLink(link))}" target="_blank" rel="noopener">${esc(title)}</a><div class="note">${esc(dateStr)}</div></div>`;
+  return `<div class="news-item"><div class="ni-text"><a href="${esc(zhLink(link))}" target="_blank" rel="noopener">${esc(title)}</a><div class="note">${esc(dateStr)}</div></div>${thumb}</div>`;
 }
 async function fillNews(symbol, gen){
   const el=document.getElementById('newsList'); if(!el) return false;
   try{
-    const url=`https://feeds.finance.yahoo.com/rss/2.0/headline?s=${symbol}&region=US&lang=en-US`;
-    const r=await fetch(PROXY+encodeURIComponent(url));
-    if(!r.ok) throw new Error('proxy '+r.status);
-    const xml=await r.text();
+    // 改用 Yahoo finance/search：回傳新聞含縮圖(thumbnail.resolutions)，可在每則新聞右側顯示畫面
+    const ns=await fetchJson(`https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(symbol)}&newsCount=8&quotesCount=0&lang=en-US&region=US`);
     if(gen!=null && gen!==SEARCH_GEN) return false;
-    const items=[...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(m=>{
-      const b=m[1];
-      const title=decodeHtmlEntities((b.match(/<title>([\s\S]*?)<\/title>/)||[])[1]||'').trim();
-      const link=((b.match(/<link>([\s\S]*?)<\/link>/)||[])[1]||'').trim();
-      const pub=((b.match(/<pubDate>([\s\S]*?)<\/pubDate>/)||[])[1]||'').trim();
-      return {title,link,pub};
+    const items=(ns?.news||[]).map(n=>{
+      const res=(n.thumbnail&&n.thumbnail.resolutions)||[];
+      let img=''; if(res.length){ const pick=res.find(r=>r.tag==='140x140')||res[res.length-1]; img=(pick&&pick.url)||''; }
+      return {title:(n.title||'').trim(), link:(n.link||'').trim(), pub:n.providerPublishTime, img};
     }).filter(x=>x.title && x.link).slice(0,6);
     window.__newsData=items;
     if(!items.length){ el.innerHTML='<div class="note">目前沒有相關新聞</div>'; return true; }
-    el.innerHTML=items.map(it=>newsItemHtml(it.title,it.link,it.pub)).join('');
+    el.innerHTML=items.map(it=>newsItemHtml(it.title,it.link,it.pub,it.img)).join('');
     translateNewsTitles(items, gen).catch(()=>{});
     return true;
   }catch(e){ el.innerHTML='<div class="note">新聞載入失敗</div>'; return false; }
@@ -2836,7 +2925,7 @@ async function translateNewsTitles(items, gen){
     const arr=JSON.parse(jm[0]);
     if(!Array.isArray(arr) || arr.length!==items.length) return;
     const el=document.getElementById('newsList'); if(!el) return;
-    el.innerHTML=items.map((it,i)=>newsItemHtml(String(arr[i]||it.title),it.link,it.pub)).join('');
+    el.innerHTML=items.map((it,i)=>newsItemHtml(String(arr[i]||it.title),it.link,it.pub,it.img)).join('');
   }catch(e){}   // 翻譯失敗就維持英文原文，不影響功能
 }
 
