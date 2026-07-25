@@ -1602,12 +1602,8 @@ const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-
 const IR_CALL_VIDEO = {
   // 值=YouTube 影片 ID(11碼) → 站內內嵌播放器(可播放/暫停/拉時間軸)＋自動繁體中文字幕；未列者退回官方 IR 線上重播。
   // 逐季人工更新為該公司最新一季法說會影片。優先官方頻道(如 Alphabet IR)，其次乾淨全程錄影(如 EARNMOAR)。
-  'GOOGL': 'LzExSq9DU9w', 'GOOG': 'LzExSq9DU9w',   // 官方 Alphabet Investor Relations，2026 Q2
-  'TSM': 'JOhMwPVXRHM',    // 台積電 2026 Q2 法說會「完整影片」(非凡新聞完整公開版，看得到魏哲家本人簡報，非純音訊)
-  'AAPL': 'zq6d9_eS-YI',   // Apple 2026 Q1 法說全程
-  'MSFT': 'pcTfnnDcbfk',   // Microsoft FY2026 Q3 法說全程
-  'META': 'tODp-03UIGo',   // Meta 2026 Q1 法說全程
-  'NVDA': 'N_jEzAX7Wb8'    // NVIDIA 2026 法說
+  // 只放「有實際影像(看得到人簡報)」的法說會影片；美國公司法說為純電話語音、無高層影像→不放靜態影片，退回官方IR重播。
+  'TSM': 'JOhMwPVXRHM'     // 台積電 2026 Q2 法說會完整影片(非凡新聞完整公開版，看得到魏哲家本人簡報)
 };
 // 產生「法說會影片」區塊(置於法說主旨最上方)：有內嵌影片→可播放/暫停/拖曳時間軸；否則給官方重播按鈕
 function irVideoBlock(sym, coName){
