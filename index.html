@@ -3240,10 +3240,12 @@ async function loadTechnical(symbol, gen){
     const optWrap=document.getElementById('techOpts');
     const state={}; optWrap.querySelectorAll('input[data-ma]').forEach(cb=>state[cb.dataset.ma]=cb.checked);
     ds.forEach(d=>{ if(d._key) d.hidden=!state[d._key]; });
+    // 固定顯示 7 個均勻分布、且「一定包含最後一天」的日期刻度，避免自動刻度把最右邊停在過去某天造成誤會
+    const NT=7, tickIdx=new Set(); for(let k=0;k<NT;k++) tickIdx.add(Math.round(k*(lab.length-1)/(NT-1)));
     __techChart=new Chart(el.getContext('2d'),{ type:'line', data:{labels:lab,datasets:ds},
       options:{ responsive:true,maintainAspectRatio:false, interaction:{mode:'index',intersect:false},
         plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.parsed.y!=null?'$'+c.parsed.y.toFixed(2):'—')}}},
-        scales:{ x:{ticks:{color:'#8b949e',font:{size:9},maxTicksLimit:9,autoSkip:true},grid:{color:'rgba(48,54,61,.4)'}},
+        scales:{ x:{ticks:{color:'#8b949e',font:{size:9},autoSkip:false,maxRotation:0,callback:(v,i)=>tickIdx.has(i)?lab[i]:''},grid:{display:false}},
           y:{position:'right',ticks:{color:'#8b949e',font:{size:10},callback:v=>'$'+v},grid:{color:'rgba(48,54,61,.3)'}} } }
     });
     // 綁定核取方塊：可複選疊加
