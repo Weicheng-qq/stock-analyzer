@@ -189,16 +189,17 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 #ai_guidance .ai, #ai_products .ai { line-height:1.95; }
 #ai_guidance .ai > div:not(.ir-video):not(.note), #ai_products .ai > div:not(.note) { margin-bottom:14px; padding-bottom:13px; border-bottom:1px solid rgba(48,54,61,.6); }
 #ai_guidance .ai > div:not(.ir-video):not(.note):last-child, #ai_products .ai > div:not(.note):last-child { border-bottom:none; padding-bottom:0; margin-bottom:0; }
-/* 最上方美股四大指數列 */
-.index-bar { display:flex; gap:0; overflow-x:auto; background:#0b0e13; border-bottom:1px solid var(--border); font-size:12.5px; -webkit-overflow-scrolling:touch; }
-.index-bar .ix { flex:1 0 auto; min-width:150px; display:flex; align-items:center; justify-content:center; gap:8px; padding:7px 14px; border-right:1px solid rgba(48,54,61,.5); white-space:nowrap; }
+/* 美股四大指數列（放在自選股下面，字放大、卡片樣式） */
+.index-title { font-size:15px; font-weight:800; color:var(--blue); margin:0 0 10px; }
+.index-bar { display:flex; gap:0; overflow-x:auto; background:var(--bg2); border:1px solid var(--border); border-radius:12px; font-size:15px; margin-bottom:20px; -webkit-overflow-scrolling:touch; }
+.index-bar .ix { flex:1 0 auto; min-width:172px; display:flex; align-items:center; justify-content:center; gap:10px; padding:13px 16px; border-right:1px solid rgba(48,54,61,.5); white-space:nowrap; }
 .index-bar .ix:last-child { border-right:none; }
-.index-bar .ix-name { color:var(--text2); }
-.index-bar .ix-val { font-weight:700; color:var(--text); }
-.index-bar .ix-chg { font-weight:700; }
+.index-bar .ix-name { color:var(--text2); font-size:14px; }
+.index-bar .ix-val { font-weight:700; color:var(--text); font-size:15.5px; }
+.index-bar .ix-chg { font-weight:700; font-size:14.5px; }
 .index-bar .ix-chg.up { color:var(--green); }
 .index-bar .ix-chg.down { color:var(--red); }
-@media(max-width:560px){ .index-bar .ix { min-width:132px; font-size:11.5px; padding:6px 10px; } }
+@media(max-width:560px){ .index-bar { font-size:14px; } .index-bar .ix { min-width:150px; padding:11px 12px; gap:8px; } }
 /* 估值小結：用不同顏色(黃)＋左側色條，讓使用者一眼知道這是小結 */
 .val-summary { margin-top:12px; padding:12px 14px; background:rgba(210,153,34,.1); border-left:3px solid var(--yellow); border-radius:8px; font-size:13px; color:var(--text); line-height:1.85; }
 .val-summary-tag { display:block; color:var(--yellow); font-weight:800; font-size:12px; margin-bottom:6px; letter-spacing:.5px; }
@@ -225,8 +226,6 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 </style>
 </head>
 <body>
-
-<div id="indexBar" class="index-bar"></div>
 
 <div class="header">
   <div class="logo"><svg width="30" height="30" viewBox="0 0 192 192" style="vertical-align:-8px;margin-right:2px"><rect width="192" height="192" rx="40" fill="#0d1117"/><rect x="34" y="118" width="24" height="40" rx="6" fill="#58a6ff"/><rect x="74" y="94" width="24" height="64" rx="6" fill="#58a6ff"/><rect x="114" y="70" width="24" height="88" rx="6" fill="#58a6ff"/><rect x="154" y="34" width="24" height="124" rx="6" fill="#3fb950"/></svg> 美股AI深度分析</div>
@@ -297,6 +296,9 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     </div>
     <div id="watchlistTable"><div class="note">尚未加入任何自選股，在上方輸入後按「加入」</div></div>
   </div>
+
+  <div class="index-title">📊 美股四大指數</div>
+  <div id="indexBar" class="index-bar"></div>
 
   <div id="logPanel" class="log-panel"><h3>🔄 載入進度</h3><div id="logItems"></div></div>
   <div id="results" class="results"></div>
