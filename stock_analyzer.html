@@ -185,6 +185,20 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 @media(max-width:560px){ .news-item .ni-thumb { width:72px; height:52px; } }
 .ai { font-size:13.5px; line-height:1.85; color:var(--text); }
 .ai strong { color:var(--blue); }
+/* 法說會 / 產品：每個主題段落用分隔線與間距分開，一眼看得出層次、不像一團字 */
+#ai_guidance .ai, #ai_products .ai { line-height:1.95; }
+#ai_guidance .ai > div:not(.ir-video):not(.note), #ai_products .ai > div:not(.note) { margin-bottom:14px; padding-bottom:13px; border-bottom:1px solid rgba(48,54,61,.6); }
+#ai_guidance .ai > div:not(.ir-video):not(.note):last-child, #ai_products .ai > div:not(.note):last-child { border-bottom:none; padding-bottom:0; margin-bottom:0; }
+/* 最上方美股四大指數列 */
+.index-bar { display:flex; gap:0; overflow-x:auto; background:#0b0e13; border-bottom:1px solid var(--border); font-size:12.5px; -webkit-overflow-scrolling:touch; }
+.index-bar .ix { flex:1 0 auto; min-width:150px; display:flex; align-items:center; justify-content:center; gap:8px; padding:7px 14px; border-right:1px solid rgba(48,54,61,.5); white-space:nowrap; }
+.index-bar .ix:last-child { border-right:none; }
+.index-bar .ix-name { color:var(--text2); }
+.index-bar .ix-val { font-weight:700; color:var(--text); }
+.index-bar .ix-chg { font-weight:700; }
+.index-bar .ix-chg.up { color:var(--green); }
+.index-bar .ix-chg.down { color:var(--red); }
+@media(max-width:560px){ .index-bar .ix { min-width:132px; font-size:11.5px; padding:6px 10px; } }
 .ai-loading { display:flex; align-items:center; gap:8px; color:var(--text2); font-size:13px; }
 .ai-dot { width:6px; height:6px; border-radius:50%; background:var(--blue); animation:pulse 1.2s infinite; }
 .ai-dot:nth-child(2){animation-delay:.2s} .ai-dot:nth-child(3){animation-delay:.4s}
@@ -198,6 +212,8 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 </style>
 </head>
 <body>
+
+<div id="indexBar" class="index-bar"></div>
 
 <div class="header">
   <div class="logo"><svg width="30" height="30" viewBox="0 0 192 192" style="vertical-align:-8px;margin-right:2px"><rect width="192" height="192" rx="40" fill="#0d1117"/><rect x="34" y="118" width="24" height="40" rx="6" fill="#58a6ff"/><rect x="74" y="94" width="24" height="64" rx="6" fill="#58a6ff"/><rect x="114" y="70" width="24" height="88" rx="6" fill="#58a6ff"/><rect x="154" y="34" width="24" height="124" rx="6" fill="#3fb950"/></svg> 美股AI深度分析</div>
@@ -994,7 +1010,6 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   <div class="card">
     <div class="ct">💹 估值與股價</div>
     <div class="vr"><span class="vl">本益比 P/E（Yahoo 實際 trailing）</span><span class="vn">${pe!=null?pe.toFixed(1)+'x':'—'}</span></div>
-    <div class="vr"><span class="vl">目前股價</span><span class="vn">${price!=null?'$'+(+price).toFixed(2):'—'}</span></div>
     <div style="margin-top:14px" class="ct">📊 本益比：與自己歷史相比</div>
     ${pe5?`
     <div class="vr"><span class="vl">近5年本益比區間</span><span class="vn">${pe5.min.toFixed(1)}x ~ ${pe5.max.toFixed(1)}x</span></div>
@@ -1003,7 +1018,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
       <div class="pe-track"><div class="pe-fill" style="width:${Math.max(2,Math.min(100,pePos)).toFixed(0)}%"></div><div class="pe-marker" style="left:${Math.max(0,Math.min(100,pePos)).toFixed(0)}%"><div class="pe-bubble">${pe.toFixed(1)}x</div></div></div>
       <div class="pe-scale"><span>${pe5.min.toFixed(1)}x<br><span class="pe-tag" style="color:var(--green)">便宜</span></span><span>${pe5.max.toFixed(1)}x<br><span class="pe-tag" style="color:var(--red)">昂貴</span></span></div>
     </div>`:''}
-    <div class="note">近5年本益比區間，以 Yahoo 現值本益比為基準、配合5年月線股價與年度EPS成長計算（已處理 ADR）。位置越低（越靠左綠色）代表相對越便宜。</div>`:`<div class="note">此股 5 年本益比區間資料不足。</div>`}
+`:`<div class="note">此股 5 年本益比區間資料不足。</div>`}
     <div style="margin-top:14px" class="ct">⚔️ 本益比：與競爭對手相比</div>
     <div id="peCompetitors"><div class="note">等待 AI 提供競爭對手代碼後查詢實際本益比...</div></div>
     <div style="margin-top:12px" id="ai_valuation">${aiLoading()}</div>
@@ -1536,8 +1551,7 @@ function irVideoBlock(sym, coName){
     // 內嵌 YouTube 播放器：原生支援播放/暫停/拉時間軸；強制自動字幕並翻成繁體中文(cc_lang_pref=zh-Hant)、原音不變
     const orig = (location.protocol==='http:'||location.protocol==='https:') ? '&origin='+encodeURIComponent(location.origin) : '';
     const src = `https://www.youtube-nocookie.com/embed/${esc(v)}?rel=0&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant${orig}`;
-    return `<div class="ir-video"><iframe src="${src}" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
-      + `<div class="ir-video-links" style="margin-top:-6px">🎬 <b>法說會影片</b>（原音＋繁體中文字幕）｜ 若字幕未顯示，請點播放器右下角 <b>CC</b> → ⚙️ 字幕 → 自動翻譯 → 中文(繁體)</div>`;
+    return `<div class="ir-video"><iframe src="${src}" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
   }
   const watchUrl = (v && /^https?:/.test(v)) ? v : irPage;
   if(!watchUrl) return '';
@@ -1559,7 +1573,7 @@ const IR_CALL_SUMMARY = {
 • <b>2026 全年資本預算上修至 600～640 億美元</b>（US$60～64B），持續大額投資支應客戶成長。<br>
 • 配置：70～80% 用於先進製程、約 10% 特殊製程、10～20% 先進封裝／測試／光罩。<br>
 • 第二季資本支出 157 億美元（約新台幣 4,960 億元）。</div>
-<div style="margin-bottom:10px"><b style="color:var(--blue)">🇺🇸 美國投資</b><br>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🗽 美國投資</b><br>
 • 宣布<b>在美國亞利桑那額外投資 1,000 億美元</b>（US$100B），興建更多 2 奈米及以下邏輯晶圓廠與先進封裝廠；<b>亞利桑那總投資額達 2,650 億美元</b>（US$265B）。<br>
 • 同時未來數年在台灣興建 13 座先進製程與先進封裝廠。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 技術進展</b><br>
@@ -3236,7 +3250,22 @@ function maybeRunDemo(){
 window.addEventListener('load', maybeRunDemo);
 window.addEventListener('pageshow', function(e){ if(e.persisted) maybeRunDemo(); });   // 從返回快取(bfcache)回到頁面時 load 不會再觸發，改由 pageshow 補跑
 // 開啟頁面時渲染自選股清單（每次都要跑，不受上面的 demo_done 限制）
-window.addEventListener('load', function(){ renderWatchlist(); });
+// 最上方美股四大指數列：道瓊、標普500、那斯達克、費城半導體（漲綠跌紅，與自選股一致）
+async function loadIndexBar(){
+  const el=document.getElementById('indexBar'); if(!el) return;
+  const idx=[{s:'^DJI',n:'道瓊'},{s:'^GSPC',n:'標普500'},{s:'^IXIC',n:'那斯達克'},{s:'^SOX',n:'費城半導體'}];
+  if(!el.children.length) el.innerHTML=idx.map(x=>`<div class="ix" id="ix_${x.s.replace('^','')}"><span class="ix-name">${x.n}</span><span class="ix-val">…</span></div>`).join('');
+  await Promise.all(idx.map(async x=>{
+    const cell=document.getElementById('ix_'+x.s.replace('^','')); if(!cell) return;
+    try{
+      const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(x.s)}?range=1d&interval=1d`);
+      const m=ch?.chart?.result?.[0]?.meta; const p=m?.regularMarketPrice, prev=m?.previousClose??m?.chartPreviousClose;
+      if(p!=null&&prev){ const pct=(p-prev)/prev*100; cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-val">${p.toLocaleString('en-US',{maximumFractionDigits:2})}</span><span class="ix-chg ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span>`; }
+      else cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-val">—</span>`;
+    }catch(e){ cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-val">—</span>`; }
+  }));
+}
+window.addEventListener('load', function(){ renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); });
 
 // ⚠️ 暫時停用 Service Worker 註冊：先前的 SW 在部分裝置(桌面Chrome/Edge、Android PWA)造成整頁重載迴圈。
 // 不再主動註冊；已有舊 SW 的裝置，瀏覽器會自動抓到已改成 kill-switch 的 sw.js 並自我清除(清快取+unregister)，迴圈即中止。
