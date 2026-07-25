@@ -144,6 +144,13 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-add input { flex:1; background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:9px 12px; font-size:13px; }
 
 .chart-wrap { position:relative; height:250px; }
+.tech-opts { display:flex; flex-wrap:wrap; gap:8px 16px; margin:14px 0 4px; }
+.tech-opts label { display:inline-flex; align-items:center; gap:5px; font-size:13px; color:var(--text); cursor:pointer; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:6px 10px; user-select:none; }
+.tech-opts label:hover { border-color:var(--blue); }
+.tech-opts input { accent-color:var(--blue); cursor:pointer; margin:0; }
+.tech-opts .dot { width:10px; height:3px; border-radius:2px; display:inline-block; }
+.tech-ai { margin-bottom:12px; padding:12px 14px; background:linear-gradient(135deg,rgba(88,166,255,.08),rgba(63,185,80,.06)); border:1px solid rgba(88,166,255,.25); border-radius:10px; }
+.tech-ai b, .tech-ai strong { color:var(--blue); }
 .vr { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(48,54,61,.4); font-size:13px; }
 .vr:last-child { border-bottom:none; }
 .vl { color:var(--text2); } .vn { font-weight:600; }
@@ -916,6 +923,21 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   <div class="card"><div class="ct">💰 年營收 &amp; 成長率</div><div class="chart-wrap"><canvas id="revChart"></canvas></div></div>
 </div>
 
+<div class="card" style="margin-bottom:16px">
+  <div class="ct">📉 技術分析 — 股價趨勢圖</div>
+  <div id="ai_technical" class="ai tech-ai">${aiLoading()}</div>
+  <div class="chart-wrap" style="height:360px"><canvas id="techChart"></canvas></div>
+  <div class="tech-opts" id="techOpts">
+    <label><input type="checkbox" data-ma="ma5"> <span class="dot" style="background:#f0883e"></span>5日均線</label>
+    <label><input type="checkbox" data-ma="ma10"> <span class="dot" style="background:#e3b341"></span>10日均線</label>
+    <label><input type="checkbox" data-ma="ma20" checked> <span class="dot" style="background:#58a6ff"></span>月均線 (20MA)</label>
+    <label><input type="checkbox" data-ma="ma60" checked> <span class="dot" style="background:#bc8cff"></span>季均線 (60MA)</label>
+    <label><input type="checkbox" data-ma="ma240"> <span class="dot" style="background:#3fb950"></span>年均線 (240MA)</label>
+    <label><input type="checkbox" data-ma="boll"> <span class="dot" style="background:#8b949e"></span>布林軌道</label>
+  </div>
+  <div class="note">股價來自 Yahoo Finance 日線；均線與布林軌道由實際收盤價計算。可勾選多個指標疊加。技術分析僅供參考，不構成投資建議。</div>
+</div>
+
 <div class="g2">
   <div class="card">
     <div class="ct">📈 年營收明細與成長率（財政年度）</div>
@@ -980,6 +1002,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 <div class="note" style="text-align:center;margin-top:8px">財務數據：美國 SEC EDGAR 官方10-K年報；股價：Yahoo Finance；質化分析：免費 AI 模型（Gemini / Groq / OpenRouter）。<b>僅供參考，不構成投資建議。</b></div>`;
 
   drawChart(rows);
+  loadTechnical(symbol, gen);
 
   // 給 AI 的上下文
   const finText=rows.map(r=>`${r.yr}: 營收${cs}${fmtB(r.rev)}, 成長${r.gr!=null?r.gr.toFixed(1)+'%':'NA'}, 毛利率${r.gm!=null?r.gm.toFixed(1)+'%':'NA'}, 淨利率${r.nm!=null?r.nm.toFixed(1)+'%':'NA'}, ROE${r.roe!=null?r.roe.toFixed(1)+'%':'NA'}`).join('\n')
@@ -3037,6 +3060,79 @@ function drawChart(rows){
         y:{ticks:{color:'#8b949e',font:{size:10},callback:v=>'$'+v+'B'},grid:{color:'rgba(48,54,61,.3)'}},
         y1:{position:'right',ticks:{color:'#3fb950',font:{size:10},callback:v=>v+'%'},grid:{display:false}} } }
   });
+}
+
+// ── 技術分析：股價趨勢圖(可勾選均線/布林軌道) + AI 白話解讀 ──
+let __techChart=null;
+function sma(arr,p){ const o=new Array(arr.length).fill(null); let s=0; for(let i=0;i<arr.length;i++){ s+=arr[i]; if(i>=p) s-=arr[i-p]; if(i>=p-1) o[i]=s/p; } return o; }
+function bollinger(arr,p,k){ const mid=sma(arr,p),up=new Array(arr.length).fill(null),lo=new Array(arr.length).fill(null);
+  for(let i=p-1;i<arr.length;i++){ let m=mid[i],v=0; for(let j=i-p+1;j<=i;j++){ v+=(arr[j]-m)*(arr[j]-m); } const sd=Math.sqrt(v/p); up[i]=m+k*sd; lo[i]=m-k*sd; } return {mid,up,lo}; }
+async function loadTechnical(symbol, gen){
+  const box=document.getElementById('ai_technical');
+  try{
+    const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=2y&interval=1d`);
+    if(gen!=null && gen!==SEARCH_GEN) return;
+    const res=ch?.chart?.result?.[0]; const ts=res?.timestamp||[]; const cl=res?.indicators?.quote?.[0]?.close||[];
+    const pts=[]; for(let i=0;i<ts.length;i++){ if(cl[i]!=null) pts.push({t:ts[i]*1000, c:cl[i]}); }
+    if(pts.length<30){ if(box) box.innerHTML='<span style="color:var(--text2)">此檔日線資料不足，無法產生技術分析。</span>'; return; }
+    const closes=pts.map(p=>p.c);
+    const ma5=sma(closes,5),ma10=sma(closes,10),ma20=sma(closes,20),ma60=sma(closes,60),ma240=sma(closes,240);
+    const bb=bollinger(closes,20,2);
+    // 顯示最近 ~1 年(252 交易日)，均線用完整2年資料計算故年線在顯示區間內有效
+    const N=Math.min(pts.length,252); const s=pts.length-N;
+    const sl=a=>a.slice(s); const lab=pts.slice(s).map(p=>{ const d=new Date(p.t); return (d.getMonth()+1)+'/'+d.getDate(); });
+    const el=document.getElementById('techChart'); if(!el) return;
+    if(__techChart){ try{__techChart.destroy();}catch(e){} __techChart=null; }
+    const mk=(label,data,color,extra)=>Object.assign({label,data:sl(data),borderColor:color,backgroundColor:'transparent',borderWidth:1.4,pointRadius:0,tension:.2,spanGaps:true},extra||{});
+    const ds=[
+      mk('股價',closes,'#c9d1d9',{borderWidth:1.8}),
+      mk('5日均線',ma5,'#f0883e',{_key:'ma5'}),
+      mk('10日均線',ma10,'#e3b341',{_key:'ma10'}),
+      mk('月均線(20)',ma20,'#58a6ff',{_key:'ma20'}),
+      mk('季均線(60)',ma60,'#bc8cff',{_key:'ma60'}),
+      mk('年均線(240)',ma240,'#3fb950',{_key:'ma240'}),
+      mk('布林上軌',bb.up,'#8b949e',{_key:'boll',borderDash:[4,3],borderWidth:1}),
+      mk('布林下軌',bb.lo,'#8b949e',{_key:'boll',borderDash:[4,3],borderWidth:1,fill:'-1',backgroundColor:'rgba(139,148,158,.08)'})
+    ];
+    // 依核取方塊預設狀態設定顯示/隱藏（股價恆顯示）
+    const optWrap=document.getElementById('techOpts');
+    const state={}; optWrap.querySelectorAll('input[data-ma]').forEach(cb=>state[cb.dataset.ma]=cb.checked);
+    ds.forEach(d=>{ if(d._key) d.hidden=!state[d._key]; });
+    __techChart=new Chart(el.getContext('2d'),{ type:'line', data:{labels:lab,datasets:ds},
+      options:{ responsive:true,maintainAspectRatio:false, interaction:{mode:'index',intersect:false},
+        plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.parsed.y!=null?'$'+c.parsed.y.toFixed(2):'—')}}},
+        scales:{ x:{ticks:{color:'#8b949e',font:{size:9},maxTicksLimit:9,autoSkip:true},grid:{color:'rgba(48,54,61,.4)'}},
+          y:{position:'right',ticks:{color:'#8b949e',font:{size:10},callback:v=>'$'+v},grid:{color:'rgba(48,54,61,.3)'}} } }
+    });
+    // 綁定核取方塊：可複選疊加
+    optWrap.querySelectorAll('input[data-ma]').forEach(cb=>{
+      cb.onchange=()=>{ __techChart.data.datasets.forEach(d=>{ if(d._key===cb.dataset.ma) d.hidden=!cb.checked; }); __techChart.update(); };
+    });
+    // 計算技術指標（全部來自真實收盤價），供白話解讀
+    const last=closes[closes.length-1], i=closes.length-1;
+    const val=a=>a[i]!=null?a[i]:null; const rel=(p,m)=>m==null?'—':(p>=m?'站上':'跌破');
+    const hi52=Math.max(...closes.slice(-252)), lo52=Math.min(...closes.slice(-252));
+    const chg20=closes.length>21?((last-closes[i-20])/closes[i-20]*100):null;
+    const align=(val(ma5)>val(ma20)&&val(ma20)>val(ma60))?'均線多頭排列(短中長期向上)':((val(ma5)<val(ma20)&&val(ma20)<val(ma60))?'均線空頭排列(短中長期向下)':'均線糾結、方向不明');
+    // 近5日 5MA 與 20MA 的黃金/死亡交叉
+    let cross='無明顯交叉'; for(let k=i;k>i-5&&k>0;k--){ if(ma5[k]!=null&&ma20[k]!=null&&ma5[k-1]!=null&&ma20[k-1]!=null){ if(ma5[k-1]<=ma20[k-1]&&ma5[k]>ma20[k]){cross='近日出現黃金交叉(5日均線上穿20日均線)';break;} if(ma5[k-1]>=ma20[k-1]&&ma5[k]<ma20[k]){cross='近日出現死亡交叉(5日均線下穿20日均線)';break;} } }
+    let bbPos='—'; if(bb.up[i]!=null&&bb.lo[i]!=null){ const pb=(last-bb.lo[i])/(bb.up[i]-bb.lo[i]); bbPos=pb>0.85?'貼近布林上軌(短線偏強/過熱)':pb<0.15?'貼近布林下軌(短線偏弱/超賣)':'位於布林軌道中段'; }
+    const facts=`目前股價 $${last.toFixed(2)}；`
+      +`相對均線：${rel(last,val(ma5))}5日、${rel(last,val(ma20))}20日、${rel(last,val(ma60))}60日、${rel(last,val(ma240))}年線240日。`
+      +`${align}。${cross}。${bbPos}。`
+      +`近20日${chg20!=null?(chg20>=0?'上漲':'下跌')+Math.abs(chg20).toFixed(1)+'%':'—'}；`
+      +`一年高點 $${hi52.toFixed(2)}、低點 $${lo52.toFixed(2)}，目前約在區間 ${((last-lo52)/(hi52-lo52)*100).toFixed(0)}% 位置。`;
+    // 先放「計算出的事實摘要」當 fallback，再嘗試用 AI 轉白話
+    if(box) box.innerHTML=`<b>📊 技術面速讀</b>：${esc(facts)}`;
+    const gmKey=getGmKey(); const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1); const useServer=!gmKey && !isLocal;
+    if(gmKey||useServer){
+      const prompt=`你是專業技術分析師。以下是 ${symbol} 由真實日線收盤價計算出的技術指標。請用繁體中文寫 3-5 句「白話」解讀，讓完全不懂技術分析的人也能快速掌握目前股價趨勢、均線與布林軌道透露的訊息。只根據提供數據、不要臆測、不要給買賣點位或投資建議。只回傳 JSON：{"reason":"..."}。
+技術指標：${facts}`;
+      try{ const out=await callAIWithPrompt(prompt, gmKey, useServer); if(gen!=null&&gen!==SEARCH_GEN) return; const r=(out&&out.reason||'').trim();
+        if(r && box) box.innerHTML=`<b>🤖 AI 技術分析解讀</b>：${esc(r)}<div class="note" style="margin-top:6px">技術面速讀：${esc(facts)}</div>`;
+      }catch(e){ /* AI 忙碌就維持事實摘要 */ }
+    }
+  }catch(e){ if(box) box.innerHTML='<span style="color:var(--text2)">技術分析載入失敗（股價資料暫時取不到）。</span>'; }
 }
 
 // AI 欄位可能回傳字串或陣列，統一轉成 HTML（陣列以 <br> 分行）
