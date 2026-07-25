@@ -1002,7 +1002,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 <div class="note" style="text-align:center;margin-top:8px">財務數據：美國 SEC EDGAR 官方10-K年報；股價：Yahoo Finance；質化分析：免費 AI 模型（Gemini / Groq / OpenRouter）。<b>僅供參考，不構成投資建議。</b></div>`;
 
   drawChart(rows);
-  loadTechnical(symbol, gen);
+  loadTechnical(symbol, SEARCH_GEN);
 
   // 給 AI 的上下文
   const finText=rows.map(r=>`${r.yr}: 營收${cs}${fmtB(r.rev)}, 成長${r.gr!=null?r.gr.toFixed(1)+'%':'NA'}, 毛利率${r.gm!=null?r.gm.toFixed(1)+'%':'NA'}, 淨利率${r.nm!=null?r.nm.toFixed(1)+'%':'NA'}, ROE${r.roe!=null?r.roe.toFixed(1)+'%':'NA'}`).join('\n')
