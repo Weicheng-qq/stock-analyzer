@@ -114,11 +114,11 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-logo { flex:none; width:26px; height:26px; border-radius:6px; object-fit:contain; background:#fff; padding:2px; box-sizing:border-box; }
 .wl-name { flex:1.8; min-width:0; font-weight:600; overflow-wrap:anywhere; word-break:break-word; line-height:1.25; }
 .wl-name .sym { display:block; color:var(--text2); font-weight:400; font-size:11px; }
-.wl-price { flex:0.7; text-align:right; font-weight:600; }
+.wl-price { flex:0.7; text-align:right; font-weight:600; font-family:ui-monospace,'SF Mono','Consolas','Roboto Mono',monospace; font-variant-numeric:tabular-nums; }
 .wl-chg { flex:0.8; text-align:right; }
-.wl-chg .pill { display:inline-block; padding:3px 7px; border-radius:6px; font-weight:700; font-size:12px; color:#fff; }
-.wl-chg .pill.up { background:var(--red); }   /* 台股慣例：漲=紅底 */
-.wl-chg .pill.down { background:var(--green); } /* 跌=綠底 */
+.wl-chg .pill { display:inline-block; padding:3px 8px; border-radius:6px; font-weight:700; font-size:12.5px; color:#fff; font-family:ui-monospace,'SF Mono','Consolas','Roboto Mono',monospace; font-variant-numeric:tabular-nums; letter-spacing:.3px; }
+.wl-chg .pill.up { background:var(--green); }  /* 漲=綠底 */
+.wl-chg .pill.down { background:var(--red); }  /* 跌=紅底 */
 .wl-ai-read { padding:0 0 10px 34px; font-size:12px; line-height:1.5; color:var(--text2); }
 .wl-ai-read b { color:var(--blue); font-weight:600; }
 .wl-ai-read .muted { opacity:.7; }
@@ -1476,12 +1476,14 @@ function irVideoBlock(sym, coName){
   const v = IR_CALL_VIDEO[sym];
   const irPage = IR_QUARTERLY_PAGE[sym];
   if(v && /^[\w-]{11}$/.test(v)){
-    // 內嵌 YouTube 播放器：原生支援播放/暫停/拉時間軸快轉
-    return `<div class="ir-video"><iframe src="https://www.youtube-nocookie.com/embed/${esc(v)}?rel=0" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
+    // 內嵌 YouTube 播放器：原生支援播放/暫停/拉時間軸；強制自動字幕並翻成繁體中文(cc_lang_pref=zh-Hant)、原音不變
+    const src = `https://www.youtube-nocookie.com/embed/${esc(v)}?rel=0&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant`;
+    return `<div class="ir-video"><iframe src="${src}" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
+      + `<div class="ir-video-links" style="margin-top:-6px">🎬 <b>法說會影片</b>（原音＋繁體中文字幕）｜ 若字幕未顯示，請點播放器右下角 <b>CC</b> → ⚙️ 字幕 → 自動翻譯 → 中文(繁體)</div>`;
   }
   const watchUrl = (v && /^https?:/.test(v)) ? v : irPage;
   if(!watchUrl) return '';
-  return `<div class="ir-video-links">🎬 <b>法說會影片</b>：<a href="${esc(watchUrl)}" target="_blank">▶ 官方線上會議／重播（可播放、暫停、拉時間軸）↗</a></div>`;
+  return `<div class="ir-video-links">🎬 <b>法說會影片</b>：<a href="${esc(watchUrl)}" target="_blank">▶ 官方線上會議／重播（可播放、暫停、拉時間軸）↗</a><span class="muted"> ｜ 此公司暫無可內嵌影片，開啟官方線上重播</span></div>`;
 }
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
