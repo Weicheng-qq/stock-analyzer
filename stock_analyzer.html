@@ -543,6 +543,8 @@ const ALIASES={
 // 代碼→中文名反查表(挑ALIASES裡最長的中文別名當正式名稱，例如台積電優先於台積)，供自選股顯示中文公司名用
 const TICKER_ZH={};
 for(const k in ALIASES){ if(/[一-鿿]/.test(k)){ const t=ALIASES[k]; if(!TICKER_ZH[t]||k.length>TICKER_ZH[t].length) TICKER_ZH[t]=k; } }
+// 指定顯示名稱覆蓋（避免自動挑到過長/不慣用的別名）
+Object.assign(TICKER_ZH, {'NVDA':'輝達','SKHY':'海力士'});
 let tickerMap=null;
 function findCompany(raw){
   const q=raw.trim(); const U=q.toUpperCase();
