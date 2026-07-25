@@ -1052,7 +1052,6 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
     ${cum?`<tr style="border-top:2px solid var(--border)"><td><strong>${cum.label}</strong> <span style="color:var(--yellow)">†</span></td><td>${gapEstimated?'≈':''}${fmtRev(cum.rev,rUnit)}</td>
       <td class="${cum.yoy!=null?(cum.yoy>=0?'g':'r'):''}">${cum.yoy!=null?(cum.yoy>=0?'▲':'▼')+' '+Math.abs(cum.yoy).toFixed(1)+'% (年增)':'—'}</td></tr>`:''}
     </table>
-    <div class="note">† = SEC 尚未正式申報之最新年度/本財年累計季度，以 Yahoo Finance 補齊；金額前綴 ≈ 代表幣別換算估計值（毛利率/淨利率/成長率為比率，不受幣別影響、仍精確）。</div>
   </div>
   <div class="card">
     <div class="ct">🏦 投資大行目標價</div>
