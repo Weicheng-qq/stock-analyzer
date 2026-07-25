@@ -202,6 +202,16 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 /* 估值小結：用不同顏色(黃)＋左側色條，讓使用者一眼知道這是小結 */
 .val-summary { margin-top:12px; padding:12px 14px; background:rgba(210,153,34,.1); border-left:3px solid var(--yellow); border-radius:8px; font-size:13px; color:var(--text); line-height:1.85; }
 .val-summary-tag { display:block; color:var(--yellow); font-weight:800; font-size:12px; margin-bottom:6px; letter-spacing:.5px; }
+/* 版主選股邏輯結論：醒目結論框，顏色隨結論(綠買入觀察/黃等待/紅不符) */
+.mv-conclusion { margin:4px 0 4px; padding:14px 16px; border-radius:10px; font-size:13.5px; line-height:1.9; border:1px solid var(--border); border-left-width:4px; background:var(--bg3); }
+.mv-conclusion.s-buy { border-left-color:var(--green); background:rgba(63,185,80,.08); }
+.mv-conclusion.s-hold { border-left-color:var(--yellow); background:rgba(210,153,34,.09); }
+.mv-conclusion.s-sell { border-left-color:var(--red); background:rgba(248,81,73,.08); }
+.mv-conclusion .mv-tag { display:block; font-weight:800; font-size:13px; margin-bottom:7px; }
+.mv-conclusion.s-buy .mv-tag { color:var(--green); }
+.mv-conclusion.s-hold .mv-tag { color:var(--yellow); }
+.mv-conclusion.s-sell .mv-tag { color:var(--red); }
+.mv-conclusion b { color:var(--text); }
 .ai-loading { display:flex; align-items:center; gap:8px; color:var(--text2); font-size:13px; }
 .ai-dot { width:6px; height:6px; border-radius:50%; background:var(--blue); animation:pulse 1.2s infinite; }
 .ai-dot:nth-child(2){animation-delay:.2s} .ai-dot:nth-child(3){animation-delay:.4s}
@@ -929,6 +939,15 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   ];
   const passCount=checklist.filter(c=>c.pass===true).length;
   const chkHtml=checklist.map(c=>`<div class="vr"><span class="vl">${c.pass===true?'✅':c.pass===false?'❌':'➖'} ${c.label}</span><span class="vn ${c.pass===true?'g':c.pass===false?'r':''}">${esc(c.val)}</span></div>`).join('');
+  // 版主選股邏輯結論（依實際檢核結果＋估值位置，對應版主原則「以合理低估價格，買入擁有強大護城河公司」）
+  const chkTotal=checklist.length;
+  const qualityOk=passCount>=Math.ceil(chkTotal*0.6);   // 多數品質/護城河準則通過
+  const cheap=(pePos!=null&&pePos<40), pricey=(pePos!=null&&pePos>75);
+  const posText=(pePos!=null)?`本益比位於近5年區間約 ${pePos.toFixed(0)}% 位置`:'本益比區間資料不足';
+  let mvClass, mvText;
+  if(qualityOk && cheap){ mvClass='s-buy'; mvText=`通過 <b>${passCount}/${chkTotal}</b> 項選股準則，且 ${posText}（相對<b>便宜</b>）。<b>符合版主邏輯</b>——強護城河好公司＋合理低估價格，屬<b>值得關注的買入觀察區</b>。`; }
+  else if(qualityOk){ mvClass='s-hold'; mvText=`通過 <b>${passCount}/${chkTotal}</b> 項選股準則，基本面與護城河佳，但 ${posText}（估值${pricey?'<b>偏高</b>':'不算便宜'}）。<b>好公司、但價格尚未到合理低估</b>——建議耐心等待較便宜的價位再進場。`; }
+  else { mvClass='s-sell'; mvText=`僅通過 <b>${passCount}/${chkTotal}</b> 項選股準則，基本面尚未完全符合版主「強護城河」核心標準（${posText}）。<b>暫不符合版主選股條件</b>，宜再觀察或尋找更優質標的。`; }
   // 年營收欄位統一單位：依最大金額自動選 兆／十億／百萬，單位標在欄名右邊，數字乾淨好懂
   const rUnit = pickRevUnit([...rows.map(r=>r.rev), cum?cum.rev:null]);
 
@@ -1037,6 +1056,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   ${chkHtml}
   <div id="chk_outlook"><div class="vr"><span class="vl">➖ 法說會成長動能（CEO 對未來展望）</span><span class="vn">分析中...</span></div></div>
   <div class="note" style="margin:6px 0 12px">前 ${checklist.length} 項為實際數據自動檢核；最後一項「成長動能」依公司官方指引/資本支出判斷。✅=符合 ❌=未達標 ➖=無資料。</div>
+  <div class="mv-conclusion ${mvClass}"><span class="mv-tag">🧭 版主選股邏輯結論</span>${mvText}<div class="note" style="margin-top:8px">依版主原則「以合理低估價格，買入擁有強大護城河公司」自動歸納，僅供參考、不構成投資建議。</div></div>
   <div id="ai_independent_box" style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
     <div style="font-size:13px;color:var(--text2);margin-bottom:8px">🤖 AI 獨立分析（依 AI 自己的專業判斷，不受上方版主選股準則限制）</div>
     <div id="ai_independent">${aiLoading()}</div>
