@@ -192,6 +192,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 @media(max-width:560px){ .news-item .ni-thumb { width:72px; height:52px; } }
 .ai { font-size:13.5px; line-height:1.85; color:var(--text); }
 .ai strong { color:var(--blue); }
+.ai .li { display:block; padding-left:1.4em; text-indent:-1.4em; margin:2px 0; }
 /* 法說會 / 產品：每個主題段落用分隔線與間距分開，一眼看得出層次、不像一團字 */
 #ai_guidance .ai, #ai_products .ai { line-height:1.95; }
 #ai_guidance .ai > div:not(.ir-video):not(.note), #ai_products .ai > div:not(.note) { margin-bottom:14px; padding-bottom:13px; border-bottom:1px solid rgba(48,54,61,.6); }
@@ -211,14 +212,12 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .val-summary { margin-top:12px; padding:12px 14px; background:rgba(210,153,34,.1); border-left:3px solid var(--yellow); border-radius:8px; font-size:13px; color:var(--text); line-height:1.85; }
 .val-summary-tag { display:block; color:var(--yellow); font-weight:800; font-size:12px; margin-bottom:6px; letter-spacing:.5px; }
 /* 版主選股邏輯結論：醒目結論框，顏色隨結論(綠買入觀察/黃等待/紅不符) */
-.mv-conclusion { margin:4px 0 4px; padding:14px 16px; border-radius:10px; font-size:13.5px; line-height:1.9; border:1px solid var(--border); border-left-width:4px; background:var(--bg3); }
+.mv-conclusion { margin:4px 0 4px; padding:14px 16px; border-radius:10px; font-size:13.5px; line-height:1.9; border:1px solid var(--border); border-left-width:4px; background:var(--bg3); color:var(--text)!important; }
+.mv-conclusion, .mv-conclusion * { color:var(--text); }
 .mv-conclusion.s-buy { border-left-color:var(--green); background:rgba(63,185,80,.08); }
 .mv-conclusion.s-hold { border-left-color:var(--yellow); background:rgba(210,153,34,.09); }
 .mv-conclusion.s-sell { border-left-color:var(--red); background:rgba(248,81,73,.08); }
-.mv-conclusion .mv-tag { display:block; font-weight:800; font-size:13px; margin-bottom:7px; }
-.mv-conclusion.s-buy .mv-tag { color:var(--green); }
-.mv-conclusion.s-hold .mv-tag { color:var(--yellow); }
-.mv-conclusion.s-sell .mv-tag { color:var(--red); }
+.mv-conclusion .mv-tag { display:block; font-weight:800; font-size:13px; margin-bottom:7px; color:var(--blue)!important; }
 .mv-conclusion b { color:var(--text); }
 .ai-loading { display:flex; align-items:center; gap:8px; color:var(--text2); font-size:13px; }
 .ai-dot { width:6px; height:6px; border-radius:50%; background:var(--blue); animation:pulse 1.2s infinite; }
@@ -980,11 +979,11 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
     {label:'ROE > 20%', pass:lastRoe!=null?lastRoe>20:null, val:lastRoe!=null?lastRoe.toFixed(1)+'%':'無資料'},
     {label:'10年營收整體向上（≤2年下滑）', pass:growths.length?(declineYears<=2&&overallUp):null, val:`下滑${declineYears}年`},
     {label:'近3年營收成長皆 > 20%（快速成長）', pass:last3g.length===3?fastGrower:null, val:last3g.map(g=>g.toFixed(0)+'%').join(' / ')||'無資料'},
-    {label:'本益比 < 13', pass:pe!=null?pe<13:null, val:pe!=null?pe.toFixed(1)+'x':'無資料'},
-    {label:'本益比位於近5年區間偏低半部', pass:(pePos!=null)?pePos<50:null, val:(pe5&&pePos!=null)?`區間${pe5.min.toFixed(0)}~${pe5.max.toFixed(0)}x，現${pePos.toFixed(0)}%位置`:'無資料'},
+    {label:'本益比 < 13', pass:pe!=null?pe<13:null, cls:(pe!=null&&pe<13)?'g':(pePos!=null?(pePos<=70?'y':'r'):(pe!=null?'r':'')), val:pe!=null?pe.toFixed(1)+'x':'無資料'},
+    {label:'本益比位於近5年區間偏低半部', pass:(pePos!=null)?pePos<50:null, cls:(pePos==null?'':(pePos<50?'g':pePos<=70?'y':'r')), val:(pe5&&pePos!=null)?`區間${pe5.min.toFixed(0)}~${pe5.max.toFixed(0)}x，現${pePos.toFixed(0)}%位置`:'無資料'},
   ];
   const passCount=checklist.filter(c=>c.pass===true).length;
-  const chkHtml=checklist.map(c=>`<div class="vr"><span class="vl">${c.pass===true?'✅':c.pass===false?'❌':'➖'} ${c.label}</span><span class="vn ${c.pass===true?'g':c.pass===false?'r':''}">${esc(c.val)}</span></div>`).join('');
+  const chkHtml=checklist.map(c=>`<div class="vr"><span class="vl">${c.pass===true?'✅':c.pass===false?'❌':'➖'} ${c.label}</span><span class="vn ${c.cls!==undefined?c.cls:(c.pass===true?'g':c.pass===false?'r':'')}">${esc(c.val)}</span></div>`).join('');
   // 版主選股邏輯結論（依實際檢核結果＋估值位置，對應版主原則「以合理低估價格，買入擁有強大護城河公司」）
   const chkTotal=checklist.length;
   const qualityOk=passCount>=Math.ceil(chkTotal*0.6);   // 多數品質/護城河準則通過
@@ -1173,7 +1172,14 @@ async function retryAI(){
   else{ logErr('ai','AI 失敗：'+(aiErr.message==='DAILY_LIMIT'?'免費 AI 每日額度已用完（明早 8 點重置）':aiErr.message)); showAIFail(aiErr, usedServer); }
   setTimeout(()=>logPanel(false),1200);
 }
-function setAI(id,html){ const el=document.getElementById(id); if(el) el.innerHTML=html; }
+// 條列(•)行套用「懸掛縮排」：換行後的文字對齊第一行首字(而非跑到最左邊的圓點下)
+function hangIndent(html){
+  if(!html || html.indexOf('•')<0) return html;
+  html=html.replace(/(•[^]*?)(?=<br\s*\/?>|<\/div>|$)/g, m=>`<span class="li">${m}</span>`);
+  html=html.replace(/<br\s*\/?>\s*(<span class="li">)/g, '$1');
+  return html;
+}
+function setAI(id,html){ const el=document.getElementById(id); if(el) el.innerHTML=hangIndent(html); }
 
 // ── Gemini ──
 async function callGemini(ctx, key, useServer){
@@ -1359,8 +1365,7 @@ function renderAI(ai){
   // 法說會口頭 Q&A 直達連結（官方逐字稿/影片為一手來源，一鍵可查）
   const coName=(window.__coNameForLinks||'').trim();
   const irPage=IR_QUARTERLY_PAGE[window.__symbolForLinks];
-  const linksBlock = coName ? `<div class="note" style="margin-top:10px;border-top:1px solid var(--border);padding-top:8px">🎧 想看 CEO 口頭 Q&A？一鍵直達一手來源：
-    ${irPage?`<a href="${esc(irPage)}" target="_blank" style="color:var(--blue)">官方法說會專區（含逐字稿PDF）↗</a>`:`<a href="https://www.google.com/search?q=${encodeURIComponent(coName+' earnings call transcript 逐字稿')}" target="_blank" style="color:var(--blue)">官方逐字稿搜尋 ↗</a>`}</div>` : '';
+  const linksBlock = '';
   // 資本支出/成長動能（官方年報，若有）
   const capexZh=(ai.capex_zh&&String(ai.capex_zh).trim())?ai.capex_zh:(window.__capexData?window.__capexData.text:null);
   const capexBlock = window.__capexData ? `<div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px"><div style="color:var(--orange);font-size:12px;margin-bottom:4px">🏗️ 資本支出與成長動能（官方年報 ${esc(window.__capexData.date)}）</div>${norm(capexZh)}</div>` : '';
@@ -1368,7 +1373,7 @@ function renderAI(ai){
   const videoBlock = irVideoBlock(window.__symbolForLinks, coName);   // 🎬 法說會影片，置於法說主旨最上方
   const manualCall=IR_CALL_SUMMARY[window.__symbolForLinks];
   if(manualCall){
-    setAI('ai_guidance',`<div class="ai">${videoBlock}${manualCall.html}<div class="note" style="margin-top:8px">來源：${esc(manualCall.quarter)} 公司官方投資人簡報／法說會逐字稿</div>`+linksBlock+`</div>`);
+    setAI('ai_guidance',`<div class="ai">${videoBlock}${manualCall.html}</div>`);
   } else if(window.__guidanceReal && window.__guidanceData){
     const gd=window.__guidanceData;
     const zh=(ai.guidance_zh&&String(ai.guidance_zh).trim())?ai.guidance_zh:null;
@@ -1624,7 +1629,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（2026/07/16）',
     source: 'https://investor.tsmc.com/chinese/quarterly-results/2026/q2',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依台積電官方法人說明會<b>逐字稿＋簡報</b>人工判讀整理（2026/07/16 法說會，數字均為官方原文，非AI臆測）</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • 上修 <b>2026 全年美元營收成長預期至「略高於 40%」</b>（年增，較先前展望調高），受惠 AI 大趨勢與 3/5 奈米強勁需求。<br>
 • AI 需求極為強勁，管理層對多年 AI 大趨勢信心很高；董事長魏哲家對 AI 相關營收五年成長率（先前為 mid-to-high 50% CAGR）表示「比之前更強」，需求看好延續到 2029～2030 年。<br>
@@ -1639,16 +1643,12 @@ const IR_CALL_SUMMARY = {
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 技術進展</b><br>
 • 2 奈米（N2）2025 年進入量產，第三季起陡峭放量。<br>
 • A14 製程（第二代 nanosheet）較 N2 速度提升 10～15%（同功耗）或功耗改善 25～30%（同速度）、晶片密度提升近 20%；2027 年風險試產、2028 量產。A13／A12 為 A14 延伸。<br>
-• 3 奈米全球擴建：台灣、亞利桑那、日本各再增一座。</div>
-<div style="margin-bottom:10px"><b style="color:var(--orange)">💰 股利／⚠️ 毛利率提醒</b><br>
-• 2026 年每股現金股利 NT$24（年增 33%）。<br>
-• 毛利率稀釋：2 奈米陡峭放量下半年稀釋約 3～4 個百分點；海外廠擴產稀釋初期 2～3%、後期擴大至 3～4%。</div>`
+• 3 奈米全球擴建：台灣、亞利桑那、日本各再增一座。</div>`
   },
   'NVO': {
     quarter: '2026 第一季（2026/05/06）',
     source: 'https://www.novonordisk.com/investors/financial-results.html',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依諾和諾德官方<b>投資人簡報＋公司公告</b>人工判讀整理（2026/05/06 Q1 2026 財報，CEO Mike Doustdar，數字均為官方原文，非AI臆測）</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望（2026 全年上修）</b><br>
 • <b>2026 全年展望上修</b>（主因 GLP-1 產品銷售預期增加）：調整後銷售成長 <b>-4% 至 -12%</b>（固定匯率CER）、調整後營業利益成長 <b>-4% 至 -12%</b>（CER）——較 2/3 前次展望（-5%～-13%）上修。<br>
 • 註：調整後數字已排除美國 340B 藥價計畫撥備沖銷的一次性非現金影響（US$42 億）；若以未調整基礎，2026 銷售與營業利益成長中值分別約 <b>+1%、+12%</b>（CER）。<br>
@@ -1664,7 +1664,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（2026/07/24，季末 6/27）',
     source: 'https://www.intc.com/financial-info/financial-results',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依英特爾官方<b>法說會逐字稿(Prepared Remarks)＋財報簡報</b>人工判讀整理（2026/07/24 Q2 2026 財報，數字均為官方原文，非AI臆測）</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • 第三季（Q3 2026）展望：營收 <b>158～168 億美元</b>（中值 163 億）、非GAAP 毛利率 42%、稅率 11%、EPS $0.38。<br>
 • 第二季（Q2 2026）：營收 <b>161 億美元</b>（超財測中值 18 億）、非GAAP EPS $0.38；<b>連續第 7 季超財測</b>；AI 相關業務持續成長。<br>
@@ -1680,7 +1679,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（2026/04/30）',
     source: 'https://investor.lilly.com/financial-information/quarterly-results',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依禮來官方 Q1 2026 財報新聞稿（向 SEC 申報）人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望（2026 全年上修）</b><br>
 • <b>2026 全年營收展望上修至 820～850 億美元</b>（原 800～830 億），反映第一季強勁表現；獲利率（Performance Margin）上修至 47.0～48.5%；<b>非GAAP EPS 上修至 $35.50～37.00</b>（原 $33.50～35.00）；稅率 18～19% 不變。<br>
 • 第一季（Q1 2026）：全球營收 <b>198 億美元、年增 56%</b>（銷量 +65%、價格 -13%）；核心產品營收 134 億（由 Mounjaro、Zepbound 領軍）；非GAAP EPS $8.55（年增 156%）、毛利率約 82%。</div>
@@ -1693,7 +1691,6 @@ const IR_CALL_SUMMARY = {
     quarter: 'FY2027 第一季（2026/05/20）',
     source: 'https://investor.nvidia.com/financial-info/quarterly-results/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依輝達官方 Q1 FY2027 財報新聞稿＋財務長評論（向 SEC 申報）人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>第二季（Q2 FY2027）展望：營收 910 億美元 ±2%</b>（展望中不假設任何來自中國的資料中心運算營收）；GAAP／非GAAP 毛利率 74.9%／75.0% ±50bps。<br>
 • 第一季（Q1 FY2027）：營收 <b>816 億美元、年增 85%</b>（季增 20%）；毛利率 74.9%／75.0%；淨利 583 億美元、稀釋 EPS $2.39（年增 214%）。<br>
@@ -1708,7 +1705,6 @@ const IR_CALL_SUMMARY = {
     quarter: 'FY2026 第三季（2026/06/24，季末 5/28）',
     source: 'https://investors.micron.com/financial-information',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依美光官方 財季 Q3 FY2026 財報新聞稿（向 SEC 申報）人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>財季 Q4 FY2026 展望：營收 500 億美元 ±10 億</b>、毛利率約 <b>86%</b>、營業費用約 16.5～18.6 億、非GAAP EPS $31.00 ±1.00（GAAP $30.73 ±1.00）。<br>
 • 財季 Q3（季末 2026/05/28）：營收 <b>414.6 億美元</b>（前季 238.6 億、去年同期 93 億，AI 記憶體需求爆發）；GAAP 淨利 282.4 億、EPS $24.67（非GAAP $25.11）；營運現金流 253.9 億。<br>
@@ -1721,7 +1717,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（官網 abc.xyz 財報）',
     source: 'https://abc.xyz/investor/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Alphabet 官網 Q2 2026 財報新聞稿＋簡報人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長動能／展望</b><br>
 • 第二季（Q2 2026）：總營收 <b>1,198 億美元、年增 24%</b>；營業利益率擴大 2 個百分點至 34%。<br>
 • <b>資本支出大增至 449 億美元</b>（去年同期 224 億、翻倍），持續擴充 AI 基礎建設與全球運算（上半年資本支出達 806 億）。<br>
@@ -1734,7 +1729,6 @@ const IR_CALL_SUMMARY = {
     quarter: 'FY2026 第二季（官網 investor.apple.com 財報）',
     source: 'https://investor.apple.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依蘋果官網 Q2 FY2026 財報新聞稿＋合併財務報表人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能／展望</b><br>
 • 第二季（FY2026 Q2，季末 2026/03/28）：營收 <b>1,112 億美元、年增 17%</b>（史上最佳三月季，各地區皆雙位數成長）；稀釋 EPS $2.01（年增 22%）。<br>
 • <b>服務(Services)營收創歷史新高</b>（約 310 億美元）。<br>
@@ -1746,7 +1740,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網 q4cdn 財報＋逐字稿）',
     source: 'https://investor.atmeta.com/financials/default.aspx',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Meta 官網 Q1 2026 財報新聞稿＋法說會逐字稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>第二季（Q2 2026）營收展望：580～610 億美元</b>。<br>
 • 全年 2026：總費用展望 <b>1,620～1,690 億美元</b>（維持不變）。<br>
@@ -1760,7 +1753,6 @@ const IR_CALL_SUMMARY = {
     quarter: 'FY2026 第三季（官網 microsoft.com/investor 財報）',
     source: 'https://www.microsoft.com/en-us/investor',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依微軟官網 FY2026 Q3 財報新聞稿人工判讀整理（季末 2026/03/31），數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 成長動能／展望</b><br>
 • <b>AI 業務年化營收執行率突破 370 億美元、年增 123%</b>（CEO Satya Nadella）。<br>
 • <b>Azure 雲端服務營收年增 40%</b>；Microsoft Cloud 營收 545 億美元（年增 29%）；商業合約未實現履約義務（RPO）年增 99% 至 <b>6,270 億美元</b>（龐大未來營收backlog）。<br>
@@ -1775,7 +1767,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網 ir.aboutamazon.com 財報）',
     source: 'https://ir.aboutamazon.com/quarterly-results/default.aspx',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依亞馬遜官網 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>第二季（Q2 2026）展望：淨銷售 1,940～1,990 億美元（年增 16～19%）、營業利益 200～240 億美元</b>。<br>
 • 第一季（Q1 2026）：淨銷售 <b>1,815 億美元、年增 17%</b>；營業利益 239 億美元。<br>
@@ -1789,7 +1780,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網 ir.tesla.com 股東信）',
     source: 'https://ir.tesla.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依特斯拉官方 Q1 2026 股東更新信（官網同一份，經 SEC 申報取得）人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長動能／展望</b><br>
 • 特斯拉不提供數字型營收財測，未來成長聚焦：<b>Robotaxi（自駕計程車）放量、Cybercab 與 Tesla Semi 進入量產、Optimus 人形機器人邁向量產、能源儲存業務擴張、FSD（監督式）持續推進。</b><br>
 • 推出兩款車型的<b>平價版本（affordable trims）</b>刺激需求；Cybertruck 開始於阿聯（UAE）交車；亞太與南美需求成長。<br>
@@ -1801,7 +1791,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網 ir.amd.com 財報）',
     source: 'https://ir.amd.com/financial-information/financial-results',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依超微(AMD)官網 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>第二季（Q2 2026）展望：營收約 112 億美元 ±3 億</b>（中值年增約 46%）。<br>
 • 第一季（Q1 2026）：營收 <b>103 億美元、年增 38%</b>；GAAP 毛利率 53%、EPS $0.84；非GAAP 毛利率 55%、EPS $1.37；創單季自由現金流新高。<br>
@@ -1814,7 +1803,6 @@ const IR_CALL_SUMMARY = {
     quarter: 'FY2026 第二季（官網 investors.broadcom.com 財報）',
     source: 'https://investors.broadcom.com/financial-information/quarterly-results',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依博通(Broadcom)官網 Q2 FY2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>第三季（Q3 FY2026）營收展望：約 294 億美元、年增 84%</b>；非GAAP 營業利益率約 67%、調整後 EBITDA 約 68%。<br>
 • <b>AI 半導體營收：Q2 達 108 億美元、年增 143%</b>（客製 AI 加速器＋AI 網路晶片帶動）；<b>Q3 預期年增逾 200% 至 160 億美元</b>。<br>
@@ -1827,7 +1815,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（官網 asml.com 財報，2026/07/15）',
     source: 'https://www.asml.com/en/investors/financial-results',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依艾司摩爾(ASML)官網 Q2 2026 財報新聞稿人工判讀整理（單位：歐元），數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望（2026 上修）</b><br>
 • <b>2026 全年營收展望上修至 430～450 億歐元</b>、毛利率 54～56%（主因裝機基礎管理 Installed Base Management 銷售優於預期、AI 相關投資帶動）。<br>
 • <b>第三季（Q3 2026）展望：營收 110～120 億歐元</b>、毛利率 55～57%。<br>
@@ -1840,7 +1827,6 @@ const IR_CALL_SUMMARY = {
     quarter: 'FY2026 第二季（官網 q4cdn 財報，2026/04/29）',
     source: 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依高通(Qualcomm)官網 FY2026 Q2 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>第三季（Q3 FY2026）展望：總營收 92～100 億美元、非GAAP EPS $2.10～2.30</b>；已反映<b>記憶體供應吃緊與漲價</b>對手機需求的影響。<br>
 • 第二季（Q2 FY2026）：總營收約 <b>105 億美元</b>；非GAAP EPS <b>$2.65（創新高）</b>；上半年完成 54 億美元股票回購。<br>
@@ -1853,7 +1839,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網 q4cdn 財報＋逐字稿）',
     source: 'https://investor.uber.com/financials/default.aspx',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Uber 官網 Q1 2026 財報新聞稿＋法說會逐字稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>第二季（Q2 2026）展望：總訂單金額(Gross Bookings) 562.5～577.5 億美元，固定匯率年增 18～22%</b>。<br>
 • 第一季（Q1 2026）：總訂單金額年增 21%（約 537 億美元）；營收 <b>132 億美元、年增 14%</b>；<b>調整後 EBITDA 25 億、年增 33%</b>；GAAP 營業利益 19 億（創新高）。<br>
@@ -1866,7 +1851,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（官網 q4cdn 股東信＋逐字稿）',
     source: 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Netflix 官網 Q2 2026 股東信＋法說會逐字稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望（2026 全年上修）</b><br>
 • <b>2026 全年營收展望上修至 510～514 億美元</b>、營業利益率維持 <b>31.5%</b>。<br>
 • 第三季（Q3 2026）預估營收 <b>128.6 億美元、年增約 12%</b>（會員數、漲價、廣告收入帶動）。<br>
@@ -1879,7 +1863,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網 q4cdn 財報＋逐字稿）',
     source: 'https://ir.bookingholdings.com/financial-information/quarterly-results',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Booking Holdings 官網 Q1 2026 財報＋法說會逐字稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • 第二季與全年展望：<b>短期受中東衝突影響</b>（旅遊需求波動、歐亞交通走廊中斷，約拖累總訂單成長 2 個百分點），管理層視中東為長期優勢、需求回穩後看好。<br>
 • 第一季（Q1 2026）：<b>訂房間夜數年增 6%</b>；總訂單（Gross Bookings）年增 15%（固定匯率 +8%，含 ADR 房價 +1%）；<b>營收 55 億美元、年增 16%</b>；調整後 EBITDA 約 13 億（+19%）、調整後 EPS $1.14（+14%）。</div>
@@ -1890,7 +1873,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（官網 jpmorganchase.com/ir 財報）',
     source: 'https://www.jpmorganchase.com/ir/quarterly-earnings',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依摩根大通(JPMorgan)官網 2Q26 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測（銀行股無毛利率概念，屬正常）</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第二季（2Q26）：管理基礎營收 <b>580 億美元、淨利 169 億美元</b>；<b>ROTCE 29%</b>（排除特殊項目 23%）；CET1 資本比率 14.1%，資本充足。<br>
 • <b>投資銀行與交易極強</b>：交易(Markets)營收年增 35%（客戶活動熱絡）；投行手續費年增 30%、全球投行手續費市占 9.3% 排名第一。<br>
@@ -1905,7 +1887,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（官網 investor.jnj.com 財報）',
     source: 'https://www.investor.jnj.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依嬌生(Johnson & Johnson)官網 Q2 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望（2026 全年上修）</b><br>
 • <b>2026 全年營收展望上修至約 1,011 億美元</b>（中值年增 7.3%）；<b>調整後 EPS 上修 $0.13 至 $11.68</b>（+8.2%）；營收可望首度突破 1,000 億美元目標。<br>
 • 第二季（Q2 2026）：全球營收 <b>253 億美元、年增 6.6%</b>（營運成長 5.6%）；GAAP EPS $2.27、調整後 EPS $2.90。</div>
@@ -1917,7 +1898,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報，官網同一份財報新聞稿）',
     source: 'https://www.pfizer.com/investors',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依輝瑞(Pfizer)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>重申(reaffirm) 2026 全年財測</b>各項目。<br>
 • 第一季（Q1 2026）：營收 <b>145 億美元、營運成長 2%</b>（排除新冠產品貢獻）；GAAP EPS $0.47、調整後 EPS $0.75。<br>
@@ -1929,7 +1909,6 @@ const IR_CALL_SUMMARY = {
     quarter: 'FY2026 第三季（官網財報，2026/05/28）',
     source: 'https://investor.costco.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依好市多(Costco)官方 財季 Q3 FY2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 財季 Q3（季末約 2026/05）：<b>淨銷售額年增 11.6% 至 691.5 億美元</b>（去年同期 619.6 億）。<br>
 • <b>會員費收入持續成長</b>（高續約率、高毛利，是獲利穩定基石）；倉儲會員模式＋自有品牌 Kirkland 撐起穩健同店成長。</div>
@@ -1940,7 +1919,6 @@ const IR_CALL_SUMMARY = {
     quarter: 'FY2027 第一季（官網財報，2026/05/28）',
     source: 'https://investors.delltechnologies.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依戴爾(Dell)官方 Q1 FY2027 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>2027 全年營收展望上修至中值 1,670 億美元、年增近 50%</b>（AI 伺服器帶動）；上調 AI 伺服器營收預期。<br>
 • 第一季（Q1 FY2027）：營收 <b>438 億美元、年增 88%（創新高）</b>；GAAP EPS $5.24（+282%）、非GAAP EPS $4.86；本季認列 <b>161 億美元 AI 伺服器營收</b>。</div>
@@ -1952,7 +1930,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://investors.coca-colacompany.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依可口可樂(Coca-Cola)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季（Q1 2026）：淨營收年增 12% 至約 <b>120 億美元</b>；<b>有機營收(organic)年增 10%</b>（濃縮液銷量 +8%、價格/組合 +2%）。<br>
 • <b>比較後 EPS 年增 18% 至 $0.86</b>；非GAAP 營業利益率 34.5%（優於去年 33.8%）。</div>
@@ -1963,7 +1940,6 @@ const IR_CALL_SUMMARY = {
     quarter: 'FY2026 第二季（官網財報）',
     source: 'https://investor.starbucks.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依星巴克(Starbucks)官方 Q2 FY2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望（上修）</b><br>
 • <b>上修 2026 全年同店銷售成長與非GAAP EPS 財測</b>。<br>
 • 第二季（Q2 FY2026）：營收年增 9% 至 <b>95 億美元</b>；<b>同店銷售 +6.2%</b>（來客數 +3.8%、客單價 +2.4%）；GAAP 營業利益率擴大 180bps 至 8.7%；GAAP EPS $0.45、非GAAP EPS $0.50。</div>
@@ -1974,7 +1950,6 @@ const IR_CALL_SUMMARY = {
     quarter: 'FY2026 第二季（官網財報）',
     source: 'https://thewaltdisneycompany.com/investor-relations/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依迪士尼(Disney)官方 Q2 FY2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第二季（FY2026 Q2）：總營收 <b>252 億美元、年增 7%</b>；各部門營業利益略優於先前財測；GAAP EPS $1.27、<b>調整後 EPS 升至 $1.57</b>（去年 $1.45）。<br>
 • 串流（Disney+）SVOD 獲利持續改善為重點。</div>
@@ -1985,7 +1960,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://marriott.gcs-web.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依萬豪國際(Marriott)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>2026 全年展望：全球 RevPAR（每房平均營收）成長 1.5～2.5%（固定匯率）、淨房間數成長 4.5～5%</b>；全年總管理費收入 <b>59.25～59.85 億美元</b>。<br>
 • 第一季（Q1 2026）：<b>全球 RevPAR 年增 4.2%</b>（美加 +4.0%、國際 +4.6%）；淨利 6.48 億、調整後淨利 7.26 億；<b>調整後 EPS $2.72</b>；淨房間數年增 4.5%。</div>
@@ -1996,7 +1970,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季營運更新（官網 ihgplc.com）',
     source: 'https://www.ihgplc.com/en/investors',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依洲際酒店集團(IHG)官網 Q1 2026 營運更新(Trading Update)人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>對達成市場共識的成長與獲利預期有信心</b>；開發動能延續（簽約與開業皆優於去年）。<br>
 • 第一季（Q1 2026）：<b>全球 RevPAR 年增 4.4%</b>（團體 +7%、商務 +6%、休閒 +1%；平均房價 ADR +2%）；<b>淨系統客房數年增 5.0%</b>，全球達 103.6 萬間客房（7,014 家飯店）。<br>
@@ -2009,7 +1982,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網 news.skhynix.com 財報）',
     source: 'https://news.skhynix.com/en/tag/quarterly-earnings/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 SK海力士(SK hynix)官網 1Q26 財報新聞稿人工判讀整理（單位：韓元），數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • 展望：AI 從大型模型訓練走向<b>agentic AI 即時推論</b>，記憶體需求擴及 DRAM 與 NAND；預期 <b>DRAM 與 NAND 價格續維持有利</b>。<br>
 • 第一季（Q1 2026）：<b>營收 52.58 兆韓元（季度首度突破 50 兆、創新高）</b>；營業利益 37.61 兆韓元、<b>營業利益率 72%（創新高、季增近倍）</b>；淨利 40.35 兆韓元（淨利率 77%）。<br>
@@ -2022,7 +1994,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（官網財報）',
     source: 'https://www.goldmansachs.com/investor-relations/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依高盛(Goldman Sachs)官方 2Q26 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測（銀行股無毛利率概念）</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第二季（2Q26）：淨營收 <b>203.4 億美元、淨利 66.3 億美元</b>；<b>EPS $20.98、ROE 23.5%</b>；每股淨值 $367.67。<br>
 • 上半年累計：淨營收 375.7 億、淨利 122.6 億。投行與交易受惠市場活動熱絡。</div>
@@ -2033,7 +2004,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（官網財報）',
     source: 'https://investor.bankofamerica.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依美國銀行(Bank of America)官方 2Q26 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測（銀行股無毛利率概念）</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第二季（2Q26）：<b>營收年增 15%、淨利雙位數成長、ROE 強勁</b>；深化既有客戶關係並拓展新客。<br>
 • 淨利息收入(NII)約 160 億美元；平均存款約 9,570 億美元。</div>
@@ -2044,7 +2014,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（官網財報）',
     source: 'https://www.morganstanley.com/about-us-ir',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依摩根士丹利(Morgan Stanley)官方 2Q26 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測（銀行股無毛利率概念）</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第二季（2Q26）：<b>淨營收 213 億美元</b>（去年同期 168 億，年增 27%）；<b>EPS $3.46、ROTCE 26.6%</b>。<br>
 • <b>財富管理淨新增資產創紀錄 1,480 億美元</b>；投資管理 AUM 達 10 兆美元里程碑。</div>
@@ -2055,7 +2024,6 @@ const IR_CALL_SUMMARY = {
     quarter: 'FY2026 第四季（官網財報）',
     source: 'https://investor.oracle.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依甲骨文(Oracle)官方 Q4 FY2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>第一季（Q1 FY2027）展望：總營收年增 27～29%</b>；全年 EPS 指引 $8.05（+18%）。<br>
 • <b>剩餘履約義務(RPO)暴增至 6,380 億美元、年增 363%</b>（單季增 850 億）——AI 與雲端基礎建設需求帶動的龐大 backlog。<br>
@@ -2067,7 +2035,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://investors.palantir.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依帕蘭泰爾(Palantir)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望（大幅上修）</b><br>
 • <b>營收年增 104%</b>；<b>上修 2026 全年營收成長指引至 71%</b>（較上季再拉高 10 個百分點）。<br>
 • 美國營收年增 104% 至 12.82 億美元；<b>美國商業營收年增 133% 至 5.95 億</b>——AI 平台(AIP)需求爆發。<br>
@@ -2079,7 +2046,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（官網財報，2026/07/22）',
     source: 'https://www.ibm.com/investor',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 IBM 官方 Q2 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • 重申全年展望；<b>全年自由現金流預計年增約 10 億美元</b>。<br>
 • 第二季（Q2 2026）：<b>軟體(Software)營收 78 億美元、年增 5%</b>（Hybrid Cloud／Red Hat 成長）；諮詢(Consulting)53 億（持平、固定匯率 +1%）；基礎架構(Infrastructure，Power/Storage)創新高速度成長。</div>
@@ -2090,7 +2056,6 @@ const IR_CALL_SUMMARY = {
     quarter: 'FY2026 第二季（官網財報）',
     source: 'https://investor.visa.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Visa 官方 Q2 FY2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測（支付網路無傳統毛利率）</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第二季（Q2 FY2026）：<b>淨營收 112 億美元、年增 17%（2022 年以來最高）</b>；GAAP EPS $3.14、非GAAP EPS $3.31（+20%）；非GAAP 淨利 63 億。<br>
 • <b>支付金額、跨境交易量、處理交易筆數皆強勁</b>；消費支出具韌性；持續回購與配息。</div>
@@ -2101,7 +2066,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://investor.mastercard.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依萬事達卡(Mastercard)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季（Q1 2026）：<b>淨營收 84 億美元、年增 16%</b>；<b>加值服務與解決方案年增 22%</b>；營業利益 49 億；調整後 EPS $4.35、調整後淨利 41 億。<br>
 • 總刷卡金額(GDV) +7%、消費金額 +9%（當地貨幣）；跨境交易強勁。</div>
@@ -2112,7 +2076,6 @@ const IR_CALL_SUMMARY = {
     quarter: 'FY2027 第一季（官網財報）',
     source: 'https://stock.walmart.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依沃爾瑪(Walmart)官方 Q1 FY2027 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>第二季（Q2 FY2027）展望：淨銷售固定匯率成長 4.0～5.0%</b>。<br>
 • 第一季（Q1 FY2027）：總營收（固定匯率）<b>1,754 億美元、年增 5.9%</b>；<b>電商淨銷售年增 26%</b>（佔總淨銷售 23%）；調整後營業利益 79 億、調整後 EPS $0.68；會員與其他收入成長。</div>
@@ -2123,7 +2086,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（官網財報，2026/07/09）',
     source: 'https://www.pepsico.com/investors',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依百事(PepsiCo)官方 Q2 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 未來成長展望</b><br>
 • <b>重申 2026 全年財務財測</b>。<br>
 • 第二季（Q2 2026）：<b>淨營收年增 6.4%、有機營收成長 2.4%</b>；核心 EPS 年增 4%。</div>
@@ -2134,7 +2096,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://www.investor.mcdonalds.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依麥當勞(McDonald's)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季（Q1 2026）：<b>全球同店銷售 +3.8%</b>（美國 +3.9%、國際自營市場 +3.9%）；營收年增 9%（固定匯率 +4%）；系統銷售 +11%。<br>
 • 營業利益 +12%；EPS $2.78（+7%）。</div>
@@ -2145,7 +2106,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://investor.exxonmobil.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依艾克森美孚(ExxonMobil)官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季（Q1 2026）：<b>獲利 42 億美元、EPS $1.00</b>（受不利的估計時序效應影響，排除相關項目後較高、EPS 約 $2.09）。<br>
 • 上游圭亞那(Guyana)產量提升；<b>Golden Pass LNG Train 1 首批 LNG 出貨</b>，擴大美國 LNG 出口。</div>
@@ -2156,7 +2116,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2027 財年第一季（官網財報，FY2027 Q1）',
     source: 'https://ir.crowdstrike.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 CrowdStrike 官方 FY2027 Q1 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季（截至 2026/4/30）：<b>總營收 13.9 億美元、年增 26%</b>；<b>年度經常性收入(ARR) 55.1 億美元、年增 24%</b>，其中本季<b>淨新增 ARR 2.56 億美元</b>。<br>
 • 訂閱毛利率約 78%；<b>營運現金流 5.91 億、自由現金流 4.68 億美元</b>（均創同季高）。<br>
@@ -2169,7 +2128,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 財年第三季（官網財報，FY2026 Q3）',
     source: 'https://investors.paloaltonetworks.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Palo Alto Networks 官方 FY2026 Q3 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第三季：<b>總營收 30 億美元、年增 31%</b>；<b>剩餘履約義務(RPO) 184 億美元、年增 36%</b>。<br>
 • <b>次世代安全 ARR(NGS ARR) 81 億美元、年增 60%</b>，平台化(Platformization)策略持續放量。<br>
@@ -2181,7 +2139,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://investors.arista.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Arista Networks 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季：<b>營收 27.09 億美元、年增 35.1%</b>；<b>非 GAAP 營業利益率 47.8%</b>（GAAP 42.7%）。<br>
 • 雲端與 AI 資料中心網路需求強勁，超大規模客戶擴建 AI 叢集帶動高速乙太網交換器出貨。</div>
@@ -2192,7 +2149,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2027 財年第一季（官網財報，FY2027 Q1）',
     source: 'https://investor.marvell.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Marvell 官方 FY2027 Q1 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季：<b>營收 24.18 億美元、年增 28%</b>，高於財測中值；<b>非 GAAP 毛利率 58.9%</b>。<br>
 • 資料中心（AI 客製化晶片、光電、交換）為主要成長引擎；<b>第二季財測約 27 億美元</b>。<br>
@@ -2204,7 +2160,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 財年第四季（官網初步業績，FY2026 Q4）',
     source: 'https://ir.supermicro.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Super Micro 官方 FY2026 Q4 初步業績公告人工判讀整理，數字均為官方原文（正式財報 8/11 公布），非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第四季（初步）：<b>營收接近 110–125 億美元財測區間下緣（約 110 億美元）</b>；<b>毛利率約 15–17%</b>（較前季改善）。<br>
 • 本季<b>接獲逾 600 億美元新訂單</b>，反映 AI 伺服器與液冷需求強勁。<br>
@@ -2216,7 +2171,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 財年第四季（官網股東信，FY2026 Q4，截至 2026/3/31）',
     source: 'https://investors.arm.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Arm 官方 FY2026 Q4 股東信(Shareholder Letter)人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第四季：<b>總營收 14.9 億美元、年增 20%（單季新高）</b>；<b>非 GAAP 每股盈餘 $0.60（創新高）</b>。<br>
 • <b>權利金(Royalty)收入 6.71 億美元、年增 11%</b>，成長來自智慧手機、邊緣 AI、實體 AI 與雲端 AI，其中<b>資料中心權利金年增逾一倍</b>。<br>
@@ -2229,7 +2183,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://investors.airbnb.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Airbnb 官方 Q1 2026 股東信人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季：<b>營收 27 億美元、年增 18%</b>（排除匯率 +15%）；淨利 1.6 億美元；<b>調整後 EBITDA 5.19 億美元、年增 24%</b>。<br>
 • <b>總訂單金額(GBV) 292 億美元、年增 19%</b>；<b>預訂夜晚與體驗數 1.562 億、年增 9%</b>；自由現金流 17 億美元（過去 12 個月 45 億）。<br>
@@ -2241,7 +2194,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://investors.vertiv.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Vertiv 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季：<b>淨銷售額 26.50 億美元、年增 30%</b>；<b>營業利益年增 51%</b>、調整後營業利益率 20.8%（+430 個基點）。<br>
 • <b>上修全年 2026 財測：淨銷售額 135–140 億美元、有機成長 29–31%</b>；調整後稀釋 EPS 6.30–6.40 美元（年增 51%）。</div>
@@ -2252,7 +2204,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://www.chevron.com/investors',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Chevron 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季：<b>獲利 22.1 億美元；調整後獲利 28 億美元</b>。上游(Upstream) 39.09 億、下游(Downstream) 虧損 8.17 億。<br>
 • <b>季內回饋股東 60 億美元</b>（含股利 35 億）；董事會宣告季配息每股 1.71 美元。<br>
@@ -2264,7 +2215,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（官網財報）',
     source: 'https://www.unitedhealthgroup.com/investors.html',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 UnitedHealth Group 官方 Q2 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第二季：<b>營收 1,120 億美元、營業利益 80 億美元</b>；<b>EPS $6.04</b>；醫療成本率(MCR) 86.7%。<br>
 • <b>UnitedHealthcare（保險）</b>：服務 4,850 萬人、營收 860 億、獲利 39 億；<b>Optum（健康服務）</b>：服務逾 1.2 億人、營收 657 億、獲利 40 億。<br>
@@ -2276,7 +2226,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://investors.abbvie.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 AbbVie 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季：<b>淨營收 150.02 億美元</b>；調整後稀釋 EPS $2.65。<br>
 • <b>免疫學組合 72.90 億、年增 16.4%</b>（Skyrizi 44.83 億、Rinvoq 21.19 億、Humira 6.88 億）；<b>神經科學 28.75 億、年增 26.0%</b>；腫瘤 16.31 億、醫美(Aesthetics) 11.86 億。<br>
@@ -2288,7 +2237,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://investors.amgen.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Amgen 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季：<b>總營收 86 億美元、年增 6%</b>（產品銷售 +4%）；GAAP EPS $3.34（+4%）、非 GAAP EPS $5.15（+5%）。<br>
 • <b>Repatha（降膽固醇）8.76 億、年增 34%</b>；Prolia 因生物相似藥衝擊年減 34% 至 7.27 億。<br>
@@ -2300,7 +2248,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 財年第三季（官網財報，FY2026 Q3）',
     source: 'https://investor.lamresearch.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Lam Research 官方 FY2026 Q3 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第三季（截至 2026/3/29）：<b>營收 58.4 億美元</b>；GAAP 毛利率 49.8%、營業利益率 35.0%、稀釋 EPS $1.45（非 GAAP 相近）。<br>
 • 區域營收：中國 34%、韓國 23%、台灣 23%、日本 8%；<b>下季財測營收約 66 億美元（±4 億）</b>。</div>
@@ -2311,7 +2258,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://investors.caterpillar.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Caterpillar 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季：<b>營收 174 億美元、年增 22%</b>；<b>每股獲利 $5.47</b>（去年同期 $4.20）。<br>
 • 分部：能源與運輸(Energy) 70.31 億、營建(Construction) 71.61 億、資源(Resource) 37.97 億；在手訂單(backlog)創高。</div>
@@ -2322,7 +2268,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（官網財報，GE Aerospace）',
     source: 'https://www.geaerospace.com/investor-relations',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 GE Aerospace 官方 Q2 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第二季：<b>訂單 165 億美元、年增 17%</b>；<b>營收(GAAP) 133 億、年增 21%</b>（調整後 126 億、+24%）；營業利益 27 億、年增 18%。<br>
 • <b>GAAP EPS $2.30（+23%）、調整後 EPS $2.02（+22%）</b>；自由現金流 30 億、年增 43%。<br>
@@ -2334,7 +2279,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第二季（官網財報，AT&T）',
     source: 'https://investors.att.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 AT&T 官方 Q2 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第二季：<b>營收 316 億美元、年增 2.3%</b>；持續營運 EPS $0.66（調整後 $0.65）；營業利益 75 億。<br>
 • 行動(Mobility)、光纖(Fiber)、固定無線同步淨增用戶；重申全年及多年財務財測。<br>
@@ -2346,7 +2290,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 財年第四季（官網財報，FY2026 Q4）',
     source: 'https://investors.nike.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 NIKE 官方 FY2026 Q4 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第四季：<b>營收 110 億美元、年減 1%（匯率中性 -4%）</b>；<b>毛利率年增 890 個基點至 49.2%</b>（去年同期受庫存出清壓低基期）。<br>
 • 全年 FY2026 營收 464 億美元、大致持平（匯率中性 -2%）；Nike Direct 第四季 41 億、年減 7%。</div>
@@ -2357,7 +2300,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報，歐元計價）',
     source: 'https://investors.spotify.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Spotify 官方 Q1 2026 股東信人工判讀整理，數字均為官方原文（歐元），非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季：<b>總營收 45.33 億歐元</b>（訂閱 41.48 億／廣告 3.85 億）；<b>毛利 14.95 億歐元、營業利益 7.15 億歐元</b>。<br>
 • <b>月活躍用戶(MAU) 7.61 億、付費訂閱戶(Premium) 2.93 億</b>（截至 2026/3/31）。</div>
@@ -2368,7 +2310,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://investors.boeing.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Boeing 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季：<b>營收 222 億美元</b>（交付 143 架商用機）；GAAP 每股虧損 $0.11、核心每股虧損（非 GAAP）$0.20；自由現金流 -15 億美元。<br>
 • <b>總積壓訂單(backlog)創高達 6,950 億美元</b>，含逾 6,100 架商用飛機。</div>
@@ -2379,7 +2320,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://investors.shopify.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 Shopify 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季：<b>營收 31.70 億美元、年增約 34%</b>（去年同期 23.60 億）；毛利 15.46 億、營業利益 3.82 億；<b>自由現金流 4.76 億（利潤率 15%）</b>。<br>
 • 訂閱方案(Subscription) 7.50 億、商家解決方案(Merchant Solutions) 24.20 億；每月經常性收入(MRR) 2.12 億。</div>
@@ -2390,7 +2330,6 @@ const IR_CALL_SUMMARY = {
     quarter: '2026 第一季（官網財報）',
     source: 'https://investor.pypl.com/',
     html: `
-<div style="color:var(--green);font-size:12px;margin-bottom:8px">✅ 依 PayPal 官方 Q1 2026 財報新聞稿人工判讀整理，數字均為官方原文，非AI臆測</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
 • 第一季：<b>淨營收 84 億美元、年增 7%</b>（匯率中性 +5%）；<b>總支付金額(TPV) 4,640 億、年增 11%</b>；支付筆數 65 億、年增 7%。<br>
 • GAAP EPS $1.21（-6%）、非 GAAP EPS $1.34（+1%）；營運現金流 11 億美元。</div>
