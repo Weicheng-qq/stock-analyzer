@@ -1172,11 +1172,15 @@ async function retryAI(){
   else{ logErr('ai','AI 失敗：'+(aiErr.message==='DAILY_LIMIT'?'免費 AI 每日額度已用完（明早 8 點重置）':aiErr.message)); showAIFail(aiErr, usedServer); }
   setTimeout(()=>logPanel(false),1200);
 }
-// 條列(•)行套用「懸掛縮排」：換行後的文字對齊第一行首字(而非跑到最左邊的圓點下)
+// 條列行套用「懸掛縮排」：換行後的文字對齊第一行首字(而非跑到最左邊的標記下)
+// 標記＝• 或各種清單用 emoji(🏰🟢🔴🚀✅⚠️…)；只在「行首(<br>/</div>/開頭之後)」才算，避免動到標題內或內文中的 emoji
 function hangIndent(html){
-  if(!html || html.indexOf('•')<0) return html;
-  html=html.replace(/(•[^]*?)(?=<br\s*\/?>|<\/div>|$)/g, m=>`<span class="li">${m}</span>`);
-  html=html.replace(/<br\s*\/?>\s*(<span class="li">)/g, '$1');
+  if(!html) return html;
+  try{
+    const M='[\\u2022\\u2023\\u2043\\u25AA\\u25E6\\u2705\\u26A0\\u2600-\\u27BF\\u2190-\\u21FF\\u2B00-\\u2BFF\\u{1F300}-\\u{1FAFF}]';
+    const re=new RegExp('(^|<br\\s*/?>|</div>)\\s*('+M+'[^]*?)(?=<br\\s*/?>|</div>|$)','gu');
+    html=html.replace(re, (m,pre,body)=> (/^<br/i.test(pre)?'':pre) + '<span class="li">'+body+'</span>');
+  }catch(e){ /* 舊瀏覽器不支援 unicode regex 就維持原樣 */ }
   return html;
 }
 function setAI(id,html){ const el=document.getElementById(id); if(el) el.innerHTML=hangIndent(html); }
