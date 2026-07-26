@@ -1178,7 +1178,7 @@ function hangIndent(html){
   if(!html) return html;
   try{
     const M='[\\u2022\\u2023\\u2043\\u25AA\\u25E6\\u2705\\u26A0\\u2600-\\u27BF\\u2190-\\u21FF\\u2B00-\\u2BFF\\u{1F300}-\\u{1FAFF}]';
-    const re=new RegExp('(^|<br\\s*/?>|</div>)\\s*('+M+'[^]*?)(?=<br\\s*/?>|</div>|$)','gu');
+    const re=new RegExp('(^|<br\\s*/?>|</div>|<div[^>]*>)\\s*('+M+'[^]*?)(?=<br\\s*/?>|</div>|$)','gu');
     html=html.replace(re, (m,pre,body)=> (/^<br/i.test(pre)?'':pre) + '<span class="li">'+body+'</span>');
   }catch(e){ /* 舊瀏覽器不支援 unicode regex 就維持原樣 */ }
   return html;
