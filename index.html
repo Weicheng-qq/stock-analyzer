@@ -204,6 +204,11 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 #ai_guidance .ai > div:not(.ir-video):not(.note), #ai_products .ai > div:not(.note) { margin-bottom:14px; padding-bottom:13px; border-bottom:1px solid rgba(48,54,61,.6); }
 #ai_guidance .ai > div:not(.ir-video):not(.note):last-child, #ai_products .ai > div:not(.note):last-child { border-bottom:none; padding-bottom:0; margin-bottom:0; }
 /* 美股四大指數（放在自選股上面）：桌機4欄、手機2×2，全部一次顯示、不用橫向捲動 */
+.grp-menu { display:flex; gap:6px; overflow-x:auto; margin:0 0 16px; padding-bottom:3px; -webkit-overflow-scrolling:touch; }
+.grp-menu .grp-btn { flex:0 0 auto; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:20px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; }
+.grp-menu .grp-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
+.grp-mode .g2 { display:block; }
+.grp-empty { text-align:center; color:var(--text2); font-size:13px; padding:40px 16px; line-height:1.8; }
 .market-tabs { display:flex; gap:8px; margin:0 0 14px; }
 .market-tabs .mkt-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:10px; padding:11px 10px; font-size:15px; font-weight:700; cursor:pointer; }
 .market-tabs .mkt-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
@@ -246,9 +251,9 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   <div class="logo"><svg width="30" height="30" viewBox="0 0 192 192" style="vertical-align:-8px;margin-right:2px"><rect width="192" height="192" rx="40" fill="#0d1117"/><rect x="34" y="118" width="24" height="40" rx="6" fill="#58a6ff"/><rect x="74" y="94" width="24" height="64" rx="6" fill="#58a6ff"/><rect x="114" y="70" width="24" height="88" rx="6" fill="#58a6ff"/><rect x="154" y="34" width="24" height="124" rx="6" fill="#3fb950"/></svg> 美股AI深度分析</div>
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="代碼或公司名，例如 AAPL / 台積電 / 諾和諾德 / Apple" onkeydown="if(event.key==='Enter')doSearch()">
+    <input type="text" id="searchInput" placeholder="代碼或公司名，例如 AAPL / 台積電 / 諾和諾德 / Apple" onkeydown="if(event.key==='Enter'){__jumpAfterSearch=true;doSearch()}">
   </div>
-  <button class="search-btn" onclick="doSearch()">分析</button>
+  <button class="search-btn" onclick="__jumpAfterSearch=true;doSearch()">分析</button>
   <button class="install-btn" id="installBtn" onclick="handleInstallClick()" title="安裝成手機/電腦App" style="display:none">📲 安裝 App</button>
   <button class="settings-btn" onclick="openSettings()" title="AI 金鑰設定">⚙️</button>
 </div>
@@ -307,6 +312,16 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <button class="mkt-btn" data-mkt="us" onclick="setMarket('us')">🔵 美股</button>
     <button class="mkt-btn" data-mkt="tw" onclick="setMarket('tw')">🟢 台股</button>
   </div>
+  <div class="grp-menu" id="grpMenu">
+    <button class="grp-btn" data-g="1" onclick="showGroup(1)">大盤指數與自選股</button>
+    <button class="grp-btn" data-g="2" onclick="showGroup(2)">關鍵財務指標</button>
+    <button class="grp-btn" data-g="3" onclick="showGroup(3)">護城河與彼得林區分類</button>
+    <button class="grp-btn" data-g="4" onclick="showGroup(4)">股價估值評估</button>
+    <button class="grp-btn" data-g="5" onclick="showGroup(5)">法說會未來前景</button>
+    <button class="grp-btn" data-g="6" onclick="showGroup(6)">財經新聞</button>
+    <button class="grp-btn" data-g="7" onclick="showGroup(7)">AI技術分析</button>
+    <button class="grp-btn" data-g="8" onclick="showGroup(8)">投資總結</button>
+  </div>
   <div class="index-title" id="indexTitle">📊 四大指數</div>
   <div id="indexBar" class="index-bar"></div>
 
@@ -321,6 +336,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 
   <div id="logPanel" class="log-panel"><h3>🔄 載入進度</h3><div id="logItems"></div></div>
   <div id="results" class="results"></div>
+  <div id="grpEmpty" class="grp-empty" style="display:none">請先回到「大盤指數與自選股」，點任一個股的「AI」按鈕完成分析，即可在此看到該主題內容。</div>
 </div>
 
 <script>
@@ -528,7 +544,7 @@ function logPanel(s){ document.getElementById('logPanel').style.display=s?'block
 function logAdd(k,m){ const c=document.getElementById('logItems'); const d=document.createElement('div'); d.className='log-item'; d.id='log_'+k; d.innerHTML=`<div class="log-spin"></div><span>${m}</span>`; c.appendChild(d); }
 function logOk(k,m){ const el=document.getElementById('log_'+k); if(el) el.innerHTML=`<span class="log-ok">✓</span><span>${m}</span>`; }
 function logErr(k,m){ const el=document.getElementById('log_'+k); if(el) el.innerHTML=`<span class="log-err">✗</span><span style="color:var(--red)">${m}</span>`; }
-function quickSearch(s){ document.getElementById('searchInput').value=s; doSearch(); }
+function quickSearch(s){ document.getElementById('searchInput').value=s; __jumpAfterSearch=true; doSearch(); }
 
 // ── SEC ──
 // 常用中文／別名 → 美股代碼（找不到代碼時先查這裡）
@@ -643,7 +659,7 @@ function moveWatchlistItem(symbol, dir){
 function watchlistAnalyze(symbol){
   if(/\.TW[O]?$/i.test(symbol) || getMarket()==='tw'){ alert('台股個股深度分析建置中（Phase 2 即將推出）；目前台股可看即時股價、當日走勢線與 AI 漲跌解讀。'); return; }
   const inp=document.getElementById('searchInput'); if(inp) inp.value=symbol;
-  doSearch();
+  __jumpAfterSearch=true; doSearch();
   window.scrollTo({top:0, behavior:'smooth'});
 }
 function renderWatchlist(){
@@ -1151,7 +1167,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 
   drawChart(rows);
   loadTechnical(symbol, SEARCH_GEN);
-  renderLayoutControls();
+  applyGroupAfterRender();
 
   // 給 AI 的上下文
   const finText=rows.map(r=>`${r.yr}: 營收${cs}${fmtB(r.rev)}, 成長${r.gr!=null?r.gr.toFixed(1)+'%':'NA'}, 毛利率${r.gm!=null?r.gm.toFixed(1)+'%':'NA'}, 淨利率${r.nm!=null?r.nm.toFixed(1)+'%':'NA'}, ROE${r.roe!=null?r.roe.toFixed(1)+'%':'NA'}`).join('\n')
@@ -3325,7 +3341,38 @@ function initMarketUI(){
   const it=document.getElementById('indexTitle'); if(it) it.textContent = m==='tw' ? '📊 加權指數' : '📊 四大指數';
   const si=document.getElementById('searchInput'); if(si) si.placeholder = m==='tw' ? '台股代碼或名稱，例如 2330 / 台積電 / 聯發科' : '代碼或公司名，例如 AAPL / 台積電 / Apple';
 }
-window.addEventListener('load', function(){ initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); });
+// ── 8 大主題選單：把各架構主旨分組，點選單只看該群組 ──
+let __grp=1, __jumpAfterSearch=false;
+function cardGroup(c){
+  if(c.classList && c.classList.contains('co-head')) return 7;   // 公司股價
+  const ct=c.querySelector && c.querySelector('.ct'); const t=ct?ct.textContent:'';
+  if(/財務指標|年營收/.test(t)) return 2;
+  if(/護城河|彼得林區|競爭對手/.test(t)) return 3;
+  if(/估值/.test(t)) return 4;
+  if(/法說會|利多|利空|風險/.test(t)) return 5;
+  if(/最新新聞|目標價/.test(t)) return 6;
+  if(/技術分析|產品與服務/.test(t)) return 7;
+  if(/投資總結/.test(t)) return 8;
+  return 0;
+}
+function showGroup(n){
+  __grp=n; document.body.classList.add('grp-mode');
+  ['welcome','indexTitle','indexBar','watchlistCard'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display=(n===1)?'':'none'; });
+  const res=document.getElementById('results'); let anyCard=false;
+  if(res){
+    res.style.display=(n===1)?'none':'';
+    [...res.querySelectorAll('.card, .co-head')].forEach(c=>{ const show=cardGroup(c)===n; c.style.display=show?'':'none'; if(show) anyCard=true; });
+    res.querySelectorAll('.g2').forEach(g=>{ const vis=[...g.children].some(c=>c.style.display!=='none'); g.style.display=vis?'block':'none'; });
+    res.querySelectorAll(':scope > .note').forEach(nt=>nt.style.display='none');
+  }
+  const emp=document.getElementById('grpEmpty'); if(emp) emp.style.display=(n>=2 && !anyCard)?'block':'none';
+  document.querySelectorAll('#grpMenu .grp-btn').forEach(b=>b.classList.toggle('active', +b.dataset.g===n));
+  setTimeout(()=>{ if(res) res.querySelectorAll('canvas').forEach(cv=>{ if(cv.offsetParent){ const ch=(window.Chart&&Chart.getChart)?Chart.getChart(cv):null; if(ch) ch.resize(); } }); }, 60);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+// 分析完成後：若使用者主動查詢，跳到「關鍵財務指標」；否則(如開場範例)維持目前群組
+function applyGroupAfterRender(){ if(__jumpAfterSearch){ __jumpAfterSearch=false; showGroup(2); } else { showGroup(__grp); } }
+window.addEventListener('load', function(){ initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); showGroup(1); });
 
 // ⚠️ 暫時停用 Service Worker 註冊：先前的 SW 在部分裝置(桌面Chrome/Edge、Android PWA)造成整頁重載迴圈。
 // 不再主動註冊；已有舊 SW 的裝置，瀏覽器會自動抓到已改成 kill-switch 的 sw.js 並自我清除(清快取+unregister)，迴圈即中止。
