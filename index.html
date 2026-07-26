@@ -198,6 +198,9 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 #ai_guidance .ai > div:not(.ir-video):not(.note), #ai_products .ai > div:not(.note) { margin-bottom:14px; padding-bottom:13px; border-bottom:1px solid rgba(48,54,61,.6); }
 #ai_guidance .ai > div:not(.ir-video):not(.note):last-child, #ai_products .ai > div:not(.note):last-child { border-bottom:none; padding-bottom:0; margin-bottom:0; }
 /* 美股四大指數（放在自選股上面）：桌機4欄、手機2×2，全部一次顯示、不用橫向捲動 */
+.market-tabs { display:flex; gap:8px; margin:0 0 14px; }
+.market-tabs .mkt-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:10px; padding:11px 10px; font-size:15px; font-weight:700; cursor:pointer; }
+.market-tabs .mkt-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
 .index-title { font-size:18px; font-weight:800; color:var(--blue); margin:0 0 10px; letter-spacing:.3px; }
 .index-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:20px; }
 .index-bar .ix { background:var(--bg2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:11px 6px; text-align:center; min-width:0; }
@@ -294,7 +297,11 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     </div>
   </div>
 
-  <div class="index-title">📊 四大指數</div>
+  <div class="market-tabs" id="marketTabs">
+    <button class="mkt-btn" data-mkt="us" onclick="setMarket('us')">🔵 美股</button>
+    <button class="mkt-btn" data-mkt="tw" onclick="setMarket('tw')">🟢 台股</button>
+  </div>
+  <div class="index-title" id="indexTitle">📊 四大指數</div>
   <div id="indexBar" class="index-bar"></div>
 
   <div class="card" id="watchlistCard" style="margin-bottom:20px">
@@ -564,8 +571,18 @@ async function loadTickerMap(){
 
 // ⭐ 自選股：存在瀏覽器 localStorage(只存在你自己的裝置)，可新增/刪除/上下移排序；
 // 「AI分析」按鈕直接觸發完整搜尋，帶出這個網站的所有區塊(財務/彼得林區分類/新聞/目標價/投資總結...)
-function getWatchlist(){ try{ const raw=localStorage.getItem('watchlist'); if(raw===null) return [{symbol:'TSM',name:'台積電'},{symbol:'GOOGL',name:'谷歌'},{symbol:'NVDA',name:'輝達'},{symbol:'NVO',name:'諾和諾德'}]; return JSON.parse(raw); }catch(e){ return []; } }
-function saveWatchlist(list){ try{ localStorage.setItem('watchlist', JSON.stringify(list)); }catch(e){} }
+// 市場模式：美股(us) / 台股(tw)。台股用 Yahoo「代碼.TW」，一套程式共用。
+function getMarket(){ try{ return localStorage.getItem('market')||'us'; }catch(e){ return 'us'; } }
+function setMarket(m){ try{ localStorage.setItem('market', m); }catch(e){} location.reload(); }
+// 常見台股代碼→中文名(加入自選股時用；查無再用 Yahoo 名稱)
+const TW_NAMES={'2330':'台積電','2317':'鴻海','2454':'聯發科','2308':'台達電','2382':'廣達','2303':'聯電','3711':'日月光投控','2412':'中華電','2891':'中信金','2881':'富邦金','2882':'國泰金','2886':'兆豐金','2884':'玉山金','2603':'長榮','2609':'陽明','2615':'萬海','2379':'瑞昱','3034':'聯詠','2357':'華碩','2409':'友達','3231':'緯創','2356':'英業達','4938':'和碩','2377':'微星','6669':'緯穎','3661':'世芯-KY','3443':'創意','6488':'環球晶','8046':'南電','2408':'南亞科','3037':'欣興','2327':'國巨','1301':'台塑','1303':'南亞','1326':'台化','2002':'中鋼','2207':'和泰車','1216':'統一','2912':'統一超','2801':'彰銀','5880':'合庫金','2892':'第一金','2880':'華南金','00878':'國泰永續高股息','0056':'元大高股息','0050':'元大台灣50'};
+const WATCH_DEFAULT={
+  us:[{symbol:'TSM',name:'台積電'},{symbol:'GOOGL',name:'谷歌'},{symbol:'NVDA',name:'輝達'},{symbol:'NVO',name:'諾和諾德'}],
+  tw:[{symbol:'2330.TW',name:'台積電'},{symbol:'2317.TW',name:'鴻海'},{symbol:'2454.TW',name:'聯發科'},{symbol:'2308.TW',name:'台達電'}]
+};
+function wlKey(){ return getMarket()==='tw' ? 'watchlist_tw' : 'watchlist'; }
+function getWatchlist(){ try{ const raw=localStorage.getItem(wlKey()); if(raw===null) return WATCH_DEFAULT[getMarket()].slice(); return JSON.parse(raw); }catch(e){ return []; } }
+function saveWatchlist(list){ try{ localStorage.setItem(wlKey(), JSON.stringify(list)); }catch(e){} }
 async function translateCompanyName(enName){
   try{
     const r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'meta-llama/llama-3.3-70b-instruct:free',messages:[{role:'user',content:`Translate this US-listed company's official name into its commonly-used Traditional Chinese (繁體中文) short name, the way Taiwanese financial media would refer to it (e.g. "Apple Inc" -> 蘋果, "Microsoft Corporation" -> 微軟). Reply with ONLY the Chinese name, nothing else, no punctuation, no explanation.\n\nCompany name: ${enName}`}],temperature:0.2})});
@@ -578,6 +595,18 @@ async function translateCompanyName(enName){
 async function addToWatchlist(){
   const inp=document.getElementById('watchlistInput');
   const raw=(inp?.value||'').trim(); if(!raw) return;
+  // 台股模式：輸入 4 碼代碼(或帶.TW)即可加入，用 Yahoo「代碼.TW」抓資料
+  if(getMarket()==='tw'){
+    let code=raw.replace(/[^0-9A-Za-z]/g,'').toUpperCase();
+    const m=code.match(/^(\d{4,6})(TW|TWO)?$/i);
+    if(!m){ alert('請輸入台股代碼，例如 2330（台積電）、6488（環球晶）'); return; }
+    const sym=m[1]+'.'+((m[2]||'TW').toUpperCase()==='TWO'?'TWO':'TW');
+    const list=getWatchlist();
+    if(list.some(x=>x.symbol===sym)){ alert(`「${m[1]}」已在清單裡了`); inp.value=''; return; }
+    let name=(TW_NAMES&&TW_NAMES[m[1]])||m[1];
+    if(name===m[1]){ try{ const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=1d&interval=1d`); const nm=ch?.chart?.result?.[0]?.meta?.shortName; if(nm) name=nm; }catch(e){} }
+    list.push({symbol:sym, name}); saveWatchlist(list); inp.value=''; renderWatchlist(); return;
+  }
   try{
     await loadTickerMap();
     const found=findCompany(raw);
@@ -604,6 +633,7 @@ function moveWatchlistItem(symbol, dir){
   renderWatchlist();
 }
 function watchlistAnalyze(symbol){
+  if(/\.TW[O]?$/i.test(symbol) || getMarket()==='tw'){ alert('台股個股深度分析建置中（Phase 2 即將推出）；目前台股可看即時股價、當日走勢線與 AI 漲跌解讀。'); return; }
   const inp=document.getElementById('searchInput'); if(inp) inp.value=symbol;
   doSearch();
   window.scrollTo({top:0, behavior:'smooth'});
@@ -817,6 +847,7 @@ async function mergeAll(cik,tags,instant){
 async function doSearch(){
   const raw=document.getElementById('searchInput').value.trim();
   if(!raw) return;
+  if(getMarket()==='tw'){ alert('台股個股深度分析建置中（Phase 2 即將推出）。目前台股可用：自選股即時股價、當日走勢線、盤前/盤後、AI 漲跌解讀、台股指數。'); return; }
   let symbol;
   const gen=++SEARCH_GEN;   // 本次搜尋序號：避免上一次(較慢)的非同步回應蓋掉這次結果
   window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__capexData=null; window.__wikiData=null; window.__guidanceData=null;
@@ -3245,6 +3276,7 @@ function fmtRev(v,rUnit){ return Math.round(v/rUnit.div).toLocaleString('en-US')
 var __demoRan=false;   // 一次性旗標：確保範例只會自動跑一次，避免 load+pageshow 或重複事件觸發第二次 doSearch(第二次會在開頭清空結果，造成「內容閃一下就消失」)
 function maybeRunDemo(){
   if(__demoRan) return;
+  if(getMarket()==='tw') return;   // 台股模式不自動跑美股範例(台股個股分析為Phase 2)
   var welcome=document.getElementById('welcome');
   var results=document.getElementById('results');
   if(!welcome || getComputedStyle(welcome).display==='none') return;   // 已經在跑/看某支股票，別打斷
@@ -3258,10 +3290,14 @@ window.addEventListener('pageshow', function(e){ if(e.persisted) maybeRunDemo();
 // 最上方美股四大指數列：道瓊、標普500、那斯達克、費城半導體（漲綠跌紅，與自選股一致）
 async function loadIndexBar(){
   const el=document.getElementById('indexBar'); if(!el) return;
-  const idx=[{s:'^DJI',n:'道瓊'},{s:'^GSPC',n:'標普500'},{s:'^IXIC',n:'那斯達克'},{s:'^SOX',n:'費城半導體'}];
-  if(!el.children.length) el.innerHTML=idx.map(x=>`<div class="ix" id="ix_${x.s.replace('^','')}"><span class="ix-name">${x.n}</span><span class="ix-val">…</span></div>`).join('');
+  const idx = getMarket()==='tw'
+    ? [{s:'^TWII',n:'加權指數'},{s:'^TWOII',n:'櫃買指數'}]
+    : [{s:'^DJI',n:'道瓊'},{s:'^GSPC',n:'標普500'},{s:'^IXIC',n:'那斯達克'},{s:'^SOX',n:'費城半導體'}];
+  el.style.gridTemplateColumns = idx.length===2 ? 'repeat(2,1fr)' : '';   // 台股2欄;美股用CSS(桌機4/手機2)
+  const cid=s=>'ix_'+s.replace(/[^A-Za-z0-9]/g,'');
+  if(!el.children.length) el.innerHTML=idx.map(x=>`<div class="ix" id="${cid(x.s)}"><span class="ix-name">${x.n}</span><span class="ix-val">…</span></div>`).join('');
   await Promise.all(idx.map(async x=>{
-    const cell=document.getElementById('ix_'+x.s.replace('^','')); if(!cell) return;
+    const cell=document.getElementById(cid(x.s)); if(!cell) return;
     try{
       const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(x.s)}?range=1d&interval=1d`);
       const m=ch?.chart?.result?.[0]?.meta; const p=m?.regularMarketPrice, prev=m?.previousClose??m?.chartPreviousClose;
@@ -3270,7 +3306,14 @@ async function loadIndexBar(){
     }catch(e){ cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-val">—</span>`; }
   }));
 }
-window.addEventListener('load', function(){ renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); });
+// 依目前市場設定切換鈕與標題的樣式
+function initMarketUI(){
+  const m=getMarket();
+  document.querySelectorAll('#marketTabs .mkt-btn').forEach(b=>b.classList.toggle('active', b.dataset.mkt===m));
+  const it=document.getElementById('indexTitle'); if(it) it.textContent = m==='tw' ? '📊 台股指數' : '📊 美股四大指數';
+  const si=document.getElementById('searchInput'); if(si) si.placeholder = m==='tw' ? '台股代碼或名稱，例如 2330 / 台積電 / 聯發科' : '代碼或公司名，例如 AAPL / 台積電 / Apple';
+}
+window.addEventListener('load', function(){ initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); });
 
 // ⚠️ 暫時停用 Service Worker 註冊：先前的 SW 在部分裝置(桌面Chrome/Edge、Android PWA)造成整頁重載迴圈。
 // 不再主動註冊；已有舊 SW 的裝置，瀏覽器會自動抓到已改成 kill-switch 的 sw.js 並自我清除(清快取+unregister)，迴圈即中止。
