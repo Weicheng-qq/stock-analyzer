@@ -3360,7 +3360,7 @@ function showGroup(n){
   ['welcome','indexTitle','indexBar','watchlistCard'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display=(n===1)?'':'none'; });
   const res=document.getElementById('results'); let anyCard=false;
   if(res){
-    res.style.display=(n===1)?'none':'';
+    res.style.display=(n===1)?'none':'block';   // .results 類別預設 display:none，需明確設 block 才顯示
     [...res.querySelectorAll('.card, .co-head')].forEach(c=>{ const show=cardGroup(c)===n; c.style.display=show?'':'none'; if(show) anyCard=true; });
     res.querySelectorAll('.g2').forEach(g=>{ const vis=[...g.children].some(c=>c.style.display!=='none'); g.style.display=vis?'block':'none'; });
     res.querySelectorAll(':scope > .note').forEach(nt=>nt.style.display='none');
