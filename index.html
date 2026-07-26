@@ -979,8 +979,8 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
     {label:'ROE > 20%', pass:lastRoe!=null?lastRoe>20:null, val:lastRoe!=null?lastRoe.toFixed(1)+'%':'無資料'},
     {label:'10年營收整體向上（≤2年下滑）', pass:growths.length?(declineYears<=2&&overallUp):null, val:`下滑${declineYears}年`},
     {label:'近3年營收成長皆 > 20%（快速成長）', pass:last3g.length===3?fastGrower:null, val:last3g.map(g=>g.toFixed(0)+'%').join(' / ')||'無資料'},
-    {label:'本益比 < 13', pass:pe!=null?pe<13:null, cls:(pe!=null&&pe<13)?'g':(pePos!=null?(pePos<=70?'y':'r'):(pe!=null?'r':'')), val:pe!=null?pe.toFixed(1)+'x':'無資料'},
-    {label:'本益比位於近5年區間偏低半部', pass:(pePos!=null)?pePos<50:null, cls:(pePos==null?'':(pePos<50?'g':pePos<=70?'y':'r')), val:(pe5&&pePos!=null)?`區間${pe5.min.toFixed(0)}~${pe5.max.toFixed(0)}x，現${pePos.toFixed(0)}%位置`:'無資料'},
+    {label:'本益比 < 13', pass:pe!=null?pe<13:null, cls:(pe!=null&&pe<13)?'g':(pePos!=null?(pePos<=50?'y':'r'):(pe!=null?'r':'')), val:pe!=null?pe.toFixed(1)+'x':'無資料'},
+    {label:'本益比位於近5年區間偏低半部', pass:(pePos!=null)?pePos<50:null, cls:(pe!=null&&pe<13)?'g':(pePos==null?'':(pePos<=50?'y':'r')), val:(pe5&&pePos!=null)?`區間${pe5.min.toFixed(0)}~${pe5.max.toFixed(0)}x，現${pePos.toFixed(0)}%位置`:'無資料'},
   ];
   const passCount=checklist.filter(c=>c.pass===true).length;
   const chkHtml=checklist.map(c=>`<div class="vr"><span class="vl">${c.pass===true?'✅':c.pass===false?'❌':'➖'} ${c.label}</span><span class="vn ${c.cls!==undefined?c.cls:(c.pass===true?'g':c.pass===false?'r':'')}">${esc(c.val)}</span></div>`).join('');
