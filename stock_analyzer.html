@@ -112,6 +112,12 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-move button:hover:not(:disabled) { color:var(--blue); }
 .wl-move button:disabled { opacity:.25; cursor:default; }
 .wl-logo { flex:none; width:34px; height:34px; border-radius:7px; object-fit:contain; background:#fff; padding:2px; box-sizing:border-box; }
+.wl-logo-tw { background:var(--bg3); color:var(--text2); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; padding:0; }
+/* 台股慣例：紅漲綠跌(與美股相反)。整站在台股模式時翻轉漲跌顏色 */
+.mkt-tw .wl-chg .pill.up { background:var(--red); }
+.mkt-tw .wl-chg .pill.down { background:var(--green); }
+.mkt-tw .index-bar .ix-chg.up, .mkt-tw .wl-ext .up { color:var(--red); }
+.mkt-tw .index-bar .ix-chg.down, .mkt-tw .wl-ext .down { color:var(--green); }
 .wl-name { flex:1.3; min-width:0; font-weight:700; font-size:15.5px; overflow-wrap:anywhere; word-break:break-word; line-height:1.2; }
 .wl-name .sym { display:block; color:var(--text2); font-weight:400; font-size:12px; }
 .wl-spark { flex:none; width:70px; height:26px; }
@@ -653,9 +659,10 @@ function renderWatchlist(){
         <button onclick="moveWatchlistItem('${esc(it.symbol)}',-1)" ${i===0?'disabled':''} title="上移">▲</button>
         <button onclick="moveWatchlistItem('${esc(it.symbol)}',1)" ${i===list.length-1?'disabled':''} title="下移">▼</button>
       </div>
-      <img class="wl-logo" src="https://financialmodelingprep.com/image-stock/${esc(it.symbol)}.png" alt="" loading="lazy"
-           onerror="if(this.dataset.fb){this.style.display='none'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(it.symbol)}')}">
-      <div class="wl-name" title="${esc(it.name)}">${esc(it.name)}<span class="sym">${esc(it.symbol)}</span></div>
+      ${/\.TW/i.test(it.symbol)
+        ? `<div class="wl-logo wl-logo-tw">${esc(it.symbol.replace(/\..*/,''))}</div>`
+        : `<img class="wl-logo" src="https://financialmodelingprep.com/image-stock/${esc(it.symbol)}.png" alt="" loading="lazy" onerror="if(this.dataset.fb){this.style.display='none'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(it.symbol)}')}">`}
+      <div class="wl-name" title="${esc(it.name)}">${esc(it.name)}<span class="sym">${esc(it.symbol.replace(/\.(TW|TWO)$/i,''))}</span></div>
       <svg class="wl-spark" id="wls_${esc(it.symbol)}" viewBox="0 0 72 26" preserveAspectRatio="none" aria-hidden="true"></svg>
       <div class="wl-pc">
         <div class="wl-price" id="wlp_${esc(it.symbol)}">…</div>
@@ -711,7 +718,7 @@ async function loadWatchlistSpark(list){
       if(sEl && pts.length>=2){
         const mn=Math.min(...pts), mx=Math.max(...pts), rng=(mx-mn)||1, W=70, H=26, pad=3;
         const d=pts.map((v,idx)=>`${(idx/(pts.length-1)*(W-pad*2)+pad).toFixed(1)},${(H-pad-(v-mn)/rng*(H-pad*2)).toFixed(1)}`).join(' ');
-        const up=pts[pts.length-1]>=pts[0]; const col=up?'#3fb950':'#f85149';
+        const up=pts[pts.length-1]>=pts[0]; const tw=getMarket()==='tw'; const col=up?(tw?'#f85149':'#3fb950'):(tw?'#3fb950':'#f85149');
         sEl.innerHTML=`<polyline points="${d}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>`;
       }
       if(eEl){
@@ -3309,6 +3316,7 @@ async function loadIndexBar(){
 // 依目前市場設定切換鈕與標題的樣式
 function initMarketUI(){
   const m=getMarket();
+  document.body.classList.toggle('mkt-tw', m==='tw');   // 台股紅漲綠跌
   document.querySelectorAll('#marketTabs .mkt-btn').forEach(b=>b.classList.toggle('active', b.dataset.mkt===m));
   const it=document.getElementById('indexTitle'); if(it) it.textContent = m==='tw' ? '📊 台股指數' : '📊 美股四大指數';
   const si=document.getElementById('searchInput'); if(si) si.placeholder = m==='tw' ? '台股代碼或名稱，例如 2330 / 台積電 / 聯發科' : '代碼或公司名，例如 AAPL / 台積電 / Apple';
