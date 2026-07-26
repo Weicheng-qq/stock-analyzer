@@ -3346,13 +3346,13 @@ let __grp=1, __jumpAfterSearch=false;
 function cardGroup(c){
   if(c.classList && c.classList.contains('co-head')) return 7;   // 公司股價
   const ct=c.querySelector && c.querySelector('.ct'); const t=ct?ct.textContent:'';
+  if(/投資總結/.test(t)) return 8;   // 需在護城河之前判斷(投資總結標題含「護城河」三字)
   if(/財務指標|年營收/.test(t)) return 2;
   if(/護城河|彼得林區|競爭對手/.test(t)) return 3;
   if(/估值/.test(t)) return 4;
   if(/法說會|利多|利空|風險/.test(t)) return 5;
   if(/最新新聞|目標價/.test(t)) return 6;
   if(/技術分析|產品與服務/.test(t)) return 7;
-  if(/投資總結/.test(t)) return 8;
   return 0;
 }
 function showGroup(n){
