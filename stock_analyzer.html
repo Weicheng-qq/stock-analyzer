@@ -582,6 +582,8 @@ function getMarket(){ try{ return localStorage.getItem('market')||'us'; }catch(e
 function setMarket(m){ try{ localStorage.setItem('market', m); }catch(e){} location.reload(); }
 // 常見台股代碼→中文名(加入自選股時用；查無再用 Yahoo 名稱)
 const TW_NAMES={'2330':'台積電','2317':'鴻海','2454':'聯發科','2308':'台達電','2382':'廣達','2303':'聯電','3711':'日月光投控','2412':'中華電','2891':'中信金','2881':'富邦金','2882':'國泰金','2886':'兆豐金','2884':'玉山金','2603':'長榮','2609':'陽明','2615':'萬海','2379':'瑞昱','3034':'聯詠','2357':'華碩','2409':'友達','3231':'緯創','2356':'英業達','4938':'和碩','2377':'微星','6669':'緯穎','3661':'世芯-KY','3443':'創意','6488':'環球晶','8046':'南電','2408':'南亞科','3037':'欣興','2327':'國巨','1301':'台塑','1303':'南亞','1326':'台化','2002':'中鋼','2207':'和泰車','1216':'統一','2912':'統一超','2801':'彰銀','5880':'合庫金','2892':'第一金','2880':'華南金','00878':'國泰永續高股息','0056':'元大高股息','0050':'元大台灣50'};
+// 台股 FMP 圖庫已知會回錯圖(非正式logo)的代碼→改用代碼底圖(例:2317鴻海回T恤照)
+const TW_LOGO_BAD=new Set(['2317']);
 const WATCH_DEFAULT={
   us:[{symbol:'TSM',name:'台積電'},{symbol:'GOOGL',name:'谷歌'},{symbol:'NVDA',name:'輝達'},{symbol:'NVO',name:'諾和諾德'}],
   tw:[{symbol:'2330.TW',name:'台積電'},{symbol:'2317.TW',name:'鴻海'},{symbol:'2454.TW',name:'聯發科'},{symbol:'2308.TW',name:'台達電'}]
@@ -659,9 +661,11 @@ function renderWatchlist(){
         <button onclick="moveWatchlistItem('${esc(it.symbol)}',-1)" ${i===0?'disabled':''} title="上移">▲</button>
         <button onclick="moveWatchlistItem('${esc(it.symbol)}',1)" ${i===list.length-1?'disabled':''} title="下移">▼</button>
       </div>
-      ${/\.TW/i.test(it.symbol)
-        ? `<div class="wl-logo wl-logo-tw">${esc(it.symbol.replace(/\..*/,''))}</div>`
-        : `<img class="wl-logo" src="https://financialmodelingprep.com/image-stock/${esc(it.symbol)}.png" alt="" loading="lazy" onerror="if(this.dataset.fb){this.style.display='none'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(it.symbol)}')}">`}
+      ${(function(){ const tw=/\.TW/i.test(it.symbol); const code=esc(it.symbol.replace(/\..*/,''));
+        const box=`<div class="wl-logo wl-logo-tw">${code}</div>`;
+        if(tw && TW_LOGO_BAD.has(it.symbol.replace(/\..*/,''))) return box;
+        if(tw) return `<img class="wl-logo" src="https://financialmodelingprep.com/image-stock/${esc(it.symbol)}.png" alt="" loading="lazy" onerror="this.outerHTML='<div class=&quot;wl-logo wl-logo-tw&quot;>${code}</div>'">`;
+        return `<img class="wl-logo" src="https://financialmodelingprep.com/image-stock/${esc(it.symbol)}.png" alt="" loading="lazy" onerror="if(this.dataset.fb){this.style.display='none'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(it.symbol)}')}">`; })()}
       <div class="wl-name" title="${esc(it.name)}">${esc(it.name)}<span class="sym">${esc(it.symbol.replace(/\.(TW|TWO)$/i,''))}</span></div>
       <svg class="wl-spark" id="wls_${esc(it.symbol)}" viewBox="0 0 72 26" preserveAspectRatio="none" aria-hidden="true"></svg>
       <div class="wl-pc">
@@ -3318,7 +3322,7 @@ function initMarketUI(){
   const m=getMarket();
   document.body.classList.toggle('mkt-tw', m==='tw');   // 台股紅漲綠跌
   document.querySelectorAll('#marketTabs .mkt-btn').forEach(b=>b.classList.toggle('active', b.dataset.mkt===m));
-  const it=document.getElementById('indexTitle'); if(it) it.textContent = m==='tw' ? '📊 台股指數' : '📊 美股四大指數';
+  const it=document.getElementById('indexTitle'); if(it) it.textContent = m==='tw' ? '📊 加權指數' : '📊 四大指數';
   const si=document.getElementById('searchInput'); if(si) si.placeholder = m==='tw' ? '台股代碼或名稱，例如 2330 / 台積電 / 聯發科' : '代碼或公司名，例如 AAPL / 台積電 / Apple';
 }
 window.addEventListener('load', function(){ initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); });
