@@ -159,6 +159,8 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-add input { flex:1; background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:9px 12px; font-size:13px; }
 
 .chart-wrap { position:relative; height:250px; }
+.tech-wrap { height:320px; }
+@media(max-width:560px){ .tech-wrap { height:240px; } }
 .tech-opts { display:flex; flex-wrap:wrap; gap:8px 16px; margin:14px 0 4px; }
 .tech-opts label { display:inline-flex; align-items:center; gap:5px; font-size:13px; color:var(--text); cursor:pointer; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:6px 10px; user-select:none; }
 .tech-opts label:hover { border-color:var(--blue); }
@@ -1090,7 +1092,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 <div class="card" style="margin-bottom:16px">
   <div class="ct">📉 技術分析 — 股價趨勢圖</div>
   <div id="ai_technical" class="ai tech-ai">${aiLoading()}</div>
-  <div class="chart-wrap" style="height:360px"><canvas id="techChart"></canvas></div>
+  <div class="chart-wrap tech-wrap"><canvas id="techChart"></canvas></div>
   <div class="tech-opts" id="techOpts">
     <label><input type="checkbox" data-ma="ma5"> <span class="dot" style="background:#f0883e"></span>5日均線</label>
     <label><input type="checkbox" data-ma="ma10"> <span class="dot" style="background:#e3b341"></span>10日均線</label>
@@ -3209,6 +3211,7 @@ function sma(arr,p){ const o=new Array(arr.length).fill(null); let s=0; for(let 
 function bollinger(arr,p,k){ const mid=sma(arr,p),up=new Array(arr.length).fill(null),lo=new Array(arr.length).fill(null);
   for(let i=p-1;i<arr.length;i++){ let m=mid[i],v=0; for(let j=i-p+1;j<=i;j++){ v+=(arr[j]-m)*(arr[j]-m); } const sd=Math.sqrt(v/p); up[i]=m+k*sd; lo[i]=m-k*sd; } return {mid,up,lo}; }
 async function loadTechnical(symbol, gen){
+  window.__techSymbol=symbol;
   const box=document.getElementById('ai_technical');
   try{
     const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=2y&interval=1d`);
@@ -3354,7 +3357,8 @@ function cardGroup(c){
   if(/估值/.test(t)) return 4;
   if(/法說會|利多|利空|風險/.test(t)) return 5;
   if(/最新新聞|目標價/.test(t)) return 6;
-  if(/技術分析|產品與服務/.test(t)) return 7;
+  if(/產品與服務/.test(t)) return 3;   // 產品與服務→護城河與彼得林區選單(最下面)
+  if(/技術分析/.test(t)) return 7;
   return 0;
 }
 function showGroup(n){
@@ -3362,8 +3366,8 @@ function showGroup(n){
   ['welcome','indexTitle','indexBar','watchlistCard'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display=(n===1)?'':'none'; });
   const res=document.getElementById('results'); let anyCard=false;
   if(res){
-    // 護城河選單(群組3)：把護城河分析卡移到最前面
-    if(n===3){ const mo=document.getElementById('ai_moat'); const c=mo&&mo.closest('.card'); if(c) res.insertBefore(c, res.firstChild); }
+    // 護城河選單(群組3)：護城河分析移最前、產品與服務移最後
+    if(n===3){ const mo=document.getElementById('ai_moat')?.closest('.card'); if(mo) res.insertBefore(mo, res.firstChild); const pr=document.getElementById('ai_products')?.closest('.card'); if(pr) res.appendChild(pr); }
     // 財經新聞選單(群組6)：最新新聞在上、投資大行目標價在下
     if(n===6){ const nc=document.getElementById('newsList'); const nCard=nc&&nc.closest('.card'); const tg=document.getElementById('analystTargets'); const tCard=tg&&tg.closest('.card'); if(nCard&&tCard) nCard.insertAdjacentElement('afterend', tCard); }
     res.style.display=(n===1)?'none':'block';   // .results 類別預設 display:none，需明確設 block 才顯示
@@ -3373,7 +3377,11 @@ function showGroup(n){
   }
   const emp=document.getElementById('grpEmpty'); if(emp) emp.style.display=(n>=2 && !anyCard)?'block':'none';
   document.querySelectorAll('#grpMenu .grp-btn').forEach(b=>b.classList.toggle('active', +b.dataset.g===n));
-  setTimeout(()=>{ if(res) res.querySelectorAll('canvas').forEach(cv=>{ if(cv.offsetParent){ const ch=(window.Chart&&Chart.getChart)?Chart.getChart(cv):null; if(ch) ch.resize(); } }); }, 60);
+  setTimeout(()=>{
+    if(res) res.querySelectorAll('canvas').forEach(cv=>{ if(cv.offsetParent){ const ch=(window.Chart&&Chart.getChart)?Chart.getChart(cv):null; if(ch) ch.resize(); } });
+    // 技術分析圖若因先前在隱藏狀態建立而變 0 尺寸，顯示後重建一次
+    if(n===7){ const cv=document.getElementById('techChart'); if(cv && cv.getBoundingClientRect().width<10 && window.__techSymbol) loadTechnical(window.__techSymbol, SEARCH_GEN); }
+  }, 80);
   window.scrollTo({top:0, behavior:'smooth'});
 }
 // 分析完成後：若使用者主動查詢，跳到「關鍵財務指標」；否則(如開場範例)維持目前群組
