@@ -615,6 +615,29 @@ const WATCH_DEFAULT={
 function wlKey(){ return getMarket()==='tw' ? 'watchlist_tw' : 'watchlist'; }
 function getWatchlist(){ try{ const raw=localStorage.getItem(wlKey()); if(raw===null) return WATCH_DEFAULT[getMarket()].slice(); return JSON.parse(raw); }catch(e){ return []; } }
 function saveWatchlist(list){ try{ localStorage.setItem(wlKey(), JSON.stringify(list)); }catch(e){} }
+// 台股全代碼↔名稱對照(官方TWSE上市+TPEx上櫃清單)，供「中文名/代碼」搜尋與自動判斷上市(.TW)/上櫃(.TWO)
+let __twMap=null;
+async function loadTwCompanyMap(){
+  if(__twMap) return __twMap;
+  const m={byName:{}, byCode:{}};
+  try{ const l=await fetchJson('https://openapi.twse.com.tw/v1/opendata/t187ap03_L'); (l||[]).forEach(x=>{ const c=x['公司代號'], n=x['公司簡稱']; if(c&&n){ m.byCode[c]={name:n,mkt:'TW'}; if(!m.byName[n]) m.byName[n]={code:c,mkt:'TW'}; } }); }catch(e){}
+  try{ const o=await fetchJson('https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O'); (o||[]).forEach(x=>{ const c=x.SecuritiesCompanyCode, n=x.CompanyAbbreviation; if(c&&n){ m.byCode[c]={name:n,mkt:'TWO'}; if(!m.byName[n]) m.byName[n]={code:c,mkt:'TWO'}; } }); }catch(e){}
+  __twMap=m; return m;
+}
+// 解析台股輸入(代碼或中文名)→ {sym:'2330.TW', name:'台積電'}；查無回 null
+async function resolveTwInput(raw){
+  const s=(raw||'').trim(); if(!s) return null;
+  const cm=s.replace(/[^0-9A-Za-z]/g,'').toUpperCase().match(/^(\d{4,6})(TW|TWO)?$/i);
+  const map=await loadTwCompanyMap();
+  if(cm){ const code=cm[1]; const mkt=cm[2]?(cm[2].toUpperCase()==='TWO'?'TWO':'TW'):(map.byCode[code]?map.byCode[code].mkt:'TW'); return {sym:code+'.'+mkt, name:TW_NAMES[code]||(map.byCode[code]&&map.byCode[code].name)||code}; }
+  // 中文名：先官方簡稱精確、再包含；再查常用別名 TW_NAMES
+  let hit=map.byName[s];
+  if(!hit){ const k=Object.keys(map.byName).find(n=>n===s); if(k) hit=map.byName[k]; }
+  if(!hit){ const k=Object.keys(map.byName).find(n=>n.indexOf(s)>-1||s.indexOf(n)>-1); if(k) hit=map.byName[k]; }
+  if(!hit){ const c=Object.keys(TW_NAMES).find(code=>TW_NAMES[code]===s||TW_NAMES[code].indexOf(s)>-1); if(c) hit={code:c, mkt:(map.byCode[c]?map.byCode[c].mkt:'TW')}; }
+  if(hit) return {sym:hit.code+'.'+hit.mkt, name:TW_NAMES[hit.code]||(map.byCode[hit.code]&&map.byCode[hit.code].name)||s};
+  return null;
+}
 async function translateCompanyName(enName){
   try{
     const r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'meta-llama/llama-3.3-70b-instruct:free',messages:[{role:'user',content:`Translate this US-listed company's official name into its commonly-used Traditional Chinese (繁體中文) short name, the way Taiwanese financial media would refer to it (e.g. "Apple Inc" -> 蘋果, "Microsoft Corporation" -> 微軟). Reply with ONLY the Chinese name, nothing else, no punctuation, no explanation.\n\nCompany name: ${enName}`}],temperature:0.2})});
@@ -629,20 +652,13 @@ async function addToWatchlist(){
   const raw=(inp?.value||'').trim(); if(!raw) return;
   // 台股模式：輸入 4 碼代碼(或帶.TW)即可加入，用 Yahoo「代碼.TW」抓資料
   if(getMarket()==='tw'){
-    let code=raw.replace(/[^0-9A-Za-z]/g,'').toUpperCase();
-    const m=code.match(/^(\d{4,6})(TW|TWO)?$/i);
-    if(!m){ alert('請輸入台股代碼，例如 2330（台積電）、8299（群聯）'); return; }
-    // 先試 .TW(上市)，無資料再試 .TWO(上櫃)；使用者若已指定後綴則直接用
-    const suffixes = m[2] ? [m[2].toUpperCase()==='TWO'?'TWO':'TW'] : ['TW','TWO'];
-    let sym=null, ynm=null;
-    for(const suf of suffixes){
-      try{ const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${m[1]}.${suf}?range=1d&interval=1d`); const meta=ch?.chart?.result?.[0]?.meta; if(meta && meta.regularMarketPrice!=null){ sym=m[1]+'.'+suf; ynm=meta.shortName||meta.longName||null; break; } }catch(e){}
-    }
-    if(!sym){ alert(`查不到台股「${m[1]}」的資料，請確認代碼（上市/上櫃皆可）`); return; }
+    const r=await resolveTwInput(raw);
+    if(!r){ alert(`查不到台股「${raw}」，請輸入代碼(如 2330)或公司名(如 台積電 / 群聯)`); return; }
     const list=getWatchlist();
-    if(list.some(x=>x.symbol===sym)){ alert(`「${m[1]}」已在清單裡了`); inp.value=''; return; }
-    const name=(TW_NAMES&&TW_NAMES[m[1]])||ynm||m[1];
-    list.push({symbol:sym, name}); saveWatchlist(list); inp.value=''; renderWatchlist(); return;
+    if(list.some(x=>x.symbol===r.sym)){ alert(`「${r.name}」已在清單裡了`); inp.value=''; return; }
+    // 驗證 Yahoo 有資料再加入(取正式名稱)
+    let name=r.name; try{ const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${r.sym}?range=1d&interval=1d`); const meta=ch?.chart?.result?.[0]?.meta; if(!meta||meta.regularMarketPrice==null){ alert(`查不到台股「${raw}」的即時資料`); return; } }catch(e){ alert('查詢失敗，請稍後再試'); return; }
+    list.push({symbol:r.sym, name}); saveWatchlist(list); inp.value=''; renderWatchlist(); return;
   }
   try{
     await loadTickerMap();
@@ -957,11 +973,9 @@ async function doSearch(){
   const raw=document.getElementById('searchInput').value.trim();
   if(!raw) return;
   if(getMarket()==='tw'){
-    const c=raw.replace(/[^0-9A-Za-z]/g,'').toUpperCase(); const mm=c.match(/^(\d{4,6})(TW|TWO)?$/i);
-    if(!mm){ alert('請輸入台股代碼，例如 2330（台積電）、8299（群聯）'); return; }
-    const sufs=mm[2]?[mm[2].toUpperCase()==='TWO'?'TWO':'TW']:['TW','TWO'];
-    for(const suf of sufs){ try{ const t=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${mm[1]}.${suf}?range=1d&interval=1d`); if(t?.chart?.result?.[0]?.meta?.regularMarketPrice!=null){ doSearchTW(mm[1]+'.'+suf); return; } }catch(e){} }
-    alert(`查不到台股「${mm[1]}」，請確認代碼`); return;
+    const r=await resolveTwInput(raw);
+    if(!r){ alert(`查不到台股「${raw}」，請輸入代碼(如 2330)或公司名(如 台積電 / 群聯)`); return; }
+    doSearchTW(r.sym); return;
   }
   let symbol;
   const gen=++SEARCH_GEN;   // 本次搜尋序號：避免上一次(較慢)的非同步回應蓋掉這次結果
