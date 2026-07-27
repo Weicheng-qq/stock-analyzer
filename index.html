@@ -3364,6 +3364,8 @@ function showGroup(n){
   if(res){
     // 護城河選單(群組3)：把護城河分析卡移到最前面
     if(n===3){ const mo=document.getElementById('ai_moat'); const c=mo&&mo.closest('.card'); if(c) res.insertBefore(c, res.firstChild); }
+    // 財經新聞選單(群組6)：最新新聞在上、投資大行目標價在下
+    if(n===6){ const nc=document.getElementById('newsList'); const nCard=nc&&nc.closest('.card'); const tg=document.getElementById('analystTargets'); const tCard=tg&&tg.closest('.card'); if(nCard&&tCard) nCard.insertAdjacentElement('afterend', tCard); }
     res.style.display=(n===1)?'none':'block';   // .results 類別預設 display:none，需明確設 block 才顯示
     [...res.querySelectorAll('.card, .co-head')].forEach(c=>{ const show=cardGroup(c)===n; c.style.display=show?'':'none'; if(show) anyCard=true; });
     res.querySelectorAll('.g2').forEach(g=>{ const vis=[...g.children].some(c=>c.style.display!=='none'); g.style.display=vis?'block':'none'; });
