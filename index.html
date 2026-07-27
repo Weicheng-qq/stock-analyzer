@@ -316,6 +316,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
   <div class="grp-menu" id="grpMenu">
     <button class="grp-btn" data-g="1" onclick="showGroup(1)">大盤指數與自選股</button>
+    <button class="grp-btn" data-g="9" onclick="showGroup(9)">產品與服務</button>
     <button class="grp-btn" data-g="2" onclick="showGroup(2)">關鍵財務指標</button>
     <button class="grp-btn" data-g="3" onclick="showGroup(3)">護城河與彼得林區分類</button>
     <button class="grp-btn" data-g="4" onclick="showGroup(4)">股價估值評估</button>
@@ -3361,7 +3362,7 @@ function cardGroup(c){
   if(/估值/.test(t)) return 4;
   if(/法說會|利多|利空|風險/.test(t)) return 5;
   if(/最新新聞|目標價/.test(t)) return 6;
-  if(/產品與服務/.test(t)) return 3;   // 產品與服務→護城河與彼得林區選單(最下面)
+  if(/產品與服務/.test(t)) return 9;   // 產品與服務→獨立選單(排在關鍵財務指標前)
   if(/技術分析/.test(t)) return 7;
   return 0;
 }
@@ -3371,7 +3372,7 @@ function showGroup(n){
   const res=document.getElementById('results'); let anyCard=false;
   if(res){
     // 護城河選單(群組3)：護城河分析移最前、產品與服務移最後
-    if(n===3){ const mo=document.getElementById('ai_moat')?.closest('.card'); if(mo) res.insertBefore(mo, res.firstChild); const pr=document.getElementById('ai_products')?.closest('.card'); if(pr) res.appendChild(pr); }
+    if(n===3){ const mo=document.getElementById('ai_moat')?.closest('.card'); if(mo) res.insertBefore(mo, res.firstChild); }
     // 財經新聞選單(群組6)：最新新聞在上、投資大行目標價在下
     if(n===6){ const nc=document.getElementById('newsList'); const nCard=nc&&nc.closest('.card'); const tg=document.getElementById('analystTargets'); const tCard=tg&&tg.closest('.card'); if(nCard&&tCard) nCard.insertAdjacentElement('afterend', tCard); }
     res.style.display=(n===1)?'none':'block';   // .results 類別預設 display:none，需明確設 block 才顯示
