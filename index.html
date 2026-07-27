@@ -670,7 +670,7 @@ function moveWatchlistItem(symbol, dir){
   renderWatchlist();
 }
 function watchlistAnalyze(symbol){
-  if(/\.TW[O]?$/i.test(symbol) || getMarket()==='tw'){ alert('台股個股深度分析建置中（Phase 2 即將推出）；目前台股可看即時股價、當日走勢線與 AI 漲跌解讀。'); return; }
+  if(/\.TW[O]?$/i.test(symbol)){ doSearchTW(symbol); window.scrollTo({top:0, behavior:'smooth'}); return; }
   const inp=document.getElementById('searchInput'); if(inp) inp.value=symbol;
   __jumpAfterSearch=true; doSearch();
   window.scrollTo({top:0, behavior:'smooth'});
@@ -886,10 +886,83 @@ async function mergeAll(cik,tags,instant){
 }
 
 // ── Main ──
+// ── 台股個股分析(Phase 2 批次1)：Yahoo(.TW/.TWO)供應 技術分析/新聞/AI/估值；財務指標(MOPS)為批次2 ──
+function twResultsHtml(o){
+  const upcol=o.chg!=null?(o.chg>=0?'var(--red)':'var(--green)'):'var(--text2)';  // 台股紅漲綠跌
+  const chgTxt=o.chg!=null?`${o.chg>=0?'▲':'▼'} ${Math.abs(o.chg).toFixed(2)} (${o.pct>=0?'+':''}${o.pct.toFixed(2)}%)`:'';
+  const techOpts=`<div class="tech-opts" id="techOpts">
+    <label><input type="checkbox" data-ma="ma5"> <span class="dot" style="background:#f0883e"></span>5日均線</label>
+    <label><input type="checkbox" data-ma="ma10"> <span class="dot" style="background:#e3b341"></span>10日均線</label>
+    <label><input type="checkbox" data-ma="ma20"> <span class="dot" style="background:#58a6ff"></span>月均線 (20MA)</label>
+    <label><input type="checkbox" data-ma="ma60" checked> <span class="dot" style="background:#bc8cff"></span>季均線 (60MA)</label>
+    <label><input type="checkbox" data-ma="ma240"> <span class="dot" style="background:#3fb950"></span>年均線 (240MA)</label>
+    <label><input type="checkbox" data-ma="boll" checked> <span class="dot" style="background:#8b949e"></span>布林軌道</label></div>`;
+  return `
+<div class="co-head">
+  <div class="co-logo">${esc(o.code[0]||'台')}</div>
+  <div class="co-info"><h1>${esc(o.name)}</h1><div class="co-ticker">${esc(o.code)} · 台股 · Yahoo Finance ${o.mkt==='TWO'?'(上櫃)':'(上市)'}</div><div class="lynch-badge" id="lynchBadge">🔄 AI 分類中...</div></div>
+  <div class="co-price"><div class="price-val">NT$${(+o.price).toFixed(2)}</div>${o.chg!=null?`<div style="font-weight:700;color:${upcol}">${chgTxt}</div>`:''}</div>
+</div>
+<div class="card"><div class="ct">🏭 產品與服務（營收來源）</div><div id="ai_products">${aiLoading()}</div></div>
+<div class="card"><div class="ct">📊 近10年財務指標</div><div class="note" style="padding:14px 0">台股「關鍵財務指標」（近年毛利率/淨利率/ROE/年營收）正串接官方公開資訊觀測所 MOPS，批次 2 推出。</div></div>
+<div class="card"><div class="ct">🏷️ 彼得林區六大分類</div><div id="ai_lynch">${aiLoading()}</div></div>
+<div class="card"><div class="ct">🏰 護城河分析</div><div id="ai_moat">${aiLoading()}</div></div>
+<div class="card"><div class="ct">⚔️ 前三大競爭對手 &amp; 世界排名</div><div id="ai_competitors">${aiLoading()}</div></div>
+<div class="card"><div class="ct">💹 股價估值評估</div>
+  <div class="vr"><span class="vl">目前股價</span><span class="vn">NT$${(+o.price).toFixed(2)}</span></div>
+  <div class="note" style="margin:6px 0">本益比、與歷史/同業比較需 EPS 財務資料，隨批次 2（MOPS）一起推出。</div>
+  <div id="ai_valuation">${aiLoading()}</div></div>
+<div class="card"><div class="ct">🎤 法說會 CEO 前景展望</div><div id="ai_guidance">${aiLoading()}</div></div>
+<div class="card"><div class="ct">🌪️ 未來利多 &amp; 利空風險</div><div id="ai_risks">${aiLoading()}</div></div>
+<div class="card"><div class="ct">📉 技術分析 — 股價趨勢圖</div><div id="ai_technical" class="ai tech-ai">${aiLoading()}</div><div class="chart-wrap tech-wrap"><canvas id="techChart"></canvas></div>${techOpts}<div class="note">股價來自 Yahoo Finance 日線；均線與布林軌道由實際收盤價計算。技術分析僅供參考。</div></div>
+<div class="card"><div class="ct">📰 最新新聞</div><div id="newsList"><div class="note">載入中...</div></div></div>
+<div class="card verdict"><div class="ct">🎯 投資總結 — AI 綜合判斷</div>
+  <div id="chk_outlook"></div>
+  <div class="note" style="margin:6px 0 12px">版主選股準則（毛利率/淨利率/ROE/本益比等）需台股財務資料，隨批次 2 推出；以下為 AI 依基本面與產業的獨立判斷。</div>
+  <div id="ai_independent_box" style="margin-top:8px;padding-top:14px;border-top:1px solid var(--border)"><div id="ai_independent">${aiLoading()}</div></div>
+</div>`;
+}
+async function doSearchTW(symbol){
+  const gen=++SEARCH_GEN;
+  window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__capexData=null; window.__wikiData=null;
+  document.getElementById('results').innerHTML=''; document.getElementById('logItems').innerHTML=''; logPanel(true); logAdd('p','抓取台股資料...');
+  try{
+    const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=1d`);
+    if(gen!==SEARCH_GEN) return;
+    const meta=ch?.chart?.result?.[0]?.meta;
+    if(!meta||meta.regularMarketPrice==null){ document.getElementById('results').innerHTML='<div class="err-box">查不到此台股資料，請確認代碼</div>'; logPanel(false); return; }
+    const code=symbol.replace(/\..*/,''); const mkt=/\.TWO$/i.test(symbol)?'TWO':'TW';
+    const name=TW_NAMES[code]||meta.shortName||meta.longName||code;
+    const price=meta.regularMarketPrice, prev=meta.previousClose??meta.chartPreviousClose;
+    const chg=(price!=null&&prev!=null)?price-prev:null, pct=(chg!=null&&prev)?chg/prev*100:null;
+    logOk('p','台股資料載入完成'); logPanel(false);
+    window.__symbolForLinks=code; window.__coNameForLinks=name;
+    document.getElementById('results').innerHTML=twResultsHtml({code,name,price,chg,pct,mkt});
+    const gmKey=getGmKey(); const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1); const useServer=!gmKey && !isLocal;
+    const ctx={ name, symbol:code, price, pe:null, peRangeText:'無', finText:`公司：${name}（台股 ${code}）。目前股價 NT$${price.toFixed(2)}。（台股完整財務指標建置中，請依這家公司的產業地位、競爭格局、產品結構與基本面知識進行分析）`, chkText:'', passCount:0, chkTotal:0 };
+    window.__lastAI={ctx, peInfo:null, gen};
+    loadTechnical(symbol, gen);
+    fillNews(symbol, gen);
+    if(gmKey||useServer){
+      logPanel(true); logAdd('ai','AI 分析中...');
+      let ai=null; try{ ai=await callGemini(ctx, gmKey, useServer); }catch(e){}
+      if(gen!==SEARCH_GEN) return;
+      if(ai){ renderAI(ai); runIndependentAiAnalysis(); logOk('ai','AI 分析完成'); } else { setAllAI('<div class="note">AI 分析暫時無法取得，稍後再試。</div>'); logErr('ai','AI 分析失敗'); }
+      logPanel(false);
+    } else { setAllAI('<div class="note">請點右上 ⚙️ 設定免費 AI 金鑰以顯示 AI 分析。</div>'); }
+    __jumpAfterSearch=true; applyGroupAfterRender();
+  }catch(e){ document.getElementById('results').innerHTML='<div class="err-box">台股資料載入失敗，請稍後再試</div>'; logPanel(false); }
+}
 async function doSearch(){
   const raw=document.getElementById('searchInput').value.trim();
   if(!raw) return;
-  if(getMarket()==='tw'){ alert('台股個股深度分析建置中（Phase 2 即將推出）。目前台股可用：自選股即時股價、當日走勢線、盤前/盤後、AI 漲跌解讀、台股指數。'); return; }
+  if(getMarket()==='tw'){
+    const c=raw.replace(/[^0-9A-Za-z]/g,'').toUpperCase(); const mm=c.match(/^(\d{4,6})(TW|TWO)?$/i);
+    if(!mm){ alert('請輸入台股代碼，例如 2330（台積電）、8299（群聯）'); return; }
+    const sufs=mm[2]?[mm[2].toUpperCase()==='TWO'?'TWO':'TW']:['TW','TWO'];
+    for(const suf of sufs){ try{ const t=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${mm[1]}.${suf}?range=1d&interval=1d`); if(t?.chart?.result?.[0]?.meta?.regularMarketPrice!=null){ doSearchTW(mm[1]+'.'+suf); return; } }catch(e){} }
+    alert(`查不到台股「${mm[1]}」，請確認代碼`); return;
+  }
   let symbol;
   const gen=++SEARCH_GEN;   // 本次搜尋序號：避免上一次(較慢)的非同步回應蓋掉這次結果
   window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__capexData=null; window.__wikiData=null; window.__guidanceData=null;
