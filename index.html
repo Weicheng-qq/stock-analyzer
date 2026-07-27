@@ -600,6 +600,8 @@ function setMarket(m){ try{ localStorage.setItem('market', m); }catch(e){} locat
 const TW_NAMES={'2330':'台積電','2317':'鴻海','2454':'聯發科','2308':'台達電','2382':'廣達','2303':'聯電','3711':'日月光投控','2412':'中華電','2891':'中信金','2881':'富邦金','2882':'國泰金','2886':'兆豐金','2884':'玉山金','2603':'長榮','2609':'陽明','2615':'萬海','2379':'瑞昱','3034':'聯詠','2357':'華碩','2409':'友達','3231':'緯創','2356':'英業達','4938':'和碩','2377':'微星','6669':'緯穎','3661':'世芯-KY','3443':'創意','6488':'環球晶','8046':'南電','2408':'南亞科','3037':'欣興','2327':'國巨','1301':'台塑','1303':'南亞','1326':'台化','2002':'中鋼','2207':'和泰車','1216':'統一','2912':'統一超','2801':'彰銀','5880':'合庫金','2892':'第一金','2880':'華南金','00878':'國泰永續高股息','0056':'元大高股息','0050':'元大台灣50'};
 // 台股 FMP 圖庫已知會回錯圖(非正式logo)的代碼→改用代碼底圖(例:2317鴻海回T恤照)
 const TW_LOGO_BAD=new Set(['2317']);
+// 美股 FMP 圖庫回「空白圖」的代碼→改用 parqet 圖庫(例:DIS迪士尼)
+const LOGO_ALT={'DIS':'https://assets.parqet.com/logos/symbol/DIS'};
 const WATCH_DEFAULT={
   us:[{symbol:'TSM',name:'台積電'},{symbol:'GOOGL',name:'谷歌'},{symbol:'NVDA',name:'輝達'},{symbol:'NVO',name:'諾和諾德'}],
   tw:[{symbol:'2330.TW',name:'台積電'},{symbol:'2317.TW',name:'鴻海'},{symbol:'2454.TW',name:'聯發科'},{symbol:'2308.TW',name:'台達電'}]
@@ -681,7 +683,7 @@ function renderWatchlist(){
         const box=`<div class="wl-logo wl-logo-tw">${code}</div>`;
         if(tw && TW_LOGO_BAD.has(it.symbol.replace(/\..*/,''))) return box;
         if(tw) return `<img class="wl-logo" src="https://financialmodelingprep.com/image-stock/${esc(it.symbol)}.png" alt="" loading="lazy" onerror="this.outerHTML='<div class=&quot;wl-logo wl-logo-tw&quot;>${code}</div>'">`;
-        return `<img class="wl-logo" src="https://financialmodelingprep.com/image-stock/${esc(it.symbol)}.png" alt="" loading="lazy" onerror="if(this.dataset.fb){this.style.display='none'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(it.symbol)}')}">`; })()}
+        return `<img class="wl-logo" src="${LOGO_ALT[it.symbol]||('https://financialmodelingprep.com/image-stock/'+esc(it.symbol)+'.png')}" alt="" loading="lazy" onerror="if(this.dataset.fb){this.style.display='none'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(it.symbol)}')}">`; })()}
       <div class="wl-name" title="${esc(it.name)}">${esc(it.name)}<span class="sym">${esc(it.symbol.replace(/\.(TW|TWO)$/i,''))}</span></div>
       <svg class="wl-spark" id="wls_${esc(it.symbol)}" viewBox="0 0 72 26" preserveAspectRatio="none" aria-hidden="true"></svg>
       <div class="wl-pc">
@@ -3344,7 +3346,7 @@ function initMarketUI(){
 // ── 8 大主題選單：把各架構主旨分組，點選單只看該群組 ──
 let __grp=1, __jumpAfterSearch=false;
 function cardGroup(c){
-  if(c.classList && c.classList.contains('co-head')) return 7;   // 公司股價
+  if(c.classList && c.classList.contains('co-head')) return 2;   // 公司股價→放在關鍵財務指標最上面
   const ct=c.querySelector && c.querySelector('.ct'); const t=ct?ct.textContent:'';
   if(/投資總結/.test(t)) return 8;   // 需在護城河之前判斷(投資總結標題含「護城河」三字)
   if(/財務指標|年營收/.test(t)) return 2;
@@ -3360,6 +3362,8 @@ function showGroup(n){
   ['welcome','indexTitle','indexBar','watchlistCard'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display=(n===1)?'':'none'; });
   const res=document.getElementById('results'); let anyCard=false;
   if(res){
+    // 護城河選單(群組3)：把護城河分析卡移到最前面
+    if(n===3){ const mo=document.getElementById('ai_moat'); const c=mo&&mo.closest('.card'); if(c) res.insertBefore(c, res.firstChild); }
     res.style.display=(n===1)?'none':'block';   // .results 類別預設 display:none，需明確設 block 才顯示
     [...res.querySelectorAll('.card, .co-head')].forEach(c=>{ const show=cardGroup(c)===n; c.style.display=show?'':'none'; if(show) anyCard=true; });
     res.querySelectorAll('.g2').forEach(g=>{ const vis=[...g.children].some(c=>c.style.display!=='none'); g.style.display=vis?'block':'none'; });
