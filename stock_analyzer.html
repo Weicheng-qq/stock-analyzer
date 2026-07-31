@@ -104,6 +104,12 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .dt td { padding:7px 10px; border-bottom:1px solid rgba(48,54,61,.4); }
 .dt tr:last-child td { border-bottom:none; }
 .g { color:var(--green); } .r { color:var(--red); } .y { color:var(--yellow); }
+.wl-edit-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); border-radius:8px; padding:6px 12px; font-size:13px; font-weight:600; cursor:pointer; }
+.wl-edit-btn:hover { border-color:var(--blue); color:var(--text); }
+.wl-drag { flex:none; cursor:grab; touch-action:none; color:var(--text2); font-size:20px; line-height:1; padding:0 6px 0 2px; user-select:none; }
+.wl-drag:active { cursor:grabbing; }
+.wl-editing .wl-item { background:var(--bg3); border-radius:8px; margin-bottom:4px; }
+.wl-item.dragging { opacity:.65; background:var(--bg2); box-shadow:0 4px 14px rgba(0,0,0,.4); }
 .wl-item { border-bottom:1px solid rgba(48,54,61,.4); }
 .wl-item:last-child { border-bottom:none; }
 .wl-row { display:flex; align-items:center; gap:10px; padding:12px 0 4px; font-size:15.5px; }
@@ -329,7 +335,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   <div id="indexBar" class="index-bar"></div>
 
   <div class="card" id="watchlistCard" style="margin-bottom:20px">
-    <div class="ct">⭐ 自選股</div>
+    <div class="ct" style="display:flex;justify-content:space-between;align-items:center">⭐ 自選股 <button class="wl-edit-btn" id="wlEditBtn" onclick="toggleWlEdit()">✏️ 編輯</button></div>
     <div class="wl-add">
       <input type="text" id="watchlistInput" placeholder="輸入代碼或公司名，例如 AAPL / 台積電" onkeydown="if(event.key==='Enter')addToWatchlist()">
       <button class="search-btn" onclick="addToWatchlist()">+ 加入</button>
@@ -669,6 +675,33 @@ function removeFromWatchlist(symbol){
   saveWatchlist(getWatchlist().filter(x=>x.symbol!==symbol));
   renderWatchlist();
 }
+// 自選股編輯模式：可拖曳一次調到任意上下位置
+let __wlEdit=false;
+function toggleWlEdit(){ __wlEdit=!__wlEdit; renderWatchlist(); }
+function initWlDrag(){
+  const el=document.getElementById('watchlistTable'); if(!el) return;
+  el.querySelectorAll('.wl-drag').forEach(h=>{
+    h.onpointerdown=e=>{
+      e.preventDefault();
+      const item=h.closest('.wl-item'); if(!item) return;
+      item.classList.add('dragging'); try{ h.setPointerCapture(e.pointerId); }catch(_){}
+      const move=ev=>{
+        const y=ev.clientY;
+        const sibs=[...el.querySelectorAll('.wl-item:not(.dragging)')];
+        let after=null;
+        for(const s of sibs){ const r=s.getBoundingClientRect(); if(y < r.top + r.height/2){ after=s; break; } }
+        if(after) el.insertBefore(item, after); else el.appendChild(item);
+      };
+      const up=()=>{
+        h.onpointermove=null; h.onpointerup=null; try{ h.releasePointerCapture(e.pointerId); }catch(_){}
+        item.classList.remove('dragging');
+        const order=[...el.querySelectorAll('.wl-item')].map(it=>it.dataset.sym);
+        const l2=getWatchlist(); l2.sort((a,b)=>order.indexOf(a.symbol)-order.indexOf(b.symbol)); saveWatchlist(l2);
+      };
+      h.onpointermove=move; h.onpointerup=up;
+    };
+  });
+}
 function moveWatchlistItem(symbol, dir){
   const list=getWatchlist();
   const i=list.findIndex(x=>x.symbol===symbol); if(i<0) return;
@@ -692,12 +725,9 @@ function renderWatchlist(){
   if(__namefix) saveWatchlist(list);
   if(!list.length){ el.innerHTML='<div class="note">尚未加入任何自選股，在上方輸入後按「加入」</div>'; return; }
   el.innerHTML = list.map((it,i)=>`
-    <div class="wl-item">
+    <div class="wl-item" data-sym="${esc(it.symbol)}">
     <div class="wl-row">
-      <div class="wl-move">
-        <button onclick="moveWatchlistItem('${esc(it.symbol)}',-1)" ${i===0?'disabled':''} title="上移">▲</button>
-        <button onclick="moveWatchlistItem('${esc(it.symbol)}',1)" ${i===list.length-1?'disabled':''} title="下移">▼</button>
-      </div>
+      ${__wlEdit?`<div class="wl-drag" title="拖曳調整順序">☰</div>`:''}
       ${(function(){ const tw=/\.TW/i.test(it.symbol); const code=esc(it.symbol.replace(/\..*/,''));
         const box=`<div class="wl-logo wl-logo-tw">${code}</div>`;
         const twcode=it.symbol.replace(/\..*/,'');
@@ -720,6 +750,9 @@ function renderWatchlist(){
   loadWatchlistPrices(list);
   loadWatchlistSpark(list);
   loadWatchlistInsights(list);
+  const eb=document.getElementById('wlEditBtn'); if(eb) eb.textContent=__wlEdit?'✓ 完成':'✏️ 編輯';
+  el.classList.toggle('wl-editing', __wlEdit);
+  if(__wlEdit) initWlDrag();
   // 舊資料若名稱還是英文(尚未翻譯過)，背景翻譯成中文後就地更新，不用使用者手動處理
   list.forEach(it=>{
     if(/[一-鿿]/.test(it.name)) return;
