@@ -912,7 +912,7 @@ function twResultsHtml(o){
   <div class="co-price"><div class="price-val">NT$${(+o.price).toFixed(2)}</div>${o.chg!=null?`<div style="font-weight:700;color:${upcol}">${chgTxt}</div>`:''}</div>
 </div>
 <div class="card"><div class="ct">🏭 產品與服務（營收來源）</div><div id="ai_products">${aiLoading()}</div></div>
-<div class="card"><div class="ct">📊 近10年財務指標</div><div class="note" style="padding:14px 0">台股「關鍵財務指標」（近年毛利率/淨利率/ROE/年營收）正串接官方公開資訊觀測所 MOPS，批次 2 推出。</div></div>
+<div class="card"><div class="ct">📊 近年關鍵財務指標</div><div id="tw_fin">${aiLoading()}</div></div>
 <div class="card"><div class="ct">🏷️ 彼得林區六大分類</div><div id="ai_lynch">${aiLoading()}</div></div>
 <div class="card"><div class="ct">🏰 護城河分析</div><div id="ai_moat">${aiLoading()}</div></div>
 <div class="card"><div class="ct">⚔️ 前三大競爭對手 &amp; 世界排名</div><div id="ai_competitors">${aiLoading()}</div></div>
@@ -929,6 +929,33 @@ function twResultsHtml(o){
   <div class="note" style="margin:6px 0 12px">版主選股準則（毛利率/淨利率/ROE/本益比等）需台股財務資料，隨批次 2 推出；以下為 AI 依基本面與產業的獨立判斷。</div>
   <div id="ai_independent_box" style="margin-top:8px;padding-top:14px;border-top:1px solid var(--border)"><div id="ai_independent">${aiLoading()}</div></div>
 </div>`;
+}
+// 台股財務指標(Yahoo fundamentals 近4年)：毛利率/淨利率/ROE/年營收，回傳 rows 供 AI 上下文
+async function loadTwFinancials(symbol, gen){
+  const el=document.getElementById('tw_fin');
+  try{
+    const now=Math.floor(Date.now()/1000), p1=now-380000000;
+    const d=await fetchJson(`https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/${symbol}?symbol=${symbol}&type=annualTotalRevenue,annualGrossProfit,annualNetIncomeCommonStockholders,annualStockholdersEquity&period1=${p1}&period2=${now}`);
+    if(gen!=null && gen!==SEARCH_GEN) return [];
+    const res=d?.timeseries?.result||[]; const by={};
+    const grab=(type,key)=>{ const s=res.find(r=>r.meta&&r.meta.type&&r.meta.type[0]===type); ((s&&s[type])||[]).forEach(v=>{ if(v&&v.reportedValue!=null){ const y=+v.asOfDate.slice(0,4); (by[y]=by[y]||{})[key]=(v.reportedValue.raw!=null?v.reportedValue.raw:v.reportedValue); } }); };
+    grab('annualTotalRevenue','rev'); grab('annualGrossProfit','gp'); grab('annualNetIncomeCommonStockholders','ni'); grab('annualStockholdersEquity','eq');
+    const years=Object.keys(by).map(Number).sort((a,b)=>a-b);
+    if(!years.length){ if(el) el.innerHTML='<div class="note">此台股暫無可用財務資料（Yahoo）。</div>'; return []; }
+    const rows=years.map(y=>{ const o=by[y]; const gm=(o.rev&&o.gp!=null)?o.gp/o.rev*100:null; const nm=(o.rev&&o.ni!=null)?o.ni/o.rev*100:null; const roe=(o.eq&&o.ni!=null)?o.ni/o.eq*100:null; return {yr:y, rev:(o.rev!=null?o.rev:null), gm, nm, roe}; });
+    rows.forEach((r,i)=>{ r.gr=(i>0&&rows[i-1].rev&&r.rev!=null)?(r.rev-rows[i-1].rev)/rows[i-1].rev*100:null; });
+    const ru=pickRevUnit(rows.map(r=>r.rev));
+    const cc2=(v,g,m)=>v==null?'':(v>=g?'g':v>=m?'y':'r');
+    const html=`<table class="dt"><tr><th>年份</th><th>毛利率</th><th>淨利率</th><th>ROE</th></tr>`
+      +rows.map(r=>`<tr><td><strong>${r.yr}</strong></td><td class="${cc2(r.gm,30,20)}">${r.gm!=null?r.gm.toFixed(1)+'%':'—'}</td><td class="${cc2(r.nm,15,5)}">${r.nm!=null?r.nm.toFixed(1)+'%':'—'}</td><td class="${cc2(r.roe,20,10)}">${r.roe!=null?r.roe.toFixed(1)+'%':'—'}</td></tr>`).join('')
+      +`</table>`
+      +`<div class="ct" style="margin-top:16px">📈 年營收 <span style="color:var(--text2);font-weight:400;font-size:13px">（NT$${ru.label}）</span></div>`
+      +`<table class="dt"><tr><th>年份</th><th>年營收</th><th>較前年</th></tr>`
+      +rows.map(r=>`<tr><td><strong>${r.yr}</strong></td><td>${r.rev!=null?fmtRev(r.rev,ru):'—'}</td><td class="${r.gr!=null?(r.gr>=0?'g':'r'):''}">${r.gr!=null?(r.gr>=0?'▲':'▼')+' '+Math.abs(r.gr).toFixed(1)+'%':'—'}</td></tr>`).join('')
+      +`</table><div class="note" style="margin-top:8px">資料來源：Yahoo Finance（近 4 年）。台股官方 10 年財報(MOPS)因其 API 擋外部程式擷取，暫以此為準。</div>`;
+    if(el) el.innerHTML=html;
+    return rows;
+  }catch(e){ if(el) el.innerHTML='<div class="note">台股財務資料暫時取不到。</div>'; return []; }
 }
 async function doSearchTW(symbol){
   const gen=++SEARCH_GEN;
@@ -947,10 +974,15 @@ async function doSearchTW(symbol){
     window.__symbolForLinks=code; window.__coNameForLinks=name;
     document.getElementById('results').innerHTML=twResultsHtml({code,name,price,chg,pct,mkt});
     const gmKey=getGmKey(); const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1); const useServer=!gmKey && !isLocal;
-    const ctx={ name, symbol:code, price, pe:null, peRangeText:'無', finText:`公司：${name}（台股 ${code}）。目前股價 NT$${price.toFixed(2)}。（台股完整財務指標建置中，請依這家公司的產業地位、競爭格局、產品結構與基本面知識進行分析）`, chkText:'', passCount:0, chkTotal:0 };
-    window.__lastAI={ctx, peInfo:null, gen};
     loadTechnical(symbol, gen);
     fillNews(symbol, gen);
+    const finRows=await loadTwFinancials(symbol, gen);   // 近4年台股財務(Yahoo)
+    if(gen!==SEARCH_GEN) return;
+    const finText = finRows.length
+      ? finRows.map(r=>`${r.yr}: 年營收NT$${r.rev!=null?(r.rev/1e8).toFixed(0)+'億':'NA'}, 成長${r.gr!=null?r.gr.toFixed(1)+'%':'NA'}, 毛利率${r.gm!=null?r.gm.toFixed(1)+'%':'NA'}, 淨利率${r.nm!=null?r.nm.toFixed(1)+'%':'NA'}, ROE${r.roe!=null?r.roe.toFixed(1)+'%':'NA'}`).join('\n')
+      : `公司：${name}（台股 ${code}）。目前股價 NT$${price.toFixed(2)}。（財務資料有限，請依產業地位與基本面知識分析）`;
+    const ctx={ name, symbol:code, price, pe:null, peRangeText:'無', finText:`公司：${name}（台股 ${code}），目前股價 NT$${price.toFixed(2)}。近年財務（Yahoo，新台幣）：\n${finText}`, chkText:'', passCount:0, chkTotal:0 };
+    window.__lastAI={ctx, peInfo:null, gen};
     if(gmKey||useServer){
       logPanel(true); logAdd('ai','AI 分析中...');
       let ai=null; try{ ai=await callGemini(ctx, gmKey, useServer); }catch(e){}
