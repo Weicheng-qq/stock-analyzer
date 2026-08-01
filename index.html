@@ -762,7 +762,7 @@ function renderWatchlist(){
         <div class="wl-chg" id="wlc_${esc(it.symbol)}">…</div>
       </div>
       <button class="wl-ai-btn" onclick="watchlistAnalyze('${esc(it.symbol)}')">AI</button>
-      <button class="wl-del" onclick="removeFromWatchlist('${esc(it.symbol)}')" title="刪除">✕</button>
+      ${__wlEdit?`<button class="wl-del" onclick="removeFromWatchlist('${esc(it.symbol)}')" title="刪除">✕</button>`:''}
     </div>
     <div class="wl-ext" id="wle_${esc(it.symbol)}"></div>
     <div class="wl-ai-read" id="wlr_${esc(it.symbol)}"><span class="muted">💡 漲跌解讀載入中…</span></div>
