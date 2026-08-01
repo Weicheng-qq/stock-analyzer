@@ -1780,6 +1780,7 @@ async function fetchWikipedia(name, symbol){
 //   (群聯電子/台積電/聯發科…)覆蓋完整且持續更新，作為定性內容的事實來源。
 async function fetchWikipediaZh(name, code){
   const cands=[name, name&&name.replace(/-KY$/,''), code&&(code+' 股票')].filter(Boolean);
+  let zhText=null, zhTitle=null, zhUrl=null, enName=null;
   for(const q of cands){
     try{
       const url=`https://zh.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(q)}&gsrlimit=1&prop=extracts|info&explaintext=1&inprop=url&format=json&origin=*`;
@@ -1789,12 +1790,29 @@ async function fetchWikipediaZh(name, code){
       const p=Object.values(pages)[0];
       if(!p||!p.extract||p.extract.length<120) continue;
       // 中文維基：取前段(公司概述+主要業務/產品)，condenseWiki 的英文關鍵字對中文無效但 intro 段已足夠
-      const intro=p.extract.split(/\n\n+/).slice(0,4).join('\n').slice(0,3200);
-      window.__wikiData={ title:p.title, text:intro, url:p.fullurl||('https://zh.wikipedia.org/wiki/'+encodeURIComponent(p.title)) };
-      return true;
+      zhText=p.extract.split(/\n\n+/).slice(0,4).join('\n').slice(0,3200);
+      zhTitle=p.title; zhUrl=p.fullurl||('https://zh.wikipedia.org/wiki/'+encodeURIComponent(p.title));
+      const m=p.extract.match(/英[語语][：:]\s*([A-Za-z0-9&\.,\-'\s]+?)\s*[）)，,]/);   // 從「（英語：Phison…）」取英文名供 fallback
+      if(m) enName=m[1].trim();
+      break;
     }catch(e){}
   }
-  return false;
+  if(!zhText) return false;
+  // 中文維基是 stub(如群聯僅164字)時，補抓內容更豐富的英文維基(群聯英文條目達2900字)，合併呈現
+  if(zhText.length<400 && enName){
+    try{
+      const eu=`https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(enName)}&gsrlimit=1&prop=extracts|info&explaintext=1&inprop=url&format=json&origin=*`;
+      const er=await fetch(eu);
+      if(er.ok){ const ed=await er.json(); const ep=ed&&ed.query&&ed.query.pages&&Object.values(ed.query.pages)[0];
+        if(ep&&ep.extract&&ep.extract.length>zhText.length){
+          window.__wikiData={ title:zhTitle, text:zhText+'\n\n【English Wikipedia（供補充，請輸出繁體中文）】\n'+condenseWiki(ep.extract), url:zhUrl };
+          return true;
+        }
+      }
+    }catch(e){}
+  }
+  window.__wikiData={ title:zhTitle, text:zhText, url:zhUrl };
+  return true;
 }
 
 // 投資大行目標價（免費）：StockAnalysis.com 只顯示每檔股票「最近5筆」分析師動態，不保證涵蓋以下5家，
