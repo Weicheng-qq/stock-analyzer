@@ -620,7 +620,8 @@ async function loadTickerMap(){
 // 「AI分析」按鈕直接觸發完整搜尋，帶出這個網站的所有區塊(財務/彼得林區分類/新聞/目標價/投資總結...)
 // 市場模式：美股(us) / 台股(tw)。台股用 Yahoo「代碼.TW」，一套程式共用。
 function getMarket(){ try{ return localStorage.getItem('market')||'us'; }catch(e){ return 'us'; } }
-function setMarket(m){ try{ localStorage.setItem('market', m); }catch(e){} location.reload(); }
+function setMarket(m){ try{ localStorage.setItem('market', m); localStorage.setItem('marketPicked','1'); }catch(e){} location.reload(); }
+function marketPicked(){ try{ return localStorage.getItem('marketPicked')==='1'; }catch(e){ return false; } }
 // 常見台股代碼→中文名(加入自選股時用；查無再用 Yahoo 名稱)
 const TW_NAMES={'2330':'台積電','2317':'鴻海','2454':'聯發科','2308':'台達電','2382':'廣達','2303':'聯電','3711':'日月光投控','2412':'中華電','2891':'中信金','2881':'富邦金','2882':'國泰金','2886':'兆豐金','2884':'玉山金','2603':'長榮','2609':'陽明','2615':'萬海','2379':'瑞昱','3034':'聯詠','2357':'華碩','2409':'友達','3231':'緯創','2356':'英業達','4938':'和碩','2377':'微星','6669':'緯穎','3661':'世芯-KY','3443':'創意','6488':'環球晶','8046':'南電','2408':'南亞科','3037':'欣興','2327':'國巨','1301':'台塑','1303':'南亞','1326':'台化','2002':'中鋼','2207':'和泰車','1216':'統一','2912':'統一超','2801':'彰銀','5880':'合庫金','2892':'第一金','2880':'華南金','00878':'國泰永續高股息','0056':'元大高股息','0050':'元大台灣50',
 '8299':'群聯','6488':'環球晶','3105':'穩懋','4966':'譜瑞-KY','6415':'矽力-KY','5274':'信驊','3529':'力旺','8069':'元太','6510':'精測','4919':'新唐','3227':'原相','1795':'美時','6547':'高端疫苗','5483':'中美晶','2345':'智邦','3661':'世芯-KY'};
@@ -2717,6 +2718,18 @@ const IR_CALL_SUMMARY = {
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
 const IR_PRODUCTS_SUMMARY = {
   // ── 台股（官網為主，人工逐間讀公司官網建置；未建置者由中文維基/AI備援）──
+  '3711': {
+    quarter: '官網 aseglobal.com 集團業務與 AI 先進封裝（2026）',
+    source: 'https://www.aseglobal.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">集團業務（資料來源：日月光投控官網 aseglobal.com）</b></div>
+日月光投控（ASE Technology Holding）為<b>全球最大 IC 封測(OSAT)龍頭</b>，兩大事業旗艦：<br>
+<b>ASE（日月光半導體）</b>：IC 封裝與測試——傳統封裝、覆晶(FC)、SiP 系統級封裝、扇出(FOWLP/FOPLP)、<b>先進 AI 封裝</b>（2.5D/3D、CoWoS 相關）。<br>
+<b>USI（環旭電子）</b>：SiP 系統級封裝解決方案，供應手機/穿戴/汽車/工業客戶。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">最新官方戰略（2026，日月光官網新聞）</b><br>
+• <b>推出自動化 310mm 面板級封裝(PLP)</b>（2026/05/26）——加速 AI 創新、突破晶圓級封裝面積限制。<br>
+• <b>與欣興電子(WUS) 策略合作，於高雄打造先進 AI 封裝中心</b>（2026/05/08）。<br>
+• ESG 基金會啟動生態復育行動，聚焦永續與治理。</div>`
+  },
   '2303': {
     quarter: '官網 umc.com 特殊製程與擴產計畫（2026）',
     source: 'https://www.umc.com/',
@@ -3758,7 +3771,8 @@ function showGroup(n){
   // 大盤指數(n=1) 與 自選股(n=10) 拆成兩個獨立選單。welcome 只在大盤指數頁顯示
   const showIndex = (n===1);
   const showWl    = (n===10);
-  const e_wel=document.getElementById('welcome');       if(e_wel) e_wel.style.display=showIndex?'':'none';
+  // welcome 只在「大盤指數頁 且 尚未選過市場」時顯示;使用者按過美股/台股後就永遠不再出現(節省 App 空間)
+  const e_wel=document.getElementById('welcome');       if(e_wel) e_wel.style.display=(showIndex && !marketPicked())?'':'none';
   const e_iT =document.getElementById('indexTitle');    if(e_iT ) e_iT .style.display=showIndex?'':'none';
   const e_iB =document.getElementById('indexBar');      if(e_iB ) e_iB .style.display=showIndex?'':'none';
   const e_wl =document.getElementById('watchlistCard'); if(e_wl ) e_wl .style.display=showWl   ?'':'none';
