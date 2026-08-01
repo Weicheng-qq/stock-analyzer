@@ -2631,6 +2631,19 @@ const IR_CALL_SUMMARY = {
 };
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
 const IR_PRODUCTS_SUMMARY = {
+  // ── 台股（官網為主，人工逐間讀公司官網建置；未建置者由中文維基/AI備援）──
+  '8299': {
+    quarter: '官網 phison.com 產品與解決方案（2026）',
+    source: 'https://www.phison.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">產品與解決方案（資料來源：群聯官網 phison.com）</b></div>
+群聯電子(Phison)為<b>NAND 快閃記憶體控制晶片</b>全球獨立龍頭，並延伸至完整快閃儲存解決方案：<br>
+<b>企業級</b>（Pascari 品牌 SSD，最高容量達 245.76 TB）｜<b>嵌入式／消費級</b>（現成 SSD、隨身碟、記憶卡控制晶片）｜<b>車規級</b>（先進駕駛輔助 ADAS、智慧駕駛、車載娛樂、座艙顯示）｜<b>電競/遊戲</b>｜<b>安全性應用</b>。<br>
+<b>IMAGIN+</b> 設計服務：客製化 SSD 設計、NAND 研發資源共享、信號調節解決方案。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">最新官方戰略（2026，群聯官網新聞）</b><br>
+• <b>全面轉型「AI 賦能者」</b>，構築 <b>Phison Pascari aiDAPTIV™ 生態系</b>——aiDAPTIV+ 平台將 AI/ML 技術整合進 NAND 控制晶片與演算法，提升算力與可靠性。<br>
+• 攜手 Intel 將邊緣 AI 工作負載導入 Intel AI PC 平台；aiDAPTIV AI PC 方案獲 COMPUTEX Best Choice Award。<br>
+• ESG：連續四年入選 S&P Global 標普全球永續年鑑。</div>`
+  },
   'TSM': {
     quarter: '2026 第二季（2026/07/16）',
     source: 'https://investor.tsmc.com/chinese/quarterly-results/2026/q2',
