@@ -989,7 +989,7 @@ function twResultsHtml(o){
 async function loadTwFinancials(symbol, gen){
   const el=document.getElementById('tw_fin');
   const code=String(symbol||'').replace(/\..*/,'');
-  let by={}, sourceLabel='';
+  let by={}, sourceLabel='', dFS_raw=null;
   // 主：FinMind (10年)
   try{
     const [rFS,rBS]=await Promise.all([
@@ -1001,6 +1001,7 @@ async function loadTwFinancials(symbol, gen){
       const dFS=await rFS.json(), dBS=await rBS.json();
       const fs=dFS?.data||[], bs=dBS?.data||[];
       if(fs.length){
+        dFS_raw=fs;   // 保留原始逐季資料供進行中年度做同期比
         // 損益：Revenue/GrossProfit/IncomeAfterTaxes 逐季加總為年
         for(const r of fs){
           const y=+r.date.slice(0,4);
@@ -1036,16 +1037,50 @@ async function loadTwFinancials(symbol, gen){
   try{
     const years=Object.keys(by).map(Number).sort((a,b)=>a-b);
     if(!years.length){ if(el) el.innerHTML='<div class="note">此台股暫無可用財務資料。</div>'; return []; }
-    const rows=years.map(y=>{ const o=by[y]; const gm=(o.rev&&o.gp!=null)?o.gp/o.rev*100:null; const nm=(o.rev&&o.ni!=null)?o.ni/o.rev*100:null; const roe=(o.eq&&o.ni!=null)?o.ni/o.eq*100:null; return {yr:y, rev:(o.rev!=null?o.rev:null), gm, nm, roe}; });
-    rows.forEach((r,i)=>{ r.gr=(i>0&&rows[i-1].rev&&r.rev!=null)?(r.rev-rows[i-1].rev)/rows[i-1].rev*100:null; });
+    // 進行中年度處理:FinMind 逐季加總、若當年只有 1-3 季(季末月分別是3/6/9)代表年度尚未結束,
+    //   直接與前年整年比會變成「年減 70%」誤導。改為①年份標「至QN」②較前年比改「同期比」(前年前N季加總)
+    const quartersByYear={};   // year -> [季末月...]  用來偵測是否有4季
+    for(const r of (dFS_raw||[])){ if(r&&r.type==='Revenue'){ const y=+r.date.slice(0,4),m=+r.date.slice(5,7); (quartersByYear[y]=quartersByYear[y]||new Set()).add(m); } }
+    const rows=years.map(y=>{
+      const o=by[y];
+      const qSet=quartersByYear[y]; const nQ=qSet? qSet.size : 4;   // Yahoo fallback 沒逐季就當4季
+      const partial=(nQ<4);
+      const gm=(o.rev&&o.gp!=null)?o.gp/o.rev*100:null;
+      const nm=(o.rev&&o.ni!=null)?o.ni/o.rev*100:null;
+      const roe=(o.eq&&o.ni!=null)?o.ni/o.eq*100:null;
+      return {yr:y, rev:(o.rev!=null?o.rev:null), gm, nm, roe, partial, nQ};
+    });
+    // 較前年比:整年 vs 整年;若當年 partial,前年同樣加總前 N 季做同期比(避免誤導)
+    const revPartialPrev={};   // {y: 前一年前 nQ 季加總}
+    if(dFS_raw){
+      for(const r of rows){ if(!r.partial) continue;
+        let sum=0,cnt=0;
+        for(const x of dFS_raw){
+          if(x.type!=='Revenue') continue;
+          const y2=+x.date.slice(0,4), m2=+x.date.slice(5,7);
+          if(y2===r.yr-1 && quartersByYear[r.yr] && quartersByYear[r.yr].has(m2)){ sum+=+x.value||0; cnt++; }
+        }
+        if(cnt===r.nQ) revPartialPrev[r.yr]=sum;
+      }
+    }
+    rows.forEach((r,i)=>{
+      const prev=rows[i-1];
+      if(i===0 || !r.rev){ r.gr=null; return; }
+      if(r.partial){
+        const base=revPartialPrev[r.yr];
+        r.gr = (base>0)? (r.rev-base)/base*100 : null;
+      } else {
+        r.gr = (prev&&prev.rev&&!prev.partial)? (r.rev-prev.rev)/prev.rev*100 : null;
+      }
+    });
     const ru=pickRevUnit(rows.map(r=>r.rev));
     const cc2=(v,g,m)=>v==null?'':(v>=g?'g':v>=m?'y':'r');
     const html=`<table class="dt"><tr><th>年份</th><th>毛利率</th><th>淨利率</th><th>ROE</th></tr>`
-      +rows.map(r=>`<tr><td><strong>${r.yr}</strong></td><td class="${cc2(r.gm,30,20)}">${r.gm!=null?r.gm.toFixed(1)+'%':'—'}</td><td class="${cc2(r.nm,15,5)}">${r.nm!=null?r.nm.toFixed(1)+'%':'—'}</td><td class="${cc2(r.roe,20,10)}">${r.roe!=null?r.roe.toFixed(1)+'%':'—'}</td></tr>`).join('')
+      +rows.map(r=>`<tr><td><strong>${r.yr}${r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> Q1~Q${r.nQ}</span>`:''}</strong></td><td class="${cc2(r.gm,30,20)}">${r.gm!=null?r.gm.toFixed(1)+'%':'—'}</td><td class="${cc2(r.nm,15,5)}">${r.nm!=null?r.nm.toFixed(1)+'%':'—'}</td><td class="${cc2(r.roe,20,10)}">${r.roe!=null?r.roe.toFixed(1)+'%'+(r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> ${r.nQ}季</span>`:''):'—'}</td></tr>`).join('')
       +`</table>`
       +`<div class="ct" style="margin-top:16px">📈 年營收 <span style="color:var(--text2);font-weight:400;font-size:13px">（NT$${ru.label}）</span></div>`
       +`<table class="dt"><tr><th>年份</th><th>年營收</th><th>較前年</th></tr>`
-      +rows.map(r=>`<tr><td><strong>${r.yr}</strong></td><td>${r.rev!=null?fmtRev(r.rev,ru):'—'}</td><td class="${r.gr!=null?(r.gr>=0?'g':'r'):''}">${r.gr!=null?(r.gr>=0?'▲':'▼')+' '+Math.abs(r.gr).toFixed(1)+'%':'—'}</td></tr>`).join('')
+      +rows.map(r=>`<tr><td><strong>${r.yr}${r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> Q1~Q${r.nQ}</span>`:''}</strong></td><td>${r.rev!=null?fmtRev(r.rev,ru):'—'}${r.partial?`<span style="color:var(--text2);font-size:11px"> 累計</span>`:''}</td><td class="${r.gr!=null?(r.gr>=0?'g':'r'):''}">${r.gr!=null?(r.gr>=0?'▲':'▼')+' '+Math.abs(r.gr).toFixed(1)+'%'+(r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> 同期比</span>`:''):'—'}</td></tr>`).join('')
       +`</table><div class="note" style="margin-top:8px">資料來源：${sourceLabel||'—'}</div>`;
     if(el) el.innerHTML=html;
     return rows;
