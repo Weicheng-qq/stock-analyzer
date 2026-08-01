@@ -311,7 +311,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 <div class="main">
   <div id="welcome" class="welcome">
     <h1>美股AI深度分析工具</h1>
-    <p style="color:var(--blue);font-weight:700;margin-top:6px;font-size:15px">以合理價格擁有強大護城河公司</p>
+    <p style="color:var(--blue);font-weight:700;margin-top:6px;font-size:15px">以合理低估價格 買入擁有強大護城河的公司</p>
     <p>10年財務指標 · 營收成長 · 彼得林區分類 · 護城河 · 競爭對手 · 買入建議</p>
     <p style="color:var(--text2);font-size:13px;margin-top:10px">在上方搜尋框輸入、或點下方按鈕，即可查看任一美股的完整分析（開啟時預設顯示台積電範例）</p>
     <div class="chips">
@@ -2719,6 +2719,34 @@ const IR_CALL_SUMMARY = {
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
 const IR_PRODUCTS_SUMMARY = {
   // ── 台股（官網為主，人工逐間讀公司官網建置；未建置者由中文維基/AI備援）──
+  '2345': {
+    quarter: '官網 accton.com 業務與 AI 網通全球佈局（2026）',
+    source: 'https://www.accton.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（資料來源：智邦科技官網 accton.com）</b></div>
+智邦科技（Accton）為<b>全球網通白牌交換器/AI 資料中心基礎設施龍頭</b>，四大服務模式：<br>
+<b>ODM（原廠委託設計製造）</b>｜<b>JDM（聯合開發製造）</b>｜<b>開放式基礎設施（Open Infrastructure）</b>｜<b>上游解決方案</b>（頂級技術夥伴合作）。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">核心產品能力（Hyper-Scale Fabric）</b><br>
+• <b>液冷 Liquid Cooling</b>：面向 AI Fabric 的高密度散熱（機櫃內熱交換、CDU、42U 30kW 完整整合）。<br>
+• <b>光學 Optics</b>：超高頻寬互連、大規模雲端網路無損傳輸。<br>
+• <b>機櫃整合 Rack Integration</b>：100G 交換器 + GPU 伺服器系統級組裝，供 Hyperscale 部署。<br>
+• FPGA/CPLD、精密機構、電信級可靠性驗證。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">全球佈局擴產（2026 官網公告）</b><br>
+• 新竹 AI 園區總部（總部/次世代 AI 基礎設施核心）｜越南永福（自動化高產能工廠）｜加州爾灣（北美整合中心）。<br>
+• <b>擴產中</b>：馬來西亞（東南亞產能）、新加坡（工程/物流樞紐）、<b>美國達拉斯（機櫃級整合、專為美國部署）</b>。</div>`
+  },
+  '2412': {
+    quarter: '官網 cht.com.tw + chtglobal.com 業務結構（2026）',
+    source: 'https://www.cht.com.tw/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（資料來源：中華電信官網 cht.com.tw + 國際部 chtglobal.com）</b></div>
+中華電信（Chunghwa Telecom）為<b>台灣最大整合型電信業者</b>，四大營運範疇：<br>
+<b>消費個人</b>：5G 行動上網、HiNet 光世代寬頻、MOD/Hami Video 影音、Hami 支付/金融服務。<br>
+<b>企業客戶</b>：專線/雲端/資安/物聯網/AI 智慧解決方案。<br>
+<b>國際業務（CHT Global）</b>：全球網路整合服務、50+ Global PoPs、15+ 據點、30+ 條海底電纜；亞歐美主要市場覆蓋，服務跨國企業。<br>
+<b>電信基礎建設</b>：全台最完整光纖與行動通訊網路、資料中心 IDC / colocation。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品與策略重點</b><br>
+• 穩定現金流＋高股息殖利率的定存概念股龍頭；受惠 5G/雲端/資安/AI 資料中心長期需求。<br>
+• 亞太首屈一指的海纜與 IDC 資產，AI 資料中心與雲端業務為新成長動能。</div>`
+  },
   '2382': {
     quarter: '官網 quantatw.com 集團業務與最新公告（2026）',
     source: 'https://www.quantatw.com/',
