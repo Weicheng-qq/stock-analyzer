@@ -279,24 +279,31 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 
 <div class="modal-overlay" id="settingsModal">
   <div class="modal">
-    <h2>⚙️ AI 分析金鑰（免費）</h2>
-    <p class="sub">財務數據(毛利率/營收等)用美國 SEC 官方資料、不需金鑰。但<b style="color:var(--text)">彼得林區分類、競爭對手、護城河、CEO展望、買入建議</b>需要 AI 判讀。支援三種免費金鑰：<b style="color:var(--blue)">Gemini（推薦，內容品質最好）</b>、Groq（速度最快）或 OpenRouter。</p>
-    <div class="steps">
-      <b>推薦：取得免費 Gemini 金鑰（不需信用卡，1分鐘）：</b><br>
-      1. 前往 <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a><br>
-      2. 用 Google 帳號登入 → 點 <b>Create API key</b><br>
-      3. 複製那串 <b>AIza...</b> 開頭的金鑰，貼到下方<br><br>
-      <b>或用免費 Groq 金鑰（速度最快）：</b><br>
-      1. 前往 <a href="https://console.groq.com/keys" target="_blank">console.groq.com/keys</a> → <b>Create API Key</b> → 複製 <b>gsk_...</b><br><br>
-      <b>或用免費 OpenRouter 金鑰：</b><br>
-      1. 前往 <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a> → <b>Create Key</b> → 複製 <b>sk-or-...</b>
+    <h2>⚙️ AI 分析設定</h2>
+    <div style="background:rgba(63,185,80,.12);border:1px solid rgba(63,185,80,.4);border-radius:10px;padding:13px 15px;margin-bottom:14px;line-height:1.7;font-size:14px">
+      <b style="color:var(--green)">✅ AI 分析已內建，免設定即可使用</b><br>
+      <span style="color:var(--text2)">財務數據來自美國 SEC 官方資料；彼得林區分類、護城河、競爭對手、CEO 展望、買入建議由內建 AI 免費判讀，你不需要做任何設定。</span>
     </div>
-    <label>API Key（AIza... 或 gsk_... 或 sk-or-...）</label>
-    <input type="text" id="gmKey" placeholder="貼上你的 AIza... / gsk_... / sk-or-... 金鑰">
-    <p class="note">金鑰只存在你瀏覽器(localStorage)，不會外傳到我方。使用免費模型，日常分析免費。</p>
+    <details class="adv-key">
+      <summary style="cursor:pointer;color:var(--text2);font-size:13.5px;padding:6px 0;user-select:none">進階：改用自己的免費金鑰（選填，一般使用者可略過）</summary>
+      <p class="sub" style="margin-top:8px">若共用 AI 額度暫時忙碌，可自行申請免費金鑰替代（<b style="color:var(--blue)">Gemini</b> 品質最好／Groq 最快／OpenRouter 備援）：</p>
+      <div class="steps">
+        <b>推薦：取得免費 Gemini 金鑰（不需信用卡，1分鐘）：</b><br>
+        1. 前往 <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a><br>
+        2. 用 Google 帳號登入 → 點 <b>Create API key</b><br>
+        3. 複製那串 <b>AIza...</b> 開頭的金鑰，貼到下方<br><br>
+        <b>或用免費 Groq 金鑰（速度最快）：</b><br>
+        1. 前往 <a href="https://console.groq.com/keys" target="_blank">console.groq.com/keys</a> → <b>Create API Key</b> → 複製 <b>gsk_...</b><br><br>
+        <b>或用免費 OpenRouter 金鑰：</b><br>
+        1. 前往 <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a> → <b>Create Key</b> → 複製 <b>sk-or-...</b>
+      </div>
+      <label>API Key（AIza... 或 gsk_... 或 sk-or-...）</label>
+      <input type="text" id="gmKey" placeholder="貼上你的 AIza... / gsk_... / sk-or-... 金鑰">
+      <p class="note">金鑰只存在你瀏覽器(localStorage)，不會外傳到我方。使用免費模型，日常分析免費。</p>
+    </details>
     <div class="modal-btns">
-      <button class="btn-sec" onclick="closeSettings()">取消</button>
-      <button class="btn-pri" onclick="saveSettings()">儲存</button>
+      <button class="btn-sec" onclick="closeSettings()">關閉</button>
+      <button class="btn-pri" onclick="saveSettings()">儲存金鑰</button>
     </div>
   </div>
 </div>
