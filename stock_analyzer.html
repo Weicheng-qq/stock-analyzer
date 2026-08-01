@@ -3476,6 +3476,21 @@ function maybeRunDemo(){
 }
 window.addEventListener('load', maybeRunDemo);
 window.addEventListener('pageshow', function(e){ if(e.persisted) maybeRunDemo(); });   // 從返回快取(bfcache)回到頁面時 load 不會再觸發，改由 pageshow 補跑
+
+// 📈 回到前景就自動重抓「即時股價」：手機把 App 從背景喚回(或 PWA/bfcache 還原畫面)時，
+//   畫面會停在上次的舊股價、JS 不會重跑，過去要手動下拉重整才會更新。這裡監聽
+//   visibilitychange(切回前景)/pageshow(bfcache還原)/focus，就地重抓自選股股價+走勢+指數列(不重繪清單、免閃爍)。
+var __lastLiveRefresh=Date.now();   // 初始化為現在，避免首次載入後緊接的 focus 造成重複抓取
+function refreshLiveData(force){
+  var now=Date.now();
+  if(!force && now-__lastLiveRefresh<15000) return;   // 15秒內不重複，避免 visibility+focus+pageshow 同時觸發多抓
+  __lastLiveRefresh=now;
+  try{ loadIndexBar(); }catch(e){}
+  try{ var l=(typeof getWatchlist==='function')?getWatchlist():null; if(l&&l.length){ loadWatchlistPrices(l); loadWatchlistSpark(l); } }catch(e){}
+}
+document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='visible') refreshLiveData(false); });
+window.addEventListener('pageshow', function(e){ if(e.persisted) refreshLiveData(true); });   // bfcache 還原一定強制重抓
+window.addEventListener('focus', function(){ refreshLiveData(false); });
 // 開啟頁面時渲染自選股清單（每次都要跑，不受上面的 demo_done 限制）
 // 最上方美股四大指數列：道瓊、標普500、那斯達克、費城半導體（漲綠跌紅，與自選股一致）
 async function loadIndexBar(){
