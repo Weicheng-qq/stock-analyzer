@@ -1025,6 +1025,9 @@ async function doSearchTW(symbol){
     fillNews(symbol, gen);
     const finRows=await loadTwFinancials(symbol, gen);   // 近4年台股財務(Yahoo)
     if(gen!==SEARCH_GEN) return;
+    // 抓中文維基百科作為 products/competitors/moat 的真實事實來源(取代原本純 AI 腦補),失敗不影響其餘
+    try{ await Promise.race([fetchWikipediaZh(name, code), new Promise(r=>setTimeout(r,6000))]); }catch(e){}
+    if(gen!==SEARCH_GEN) return;
     const finText = finRows.length
       ? finRows.map(r=>`${r.yr}: 年營收NT$${r.rev!=null?(r.rev/1e8).toFixed(0)+'億':'NA'}, 成長${r.gr!=null?r.gr.toFixed(1)+'%':'NA'}, 毛利率${r.gm!=null?r.gm.toFixed(1)+'%':'NA'}, 淨利率${r.nm!=null?r.nm.toFixed(1)+'%':'NA'}, ROE${r.roe!=null?r.roe.toFixed(1)+'%':'NA'}`).join('\n')
       : `公司：${name}（台股 ${code}）。目前股價 NT$${price.toFixed(2)}。（財務資料有限，請依產業地位與基本面知識分析）`;
@@ -1164,7 +1167,12 @@ async function doSearch(){
     ['cik','fin','price','render','ai'].forEach(k=>{ const el=document.getElementById('log_'+k); if(el&&el.querySelector('.log-spin')) logErr(k,e.message); });
     document.getElementById('results').style.display='block';
     if(e.message==='PROXY_DOWN'){
-      document.getElementById('results').innerHTML=`<div class="err-box">⚠️ <b>連不到本機資料代理</b><br><br>請先雙擊資料夾裡的 <b>啟動.bat</b>，跳出綠字小視窗後保持開著，再按重試。<br><button class="retry-btn" onclick="doSearch()">🔄 重試</button></div>`;
+      // 依環境顯示:本機開發才提「啟動.bat」;線上版/手機App顯示友善訊息(上架Google Play後使用者不該看到本機開發用語)
+      const isLocalEnv=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1);
+      const msg = isLocalEnv
+        ? `⚠️ <b>連不到本機資料代理</b><br><br>請先雙擊資料夾裡的 <b>啟動.bat</b>，跳出綠字小視窗後保持開著，再按重試。`
+        : `⚠️ <b>資料來源暫時連線忙碌</b><br><br>官方財報資料伺服器目前忙碌或網路不穩，請稍候再按重試。`;
+      document.getElementById('results').innerHTML=`<div class="err-box">${msg}<br><button class="retry-btn" onclick="doSearch()">🔄 重試</button></div>`;
     } else {
       document.getElementById('results').innerHTML=`<div class="err-box">⚠️ ${esc(e.message)}<br><button class="retry-btn" onclick="doSearch()">🔄 重試</button></div>`;
     }
@@ -1760,6 +1768,28 @@ async function fetchWikipedia(name, symbol){
       const p=Object.values(pages)[0];
       if(!p||!p.extract||p.extract.length<200) continue;
       window.__wikiData={ title:p.title, text:condenseWiki(p.extract), url:p.fullurl||('https://en.wikipedia.org/wiki/'+encodeURIComponent(p.title)) };
+      return true;
+    }catch(e){}
+  }
+  return false;
+}
+
+// 台股用「中文維基百科」抓公司真實公開資料(產品/競爭/發展)餵給 AI —— 台股原本沒抓任何官方/維基資料，
+//   導致 products/competitors/moat 全由 AI 憑訓練記憶腦補(違反事實鐵則、群聯等內容糟)。中文維基對台股公司
+//   (群聯電子/台積電/聯發科…)覆蓋完整且持續更新，作為定性內容的事實來源。
+async function fetchWikipediaZh(name, code){
+  const cands=[name, name&&name.replace(/-KY$/,''), code&&(code+' 股票')].filter(Boolean);
+  for(const q of cands){
+    try{
+      const url=`https://zh.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(q)}&gsrlimit=1&prop=extracts|info&explaintext=1&inprop=url&format=json&origin=*`;
+      const r=await fetch(url); if(!r.ok) continue;
+      const d=await r.json(); const pages=d&&d.query&&d.query.pages;
+      if(!pages) continue;
+      const p=Object.values(pages)[0];
+      if(!p||!p.extract||p.extract.length<120) continue;
+      // 中文維基：取前段(公司概述+主要業務/產品)，condenseWiki 的英文關鍵字對中文無效但 intro 段已足夠
+      const intro=p.extract.split(/\n\n+/).slice(0,4).join('\n').slice(0,3200);
+      window.__wikiData={ title:p.title, text:intro, url:p.fullurl||('https://zh.wikipedia.org/wiki/'+encodeURIComponent(p.title)) };
       return true;
     }catch(e){}
   }
