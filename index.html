@@ -328,7 +328,8 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <button class="mkt-btn" data-mkt="tw" onclick="setMarket('tw')">🟢 台股</button>
   </div>
   <div class="grp-menu" id="grpMenu">
-    <button class="grp-btn" data-g="1" onclick="showGroup(1)">大盤指數與自選股</button>
+    <button class="grp-btn" data-g="1" onclick="showGroup(1)">大盤指數</button>
+    <button class="grp-btn" data-g="10" onclick="showGroup(10)">自選股</button>
     <button class="grp-btn" data-g="9" onclick="showGroup(9)">產品與服務</button>
     <button class="grp-btn" data-g="2" onclick="showGroup(2)">關鍵財務指標</button>
     <button class="grp-btn" data-g="3" onclick="showGroup(3)">護城河與彼得林區分類</button>
@@ -352,7 +353,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 
   <div id="logPanel" class="log-panel"><h3>🔄 載入進度</h3><div id="logItems"></div></div>
   <div id="results" class="results"></div>
-  <div id="grpEmpty" class="grp-empty" style="display:none">請先回到「大盤指數與自選股」，點任一個股的「AI」按鈕完成分析，即可在此看到該主題內容。</div>
+  <div id="grpEmpty" class="grp-empty" style="display:none">請先回到「自選股」，點任一個股的「AI」按鈕完成分析，即可在此看到該主題內容。</div>
 </div>
 
 <script>
@@ -2716,6 +2717,20 @@ const IR_CALL_SUMMARY = {
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
 const IR_PRODUCTS_SUMMARY = {
   // ── 台股（官網為主，人工逐間讀公司官網建置；未建置者由中文維基/AI備援）──
+  '2303': {
+    quarter: '官網 umc.com 特殊製程與擴產計畫（2026）',
+    source: 'https://www.umc.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（資料來源：聯華電子官網 umc.com）</b></div>
+聯華電子（UMC）為<b>全球純晶圓代工市佔前 3、專攻特殊製程</b>：<br>
+<b>製程平台</b>：邏輯、射頻(RF)、高壓製程(HV)、BCD 製程、嵌入式非揮發性記憶體(eNVM)。<br>
+<b>應用領域</b>：行動與無線通訊、<b>物聯網與穿戴裝置</b>（低功耗邏輯/混訊、eNVM、BCD、微機電）、計算與數據處理（HV、eFlash）、<b>車用晶片 UMC Auto 平台</b>。<br>
+規模：12 座晶圓廠遍及亞洲、約 16,700 件全球半導體專利。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">最新官方戰略（2026，聯電官網新聞）</b><br>
+• <b>宣布新加坡擴產與台南興建新廠</b>（2026/07/29）——因應 AI 需求加速成長；擴產分階段推進、兼顧速度與資本紀律。<br>
+• <b>與 SILITH 達成矽光子量產里程碑</b>（2026/07/14）——加速 AI 基礎設施所需的矽光子高產量製造。<br>
+• 推出 <b>14nm eHV FinFET 平台</b>（2026/05/14）——助力新一代智慧型手機顯示技術；與 Cadence 攜手 22nm 類比/混訊設計認證。<br>
+• 2026 股東會通過每股現金股利 <b>NT$2.60</b>；獲頒標普全球永續年鑑 Top 1%。</div>`
+  },
   '2317': {
     quarter: '官網 honhai.com 集團策略與 3+3+3（2026）',
     source: 'https://www.honhai.com/',
@@ -3740,19 +3755,26 @@ function cardGroup(c){
 }
 function showGroup(n){
   __grp=n; document.body.classList.add('grp-mode');
-  ['welcome','indexTitle','indexBar','watchlistCard'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display=(n===1)?'':'none'; });
+  // 大盤指數(n=1) 與 自選股(n=10) 拆成兩個獨立選單。welcome 只在大盤指數頁顯示
+  const showIndex = (n===1);
+  const showWl    = (n===10);
+  const e_wel=document.getElementById('welcome');       if(e_wel) e_wel.style.display=showIndex?'':'none';
+  const e_iT =document.getElementById('indexTitle');    if(e_iT ) e_iT .style.display=showIndex?'':'none';
+  const e_iB =document.getElementById('indexBar');      if(e_iB ) e_iB .style.display=showIndex?'':'none';
+  const e_wl =document.getElementById('watchlistCard'); if(e_wl ) e_wl .style.display=showWl   ?'':'none';
   const res=document.getElementById('results'); let anyCard=false;
   if(res){
     // 護城河選單(群組3)：護城河分析移最前、產品與服務移最後
     if(n===3){ const mo=document.getElementById('ai_moat')?.closest('.card'); if(mo) res.insertBefore(mo, res.firstChild); }
     // 財經新聞選單(群組6)：最新新聞在上、投資大行目標價在下
     if(n===6){ const nc=document.getElementById('newsList'); const nCard=nc&&nc.closest('.card'); const tg=document.getElementById('analystTargets'); const tCard=tg&&tg.closest('.card'); if(nCard&&tCard) nCard.insertAdjacentElement('afterend', tCard); }
-    res.style.display=(n===1)?'none':'block';   // .results 類別預設 display:none，需明確設 block 才顯示
+    const showRes=(n!==1 && n!==10);
+    res.style.display=showRes?'block':'none';   // .results 類別預設 display:none，需明確設 block 才顯示
     [...res.querySelectorAll('.card, .co-head')].forEach(c=>{ const show=cardGroup(c)===n; c.style.display=show?'':'none'; if(show) anyCard=true; });
     res.querySelectorAll('.g2').forEach(g=>{ const vis=[...g.children].some(c=>c.style.display!=='none'); g.style.display=vis?'block':'none'; });
     res.querySelectorAll(':scope > .note').forEach(nt=>nt.style.display='none');
   }
-  const emp=document.getElementById('grpEmpty'); if(emp){ const showEmp=(n>=2 && !anyCard); emp.style.display=showEmp?'block':'none'; if(showEmp) emp.textContent = getMarket()==='tw' ? '台股個股深度分析建置中（Phase 2 即將推出）。目前台股請看「大盤指數與自選股」：即時股價、當日走勢線、盤前/盤後與 AI 漲跌解讀。' : '請先回到「大盤指數與自選股」，點任一個股的「AI」按鈕完成分析，即可在此看到該主題內容。'; }
+  const emp=document.getElementById('grpEmpty'); if(emp){ const showEmp=(n>=2 && n!==10 && !anyCard); emp.style.display=showEmp?'block':'none'; if(showEmp) emp.textContent = getMarket()==='tw' ? '台股個股深度分析建置中（Phase 2 即將推出）。目前台股請看「自選股」：即時股價、當日走勢線、盤前/盤後與 AI 漲跌解讀。' : '請先回到「自選股」，點任一個股的「AI」按鈕完成分析，即可在此看到該主題內容。'; }
   document.querySelectorAll('#grpMenu .grp-btn').forEach(b=>b.classList.toggle('active', +b.dataset.g===n));
   setTimeout(()=>{
     if(res) res.querySelectorAll('canvas').forEach(cv=>{ if(cv.offsetParent){ const ch=(window.Chart&&Chart.getChart)?Chart.getChart(cv):null; if(ch) ch.resize(); } });
