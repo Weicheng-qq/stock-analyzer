@@ -1032,7 +1032,7 @@ async function doSearchTW(symbol){
       ? finRows.map(r=>`${r.yr}: 年營收NT$${r.rev!=null?(r.rev/1e8).toFixed(0)+'億':'NA'}, 成長${r.gr!=null?r.gr.toFixed(1)+'%':'NA'}, 毛利率${r.gm!=null?r.gm.toFixed(1)+'%':'NA'}, 淨利率${r.nm!=null?r.nm.toFixed(1)+'%':'NA'}, ROE${r.roe!=null?r.roe.toFixed(1)+'%':'NA'}`).join('\n')
       : `公司：${name}（台股 ${code}）。目前股價 NT$${price.toFixed(2)}。（財務資料有限，請依產業地位與基本面知識分析）`;
     const equivNote = usEquiv ? `（本公司即美股 ${usEquiv} 的同一實體，請以其真實主營業務與產業地位分析，產品與法說會展望已另用官方事實呈現）` : '';
-    const ctx={ name, symbol:code, price, pe:null, peRangeText:'無', finText:`公司：${name}（台股 ${code}）${equivNote}，目前股價 NT$${price.toFixed(2)}。近年財務（Yahoo，新台幣）：\n${finText}`, chkText:'', passCount:0, chkTotal:0 };
+    const ctx={ name, symbol:code, price, market:'tw', curLabel:'新台幣', pe:null, peRangeText:'無', finText:`公司：${name}（台股 ${code}）${equivNote}，目前股價 NT$${price.toFixed(2)}。近年財務（Yahoo，新台幣）：\n${finText}`, chkText:'', passCount:0, chkTotal:0 };
     window.__lastAI={ctx, peInfo:null, gen};
     if(gmKey||useServer){
       logPanel(true); logAdd('ai','AI 分析中...');
@@ -1427,7 +1427,8 @@ function setAI(id,html){ const el=document.getElementById(id); if(el) el.innerHT
 
 // ── Gemini ──
 async function callGemini(ctx, key, useServer){
-  const prompt=`你是專業美股分析師。根據以下公司資料，用繁體中文回答，並「只」回傳 JSON（不要任何其他文字、不要 markdown 標記）。
+  const isTW = ctx.market==='tw';
+  const prompt=`你是專業${isTW?'台股':'美股'}分析師。根據以下公司資料，用繁體中文回答，並「只」回傳 JSON（不要任何其他文字、不要 markdown 標記）。${isTW?'\n（這是台灣上市／上櫃股票，金額以新台幣為主；財務數字來自 Yahoo，定性內容請以下方提供的維基百科資料為事實依據，不足處用產業常識補足，嚴禁編造。）':''}
 
 公司：${ctx.name} (${ctx.symbol})
 目前股價：${ctx.price!=null?'$'+ctx.price:'未知'}
