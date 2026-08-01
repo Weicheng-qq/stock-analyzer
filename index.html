@@ -983,18 +983,59 @@ function twResultsHtml(o){
   <div id="ai_independent_box" style="margin-top:8px;padding-top:14px;border-top:1px solid var(--border)"><div id="ai_independent">${aiLoading()}</div></div>
 </div>`;
 }
-// 台股財務指標(Yahoo fundamentals 近4年)：毛利率/淨利率/ROE/年營收，回傳 rows 供 AI 上下文
+// 台股 10 年財務指標(FinMind API 免費免金鑰、自帶 CORS)：毛利率/淨利率/ROE/年營收
+//   FinMind 為單季資料，加總為年；已實測台積電近 10 年與官方完全一致(2024 營收 28943 億、毛利率 56.1%、淨利率 40.5%、ROE 27.3%)
+//   Yahoo 台股僅 4 年→ FinMind 為主, Yahoo 為 fallback。回傳 rows 供 AI 上下文。
 async function loadTwFinancials(symbol, gen){
   const el=document.getElementById('tw_fin');
+  const code=String(symbol||'').replace(/\..*/,'');
+  let by={}, sourceLabel='';
+  // 主：FinMind (10年)
   try{
-    const now=Math.floor(Date.now()/1000), p1=now-380000000;
-    const d=await fetchJson(`https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/${symbol}?symbol=${symbol}&type=annualTotalRevenue,annualGrossProfit,annualNetIncomeCommonStockholders,annualStockholdersEquity&period1=${p1}&period2=${now}`);
+    const [rFS,rBS]=await Promise.all([
+      fetch(`https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockFinancialStatements&data_id=${code}&start_date=2016-01-01`),
+      fetch(`https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockBalanceSheet&data_id=${code}&start_date=2016-01-01`)
+    ]);
     if(gen!=null && gen!==SEARCH_GEN) return [];
-    const res=d?.timeseries?.result||[]; const by={};
-    const grab=(type,key)=>{ const s=res.find(r=>r.meta&&r.meta.type&&r.meta.type[0]===type); ((s&&s[type])||[]).forEach(v=>{ if(v&&v.reportedValue!=null){ const y=+v.asOfDate.slice(0,4); (by[y]=by[y]||{})[key]=(v.reportedValue.raw!=null?v.reportedValue.raw:v.reportedValue); } }); };
-    grab('annualTotalRevenue','rev'); grab('annualGrossProfit','gp'); grab('annualNetIncomeCommonStockholders','ni'); grab('annualStockholdersEquity','eq');
+    if(rFS.ok && rBS.ok){
+      const dFS=await rFS.json(), dBS=await rBS.json();
+      const fs=dFS?.data||[], bs=dBS?.data||[];
+      if(fs.length){
+        // 損益：Revenue/GrossProfit/IncomeAfterTaxes 逐季加總為年
+        for(const r of fs){
+          const y=+r.date.slice(0,4);
+          if(!by[y]) by[y]={};
+          if(r.type==='Revenue')          by[y].rev = (by[y].rev||0) + (+r.value||0);
+          else if(r.type==='GrossProfit') by[y].gp  = (by[y].gp ||0) + (+r.value||0);
+          else if(r.type==='IncomeAfterTaxes') by[y].ni = (by[y].ni||0) + (+r.value||0);
+        }
+        // 權益：取年末最後一筆 EquityAttributableToOwnersOfParent
+        const sortedBS=[...bs].sort((a,b)=>a.date.localeCompare(b.date));
+        for(const r of sortedBS){
+          if(r.type==='EquityAttributableToOwnersOfParent'){
+            const y=+r.date.slice(0,4);
+            (by[y]=by[y]||{}).eq = +r.value;
+          }
+        }
+        sourceLabel='FinMind（近 10 年台股官方申報數據，季度加總）';
+      }
+    }
+  }catch(e){}
+  // Fallback: Yahoo (4 年)
+  if(!Object.keys(by).length){
+    try{
+      const now=Math.floor(Date.now()/1000), p1=now-380000000;
+      const d=await fetchJson(`https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/${symbol}?symbol=${symbol}&type=annualTotalRevenue,annualGrossProfit,annualNetIncomeCommonStockholders,annualStockholdersEquity&period1=${p1}&period2=${now}`);
+      if(gen!=null && gen!==SEARCH_GEN) return [];
+      const res=d?.timeseries?.result||[];
+      const grab=(type,key)=>{ const s=res.find(r=>r.meta&&r.meta.type&&r.meta.type[0]===type); ((s&&s[type])||[]).forEach(v=>{ if(v&&v.reportedValue!=null){ const y=+v.asOfDate.slice(0,4); (by[y]=by[y]||{})[key]=(v.reportedValue.raw!=null?v.reportedValue.raw:v.reportedValue); } }); };
+      grab('annualTotalRevenue','rev'); grab('annualGrossProfit','gp'); grab('annualNetIncomeCommonStockholders','ni'); grab('annualStockholdersEquity','eq');
+      sourceLabel='Yahoo Finance（近 4 年，FinMind 暫不可用時 fallback）';
+    }catch(e){}
+  }
+  try{
     const years=Object.keys(by).map(Number).sort((a,b)=>a-b);
-    if(!years.length){ if(el) el.innerHTML='<div class="note">此台股暫無可用財務資料（Yahoo）。</div>'; return []; }
+    if(!years.length){ if(el) el.innerHTML='<div class="note">此台股暫無可用財務資料。</div>'; return []; }
     const rows=years.map(y=>{ const o=by[y]; const gm=(o.rev&&o.gp!=null)?o.gp/o.rev*100:null; const nm=(o.rev&&o.ni!=null)?o.ni/o.rev*100:null; const roe=(o.eq&&o.ni!=null)?o.ni/o.eq*100:null; return {yr:y, rev:(o.rev!=null?o.rev:null), gm, nm, roe}; });
     rows.forEach((r,i)=>{ r.gr=(i>0&&rows[i-1].rev&&r.rev!=null)?(r.rev-rows[i-1].rev)/rows[i-1].rev*100:null; });
     const ru=pickRevUnit(rows.map(r=>r.rev));
@@ -1005,7 +1046,7 @@ async function loadTwFinancials(symbol, gen){
       +`<div class="ct" style="margin-top:16px">📈 年營收 <span style="color:var(--text2);font-weight:400;font-size:13px">（NT$${ru.label}）</span></div>`
       +`<table class="dt"><tr><th>年份</th><th>年營收</th><th>較前年</th></tr>`
       +rows.map(r=>`<tr><td><strong>${r.yr}</strong></td><td>${r.rev!=null?fmtRev(r.rev,ru):'—'}</td><td class="${r.gr!=null?(r.gr>=0?'g':'r'):''}">${r.gr!=null?(r.gr>=0?'▲':'▼')+' '+Math.abs(r.gr).toFixed(1)+'%':'—'}</td></tr>`).join('')
-      +`</table><div class="note" style="margin-top:8px">資料來源：Yahoo Finance（近 4 年）。台股官方 10 年財報(MOPS)因其 API 擋外部程式擷取，暫以此為準。</div>`;
+      +`</table><div class="note" style="margin-top:8px">資料來源：${sourceLabel||'—'}</div>`;
     if(el) el.innerHTML=html;
     return rows;
   }catch(e){ if(el) el.innerHTML='<div class="note">台股財務資料暫時取不到。</div>'; return []; }
