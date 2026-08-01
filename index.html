@@ -263,7 +263,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
   <button class="search-btn" onclick="__jumpAfterSearch=true;doSearch()">分析</button>
   <button class="install-btn" id="installBtn" onclick="handleInstallClick()" title="安裝成手機/電腦App" style="display:none">📲 安裝 App</button>
-  <button class="settings-btn" onclick="openSettings()" title="AI 金鑰設定">⚙️</button>
+  <button class="settings-btn" id="settingsBtn" onclick="openSettings()" title="AI 金鑰設定">⚙️</button>
 </div>
 
 <div class="modal-overlay" id="iosInstallModal">
@@ -396,6 +396,14 @@ var memKey = '';
 function safeGet(){ try{ return localStorage.getItem('gm_key')||memKey||''; }catch(e){ return memKey; } }
 function safeSet(v){ memKey=v; try{ localStorage.setItem('gm_key', v); }catch(e){} }
 function getGmKey(){ return safeGet(); }
+// 上架 Google Play 後,一般使用者不該看到「AI 金鑰設定」——伺服器 /api/ai 已免費代跑 AI,免設定即可用。
+//   線上/App 版隱藏 ⚙️ 設定鈕;只有本機開發版(localhost/file:)保留給開發者自己設金鑰。
+(function hideSettingsForUsers(){
+  try{
+    var isLocalEnv=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1);
+    if(!isLocalEnv){ var b=document.getElementById('settingsBtn'); if(b) b.style.display='none'; }
+  }catch(e){}
+})();
 function openSettings(){ try{ document.getElementById('gmKey').value=getGmKey(); }catch(e){} document.getElementById('settingsModal').classList.add('open'); }
 function closeSettings(){ document.getElementById('settingsModal').classList.remove('open'); }
 function saveSettings(){ safeSet(document.getElementById('gmKey').value.trim()); closeSettings(); alert('✅ 已儲存'); }
