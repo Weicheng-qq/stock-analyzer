@@ -745,6 +745,26 @@ function watchlistAnalyze(symbol){
   __jumpAfterSearch=true; doSearch();
   window.scrollTo({top:0, behavior:'smooth'});
 }
+// 使用者一打開 App 點「產品與服務」等深度分析選單時,若尚無分析資料,自動分析自選股第一檔,
+// 不要求使用者先回自選股點 AI 鈕(使用者反映此流程多餘)。只在真的點深度選單時才觸發,單看大盤/自選股不耗 AI 額度。
+let __autoLoading=false, __autoTried=false;
+function autoLoadDefaultStock(targetGroup){
+  if(__autoLoading || __autoTried) return false;
+  const list=getWatchlist(); if(!list.length) return false;
+  const sym=list[0].symbol; if(!sym) return false;
+  __autoTried=true; __autoLoading=true;
+  __grp=targetGroup;          // 記住使用者要看的選單
+  __jumpAfterSearch=false;    // 分析完回到該選單,不強制跳到「關鍵財務指標」
+  try{
+    if(/\.TW[O]?$/i.test(sym)){ doSearchTW(sym); }
+    else { const inp=document.getElementById('searchInput'); if(inp) inp.value=sym; doSearch(); }
+  }catch(e){ __autoLoading=false; return false; }
+  return true;
+}
+function autoLoadName(){
+  const list=getWatchlist();
+  return (list.length && (list[0].name||list[0].symbol)) || '';
+}
 function renderWatchlist(){
   const el=document.getElementById('watchlistTable'); if(!el) return;
   const list=getWatchlist();
@@ -1157,7 +1177,7 @@ async function doSearchTW(symbol){
     const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=1d`);
     if(gen!==SEARCH_GEN) return;
     const meta=ch?.chart?.result?.[0]?.meta;
-    if(!meta||meta.regularMarketPrice==null){ document.getElementById('results').innerHTML='<div class="err-box">查不到此台股資料，請確認代碼</div>'; logPanel(false); return; }
+    if(!meta||meta.regularMarketPrice==null){ __autoLoading=false; document.getElementById('results').innerHTML='<div class="err-box">查不到此台股資料，請確認代碼</div>'; logPanel(false); return; }
     const code=symbol.replace(/\..*/,''); const mkt=/\.TWO$/i.test(symbol)?'TWO':'TW';
     const name=TW_NAMES[code]||meta.shortName||meta.longName||code;
     const price=meta.regularMarketPrice, prev=meta.previousClose??meta.chartPreviousClose;
@@ -1206,8 +1226,9 @@ async function doSearchTW(symbol){
       if(ai){ renderAI(ai); runIndependentAiAnalysis(); logOk('ai','AI 分析完成'); } else { setAllAI('<div class="note">AI 分析暫時無法取得，稍後再試。</div>'); logErr('ai','AI 分析失敗'); }
       logPanel(false);
     } else { setAllAI('<div class="note">請點右上 ⚙️ 設定免費 AI 金鑰以顯示 AI 分析。</div>'); }
-    __jumpAfterSearch=true; applyGroupAfterRender();
-  }catch(e){ document.getElementById('results').innerHTML='<div class="err-box">台股資料載入失敗，請稍後再試</div>'; logPanel(false); }
+    if(!__autoLoading) __jumpAfterSearch=true;   // 自動載入時保持使用者當下選的選單,不強制跳「關鍵財務指標」
+    applyGroupAfterRender();
+  }catch(e){ __autoLoading=false; document.getElementById('results').innerHTML='<div class="err-box">台股資料載入失敗，請稍後再試</div>'; logPanel(false); }
 }
 async function doSearch(){
   const raw=document.getElementById('searchInput').value.trim();
@@ -1329,6 +1350,7 @@ async function doSearch(){
     }
   }catch(e){
     console.error(e);
+    __autoLoading=false;
     ['cik','fin','price','render','ai'].forEach(k=>{ const el=document.getElementById('log_'+k); if(el&&el.querySelector('.log-spin')) logErr(k,e.message); });
     document.getElementById('results').style.display='block';
     if(e.message==='PROXY_DOWN'){
@@ -4321,7 +4343,17 @@ function showGroup(n){
     res.querySelectorAll('.g2').forEach(g=>{ const vis=[...g.children].some(c=>c.style.display!=='none'); g.style.display=vis?'block':'none'; });
     res.querySelectorAll(':scope > .note').forEach(nt=>nt.style.display='none');
   }
-  const emp=document.getElementById('grpEmpty'); if(emp){ const showEmp=(n>=2 && n!==10 && !anyCard); emp.style.display=showEmp?'block':'none'; if(showEmp) emp.textContent = getMarket()==='tw' ? '台股個股深度分析建置中（Phase 2 即將推出）。目前台股請看「自選股」：即時股價、當日走勢線、盤前/盤後與 AI 漲跌解讀。' : '請先回到「自選股」，點任一個股的「AI」按鈕完成分析，即可在此看到該主題內容。'; }
+  const emp=document.getElementById('grpEmpty');
+  if(emp){
+    const showEmp=(n>=2 && n!==10 && !anyCard);
+    emp.style.display=showEmp?'block':'none';
+    if(showEmp){
+      // 無資料時不再顯示「建置中」(台股深度分析早已完成),改為自動載入自選股第一檔
+      if(autoLoadDefaultStock(n)) emp.textContent=`正在為你載入「${autoLoadName()}」的深度分析，請稍候…`;
+      else if(__autoLoading)      emp.textContent='正在載入分析，請稍候…';
+      else                        emp.textContent='在上方搜尋框輸入代碼或公司名即可分析，或到「自選股」點任一個股的「AI」按鈕。';
+    }
+  }
   document.querySelectorAll('#grpMenu .grp-btn').forEach(b=>b.classList.toggle('active', +b.dataset.g===n));
   setTimeout(()=>{
     if(res) res.querySelectorAll('canvas').forEach(cv=>{ if(cv.offsetParent){ const ch=(window.Chart&&Chart.getChart)?Chart.getChart(cv):null; if(ch) ch.resize(); } });
@@ -4331,7 +4363,7 @@ function showGroup(n){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 // 分析完成後：若使用者主動查詢，跳到「關鍵財務指標」；否則(如開場範例)維持目前群組
-function applyGroupAfterRender(){ if(__jumpAfterSearch){ __jumpAfterSearch=false; showGroup(2); } else { showGroup(__grp); } }
+function applyGroupAfterRender(){ __autoLoading=false; if(__jumpAfterSearch){ __jumpAfterSearch=false; showGroup(2); } else { showGroup(__grp); } }
 window.addEventListener('load', function(){ initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); showGroup(1); });
 
 // ⚠️ 暫時停用 Service Worker 註冊：先前的 SW 在部分裝置(桌面Chrome/Edge、Android PWA)造成整頁重載迴圈。
