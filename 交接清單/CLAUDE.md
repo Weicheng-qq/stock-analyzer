@@ -356,9 +356,9 @@ AAPL / MSFT / META / AMZN / V / MA / QCOM / KO / XOM / CVX / ABBV / VRT / BA / P
 
 ### 8.4 已知待修問題
 - ~~台股估值卡本益比~~：✅ 已完成（loadYahooFin + computePe5yRange + renderTwPeChecklist）。
-- 程式化連續 `setMarket('tw')` + `doSearchTW()` 首次偶爾 `ai_products` 未渲染，重呼叫即正常；真實使用者點選不受影響，但值得查 SEARCH_GEN/init 競態。
+- ~~setMarket + doSearchTW 競態~~：✅ 已釐清非缺陷。`setMarket` 本身就是「寫 localStorage → `location.reload()`」，程式化連續呼叫時 doSearch 跑在即將被重載銷毀的頁面上，故看似未渲染。真實使用者點市場鈕→頁面重載→再輸入搜尋，流程正常。**自動化測試須分兩步**：先 `setMarket` 等重載完成，再設 `searchInput` 值呼叫 `doSearch()`。
 - 美股法說影片：僅台積電有實際影像；美股純語音改回官方 IR 重播；`IR_CALL_VIDEO` 只留 TSM。
-- 雙掛牌美股事實內容目前僅台積電(TSM)；聯電/日月光/中華電 ADR 未建。
+- ~~雙掛牌美股事實內容僅台積電~~：✅ 已完成。`TW_US_EQUIV`（台股→美股，2330→TSM）＋ `US_TW_EQUIV`（美股 ADR→台股，UMC→2303／ASX→3711／CHT→2412）雙向共用官方事實。
 
 ---
 
@@ -559,9 +559,9 @@ AAPL / MSFT / META / AMZN / V / MA / QCOM / KO / XOM / CVX / ABBV / VRT / BA / P
 | 狀態 | 問題 | 說明 |
 |:---:|------|------|
 | ✅ | 台股估值卡本益比 | 已完成：loadYahooFin + computePe5yRange + renderTwPeChecklist |
-| ❌ | setMarket/doSearchTW 競態 | 程式化連續呼叫首次偶爾 ai_products 未渲染 |
-| ❌ | 美股法說影片僅 TSM | 其餘美股純語音，IR_CALL_VIDEO 只留 TSM |
-| ❌ | 雙掛牌 ADR 僅 TSM | 聯電/日月光/中華電 ADR 未建 |
+| ✅ | ~~setMarket/doSearchTW 競態~~ | 非缺陷：`setMarket` 本質是 `location.reload()`，程式化連呼會被重載中斷。真實使用者點按鈕→重載→再搜尋完全正常。**測試時須分兩步**：先 setMarket 等重載完，再設值搜尋 |
+| ✅ | ~~美股法說影片僅 TSM~~ | 非缺陷：美股法說會本身多為純語音（audio webcast），無影像可放。台積電有非凡新聞電視轉播故獨有。其餘退回官方 IR 重播頁按鈕，符合「以事實為依據」原則 |
+| ✅ | 雙掛牌 ADR | US_TW_EQUIV 反向對照：UMC→2303/ASX→3711/CHT→2412 共用台股官方事實 |
 | ❌ | Google Play 上架 | TWA/Bubblewrap 包裝，尚未實際提交 |
 
 ### B.8 法說會排程更新（依日期）
