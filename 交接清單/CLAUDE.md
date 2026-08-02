@@ -562,7 +562,7 @@ AAPL / MSFT / META / AMZN / V / MA / QCOM / KO / XOM / CVX / ABBV / VRT / BA / P
 | ✅ | ~~setMarket/doSearchTW 競態~~ | 非缺陷：`setMarket` 本質是 `location.reload()`，程式化連呼會被重載中斷。真實使用者點按鈕→重載→再搜尋完全正常。**測試時須分兩步**：先 setMarket 等重載完，再設值搜尋 |
 | ✅ | ~~美股法說影片僅 TSM~~ | 非缺陷：美股法說會本身多為純語音（audio webcast），無影像可放。台積電有非凡新聞電視轉播故獨有。其餘退回官方 IR 重播頁按鈕，符合「以事實為依據」原則 |
 | ✅ | 雙掛牌 ADR | US_TW_EQUIV 反向對照：UMC→2303/ASX→3711/CHT→2412 共用台股官方事實 |
-| ❌ | Google Play 上架 | TWA/Bubblewrap 包裝，尚未實際提交 |
+| ⏸️ | Google Play 上架 | **使用者 2026-08-02 決定暫緩**：「先不進行，未來我覺得 app 完美時，會再提出此需求」。需 $25 開發者註冊費牴觸零費用原則。**勿主動推進或再次提議**，等使用者自己提出 |
 
 ### B.8 法說會排程更新（依日期）
 | 狀態 | 日期 | 公司 | 說明 |
