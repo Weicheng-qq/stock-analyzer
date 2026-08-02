@@ -974,17 +974,64 @@ function twResultsHtml(o){
 <div class="card"><div class="ct">⚔️ 前三大競爭對手 &amp; 世界排名</div><div id="ai_competitors">${aiLoading()}</div></div>
 <div class="card"><div class="ct">💹 股價估值評估</div>
   <div class="vr"><span class="vl">目前股價</span><span class="vn">NT$${(+o.price).toFixed(2)}</span></div>
-  <div class="note" style="margin:6px 0">本益比、與歷史/同業比較需 EPS 財務資料，隨批次 2（MOPS）一起推出。</div>
+  <div id="tw_pe_area"><div class="note" style="margin:6px 0">載入本益比資料中...</div></div>
   <div id="ai_valuation">${aiLoading()}</div></div>
 <div class="card"><div class="ct">🎤 法說會 CEO 前景展望</div><div id="ai_guidance">${aiLoading()}</div></div>
 <div class="card"><div class="ct">🌪️ 未來利多 &amp; 利空風險</div><div id="ai_risks">${aiLoading()}</div></div>
 <div class="card"><div class="ct">📉 技術分析 — 股價趨勢圖</div><div id="ai_technical" class="ai tech-ai">${aiLoading()}</div><div class="chart-wrap tech-wrap"><canvas id="techChart"></canvas></div>${techOpts}<div class="note">股價來自 Yahoo Finance 日線；均線與布林軌道由實際收盤價計算。技術分析僅供參考。</div></div>
 <div class="card"><div class="ct">📰 最新新聞</div><div id="newsList"><div class="note">載入中...</div></div></div>
-<div class="card verdict"><div class="ct">🎯 投資總結 — AI 綜合判斷</div>
+<div class="card verdict"><div class="ct">🎯 投資總結 — 以下為版主選股準則(以合理低估價格,買入擁有強大護城河公司)</div>
   <div id="chk_outlook"></div>
-  <div class="note" style="margin:6px 0 12px">版主選股準則（毛利率/淨利率/ROE/本益比等）需台股財務資料，隨批次 2 推出；以下為 AI 依基本面與產業的獨立判斷。</div>
+  <div id="tw_chk_note"><div class="note" style="margin:6px 0 12px">載入選股準則中...</div></div>
   <div id="ai_independent_box" style="margin-top:8px;padding-top:14px;border-top:1px solid var(--border)"><div id="ai_independent">${aiLoading()}</div></div>
 </div>`;
+}
+function renderTwPeChecklist(finRows, pe, pe5, pePos, price){
+  const peArea=document.getElementById('tw_pe_area');
+  if(peArea){
+    let h=`<div class="vr"><span class="vl">本益比 P/E（Yahoo 實際 trailing）</span><span class="vn">${pe!=null?pe.toFixed(1)+'x':'—'}</span></div>`;
+    h+=`<div style="margin-top:14px" class="ct">📊 本益比：與自己歷史相比</div>`;
+    if(pe5){
+      h+=`<div class="vr"><span class="vl">近5年本益比區間</span><span class="vn">${pe5.min.toFixed(1)}x ~ ${pe5.max.toFixed(1)}x</span></div>`;
+      h+=`<div class="vr"><span class="vl">目前位置</span><span class="vn ${pePos!=null?(pePos<40?'g':pePos>75?'r':'y'):''}">${pe!=null?pe.toFixed(1)+'x':'—'}${pePos!=null?'（區間 '+pePos.toFixed(0)+'% 位置）':''}</span></div>`;
+      if(pePos!=null) h+=`<div class="pe-gauge"><div class="pe-track"><div class="pe-fill" style="width:${Math.max(2,Math.min(100,pePos)).toFixed(0)}%"></div><div class="pe-marker" style="left:${Math.max(0,Math.min(100,pePos)).toFixed(0)}%"><div class="pe-bubble">${pe.toFixed(1)}x</div></div></div><div class="pe-scale"><span>${pe5.min.toFixed(1)}x<br><span class="pe-tag" style="color:var(--green)">便宜</span></span><span>${pe5.max.toFixed(1)}x<br><span class="pe-tag" style="color:var(--red)">昂貴</span></span></div></div>`;
+    } else { h+=`<div class="note">此股 5 年本益比區間資料不足。</div>`; }
+    h+=`<div style="margin-top:14px" class="ct">⚔️ 本益比：與競爭對手相比</div>`;
+    h+=`<div id="peCompetitors"><div class="note">等待 AI 提供競爭對手代碼後查詢實際本益比...</div></div>`;
+    peArea.innerHTML=h;
+  }
+  const last=finRows.length?finRows[finRows.length-1]:{};
+  const lastRoe=[...finRows].reverse().find(r=>r.roe!=null)?.roe??null;
+  const growths=finRows.map(r=>r.gr).filter(g=>g!=null);
+  const declineYears=growths.filter(g=>g<0).length;
+  const overallUp=finRows.length>=2&&finRows[finRows.length-1].rev!=null&&finRows[0].rev!=null&&finRows[finRows.length-1].rev>finRows[0].rev;
+  const last3g=growths.slice(-3);
+  const fastGrower=last3g.length===3&&last3g.every(g=>g>20);
+  const checklist=[
+    {label:'稅後淨利率 > 40%', pass:last.nm!=null?last.nm>40:null, val:last.nm!=null?last.nm.toFixed(1)+'%':'無資料'},
+    {label:'毛利率 > 50%', pass:last.gm!=null?last.gm>50:null, val:last.gm!=null?last.gm.toFixed(1)+'%':'無資料'},
+    {label:'ROE > 20%', pass:lastRoe!=null?lastRoe>20:null, val:lastRoe!=null?lastRoe.toFixed(1)+'%':'無資料'},
+    {label:'10年營收整體向上（≤2年下滑）', pass:growths.length?(declineYears<=2&&overallUp):null, val:'下滑'+declineYears+'年'},
+    {label:'近3年營收成長皆 > 20%（快速成長）', pass:last3g.length===3?fastGrower:null, val:last3g.map(g=>g.toFixed(0)+'%').join(' / ')||'無資料'},
+    {label:'本益比 < 13', pass:pe!=null?pe<13:null, cls:(pe!=null&&pe<13)?'g':(pePos!=null?(pePos<=50?'y':'r'):(pe!=null?'r':'')), val:pe!=null?pe.toFixed(1)+'x':'無資料'},
+    {label:'本益比位於近5年區間偏低半部', pass:(pePos!=null)?pePos<50:null, cls:(pe!=null&&pe<13)?'g':(pePos==null?'':(pePos<=50?'y':'r')), val:(pe5&&pePos!=null)?'區間'+pe5.min.toFixed(0)+'~'+pe5.max.toFixed(0)+'x，現'+pePos.toFixed(0)+'%位置':'無資料'},
+  ];
+  const passCount=checklist.filter(c=>c.pass===true).length;
+  const chkTotal=checklist.length;
+  const chkHtml=checklist.map(c=>`<div class="vr"><span class="vl">${c.pass===true?'✅':c.pass===false?'❌':'➖'} ${c.label}</span><span class="vn ${c.cls!==undefined?c.cls:(c.pass===true?'g':c.pass===false?'r':'')}">${esc(c.val)}</span></div>`).join('');
+  const qualityOk=passCount>=Math.ceil(chkTotal*0.6);
+  const cheap=(pePos!=null&&pePos<40), pricey=(pePos!=null&&pePos>75);
+  const posText=(pePos!=null)?'本益比位於近5年區間約 '+pePos.toFixed(0)+'% 位置':'本益比區間資料不足';
+  let mvClass, mvText;
+  if(qualityOk&&cheap){ mvClass='s-buy'; mvText='通過 <b>'+passCount+'/'+chkTotal+'</b> 項選股準則，且 '+posText+'（相對<b>便宜</b>）。<b>符合版主邏輯</b>——強護城河好公司＋合理低估價格，屬<b>值得關注的買入觀察區</b>。'; }
+  else if(qualityOk){ mvClass='s-hold'; mvText='通過 <b>'+passCount+'/'+chkTotal+'</b> 項選股準則，基本面與護城河佳，但 '+posText+'（估值'+(pricey?'<b>偏高</b>':'不算便宜')+'）。<b>好公司、但價格尚未到合理低估</b>——建議耐心等待較便宜的價位再進場。'; }
+  else { mvClass='s-sell'; mvText='僅通過 <b>'+passCount+'/'+chkTotal+'</b> 項選股準則，基本面尚未完全符合版主「強護城河」核心標準（'+posText+'）。<b>暫不符合版主選股條件</b>，宜再觀察或尋找更優質標的。'; }
+  const chkEl=document.getElementById('chk_outlook');
+  if(chkEl) chkEl.innerHTML='<div class="verdict-text '+mvClass+'" style="margin-bottom:14px">'+mvText+'</div>'+chkHtml;
+  const noteEl=document.getElementById('tw_chk_note');
+  if(noteEl) noteEl.remove();
+  const chkText=checklist.map(c=>(c.pass===true?'通過':c.pass===false?'未達標':'無資料')+'｜'+c.label+'（實際:'+c.val+'）').join('\n');
+  return { passCount, chkTotal, chkText };
 }
 // 台股 10 年財務指標(FinMind API 免費免金鑰、自帶 CORS)：毛利率/淨利率/ROE/年營收
 //   FinMind 為單季資料，加總為年；已實測台積電近 10 年與官方完全一致(2024 營收 28943 億、毛利率 56.1%、淨利率 40.5%、ROE 27.3%)
@@ -1110,8 +1157,25 @@ async function doSearchTW(symbol){
     const gmKey=getGmKey(); const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1); const useServer=!gmKey && !isLocal;
     loadTechnical(symbol, gen);
     fillNews(symbol, gen);
-    const finRows=await loadTwFinancials(symbol, gen);   // 近4年台股財務(Yahoo)
+    const finRows=await loadTwFinancials(symbol, gen);   // 近10年台股財務(FinMind/Yahoo)
     if(gen!==SEARCH_GEN) return;
+    // 本益比（Yahoo timeseries）
+    let peInfo=null;
+    try{
+      logAdd('pe','載入本益比（Yahoo）...');
+      const yf=await loadYahooFin(symbol);
+      const tk=Object.keys(yf.tpe).sort(), qk=Object.keys(yf.qpe).sort();
+      const peCur=tk.length?yf.tpe[tk[tk.length-1]]:(qk.length?yf.qpe[qk[qk.length-1]]:null);
+      let range5y=null;
+      try{ range5y=await computePe5yRange(symbol, peCur, yf.aeps); }catch(e){}
+      peInfo={ current:peCur, range5y };
+      logOk('pe','本益比載入完成');
+    }catch(e){ logErr('pe','本益比略過（不影響其他資料）'); }
+    if(gen!==SEARCH_GEN) return;
+    const pe=peInfo?.current??null;
+    const pe5=peInfo?.range5y||null;
+    const pePos=(pe5&&pe!=null&&pe5.max>pe5.min)?((pe-pe5.min)/(pe5.max-pe5.min)*100):null;
+    const twChk=renderTwPeChecklist(finRows, pe, pe5, pePos, price);
     // 抓中文維基百科作為 products/competitors/moat 的真實事實來源(取代原本純 AI 腦補),失敗不影響其餘
     try{ await Promise.race([fetchWikipediaZh(name, code), new Promise(r=>setTimeout(r,6000))]); }catch(e){}
     if(gen!==SEARCH_GEN) return;
@@ -1119,8 +1183,9 @@ async function doSearchTW(symbol){
       ? finRows.map(r=>`${r.yr}: 年營收NT$${r.rev!=null?(r.rev/1e8).toFixed(0)+'億':'NA'}, 成長${r.gr!=null?r.gr.toFixed(1)+'%':'NA'}, 毛利率${r.gm!=null?r.gm.toFixed(1)+'%':'NA'}, 淨利率${r.nm!=null?r.nm.toFixed(1)+'%':'NA'}, ROE${r.roe!=null?r.roe.toFixed(1)+'%':'NA'}`).join('\n')
       : `公司：${name}（台股 ${code}）。目前股價 NT$${price.toFixed(2)}。（財務資料有限，請依產業地位與基本面知識分析）`;
     const equivNote = usEquiv ? `（本公司即美股 ${usEquiv} 的同一實體，請以其真實主營業務與產業地位分析，產品與法說會展望已另用官方事實呈現）` : '';
-    const ctx={ name, symbol:code, price, market:'tw', curLabel:'新台幣', pe:null, peRangeText:'無', finText:`公司：${name}（台股 ${code}）${equivNote}，目前股價 NT$${price.toFixed(2)}。近年財務（Yahoo，新台幣）：\n${finText}`, chkText:'', passCount:0, chkTotal:0 };
-    window.__lastAI={ctx, peInfo:null, gen};
+    const peRangeText=pe5?`${pe5.min.toFixed(0)}~${pe5.max.toFixed(0)}x${pePos!=null?'（目前'+pePos.toFixed(0)+'%位置）':''}`:'無';
+    const ctx={ name, symbol:code, price, market:'tw', curLabel:'新台幣', pe, peRangeText, finText:`公司：${name}（台股 ${code}）${equivNote}，目前股價 NT$${price.toFixed(2)}。近年財務（Yahoo，新台幣）：\n${finText}`, chkText:twChk.chkText, passCount:twChk.passCount, chkTotal:twChk.chkTotal };
+    window.__lastAI={ctx, peInfo, gen};
     if(gmKey||useServer){
       logPanel(true); logAdd('ai','AI 分析中...');
       let ai=null; try{ ai=await callGemini(ctx, gmKey, useServer); }catch(e){}
