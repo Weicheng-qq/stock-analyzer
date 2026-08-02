@@ -301,6 +301,10 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
       <input type="text" id="gmKey" placeholder="貼上你的 AIza... / gsk_... / sk-or-... 金鑰">
       <p class="note">金鑰只存在你瀏覽器(localStorage)，不會外傳到我方。使用免費模型，日常分析免費。</p>
     </details>
+    <p class="note" style="margin-top:14px;padding-top:10px;border-top:1px solid var(--border)">
+      版本：<b id="appVer">—</b>　<a href="javascript:void(0)" onclick="forceUpdate()" style="color:var(--blue)">強制更新到最新版</a><br>
+      <span style="opacity:.75">若畫面內容過舊(例如仍顯示「待推出」)，點上方連結即可清除快取重載。</span>
+    </p>
     <div class="modal-btns">
       <button class="btn-sec" onclick="closeSettings()">關閉</button>
       <button class="btn-pri" onclick="saveSettings()">儲存金鑰</button>
@@ -4339,6 +4343,31 @@ if('serviceWorker' in navigator){
     if(window.caches && caches.keys){ caches.keys().then(function(ks){ ks.forEach(function(k){ caches.delete(k); }); }).catch(function(){}); }
   }catch(e){}
 }
+
+// 版本顯示：用 document.lastModified(即伺服器 Last-Modified)自動取得，免手動維護版本號。
+// 使用者若在手機 App 看到過舊內容，可在 ⚙️ 設定中確認版本並點「強制更新」。
+function appVersionText(){
+  try{
+    const d=new Date(document.lastModified);
+    if(isNaN(d)) return '未知';
+    const p=n=>String(n).padStart(2,'0');
+    return `${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+  }catch(e){ return '未知'; }
+}
+// 強制更新：清所有快取 + 註銷 SW，再以繞過快取的方式重載(加時間戳避免中間層回舊檔)。
+async function forceUpdate(){
+  try{
+    if(window.caches && caches.keys){ const ks=await caches.keys(); await Promise.all(ks.map(k=>caches.delete(k))); }
+  }catch(e){}
+  try{
+    if('serviceWorker' in navigator){ const rs=await navigator.serviceWorker.getRegistrations(); await Promise.all(rs.map(r=>r.unregister())); }
+  }catch(e){}
+  const u=new URL(location.href); u.searchParams.set('_v', Date.now());
+  location.replace(u.toString());
+}
+window.addEventListener('load', function(){
+  const el=document.getElementById('appVer'); if(el) el.textContent=appVersionText();
+});
 </script>
 </body>
 </html>
