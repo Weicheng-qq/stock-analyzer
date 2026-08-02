@@ -1,7 +1,7 @@
 # 美股/台股 AI 深度分析 APP — 使用者定義的所有原則與細節
 
 > **用途**：此檔是**唯一的完整總綱**，記錄使用者（版主）在所有歷史對話中定義過的原則、架構要求、犯過的錯、Skill 清單與自動化規則。每次開新 session 時，先讀取本檔 + `.claude/skills/交接手冊skill/交接記錄.md`（最新 session 進度）再開始工作。
-> **最後更新**：2026-08-02 #2
+> **最後更新**：2026-08-02 #3
 > **公開網址**：https://weicheng-stock.vercel.app
 > **原始碼位置**：`C:\Users\Amber Lin\weicheng claude\股票\`
 
@@ -355,7 +355,7 @@ AAPL / MSFT / META / AMZN / V / MA / QCOM / KO / XOM / CVX / ABBV / VRT / BA / P
 - 8 月中下旬密集：AMD/PLTR/UBER/ABNB/MCD/DIS 等
 
 ### 8.4 已知待修問題
-- 台股估值卡本益比：Yahoo chart meta 無 trailingPE，目前只顯示股價，需另補 PE(EPS)。
+- ~~台股估值卡本益比~~：✅ 已完成（loadYahooFin + computePe5yRange + renderTwPeChecklist）。
 - 程式化連續 `setMarket('tw')` + `doSearchTW()` 首次偶爾 `ai_products` 未渲染，重呼叫即正常；真實使用者點選不受影響，但值得查 SEARCH_GEN/init 競態。
 - 美股法說影片：僅台積電有實際影像；美股純語音改回官方 IR 重播；`IR_CALL_VIDEO` 只留 TSM。
 - 雙掛牌美股事實內容目前僅台積電(TSM)；聯電/日月光/中華電 ADR 未建。
@@ -522,10 +522,10 @@ AAPL / MSFT / META / AMZN / V / MA / QCOM / KO / XOM / CVX / ABBV / VRT / BA / P
 | ✅ | 美股競爭對手本益比比較 | 抓三家對手的 PE |
 | ✅ | 美股 7 項選股準則檢查清單 | 淨利率/毛利率/ROE/營收/本益比等 |
 | ✅ | 美股版主選股判斷（verdict） | 買入觀察區/好公司待價格/暫不符合 |
-| ⏳ | **台股本益比** | Yahoo timeseries 可抓 trailingPeRatio，正在實作 |
-| ⏳ | **台股 5 年本益比區間＋gauge** | 同上，需調用 computePe5yRange |
-| ⏳ | **台股 7 項選股準則檢查清單** | 同美股邏輯，PE 修好後一起上線 |
-| ⏳ | **台股版主選股判斷（verdict）** | 同上 |
+| ✅ | **台股本益比** | Yahoo timeseries trailingPeRatio，已於 doSearchTW 中載入 |
+| ✅ | **台股 5 年本益比區間＋gauge** | computePe5yRange + renderTwPeChecklist 量表 |
+| ✅ | **台股 7 項選股準則檢查清單** | 7 項自動檢核（淨利率/毛利率/ROE/營收/成長/本益比×2） |
+| ✅ | **台股版主選股判斷（verdict）** | tw_chk_verdict 自動歸納買入/觀察/暫不符合 |
 
 ### B.5 UI/UX
 | 狀態 | 需求 | 說明 |
@@ -558,7 +558,7 @@ AAPL / MSFT / META / AMZN / V / MA / QCOM / KO / XOM / CVX / ABBV / VRT / BA / P
 ### B.7 已知待修問題
 | 狀態 | 問題 | 說明 |
 |:---:|------|------|
-| ⏳ | 台股估值卡本益比 | 正在實作，需調用 loadYahooFin + computePe5yRange |
+| ✅ | 台股估值卡本益比 | 已完成：loadYahooFin + computePe5yRange + renderTwPeChecklist |
 | ❌ | setMarket/doSearchTW 競態 | 程式化連續呼叫首次偶爾 ai_products 未渲染 |
 | ❌ | 美股法說影片僅 TSM | 其餘美股純語音，IR_CALL_VIDEO 只留 TSM |
 | ❌ | 雙掛牌 ADR 僅 TSM | 聯電/日月光/中華電 ADR 未建 |
