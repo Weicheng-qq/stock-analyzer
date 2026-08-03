@@ -1257,7 +1257,9 @@ async function doSearchTW(symbol){
     showGroup(__grp);   // 骨架剛渲染時所有卡片都還沒篩選,不先收斂會閃過公司股價/產品與服務等別的選單內容
     const gmKey=getGmKey(); const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1); const useServer=!gmKey && !isLocal;
     loadTechnical(symbol, gen);
-    fillNews(symbol, gen);
+    // 雙掛牌(2330↔TSM)用美股代碼查新聞：Yahoo 對 2330.TW 與 TSM 會回不同結果，
+    //   造成同一家公司台股與美股「最新新聞」不一致(使用者回報)。
+    fillNews(TW_US_EQUIV[code]||symbol, gen);
     const finRows=await loadTwFinancials(symbol, gen);   // 近10年台股財務(FinMind/Yahoo)
     if(gen!==SEARCH_GEN) return;
     // 本益比（Yahoo timeseries）
@@ -4184,7 +4186,9 @@ async function fillCompetitorPe(ai, peInfo, gen){
 
 function drawChart(rows){
   const el=document.getElementById('revChart'); if(!el) return;
-  new Chart(el.getContext('2d'),{ type:'bar',
+  window.__revRows=rows;                         // 供 showGroup(2) 發現 0×0 時重畫
+  try{ if(window.__revChart) window.__revChart.destroy(); }catch(e){}   // 不先銷毀，重畫會報 canvas 已被占用
+  window.__revChart=new Chart(el.getContext('2d'),{ type:'bar',
     data:{ labels:rows.map(r=>r.yr), datasets:[
       {label:'年營收(B)',data:rows.map(r=>r.rev?+(r.rev/1e9).toFixed(2):0),backgroundColor:'rgba(88,166,255,.3)',borderColor:'rgba(88,166,255,.8)',borderWidth:1,borderRadius:3,yAxisID:'y'},
       {label:'成長率%',data:rows.map(r=>r.gr!=null?+r.gr.toFixed(1):null),type:'line',borderColor:'#3fb950',backgroundColor:'rgba(63,185,80,.1)',pointBackgroundColor:'#3fb950',borderWidth:2,tension:.3,yAxisID:'y1',spanGaps:true}
@@ -4443,6 +4447,8 @@ function showGroup(n){
     if(res) res.querySelectorAll('canvas').forEach(cv=>{ if(cv.offsetParent){ const ch=(window.Chart&&Chart.getChart)?Chart.getChart(cv):null; if(ch) ch.resize(); } });
     // 技術分析圖若因先前在隱藏狀態建立而變 0 尺寸，顯示後重建一次
     if(n===7){ const cv=document.getElementById('techChart'); if(cv && cv.getBoundingClientRect().width<10 && window.__techSymbol) loadTechnical(window.__techSymbol, SEARCH_GEN); }
+    // 同理:年營收圖若在隱藏容器建立會變成 0×0(Chart.js 已知行為)，切到群組2 時發現沒寬度就重畫
+    if(n===2){ const cv=document.getElementById('revChart'); if(cv && cv.getBoundingClientRect().width<10 && window.__revRows && window.__revRows.length){ try{ drawChart(window.__revRows); }catch(e){} } }
   }, 80);
   window.scrollTo({top:0, behavior:'smooth'});
 }
