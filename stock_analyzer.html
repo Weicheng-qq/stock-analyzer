@@ -1253,6 +1253,9 @@ async function loadTwFinancials(symbol, gen){
 }
 async function doSearchTW(symbol){
   const gen=++SEARCH_GEN;
+  // 主動查詢預設查完跳「關鍵財務指標」。必須在「開頭」就設定，載入途中使用者若手動點選單
+  //   (pickGroup 會把它清成 false)才蓋得掉；原本設在載入結尾，會反過來蓋掉使用者的選擇。
+  if(!__autoLoading) __jumpAfterSearch=true;
   window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__capexData=null; window.__wikiData=null;
   document.getElementById('results').innerHTML=''; document.getElementById('logItems').innerHTML=''; logPanel(true); logAdd('p','抓取台股資料...');
   try{
@@ -1319,7 +1322,6 @@ async function doSearchTW(symbol){
       if(ai){ renderAI(ai); fillCompetitorPe(ai, peInfo, gen); runIndependentAiAnalysis(); logOk('ai','AI 分析完成'); } else { setAllAI('<div class="note">AI 分析暫時無法取得，稍後再試。</div>'); logErr('ai','AI 分析失敗'); }
       logPanel(false);
     } else { setAllAI('<div class="note">請點右上 ⚙️ 設定免費 AI 金鑰以顯示 AI 分析。</div>'); }
-    if(!__autoLoading) __jumpAfterSearch=true;   // 自動載入時保持使用者當下選的選單,不強制跳「關鍵財務指標」
     applyGroupAfterRender();
   }catch(e){ __autoLoading=false; document.getElementById('results').innerHTML='<div class="err-box">台股資料載入失敗，請稍後再試</div>'; logPanel(false); }
 }
