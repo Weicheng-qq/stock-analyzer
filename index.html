@@ -1027,6 +1027,7 @@ function twResultsHtml(o){
 <div class="card"><div class="ct">🌪️ 未來利多 &amp; 利空風險</div><div id="ai_risks">${aiLoading()}</div></div>
 <div class="card"><div class="ct">📉 技術分析 — 股價趨勢圖</div><div id="ai_technical" class="ai tech-ai">${aiLoading()}</div><div class="chart-wrap tech-wrap"><canvas id="techChart"></canvas></div>${techOpts}<div class="note">股價來自 Yahoo Finance 日線；均線與布林軌道由實際收盤價計算。技術分析僅供參考。</div></div>
 <div class="card"><div class="ct">📰 最新新聞</div><div id="newsList"><div class="note">載入中...</div></div></div>
+<div class="card"><div class="ct">🏦 投資大行目標價</div><div id="analystTargets"><div class="note">載入中...</div></div></div>
 <div class="card verdict"><div class="ct">🏅 版主選股準則(以合理低估價格,買入擁有強大護城河公司)</div>
   <div id="tw_chk_items"></div>
   <div id="chk_outlook"><div class="vr"><span class="vl">➖ 法說會成長動能（CEO 對未來展望）</span><span class="vn">分析中...</span></div></div>
@@ -1266,6 +1267,9 @@ async function doSearchTW(symbol){
     // 雙掛牌(2330↔TSM)用美股代碼查新聞：Yahoo 對 2330.TW 與 TSM 會回不同結果，
     //   造成同一家公司台股與美股「最新新聞」不一致(使用者回報)。
     fillNews(TW_US_EQUIV[code]||symbol, gen);
+    // 投資大行目標價：資料源為美股，僅雙掛牌查得到；非雙掛牌台股顯示說明而非空著
+    if(TW_US_EQUIV[code]) fillAnalystTargets(TW_US_EQUIV[code], gen, price);
+    else { const at=document.getElementById('analystTargets'); if(at) at.innerHTML='<div class="note">此台股無對應美股掛牌，暫無國際投資銀行目標價可查。</div>'; }
     const finRows=await loadTwFinancials(symbol, gen);   // 近10年台股財務(FinMind/Yahoo)
     if(gen!==SEARCH_GEN) return;
     // 本益比（Yahoo timeseries）
@@ -1581,6 +1585,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 <div class="g2">
   <div class="card">
     <div class="ct">💹 股價估值評估</div>
+    <div class="vr"><span class="vl">目前股價</span><span class="vn">${price!=null?cs+(+price).toFixed(2):'—'}</span></div>
     <div class="vr"><span class="vl">本益比 P/E（Yahoo 實際 trailing）</span><span class="vn">${pe!=null?pe.toFixed(1)+'x':'—'}</span></div>
     <div style="margin-top:14px" class="ct">📊 本益比：與自己歷史相比</div>
     ${pe5?`
