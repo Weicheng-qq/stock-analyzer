@@ -1712,22 +1712,43 @@ function hangIndent(html){
 function setAI(id,html){ const el=document.getElementById(id); if(el) el.innerHTML=hangIndent(html); }
 
 // ── Gemini ──
-// 雙掛牌判定與共用快取鍵：同一家公司在台股/美股應共用同一份 AI 內容(使用者要求除股價/本益比外全部一致)
-function __dualKey(){
-  const canon=window.__symbolForLinks||'';
+// AI 結果快取鍵：以「共用代碼 + 當天日期」為鍵。
+//   ① 同一天同一家公司結果固定，不會每次重新整理就變一套說法(使用者要求)
+//   ② 雙掛牌(2330↔TSM)的 __symbolForLinks 相同 → 台股與美股自然共用同一份
+//   ③ 換日自動失效，隔天會依最新資料重新產生
+function __aiKey(prefix, fallbackSymbol){
+  const canon=window.__symbolForLinks||fallbackSymbol||'';
   if(!canon) return null;
-  const isDual = Object.keys(TW_US_EQUIV).includes(canon) || Object.values(TW_US_EQUIV).includes(canon)
-              || Object.keys(US_TW_EQUIV).includes(canon) || Object.values(US_TW_EQUIV).includes(canon);
-  return isDual ? canon : null;
+  const d=new Date();
+  const day=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  return `${prefix}_${canon}_${day}`;
+}
+// 是否為雙掛牌(提示詞要避免引用單一市場的絕對股價時使用)
+// 清掉前幾天的 AI 快取（鍵含日期，不清會逐日累積把 localStorage 撐爆）
+(function __purgeOldAiCache(){
+  try{
+    const d=new Date();
+    const today=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+    Object.keys(localStorage).forEach(k=>{
+      if(/^(gem|indep|comp)_/.test(k) && !k.endsWith('_'+today)) localStorage.removeItem(k);
+    });
+  }catch(e){}
+})();
+function __isDual(){
+  const canon=window.__symbolForLinks||'';
+  if(!canon) return false;
+  return Object.keys(TW_US_EQUIV).includes(canon) || Object.values(TW_US_EQUIV).includes(canon)
+      || Object.keys(US_TW_EQUIV).includes(canon) || Object.values(US_TW_EQUIV).includes(canon);
 }
 async function callGemini(ctx, key, useServer){
   const isTW = ctx.market==='tw';
   // 雙掛牌：整份 AI 結果(彼得林區/護城河/競爭對手/產品/利多利空/成長動能…)以共用代碼快取，
   //   兩個市場共用同一份，避免同一家公司各跑一次 AI 而內容全然不同。
-  const __dk=__dualKey();
-  if(__dk){
-    try{ const raw=localStorage.getItem('gem_'+__dk);
-      if(raw){ const c=JSON.parse(raw); if(c&&c.t&&(Date.now()-c.t)<12*3600*1000&&c.r) return c.r; }
+  const __dk=__isDual();
+  const __ck=__aiKey('gem', ctx.symbol);
+  if(__ck){
+    try{ const raw=localStorage.getItem(__ck);
+      if(raw){ const c=JSON.parse(raw); if(c&&c.r) return c.r; }
     }catch(e){}
   }
   // 成長動能的判斷依據一律「官網 IR 優先」(使用者原則2)，與畫面顯示邏輯一致(有 manualCall 就顯示官方原文)。
@@ -1804,7 +1825,7 @@ ${window.__wikiData?'【維基百科最新公開資料（持續更新，比你�
  "double":"高 或 中 或 低（三年翻倍機率，依實際成長率與估值）"
 }`;
   const __r=await callAIWithPrompt(prompt, key, useServer);
-  if(__dk&&__r){ try{ localStorage.setItem('gem_'+__dk, JSON.stringify({t:Date.now(), r:__r})); }catch(e){} }
+  if(__ck&&__r){ try{ localStorage.setItem(__ck, JSON.stringify({t:Date.now(), r:__r})); }catch(e){} }
   return __r;
 }
 // 共用的AI呼叫+多模型容錯重試邏輯，任何需要呼叫AI的地方(完整分析/獨立投資分析等)都共用這份，不要各自重寫一份
@@ -1870,21 +1891,21 @@ async function runIndependentAiAnalysis(){
   // 雙掛牌(如台積電 2330↔TSM)：同一家公司在兩個市場應給出同一份獨立分析(使用者回報兩邊內容不同)。
   //   作法：①快取以「共用代碼」為鍵，兩市場共用同一份結果 ②提示詞禁止引用單一市場的絕對股價
   //   (兩地股價/本益比本就不同：台股 NT$、美股 ADR 有溢價)，改以基本面與估值水準論述，這樣同一份文字在兩邊都正確。
-  const __dk2=__dualKey();
-  const __dual=!!__dk2;
-  const __ck='indep_'+(__dk2||ctx.symbol);
-  if(__dual){
+  const __dual=__isDual();
+  const __ck=__aiKey('indep', ctx.symbol);
+  if(__ck){
     try{
       const raw=localStorage.getItem(__ck);
-      if(raw){ const c=JSON.parse(raw);
-        if(c && c.t && (Date.now()-c.t)<12*3600*1000 && c.r){ renderIndependent(c.r); return; } }
+      if(raw){ const c=JSON.parse(raw); if(c&&c.r){ renderIndependent(c.r); return; } }
     }catch(e){}
   }
   const prompt=`你是一位獨立的專業投資分析師，請完全依你自己的專業判斷分析這家公司，不受限於任何特定的選股門檻公式或檢核清單。用繁體中文回答，「只」回傳 JSON（不要任何其他文字、不要 markdown 標記）。
 
 公司：${ctx.name} (${ctx.symbol})
-${__dual?'（本公司在台股與美股皆有掛牌，兩地股價與本益比本就不同，請勿引用任何單一市場的「絕對股價」數字，改以本益比水準、獲利能力與基本面論述，使結論在兩個市場都成立。）':'目前股價：'+(ctx.price!=null?'$'+ctx.price:'未知')}
-本益比P/E(trailing)：${ctx.pe!=null?ctx.pe.toFixed(1)+'x':'未知'}${ctx.peRangeText&&ctx.peRangeText!=='無'?'（近5年區間 '+ctx.peRangeText+'）':''}
+估值水準參考：本益比約 ${ctx.pe!=null?ctx.pe.toFixed(0)+'倍':'未知'}${ctx.peRangeText&&ctx.peRangeText!=='無'?'，近5年區間 '+ctx.peRangeText:''}
+【重要】股價與本益比會盤中變動${__dual?'，且本公司在台股與美股同時掛牌、兩地數字本就不同':''}，
+所以 reason 內「不可」引用任何絕對股價或精確到小數的本益比倍數；估值只能用「偏高／合理／偏低／位於區間高(低)檔」這類水準描述。
+可以且應該具體引用的是下方穩定的年度財務數字（營收、成長率、毛利率、淨利率、ROE）。
 近年財務（真實SEC/Yahoo數據）：
 ${ctx.finText}
 
@@ -1903,7 +1924,7 @@ ${ctx.finText}
       if(e.message==='KEY_INVALID' && !isLocal){ result=await callAIWithPrompt(prompt,'',true); }
       else throw e;
     }
-    if(__dual){ try{ localStorage.setItem(__ck, JSON.stringify({t:Date.now(), r:result})); }catch(e){} }
+    if(__ck){ try{ localStorage.setItem(__ck, JSON.stringify({t:Date.now(), r:result})); }catch(e){} }
     renderIndependent(result);
   }catch(e){
     if(el) el.innerHTML=`<div class="err-box">AI 分析失敗：${esc(e.message)}</div>`;
@@ -4235,10 +4256,10 @@ async function fillCompetitorPe(ai, peInfo, gen){
   // 雙掛牌同一家公司,AI 每次回傳的競爭對手清單不固定(台積電台股曾回 SSNLF/INTC/GFS、美股只回 INTC)。
   //   以「共用代碼」為鍵快取,讓兩個市場看到同一份對手清單。
   try{
-    const canon=__dualKey();
-    if(canon){
-      const ck='comp_'+canon, raw=localStorage.getItem(ck);
-      if(raw){ const c=JSON.parse(raw); if(c&&c.t&&(Date.now()-c.t)<12*3600*1000&&Array.isArray(c.k)&&c.k.length) tickers=c.k; }
+    const ck=__aiKey('comp', '');
+    if(ck){
+      const raw=localStorage.getItem(ck);
+      if(raw){ const c=JSON.parse(raw); if(c&&Array.isArray(c.k)&&c.k.length) tickers=c.k; }
       else if(tickers.length) localStorage.setItem(ck, JSON.stringify({t:Date.now(), k:tickers}));
     }
   }catch(e){}
