@@ -350,6 +350,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <button class="grp-btn" data-g="2" onclick="showGroup(2)">關鍵財務指標</button>
     <button class="grp-btn" data-g="4" onclick="showGroup(4)">股價估值評估</button>
     <button class="grp-btn" data-g="9" onclick="showGroup(9)">產品與服務</button>
+    <button class="grp-btn" data-g="11" onclick="showGroup(11)">版主選股準則</button>
     <button class="grp-btn" data-g="8" onclick="showGroup(8)">投資總結</button>
   </div>
   <div class="index-title" id="indexTitle">📊 四大指數</div>
@@ -1026,13 +1027,15 @@ function twResultsHtml(o){
 <div class="card"><div class="ct">🌪️ 未來利多 &amp; 利空風險</div><div id="ai_risks">${aiLoading()}</div></div>
 <div class="card"><div class="ct">📉 技術分析 — 股價趨勢圖</div><div id="ai_technical" class="ai tech-ai">${aiLoading()}</div><div class="chart-wrap tech-wrap"><canvas id="techChart"></canvas></div>${techOpts}<div class="note">股價來自 Yahoo Finance 日線；均線與布林軌道由實際收盤價計算。技術分析僅供參考。</div></div>
 <div class="card"><div class="ct">📰 最新新聞</div><div id="newsList"><div class="note">載入中...</div></div></div>
-<div class="card verdict"><div class="ct">🎯 投資總結 — 以下為版主選股準則(以合理低估價格,買入擁有強大護城河公司)</div>
+<div class="card verdict"><div class="ct">🏅 版主選股準則(以合理低估價格,買入擁有強大護城河公司)</div>
   <div id="tw_chk_items"></div>
   <div id="chk_outlook"><div class="vr"><span class="vl">➖ 法說會成長動能（CEO 對未來展望）</span><span class="vn">分析中...</span></div></div>
   <div id="tw_chk_note"><div class="note" style="margin:6px 0 12px">載入選股準則中...</div></div>
   <div id="tw_chk_verdict"></div>
-  <div id="ai_independent_box" style="margin-top:8px;padding-top:14px;border-top:1px solid var(--border)">
-    <div style="font-size:13px;color:var(--text2);margin-bottom:8px">🤖 AI 獨立分析（依 AI 自己的專業判斷，不受上方版主選股準則限制）</div>
+</div>
+<div class="card verdict"><div class="ct">🎯 投資總結</div>
+  <div id="ai_independent_box">
+    <div style="font-size:13px;color:var(--text2);margin-bottom:8px">🤖 AI 獨立分析（依 AI 自己的專業判斷，不受版主選股準則限制）</div>
     <div id="ai_independent">${aiLoading()}</div>
   </div>
 </div>`;
@@ -1599,13 +1602,17 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 </div>
 
 <div class="card verdict" style="margin-top:16px">
-  <div class="ct">🎯 投資總結 — 以下為版主選股準則(以合理低估價格,買入擁有強大護城河公司)</div>
+  <div class="ct">🏅 版主選股準則(以合理低估價格,買入擁有強大護城河公司)</div>
   ${chkHtml}
   <div id="chk_outlook"><div class="vr"><span class="vl">➖ 法說會成長動能（CEO 對未來展望）</span><span class="vn">分析中...</span></div></div>
   <div class="note" style="margin:6px 0 12px">前 ${checklist.length} 項為實際數據自動檢核；最後一項「成長動能」依公司官方指引/資本支出判斷。✅=符合 ❌=未達標 ➖=無資料。</div>
   <div class="mv-conclusion ${mvClass}"><span class="mv-tag">🧭 版主選股邏輯結論</span>${mvText}<div class="note" style="margin-top:8px">依版主原則「以合理低估價格，買入擁有強大護城河公司」自動歸納，僅供參考、不構成投資建議。</div></div>
-  <div id="ai_independent_box" style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
-    <div style="font-size:13px;color:var(--text2);margin-bottom:8px">🤖 AI 獨立分析（依 AI 自己的專業判斷，不受上方版主選股準則限制）</div>
+</div>
+
+<div class="card verdict" style="margin-top:16px">
+  <div class="ct">🎯 投資總結</div>
+  <div id="ai_independent_box">
+    <div style="font-size:13px;color:var(--text2);margin-bottom:8px">🤖 AI 獨立分析（依 AI 自己的專業判斷，不受版主選股準則限制）</div>
     <div id="ai_independent">${aiLoading()}</div>
   </div>
 </div>
@@ -4403,7 +4410,8 @@ let __grp=1, __jumpAfterSearch=false;
 function cardGroup(c){
   if(c.classList && c.classList.contains('co-head')) return 2;   // 公司股價→放在關鍵財務指標最上面
   const ct=c.querySelector && c.querySelector('.ct'); const t=ct?ct.textContent:'';
-  if(/投資總結/.test(t)) return 8;   // 需在護城河之前判斷(投資總結標題含「護城河」三字)
+  if(/版主選股準則/.test(t)) return 11;   // 獨立選單，需在護城河之前判斷(標題含「護城河」三字)
+  if(/投資總結/.test(t)) return 8;
   if(/財務指標|年營收/.test(t)) return 2;
   if(/護城河|彼得林區|競爭對手/.test(t)) return 3;
   if(/估值/.test(t)) return 4;
