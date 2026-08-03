@@ -348,13 +348,12 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <button class="mkt-btn" data-mkt="tw" onclick="setMarket('tw')">🟢 台股</button>
   </div>
   <div class="grp-menu" id="grpMenu">
-    <button class="grp-btn" data-g="1" onclick="pickGroup(1)">大盤指數</button>
     <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
+    <button class="grp-btn" data-g="2" onclick="pickGroup(2)">關鍵財務指標</button>
     <button class="grp-btn" data-g="6" onclick="pickGroup(6)">財經新聞</button>
     <button class="grp-btn" data-g="5" onclick="pickGroup(5)">法說會未來前景</button>
     <button class="grp-btn" data-g="7" onclick="pickGroup(7)">AI技術分析</button>
     <button class="grp-btn" data-g="3" onclick="pickGroup(3)">護城河與彼得林區分類</button>
-    <button class="grp-btn" data-g="2" onclick="pickGroup(2)">關鍵財務指標</button>
     <button class="grp-btn" data-g="4" onclick="pickGroup(4)">股價估值評估</button>
     <button class="grp-btn" data-g="9" onclick="pickGroup(9)">產品與服務</button>
     <button class="grp-btn" data-g="11" onclick="pickGroup(11)">版主選股準則</button>
@@ -590,7 +589,7 @@ async function fetchJson(url) {
 // 載入進度只在「大盤指數」選單顯示(美股/台股一致)：__logOn 記錄是否載入中，實際顯示還要看目前選單。
 let __logOn=false;
 function logPanel(s){ __logOn=s; syncLogPanel(); }
-function syncLogPanel(){ const el=document.getElementById('logPanel'); if(el) el.style.display=(__logOn && (typeof __grp==='undefined'||__grp===1))?'block':'none'; }
+function syncLogPanel(){ const el=document.getElementById('logPanel'); if(el) el.style.display=(__logOn && (typeof __grp==='undefined'||__grp===2))?'block':'none'; }
 function logAdd(k,m){ const c=document.getElementById('logItems'); const d=document.createElement('div'); d.className='log-item'; d.id='log_'+k; d.innerHTML=`<div class="log-spin"></div><span>${m}</span>`; c.appendChild(d); }
 function logOk(k,m){ const el=document.getElementById('log_'+k); if(el) el.innerHTML=`<span class="log-ok">✓</span><span>${m}</span>`; }
 function logErr(k,m){ const el=document.getElementById('log_'+k); if(el) el.innerHTML=`<span class="log-err">✗</span><span style="color:var(--red)">${m}</span>`; }
@@ -4536,11 +4535,12 @@ function cardGroup(c){
 function pickGroup(n){ __jumpAfterSearch=false; showGroup(n); }
 function showGroup(n){
   __grp=n; document.body.classList.add('grp-mode');
-  // 大盤指數(n=1) 與 自選股(n=10) 拆成兩個獨立選單。welcome 只在大盤指數頁顯示
-  const showIndex = (n===1);
+  // 大盤指數已併入「關鍵財務指標」(n=2)：指數列在 DOM 上本來就排在 #results 之前，
+  //   因此自然顯示在公司股價卡上方，符合使用者要求。自選股(n=10)維持獨立選單且排在最前面。
+  const showIndex = (n===2);
   const showWl    = (n===10);
-  // welcome 只在「大盤指數頁 且 尚未選過市場」時顯示;使用者按過美股/台股後就永遠不再出現(節省 App 空間)
-  const e_wel=document.getElementById('welcome');       if(e_wel) e_wel.style.display=(showIndex && !marketPicked())?'':'none';
+  // welcome 只在「尚未選過市場」時顯示;使用者按過美股/台股後就永遠不再出現(節省 App 空間)
+  const e_wel=document.getElementById('welcome');       if(e_wel) e_wel.style.display=(showWl && !marketPicked())?'':'none';   // 改綁自選股頁(預設進入頁)，否則新使用者看不到介紹
   const e_iT =document.getElementById('indexTitle');    if(e_iT ) e_iT .style.display=showIndex?'':'none';
   const e_iB =document.getElementById('indexBar');      if(e_iB ) e_iB .style.display=showIndex?'':'none';
   const e_wl =document.getElementById('watchlistCard'); if(e_wl ) e_wl .style.display=showWl   ?'':'none';
@@ -4551,7 +4551,7 @@ function showGroup(n){
     if(n===3){ const mo=document.getElementById('ai_moat')?.closest('.card'); if(mo) res.insertBefore(mo, res.firstChild); }
     // 財經新聞選單(群組6)：最新新聞在上、投資大行目標價在下
     if(n===6){ const nc=document.getElementById('newsList'); const nCard=nc&&nc.closest('.card'); const tg=document.getElementById('analystTargets'); const tCard=tg&&tg.closest('.card'); if(nCard&&tCard) nCard.insertAdjacentElement('afterend', tCard); }
-    const showRes=(n!==1 && n!==10);
+    const showRes=(n!==10);   // 大盤指數已併入 n=2，只有自選股頁不顯示分析結果
     res.style.display=showRes?'block':'none';   // .results 類別預設 display:none，需明確設 block 才顯示
     [...res.querySelectorAll('.card, .co-head')].forEach(c=>{ const show=cardGroup(c)===n; c.style.display=show?'':'none'; if(show) anyCard=true; });
     res.querySelectorAll('.g2').forEach(g=>{ const vis=[...g.children].some(c=>c.style.display!=='none'); g.style.display=vis?'block':'none'; });
@@ -4580,7 +4580,9 @@ function showGroup(n){
 }
 // 分析完成後：若使用者主動查詢，跳到「關鍵財務指標」；否則(如開場範例)維持目前群組
 function applyGroupAfterRender(){ __autoLoading=false; if(__jumpAfterSearch){ __jumpAfterSearch=false; showGroup(2); } else { showGroup(__grp); } }
-window.addEventListener('load', function(){ initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); showGroup(1); });
+// 預設進入「自選股」(選單第一項)。刻意不預設「關鍵財務指標」：該頁無資料時會觸發自動分析，
+//   一開 App 就跑會白白消耗免費 AI 額度；使用者主動點進去才載入。
+window.addEventListener('load', function(){ initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); showGroup(10); });
 
 // ⚠️ 暫時停用 Service Worker 註冊：先前的 SW 在部分裝置(桌面Chrome/Edge、Android PWA)造成整頁重載迴圈。
 // 不再主動註冊；已有舊 SW 的裝置，瀏覽器會自動抓到已改成 kill-switch 的 sw.js 並自我清除(清快取+unregister)，迴圈即中止。
