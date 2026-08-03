@@ -2252,13 +2252,15 @@ const IR_CALL_VIDEO = {
   // 台股法說會影片：來源皆為「投資看非凡(USTV 非凡電視)」的【完整公開】系列，與台積電同一來源、
   //   都是看得到高層本人簡報的完整場次。內嵌播放器已強制開啟自動字幕並翻成繁體中文(cc_lang_pref=zh-Hant)，
   //   英文場次(如台積電)可直接看中文字幕。⚠️ 每季法說後需人工更新為最新一季影片(同 IR 三常數的更新節奏)。
-  // 台積電為英文場次：保留英文原音，繁中字幕由 initIrCaptions() 透過 IFrame API 強制開啟即時翻譯。
-  'TSM': 'JOhMwPVXRHM',    // 台積電 2026 Q2 法說會【完整公開】(魏哲家本人簡報，英文原音)
-  '2454':'qEn6dHlz1h4',    // 聯發科 2026 Q1 線上法說會【完整公開】
-  '2303':'UyyeZiz2RPA',    // 聯電 2026 Q1 法說會【完整公開】(聚焦成熟製程技術升級)
-  '2317':'2D9nsifg8Ms',    // 鴻海 2026 Q1 法說會【完整公開】(聚焦AI伺服器/電動車)
-  '3711':'27jMy7OHrGQ',    // 日月光投控 2026 Q1 法說會【完整公開】(AI需求強/最新展望)
-  '2327':'C5DKdb_OU6Q'     // 國巨 法說會【完整公開】
+  // ⚠️ 值為 {id, q}：q=該影片實際場次。文字摘要(IR_CALL_SUMMARY)已更新到 Q2，但公開完整影片
+  //    多半只到 Q1，若不標示季度會讓人誤以為影片就是最新一季 → 一律在播放器下方標出場次。
+  //    台積電為英文場次：保留英文原音，繁中字幕由 initIrCaptions() 透過 IFrame API 強制即時翻譯。
+  'TSM': {id:'JOhMwPVXRHM', q:'2026 第二季（英文原音）'},   // 台積電 Q2 法說會【完整公開】魏哲家本人簡報
+  '2454':{id:'qEn6dHlz1h4', q:'2026 第一季'},              // 聯發科 Q1 線上法說會【完整公開】
+  '2303':{id:'UyyeZiz2RPA', q:'2026 第一季'},              // 聯電 Q1 法說會【完整公開】(成熟製程技術升級)
+  '2317':{id:'2D9nsifg8Ms', q:'2026 第一季'},              // 鴻海 Q1 法說會【完整公開】(AI伺服器/電動車)
+  '3711':{id:'27jMy7OHrGQ', q:'2026 第一季'},              // 日月光投控 Q1 法說會【完整公開】
+  '2327':{id:'C5DKdb_OU6Q', q:'2026 第一季'}               // 國巨 法說會【完整公開】
 };
 // 強制法說會影片顯示「繁體中文字幕」。
 //   單靠網址參數 cc_lang_pref 只是偏好、不會啟用自動翻譯；必須透過 YouTube IFrame API 在
@@ -2305,7 +2307,9 @@ function initIrCaptions(){
 }
 // 產生「法說會影片」區塊(置於法說主旨最上方)：有內嵌影片→可播放/暫停/拖曳時間軸；否則給官方重播按鈕
 function irVideoBlock(sym, coName){
-  const v = IR_CALL_VIDEO[sym];
+  const raw = IR_CALL_VIDEO[sym];
+  const v  = (raw && typeof raw==='object') ? raw.id : raw;   // 相容舊格式(純字串)
+  const vq = (raw && typeof raw==='object') ? raw.q  : '';
   const irPage = IR_QUARTERLY_PAGE[sym];
   if(v && /^[\w-]{11}$/.test(v)){
     // 內嵌 YouTube 播放器（可播放/暫停/拉時間軸）。
@@ -2314,7 +2318,8 @@ function irVideoBlock(sym, coName){
     const orig = (location.protocol==='http:'||location.protocol==='https:') ? '&origin='+encodeURIComponent(location.origin) : '';
     const src = `https://www.youtube-nocookie.com/embed/${esc(v)}?rel=0&enablejsapi=1&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant${orig}`;
     setTimeout(initIrCaptions, 0);
-    return `<div class="ir-video"><iframe id="irVideoFrame" src="${src}" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
+    return (vq ? `<div class="note" style="margin:0 0 6px"><b style="color:var(--blue)">🎬 影片場次：${esc(vq)}</b><span class="muted"> ｜ 下方文字摘要為最新一季，若場次不同以文字摘要為準</span></div>` : '')
+      + `<div class="ir-video"><iframe id="irVideoFrame" src="${src}" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
       + `<div class="note" style="margin-top:6px">💬 已自動開啟<b>繁體中文字幕</b>（英文場次為即時翻譯）。若未顯示，可點播放器右下角 <b>字幕</b> 圖示切換。</div>`;
   }
   const watchUrl = (v && /^https?:/.test(v)) ? v : irPage;
