@@ -348,17 +348,17 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <button class="mkt-btn" data-mkt="tw" onclick="setMarket('tw')">🟢 台股</button>
   </div>
   <div class="grp-menu" id="grpMenu">
-    <button class="grp-btn" data-g="1" onclick="showGroup(1)">大盤指數</button>
-    <button class="grp-btn" data-g="10" onclick="showGroup(10)">自選股</button>
-    <button class="grp-btn" data-g="6" onclick="showGroup(6)">財經新聞</button>
-    <button class="grp-btn" data-g="5" onclick="showGroup(5)">法說會未來前景</button>
-    <button class="grp-btn" data-g="7" onclick="showGroup(7)">AI技術分析</button>
-    <button class="grp-btn" data-g="3" onclick="showGroup(3)">護城河與彼得林區分類</button>
-    <button class="grp-btn" data-g="2" onclick="showGroup(2)">關鍵財務指標</button>
-    <button class="grp-btn" data-g="4" onclick="showGroup(4)">股價估值評估</button>
-    <button class="grp-btn" data-g="9" onclick="showGroup(9)">產品與服務</button>
-    <button class="grp-btn" data-g="11" onclick="showGroup(11)">版主選股準則</button>
-    <button class="grp-btn" data-g="8" onclick="showGroup(8)">投資總結</button>
+    <button class="grp-btn" data-g="1" onclick="pickGroup(1)">大盤指數</button>
+    <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
+    <button class="grp-btn" data-g="6" onclick="pickGroup(6)">財經新聞</button>
+    <button class="grp-btn" data-g="5" onclick="pickGroup(5)">法說會未來前景</button>
+    <button class="grp-btn" data-g="7" onclick="pickGroup(7)">AI技術分析</button>
+    <button class="grp-btn" data-g="3" onclick="pickGroup(3)">護城河與彼得林區分類</button>
+    <button class="grp-btn" data-g="2" onclick="pickGroup(2)">關鍵財務指標</button>
+    <button class="grp-btn" data-g="4" onclick="pickGroup(4)">股價估值評估</button>
+    <button class="grp-btn" data-g="9" onclick="pickGroup(9)">產品與服務</button>
+    <button class="grp-btn" data-g="11" onclick="pickGroup(11)">版主選股準則</button>
+    <button class="grp-btn" data-g="8" onclick="pickGroup(8)">投資總結</button>
   </div>
   <div class="index-title" id="indexTitle">📊 四大指數</div>
   <div id="indexBar" class="index-bar"></div>
@@ -2248,7 +2248,14 @@ const IR_CALL_VIDEO = {
   // 值=YouTube 影片 ID(11碼) → 站內內嵌播放器(可播放/暫停/拉時間軸)＋自動繁體中文字幕；未列者退回官方 IR 線上重播。
   // 逐季人工更新為該公司最新一季法說會影片。優先官方頻道(如 Alphabet IR)，其次乾淨全程錄影(如 EARNMOAR)。
   // 只放「有實際影像(看得到人簡報)」的法說會影片；美國公司法說為純電話語音、無高層影像→不放靜態影片，退回官方IR重播。
-  'TSM': 'JOhMwPVXRHM'     // 台積電 2026 Q2 法說會完整影片(非凡新聞完整公開版，看得到魏哲家本人簡報)
+  // 台股法說會影片：來源皆為「投資看非凡(USTV 非凡電視)」的【完整公開】系列，與台積電同一來源、
+  //   都是看得到高層本人簡報的完整場次。內嵌播放器已強制開啟自動字幕並翻成繁體中文(cc_lang_pref=zh-Hant)，
+  //   英文場次(如台積電)可直接看中文字幕。⚠️ 每季法說後需人工更新為最新一季影片(同 IR 三常數的更新節奏)。
+  'TSM': 'JOhMwPVXRHM',    // 台積電 2026 Q2 法說會(魏哲家本人簡報)
+  '2454':'qEn6dHlz1h4',    // 聯發科 2026 Q1 線上法說會【完整公開】
+  '2303':'UyyeZiz2RPA',    // 聯電 2026 Q1 法說會【完整公開】(聚焦成熟製程技術升級)
+  '2317':'2D9nsifg8Ms',    // 鴻海 2026 Q1 法說會【完整公開】(聚焦AI伺服器/電動車)
+  '2327':'C5DKdb_OU6Q'     // 國巨 法說會【完整公開】
 };
 // 產生「法說會影片」區塊(置於法說主旨最上方)：有內嵌影片→可播放/暫停/拖曳時間軸；否則給官方重播按鈕
 function irVideoBlock(sym, coName){
@@ -4522,6 +4529,9 @@ function cardGroup(c){
   if(/技術分析/.test(t)) return 7;
   return 0;
 }
+// 使用者「手動點選單」專用入口：取消搜尋完成後強制跳「關鍵財務指標」的行為。
+//   否則邊載入邊點法說會，載完會被 applyGroupAfterRender 跳回群組2(使用者回報)。
+function pickGroup(n){ __jumpAfterSearch=false; showGroup(n); }
 function showGroup(n){
   __grp=n; document.body.classList.add('grp-mode');
   // 大盤指數(n=1) 與 自選股(n=10) 拆成兩個獨立選單。welcome 只在大盤指數頁顯示
