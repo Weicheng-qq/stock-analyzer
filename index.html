@@ -106,6 +106,13 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .g { color:var(--green); } .r { color:var(--red); } .y { color:var(--yellow); }
 .wl-edit-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); border-radius:8px; padding:6px 12px; font-size:13px; font-weight:600; cursor:pointer; }
 .wl-edit-btn:hover { border-color:var(--blue); color:var(--text); }
+/* 技術分析圖數值列：取代會擋住趨勢線的浮動提示框 */
+.tech-tip { margin:8px 0 2px; padding:8px 10px; background:var(--bg2); border:1px solid var(--border); border-radius:8px; font-size:12px; line-height:1.9; min-height:38px; }
+.tech-tip .tt-hint { color:var(--text2); }
+.tech-tip .tt-day { display:inline-block; font-weight:700; color:var(--blue); margin-right:10px; }
+.tech-tip .tt-item { display:inline-block; margin-right:12px; white-space:nowrap; color:var(--text2); }
+.tech-tip .tt-item b { color:var(--text); font-weight:700; }
+.tech-tip .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:4px; vertical-align:middle; }
 .wl-drag { flex:none; cursor:grab; touch-action:none; color:var(--text2); font-size:20px; line-height:1; padding:0 6px 0 2px; user-select:none; }
 .wl-drag:active { cursor:grabbing; }
 /* 手機拖曳難操作 → 編輯模式改用上/下移按鈕(觸控目標夠大、一按即動、順序立刻存回) */
@@ -1005,7 +1012,8 @@ function twResultsHtml(o){
     <label><input type="checkbox" data-ma="ma20"> <span class="dot" style="background:#58a6ff"></span>月均線 (20MA)</label>
     <label><input type="checkbox" data-ma="ma60" checked> <span class="dot" style="background:#bc8cff"></span>季均線 (60MA)</label>
     <label><input type="checkbox" data-ma="ma240"> <span class="dot" style="background:#3fb950"></span>年均線 (240MA)</label>
-    <label><input type="checkbox" data-ma="boll" checked> <span class="dot" style="background:#8b949e"></span>布林軌道</label></div>`;
+    <label><input type="checkbox" data-ma="boll" checked> <span class="dot" style="background:#8b949e"></span>布林軌道</label></div>
+    <div class="tech-tip" id="techTip"><span class="tt-hint">👆 在圖上滑動或點按，數值會顯示在這裡（不會擋住線）</span></div>`;
   return `
 <div class="co-head">
   <div class="co-logo">${esc(o.code[0]||'台')}</div>
@@ -1551,6 +1559,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
     <label><input type="checkbox" data-ma="ma240"> <span class="dot" style="background:#3fb950"></span>年均線 (240MA)</label>
     <label><input type="checkbox" data-ma="boll" checked> <span class="dot" style="background:#8b949e"></span>布林軌道</label>
   </div>
+  <div class="tech-tip" id="techTip"><span class="tt-hint">👆 在圖上滑動或點按，數值會顯示在這裡（不會擋住線）</span></div>
   <div class="note">股價來自 Yahoo Finance 日線；均線與布林軌道由實際收盤價計算。可勾選多個指標疊加。技術分析僅供參考，不構成投資建議。</div>
 </div>
 
@@ -4337,6 +4346,23 @@ async function loadTechnical(symbol, gen){
       mk('布林上軌',bb.up,'#8b949e',{_key:'boll',borderDash:[4,3],borderWidth:1}),
       mk('布林下軌',bb.lo,'#8b949e',{_key:'boll',borderDash:[4,3],borderWidth:1,fill:'-1',backgroundColor:'rgba(139,148,158,.08)'})
     ];
+    // 技術分析圖的數值改顯示在圖表下方固定列，不用浮動提示框蓋住趨勢線
+    function techTipRenderer(ctx){
+      const box=document.getElementById('techTip'); if(!box) return;
+      const tt=ctx.tooltip;
+      if(!tt || tt.opacity===0 || !tt.dataPoints || !tt.dataPoints.length){
+        box.innerHTML='<span class="tt-hint">👆 在圖上滑動或點按，數值會顯示在這裡（不會擋住線）</span>';
+        return;
+      }
+      const day=tt.title&&tt.title.length?tt.title[0]:'';
+      const sym=(getMarket()==='tw')?'NT$':'$';   // 原本硬編 $，台股應為 NT$
+      const items=tt.dataPoints.map(p=>{
+        const col=p.dataset.borderColor||'#8b949e';
+        const v=(p.parsed.y!=null)?sym+p.parsed.y.toFixed(2):'—';
+        return `<span class="tt-item"><span class="dot" style="background:${col}"></span>${esc(p.dataset.label||'')} <b>${v}</b></span>`;
+      }).join('');
+      box.innerHTML=`<span class="tt-day">${esc(day)}</span>${items}`;
+    }
     // 依核取方塊預設狀態設定顯示/隱藏（股價恆顯示）
     const optWrap=document.getElementById('techOpts');
     const state={}; optWrap.querySelectorAll('input[data-ma]').forEach(cb=>state[cb.dataset.ma]=cb.checked);
@@ -4345,7 +4371,8 @@ async function loadTechnical(symbol, gen){
     const NT=7, tickIdx=new Set(); for(let k=0;k<NT;k++) tickIdx.add(Math.round(k*(lab.length-1)/(NT-1)));
     __techChart=new Chart(el.getContext('2d'),{ type:'line', data:{labels:lab,datasets:ds},
       options:{ responsive:true,maintainAspectRatio:false, interaction:{mode:'index',intersect:false},
-        plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.parsed.y!=null?'$'+c.parsed.y.toFixed(2):'—')}}},
+        // 浮動提示框會蓋住趨勢線(使用者反映)，改成 external：不畫浮層，把數值寫進圖表下方固定的 #techTip
+        plugins:{legend:{display:false}, tooltip:{enabled:false, external:techTipRenderer}},
         scales:{ x:{ticks:{color:'#8b949e',font:{size:9},autoSkip:false,maxRotation:0,callback:(v,i)=>tickIdx.has(i)?lab[i]:''},grid:{display:false}},
           y:{position:'right',ticks:{color:'#8b949e',font:{size:10},callback:v=>'$'+v},grid:{color:'rgba(48,54,61,.3)'}} } }
     });
