@@ -1835,10 +1835,23 @@ async function runIndependentAiAnalysis(){
   if(box) box.style.display='block';
   if(el) el.innerHTML=aiLoading();
   const ctx=st.ctx;
+  // 雙掛牌(如台積電 2330↔TSM)：同一家公司在兩個市場應給出同一份獨立分析(使用者回報兩邊內容不同)。
+  //   作法：①快取以「共用代碼」為鍵，兩市場共用同一份結果 ②提示詞禁止引用單一市場的絕對股價
+  //   (兩地股價/本益比本就不同：台股 NT$、美股 ADR 有溢價)，改以基本面與估值水準論述，這樣同一份文字在兩邊都正確。
+  const __canon=window.__symbolForLinks||ctx.symbol;
+  const __dual=!!(TW_US_EQUIV[ctx.symbol]||US_TW_EQUIV[ctx.symbol]||(__canon!==ctx.symbol));
+  const __ck='indep_'+__canon;
+  if(__dual){
+    try{
+      const raw=localStorage.getItem(__ck);
+      if(raw){ const c=JSON.parse(raw);
+        if(c && c.t && (Date.now()-c.t)<12*3600*1000 && c.r){ renderIndependent(c.r); return; } }
+    }catch(e){}
+  }
   const prompt=`你是一位獨立的專業投資分析師，請完全依你自己的專業判斷分析這家公司，不受限於任何特定的選股門檻公式或檢核清單。用繁體中文回答，「只」回傳 JSON（不要任何其他文字、不要 markdown 標記）。
 
 公司：${ctx.name} (${ctx.symbol})
-目前股價：${ctx.price!=null?'$'+ctx.price:'未知'}
+${__dual?'（本公司在台股與美股皆有掛牌，兩地股價與本益比本就不同，請勿引用任何單一市場的「絕對股價」數字，改以本益比水準、獲利能力與基本面論述，使結論在兩個市場都成立。）':'目前股價：'+(ctx.price!=null?'$'+ctx.price:'未知')}
 本益比P/E(trailing)：${ctx.pe!=null?ctx.pe.toFixed(1)+'x':'未知'}${ctx.peRangeText&&ctx.peRangeText!=='無'?'（近5年區間 '+ctx.peRangeText+'）':''}
 近年財務（真實SEC/Yahoo數據）：
 ${ctx.finText}
@@ -1858,13 +1871,20 @@ ${ctx.finText}
       if(e.message==='KEY_INVALID' && !isLocal){ result=await callAIWithPrompt(prompt,'',true); }
       else throw e;
     }
-    const rc={'買入':'s-buy','觀望':'s-hold','避開':'s-sell'}[result.rating]||'s-hold';
-    const ri={'買入':'✅','觀望':'⏳','避開':'❌'}[result.rating]||'⏳';
-    const dc={'高':'g','中':'y','低':'r'}[result.double]||'y';
-    if(el) el.innerHTML=`<div class="vscore ${rc}">${ri} ${esc(result.rating||'')}</div><div style="font-size:13px;margin-bottom:8px">三年翻倍機率：<strong class="${dc}">${esc(result.double||'')}</strong></div><div class="ai">${norm(result.reason)}</div>`;
+    if(__dual){ try{ localStorage.setItem(__ck, JSON.stringify({t:Date.now(), r:result})); }catch(e){} }
+    renderIndependent(result);
   }catch(e){
     if(el) el.innerHTML=`<div class="err-box">AI 分析失敗：${esc(e.message)}</div>`;
   }
+}
+// 獨立分析的渲染（抽出共用：新產生與讀快取都走這裡）
+function renderIndependent(result){
+  const el=document.getElementById('ai_independent'); if(!el||!result) return;
+  const box=document.getElementById('ai_independent_box'); if(box) box.style.display='block';
+  const rc={'買入':'s-buy','觀望':'s-hold','避開':'s-sell'}[result.rating]||'s-hold';
+  const ri={'買入':'✅','觀望':'⏳','避開':'❌'}[result.rating]||'⏳';
+  const dc={'高':'g','中':'y','低':'r'}[result.double]||'y';
+  el.innerHTML=`<div class="vscore ${rc}">${ri} ${esc(result.rating||'')}</div><div style="font-size:13px;margin-bottom:8px">三年翻倍機率：<strong class="${dc}">${esc(result.double||'')}</strong></div><div class="ai">${norm(result.reason)}</div>`;
 }
 
 function renderAI(ai){
@@ -4179,7 +4199,18 @@ function computeCumQuarters(yf, scale){
 // AI 回傳競爭對手美股代碼後，抓「真實」本益比做比較（Yahoo trailingPeRatio）
 async function fillCompetitorPe(ai, peInfo, gen){
   const el=document.getElementById('peCompetitors'); if(!el) return;
-  const tickers=(Array.isArray(ai?.competitor_tickers)?ai.competitor_tickers:[]).filter(t=>/^[A-Z.]{1,6}$/.test(String(t||''))).slice(0,3);
+  let tickers=(Array.isArray(ai?.competitor_tickers)?ai.competitor_tickers:[]).filter(t=>/^[A-Z.]{1,6}$/.test(String(t||''))).slice(0,3);
+  // 雙掛牌同一家公司,AI 每次回傳的競爭對手清單不固定(台積電台股曾回 SSNLF/INTC/GFS、美股只回 INTC)。
+  //   以「共用代碼」為鍵快取,讓兩個市場看到同一份對手清單。
+  try{
+    const canon=window.__symbolForLinks||'';
+    const dual=!!(TW_US_EQUIV[canon]||US_TW_EQUIV[canon]||Object.values(TW_US_EQUIV).includes(canon)||Object.keys(US_TW_EQUIV).includes(canon)||Object.values(US_TW_EQUIV).includes(canon));
+    if(canon && dual){
+      const ck='comp_'+canon, raw=localStorage.getItem(ck);
+      if(raw){ const c=JSON.parse(raw); if(c&&c.t&&(Date.now()-c.t)<12*3600*1000&&Array.isArray(c.k)&&c.k.length) tickers=c.k; }
+      else if(tickers.length) localStorage.setItem(ck, JSON.stringify({t:Date.now(), k:tickers}));
+    }
+  }catch(e){}
   if(!tickers.length){ el.innerHTML='<div class="note">（AI 未提供可查詢的美股競爭對手代碼）</div>'; return; }
   el.innerHTML='<div class="note">載入競爭對手本益比...</div>';
   const lines=[];
