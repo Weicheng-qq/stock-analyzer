@@ -110,7 +110,10 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-drag:active { cursor:grabbing; }
 /* 手機拖曳難操作 → 編輯模式改用上/下移按鈕(觸控目標夠大、一按即動、順序立刻存回) */
 .wl-move { flex:none; display:flex; flex-direction:column; gap:2px; margin-right:4px; }
-.wl-mv { width:30px; height:22px; padding:0; background:var(--bg3,#21262d); color:var(--text); border:1px solid var(--border); border-radius:5px; font-size:11px; line-height:1; cursor:pointer; }
+.wl-mv { width:26px; height:21px; padding:0; background:var(--bg3,#21262d); color:var(--text); border:1px solid var(--border); border-radius:5px; font-size:10px; line-height:1; cursor:pointer; }
+/* 編輯模式多了 ▲▼ 一欄，若不讓出空間，公司名會被擠成一字一行的直排。編輯時隱藏走勢線騰出寬度。 */
+.wl-editing .wl-spark { display:none; }
+.wl-editing .wl-name { min-width:76px; }
 .wl-mv:active { background:var(--blue); color:#0d1117; }
 .wl-mv:disabled { opacity:.28; cursor:default; }
 .wl-editing .wl-item { background:var(--bg3); border-radius:8px; margin-bottom:4px; }
@@ -806,6 +809,7 @@ function renderWatchlist(){
     <div class="wl-ext" id="wle_${esc(it.symbol)}"></div>
     <div class="wl-ai-read" id="wlr_${esc(it.symbol)}"><span class="muted">💡 漲跌解讀載入中…</span></div>
     </div>`).join('');
+  el.classList.toggle('wl-editing', !!__wlEdit);   // 編輯模式讓出寬度給 ▲▼，避免公司名被擠成直排
   loadWatchlistPrices(list);
   loadWatchlistSpark(list);
   loadWatchlistInsights(list);
