@@ -1013,6 +1013,7 @@ function twResultsHtml(o){
 </div>
 <div class="card"><div class="ct">🏭 產品與服務（營收來源）</div><div id="ai_products">${aiLoading()}</div></div>
 <div class="card"><div class="ct">📊 最近10年財務指標</div><div id="tw_fin">${aiLoading()}</div></div>
+<div class="card"><div class="ct">💰 年營收 &amp; 成長率</div><div class="chart-wrap"><canvas id="revChart"></canvas></div></div>
 <div class="card"><div class="ct">🏷️ 彼得林區六大分類</div><div id="ai_lynch">${aiLoading()}</div></div>
 <div class="card"><div class="ct">🏰 護城河分析</div><div id="ai_moat">${aiLoading()}</div></div>
 <div class="card"><div class="ct">⚔️ 前三大競爭對手 &amp; 世界排名</div><div id="ai_competitors">${aiLoading()}</div></div>
@@ -1119,6 +1120,18 @@ async function loadTwFinancials(symbol, gen){
           for(const y in ni.map)  (by[y]=by[y]||{}).ni =ni.map[y];
           for(const y in eq.map)  (by[y]=by[y]||{}).eq =eq.map[y];
           for(const y in by){ if(by[y].gp==null && cost.map[y]!=null && by[y].rev!=null) by[y].gp=by[y].rev-cost.map[y]; }
+          // 比照美股：①丟掉沒有營收的空年份 ②只留最近10年 ③SEC 申報有延遲，最新年度用 Yahoo 補(否則會少一年)
+          for(const y in by){ if(by[y].rev==null) delete by[y]; }
+          try{
+            const yf=await loadYahooFin(__usEq);
+            for(const k of Object.keys(yf.arY||{})){
+              const y=+k, rv=yf.arY[k];
+              if(rv==null || (by[y]&&by[y].rev!=null)) continue;
+              by[y]={rev:rv, gp:yf.agY?.[y]??null, ni:yf.anY?.[y]??null, eq:yf.aeqY?.[y]??null};
+            }
+          }catch(e){}
+          const keep=Object.keys(by).map(Number).sort((a,b)=>a-b).slice(-10);
+          by=Object.fromEntries(keep.map(y=>[y,by[y]]));
           sourceLabel=`SEC EDGAR 官方申報（與美股 ${__usEq} 同一份財報，確保兩市場數字一致）`;
         }
       }
@@ -1214,11 +1227,12 @@ async function loadTwFinancials(symbol, gen){
     const html=`<table class="dt"><tr><th>年份</th><th>毛利率</th><th>淨利率</th><th>ROE</th></tr>`
       +rows.map(r=>`<tr><td><strong>${r.yr}${r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> Q1~Q${r.nQ}</span>`:''}</strong></td><td class="${cc2(r.gm,30,20)}">${r.gm!=null?r.gm.toFixed(1)+'%':'—'}</td><td class="${cc2(r.nm,15,5)}">${r.nm!=null?r.nm.toFixed(1)+'%':'—'}</td><td class="${cc2(r.roe,20,10)}">${r.roe!=null?r.roe.toFixed(1)+'%'+(r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> ${r.nQ}季</span>`:''):'—'}</td></tr>`).join('')
       +`</table>`
-      +`<div class="ct" style="margin-top:16px">📈 年營收 <span style="color:var(--text2);font-weight:400;font-size:13px">（NT$${ru.label}）</span></div>`
+      +`<div class="ct" style="margin-top:16px">📈 年營收明細與成長率（財政年度） <span style="color:var(--text2);font-weight:400;font-size:13px">（NT$${ru.label}）</span></div>`
       +`<table class="dt"><tr><th>年份</th><th>年營收</th><th>較前年</th></tr>`
       +rows.map(r=>`<tr><td><strong>${r.yr}${r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> Q1~Q${r.nQ}</span>`:''}</strong></td><td>${r.rev!=null?fmtRev(r.rev,ru):'—'}${r.partial?`<span style="color:var(--text2);font-size:11px"> 累計</span>`:''}</td><td class="${r.gr!=null?(r.gr>=0?'g':'r'):''}">${r.gr!=null?(r.gr>=0?'▲':'▼')+' '+Math.abs(r.gr).toFixed(1)+'%'+(r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> 同期比</span>`:''):'—'}</td></tr>`).join('')
       +`</table><div class="note" style="margin-top:8px">資料來源：${sourceLabel||'—'}</div>`;
     if(el) el.innerHTML=html;
+    try{ drawChart(rows); }catch(e){}   // 年營收&成長率圖表(與美股同一張卡、同一個 drawChart)
     return rows;
   }catch(e){ if(el) el.innerHTML='<div class="note">台股財務資料暫時取不到。</div>'; return []; }
 }
