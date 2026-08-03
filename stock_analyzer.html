@@ -2281,9 +2281,14 @@ function initIrCaptions(){
     __irPlayer=new YT.Player('irVideoFrame',{
       events:{
         onReady:function(e){
+          // YouTube 對繁中可能用 zh-Hant 或 zh-TW，兩個都試；並優先挑清單中真正存在的繁中軌
           const force=()=>{ try{
             e.target.setOption('captions','reload',true);
+            let list=[]; try{ list=e.target.getOption('captions','tracklist')||[]; }catch(_){}
+            const hit=list.find(t=>/^zh-(Hant|TW)/i.test(t.languageCode||''));
+            if(hit){ e.target.setOption('captions','track',hit); return; }
             e.target.setOption('captions','track',{languageCode:'zh-Hant'});
+            e.target.setOption('captions','track',{languageCode:'zh-TW'});
           }catch(_){}};
           force();
           // 字幕軌清單有時要等影片開始緩衝才就緒，隔一段時間再設一次
