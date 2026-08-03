@@ -108,6 +108,11 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-edit-btn:hover { border-color:var(--blue); color:var(--text); }
 .wl-drag { flex:none; cursor:grab; touch-action:none; color:var(--text2); font-size:20px; line-height:1; padding:0 6px 0 2px; user-select:none; }
 .wl-drag:active { cursor:grabbing; }
+/* 手機拖曳難操作 → 編輯模式改用上/下移按鈕(觸控目標夠大、一按即動、順序立刻存回) */
+.wl-move { flex:none; display:flex; flex-direction:column; gap:2px; margin-right:4px; }
+.wl-mv { width:30px; height:22px; padding:0; background:var(--bg3,#21262d); color:var(--text); border:1px solid var(--border); border-radius:5px; font-size:11px; line-height:1; cursor:pointer; }
+.wl-mv:active { background:var(--blue); color:#0d1117; }
+.wl-mv:disabled { opacity:.28; cursor:default; }
 .wl-editing .wl-item { background:var(--bg3); border-radius:8px; margin-bottom:4px; }
 .wl-item.dragging { opacity:.65; background:var(--bg2); box-shadow:0 4px 14px rgba(0,0,0,.4); }
 .wl-item { border-bottom:1px solid rgba(48,54,61,.4); }
@@ -711,6 +716,7 @@ function removeFromWatchlist(symbol){
 // 自選股編輯模式：可拖曳一次調到任意上下位置
 let __wlEdit=false;
 function toggleWlEdit(){ __wlEdit=!__wlEdit; renderWatchlist(); }
+// 編輯模式已改用 ▲▼ 上下移按鈕(手機拖曳難操作)。此函式保留：若日後恢復 .wl-drag 把手仍可運作，無把手時自動不做事。
 function initWlDrag(){
   const el=document.getElementById('watchlistTable'); if(!el) return;
   el.querySelectorAll('.wl-drag').forEach(h=>{
@@ -780,7 +786,7 @@ function renderWatchlist(){
   el.innerHTML = list.map((it,i)=>`
     <div class="wl-item" data-sym="${esc(it.symbol)}">
     <div class="wl-row">
-      ${__wlEdit?`<div class="wl-drag" title="拖曳調整順序">☰</div>`:''}
+      ${__wlEdit?`<div class="wl-move"><button class="wl-mv" onclick="moveWatchlistItem('${esc(it.symbol)}',-1)" title="上移" ${i===0?'disabled':''}>▲</button><button class="wl-mv" onclick="moveWatchlistItem('${esc(it.symbol)}',1)" title="下移" ${i===list.length-1?'disabled':''}>▼</button></div>`:''}
       ${(function(){ const tw=/\.TW/i.test(it.symbol); const code=esc(it.symbol.replace(/\..*/,''));
         const box=`<div class="wl-logo wl-logo-tw">${code}</div>`;
         const twcode=it.symbol.replace(/\..*/,'');
