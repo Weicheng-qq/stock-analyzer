@@ -1698,8 +1698,24 @@ function hangIndent(html){
 function setAI(id,html){ const el=document.getElementById(id); if(el) el.innerHTML=hangIndent(html); }
 
 // ── Gemini ──
+// 雙掛牌判定與共用快取鍵：同一家公司在台股/美股應共用同一份 AI 內容(使用者要求除股價/本益比外全部一致)
+function __dualKey(){
+  const canon=window.__symbolForLinks||'';
+  if(!canon) return null;
+  const isDual = Object.keys(TW_US_EQUIV).includes(canon) || Object.values(TW_US_EQUIV).includes(canon)
+              || Object.keys(US_TW_EQUIV).includes(canon) || Object.values(US_TW_EQUIV).includes(canon);
+  return isDual ? canon : null;
+}
 async function callGemini(ctx, key, useServer){
   const isTW = ctx.market==='tw';
+  // 雙掛牌：整份 AI 結果(彼得林區/護城河/競爭對手/產品/利多利空/成長動能…)以共用代碼快取，
+  //   兩個市場共用同一份，避免同一家公司各跑一次 AI 而內容全然不同。
+  const __dk=__dualKey();
+  if(__dk){
+    try{ const raw=localStorage.getItem('gem_'+__dk);
+      if(raw){ const c=JSON.parse(raw); if(c&&c.t&&(Date.now()-c.t)<12*3600*1000&&c.r) return c.r; }
+    }catch(e){}
+  }
   // 成長動能的判斷依據一律「官網 IR 優先」(使用者原則2)，與畫面顯示邏輯一致(有 manualCall 就顯示官方原文)。
   //   否則美股會拿 SEC 自動擷取的舊指引蓋過人工判讀的最新官網 IR：台積電 2026/07/16 Q2 已把資本支出
   //   上修到 600~640 億美元，SEC 擷取版仍是上修前的 520~560 億 → 同一家公司美股與台股引用的數字不同。
@@ -1709,10 +1725,10 @@ async function callGemini(ctx, key, useServer){
         text:String(__mc.html||'').replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/[ \t]+/g,' ').trim(),
         real:false }
     : (window.__guidanceData ? { date:window.__guidanceData.date, text:window.__guidanceData.text, real:!!window.__guidanceReal } : null);
-  const prompt=`你是專業${isTW?'台股':'美股'}分析師。根據以下公司資料，用繁體中文回答，並「只」回傳 JSON（不要任何其他文字、不要 markdown 標記）。${isTW?'\n（這是台灣上市／上櫃股票，金額以新台幣為主；財務數字來自 Yahoo，定性內容請以下方提供的維基百科資料為事實依據，不足處用產業常識補足，嚴禁編造。）':''}
+  const prompt=`你是專業${__dk?'投資':(isTW?'台股':'美股')}分析師。根據以下公司資料，用繁體中文回答，並「只」回傳 JSON（不要任何其他文字、不要 markdown 標記）。${(isTW&&!__dk)?'\n（這是台灣上市／上櫃股票，金額以新台幣為主；財務數字來自 Yahoo，定性內容請以下方提供的維基百科資料為事實依據，不足處用產業常識補足，嚴禁編造。）':''}
 
 公司：${ctx.name} (${ctx.symbol})
-目前股價：${ctx.price!=null?'$'+ctx.price:'未知'}
+${__dk?'（本公司在台股與美股同時掛牌，兩地股價與本益比本就不同。請勿在任何文字欄位引用「絕對股價」或特定本益比倍數，改以獲利能力、成長性與產業地位論述，使同一份分析在兩個市場都成立。）':'目前股價：'+(ctx.price!=null?'$'+ctx.price:'未知')}
 實際本益比P/E(trailing)：${ctx.pe!=null?ctx.pe.toFixed(1)+'x':'未知'}${ctx.peRangeText&&ctx.peRangeText!=='無'?'（近5年區間 '+ctx.peRangeText+'）':''}
 近年財務（真實SEC/Yahoo數據）：
 ${ctx.finText}
@@ -1773,7 +1789,9 @@ ${window.__wikiData?'【維基百科最新公開資料（持續更新，比你�
  "rating":"買入 或 觀望 或 避開（依檢核結果與官方指引，不可臆測）",
  "double":"高 或 中 或 低（三年翻倍機率，依實際成長率與估值）"
 }`;
-  return callAIWithPrompt(prompt, key, useServer);
+  const __r=await callAIWithPrompt(prompt, key, useServer);
+  if(__dk&&__r){ try{ localStorage.setItem('gem_'+__dk, JSON.stringify({t:Date.now(), r:__r})); }catch(e){} }
+  return __r;
 }
 // 共用的AI呼叫+多模型容錯重試邏輯，任何需要呼叫AI的地方(完整分析/獨立投資分析等)都共用這份，不要各自重寫一份
 async function callAIWithPrompt(prompt, key, useServer){
@@ -1838,9 +1856,9 @@ async function runIndependentAiAnalysis(){
   // 雙掛牌(如台積電 2330↔TSM)：同一家公司在兩個市場應給出同一份獨立分析(使用者回報兩邊內容不同)。
   //   作法：①快取以「共用代碼」為鍵，兩市場共用同一份結果 ②提示詞禁止引用單一市場的絕對股價
   //   (兩地股價/本益比本就不同：台股 NT$、美股 ADR 有溢價)，改以基本面與估值水準論述，這樣同一份文字在兩邊都正確。
-  const __canon=window.__symbolForLinks||ctx.symbol;
-  const __dual=!!(TW_US_EQUIV[ctx.symbol]||US_TW_EQUIV[ctx.symbol]||(__canon!==ctx.symbol));
-  const __ck='indep_'+__canon;
+  const __dk2=__dualKey();
+  const __dual=!!__dk2;
+  const __ck='indep_'+(__dk2||ctx.symbol);
   if(__dual){
     try{
       const raw=localStorage.getItem(__ck);
@@ -4203,9 +4221,8 @@ async function fillCompetitorPe(ai, peInfo, gen){
   // 雙掛牌同一家公司,AI 每次回傳的競爭對手清單不固定(台積電台股曾回 SSNLF/INTC/GFS、美股只回 INTC)。
   //   以「共用代碼」為鍵快取,讓兩個市場看到同一份對手清單。
   try{
-    const canon=window.__symbolForLinks||'';
-    const dual=!!(TW_US_EQUIV[canon]||US_TW_EQUIV[canon]||Object.values(TW_US_EQUIV).includes(canon)||Object.keys(US_TW_EQUIV).includes(canon)||Object.values(US_TW_EQUIV).includes(canon));
-    if(canon && dual){
+    const canon=__dualKey();
+    if(canon){
       const ck='comp_'+canon, raw=localStorage.getItem(ck);
       if(raw){ const c=JSON.parse(raw); if(c&&c.t&&(Date.now()-c.t)<12*3600*1000&&Array.isArray(c.k)&&c.k.length) tickers=c.k; }
       else if(tickers.length) localStorage.setItem(ck, JSON.stringify({t:Date.now(), k:tickers}));
