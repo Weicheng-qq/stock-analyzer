@@ -657,7 +657,7 @@ const TW_LOGO_ALT={'2317':'https://financialmodelingprep.com/image-stock/FXCOF.p
 const LOGO_ALT={'DIS':'https://assets.parqet.com/logos/symbol/DIS'};
 const WATCH_DEFAULT={
   us:[{symbol:'TSM',name:'台積電'},{symbol:'GOOGL',name:'谷歌'},{symbol:'NVDA',name:'輝達'},{symbol:'NVO',name:'諾和諾德'}],
-  tw:[{symbol:'2330.TW',name:'台積電'},{symbol:'2317.TW',name:'鴻海'},{symbol:'2454.TW',name:'聯發科'},{symbol:'2308.TW',name:'台達電'}]
+  tw:[{symbol:'2330.TW',name:'台積電'},{symbol:'2454.TW',name:'聯發科'},{symbol:'2317.TW',name:'鴻海'},{symbol:'0050.TW',name:'元大台灣50'}]
 };
 function wlKey(){ return getMarket()==='tw' ? 'watchlist_tw' : 'watchlist'; }
 function getWatchlist(){ try{ const raw=localStorage.getItem(wlKey()); if(raw===null) return WATCH_DEFAULT[getMarket()].slice(); return JSON.parse(raw); }catch(e){ return []; } }
@@ -1012,7 +1012,7 @@ function twResultsHtml(o){
   <div class="co-price"><div class="price-val">NT$${(+o.price).toFixed(2)}</div>${o.chg!=null?`<div style="font-weight:700;color:${upcol}">${chgTxt}</div>`:''}</div>
 </div>
 <div class="card"><div class="ct">🏭 產品與服務（營收來源）</div><div id="ai_products">${aiLoading()}</div></div>
-<div class="card"><div class="ct">📊 最近十年財務指標</div><div id="tw_fin">${aiLoading()}</div></div>
+<div class="card"><div class="ct">📊 最近10年財務指標</div><div id="tw_fin">${aiLoading()}</div></div>
 <div class="card"><div class="ct">🏷️ 彼得林區六大分類</div><div id="ai_lynch">${aiLoading()}</div></div>
 <div class="card"><div class="ct">🏰 護城河分析</div><div id="ai_moat">${aiLoading()}</div></div>
 <div class="card"><div class="ct">⚔️ 前三大競爭對手 &amp; 世界排名</div><div id="ai_competitors">${aiLoading()}</div></div>
@@ -1095,8 +1095,37 @@ async function loadTwFinancials(symbol, gen){
   const el=document.getElementById('tw_fin');
   const code=String(symbol||'').replace(/\..*/,'');
   let by={}, sourceLabel='', dFS_raw=null;
-  // 主：FinMind (10年)
-  try{
+  // 雙掛牌(如 2330↔TSM)：改用與美股完全相同的 SEC 財報，確保同一家公司在兩個市場的財務指標數字一致。
+  //   背景：FinMind(台灣申報季度加總)與 SEC 20-F 的稅後淨利本身就差約 1%(台積電 2024：1,172,200 vs 1,157,524 百萬)，
+  //   兩者都是官方來源但口徑不同，導致使用者看到「同一家公司台股與美股淨利率/ROE 不同」。台積電 SEC 申報即以新台幣計價，幣別一致。
+  const __usEq = TW_US_EQUIV[code];
+  if(__usEq){
+    try{
+      await loadTickerMap();
+      const f=findCompany(__usEq);
+      if(gen!=null && gen!==SEARCH_GEN) return [];
+      if(f&&f.co&&f.co.cik){
+        const [rev,gp,ni,eq,cost]=await Promise.all([
+          mergeAll(f.co.cik,['RevenueFromContractWithCustomerExcludingAssessedTax','Revenues','SalesRevenueNet','RevenueFromContractWithCustomerIncludingAssessedTax','RevenuesNetOfInterestExpense','ifrs-full/Revenue','ifrs-full/RevenueFromContractsWithCustomers'],false),
+          mergeAll(f.co.cik,['GrossProfit','ifrs-full/GrossProfit'],false),
+          mergeAll(f.co.cik,['NetIncomeLoss','ProfitLoss','ifrs-full/ProfitLoss'],false),
+          mergeAll(f.co.cik,['StockholdersEquity','StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest','ifrs-full/EquityAttributableToOwnersOfParent','ifrs-full/Equity'],true),
+          mergeAll(f.co.cik,['CostOfRevenue','CostOfGoodsAndServicesSold','CostOfGoodsAndServiceExcludingDepreciationDepletionAndAmortization','CostOfGoodsSold','CostOfServices','ifrs-full/CostOfSales'],false),
+        ]);
+        if(gen!=null && gen!==SEARCH_GEN) return [];
+        if(Object.keys(rev.map||{}).length){
+          for(const y in rev.map) (by[y]=by[y]||{}).rev=rev.map[y];
+          for(const y in gp.map)  (by[y]=by[y]||{}).gp =gp.map[y];
+          for(const y in ni.map)  (by[y]=by[y]||{}).ni =ni.map[y];
+          for(const y in eq.map)  (by[y]=by[y]||{}).eq =eq.map[y];
+          for(const y in by){ if(by[y].gp==null && cost.map[y]!=null && by[y].rev!=null) by[y].gp=by[y].rev-cost.map[y]; }
+          sourceLabel=`SEC EDGAR 官方申報（與美股 ${__usEq} 同一份財報，確保兩市場數字一致）`;
+        }
+      }
+    }catch(e){}
+  }
+  // 主：FinMind (10年)。雙掛牌若已取得 SEC 資料就不再覆蓋。
+  if(!Object.keys(by).length) try{
     const [rFS,rBS]=await Promise.all([
       fetch(`https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockFinancialStatements&data_id=${code}&start_date=2016-01-01`),
       fetch(`https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockBalanceSheet&data_id=${code}&start_date=2016-01-01`)
@@ -1211,6 +1240,7 @@ async function doSearchTW(symbol){
     window.__symbolForLinks=usEquiv||code;   // 指向美股代碼,讓 IR 官方事實(產品/法說會展望/官方IR頁)直接渲染、與美股一致
     window.__coNameForLinks=name;
     document.getElementById('results').innerHTML=twResultsHtml({code,name,price,chg,pct,mkt});
+    showGroup(__grp);   // 骨架剛渲染時所有卡片都還沒篩選,不先收斂會閃過公司股價/產品與服務等別的選單內容
     const gmKey=getGmKey(); const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1); const useServer=!gmKey && !isLocal;
     loadTechnical(symbol, gen);
     fillNews(symbol, gen);
@@ -1466,7 +1496,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 
 <div class="g2">
   <div class="card">
-    <div class="ct">📊 最近${rows.length===10?'十':rows.length}年財務指標</div>
+    <div class="ct">📊 最近${rows.length}年財務指標</div>
     <table class="dt"><tr><th>年份</th><th>毛利率</th><th>淨利率</th><th>ROE</th></tr>
     ${rows.map(r=>`<tr><td><strong>${r.yr}</strong></td>
       <td class="${cc(r.gm,30,20)}">${r.gm!=null?r.gm.toFixed(1)+'%':'—'}</td>
