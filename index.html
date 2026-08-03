@@ -346,6 +346,8 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
   <div class="index-title" id="indexTitle">📊 四大指數</div>
   <div id="indexBar" class="index-bar"></div>
+  <!-- 載入進度歸屬「大盤指數」選單(美股/台股一致)：原本夾在自選股與結果之間，導致每個選單都會冒出來 -->
+  <div id="logPanel" class="log-panel"><h3>🔄 載入進度</h3><div id="logItems"></div></div>
 
   <div class="card" id="watchlistCard" style="margin-bottom:20px">
     <div class="ct" style="display:flex;justify-content:space-between;align-items:center">⭐ 自選股 <button class="wl-edit-btn" id="wlEditBtn" onclick="toggleWlEdit()">✏️ 編輯</button></div>
@@ -356,7 +358,6 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <div id="watchlistTable"><div class="note">尚未加入任何自選股，在上方輸入後按「加入」</div></div>
   </div>
 
-  <div id="logPanel" class="log-panel"><h3>🔄 載入進度</h3><div id="logItems"></div></div>
   <div id="results" class="results"></div>
   <div id="grpEmpty" class="grp-empty" style="display:none">請先回到「自選股」，點任一個股的「AI」按鈕完成分析，即可在此看到該主題內容。</div>
 </div>
@@ -570,7 +571,10 @@ async function fetchJson(url) {
   return data;
 }
 
-function logPanel(s){ document.getElementById('logPanel').style.display=s?'block':'none'; }
+// 載入進度只在「大盤指數」選單顯示(美股/台股一致)：__logOn 記錄是否載入中，實際顯示還要看目前選單。
+let __logOn=false;
+function logPanel(s){ __logOn=s; syncLogPanel(); }
+function syncLogPanel(){ const el=document.getElementById('logPanel'); if(el) el.style.display=(__logOn && (typeof __grp==='undefined'||__grp===1))?'block':'none'; }
 function logAdd(k,m){ const c=document.getElementById('logItems'); const d=document.createElement('div'); d.className='log-item'; d.id='log_'+k; d.innerHTML=`<div class="log-spin"></div><span>${m}</span>`; c.appendChild(d); }
 function logOk(k,m){ const el=document.getElementById('log_'+k); if(el) el.innerHTML=`<span class="log-ok">✓</span><span>${m}</span>`; }
 function logErr(k,m){ const el=document.getElementById('log_'+k); if(el) el.innerHTML=`<span class="log-err">✗</span><span style="color:var(--red)">${m}</span>`; }
@@ -4356,6 +4360,7 @@ function showGroup(n){
   const e_iT =document.getElementById('indexTitle');    if(e_iT ) e_iT .style.display=showIndex?'':'none';
   const e_iB =document.getElementById('indexBar');      if(e_iB ) e_iB .style.display=showIndex?'':'none';
   const e_wl =document.getElementById('watchlistCard'); if(e_wl ) e_wl .style.display=showWl   ?'':'none';
+  syncLogPanel();   // 載入進度歸屬大盤指數選單，切換選單時同步顯示/隱藏
   const res=document.getElementById('results'); let anyCard=false;
   if(res){
     // 護城河選單(群組3)：護城河分析移最前、產品與服務移最後
