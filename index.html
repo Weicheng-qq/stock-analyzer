@@ -848,10 +848,14 @@ async function loadWatchlistSpark(list){
       }
       if(eEl){
         let li=-1; for(let i=ts.length-1;i>=0;i--){ if(cl[i]!=null){ li=i; break; } }
-        const reg=meta?.regularMarketPrice, prevC=meta?.previousClose??meta?.chartPreviousClose;
+        // 盤前/盤後的基準一律用「最近一次正常盤收盤」= meta.regularMarketPrice：
+        //   盤後時它是當日收盤;盤前時正常盤尚未開始,它仍是前一交易日收盤——兩種情境都正確,且與 Yahoo 自己的算法一致。
+        //   ⚠️ 不可用 chartPreviousClose 當盤前基準:那是「圖表視窗前一筆收盤」,盤前取 1d 視窗時會抓到前兩個交易日,
+        //   基準差一天 → 股價正確但漲跌幅大錯(NVO 曾因 7/31 大跌 9%,盤前顯示 -8.99% 而非 -0.22%)。
+        const reg=meta?.regularMarketPrice, prevC=meta?.previousClose;
         let label=null, base=null, cur=null;
         if(li>=0 && regEnd && ts[li]>regEnd && reg!=null){ label='盤後'; base=reg; cur=cl[li]; }
-        else if(li>=0 && regStart && ts[li]<regStart && prevC!=null){ label='盤前'; base=prevC; cur=cl[li]; }
+        else if(li>=0 && regStart && ts[li]<regStart){ label='盤前'; base=(reg!=null?reg:prevC); cur=cl[li]; }
         if(label && base && cur!=null && Math.abs(cur-base)/base>0.0002){
           const pct=(cur-base)/base*100, up=pct>=0;
           eEl.innerHTML=`<span class="lbl">${label} $${cur.toFixed(2)}</span> <span class="${up?'up':'down'}">${up?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span>`;
@@ -1031,11 +1035,15 @@ function renderTwPeChecklist(finRows, pe, pe5, pePos, price){
     h+=`<div id="peCompetitors"><div class="note">等待 AI 提供競爭對手代碼後查詢實際本益比...</div></div>`;
     peArea.innerHTML=h;
   }
-  const last=finRows.length?finRows[finRows.length-1]:{};
-  const lastRoe=[...finRows].reverse().find(r=>r.roe!=null)?.roe??null;
-  const growths=finRows.map(r=>r.gr).filter(g=>g!=null);
+  // 選股準則一律以「最後一個完整年度」為準(同美股:美股 rows 只含 SEC 完整年報,進行中季度另以 cum 列顯示)。
+  //   否則台股會拿進行中年度(如 2026 只到 Q2)與美股的完整年度(2025)相比,同一家公司兩邊數字全不同。
+  const cRows=finRows.filter(r=>!r.partial);
+  const baseRows=cRows.length?cRows:finRows;
+  const last=baseRows.length?baseRows[baseRows.length-1]:{};
+  const lastRoe=[...baseRows].reverse().find(r=>r.roe!=null)?.roe??null;
+  const growths=baseRows.map(r=>r.gr).filter(g=>g!=null);
   const declineYears=growths.filter(g=>g<0).length;
-  const overallUp=finRows.length>=2&&finRows[finRows.length-1].rev!=null&&finRows[0].rev!=null&&finRows[finRows.length-1].rev>finRows[0].rev;
+  const overallUp=baseRows.length>=2&&baseRows[baseRows.length-1].rev!=null&&baseRows[0].rev!=null&&baseRows[baseRows.length-1].rev>baseRows[0].rev;
   const last3g=growths.slice(-3);
   const fastGrower=last3g.length===3&&last3g.every(g=>g>20);
   const checklist=[
@@ -1130,7 +1138,9 @@ async function loadTwFinancials(symbol, gen){
       const partial=(nQ<4);
       const gm=(o.rev&&o.gp!=null)?o.gp/o.rev*100:null;
       const nm=(o.rev&&o.ni!=null)?o.ni/o.rev*100:null;
-      const roe=(o.eq&&o.ni!=null)?o.ni/o.eq*100:null;
+      // 進行中年度(partial)不算 ROE:半年淨利 ÷ 全年股東權益會嚴重低估(台積電曾顯示 9.7%,實際約 32%)。
+      //   毛利率/淨利率是同期比率仍有意義可留著;ROE 是「期間損益 ÷ 時點權益」,期間不足一年即失真,故留白(同美股顯示「—」)。
+      const roe=(!partial&&o.eq&&o.ni!=null)?o.ni/o.eq*100:null;
       return {yr:y, rev:(o.rev!=null?o.rev:null), gm, nm, roe, partial, nQ};
     });
     // 較前年比:整年 vs 整年;若當年 partial,前年同樣加總前 N 季做同期比(避免誤導)
