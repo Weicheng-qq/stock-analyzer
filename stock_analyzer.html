@@ -1299,7 +1299,9 @@ async function doSearchTW(symbol){
       logPanel(true); logAdd('ai','AI 分析中...');
       let ai=null; try{ ai=await callGemini(ctx, gmKey, useServer); }catch(e){}
       if(gen!==SEARCH_GEN) return;
-      if(ai){ renderAI(ai); runIndependentAiAnalysis(); logOk('ai','AI 分析完成'); } else { setAllAI('<div class="note">AI 分析暫時無法取得，稍後再試。</div>'); logErr('ai','AI 分析失敗'); }
+      // fillCompetitorPe 原本只有美股路徑呼叫，台股的「本益比：與競爭對手相比」因此永遠停在
+      //   「等待 AI 提供競爭對手代碼…」(使用者回報)。競爭對手本益比一律查美股代碼，兩市場共用同一份結果。
+      if(ai){ renderAI(ai); fillCompetitorPe(ai, peInfo, gen); runIndependentAiAnalysis(); logOk('ai','AI 分析完成'); } else { setAllAI('<div class="note">AI 分析暫時無法取得，稍後再試。</div>'); logErr('ai','AI 分析失敗'); }
       logPanel(false);
     } else { setAllAI('<div class="note">請點右上 ⚙️ 設定免費 AI 金鑰以顯示 AI 分析。</div>'); }
     if(!__autoLoading) __jumpAfterSearch=true;   // 自動載入時保持使用者當下選的選單,不強制跳「關鍵財務指標」
