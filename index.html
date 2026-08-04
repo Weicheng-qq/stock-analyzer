@@ -656,6 +656,15 @@ const TW_US_EQUIV={'2330':'TSM'};
 // 反向對照：美股 ADR 代碼→台股代碼。聯電/日月光/中華電的官方事實(法說會展望/產品/官方IR頁)已建在台股端,
 //   美股 ADR 查詢時直接共用同一份官方內容,避免同一家公司美股靠 AI 臆測、與台股版內容不一致。
 const US_TW_EQUIV={'UMC':'2303','ASX':'3711','CHT':'2412'};
+// 台股代碼 → 對應美股代碼（雙向查表）。
+//   ⚠️ 只查 TW_US_EQUIV 會漏掉「事實內容建在台股端」的那幾對(聯電2303↔UMC、日月光3711↔ASX、中華電2412↔CHT)，
+//   導致同樣是雙掛牌，卻只有台積電享有統一財報/新聞/目標價。凡是需要「台股→美股」的地方一律用本函式。
+function twToUs(code){
+  if(!code) return null;
+  if(TW_US_EQUIV[code]) return TW_US_EQUIV[code];
+  for(const us in US_TW_EQUIV){ if(US_TW_EQUIV[us]===String(code)) return us; }
+  return null;
+}
 // 台股 FMP 圖庫已知會回錯圖(非正式logo)的代碼→改用代碼底圖
 const TW_LOGO_BAD=new Set([]);
 // 台股正確 logo 對應(FMP台股代碼抓到錯圖時,改用該公司美股OTC代碼的正確logo)。例:2317鴻海用FXCOF(FOXCONN)
@@ -1015,7 +1024,7 @@ function twResultsHtml(o){
     <div class="tech-tip" id="techTip"><span class="tt-hint">👆 在圖上滑動或點按，數值會顯示在這裡（不會擋住線）</span></div>`;
   return `
 <div class="co-head">
-  <div class="co-logo">${esc(o.code[0]||'台')}</div>
+  <div class="co-logo">${esc((o.name||'')[0]||'台')}</div>
   <div class="co-info"><h1>${esc(o.name)}</h1><div class="co-ticker">${esc(o.code)} · 台股 · Yahoo Finance ${o.mkt==='TWO'?'(上櫃)':'(上市)'}</div><div class="lynch-badge" id="lynchBadge">🔄 AI 分類中...</div></div>
   <div class="co-price"><div class="price-val">NT$${(+o.price).toFixed(2)}</div>${o.chg!=null?`<div style="font-weight:700;color:${upcol}">${chgTxt}</div>`:''}</div>
 </div>
@@ -1277,9 +1286,15 @@ async function doSearchTW(symbol){
     // 雙掛牌(2330↔TSM)用美股代碼查新聞：Yahoo 對 2330.TW 與 TSM 會回不同結果，
     //   造成同一家公司台股與美股「最新新聞」不一致(使用者回報)。
     fillNews(TW_US_EQUIV[code]||symbol, gen);
-    // 投資大行目標價：資料源為美股，僅雙掛牌查得到；非雙掛牌台股顯示說明而非空著
-    if(TW_US_EQUIV[code]) fillAnalystTargets(TW_US_EQUIV[code], gen, price);
-    else { const at=document.getElementById('analystTargets'); if(at) at.innerHTML='<div class="note">此台股無對應美股掛牌，暫無國際投資銀行目標價可查。</div>'; }
+    // 投資大行目標價：資料源為美股（美元計價），僅雙掛牌查得到；非雙掛牌台股顯示說明而非空著
+    const usCodeForTarget = twToUs(code);
+    if(usCodeForTarget) {
+      // 目標價為美元，須用 ADR 美元股價算漲跌幅（不可用台幣股價，否則百分比全錯）
+      fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${usCodeForTarget}?range=1d&interval=1d`)
+        .then(d => d?.chart?.result?.[0]?.meta?.regularMarketPrice ?? null)
+        .catch(() => null)
+        .then(usPrice => { if(gen===SEARCH_GEN) fillAnalystTargets(usCodeForTarget, gen, usPrice); });
+    } else { const at=document.getElementById('analystTargets'); if(at) at.innerHTML='<div class="note">此台股無對應美股掛牌，暫無國際投資銀行目標價可查。</div>'; }
     const finRows=await loadTwFinancials(symbol, gen);   // 近10年台股財務(FinMind/Yahoo)
     if(gen!==SEARCH_GEN) return;
     // 本益比（Yahoo timeseries）
@@ -3015,14 +3030,15 @@ const IR_CALL_SUMMARY = {
 • 「Win Now」策略：清理庫存、重整經典鞋款供給、回歸運動本業與批發夥伴，逐步回穩。</div>`
   },
   'SPOT': {
-    quarter: '2026 第一季（官網財報，歐元計價）',
+    quarter: '2026 第二季（官網財報＋SEC 6-K，2026/08/04，歐元計價）',
     source: 'https://investors.spotify.com/',
     html: `
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 經營動能</b><br>
-• 第一季：<b>總營收 45.33 億歐元</b>（訂閱 41.48 億／廣告 3.85 億）；<b>毛利 14.95 億歐元、營業利益 7.15 億歐元</b>。<br>
-• <b>月活躍用戶(MAU) 7.61 億、付費訂閱戶(Premium) 2.93 億</b>（截至 2026/3/31）。</div>
+• 第二季：<b>總營收 47.8 億歐元、年增 14%</b>（訂閱 43.3 億＋廣告 4.46 億）；<b>毛利率 33.4% 創歷史新高</b>；營業利益 6.55 億歐元、淨利 5.45 億歐元。<br>
+• <b>付費訂閱戶(Premium) 突破 3 億大關</b>（音樂串流史上首次）；<b>MAU 7.77 億</b>（截至 2026/6/30）。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
-• 訂閱漲價與廣告業務擴張推升毛利；持續投入 AI 推薦與有聲書、Podcast 內容變現。</div>`
+• Q3 財測：營收 50 億歐元、營業利益 6.7 億、毛利率 32.9%、Premium 3.05 億戶、MAU 7.88 億。<br>
+• 核心市場成長趨緩，但訂閱漲價＋ARPU 提升（年增 7~7.5%）持續驅動營收；廣告自動化銷售渠道佔比提高。</div>`
   },
   'BA': {
     quarter: '2026 第二季（官網財報＋SEC 8-K，2026/07/28）',
@@ -4164,13 +4180,13 @@ CPU 架構與矽智財(IP)授權龍頭：以 <b>Armv9 架構</b>與 <b>運算子
 • 「Win Now」策略清庫存、重整經典鞋款、回歸運動本業與批發夥伴。</div>`
   },
   'SPOT': {
-    quarter: 'Q1 2026（官網財報，歐元）',
+    quarter: 'Q2 2026（官網財報＋SEC 6-K，2026/08/04，歐元）',
     source: 'https://investors.spotify.com/',
-    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q1 2026，總營收 45.33 億歐元）</b></div>
-全球最大音樂串流平台：<b>訂閱(Premium) 41.48 億歐元</b>＋<b>廣告(Ad-Supported) 3.85 億歐元</b>；MAU 7.61 億、付費戶 2.93 億。<br>
-<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q1 2026）</b><br>
-• 訂閱漲價＋廣告擴張推升毛利至 14.95 億歐元、營業利益 7.15 億歐元。<br>
-• 拓展有聲書、Podcast 與 AI 推薦，提升用戶變現。</div>`
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q2 2026，總營收 47.8 億歐元）</b></div>
+全球最大音樂串流平台：<b>訂閱(Premium) 43.3 億歐元</b>＋<b>廣告(Ad-Supported) 4.46 億歐元</b>；MAU 7.77 億、<b>付費戶突破 3 億</b>（音樂串流史上首次）。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q2 2026）</b><br>
+• 毛利率 33.4% 創歷史新高；營業利益 6.55 億歐元、淨利 5.45 億歐元。<br>
+• 訂閱 ARPU 年增 7~7.5%；廣告自動化銷售渠道佔比提高。</div>`
   },
   'BA': {
     quarter: 'Q2 2026（官網財報＋SEC 8-K，2026/07/28）',
