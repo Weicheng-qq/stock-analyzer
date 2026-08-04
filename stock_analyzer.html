@@ -1120,7 +1120,7 @@ async function loadTwFinancials(symbol, gen){
   // 雙掛牌(如 2330↔TSM)：改用與美股完全相同的 SEC 財報，確保同一家公司在兩個市場的財務指標數字一致。
   //   背景：FinMind(台灣申報季度加總)與 SEC 20-F 的稅後淨利本身就差約 1%(台積電 2024：1,172,200 vs 1,157,524 百萬)，
   //   兩者都是官方來源但口徑不同，導致使用者看到「同一家公司台股與美股淨利率/ROE 不同」。台積電 SEC 申報即以新台幣計價，幣別一致。
-  const __usEq = TW_US_EQUIV[code];
+  const __usEq = twToUs(code);
   if(__usEq){
     try{
       await loadTickerMap();
@@ -1276,7 +1276,7 @@ async function doSearchTW(symbol){
     const price=meta.regularMarketPrice, prev=meta.previousClose??meta.chartPreviousClose;
     const chg=(price!=null&&prev!=null)?price-prev:null, pct=(chg!=null&&prev)?chg/prev*100:null;
     logOk('p','台股資料載入完成'); logPanel(false);
-    const usEquiv=TW_US_EQUIV[code]||null;   // 雙掛牌(如2330台積電→TSM):共用美股官方事實內容
+    const usEquiv=twToUs(code);   // 雙掛牌(2330↔TSM/2303↔UMC/3711↔ASX/2412↔CHT):共用美股官方事實內容
     window.__symbolForLinks=usEquiv||code;   // 指向美股代碼,讓 IR 官方事實(產品/法說會展望/官方IR頁)直接渲染、與美股一致
     window.__coNameForLinks=name;
     document.getElementById('results').innerHTML=twResultsHtml({code,name,price,chg,pct,mkt});
@@ -1285,7 +1285,7 @@ async function doSearchTW(symbol){
     loadTechnical(symbol, gen);
     // 雙掛牌(2330↔TSM)用美股代碼查新聞：Yahoo 對 2330.TW 與 TSM 會回不同結果，
     //   造成同一家公司台股與美股「最新新聞」不一致(使用者回報)。
-    fillNews(TW_US_EQUIV[code]||symbol, gen);
+    fillNews(usEquiv||symbol, gen);
     // 投資大行目標價：資料源為美股（美元計價），僅雙掛牌查得到；非雙掛牌台股顯示說明而非空著
     const usCodeForTarget = twToUs(code);
     if(usCodeForTarget) {
