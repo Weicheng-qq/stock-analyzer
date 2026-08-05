@@ -676,14 +676,14 @@ const TW_LOGO_ALT={'2317':'https://financialmodelingprep.com/image-stock/FXCOF.p
 const LOGO_ALT={'DIS':'https://assets.parqet.com/logos/symbol/DIS'};
 function coLogoImg(symbol, code, isTw){
   const fb=esc(isTw?(code||symbol):(symbol?symbol[0]:'?'));
-  const fallback=`<div class="co-logo">${fb}</div>`;
+  const fallback=`<div class=&quot;co-logo&quot;>${fb}</div>`;
   if(isTw){
-    if(TW_LOGO_ALT[code]) return `<img class="co-logo" src="${TW_LOGO_ALT[code]}" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="this.outerHTML='${fallback.replace(/'/g,'&#39;')}'">`;
-    if(TW_LOGO_BAD.has(code)) return fallback;
-    return `<img class="co-logo" src="https://financialmodelingprep.com/image-stock/${esc(code)}.TW.png" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="this.outerHTML='${fallback.replace(/'/g,'&#39;')}'">`;
+    if(TW_LOGO_ALT[code]) return `<img class="co-logo" src="${TW_LOGO_ALT[code]}" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="this.outerHTML='${fallback}'">`;
+    if(TW_LOGO_BAD.has(code)) return `<div class="co-logo">${fb}</div>`;
+    return `<img class="co-logo" src="https://financialmodelingprep.com/image-stock/${esc(code)}.TW.png" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="this.outerHTML='${fallback}'">`;
   }
   const src=LOGO_ALT[symbol]||('https://financialmodelingprep.com/image-stock/'+esc(symbol)+'.png');
-  return `<img class="co-logo" src="${src}" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="if(this.dataset.fb){this.outerHTML='${fallback.replace(/'/g,'&#39;')}'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(symbol)}')}">`;
+  return `<img class="co-logo" src="${src}" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="if(this.dataset.fb){this.outerHTML='${fallback}'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(symbol)}')}">`;
 }
 const WATCH_DEFAULT={
   us:[{symbol:'TSM',name:'台積電'},{symbol:'GOOGL',name:'谷歌'},{symbol:'NVDA',name:'輝達'},{symbol:'NVO',name:'諾和諾德'}],
@@ -2432,7 +2432,7 @@ function investmentMastersHtml(){
   MASTER_VIDEOS.forEach(g=>{
     h+=`<div style="margin:18px 0 10px;font-size:15px;font-weight:700">${g.icon} ${g.person}</div>`;
     g.videos.forEach(v=>{
-      const thumb=`https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
+      const thumb=`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`;
       const src=`https://www.youtube-nocookie.com/embed/${v.id}?rel=0&enablejsapi=1&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant${orig}`;
       h+=`<div style="margin-bottom:14px"><div style="font-size:13px;color:var(--text2);margin-bottom:4px">${esc(v.title)}</div>`
         +`<div class="ir-video master-thumb" data-src="${esc(src)}" onclick="loadMasterVid(this)" style="position:relative;cursor:pointer">`
