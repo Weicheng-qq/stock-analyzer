@@ -350,6 +350,8 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   <div class="grp-menu" id="grpMenu">
     <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
     <button class="grp-btn" data-g="2" onclick="pickGroup(2)">關鍵財務指標</button>
+    <button class="grp-btn tw-only" data-g="12" onclick="pickGroup(12)">每月營收</button>
+    <button class="grp-btn tw-only" data-g="13" onclick="pickGroup(13)">三大法人</button>
     <button class="grp-btn" data-g="6" onclick="pickGroup(6)">財經新聞</button>
     <button class="grp-btn" data-g="5" onclick="pickGroup(5)">法說會未來前景</button>
     <button class="grp-btn" data-g="7" onclick="pickGroup(7)">AI技術分析</button>
@@ -1032,6 +1034,8 @@ function twResultsHtml(o){
 <div class="card"><div class="ct">📊 最近10年財務指標</div><div id="tw_fin">${aiLoading()}</div></div>
 <div class="card"><div class="ct">💰 年營收 &amp; 成長率</div><div class="chart-wrap"><canvas id="revChart"></canvas></div></div>
 <div class="card"><div class="ct">📈 年營收明細與成長率（財政年度）</div><div id="tw_rev">${aiLoading()}</div></div>
+<div class="card"><div class="ct">📅 每月營收</div><div id="tw_monthly_rev"><div class="note">載入中...</div></div></div>
+<div class="card"><div class="ct">🏛️ 三大法人買賣超</div><div id="tw_institutional"><div class="note">載入中...</div></div></div>
 <div class="card"><div class="ct">🏷️ 彼得林區六大分類</div><div id="ai_lynch">${aiLoading()}</div></div>
 <div class="card"><div class="ct">🏰 護城河分析</div><div id="ai_moat">${aiLoading()}</div></div>
 <div class="card"><div class="ct">⚔️ 前三大競爭對手 &amp; 世界排名</div><div id="ai_competitors">${aiLoading()}</div></div>
@@ -1259,6 +1263,71 @@ async function loadTwFinancials(symbol, gen){
     return rows;
   }catch(e){ if(el) el.innerHTML='<div class="note">台股財務資料暫時取不到。</div>'; return []; }
 }
+async function loadTwMonthlyRevenue(code, gen){
+  const el=document.getElementById('tw_monthly_rev'); if(!el) return;
+  try{
+    const twoYearsAgo=new Date(); twoYearsAgo.setFullYear(twoYearsAgo.getFullYear()-2);
+    const sd=twoYearsAgo.toISOString().slice(0,10);
+    const r=await fetch(`https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockMonthRevenue&data_id=${code}&start_date=${sd}`);
+    if(gen!==SEARCH_GEN) return;
+    if(!r.ok){ el.innerHTML='<div class="note">月營收資料暫時取不到。</div>'; return; }
+    const d=await r.json(); const raw=d?.data||[];
+    if(!raw.length){ el.innerHTML='<div class="note">無月營收資料。</div>'; return; }
+    const byYM={}; raw.forEach(r=>{ const k=r.revenue_year*100+r.revenue_month; byYM[k]={y:r.revenue_year,m:r.revenue_month,rev:r.revenue}; });
+    const keys=Object.keys(byYM).map(Number).sort((a,b)=>a-b);
+    const rows=keys.map(k=>{
+      const c=byYM[k], prevMK=k%100===1?((c.y-1)*100+12):(k-1), prevYK=(c.y-1)*100+c.m;
+      const pm=byYM[prevMK], py=byYM[prevYK];
+      const mom=pm?(c.rev-pm.rev)/pm.rev*100:null;
+      const yoy=py?(c.rev-py.rev)/py.rev*100:null;
+      let cumCur=0, cumPrev=0, cumYoy=null;
+      for(let i=1;i<=c.m;i++){
+        const ck=byYM[c.y*100+i], pk=byYM[(c.y-1)*100+i];
+        if(ck) cumCur+=ck.rev; if(pk) cumPrev+=pk.rev;
+      }
+      if(cumPrev>0) cumYoy=(cumCur-cumPrev)/cumPrev*100;
+      return {y:c.y,m:c.m,rev:c.rev,mom,yoy,cumYoy};
+    });
+    const show=rows.slice(-12).reverse();
+    const ru=pickRevUnit(show.map(r=>r.rev));
+    const pc=(v)=>v==null?'—':`<span class="${v>=0?'g':'r'}">${v>=0?'+':''}${v.toFixed(1)}%</span>`;
+    let h=`<div class="note" style="margin:-2px 0 8px">單位：NT$${ru.label}</div>`;
+    h+=`<table class="dt"><tr><th>月份</th><th>營收</th><th>MoM</th><th>YoY</th><th>累計YoY</th></tr>`;
+    show.forEach(r=>{
+      h+=`<tr><td>${r.y}/${String(r.m).padStart(2,'0')}</td><td>${fmtRev(r.rev,ru)}</td><td>${pc(r.mom)}</td><td>${pc(r.yoy)}</td><td>${pc(r.cumYoy)}</td></tr>`;
+    });
+    h+=`</table><div class="note" style="margin-top:8px">資料來源：FinMind（MOPS 公開資訊觀測站月營收）</div>`;
+    el.innerHTML=h;
+  }catch(e){ if(el) el.innerHTML='<div class="note">月營收資料載入失敗。</div>'; }
+}
+async function loadTwInstitutional(code, gen){
+  const el=document.getElementById('tw_institutional'); if(!el) return;
+  try{
+    const sd=new Date(); sd.setDate(sd.getDate()-60);
+    const r=await fetch(`https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockInstitutionalInvestorsBuySell&data_id=${code}&start_date=${sd.toISOString().slice(0,10)}`);
+    if(gen!==SEARCH_GEN) return;
+    if(!r.ok){ el.innerHTML='<div class="note">三大法人資料暫時取不到。</div>'; return; }
+    const d=await r.json(); const raw=d?.data||[];
+    if(!raw.length){ el.innerHTML='<div class="note">無三大法人資料。</div>'; return; }
+    const byDate={};
+    raw.forEach(r=>{
+      if(!byDate[r.date]) byDate[r.date]={fi:0,it:0,dl:0};
+      const net=(r.buy||0)-(r.sell||0);
+      if(r.name==='Foreign_Investor') byDate[r.date].fi+=net;
+      else if(r.name==='Investment_Trust') byDate[r.date].it+=net;
+      else if(r.name==='Dealer_self'||r.name==='Dealer_Hedging') byDate[r.date].dl+=net;
+    });
+    const dates=Object.keys(byDate).sort().slice(-20).reverse();
+    const fmt=v=>{const lots=Math.round(v/1000); const s=lots>=0?'+'+lots.toLocaleString():lots.toLocaleString(); return `<span class="${lots>=0?'r':'g'}">${s}</span>`;};
+    let h=`<table class="dt"><tr><th>日期</th><th>外資(張)</th><th>投信(張)</th><th>自營商(張)</th><th>合計(張)</th></tr>`;
+    dates.forEach(dt=>{
+      const d=byDate[dt], total=d.fi+d.it+d.dl;
+      h+=`<tr><td>${dt.slice(5)}</td><td>${fmt(d.fi)}</td><td>${fmt(d.it)}</td><td>${fmt(d.dl)}</td><td>${fmt(total)}</td></tr>`;
+    });
+    h+=`</table><div class="note" style="margin-top:8px">資料來源：FinMind（證交所三大法人買賣超日報）．單位：張（1張＝1,000股）</div>`;
+    el.innerHTML=h;
+  }catch(e){ if(el) el.innerHTML='<div class="note">三大法人資料載入失敗。</div>'; }
+}
 async function doSearchTW(symbol){
   const gen=++SEARCH_GEN;
   // 主動查詢預設查完跳「關鍵財務指標」。必須在「開頭」就設定，載入途中使用者若手動點選單
@@ -1283,6 +1352,8 @@ async function doSearchTW(symbol){
     showGroup(__grp);   // 骨架剛渲染時所有卡片都還沒篩選,不先收斂會閃過公司股價/產品與服務等別的選單內容
     const gmKey=getGmKey(); const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1); const useServer=!gmKey && !isLocal;
     loadTechnical(symbol, gen);
+    loadTwMonthlyRevenue(code, gen);
+    loadTwInstitutional(code, gen);
     // 雙掛牌(2330↔TSM)用美股代碼查新聞：Yahoo 對 2330.TW 與 TSM 會回不同結果，
     //   造成同一家公司台股與美股「最新新聞」不一致(使用者回報)。
     fillNews(usEquiv||symbol, gen);
@@ -4583,6 +4654,7 @@ function initMarketUI(){
   document.querySelectorAll('#marketTabs .mkt-btn').forEach(b=>b.classList.toggle('active', b.dataset.mkt===m));
   const it=document.getElementById('indexTitle'); if(it) it.textContent = m==='tw' ? '📊 加權指數' : '📊 四大指數';
   const si=document.getElementById('searchInput'); if(si) si.placeholder = m==='tw' ? '台股代碼或名稱，例如 2330 / 台積電 / 聯發科' : '代碼或公司名，例如 AAPL / 台積電 / Apple';
+  document.querySelectorAll('#grpMenu .tw-only').forEach(b=>b.style.display=m==='tw'?'':'none');
 }
 // ── 8 大主題選單：把各架構主旨分組，點選單只看該群組 ──
 let __grp=1, __jumpAfterSearch=false;
@@ -4591,6 +4663,8 @@ function cardGroup(c){
   const ct=c.querySelector && c.querySelector('.ct'); const t=ct?ct.textContent:'';
   if(/版主選股準則/.test(t)) return 11;   // 獨立選單，需在護城河之前判斷(標題含「護城河」三字)
   if(/投資總結/.test(t)) return 8;
+  if(/每月營收/.test(t)) return 12;
+  if(/三大法人/.test(t)) return 13;
   if(/財務指標|年營收/.test(t)) return 2;
   if(/護城河|彼得林區|競爭對手/.test(t)) return 3;
   if(/估值/.test(t)) return 4;
