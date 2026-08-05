@@ -1322,7 +1322,8 @@ async function loadTwInstitutional(code, gen){
     let h=`<table class="dt"><tr><th>日期</th><th>外資(張)</th><th>投信(張)</th><th>自營商(張)</th><th>合計(張)</th></tr>`;
     dates.forEach(dt=>{
       const d=byDate[dt], total=d.fi+d.it+d.dl;
-      h+=`<tr><td>${dt.slice(5)}</td><td>${fmt(d.fi)}</td><td>${fmt(d.it)}</td><td>${fmt(d.dl)}</td><td>${fmt(total)}</td></tr>`;
+      const mm=+dt.slice(5,7), dd=+dt.slice(8,10);
+      h+=`<tr><td>${mm}/${dd}</td><td>${fmt(d.fi)}</td><td>${fmt(d.it)}</td><td>${fmt(d.dl)}</td><td>${fmt(total)}</td></tr>`;
     });
     h+=`</table><div class="note" style="margin-top:8px">資料來源：FinMind（證交所三大法人買賣超日報）．單位：張（1張＝1,000股）</div>`;
     el.innerHTML=h;
@@ -2299,7 +2300,8 @@ async function fillAnalystTargets(symbol, gen, curPrice){
     list.forEach((f,i)=>{
       const upside=(curPrice!=null && curPrice>0)?((f.target-curPrice)/curPrice*100):null;
       const cls=upside!=null?(upside>0?'g':upside<0?'r':''):'';
-      out+=`<div class="vr"><span class="vl" id="wta_label_${i}">${esc(f.label)}</span><span class="vn ${cls}">$${Math.round(f.target)}${upside!=null?`（${upside>=0?'+':''}${upside.toFixed(1)}%）`:''}<span style="color:var(--text2);font-weight:400;font-size:11px;margin-left:6px">${esc(f.date)}</span></span></div>`;
+      const rptUrl=zhLink(`https://www.google.com/search?q=${encodeURIComponent(f.firm+' '+symbol+' price target')}&tbm=nws`);
+      out+=`<div class="vr"><span class="vl" id="wta_label_${i}">${esc(f.label)}</span><span class="vn ${cls}">$${Math.round(f.target)}${upside!=null?`（${upside>=0?'+':''}${upside.toFixed(1)}%）`:''}<span style="color:var(--text2);font-weight:400;font-size:11px;margin-left:6px">${esc(f.date)}</span> <a href="${rptUrl}" target="_blank" rel="noopener" style="font-size:11px;text-decoration:none">📄報告</a></span></div>`;
     });
     el.innerHTML = out || '<div class="note">目前查無分析師動態資料</div>';
     // 補位用的其他分析師機構名稱(不在5大銀行名單內)還是英文，背景翻譯成中文後就地替換
@@ -4631,14 +4633,31 @@ window.addEventListener('focus', function(){ refreshLiveData(false); });
 // 最上方美股四大指數列：道瓊、標普500、那斯達克、費城半導體（漲綠跌紅，與自選股一致）
 async function loadIndexBar(){
   const el=document.getElementById('indexBar'); if(!el) return;
-  const idx = getMarket()==='tw'
-    ? [{s:'^TWII',n:'加權指數'},{s:'^TWOII',n:'櫃買指數'}]
+  const isTw=getMarket()==='tw';
+  const idx = isTw
+    ? [{s:'^TWII',n:'加權指數'},{s:'^TWOII',n:'櫃買指數'},{s:'TX_NIGHT',n:'台指期夜盤'}]
     : [{s:'^DJI',n:'道瓊'},{s:'^GSPC',n:'標普500'},{s:'^IXIC',n:'那斯達克'},{s:'^SOX',n:'費城半導體'}];
-  el.style.gridTemplateColumns = idx.length===2 ? 'repeat(2,1fr)' : '';   // 台股2欄;美股用CSS(桌機4/手機2)
+  el.style.gridTemplateColumns = isTw ? 'repeat(3,1fr)' : '';
   const cid=s=>'ix_'+s.replace(/[^A-Za-z0-9]/g,'');
   if(!el.children.length) el.innerHTML=idx.map(x=>`<div class="ix" id="${cid(x.s)}"><span class="ix-name">${x.n}</span><span class="ix-val">…</span></div>`).join('');
   await Promise.all(idx.map(async x=>{
     const cell=document.getElementById(cid(x.s)); if(!cell) return;
+    if(x.s==='TX_NIGHT'){
+      try{
+        const sd=new Date(); sd.setDate(sd.getDate()-7);
+        const r=await fetch(`https://api.finmindtrade.com/api/v4/data?dataset=TaiwanFuturesDaily&data_id=TX&start_date=${sd.toISOString().slice(0,10)}`);
+        if(!r.ok) throw new Error();
+        const d=await r.json(); const rows=(d?.data||[]).filter(r=>r.trading_session==='after_market'&&r.close>0);
+        const ym=new Date().getFullYear()*100+new Date().getMonth()+1;
+        const near=rows.filter(r=>{const cd=parseInt(r.contract_date);return cd>=ym;}).sort((a,b)=>a.contract_date.localeCompare(b.contract_date)||b.date.localeCompare(a.date));
+        const latest=near[0];
+        if(latest){
+          const pct=latest.spread_per;
+          cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-line"><span class="ix-val">${latest.close.toLocaleString('en-US',{maximumFractionDigits:0})}</span><span class="ix-chg ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span></span>`;
+        } else { cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-val">—</span>`; }
+      }catch(e){ cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-val">—</span>`; }
+      return;
+    }
     try{
       const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(x.s)}?range=1d&interval=1d`);
       const m=ch?.chart?.result?.[0]?.meta; const p=m?.regularMarketPrice, prev=m?.previousClose??m?.chartPreviousClose;
