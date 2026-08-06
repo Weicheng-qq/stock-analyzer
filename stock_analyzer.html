@@ -633,6 +633,21 @@ const TICKER_ZH={};
 for(const k in ALIASES){ if(/[一-鿿]/.test(k)){ const t=ALIASES[k]; if(!TICKER_ZH[t]||k.length>TICKER_ZH[t].length) TICKER_ZH[t]=k; } }
 // 指定顯示名稱覆蓋（避免自動挑到過長/不慣用的別名）
 Object.assign(TICKER_ZH, {'NVDA':'輝達','SKHY':'海力士','GOOGL':'谷歌','GOOG':'谷歌'});
+// 美股常見ETF：SEC company_tickers.json 只收錄「有申報10-K/10-Q的公司」，不含ETF(基金非公司)，
+//   findCompany() 查不到；ETF也沒有SEC財報可跑深度分析，故只用於加入自選股(僅需代碼+名稱+Yahoo報價)。
+const US_ETF={
+  'SPY':'SPDR標普500 ETF','VOO':'Vanguard標普500 ETF','IVV':'iShares核心標普500 ETF',
+  'QQQ':'Invesco那斯達克100 ETF','VTI':'Vanguard整體美股市場 ETF','DIA':'SPDR道瓊工業 ETF',
+  'IWM':'iShares羅素2000小型股 ETF','SMH':'VanEck半導體 ETF','SOXX':'iShares費城半導體 ETF',
+  'ARKK':'ARK創新 ETF','XLK':'標普科技類股 ETF','XLF':'標普金融類股 ETF','XLE':'標普能源類股 ETF',
+  'GLD':'SPDR黃金 ETF','TLT':'iShares 20年期以上美債 ETF','SCHD':'Schwab美國高股息 ETF'
+};
+function findUsEtf(raw){
+  const q=(raw||'').trim(); if(!q) return null; const U=q.toUpperCase();
+  if(US_ETF[U]) return {symbol:U, name:US_ETF[U]};
+  const hit=Object.keys(US_ETF).find(k=>US_ETF[k]===q || US_ETF[k].indexOf(q)>-1);
+  return hit?{symbol:hit, name:US_ETF[hit]}:null;
+}
 let tickerMap=null;
 function findCompany(raw){
   const q=raw.trim(); const U=q.toUpperCase();
@@ -659,7 +674,8 @@ function setMarket(m){ try{ localStorage.setItem('market', m); localStorage.setI
 function marketPicked(){ try{ return localStorage.getItem('marketPicked')==='1'; }catch(e){ return false; } }
 // 常見台股代碼→中文名(加入自選股時用；查無再用 Yahoo 名稱)
 const TW_NAMES={'2330':'台積電','2317':'鴻海','2454':'聯發科','2308':'台達電','2382':'廣達','2303':'聯電','3711':'日月光投控','2412':'中華電','2891':'中信金','2881':'富邦金','2882':'國泰金','2886':'兆豐金','2884':'玉山金','2603':'長榮','2609':'陽明','2615':'萬海','2379':'瑞昱','3034':'聯詠','2357':'華碩','2409':'友達','3231':'緯創','2356':'英業達','4938':'和碩','2377':'微星','6669':'緯穎','3661':'世芯-KY','3443':'創意','6488':'環球晶','8046':'南電','2408':'南亞科','3037':'欣興','2327':'國巨','1301':'台塑','1303':'南亞','1326':'台化','2002':'中鋼','2207':'和泰車','1216':'統一','2912':'統一超','2801':'彰銀','5880':'合庫金','2892':'第一金','2880':'華南金','00878':'國泰永續高股息','0056':'元大高股息','0050':'元大台灣50',
-'8299':'群聯','6488':'環球晶','3105':'穩懋','4966':'譜瑞-KY','6415':'矽力-KY','5274':'信驊','3529':'力旺','8069':'元太','6510':'精測','4919':'新唐','3227':'原相','1795':'美時','6547':'高端疫苗','5483':'中美晶','2345':'智邦','3661':'世芯-KY'};
+'8299':'群聯','6488':'環球晶','3105':'穩懋','4966':'譜瑞-KY','6415':'矽力-KY','5274':'信驊','3529':'力旺','8069':'元太','6510':'精測','4919':'新唐','3227':'原相','1795':'美時','6547':'高端疫苗','5483':'中美晶','2345':'智邦','3661':'世芯-KY',
+'006208':'富邦台50','00919':'群益台灣精選高息','00929':'復華台灣科技優息','0052':'富邦科技','00713':'元大台灣高息低波'};
 // 台股↔美股「雙掛牌」對照：台股代碼→美股代碼。若該美股已在 IR_CALL_SUMMARY/IR_PRODUCTS_SUMMARY
 //   建有「官方事實」內容，台股分析就直接共用同一份事實(產品/法說會展望/官方IR頁)，避免台股靠 AI 臆測、
 //   且與美股同公司內容不一致(使用者反映台積電台股vs美股內容不同)。台積電(2330↔TSM)事實內容建在美股端。
@@ -740,11 +756,16 @@ async function addToWatchlist(){
   try{
     await loadTickerMap();
     const found=findCompany(raw);
-    if(!found){ alert(`找不到「${raw}」，請輸入美股代碼(如 AAPL)或公司名(如 台積電 / Apple)`); return; }
+    let symbol, name;
+    if(found){ symbol=found.symbol; name=TICKER_ZH[found.symbol]||found.co.title; }   // 有現成中文名優先用；沒有就先用英文，背景翻譯完再替換
+    else {
+      const etf=findUsEtf(raw);   // 公司查無時retry ETF清單(ETF無SEC申報,查不到company_tickers.json很正常)
+      if(!etf){ alert(`找不到「${raw}」，請輸入美股代碼(如 AAPL)或公司名(如 台積電 / Apple)，也可輸入ETF代碼(如 QQQ / SPY)`); return; }
+      symbol=etf.symbol; name=etf.name;
+    }
     const list=getWatchlist();
-    if(list.some(x=>x.symbol===found.symbol)){ alert(`「${found.symbol}」已經在自選股清單裡了`); inp.value=''; return; }
-    const name=TICKER_ZH[found.symbol]||found.co.title;   // 有現成中文名優先用；沒有就先用英文，背景翻譯完再替換
-    list.push({symbol:found.symbol, name});
+    if(list.some(x=>x.symbol===symbol)){ alert(`「${symbol}」已經在自選股清單裡了`); inp.value=''; return; }
+    list.push({symbol, name});
     saveWatchlist(list);
     inp.value='';
     renderWatchlist();
