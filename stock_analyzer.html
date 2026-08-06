@@ -363,6 +363,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   <div class="grp-menu" id="grpMenu">
     <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
     <button class="grp-btn" data-g="14" onclick="pickGroup(14)">投資大師學院</button>
+    <button class="grp-btn" data-g="15" onclick="pickGroup(15)">投資主題</button>
     <button class="grp-btn" data-g="6" onclick="pickGroup(6)">財經新聞</button>
     <button class="grp-btn" data-g="2" onclick="pickGroup(2)">大盤指數與關鍵財務指標</button>
     <button class="grp-btn tw-only" data-g="12" onclick="pickGroup(12)">每月營收</button>
@@ -386,9 +387,13 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
       <input type="text" id="watchlistInput" placeholder="輸入代碼或公司名，例如 AAPL / 台積電" onkeydown="if(event.key==='Enter')addToWatchlist()">
       <button class="search-btn" onclick="addToWatchlist()">+ 加入</button>
     </div>
-    <div id="wlThemeChips" class="wl-theme-chips" style="display:none"></div>
-    <div id="wlThemeList"></div>
     <div id="watchlistTable"><div class="note">尚未加入任何自選股，在上方輸入後按「加入」</div></div>
+  </div>
+
+  <div class="card" id="themeCard" style="margin-bottom:20px;display:none">
+    <div class="ct">🧩 投資主題</div>
+    <div id="themeChips" class="wl-theme-chips"></div>
+    <div id="themeList"></div>
   </div>
 
   <div id="results" class="results"></div>
@@ -784,13 +789,8 @@ function removeFromWatchlist(symbol){
 }
 // 自選股編輯模式：可拖曳一次調到任意上下位置
 let __wlEdit=false;
-function toggleWlEdit(){
-  __wlEdit=!__wlEdit; renderWatchlist();
-  const chips=document.getElementById('wlThemeChips');
-  if(chips) chips.style.display=__wlEdit?'flex':'none';
-  if(__wlEdit){ __wlView='list'; renderThemeChips(); } else { const tl=document.getElementById('wlThemeList'); if(tl) tl.innerHTML=''; }
-}
-// 主題概念股：編輯自選股時可瀏覽各族群個股，點愛心加入自選股清單。
+function toggleWlEdit(){ __wlEdit=!__wlEdit; renderWatchlist(); }
+// 主題概念股：獨立選單(投資主題)，可瀏覽各族群個股即時股價，點愛心加入自選股清單。
 //   代碼皆為常見/大型代表股，非窮舉；美股用代碼(TICKER_ZH有中文名則顯示中文)，
 //   台股用代碼(TW_NAMES/TW_ALL查中文名)。減肥藥題材台灣無對應標的，故只列美股。
 const THEME_STOCKS={
@@ -804,22 +804,20 @@ const THEME_STOCKS={
   '高股息族群':{tw:['2412','2886','2892','5880','2891','1216','2884'],us:['KO','PG','JNJ','VZ','T','XOM','CVX','PEP']},
   '減肥藥題材':{tw:[],us:['LLY','NVO','VKTX','AMGN','PFE']}
 };
-let __wlView='list';
+let __themeKey=null;
 function renderThemeChips(){
-  const el=document.getElementById('wlThemeChips'); if(!el) return;
+  const el=document.getElementById('themeChips'); if(!el) return;
   const mkt=getMarket();
-  let h=`<div class="chip${__wlView==='list'?' active':''}" onclick="setWlView('list')">⭐ 自選股清單</div>`;
-  for(const k in THEME_STOCKS){ if(!(THEME_STOCKS[k][mkt]||[]).length) continue; h+=`<div class="chip${__wlView===k?' active':''}" onclick="setWlView('${esc(k)}')">${esc(k)}</div>`; }
+  if(__themeKey==null || !(THEME_STOCKS[__themeKey]?.[mkt]||[]).length){ __themeKey=Object.keys(THEME_STOCKS).find(k=>(THEME_STOCKS[k][mkt]||[]).length); }
+  let h='';
+  for(const k in THEME_STOCKS){ if(!(THEME_STOCKS[k][mkt]||[]).length) continue; h+=`<div class="chip${__themeKey===k?' active':''}" onclick="setThemeKey('${esc(k)}')">${esc(k)}</div>`; }
   el.innerHTML=h;
+  renderThemeList();
 }
-function setWlView(key){
-  __wlView=key;
-  renderThemeChips();
-  const listEl=document.getElementById('wlThemeList'), tableEl=document.getElementById('watchlistTable'), addBar=document.querySelector('.wl-add');
-  if(key==='list'){ if(listEl) listEl.innerHTML=''; if(tableEl) tableEl.style.display=''; if(addBar) addBar.style.display=''; return; }
-  if(tableEl) tableEl.style.display='none'; if(addBar) addBar.style.display='none';
-  if(!listEl) return;
-  const mkt=getMarket(); const codes=THEME_STOCKS[key]?.[mkt]||[];
+function setThemeKey(key){ __themeKey=key; renderThemeChips(); }
+function renderThemeList(){
+  const listEl=document.getElementById('themeList'); if(!listEl) return;
+  const mkt=getMarket(); const codes=THEME_STOCKS[__themeKey]?.[mkt]||[];
   const wl=getWatchlist(); const have=new Set(wl.map(x=>x.symbol));
   const rows=codes.map(code=>{
     let symbol,name;
@@ -2457,15 +2455,20 @@ const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-
 // 🎬 法說會影片（keyed by 代碼）：值可為 YouTube 影片 ID(11碼，內嵌可播放/暫停/拉時間軸) 或完整官方重播網址(外開)。
 // 人工逐間驗證後填入官方來源；未填者自動退回「官方法說會線上重播頁」按鈕(IR_QUARTERLY_PAGE，該頁本身即有播放器)。
 const IR_CALL_VIDEO = {
-  // 值=YouTube 影片 ID(11碼) → 站內內嵌播放器(可播放/暫停/拉時間軸)＋自動繁體中文字幕；未列者退回官方 IR 線上重播。
+  // 值=YouTube 影片 ID(11碼) → 站內內嵌播放器(可播放/暫停/拉時間軸)；未列者退回官方 IR 線上重播。
   // 逐季人工更新為該公司最新一季法說會影片。優先官方頻道(如 Alphabet IR)，其次乾淨全程錄影(如 EARNMOAR)。
   // 只放「有實際影像(看得到人簡報)」的法說會影片；美國公司法說為純電話語音、無高層影像→不放靜態影片，退回官方IR重播。
   // 台股法說會影片：來源皆為「投資看非凡(USTV 非凡電視)」的【完整公開】系列，與台積電同一來源、
-  //   都是看得到高層本人簡報的完整場次。內嵌播放器已強制開啟自動字幕並翻成繁體中文(cc_lang_pref=zh-Hant)，
-  //   英文場次(如台積電)可直接看中文字幕。⚠️ 每季法說後需人工更新為最新一季影片(同 IR 三常數的更新節奏)。
+  //   都是看得到高層本人簡報的完整場次。⚠️ 每季法說後需人工更新為最新一季影片(同 IR 三常數的更新節奏)。
   // ⚠️ 值為 {id, q}：q=該影片實際場次。文字摘要(IR_CALL_SUMMARY)已更新到 Q2，但公開完整影片
   //    多半只到 Q1，若不標示季度會讓人誤以為影片就是最新一季 → 一律在播放器下方標出場次。
-  //    台積電為英文場次：保留英文原音，繁中字幕由 initIrCaptions() 透過 IFrame API 強制即時翻譯。
+  // ⚠️⚠️ 已實測確認：YouTube「自動翻譯字幕」是 youtube.com 網頁版播放器的client端功能，
+  //    無法透過 IFrame API(setOption captions/track) 或 URL 參數(cc_lang_pref)強制觸發翻譯，
+  //    只能選擇「真實存在」的字幕軌(如影片本來就有的zh-Hant軌)。這類法說會影片來源多半只有
+  //    「英文(自動產生)」單一字幕軌，此軌無法被API強制翻譯成中文；要看中文翻譯字幕，使用者需自己
+  //    在播放器字幕選單內手動操作(YouTube會依使用者自己的帳號/瀏覽器語言設定決定是否提供翻譯選項)。
+  //    forceZhCaptions()/initIrCaptions() 保留「若真的有zh-Hant/zh-TW原生字幕軌就自動選用」的邏輯，
+  //    但不再對外宣稱能強制翻譯，UI文案已改誠實描述。
   'TSM': {id:'JOhMwPVXRHM', q:'2026 第二季（英文原音）'},   // 台積電 Q2 法說會【完整公開】魏哲家本人簡報
   '2454':{id:'qEn6dHlz1h4', q:'2026 第一季'},              // 聯發科 Q1 線上法說會【完整公開】
   '2303':{id:'UyyeZiz2RPA', q:'2026 第一季'},              // 聯電 Q1 法說會【完整公開】(成熟製程技術升級)
@@ -2477,8 +2480,10 @@ const IR_CALL_VIDEO = {
 //   單靠網址參數 cc_lang_pref 只是偏好、不會啟用自動翻譯；必須透過 YouTube IFrame API 在
 //   播放器 onReady 後呼叫 setOption('captions','track',{languageCode:'zh-Hant'})，
 //   英文場次才會出現即時翻譯的繁中字幕(原音不變)。
-// 通用版：任何頁面上的 YouTube iframe(依 id) 都可呼叫此函式強制切繁中字幕。
+// 通用版：任何頁面上的 YouTube iframe(依 id) 都可呼叫此函式，嘗試切到繁中字幕。
 //   法說會影片(irVideoFrame)與投資大師影片(每支各自的 id)共用同一套邏輯。
+//   ⚠️ 只對「影片本身真的有zh-Hant/zh-TW原生字幕軌」有效；若只有「英文(自動產生)」單一軌，
+//   此函式無法強制觸發YouTube的自動翻譯(已實測確認IFrame API不支援)，會靜默不生效，不影響播放。
 let __ytApiLoading=false;
 const __ytPlayers={};
 let __ytPendingCaptions=[];
@@ -2566,7 +2571,7 @@ function investmentMastersHtml(){
     +`<button class="master-tab-btn${__masterTab==='long'?' active':''}" onclick="setMasterTab('long')">🎬 長影片</button>`
     +`<button class="master-tab-btn${__masterTab==='short'?' active':''}" onclick="setMasterTab('short')">📱 短影音</button>`
     +`</div><div id="masterVidList">${masterVidListHtml()}</div>`
-    +`<div class="note" style="margin-top:8px">💬 已自動開啟<b>繁體中文字幕</b>（英文原音為即時翻譯）。若未顯示，可點播放器右下角字幕圖示切換。</div>`;
+    +`<div class="note" style="margin-top:8px">💬 影片若有中文字幕軌會自動套用；若原音非中文，可點播放器右下角<b>字幕圖示</b>開啟英文字幕，YouTube 會依您自己的帳號/瀏覽器語言設定提供即時翻譯選項(此為 YouTube 平台功能，需在字幕選單內手動選擇翻譯語言，無法由本站強制開啟)。</div>`;
   return h;
 }
 function masterVidListHtml(){
@@ -2620,7 +2625,7 @@ function irVideoBlock(sym, coName){
     return (vq ? `<div class="note" style="margin:0 0 6px"><b style="color:var(--blue)">🎬 影片場次：${esc(vq)}</b><span class="muted"> ｜ 下方文字摘要為最新一季，若場次不同以文字摘要為準</span></div>` : '')
       + `<div class="ir-video" data-vid="${esc(v)}" onclick="loadIrVideo(this)" style="cursor:pointer">`
       + `<img src="${thumb}" loading="lazy"><div class="ir-play-btn"><div></div></div></div>`
-      + `<div class="note" style="margin-top:6px">💬 點擊播放後自動開啟<b>繁體中文字幕</b>（英文場次為即時翻譯）。若未顯示，可點播放器右下角 <b>字幕</b> 圖示切換。</div>`;
+      + `<div class="note" style="margin-top:6px">💬 點擊播放器右下角 <b>字幕</b> 圖示可開啟字幕；英文場次若要看繁體中文翻譯，需在字幕選單內手動選擇翻譯語言(此為 YouTube 平台的即時翻譯功能，依您自己的帳號/瀏覽器語言設定提供，本站無法強制開啟)。</div>`;
   }
   const watchUrl = (v && /^https?:/.test(v)) ? v : irPage;
   if(!watchUrl) return '';
@@ -4931,11 +4936,14 @@ function showGroup(n){
   //   因此自然顯示在公司股價卡上方，符合使用者要求。自選股(n=10)維持獨立選單且排在最前面。
   const showIndex = (n===2);
   const showWl    = (n===10);
+  const showTheme = (n===15);
   // welcome 只在「尚未選過市場」時顯示;使用者按過美股/台股後就永遠不再出現(節省 App 空間)
   const e_wel=document.getElementById('welcome');       if(e_wel) e_wel.style.display=(showWl && !marketPicked())?'':'none';   // 改綁自選股頁(預設進入頁)，否則新使用者看不到介紹
   const e_iT =document.getElementById('indexTitle');    if(e_iT ) e_iT .style.display=showIndex?'':'none';
   const e_iB =document.getElementById('indexBar');      if(e_iB ) e_iB .style.display=showIndex?'':'none';
   const e_wl =document.getElementById('watchlistCard'); if(e_wl ) e_wl .style.display=showWl   ?'':'none';
+  const e_th =document.getElementById('themeCard');     if(e_th ) e_th .style.display=showTheme?'':'none';
+  if(showTheme) renderThemeChips();   // 進入「投資主題」頁時(重新)渲染，反映當下市場/自選股狀態
   syncLogPanel();   // 載入進度歸屬大盤指數選單，切換選單時同步顯示/隱藏
   const res=document.getElementById('results'); let anyCard=false;
   if(res){
@@ -4943,7 +4951,7 @@ function showGroup(n){
     if(n===3){ const mo=document.getElementById('ai_moat')?.closest('.card'); if(mo) res.insertBefore(mo, res.firstChild); }
     // 財經新聞選單(群組6)：最新新聞在上、投資大行目標價在下
     if(n===6){ const nc=document.getElementById('newsList'); const nCard=nc&&nc.closest('.card'); const tg=document.getElementById('analystTargets'); const tCard=tg&&tg.closest('.card'); if(nCard&&tCard) nCard.insertAdjacentElement('afterend', tCard); }
-    const showRes=(n!==10);   // 大盤指數已併入 n=2，只有自選股頁不顯示分析結果
+    const showRes=(n!==10 && n!==15);   // 大盤指數已併入 n=2，自選股頁與投資主題頁不顯示分析結果
     res.style.display=showRes?'block':'none';   // .results 類別預設 display:none，需明確設 block 才顯示
     [...res.querySelectorAll('.card, .co-head')].forEach(c=>{ const show=cardGroup(c)===n; c.style.display=show?'':'none'; if(show) anyCard=true; });
     res.querySelectorAll('.g2').forEach(g=>{ const vis=[...g.children].some(c=>c.style.display!=='none'); g.style.display=vis?'block':'none'; });
@@ -4951,7 +4959,7 @@ function showGroup(n){
   }
   const emp=document.getElementById('grpEmpty');
   if(emp){
-    const showEmp=(n>=2 && n!==10 && !anyCard);
+    const showEmp=(n>=2 && n!==10 && n!==15 && !anyCard);
     emp.style.display=showEmp?'block':'none';
     if(showEmp){
       // 無資料時不再顯示「建置中」(台股深度分析早已完成),改為自動載入自選股第一檔
