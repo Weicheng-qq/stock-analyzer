@@ -167,6 +167,11 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-ai-btn { flex:none; background:var(--blue); color:#0d1117; border:none; border-radius:7px; padding:8px 13px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; }
 .wl-del { flex:none; background:none; border:none; color:var(--text2); cursor:pointer; font-size:18px; padding:0 2px; }
 .wl-del:hover { color:var(--red); }
+.wl-theme-chips { display:flex; gap:8px; overflow-x:auto; padding:2px 2px 12px; margin-top:4px; -webkit-overflow-scrolling:touch; }
+.wl-theme-chips .chip { flex:none; white-space:nowrap; }
+.wl-theme-chips .chip.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
+.wl-heart { flex:none; background:none; border:none; cursor:pointer; font-size:20px; padding:0 2px; line-height:1; color:var(--text2); }
+.wl-heart.added { color:var(--red); cursor:default; }
 /* 手機：名稱給更多空間、AI鈕只留圖示、價格漲跌幅收窄，避免長中文名被擠到換太多行 */
 @media(max-width:560px){
   .wl-row { gap:7px; font-size:16px; }
@@ -381,6 +386,8 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
       <input type="text" id="watchlistInput" placeholder="輸入代碼或公司名，例如 AAPL / 台積電" onkeydown="if(event.key==='Enter')addToWatchlist()">
       <button class="search-btn" onclick="addToWatchlist()">+ 加入</button>
     </div>
+    <div id="wlThemeChips" class="wl-theme-chips" style="display:none"></div>
+    <div id="wlThemeList"></div>
     <div id="watchlistTable"><div class="note">尚未加入任何自選股，在上方輸入後按「加入」</div></div>
   </div>
 
@@ -777,7 +784,79 @@ function removeFromWatchlist(symbol){
 }
 // 自選股編輯模式：可拖曳一次調到任意上下位置
 let __wlEdit=false;
-function toggleWlEdit(){ __wlEdit=!__wlEdit; renderWatchlist(); }
+function toggleWlEdit(){
+  __wlEdit=!__wlEdit; renderWatchlist();
+  const chips=document.getElementById('wlThemeChips');
+  if(chips) chips.style.display=__wlEdit?'flex':'none';
+  if(__wlEdit){ __wlView='list'; renderThemeChips(); } else { const tl=document.getElementById('wlThemeList'); if(tl) tl.innerHTML=''; }
+}
+// 主題概念股：編輯自選股時可瀏覽各族群個股，點愛心加入自選股清單。
+//   代碼皆為常見/大型代表股，非窮舉；美股用代碼(TICKER_ZH有中文名則顯示中文)，
+//   台股用代碼(TW_NAMES/TW_ALL查中文名)。減肥藥題材台灣無對應標的，故只列美股。
+const THEME_STOCKS={
+  '半導體題材':{tw:['2330','2454','2303','3711','6488','2379','3034','2408','8299','3105'],us:['NVDA','AMD','AVGO','TSM','ASML','QCOM','MU','INTC','ARM']},
+  '機器人概念股':{tw:['2308','2317','2345','2382','2049','2359','1597'],us:['TSLA','NVDA','ISRG','ROK','ABB']},
+  '光通訊概念股':{tw:['3008','3406','3450','4979','6442','3081','3163','3234','3363'],us:['COHR','LITE','CIEN','FN','AAOI']},
+  '人工智慧':{tw:['2330','2317','2454','3037','2408','3017','2449','2382'],us:['NVDA','MSFT','GOOGL','META','AMZN','PLTR','AMD']},
+  '存儲題材概念股':{tw:['2408','2344','6770','2337','3006','8299','3260'],us:['MU','WDC','STX','NTAP']},
+  '儲能概念股':{tw:['1513','6121','2308','8996'],us:['TSLA','FLNC','ENPH','SEDG','BE']},
+  'AI PC概念股':{tw:['2382','2324','3231','2356','4938','3260','4967','2451','2330'],us:['AMD','INTC','QCOM','NVDA','DELL','HPQ']},
+  '高股息族群':{tw:['2412','2886','2892','5880','2891','1216','2884'],us:['KO','PG','JNJ','VZ','T','XOM','CVX','PEP']},
+  '減肥藥題材':{tw:[],us:['LLY','NVO','VKTX','AMGN','PFE']}
+};
+let __wlView='list';
+function renderThemeChips(){
+  const el=document.getElementById('wlThemeChips'); if(!el) return;
+  const mkt=getMarket();
+  let h=`<div class="chip${__wlView==='list'?' active':''}" onclick="setWlView('list')">⭐ 自選股清單</div>`;
+  for(const k in THEME_STOCKS){ if(!(THEME_STOCKS[k][mkt]||[]).length) continue; h+=`<div class="chip${__wlView===k?' active':''}" onclick="setWlView('${esc(k)}')">${esc(k)}</div>`; }
+  el.innerHTML=h;
+}
+function setWlView(key){
+  __wlView=key;
+  renderThemeChips();
+  const listEl=document.getElementById('wlThemeList'), tableEl=document.getElementById('watchlistTable'), addBar=document.querySelector('.wl-add');
+  if(key==='list'){ if(listEl) listEl.innerHTML=''; if(tableEl) tableEl.style.display=''; if(addBar) addBar.style.display=''; return; }
+  if(tableEl) tableEl.style.display='none'; if(addBar) addBar.style.display='none';
+  if(!listEl) return;
+  const mkt=getMarket(); const codes=THEME_STOCKS[key]?.[mkt]||[];
+  const wl=getWatchlist(); const have=new Set(wl.map(x=>x.symbol));
+  const rows=codes.map(code=>{
+    let symbol,name;
+    if(mkt==='tw'){ symbol=code+'.'+twMkt(code); name=(typeof TW_NAMES!=='undefined'&&TW_NAMES[code])||TW_ALL[code]||code; }
+    else { symbol=code; name=TICKER_ZH[code]||code; }
+    return {symbol,name};
+  });
+  listEl.innerHTML = rows.map(r=>`
+    <div class="wl-item" data-sym="${esc(r.symbol)}">
+    <div class="wl-row">
+      ${coLogoImg(r.symbol.replace(/\..*/,''), r.symbol.replace(/\..*/,''), mkt==='tw')}
+      <div class="wl-name" title="${esc(r.name)}">${esc(r.name)}<span class="sym">${esc(r.symbol.replace(/\.(TW|TWO)$/i,''))}</span></div>
+      <div class="wl-pc">
+        <div class="wl-price" id="thp_${esc(r.symbol)}">…</div>
+      </div>
+      <button class="wl-heart${have.has(r.symbol)?' added':''}" onclick="addThemeStockToWatchlist('${esc(r.symbol)}','${esc(r.name).replace(/'/g,"\\'")}',this)" ${have.has(r.symbol)?'disabled title="已在自選股清單"':'title="加入自選股"'}>${have.has(r.symbol)?'❤️':'🤍'}</button>
+    </div></div>`).join('') || '<div class="note">此主題目前無資料</div>';
+  loadThemePrices(rows);
+}
+async function loadThemePrices(rows){
+  await Promise.all(rows.map(async r=>{
+    const pEl=document.getElementById('thp_'+r.symbol);
+    try{
+      const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${r.symbol}?range=1d&interval=1d`);
+      const price=ch?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      if(pEl) pEl.textContent = price!=null?'$'+(+price).toFixed(2):'—';
+    }catch(e){ if(pEl) pEl.textContent='—'; }
+  }));
+}
+function addThemeStockToWatchlist(symbol,name,btn){
+  const list=getWatchlist();
+  if(list.some(x=>x.symbol===symbol)) return;
+  list.push({symbol,name});
+  saveWatchlist(list);
+  renderWatchlist();   // 背景更新自選股清單表格(此時可能被主題頁蓋住不可見)，切回清單頁才不會漏掉剛加入的股票
+  if(btn){ btn.textContent='❤️'; btn.classList.add('added'); btn.disabled=true; btn.title='已在自選股清單'; }
+}
 // 編輯模式已改用 ▲▼ 上下移按鈕(手機拖曳難操作)。此函式保留：若日後恢復 .wl-drag 把手仍可運作，無把手時自動不做事。
 function initWlDrag(){
   const el=document.getElementById('watchlistTable'); if(!el) return;
