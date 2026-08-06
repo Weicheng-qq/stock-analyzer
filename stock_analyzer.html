@@ -360,7 +360,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <button class="mkt-btn" data-mkt="us" onclick="setMarket('us')">🔵 美股</button>
     <button class="mkt-btn" data-mkt="tw" onclick="setMarket('tw')">🟢 台股</button>
   </div>
-  <div class="grp-menu" id="grpMenu">
+  <div class="grp-menu" id="grpMenu" style="display:none">
     <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
     <button class="grp-btn" data-g="14" onclick="pickGroup(14)">投資大師學院</button>
     <button class="grp-btn" data-g="15" onclick="pickGroup(15)">投資主題</button>
@@ -4985,7 +4985,7 @@ function applyGroupAfterRender(){ __autoLoading=false; if(__jumpAfterSearch){ __
 // 開場封面(#welcome)固定顯示 1.5 秒再切到自選股：讓老用戶開 App 先看到品牌封面、緊接著直接看到
 //   自選股股價(使用者要求)。價格/指數改為立即背景抓取(不等封面倒數)，讓 1.5 秒後盡量已有真實數字可看；
 //   showGroup(10) 內部仍會檢查 marketPicked()，首次使用者(尚未選過市場)封面照常維持到他們手動互動為止。
-window.addEventListener('load', function(){ initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); setTimeout(function(){ showGroup(10); }, 1500); });
+window.addEventListener('load', function(){ initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); setTimeout(function(){ const gm=document.getElementById('grpMenu'); if(gm) gm.style.display=''; showGroup(10); }, 2000); });
 
 // ⚠️ 暫時停用 Service Worker 註冊：先前的 SW 在部分裝置(桌面Chrome/Edge、Android PWA)造成整頁重載迴圈。
 // 不再主動註冊；已有舊 SW 的裝置，瀏覽器會自動抓到已改成 kill-switch 的 sw.js 並自我清除(清快取+unregister)，迴圈即中止。
