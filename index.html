@@ -352,7 +352,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
   <div class="grp-menu" id="grpMenu">
     <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
-    <button class="grp-btn" data-g="2" onclick="pickGroup(2)">關鍵財務指標</button>
+    <button class="grp-btn" data-g="2" onclick="pickGroup(2)">大盤指數與關鍵財務指標</button>
     <button class="grp-btn tw-only" data-g="12" onclick="pickGroup(12)">每月營收</button>
     <button class="grp-btn tw-only" data-g="13" onclick="pickGroup(13)">三大法人</button>
     <button class="grp-btn" data-g="6" onclick="pickGroup(6)">財經新聞</button>
@@ -361,7 +361,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <button class="grp-btn" data-g="3" onclick="pickGroup(3)">護城河與彼得林區分類</button>
     <button class="grp-btn" data-g="4" onclick="pickGroup(4)">股價估值評估</button>
     <button class="grp-btn" data-g="9" onclick="pickGroup(9)">產品與服務</button>
-    <button class="grp-btn" data-g="14" onclick="pickGroup(14)">投資大師</button>
+    <button class="grp-btn" data-g="14" onclick="pickGroup(14)">投資大師學院</button>
     <button class="grp-btn" data-g="11" onclick="pickGroup(11)">版主選股準則</button>
     <button class="grp-btn" data-g="8" onclick="pickGroup(8)">投資總結</button>
   </div>
@@ -1050,7 +1050,7 @@ function twResultsHtml(o){
 <div class="card"><div class="ct">💰 年營收 &amp; 成長率</div><div class="chart-wrap"><canvas id="revChart"></canvas></div></div>
 <div class="card"><div class="ct">📈 年營收明細與成長率（財政年度）</div><div id="tw_rev">${aiLoading()}</div></div>
 <div class="card"><div class="ct">📅 每月營收</div><div id="tw_monthly_rev"><div class="note">載入中...</div></div></div>
-<div class="card"><div class="ct">🎓 投資大師</div><div id="tw_masters">${investmentMastersHtml()}</div></div>
+<div class="card"><div class="ct">🎓 投資大師學院</div><div id="tw_masters">${investmentMastersHtml()}</div></div>
 <div class="card"><div class="ct">🏛️ 三大法人買賣超</div><div id="tw_institutional"><div class="note">載入中...</div></div></div>
 <div class="card"><div class="ct">🏷️ 彼得林區六大分類</div><div id="ai_lynch">${aiLoading()}</div></div>
 <div class="card"><div class="ct">🏰 護城河分析</div><div id="ai_moat">${aiLoading()}</div></div>
@@ -1735,7 +1735,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   </div>
 </div>
 
-<div class="card"><div class="ct">🎓 投資大師</div><div>${investmentMastersHtml()}</div></div>
+<div class="card"><div class="ct">🎓 投資大師學院</div><div>${investmentMastersHtml()}</div></div>
 
 <div class="note" style="text-align:center;margin-top:8px">財務數據：美國 SEC EDGAR 官方10-K年報；股價：Yahoo Finance；質化分析：免費 AI 模型（Gemini / Groq / OpenRouter）。<b>僅供參考，不構成投資建議。</b></div>`;
 
@@ -2372,21 +2372,15 @@ const IR_CALL_VIDEO = {
 //   單靠網址參數 cc_lang_pref 只是偏好、不會啟用自動翻譯；必須透過 YouTube IFrame API 在
 //   播放器 onReady 後呼叫 setOption('captions','track',{languageCode:'zh-Hant'})，
 //   英文場次才會出現即時翻譯的繁中字幕(原音不變)。
-let __ytApiLoading=false, __irPlayer=null;
-function initIrCaptions(){
-  const frame=document.getElementById('irVideoFrame'); if(!frame) return;
-  if(!window.YT || !window.YT.Player){
-    if(!__ytApiLoading){
-      __ytApiLoading=true;
-      const s=document.createElement('script'); s.src='https://www.youtube.com/iframe_api';
-      document.head.appendChild(s);
-      window.onYouTubeIframeAPIReady=function(){ initIrCaptions(); };
-    }
-    return;
-  }
-  try{ if(__irPlayer&&__irPlayer.destroy) __irPlayer.destroy(); }catch(e){}
+// 通用版：任何頁面上的 YouTube iframe(依 id) 都可呼叫此函式強制切繁中字幕。
+//   法說會影片(irVideoFrame)與投資大師影片(每支各自的 id)共用同一套邏輯。
+let __ytApiLoading=false;
+const __ytPlayers={};
+let __ytPendingCaptions=[];
+function _applyZhCaptions(iframeId){
+  try{ if(__ytPlayers[iframeId]&&__ytPlayers[iframeId].destroy) __ytPlayers[iframeId].destroy(); }catch(e){}
   try{
-    __irPlayer=new YT.Player('irVideoFrame',{
+    __ytPlayers[iframeId]=new YT.Player(iframeId,{
       events:{
         onReady:function(e){
           // YouTube 對繁中可能用 zh-Hant 或 zh-TW，兩個都試；並優先挑清單中真正存在的繁中軌
@@ -2411,9 +2405,21 @@ function initIrCaptions(){
     });
   }catch(e){}
 }
+function forceZhCaptions(iframeId){
+  const frame=document.getElementById(iframeId); if(!frame) return;
+  if(window.YT && window.YT.Player){ _applyZhCaptions(iframeId); return; }
+  __ytPendingCaptions.push(iframeId);
+  if(!__ytApiLoading){
+    __ytApiLoading=true;
+    const s=document.createElement('script'); s.src='https://www.youtube.com/iframe_api';
+    document.head.appendChild(s);
+    window.onYouTubeIframeAPIReady=function(){ __ytPendingCaptions.splice(0).forEach(_applyZhCaptions); };
+  }
+}
+function initIrCaptions(){ forceZhCaptions('irVideoFrame'); }
 const MASTER_VIDEOS=[
   {person:'華倫·巴菲特 Warren Buffett',icon:'🏛️',videos:[
-    {id:'jXg0V2tyhXo',title:'HBO 紀錄片《成為巴菲特》— 完整版紀錄片，深入巴菲特的人生哲學與投資之道'},
+    {id:'i45_qjgFmxg',title:'《成為巴菲特》HBO 紀錄片全長版(約1小時28分)— 深入巴菲特的人生哲學與投資之道'},
     {id:'j1vGFpd49wM',title:'2025 波克夏·海瑟威股東大會 — CNBC 完整實況轉播'},
     {id:'JvEas_zZ4fM',title:'CNBC 深度專訪巴菲特 — 談投資策略、市場觀點與人生智慧'},
     {id:'2hdDE7XYr30',title:'CNBC 專訪巴菲特、蒙格與比爾蓋茲 — 三大巨頭同台對談'}
@@ -2437,7 +2443,7 @@ function investmentMastersHtml(){
     g.videos.forEach(v=>{
       const thumb=`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`;
       const src=`https://www.youtube-nocookie.com/embed/${v.id}?rel=0&enablejsapi=1&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant${orig}`;
-      h+=`<div style="margin-bottom:14px"><div style="font-size:13px;color:var(--text2);margin-bottom:4px">${esc(v.title)}</div>`
+      h+=`<div style="margin-bottom:28px"><div style="font-size:13px;color:var(--text2);margin-bottom:4px">${esc(v.title)}</div>`
         +`<div class="ir-video master-thumb" data-src="${esc(src)}" onclick="loadMasterVid(this)" style="position:relative;cursor:pointer">`
         +`<img src="${thumb}" loading="lazy" style="width:100%;border-radius:8px;display:block">`
         +`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;background:rgba(0,0,0,.7);border-radius:50%;display:flex;align-items:center;justify-content:center"><div style="width:0;height:0;border-left:22px solid #fff;border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:4px"></div></div>`
@@ -4810,9 +4816,12 @@ function showGroup(n){
 }
 // 分析完成後：若使用者主動查詢，跳到「關鍵財務指標」；否則(如開場範例)維持目前群組
 function applyGroupAfterRender(){ __autoLoading=false; if(__jumpAfterSearch){ __jumpAfterSearch=false; showGroup(2); } else { showGroup(__grp); } }
-// 預設進入「自選股」(選單第一項)。刻意不預設「關鍵財務指標」：該頁無資料時會觸發自動分析，
+// 預設進入「自選股」(選單第一項)。刻意不預設「大盤指數與關鍵財務指標」：該頁無資料時會觸發自動分析，
 //   一開 App 就跑會白白消耗免費 AI 額度；使用者主動點進去才載入。
-window.addEventListener('load', function(){ initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); showGroup(10); });
+// 開場封面(#welcome)固定顯示 1.5 秒再切到自選股：讓老用戶開 App 先看到品牌封面、緊接著直接看到
+//   自選股股價(使用者要求)。價格/指數改為立即背景抓取(不等封面倒數)，讓 1.5 秒後盡量已有真實數字可看；
+//   showGroup(10) 內部仍會檢查 marketPicked()，首次使用者(尚未選過市場)封面照常維持到他們手動互動為止。
+window.addEventListener('load', function(){ initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); setTimeout(function(){ showGroup(10); }, 1500); });
 
 // ⚠️ 暫時停用 Service Worker 註冊：先前的 SW 在部分裝置(桌面Chrome/Edge、Android PWA)造成整頁重載迴圈。
 // 不再主動註冊；已有舊 SW 的裝置，瀏覽器會自動抓到已改成 kill-switch 的 sw.js 並自我清除(清快取+unregister)，迴圈即中止。
