@@ -238,6 +238,11 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .market-tabs { display:flex; gap:8px; margin:0 0 26px; }
 .market-tabs .mkt-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:10px; padding:11px 10px; font-size:15px; font-weight:700; cursor:pointer; }
 .market-tabs .mkt-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
+.master-tabs { display:flex; gap:8px; margin:0 0 16px; }
+.master-tabs .master-tab-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:10px; padding:11px 10px; font-size:14px; font-weight:700; cursor:pointer; }
+.master-tabs .master-tab-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
+.master-short-wrap { max-width:220px; padding-top:0 !important; aspect-ratio:9/16; margin:0 auto; }
+.master-short-wrap img, .master-short-wrap iframe { object-fit:cover; }
 .index-title { font-size:18px; font-weight:800; color:var(--blue); margin:0 0 10px; letter-spacing:.3px; }
 .index-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:20px; }
 .index-bar .ix { background:var(--bg2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:11px 6px; text-align:center; min-width:0; }
@@ -2417,46 +2422,85 @@ function forceZhCaptions(iframeId){
   }
 }
 function initIrCaptions(){ forceZhCaptions('irVideoFrame'); }
+// 每人各自分 long(長影片,16:9)/short(短影音,9:16 Shorts)兩類，皆逐支核實為本人真實畫面、
+//   非文字卡/主持人畫面，並以觀看數高者優先。
 const MASTER_VIDEOS=[
-  {person:'華倫·巴菲特 Warren Buffett',icon:'🏛️',videos:[
-    {id:'i45_qjgFmxg',title:'《成為巴菲特》HBO 紀錄片全長版(約1小時28分)— 深入巴菲特的人生哲學與投資之道'},
-    {id:'j1vGFpd49wM',title:'2025 波克夏·海瑟威股東大會 — CNBC 完整實況轉播'},
-    {id:'JvEas_zZ4fM',title:'CNBC 深度專訪巴菲特 — 談投資策略、市場觀點與人生智慧'},
-    {id:'2hdDE7XYr30',title:'CNBC 專訪巴菲特、蒙格與比爾蓋茲 — 三大巨頭同台對談'}
-  ]},
-  {person:'彼得·林區 Peter Lynch',icon:'📈',videos:[
-    {id:'2GqVXPtx9Rw',title:'1994 國家記者俱樂部經典演講 — 散戶如何打敗華爾街'},
-    {id:'myu4Nv0pt0U',title:'1997 股市投資演講 — 選股策略與市場觀察'},
-    {id:'INIel3CX7cQ',title:'投資精華演講集錦 — 風趣幽默的選股心法'}
-  ]},
-  {person:'查理·蒙格 Charlie Munger',icon:'🧠',videos:[
-    {id:'pqzcCfUglws',title:'人類誤判心理學 — 完整演講（經典必看）'},
-    {id:'9VVPO3KWj3A',title:'2023 每日期刊股東大會 — 談比亞迪、特斯拉、阿里巴巴與比特幣'},
-    {id:'H5Oom5Rjp_Y',title:'蒙格最後一次 CNBC 電視專訪 — 傳奇投資人的最終智慧'}
-  ]}
+  {person:'華倫·巴菲特 Warren Buffett',icon:'🏛️',
+    long:[
+      {id:'i45_qjgFmxg',title:'《成為巴菲特》HBO 紀錄片全長版(約1小時28分)— 深入巴菲特的人生哲學與投資之道'},
+      {id:'j1vGFpd49wM',title:'2025 波克夏·海瑟威股東大會 — CNBC 完整實況轉播'},
+      {id:'JvEas_zZ4fM',title:'CNBC 深度專訪巴菲特 — 談投資策略、市場觀點與人生智慧'},
+      {id:'2hdDE7XYr30',title:'CNBC 專訪巴菲特、蒙格與比爾蓋茲 — 三大巨頭同台對談'}
+    ],
+    short:[
+      {id:'lWu2fw6APM4',title:'20孔打卡投資哲學 — 巴菲特經典比喻：一生只能做20次投資決定'},
+      {id:'5mZUJThXM44',title:'巴菲特談如何成為億萬富翁 — 資本主義與財富累積的省思'}
+    ]
+  },
+  {person:'彼得·林區 Peter Lynch',icon:'📈',
+    long:[
+      {id:'2GqVXPtx9Rw',title:'1994 國家記者俱樂部經典演講 — 散戶如何打敗華爾街'},
+      {id:'myu4Nv0pt0U',title:'1997 股市投資演講 — 選股策略與市場觀察'},
+      {id:'INIel3CX7cQ',title:'投資精華演講集錦 — 風趣幽默的選股心法'}
+    ],
+    short:[
+      {id:'G1sHwpGHLWk',title:'該不該買股票？— 林區給新手的買股時機建議'},
+      {id:'SDfGXK8SQxQ',title:'投資人浪費太多時間 — 林區談過度關注股價的迷思'}
+    ]
+  },
+  {person:'查理·蒙格 Charlie Munger',icon:'🧠',
+    long:[
+      {id:'pqzcCfUglws',title:'人類誤判心理學 — 完整演講（經典必看）'},
+      {id:'9VVPO3KWj3A',title:'2023 每日期刊股東大會 — 談比亞迪、特斯拉、阿里巴巴與比特幣'},
+      {id:'H5Oom5Rjp_Y',title:'蒙格最後一次 CNBC 電視專訪 — 傳奇投資人的最終智慧'}
+    ],
+    short:[
+      {id:'p5vm2n49qp8',title:'蒙格談特斯拉與馬斯克 — 對市值估值的直白評論'},
+      {id:'B8Ip21rA4sY',title:'給年輕人的十億美元建議 — 蒙格對年輕投資人的忠告'}
+    ]
+  }
 ];
+let __masterTab='long';
 function investmentMastersHtml(){
+  let h=`<div class="master-tabs">`
+    +`<button class="master-tab-btn${__masterTab==='long'?' active':''}" onclick="setMasterTab('long')">🎬 長影片</button>`
+    +`<button class="master-tab-btn${__masterTab==='short'?' active':''}" onclick="setMasterTab('short')">📱 短影音</button>`
+    +`</div><div id="masterVidList">${masterVidListHtml()}</div>`
+    +`<div class="note" style="margin-top:8px">💬 已自動開啟<b>繁體中文字幕</b>（英文原音為即時翻譯）。若未顯示，可點播放器右下角字幕圖示切換。</div>`;
+  return h;
+}
+function masterVidListHtml(){
   const orig=(location.protocol==='http:'||location.protocol==='https:')?'&origin='+encodeURIComponent(location.origin):'';
+  const isShort=__masterTab==='short';
   let h='';
   MASTER_VIDEOS.forEach(g=>{
+    const vids=g[__masterTab]||[];
+    if(!vids.length) return;
     h+=`<div style="margin:18px 0 10px;font-size:15px;font-weight:700">${g.icon} ${g.person}</div>`;
-    g.videos.forEach(v=>{
+    vids.forEach(v=>{
       const thumb=`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`;
-      const src=`https://www.youtube-nocookie.com/embed/${v.id}?rel=0&enablejsapi=1&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant${orig}`;
+      const src=`https://www.youtube-nocookie.com/embed/${v.id}?rel=0&enablejsapi=1&autoplay=1&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant${orig}`;
       h+=`<div style="margin-bottom:28px"><div style="font-size:13px;color:var(--text2);margin-bottom:4px">${esc(v.title)}</div>`
-        +`<div class="ir-video master-thumb" data-src="${esc(src)}" onclick="loadMasterVid(this)" style="position:relative;cursor:pointer">`
-        +`<img src="${thumb}" loading="lazy" style="width:100%;border-radius:8px;display:block">`
-        +`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;background:rgba(0,0,0,.7);border-radius:50%;display:flex;align-items:center;justify-content:center"><div style="width:0;height:0;border-left:22px solid #fff;border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:4px"></div></div>`
+        +`<div class="ir-video master-thumb${isShort?' master-short-wrap':''}" data-src="${esc(src)}" onclick="loadMasterVid(this)" style="cursor:pointer">`
+        +`<img src="${thumb}" loading="lazy"><div class="ir-play-btn"><div></div></div>`
         +`</div></div>`;
     });
   });
-  h+=`<div class="note" style="margin-top:8px">💬 已自動開啟<b>繁體中文字幕</b>（英文原音為即時翻譯）。若未顯示，可點播放器右下角字幕圖示切換。</div>`;
   return h;
 }
+function setMasterTab(tab){
+  __masterTab=tab;
+  document.querySelectorAll('.master-tab-btn').forEach(b=>{ b.classList.toggle('active', b.textContent.includes(tab==='long'?'長影片':'短影音')); });
+  const list=document.getElementById('masterVidList'); if(list) list.innerHTML=masterVidListHtml();
+}
+let __masterVidSeq=0;
 function loadMasterVid(el){
   const src=el.dataset.src; if(!src) return;
-  el.innerHTML=`<iframe src="${src}" title="投資大師影片" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="width:100%;aspect-ratio:16/9;border-radius:8px"></iframe>`;
+  const fid='masterVidFrame'+(++__masterVidSeq);
+  const isShort=el.classList.contains('master-short-wrap');
+  el.innerHTML=`<iframe id="${fid}" src="${src}" title="投資大師影片" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="width:100%;height:100%;${isShort?'':'aspect-ratio:16/9;'}border-radius:8px"></iframe>`;
   el.style.cursor='default'; el.onclick=null;
+  setTimeout(()=>forceZhCaptions(fid), 300);
 }
 // 產生「法說會影片」區塊(置於法說主旨最上方)：有內嵌影片→可播放/暫停/拖曳時間軸；否則給官方重播按鈕
 function irVideoBlock(sym, coName){
