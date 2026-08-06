@@ -157,6 +157,9 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-ai-read .muted { opacity:.7; }
 .ir-video { position:relative; width:100%; padding-top:56.25%; margin-bottom:12px; border-radius:10px; overflow:hidden; background:#000; }
 .ir-video iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
+.ir-video img { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; }
+.ir-video .ir-play-btn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:60px; height:60px; background:rgba(0,0,0,.7); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.ir-video .ir-play-btn div { width:0; height:0; border-left:22px solid #fff; border-top:13px solid transparent; border-bottom:13px solid transparent; margin-left:4px; }
 .ir-video-links { font-size:12px; margin-bottom:12px; padding:8px 10px; background:var(--bg3); border:1px solid var(--border); border-radius:8px; line-height:1.6; }
 .ir-video-links a { color:var(--blue); text-decoration:none; }
 .ir-video-links a:hover { text-decoration:underline; }
@@ -2315,7 +2318,7 @@ async function fillAnalystTargets(symbol, gen, curPrice){
     list.forEach((f,i)=>{
       const upside=(curPrice!=null && curPrice>0)?((f.target-curPrice)/curPrice*100):null;
       const cls=upside!=null?(upside>0?'g':upside<0?'r':''):'';
-      const rptUrl=zhLink(`https://www.google.com/search?q=${encodeURIComponent(f.firm+' '+symbol+' price target')}&tbm=nws`);
+      const rptUrl=`https://www.google.com/search?q=${encodeURIComponent(f.firm+' '+symbol+' price target')}&tbm=nws`;
       out+=`<div class="vr"><span class="vl" id="wta_label_${i}">${esc(f.label)}</span><span class="vn ${cls}">$${Math.round(f.target)}${upside!=null?`（${upside>=0?'+':''}${upside.toFixed(1)}%）`:''}<span style="color:var(--text2);font-weight:400;font-size:11px;margin-left:6px">${esc(f.date)}</span> <a href="${rptUrl}" target="_blank" rel="noopener" style="font-size:11px;text-decoration:none">📄報告</a></span></div>`;
     });
     el.innerHTML = out || '<div class="note">目前查無分析師動態資料</div>';
@@ -2456,19 +2459,26 @@ function irVideoBlock(sym, coName){
   const vq = (raw && typeof raw==='object') ? raw.q  : '';
   const irPage = IR_QUARTERLY_PAGE[sym];
   if(v && /^[\w-]{11}$/.test(v)){
-    // 內嵌 YouTube 播放器（可播放/暫停/拉時間軸）。
-    // ⚠️ 只加 cc_lang_pref 只是「偏好語言」，若影片沒有現成繁中字幕軌並不會自動翻譯。
-    //    要真正拿到繁體中文即時字幕，必須用 IFrame API 在播放器就緒後主動指定字幕軌(見 initIrCaptions)。
-    const orig = (location.protocol==='http:'||location.protocol==='https:') ? '&origin='+encodeURIComponent(location.origin) : '';
-    const src = `https://www.youtube-nocookie.com/embed/${esc(v)}?rel=0&enablejsapi=1&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant${orig}`;
-    setTimeout(initIrCaptions, 0);
+    // 點擊縮圖才載入 iframe：避免 YT IFrame API 接管既有 iframe 造成的「重新載入」導致畫面模糊
+    //   (使用者回報美股台積電影片首次進入模糊、切第二次才清楚)。改用高畫質靜態縮圖+點擊播放，
+    //   同投資大師選單做法，畫質穩定不受載入時序影響。
+    const thumb=`https://img.youtube.com/vi/${esc(v)}/mqdefault.jpg`;
     return (vq ? `<div class="note" style="margin:0 0 6px"><b style="color:var(--blue)">🎬 影片場次：${esc(vq)}</b><span class="muted"> ｜ 下方文字摘要為最新一季，若場次不同以文字摘要為準</span></div>` : '')
-      + `<div class="ir-video"><iframe id="irVideoFrame" src="${src}" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
-      + `<div class="note" style="margin-top:6px">💬 已自動開啟<b>繁體中文字幕</b>（英文場次為即時翻譯）。若未顯示，可點播放器右下角 <b>字幕</b> 圖示切換。</div>`;
+      + `<div class="ir-video" data-vid="${esc(v)}" onclick="loadIrVideo(this)" style="cursor:pointer">`
+      + `<img src="${thumb}" loading="lazy"><div class="ir-play-btn"><div></div></div></div>`
+      + `<div class="note" style="margin-top:6px">💬 點擊播放後自動開啟<b>繁體中文字幕</b>（英文場次為即時翻譯）。若未顯示，可點播放器右下角 <b>字幕</b> 圖示切換。</div>`;
   }
   const watchUrl = (v && /^https?:/.test(v)) ? v : irPage;
   if(!watchUrl) return '';
   return `<div class="ir-video-links">🎬 <b>法說會影片</b>：<a href="${esc(watchUrl)}" target="_blank">▶ 官方線上會議／重播（可播放、暫停、拉時間軸）↗</a><span class="muted"> ｜ 此公司暫無可內嵌影片，開啟官方線上重播</span></div>`;
+}
+function loadIrVideo(el){
+  const v=el.dataset.vid; if(!v) return;
+  const orig = (location.protocol==='http:'||location.protocol==='https:') ? '&origin='+encodeURIComponent(location.origin) : '';
+  const src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(v)}?rel=0&enablejsapi=1&autoplay=1&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant${orig}`;
+  el.innerHTML=`<iframe id="irVideoFrame" src="${src}" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  el.style.cursor='default'; el.onclick=null;
+  setTimeout(initIrCaptions, 300);
 }
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
