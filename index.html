@@ -2578,11 +2578,15 @@ function masterVidListHtml(){
     if(!vids.length) return;
     h+=`<div style="margin:18px 0 10px;font-size:15px;font-weight:700">${g.icon} ${g.person}</div>`;
     vids.forEach(v=>{
-      const thumb=`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`;
+      // 短影音是9:16直式容器，用mqdefault(320x180,16:9)以object-fit:cover填滿時要放大2倍多導致模糊，
+      //   改用maxresdefault(1280x720)為主、不存在時(舊/低畫質影片常見)用onerror退回hqdefault(480x360)。
+      //   長影片維持mqdefault即可(16:9容器不需放大)。
+      const thumb=isShort?`https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`:`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`;
+      const thumbFallback=`https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
       const src=`https://www.youtube-nocookie.com/embed/${v.id}?rel=0&enablejsapi=1&autoplay=1&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant${orig}`;
       h+=`<div style="margin-bottom:28px"><div style="font-size:13px;color:var(--text2);margin-bottom:4px">${esc(v.title)}</div>`
         +`<div class="ir-video master-thumb${isShort?' master-short-wrap':''}" data-src="${esc(src)}" onclick="loadMasterVid(this)" style="cursor:pointer">`
-        +`<img src="${thumb}" loading="lazy"><div class="ir-play-btn"><div></div></div>`
+        +`<img src="${thumb}" loading="lazy"${isShort?` onerror="this.onerror=null;this.src='${thumbFallback}'"`:''}><div class="ir-play-btn"><div></div></div>`
         +`</div></div>`;
     });
   });
