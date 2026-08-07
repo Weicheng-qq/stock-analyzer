@@ -2450,7 +2450,7 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 // 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
-const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/', 'GS': 'https://www.goldmansachs.com/investor-relations/', 'BAC': 'https://investor.bankofamerica.com/', 'MS': 'https://www.morganstanley.com/about-us-ir', 'ORCL': 'https://investor.oracle.com/', 'PLTR': 'https://investors.palantir.com/', 'IBM': 'https://www.ibm.com/investor', 'V': 'https://investor.visa.com/', 'MA': 'https://investor.mastercard.com/', 'WMT': 'https://stock.walmart.com/', 'PEP': 'https://www.pepsico.com/investors', 'MCD': 'https://www.investor.mcdonalds.com/', 'XOM': 'https://investor.exxonmobil.com/', 'CRWD': 'https://ir.crowdstrike.com/', 'PANW': 'https://investors.paloaltonetworks.com/', 'ANET': 'https://investors.arista.com/', 'MRVL': 'https://investor.marvell.com/', 'SMCI': 'https://ir.supermicro.com/', 'ARM': 'https://investors.arm.com/', 'ABNB': 'https://investors.airbnb.com/', 'VRT': 'https://investors.vertiv.com/', 'CVX': 'https://www.chevron.com/investors', 'UNH': 'https://www.unitedhealthgroup.com/investors.html', 'ABBV': 'https://investors.abbvie.com/', 'AMGN': 'https://investors.amgen.com/', 'LRCX': 'https://investor.lamresearch.com/', 'CAT': 'https://investors.caterpillar.com/', 'GE': 'https://www.geaerospace.com/investor-relations', 'T': 'https://investors.att.com/', 'NKE': 'https://investors.nike.com/', 'SPOT': 'https://investors.spotify.com/', 'BA': 'https://investors.boeing.com/', 'SHOP': 'https://investors.shopify.com/', 'PYPL': 'https://investor.pypl.com/', 'PG': 'https://us.pg.com/', 'MRK': 'https://www.merck.com/', 'VZ': 'https://www.verizon.com/', 'TXN': 'https://investor.ti.com/', 'HON': 'https://investor.honeywell.com/', 'ADBE': 'https://news.adobe.com/', '2454': 'https://www.mediatek.com/zh-tw/investor-relations', '2317': 'https://www.honhai.com/zh-tw/investor-relations', '2308': 'https://investor.deltaww.com/', '2303': 'https://www.umc.com/zh-TW/Investors/financial_information', '2382': 'https://www.quantatw.com/quanta/chinese/investor/index.aspx', '3711': 'https://www.aseglobal.com/investor-relations/', '8299': 'https://www.phison.com/zh-tw/investor-relations', '2345': 'https://www.accton.com/investor-relations/', '2412': 'https://www.cht.com.tw/zh-tw/corporate/investor', '3105': 'https://www.winfoundry.com/zh-TW/Invest/invest_index', '3034': 'https://www.novatek.com.tw/en/Investor', '2357': 'https://www.asus.com/tw/event/investor-relations/', '3231': 'https://www.wistron.com/CMS/Investor', '2324': 'https://www.compal.com/investor-relations', '2379': 'https://www.realtek.com/Investor', '4938': 'https://www.pegatroncorp.com/investor-relations', '3037': 'https://www.unimicron.com/investor.html', '3008': 'https://www.largan.com.tw/investor', '2395': 'https://www.advantech.com/en/investor-relations', '3443': 'https://www.guc-asic.com/investor-relations' };
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/', 'GS': 'https://www.goldmansachs.com/investor-relations/', 'BAC': 'https://investor.bankofamerica.com/', 'MS': 'https://www.morganstanley.com/about-us-ir', 'ORCL': 'https://investor.oracle.com/', 'PLTR': 'https://investors.palantir.com/', 'IBM': 'https://www.ibm.com/investor', 'V': 'https://investor.visa.com/', 'MA': 'https://investor.mastercard.com/', 'WMT': 'https://stock.walmart.com/', 'PEP': 'https://www.pepsico.com/investors', 'MCD': 'https://www.investor.mcdonalds.com/', 'XOM': 'https://investor.exxonmobil.com/', 'CRWD': 'https://ir.crowdstrike.com/', 'PANW': 'https://investors.paloaltonetworks.com/', 'ANET': 'https://investors.arista.com/', 'MRVL': 'https://investor.marvell.com/', 'SMCI': 'https://ir.supermicro.com/', 'ARM': 'https://investors.arm.com/', 'ABNB': 'https://investors.airbnb.com/', 'VRT': 'https://investors.vertiv.com/', 'CVX': 'https://www.chevron.com/investors', 'UNH': 'https://www.unitedhealthgroup.com/investors.html', 'ABBV': 'https://investors.abbvie.com/', 'AMGN': 'https://investors.amgen.com/', 'LRCX': 'https://investor.lamresearch.com/', 'CAT': 'https://investors.caterpillar.com/', 'GE': 'https://www.geaerospace.com/investor-relations', 'T': 'https://investors.att.com/', 'NKE': 'https://investors.nike.com/', 'SPOT': 'https://investors.spotify.com/', 'BA': 'https://investors.boeing.com/', 'SHOP': 'https://investors.shopify.com/', 'PYPL': 'https://investor.pypl.com/', 'PG': 'https://us.pg.com/', 'MRK': 'https://www.merck.com/', 'VZ': 'https://www.verizon.com/', 'TXN': 'https://investor.ti.com/', 'HON': 'https://investor.honeywell.com/', 'ADBE': 'https://news.adobe.com/', 'KLAC': 'https://ir.kla.com/', 'NXPI': 'https://investors.nxp.com/', 'RTX': 'https://www.rtx.com/investors', 'AXP': 'https://ir.americanexpress.com/', 'PM': 'https://www.pmi.com/investor-relations', '2454': 'https://www.mediatek.com/zh-tw/investor-relations', '2317': 'https://www.honhai.com/zh-tw/investor-relations', '2308': 'https://investor.deltaww.com/', '2303': 'https://www.umc.com/zh-TW/Investors/financial_information', '2382': 'https://www.quantatw.com/quanta/chinese/investor/index.aspx', '3711': 'https://www.aseglobal.com/investor-relations/', '8299': 'https://www.phison.com/zh-tw/investor-relations', '2345': 'https://www.accton.com/investor-relations/', '2412': 'https://www.cht.com.tw/zh-tw/corporate/investor', '3105': 'https://www.winfoundry.com/zh-TW/Invest/invest_index', '3034': 'https://www.novatek.com.tw/en/Investor', '2357': 'https://www.asus.com/tw/event/investor-relations/', '3231': 'https://www.wistron.com/CMS/Investor', '2324': 'https://www.compal.com/investor-relations', '2379': 'https://www.realtek.com/Investor', '4938': 'https://www.pegatroncorp.com/investor-relations', '3037': 'https://www.unimicron.com/investor.html', '3008': 'https://www.largan.com.tw/investor', '2395': 'https://www.advantech.com/en/investor-relations', '3443': 'https://www.guc-asic.com/investor-relations' };
 
 // 🎬 法說會影片（keyed by 代碼）：值可為 YouTube 影片 ID(11碼，內嵌可播放/暫停/拉時間軸) 或完整官方重播網址(外開)。
 // 人工逐間驗證後填入官方來源；未填者自動退回「官方法說會線上重播頁」按鈕(IR_QUARTERLY_PAGE，該頁本身即有播放器)。
@@ -3443,6 +3443,60 @@ const IR_CALL_SUMMARY = {
 • 上修全年營收與非GAAP EPS展望。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
 • Creative Cloud(Photoshop/Illustrator/Premiere)、Document Cloud(Acrobat)、Experience Cloud(行銷/數據分析)三大雲；AI生成式功能(Firefly)持續整合進各產品線。</div>`
+  },
+  'KLAC': {
+    quarter: 'FY2026 Q4（官網財報，2026/07/28）',
+    source: 'https://ir.kla.com/',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 全年財報創新高</b><br>
+• FY2026第四季(至6/30)營收 <b>36.6億美元</b>；GAAP EPS $1.04、非GAAP EPS $1.05(位於財測上緣)。<br>
+• <b>FY2026全年營收135.8億美元</b>，GAAP EPS $3.66；全年營運現金流41.4億、自由現金流37.7億美元。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 半導體製程檢測設備龍頭，受惠AI晶片先進製程資本支出擴張。</div>`
+  },
+  'NXPI': {
+    quarter: 'Q2 2026（官網財報，2026/07/28）',
+    source: 'https://investors.nxp.com/',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 全市場成長</b><br>
+• Q2 營收 <b>34.96億美元（年增19%、季增10%）</b>，各終端市場與地區均成長；非GAAP EPS $3.61。<br>
+• 車用營收19.4億(+12%)、工業與物聯網7.55億(+38%)、行動3.51億(+6%)、通訊基礎設施4.52億(+41%)。<br>
+• Q3展望：營收36.5～38.5億美元、非GAAP EPS $3.89～4.32。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 車用與工業物聯網為兩大主力市場；非GAAP自由現金流利潤率22.6%。</div>`
+  },
+  'RTX': {
+    quarter: 'Q2 2026（官網財報，2026/07/23）',
+    source: 'https://www.rtx.com/investors',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 營收大幅優於預期、財測上修</b><br>
+• Q2 銷售額 <b>247億美元（年增14%，有機成長16%）</b>，優於預期的228.3億；調整後EPS <b>$1.89（年增21.1%）</b>，優於預期的$1.66；GAAP EPS $1.57。<br>
+• 自由現金流29億美元；<b>在手訂單(backlog)創紀錄達2,890億美元(年增22%)</b>，商用1,700億+國防1,190億。<br>
+• 全年展望上修：調整後銷售額950～960億美元、EPS $7.10～7.25、自由現金流85～87.5億美元。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 航太發動機(Pratt & Whitney)、航電系統(Collins Aerospace)、飛彈與國防(Raytheon)三大事業群。</div>`
+  },
+  'AXP': {
+    quarter: 'Q2 2026（官網財報，2026/07/24）',
+    source: 'https://ir.americanexpress.com/',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 連續四季雙位數成長</b><br>
+• Q2 淨利31億美元（去年同期29億）；EPS <b>$4.53</b>，優於預期的$4.40；營收196.4億美元(+10%)、調整後EPS年增11%。<br>
+• <b>會員年費收入年增15.4%創紀錄</b>，為成長最快的營收項目；股東權益報酬率(ROE)達36%。<br>
+• 上調全年營收成長展望至10%，EPS財測維持$17.30～17.90(選擇再投資而非加碼庫藏股)。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 高端信用卡(白金卡/黑卡等)與會員經濟為核心，持續受惠高消費客群韌性。</div>`
+  },
+  'PM': {
+    quarter: 'Q2 2026（官網財報，2026/07/22）',
+    source: 'https://www.pmi.com/investor-relations',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 首次單季突破110億美元</b><br>
+• Q2 淨營收 <b>112億美元（年增10.4%）</b>，史上首次單季突破110億；有機成長8%、營業利益成長11%。<br>
+• 調整後稀釋EPS <b>$2.20（年增15.2%）</b>，優於預期的$2.11；無煙產品(IQOS加熱菸+ZYN尼古丁袋)為成長主力，已拓展至109個市場。<br>
+• 全年展望：有機淨營收成長5～7%、調整後EPS $8.26～8.41(+9.5～11.5%)。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
+• 積極轉型無煙產品(Smoke-Free)，IQOS與ZYN為兩大成長引擎。</div>`
   },
   // ── 台股法說會展望（資料來源：各公司官網 IR + 財經新聞整理，每季需人工更新）──
   '2454': {
@@ -5138,6 +5192,51 @@ CPU 架構與矽智財(IP)授權龍頭：以 <b>Armv9 架構</b>與 <b>運算子
 <div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q2 2026）</b><br>
 • AI優先年經常性收入(AI-first ARR)較去年成長逾3倍、突破5億美元；總ARR達271億美元。<br>
 • 生成式AI功能(Firefly)持續整合進Creative/Document/Experience各產品線。</div>`
+  },
+  'KLAC': {
+    quarter: '官網 ir.kla.com 業務結構（FY2026）',
+    source: 'https://ir.kla.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（FY2026全年營收135.8億美元）</b></div>
+全球半導體製程檢測與量測設備龍頭，核心業務：<b>製程控制系統(Process Control)</b>（晶圓檢測/量測）、<b>良率管理軟體</b>，客戶涵蓋台積電/三星/英特爾等主要晶圓廠。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（FY2026 Q4）</b><br>
+• 受惠AI晶片先進製程資本支出擴張，FY2026全年GAAP EPS $3.66。<br>
+• 自由現金流37.7億美元，資本回饋能力強勁。</div>`
+  },
+  'NXPI': {
+    quarter: '官網 investors.nxp.com 業務結構（2026）',
+    source: 'https://investors.nxp.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q2 2026營收34.96億美元）</b></div>
+全球車用與工業物聯網半導體大廠，官網揭露四大終端市場：<b>車用(Automotive)</b>、<b>工業與物聯網(Industrial & IoT)</b>、<b>行動裝置(Mobile)</b>、<b>通訊基礎設施(Communications Infrastructure)</b>。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q2 2026）</b><br>
+• 車用營收19.4億美元(+12%)為最大營收來源；工業與物聯網7.55億(+38%)成長最快。<br>
+• 非GAAP自由現金流利潤率22.6%，季內回饋股東3.6億美元。</div>`
+  },
+  'RTX': {
+    quarter: '官網 rtx.com 業務結構（2026）',
+    source: 'https://www.rtx.com/investors',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q2 2026銷售額247億美元）</b></div>
+全球航太與國防大廠，官網揭露三大事業群：<b>Pratt & Whitney(航空發動機)</b>、<b>Collins Aerospace(航電與系統整合)</b>、<b>Raytheon(飛彈與國防系統)</b>。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q2 2026）</b><br>
+• 在手訂單(backlog)創紀錄達2,890億美元(商用1,700億+國防1,190億)，能見度極高。<br>
+• 自由現金流29億美元，全年展望上修。</div>`
+  },
+  'AXP': {
+    quarter: '官網 ir.americanexpress.com 業務結構（2026）',
+    source: 'https://ir.americanexpress.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q2 2026營收196.4億美元）</b></div>
+全球高端信用卡與支付網路公司，官網揭露核心業務：<b>消費者卡片(白金卡/金卡等)</b>、<b>商務卡片</b>、<b>會員獎勵生態系(Membership Rewards)</b>，採發卡與收單合一的閉環支付網路模式。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q2 2026）</b><br>
+• 會員年費收入年增15.4%創紀錄，反映高端會員經濟持續強勁。<br>
+• 股東權益報酬率(ROE)達36%，連續四季雙位數營收成長。</div>`
+  },
+  'PM': {
+    quarter: '官網 pmi.com 業務結構（2026）',
+    source: 'https://www.pmi.com/investor-relations',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（Q2 2026淨營收112億美元）</b></div>
+全球菸草大廠，官網揭露轉型策略：<b>無煙產品(Smoke-Free)</b>（IQOS加熱菸+ZYN尼古丁袋，已拓展109個市場）、<b>傳統可燃菸品(Combustible)</b>。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">產品／營收重點（Q2 2026）</b><br>
+• 無煙產品為成長主力，帶動單季淨營收史上首次突破110億美元。<br>
+• 全年調整後EPS展望$8.26～8.41(+9.5～11.5%)。</div>`
   }
 };
 function newsItemHtml(title, link, pub, img){
