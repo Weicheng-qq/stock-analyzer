@@ -2532,46 +2532,58 @@ function initIrCaptions(){ forceZhCaptions('irVideoFrame'); }
 const MASTER_VIDEOS=[
   {person:'華倫·巴菲特 Warren Buffett',icon:'🏛️',
     long:[
-      {id:'i45_qjgFmxg',title:'《成為巴菲特》HBO 紀錄片全長版(約1小時28分)— 深入巴菲特的人生哲學與投資之道'},
-      {id:'j1vGFpd49wM',title:'2025 波克夏·海瑟威股東大會 — CNBC 完整實況轉播'},
-      {id:'JvEas_zZ4fM',title:'CNBC 深度專訪巴菲特 — 談投資策略、市場觀點與人生智慧'},
-      {id:'2hdDE7XYr30',title:'CNBC 專訪巴菲特、蒙格與比爾蓋茲 — 三大巨頭同台對談'}
+      {id:'ERH8Hs9kWH0',title:'【中文字幕】1998年佛羅里達大學經典演講 — 真人畫面全程燒錄繁中字幕，投資與人生忠告'},
+      {id:'i45_qjgFmxg',title:'《成為巴菲特》HBO 紀錄片全長版(約1小時28分)— 深入巴菲特的人生哲學與投資之道(英文原音)'},
+      {id:'j1vGFpd49wM',title:'2025 波克夏·海瑟威股東大會 — CNBC 完整實況轉播(英文原音)'},
+      {id:'2hdDE7XYr30',title:'CNBC 專訪巴菲特、蒙格與比爾蓋茲 — 三大巨頭同台對談(英文原音)'}
     ],
     short:[
       {id:'lWu2fw6APM4',title:'20孔打卡投資哲學 — 巴菲特經典比喻：一生只能做20次投資決定'},
       {id:'5mZUJThXM44',title:'巴菲特談如何成為億萬富翁 — 資本主義與財富累積的省思'}
+    ],
+    audiobook:[
+      {id:'ETs_T4UA0nE',title:'【有聲書】《巴菲特傳》(雪球)完整版（上）— 巴菲特唯一授權傳記，全程繁簡中文口述'},
+      {id:'N-4CIroWFxw',title:'【有聲書】《巴菲特傳》(雪球)完整版（下）'}
     ]
   },
   {person:'彼得·林區 Peter Lynch',icon:'📈',
     long:[
-      {id:'2GqVXPtx9Rw',title:'1994 國家記者俱樂部經典演講 — 散戶如何打敗華爾街'},
-      {id:'myu4Nv0pt0U',title:'1997 股市投資演講 — 選股策略與市場觀察'},
-      {id:'INIel3CX7cQ',title:'投資精華演講集錦 — 風趣幽默的選股心法'}
+      {id:'DNllyjjRWTc',title:'【完整字幕版】1994年珍貴演講 — 真人畫面全程燒錄繁中字幕，分享股票投資最重要的一課'},
+      {id:'2GqVXPtx9Rw',title:'1994 國家記者俱樂部經典演講 — 散戶如何打敗華爾街(英文原音)'},
+      {id:'myu4Nv0pt0U',title:'1997 股市投資演講 — 選股策略與市場觀察(英文原音)'}
     ],
     short:[
       {id:'G1sHwpGHLWk',title:'該不該買股票？— 林區給新手的買股時機建議'},
       {id:'SDfGXK8SQxQ',title:'投資人浪費太多時間 — 林區談過度關注股價的迷思'}
+    ],
+    audiobook:[
+      {id:'AEy5inKA2UM',title:'【有聲書】《彼得林區選股戰略》(彼得·林奇的成功投资)完整版（上）'},
+      {id:'HHzqVIVFbHc',title:'【有聲書】《彼得林區選股戰略》(彼得·林奇的成功投资)完整版（下）'}
     ]
   },
   {person:'查理·蒙格 Charlie Munger',icon:'🧠',
     long:[
-      {id:'pqzcCfUglws',title:'人類誤判心理學 — 完整演講（經典必看）'},
-      {id:'9VVPO3KWj3A',title:'2023 每日期刊股東大會 — 談比亞迪、特斯拉、阿里巴巴與比特幣'},
-      {id:'H5Oom5Rjp_Y',title:'蒙格最後一次 CNBC 電視專訪 — 傳奇投資人的最終智慧'}
+      {id:'Gu_iovmjcJs',title:'（中英文字幕）蒙格生前最後一次訪談 — 真人畫面全程燒錄繁中字幕，100年人生智慧'},
+      {id:'pqzcCfUglws',title:'人類誤判心理學 — 完整演講（經典必看，英文原音）'},
+      {id:'9VVPO3KWj3A',title:'2023 每日期刊股東大會 — 談比亞迪、特斯拉、阿里巴巴與比特幣(英文原音)'}
     ],
     short:[
       {id:'p5vm2n49qp8',title:'蒙格談特斯拉與馬斯克 — 對市值估值的直白評論'},
       {id:'B8Ip21rA4sY',title:'給年輕人的十億美元建議 — 蒙格對年輕投資人的忠告'}
+    ],
+    audiobook:[
+      {id:'j0DbCfHNO_A',title:'【有聲書】《窮查理寶典》完整版（上）— 蒙格畢生思維智慧精華集'},
+      {id:'FGrCITMM_gE',title:'【有聲書】《窮查理寶典》完整版（下）'}
     ]
   }
 ];
 let __masterTab='long';
+const MASTER_TAB_LABEL={long:'🎬 長影片',short:'📱 短影音',audiobook:'🎧 有聲書'};
 function investmentMastersHtml(){
-  let h=`<div class="master-tabs">`
-    +`<button class="master-tab-btn${__masterTab==='long'?' active':''}" onclick="setMasterTab('long')">🎬 長影片</button>`
-    +`<button class="master-tab-btn${__masterTab==='short'?' active':''}" onclick="setMasterTab('short')">📱 短影音</button>`
+  let h=`<div class="master-tabs">`+Object.keys(MASTER_TAB_LABEL).map(t=>
+    `<button class="master-tab-btn${__masterTab===t?' active':''}" onclick="setMasterTab('${t}')">${MASTER_TAB_LABEL[t]}</button>`).join('')
     +`</div><div id="masterVidList">${masterVidListHtml()}</div>`
-    +`<div class="note" style="margin-top:8px">💬 影片若有中文字幕軌會自動套用；若原音非中文，可點播放器右下角<b>字幕圖示</b>開啟英文字幕，YouTube 會依您自己的帳號/瀏覽器語言設定提供即時翻譯選項(此為 YouTube 平台功能，需在字幕選單內手動選擇翻譯語言，無法由本站強制開啟)。</div>`;
+    +`<div class="note" style="margin-top:8px">💬 標示「中文字幕」的影片為真人畫面燒錄繁中字幕，保證看得懂；有聲書全程中文口述。其餘英文原音影片可點播放器右下角<b>字幕圖示</b>開啟英文字幕，YouTube 會依您自己的帳號/瀏覽器語言設定提供即時翻譯選項(此為 YouTube 平台功能，需在字幕選單內手動選擇翻譯語言，無法由本站強制開啟)。</div>`;
   return h;
 }
 function masterVidListHtml(){
@@ -2585,7 +2597,7 @@ function masterVidListHtml(){
     vids.forEach(v=>{
       // 短影音是9:16直式容器，用mqdefault(320x180,16:9)以object-fit:cover填滿時要放大2倍多導致模糊，
       //   改用maxresdefault(1280x720)為主、不存在時(舊/低畫質影片常見)用onerror退回hqdefault(480x360)。
-      //   長影片維持mqdefault即可(16:9容器不需放大)。
+      //   長影片/有聲書維持mqdefault即可(16:9容器不需放大)。
       const thumb=isShort?`https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`:`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`;
       const thumbFallback=`https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
       const src=`https://www.youtube-nocookie.com/embed/${v.id}?rel=0&enablejsapi=1&autoplay=1&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant${orig}`;
@@ -2595,11 +2607,11 @@ function masterVidListHtml(){
         +`</div></div>`;
     });
   });
-  return h;
+  return h || '<div class="note">此分類目前無資料</div>';
 }
 function setMasterTab(tab){
   __masterTab=tab;
-  document.querySelectorAll('.master-tab-btn').forEach(b=>{ b.classList.toggle('active', b.textContent.includes(tab==='long'?'長影片':'短影音')); });
+  document.querySelectorAll('.master-tab-btn').forEach(b=>{ b.classList.toggle('active', b.textContent===MASTER_TAB_LABEL[tab]); });
   const list=document.getElementById('masterVidList'); if(list) list.innerHTML=masterVidListHtml();
 }
 let __masterVidSeq=0;
