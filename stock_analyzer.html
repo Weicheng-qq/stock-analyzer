@@ -621,7 +621,7 @@ function syncLogPanel(){ const el=document.getElementById('logPanel'); if(el) el
 function logAdd(k,m){ const c=document.getElementById('logItems'); const d=document.createElement('div'); d.className='log-item'; d.id='log_'+k; d.innerHTML=`<div class="log-spin"></div><span>${m}</span>`; c.appendChild(d); }
 function logOk(k,m){ const el=document.getElementById('log_'+k); if(el) el.innerHTML=`<span class="log-ok">✓</span><span>${m}</span>`; }
 function logErr(k,m){ const el=document.getElementById('log_'+k); if(el) el.innerHTML=`<span class="log-err">✗</span><span style="color:var(--red)">${m}</span>`; }
-function quickSearch(s){ document.getElementById('searchInput').value=s; __jumpAfterSearch=true; doSearch(); }
+function quickSearch(s){ revealMenu(); document.getElementById('searchInput').value=s; __jumpAfterSearch=true; doSearch(); }
 
 // ── SEC ──
 // 常用中文／別名 → 美股代碼（找不到代碼時先查這裡）
@@ -951,6 +951,7 @@ function moveWatchlistItem(symbol, dir){
   renderWatchlist();
 }
 function watchlistAnalyze(symbol){
+  revealMenu();   // 真人點AI鈕才跳過封面(demo自動搜尋不會走這個函式，不受影響)
   if(/\.TW[O]?$/i.test(symbol)){ doSearchTW(symbol); window.scrollTo({top:0, behavior:'smooth'}); return; }
   const inp=document.getElementById('searchInput'); if(inp) inp.value=symbol;
   __jumpAfterSearch=true; doSearch();
@@ -1506,7 +1507,9 @@ async function loadTwInstitutional(code, gen){
 }
 async function doSearchTW(symbol){
   const gen=++SEARCH_GEN;
-  revealMenu();   // 按下分析立刻跳過封面、顯示選單區(使用者要求)，不用等封面倒數
+  // ⚠️ revealMenu()不可放在這裡：maybeRunDemo()背景自動demo(300ms後)也會呼叫doSearch/doSearchTW，
+  //   若在這裡呼叫會讓封面秒退場，蓋掉2秒封面倒數。改成只在「真人操作」的入口(watchlistAnalyze/
+  //   quickSearch)呼叫revealMenu()，這裡維持乾淨。
   // 主動查詢預設查完跳「關鍵財務指標」。必須在「開頭」就設定，載入途中使用者若手動點選單
   //   (pickGroup 會把它清成 false)才蓋得掉；原本設在載入結尾，會反過來蓋掉使用者的選擇。
   if(!__autoLoading) __jumpAfterSearch=true;
@@ -1596,7 +1599,7 @@ async function doSearchTW(symbol){
 async function doSearch(){
   const raw=document.getElementById('searchInput').value.trim();
   if(!raw) return;
-  revealMenu();   // 按下分析立刻跳過封面、顯示選單區(使用者要求)，不用等封面倒數
+  // revealMenu()不放這裡，理由同doSearchTW()：maybeRunDemo()背景demo也會呼叫到doSearch()。
   if(getMarket()==='tw'){
     const r=await resolveTwInput(raw);
     if(!r){ alert(`查不到台股「${raw}」，請輸入代碼(如 2330)或公司名(如 台積電 / 群聯)`); return; }
