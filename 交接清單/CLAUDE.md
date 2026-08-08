@@ -1,7 +1,7 @@
 # 美股/台股 AI 深度分析 APP — 使用者定義的所有原則與細節
 
 > **用途**：此檔是**唯一的完整總綱**，記錄使用者（版主）在所有歷史對話中定義過的原則、架構要求、犯過的錯、Skill 清單與自動化規則。每次開新 session 時，先讀取本檔 + `.claude/skills/交接手冊skill/交接記錄.md`（最新 session 進度）再開始工作。
-> **最後更新**：2026-08-02 #3
+> **最後更新**：2026-08-04 #6
 > **公開網址**：https://weicheng-stock.vercel.app
 > **原始碼位置**：`C:\Users\Amber Lin\weicheng claude\股票\`
 
@@ -21,22 +21,28 @@
 - **零費用**：所有環節一律免費——API、模型、託管、資料來源、工具。**任何可能產生費用的方案，必須先詢問使用者並取得明確同意**。
 - **本機開發**：另有 `proxy.ps1` + `啟動.bat` 作為本機代理（非必要，線上版已走 Vercel API）。`.claude/launch.json` 設定 `python -m http.server 8765` 供本機預覽。
 
-### 1.3 八大主題選單（`#grpMenu`，`showGroup(n)` / `cardGroup()`）
-| 編號 | 選單項目 | 渲染/資料來源 |
-|---:|---|---|
-| 1 | 大盤指數＋自選股 | Yahoo Finance 即時報價（`loadIndexBar`，60秒刷新） |
-| 2 | 關鍵財務指標（含公司股價 co-head 在最上） | SEC EDGAR 10年 / FinMind 10年（台股） |
-| 3 | 護城河與彼得林區分類（護城河最上） | AI 分析 + 維基（台股） |
-| 4 | 股價估值評估 | Yahoo + AI |
-| 5 | 法說會未來前景 | `IR_CALL_SUMMARY`（官網 IR 優先） |
-| 6 | 財經新聞（新聞上/目標價下） | Yahoo RSS / 新聞 API |
-| 7 | AI 技術分析 | Chart.js + AI |
-| 8 | 投資總結 | 版主選股原則 + AI 獨立判斷（見第 4 節） |
-| 9 | 產品與服務（排在 2 前面） | `IR_PRODUCTS_SUMMARY`（官網 IR 優先） |
+### 1.3 十大主題選單（`#grpMenu`，`showGroup(n)` / `pickGroup(n)` / `cardGroup()`）
 
-- `cardGroup` 依 `.ct` 文字分組（投資總結需在護城河前判斷，標題含「護城河」）。
+選單按鈕的 UI 排列順序（由上到下）：
+
+| 順序 | 編號 | 選單項目 | 渲染/資料來源 |
+|:---:|---:|---|---|
+| 1 | 10 | 自選股 | localStorage 自選股清單 + Yahoo 即時報價 |
+| 2 | 2 | 關鍵財務指標（含大盤指數＋公司股價） | SEC EDGAR 10年 / FinMind 10年（台股）；指數在公司股價上方 |
+| 3 | 6 | 財經新聞（新聞上/目標價下） | Yahoo RSS / 新聞 API |
+| 4 | 5 | 法說會未來前景 | `IR_CALL_SUMMARY`（官網 IR 優先）＋法說會影片 |
+| 5 | 7 | AI 技術分析 | Chart.js + AI + techTipRenderer 外部提示 |
+| 6 | 3 | 護城河與彼得林區分類 | AI 分析 + 維基（台股） |
+| 7 | 4 | 股價估值評估 | Yahoo + AI + PE gauge + 競爭對手 PE |
+| 8 | 9 | 產品與服務 | `IR_PRODUCTS_SUMMARY`（官網 IR 優先） |
+| 9 | 11 | 版主選股準則 | 7 項選股準則檢查清單 + 版主結論 |
+| 10 | 8 | 投資總結 | AI 獨立判斷（見第 4 節） |
+
+- **pickGroup(n)**：手動選單點擊用（先清 `__jumpAfterSearch` 再 `showGroup`），防止載入跳走。
+- `cardGroup` 依 `.ct` 文字分組。**版主選股準則** 規則(`/版主選股準則/`)須在投資總結前判斷（投資總結標題含「護城河」文字）。
 - `#results` 是 `.results{display:none}` → `showGroup` 顯示要 `display:block`（非空字串）。
-- 主動查詢後 `__jumpAfterSearch` 跳群組 2。
+- 主動查詢後 `__jumpAfterSearch` 跳群組 2（在 doSearch/doSearchTW **開頭**設定，使用者中途手動點選會清除）。
+- **autoLoadDefaultStock()**：點深度選單無資料時自動分析自選股第一檔，不需使用者先點 AI 鈕。
 
 ### 1.4 四大指數
 - 美股：道瓊/標普500/那斯達克/費半（標題「四大指數」）。
@@ -44,8 +50,8 @@
 
 ### 1.5 自選股（`renderWatchlist`）
 - 顯示：logo / 名稱 / 當日走勢線 SVG / 股價 / 漲跌 pill / 盤前後 / 漲跌解讀。
-- 標題右側「✏️ 編輯」鈕（`toggleWlEdit`/`__wlEdit`）→ 編輯模式顯示 ☰ 拖曳把手，`initWlDrag` 用 pointer 事件一次拖到任意位置（手機觸控 OK），存回 localStorage。
-- **預設自選股**：美股 = 台積電(TSM)/谷歌(GOOGL)/輝達(NVDA)/諾和諾德(NVO)；台股 = 台積電(2330)/鴻海(2317)/聯發科(2454)/台達電(2308)。
+- 標題右側「✏️ 編輯」鈕（`toggleWlEdit`/`__wlEdit`）→ 編輯模式顯示 ▲▼ 按鈕（`moveWatchlistItem`），`.wl-editing` class 隱藏走勢線讓空間給按鈕，存回 localStorage。
+- **預設自選股**：美股 = 台積電(TSM)/谷歌(GOOGL)/輝達(NVDA)/諾和諾德(NVO)；台股 = 台積電(2330)/聯發科(2454)/鴻海(2317)/0050。
 - **Logo 來源**：美股 FMP `image-stock/{代碼}.png`（DIS 空白 → `LOGO_ALT` 用 parqet）；台股同用 FMP，錯圖用 `TW_LOGO_ALT`（2317 鴻海→FXCOF）、`TW_LOGO_BAD` 退代碼底圖。
 - **名稱要正確**：DELL＝戴爾（非台達電）；V＝威士卡（非「視覺」）。手機版名稱不可截斷。
 
@@ -97,9 +103,11 @@
 - **AAPL 特殊**：不公布書面財測（展望於法說會口頭），已於摘要註明。
 
 ### 3.2 法說會影片
-- 法說會內容頁面**最一開始放法說影片**，附**繁體中文字幕**。
-- 目前僅台積電(TSM)有實際影片（非凡新聞 `JOhMwPVXRHM`）；其餘美股純語音法說會已改回指向官方 IR 重播頁面。
-- `IR_CALL_VIDEO` 常數目前只保留 TSM。
+- 法說會內容頁面**最一開始放法說影片**，附**繁體中文即時字幕**。
+- `IR_CALL_VIDEO` 格式為 `{id, q}` 物件：`id` = YouTube 影片 ID，`q` = 場次標籤（如「2026 第一季」或「2026 第二季（英文原音）」）。`irVideoBlock()` 顯示場次標籤 + 字幕說明。
+- **YouTube IFrame API 強制繁中字幕**：`initIrCaptions()` 載入 iframe_api → onReady/onPlaying 主動指定 zh-Hant 字幕軌（zh-TW 備援），retry 1.5s + 4s 等字幕軌就緒。
+- 目前已有影片的公司：TSM(台積電)、2454(聯發科)、2303(聯電)、2317(鴻海)、3711(日月光)、2327(國巨)。
+- 美股純語音法說會改回指向官方 IR 重播頁面。
 
 ### 3.3 三個核心常數（keyed by 股票代碼，人工判讀寫死）
 | 常數 | 內容 | 渲染位置 |
@@ -197,7 +205,7 @@ AI 根據所有已抓取的事實資料（財務數據 + 法說會 + 產品 + �
 - 台股漲跌**紅漲綠跌**（CSS 由 `body.mkt-tw` 控制翻轉）。
 - 台股 10 年財務用 **FinMind 免費 API**（`loadTwFinancials()` 用 `TaiwanFinancialStatements` 端點）。
 - 台股定性分析（護城河/競爭對手/產品）用**中文維基百科**為事實基底（`fetchWikipediaZh()`，CORS-enabled），取代 AI 腦補，顯示「依維基百科整理」+ 維基連結。
-- 雙掛牌股（如台積電 2330）走 `TW_US_EQUIV` 映射到美股代碼（`'2330':'TSM'`），共用美股事實內容。
+- 雙掛牌股走雙向對照：`TW_US_EQUIV={'2330':'TSM'}`（台股→美股）+ `US_TW_EQUIV={'UMC':'2303','ASX':'3711','CHT':'2412'}`（美股ADR→台股）。**`twToUs(code)` 雙向查表函式**：台股端需要美股代碼時一律用此函式（不要只查 `TW_US_EQUIV[code]`，會漏掉聯電/日月光/中華電）。共用美股事實內容 + AI 快取 + SEC 財報。
 - 幣別：新台幣，金額換算「億/兆」並標「元（新台幣）」。
 - MOPS 抓取常需帶正確表單參數（POST）。
 
@@ -265,6 +273,19 @@ AI 根據所有已抓取的事實資料（財務數據 + 法說會 + 產品 + �
 - **錯**：使用者在對話中截圖/貼出金鑰（`gsk_` 或 `sk-or-` 開頭）。
 - **解法**：視為已外流，須提醒使用者重新產生，不可再使用。
 
+### 6.16 只修一間公司（打地鼠問題）
+- **錯**：使用者回報台積電美股/台股不一致 → 只修台積電，其他雙掛牌（聯電/日月光/中華電）同樣問題沒修。
+- **使用者原話**：「我跟你說的發現錯誤, 不要只針對一間公司去改, 可能所有公司都有依樣問題」。
+- **解法**：建立 `twToUs()` 雙向查表函式（取代只查 `TW_US_EQUIV[code]`）、建立雙市場一致性檢查腳本做系統性比對。**每次修 bug 都要考慮：這個問題是否影響所有公司？**
+
+### 6.17 AI 結果不穩定（每次重整都不同）
+- **錯**：快取只套用在雙掛牌，一般公司完全沒快取，導致同一天同一間公司的 AI 結論每次都不同。
+- **解法**：`__aiKey()` 以「代碼+日期」為快取鍵，套用到所有公司；換日自動清除舊鍵。
+
+### 6.18 旗標時序錯誤（__jumpAfterSearch）
+- **錯**：`__jumpAfterSearch=true` 放在 `doSearchTW` 函式末尾，會蓋掉使用者在載入中途手動點選的選單。
+- **解法**：改到函式開頭設定。**教訓：改旗標行為要追完整條時序，不能只看設定點。**
+
 ---
 
 ## 7. 關鍵財務數據：同樣以公司官方網頁為主
@@ -288,18 +309,26 @@ AI 根據所有已抓取的事實資料（財務數據 + 法說會 + 產品 + �
 ## 8. 過去上下文所有重要細節
 
 ### 8.1 已完成的重大功能
-- **自選股拖曳排序**：原本 ▲▼ 按鈕改為「✏️ 編輯模式 + ☰ 拖曳把手」（pointer 事件 + touch-action:none 支援手機觸控）。
-- **喚回即時刷新**：手機從背景喚回(PWA/bfcache)時股價停舊值。新增 `refreshLiveData()` 監聽 `visibilitychange`/`pageshow persisted`(強制)/`focus`，回前景就地重抓自選股股價+走勢+指數（15 秒節流）。
-- **自選股字體放大**：logo 30→34px、公司名/股價 14.5→16px、代碼 11→12px、漲跌幅 pill 12.5→14px。指數列同步放大：名稱 14.5→16、數值 14→17、漲跌幅 12.5→14.5px。
-- **設定 Modal 上架友善版**：伺服器端 `/api/ai` 已用伺服器端金鑰免費代跑 AI，使用者免設金鑰即可用。原本金鑰教學改收進「進階(選填)」`<details>` 摺疊區。
-- **拆分大盤指數與自選股**為兩個獨立選單項目。
+- **自選股排序**：✏️ 編輯模式 + ▲▼ 按鈕（`moveWatchlistItem`），`.wl-editing` 隱藏走勢線。
+- **喚回即時刷新**：`refreshLiveData()` 監聽 visibilitychange/pageshow/focus，回前景就地重抓。
+- **自選股字體放大**：logo 34px、名稱 16px 等。指數列同步放大。
+- **設定 Modal 上架友善版**：AI 內建免設定，金鑰收進摺疊區。
+- **大盤指數併入關鍵財務指標**（Group 1 取消，指數在公司股價上方）。
+- **版主選股準則獨立選單**（Group 11，從投資總結拆出）。
+- **自選股移到最前面**：歡迎頁顯示在自選股頁(n===10)。
+- **pickGroup(n)**：手動選單點擊用，防載入跳走。
+- **autoLoadDefaultStock()**：點深度選單無資料時自動分析。
 - **切換美股/台股後隱藏歡迎介紹**：`#welcome` 區塊自動隱藏。
 - **台股 10 年年度財務**改用 FinMind（從 Yahoo 4 年升級）。
-- **台股維基百科事實基底**：`fetchWikipediaZh()` 從中文維基百科抓定性資料，取代 AI 腦補。已端到端實測群聯 8299：產品=NAND 控制晶片/SSD/隨身碟/記憶卡控制晶片、競爭對手=慧榮/美光/三星、排名=全球獨立 NAND 控制晶片龍頭，全部正確有來源。
-- **台股 AI 提示詞語境化**：`callGemini` 台股 ctx 加 `market:'tw'`，提示詞改「你是專業台股分析師」並註明台灣上市/上櫃、金額以新台幣為主、定性以中文維基為依據。
-- **雙掛牌共用美股內容**：`TW_US_EQUIV` 映射台積電 2330→TSM，`doSearchTW` 對雙掛牌股把 `window.__symbolForLinks` 指向美股代碼 → `renderAI` 渲染該美股已建的官方產品/法說會展望事實，股價仍顯示 NT$。
-- **台股 20 間官網 IR 建置完成**（IR_CALL_SUMMARY + IR_PRODUCTS_SUMMARY + IR_QUARTERLY_PAGE 各 20 間）。
-- **美股 50+ 間官網 IR 全數建置完成**。
+- **台股維基百科事實基底**：`fetchWikipediaZh()` 從中文維基百科抓定性資料。
+- **台股 AI 提示詞語境化**：`callGemini` 台股 ctx 加 `market:'tw'`。
+- **雙掛牌共用**：`TW_US_EQUIV`(2330→TSM) + `US_TW_EQUIV`(UMC→2303/ASX→3711/CHT→2412) + `twToUs()` 雙向查表 + `__aiKey()` 日期快取共用。
+- **AI 日期快取**：所有公司的 AI 結果以「代碼+日期」快取，同一天固定不變。
+- **台股法說會影片**：6 家（TSM/2454/2303/2317/3711/2327）+ YouTube IFrame API 繁中字幕。
+- **技術分析 tooltip**：改為圖下方固定元素 `#techTip`。
+- **台股 PE 完整功能**：loadYahooFin + computePe5yRange + renderTwPeChecklist。
+- **台股 20 間 + 美股 50+ 間官網 IR 全數建置完成**。
+- **雙市場一致性檢查腳本**：`交接清單/雙市場一致性檢查.js`，九選單自動比對。
 
 ### 8.2 關鍵前端函式速查
 | 函式/常數 | 功能 |
@@ -307,16 +336,25 @@ AI 根據所有已抓取的事實資料（財務數據 + 法說會 + 產品 + �
 | `renderAI()` | 把 AI 分析結果與 IR 常數渲染到頁面 |
 | `doSearch(symbol)` | 美股個股分析主流程 |
 | `doSearchTW(symbol)` | 台股個股分析主流程 |
+| `twToUs(code)` | 台股代碼→美股代碼雙向查表（TW_US_EQUIV + US_TW_EQUIV 反查） |
+| `__aiKey(prefix, fallbackSymbol)` | AI 快取鍵 = `prefix_共用代碼_YYYYMMDD`，同一天同公司固定 |
+| `__isDual()` | 檢查當前股票是否為雙掛牌 |
+| `pickGroup(n)` | 手動選單點擊（清 __jumpAfterSearch 再 showGroup） |
+| `autoLoadDefaultStock(targetGroup)` | 點深度選單無資料時自動分析自選股第一檔 |
+| `initIrCaptions()` | YouTube IFrame API 強制繁中字幕 |
+| `techTipRenderer(ctx)` | 技術分析圖外部 tooltip（寫到 #techTip 固定元素） |
 | `loadTwFinancials(symbol,gen)` | FinMind 抓台股 10 年財務 |
 | `fetchWikipediaZh(name,code)` | 抓中文維基百科（台股定性基底） |
-| `callGemini(ctx)` | 呼叫 AI（Groq/OpenRouter） |
-| `showGroup(n)` / `cardGroup()` | 主題選單切換 |
+| `callGemini(ctx)` | 呼叫 AI（Groq/OpenRouter），結果以日期快取 |
+| `runIndependentAiAnalysis()` | AI 獨立分析，結果以日期快取 |
+| `fillCompetitorPe()` | 競爭對手 PE 比較（美股+台股都呼叫） |
+| `showGroup(n)` / `cardGroup()` | 主題選單切換 / 卡片分組 |
 | `loadIndexBar()` | 四大指數/加權指數（60 秒刷新） |
 | `renderWatchlist()` | 自選股渲染（含走勢線 SVG） |
 | `getMarket()` / `setMarket()` | 美股/台股切換 |
 | `resolveTwInput(raw)` | 台股代碼↔名稱解析 |
 | `refreshLiveData()` | 喚回即時刷新（visibilitychange/pageshow/focus） |
-| `toggleWlEdit()` / `initWlDrag()` | 自選股編輯模式＋拖曳排序 |
+| `toggleWlEdit()` / `moveWatchlistItem()` | 自選股編輯模式＋▲▼按鈕排序 |
 | `loadTechnical()` | 技術分析圖表（Chart.js） |
 | `fillNews()` | 新聞渲染 |
 | `isAnnualForm()` / `extractAnnual()` / `pickUnit()` | SEC 10 年財務資料解析 |
@@ -502,7 +540,7 @@ AAPL / MSFT / META / AMZN / V / MA / QCOM / KO / XOM / CVX / ABBV / VRT / BA / P
 | ✅ | 50+ 美股 IR 常數 | IR_CALL_SUMMARY + IR_PRODUCTS_SUMMARY |
 | ✅ | 20 台股 IR 常數 | 同上，keyed by 4 碼數字 |
 | ✅ | IR_QUARTERLY_PAGE 連結 | 20 台股＋50+美股官方 IR 頁面連結 |
-| ✅ | 八大主題選單 | showGroup(1~9) 分組 |
+| ✅ | 十大主題選單 | showGroup + pickGroup，含版主選股準則(11) |
 | ✅ | AI 分析（Groq/OpenRouter） | 免費模型，伺服器端代跑 |
 | ✅ | 彼得林區六大分類 | AI 依原著邏輯自行判斷 |
 | ✅ | 護城河分析 | 品牌/專利/轉換成本/網路效應/規模經濟 |
@@ -510,9 +548,13 @@ AAPL / MSFT / META / AMZN / V / MA / QCOM / KO / XOM / CVX / ABBV / VRT / BA / P
 | ✅ | 年營收圖表（美股） | Chart.js 長條圖＋成長率折線 |
 | ✅ | 技術分析圖表 | K 線/均線/布林軌道 |
 | ✅ | 財經新聞 | Yahoo RSS |
-| ✅ | 投資大行目標價（美股） | StockAnalysis 或 Yahoo |
-| ✅ | 兩個投資判斷 | 版主選股原則 + AI 獨立判斷 |
-| ✅ | 法說會影片（TSM） | 非凡新聞 YouTube 嵌入 |
+| ✅ | 投資大行目標價（美股+台股雙掛牌） | StockAnalysis 或 Yahoo |
+| ✅ | 兩個投資判斷 | 版主選股原則(獨立選單) + AI 獨立判斷 |
+| ✅ | 法說會影片（6家） | TSM/2454/2303/2317/3711/2327 + YouTube IFrame API 繁中字幕 |
+| ✅ | AI 結果日期快取 | 所有公司同一天結果固定，共用代碼+日期鍵 |
+| ✅ | 雙市場一致性檢查腳本 | 九選單自動比對卡片/小標題/欄位標籤 |
+| ✅ | 台股競爭對手 PE 比較 | fillCompetitorPe 美股+台股都呼叫 |
+| ⏳ | twToUs() 套用到所有位置 | 已建函式但尚未替換 4 處 TW_US_EQUIV[code] |
 
 ### B.4 估值與選股準則
 | 狀態 | 需求 | 說明 |
@@ -533,8 +575,8 @@ AAPL / MSFT / META / AMZN / V / MA / QCOM / KO / XOM / CVX / ABBV / VRT / BA / P
 | ✅ | 手機 APP 畫面優先（390×844） | 所有設計/驗證以手機為主 |
 | ✅ | 美股/台股雙市場切換 | getMarket/setMarket + localStorage |
 | ✅ | 台股紅漲綠跌 | body.mkt-tw CSS 翻轉 |
-| ✅ | 自選股拖曳排序 | ☰ 拖曳把手 + pointer 事件（手機觸控 OK） |
-| ✅ | 預設自選股 | 美股 TSM/GOOGL/NVDA/NVO；台股 2330/2317/2454/2308 |
+| ✅ | 自選股 ▲▼ 按鈕排序 | moveWatchlistItem + .wl-editing 隱藏走勢線 |
+| ✅ | 預設自選股 | 美股 TSM/GOOGL/NVDA/NVO；台股 2330/2454/2317/0050 |
 | ✅ | Logo 容錯機制 | LOGO_ALT/TW_LOGO_ALT/TW_LOGO_BAD |
 | ✅ | 四大指數/加權指數 | 60 秒自動刷新 |
 | ✅ | 歡迎介紹區 2×2 | 切換市場後自動隱藏 |
@@ -544,6 +586,12 @@ AAPL / MSFT / META / AMZN / V / MA / QCOM / KO / XOM / CVX / ABBV / VRT / BA / P
 | ✅ | 永不加回 Service Worker | 曾造成無限刷新迴圈 |
 | ✅ | 版面定案不主動改版 | 已否決 5 種風格 |
 | ✅ | 財務表格顯示 10 年 | 曾只顯示 7 年，已修正 |
+| ✅ | 大盤指數併入關鍵財務指標 | Group 1 取消，指數在公司股價上方 |
+| ✅ | 版主選股準則獨立選單 | Group 11，從投資總結拆出 |
+| ✅ | 自選股在最前面 | 歡迎頁顯示在自選股頁(n===10) |
+| ✅ | pickGroup 防跳走 | 手動選單點擊清 __jumpAfterSearch |
+| ✅ | autoLoadDefaultStock | 點深度選單無資料自動分析 |
+| ✅ | 技術分析 tooltip 改固定 | #techTip 外部 tooltip，不擋趨勢線 |
 
 ### B.6 自動化規則
 | 狀態 | 需求 | 說明 |
