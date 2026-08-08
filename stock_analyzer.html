@@ -6345,8 +6345,9 @@ function showGroup(n){
   const showIndex = (n===2);
   const showWl    = (n===10);
   const showTheme = (n===15);
-  // welcome 只在「尚未選過市場」時顯示;使用者按過美股/台股後就永遠不再出現(節省 App 空間)
-  const e_wel=document.getElementById('welcome');       if(e_wel) e_wel.style.display=(showWl && !marketPicked())?'':'none';   // 改綁自選股頁(預設進入頁)，否則新使用者看不到介紹
+  // welcome(封面介紹)：每次開App固定停留在畫面上，直到revealMenu()結束2秒封面倒數才隱藏——
+  //   不論是否已選過市場、不論第幾次開App都一樣，這是使用者明確要求(不是只有第一次使用者才看得到)。
+  const e_wel=document.getElementById('welcome');       if(e_wel) e_wel.style.display=(showWl && !__splashDone)?'':'none';
   const e_iT =document.getElementById('indexTitle');    if(e_iT ) e_iT .style.display=showIndex?'':'none';
   const e_iB =document.getElementById('indexBar');      if(e_iB ) e_iB .style.display=showIndex?'':'none';
   const e_wl =document.getElementById('watchlistCard'); if(e_wl ) e_wl .style.display=showWl   ?'':'none';
@@ -6388,11 +6389,12 @@ function showGroup(n){
 function applyGroupAfterRender(){ __autoLoading=false; if(__jumpAfterSearch){ __jumpAfterSearch=false; showGroup(2); } else { showGroup(__grp); } }
 // 預設進入「自選股」(選單第一項)。刻意不預設「大盤指數與關鍵財務指標」：該頁無資料時會觸發自動分析，
 //   一開 App 就跑會白白消耗免費 AI 額度；使用者主動點進去才載入。
-// 開場封面(#welcome)固定顯示 1.5 秒再切到自選股：讓老用戶開 App 先看到品牌封面、緊接著直接看到
-//   自選股股價(使用者要求)。價格/指數改為立即背景抓取(不等封面倒數)，讓 1.5 秒後盡量已有真實數字可看；
-//   showGroup(10) 內部仍會檢查 marketPicked()，首次使用者(尚未選過市場)封面照常維持到他們手動互動為止。
+// 開場封面(#welcome)固定顯示2秒再切到自選股：不論新舊使用者、不論第幾次開App都一樣要看到封面
+//   (使用者明確要求)。價格/指數改為立即背景抓取(不等封面倒數)，讓2秒後盡量已有真實數字可看。
+//   __splashDone旗標控制showGroup()裡welcome的顯示/隱藏，revealMenu()執行後才變true。
 // 顯示選單列(#grpMenu)並跳到自選股頁。
-function revealMenu(){ const gm=document.getElementById('grpMenu'); if(gm) gm.style.display=''; showGroup(10); }
+let __splashDone=false;   // false=封面倒數中(welcome可見)；revealMenu()執行後才變true(隱藏封面)
+function revealMenu(){ __splashDone=true; const gm=document.getElementById('grpMenu'); if(gm) gm.style.display=''; showGroup(10); }
 window.addEventListener('load', function(){
   initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000);
   // 封面固定顯示2秒才進選單區，每次開App(含第一次)都一樣——這是使用者原始需求，
