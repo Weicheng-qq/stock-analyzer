@@ -387,13 +387,14 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   <div id="logPanel" class="log-panel"><h3>🔄 載入進度</h3><div id="logItems"></div></div>
 
   <div class="card" id="watchlistCard" style="margin-bottom:20px">
-    <div class="ct">⭐ 自選股</div>
-    <div class="wl-add">
-      <input type="text" id="watchlistInput" placeholder="輸入代碼或公司名，例如 AAPL / 台積電" onkeydown="if(event.key==='Enter')addToWatchlist()">
-      <button class="search-btn" onclick="addToWatchlist()">+ 加入</button>
-      <button class="wl-edit-btn" id="wlEditBtn" onclick="toggleWlEdit()">✏️ 編輯</button>
+    <div class="ct" style="display:flex;justify-content:space-between;align-items:center">⭐ 自選股
+      <span style="display:flex;gap:8px">
+        <button class="search-btn" onclick="addToWatchlistPrompt()">+ 加入</button>
+        <button class="wl-edit-btn" id="wlEditBtn" onclick="toggleWlEdit()">✏️ 編輯</button>
+      </span>
     </div>
-    <div id="watchlistTable"><div class="note">尚未加入任何自選股，在上方輸入後按「加入」</div></div>
+    <input type="text" id="watchlistInput" style="display:none">
+    <div id="watchlistTable"><div class="note">尚未加入任何自選股，按上方「加入」新增</div></div>
   </div>
 
   <div class="card" id="themeCard" style="margin-bottom:20px;display:none">
@@ -765,6 +766,15 @@ async function translateCompanyName(enName){
     if(raw && /[一-鿿]/.test(raw) && raw.length<30) return raw;
     return null;
   }catch(e){ return null; }
+}
+// 「+ 加入」移到自選股標題列後，改用瀏覽器原生 prompt() 詢問代碼/公司名(不再常駐顯示輸入框)，
+//   寫進隱藏的 #watchlistInput 後沿用原本 addToWatchlist() 邏輯，不用重寫查詢/驗證流程。
+function addToWatchlistPrompt(){
+  const v=(prompt('輸入代碼或公司名，例如 AAPL / 台積電')||'').trim();
+  if(!v) return;
+  const inp=document.getElementById('watchlistInput');
+  if(inp) inp.value=v;
+  addToWatchlist();
 }
 async function addToWatchlist(){
   const inp=document.getElementById('watchlistInput');
