@@ -716,7 +716,9 @@ const TW_LOGO_ALT={'2317':'https://financialmodelingprep.com/image-stock/FXCOF.p
 // 美股 FMP 圖庫回「空白圖」的代碼→改用 parqet 圖庫(例:DIS迪士尼)
 const LOGO_ALT={'DIS':'https://assets.parqet.com/logos/symbol/DIS'};
 function coLogoImg(symbol, code, isTw){
-  const fb=esc(isTw?(code||symbol):(symbol?symbol[0]:'?'));
+  // TW無圖時優先顯示公司名稱首字(如「台」)當備援頭像，而非直接顯示股票代碼數字(視覺上像壞掉)
+  const twName=isTw?((typeof TW_NAMES!=='undefined'&&TW_NAMES[code])||(typeof TW_ALL!=='undefined'&&TW_ALL[code])||null):null;
+  const fb=esc(isTw?(twName?twName[0]:(code||symbol)):(symbol?symbol[0]:'?'));
   const fallback=`<div class=&quot;co-logo&quot;>${fb}</div>`;
   if(isTw){
     if(TW_LOGO_ALT[code]) return `<img class="co-logo" src="${TW_LOGO_ALT[code]}" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="this.outerHTML='${fallback}'">`;
@@ -932,11 +934,12 @@ function renderWatchlist(){
     <div class="wl-row">
       ${__wlEdit?`<div class="wl-move"><button class="wl-mv" onclick="moveWatchlistItem('${esc(it.symbol)}',-1)" title="上移" ${i===0?'disabled':''}>▲</button><button class="wl-mv" onclick="moveWatchlistItem('${esc(it.symbol)}',1)" title="下移" ${i===list.length-1?'disabled':''}>▼</button></div>`:''}
       ${(function(){ const tw=/\.TW/i.test(it.symbol); const code=esc(it.symbol.replace(/\..*/,''));
-        const box=`<div class="wl-logo wl-logo-tw">${code}</div>`;
+        const fbTxt=esc(it.name?it.name[0]:code);   // 無圖時優先顯示公司名稱首字，比股票代碼數字更像正常頭像
+        const box=`<div class="wl-logo wl-logo-tw">${fbTxt}</div>`;
         const twcode=it.symbol.replace(/\..*/,'');
-        if(tw && TW_LOGO_ALT[twcode]) return `<img class="wl-logo" src="${TW_LOGO_ALT[twcode]}" alt="" loading="lazy" onerror="this.outerHTML='<div class=&quot;wl-logo wl-logo-tw&quot;>${code}</div>'">`;
+        if(tw && TW_LOGO_ALT[twcode]) return `<img class="wl-logo" src="${TW_LOGO_ALT[twcode]}" alt="" loading="lazy" onerror="this.outerHTML='<div class=&quot;wl-logo wl-logo-tw&quot;>${fbTxt}</div>'">`;
         if(tw && TW_LOGO_BAD.has(twcode)) return box;
-        if(tw) return `<img class="wl-logo" src="https://financialmodelingprep.com/image-stock/${esc(it.symbol)}.png" alt="" loading="lazy" onerror="this.outerHTML='<div class=&quot;wl-logo wl-logo-tw&quot;>${code}</div>'">`;
+        if(tw) return `<img class="wl-logo" src="https://financialmodelingprep.com/image-stock/${esc(it.symbol)}.png" alt="" loading="lazy" onerror="this.outerHTML='<div class=&quot;wl-logo wl-logo-tw&quot;>${fbTxt}</div>'">`;
         return `<img class="wl-logo" src="${LOGO_ALT[it.symbol]||('https://financialmodelingprep.com/image-stock/'+esc(it.symbol)+'.png')}" alt="" loading="lazy" onerror="if(this.dataset.fb){this.style.display='none'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(it.symbol)}')}">`; })()}
       <div class="wl-name" title="${esc(it.name)}">${esc(it.name)}<span class="sym">${esc(it.symbol.replace(/\.(TW|TWO)$/i,''))}</span></div>
       <svg class="wl-spark" id="wls_${esc(it.symbol)}" viewBox="0 0 72 26" preserveAspectRatio="none" aria-hidden="true"></svg>
