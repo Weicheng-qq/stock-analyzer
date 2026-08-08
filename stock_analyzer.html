@@ -104,7 +104,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .dt td { padding:7px 10px; border-bottom:1px solid rgba(48,54,61,.4); }
 .dt tr:last-child td { border-bottom:none; }
 .g { color:var(--green); } .r { color:var(--red); } .y { color:var(--yellow); }
-.wl-edit-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); border-radius:8px; padding:6px 12px; font-size:13px; font-weight:600; cursor:pointer; }
+.wl-edit-btn { background:var(--bg3); border:1px solid var(--border); color:var(--text2); border-radius:8px; padding:6px 10px; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap; flex:none; }
 .wl-edit-btn:hover { border-color:var(--blue); color:var(--text); }
 /* 技術分析圖數值列：取代會擋住趨勢線的浮動提示框 */
 .tech-tip { margin:8px 0 2px; padding:8px 10px; background:var(--bg2); border:1px solid var(--border); border-radius:8px; font-size:12px; line-height:1.9; min-height:38px; }
@@ -240,7 +240,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 #ai_guidance .ai > div:not(.ir-video):not(.note):last-child, #ai_products .ai > div:not(.note):last-child { border-bottom:none; padding-bottom:0; margin-bottom:0; }
 /* 美股四大指數（放在自選股上面）：桌機4欄、手機2×2，全部一次顯示、不用橫向捲動 */
 .grp-menu { display:flex; gap:6px; overflow-x:auto; margin:0 0 16px; padding-bottom:3px; -webkit-overflow-scrolling:touch; }
-.grp-menu .grp-btn { flex:0 0 auto; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:20px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; }
+.grp-menu .grp-btn { flex:0 0 auto; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:20px; padding:9px 16px; font-size:15px; font-weight:700; cursor:pointer; white-space:nowrap; }
 .grp-menu .grp-btn.active { background:rgba(88,166,255,.16); color:var(--blue); border-color:var(--blue); }
 .grp-mode .g2 { display:block; }
 .grp-empty { text-align:center; color:var(--text2); font-size:13px; padding:40px 16px; line-height:1.8; }
@@ -387,10 +387,11 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   <div id="logPanel" class="log-panel"><h3>🔄 載入進度</h3><div id="logItems"></div></div>
 
   <div class="card" id="watchlistCard" style="margin-bottom:20px">
-    <div class="ct" style="display:flex;justify-content:space-between;align-items:center">⭐ 自選股 <button class="wl-edit-btn" id="wlEditBtn" onclick="toggleWlEdit()">✏️ 編輯</button></div>
+    <div class="ct">⭐ 自選股</div>
     <div class="wl-add">
       <input type="text" id="watchlistInput" placeholder="輸入代碼或公司名，例如 AAPL / 台積電" onkeydown="if(event.key==='Enter')addToWatchlist()">
       <button class="search-btn" onclick="addToWatchlist()">+ 加入</button>
+      <button class="wl-edit-btn" id="wlEditBtn" onclick="toggleWlEdit()">✏️ 編輯</button>
     </div>
     <div id="watchlistTable"><div class="note">尚未加入任何自選股，在上方輸入後按「加入」</div></div>
   </div>
