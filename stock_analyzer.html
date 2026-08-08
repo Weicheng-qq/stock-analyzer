@@ -365,6 +365,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <button class="grp-btn" data-g="14" onclick="pickGroup(14)">投資大師學院</button>
     <button class="grp-btn" data-g="15" onclick="pickGroup(15)">投資主題</button>
     <button class="grp-btn" data-g="6" onclick="pickGroup(6)">財經新聞</button>
+    <button class="grp-btn" data-g="16" onclick="pickGroup(16)">投資大行目標價</button>
     <button class="grp-btn" data-g="2" onclick="pickGroup(2)">指數與財務指標</button>
     <button class="grp-btn tw-only" data-g="12" onclick="pickGroup(12)">每月營收</button>
     <button class="grp-btn tw-only" data-g="13" onclick="pickGroup(13)">三大法人</button>
@@ -1517,7 +1518,13 @@ async function doSearchTW(symbol){
         .then(d => d?.chart?.result?.[0]?.meta?.regularMarketPrice ?? null)
         .catch(() => null)
         .then(usPrice => { if(gen===SEARCH_GEN) fillAnalystTargets(usCodeForTarget, gen, usPrice); });
-    } else { const at=document.getElementById('analystTargets'); if(at) at.innerHTML='<div class="note">此台股無對應美股掛牌，暫無國際投資銀行目標價可查。</div>'; }
+    } else {
+      // 台股非雙掛牌：目前查無可靠、可程式化解析的單一免費來源(能穩定涵蓋摩根大通/摩根士丹利/富邦/
+      //   高盛/野村/元大等各家券商目標價)，為避免誤植/臆造數字，改附上即時外部查詢連結讓使用者自行查看。
+      const at=document.getElementById('analystTargets');
+      const twSearchUrl=`https://www.google.com/search?q=${encodeURIComponent(name+' '+code+' 外資 目標價')}&tbm=nws`;
+      if(at) at.innerHTML=`<div class="note">此台股無對應美股掛牌，暫無自動整理的國際投資銀行目標價。<br><a href="${twSearchUrl}" target="_blank" rel="noopener">🔍 查看各家券商(摩根大通/摩根士丹利/富邦/高盛/野村/元大等)最新目標價新聞 →</a></div>`;
+    }
     const finRows=await loadTwFinancials(symbol, gen);   // 近10年台股財務(FinMind/Yahoo)
     if(gen!==SEARCH_GEN) return;
     // 本益比（Yahoo timeseries）
@@ -2459,8 +2466,7 @@ async function fillAnalystTargets(symbol, gen, curPrice){
     list.forEach((f,i)=>{
       const upside=(curPrice!=null && curPrice>0)?((f.target-curPrice)/curPrice*100):null;
       const cls=upside!=null?(upside>0?'g':upside<0?'r':''):'';
-      const rptUrl=`https://www.google.com/search?q=${encodeURIComponent(f.firm+' '+symbol+' price target')}&tbm=nws`;
-      out+=`<div class="vr"><span class="vl" id="wta_label_${i}">${esc(f.label)}</span><span class="vn ${cls}">$${Math.round(f.target)}${upside!=null?`（${upside>=0?'+':''}${upside.toFixed(1)}%）`:''}<span style="color:var(--text2);font-weight:400;font-size:11px;margin-left:6px">${esc(f.date)}</span> <a href="${rptUrl}" target="_blank" rel="noopener" style="font-size:11px;text-decoration:none">📄報告</a></span></div>`;
+      out+=`<div class="vr"><span class="vl" id="wta_label_${i}">${esc(f.label)}</span><span class="vn ${cls}">$${Math.round(f.target)}${upside!=null?`（${upside>=0?'+':''}${upside.toFixed(1)}%）`:''}<span style="color:var(--text2);font-weight:400;font-size:11px;margin-left:6px">${esc(f.date)}</span></span></div>`;
     });
     el.innerHTML = out || '<div class="note">目前查無分析師動態資料</div>';
     // 補位用的其他分析師機構名稱(不在5大銀行名單內)還是英文，背景翻譯成中文後就地替換
@@ -6012,7 +6018,8 @@ function cardGroup(c){
   if(/護城河|彼得林區|競爭對手/.test(t)) return 3;
   if(/估值/.test(t)) return 4;
   if(/法說會|利多|利空|風險/.test(t)) return 5;
-  if(/最新新聞|目標價/.test(t)) return 6;
+  if(/最新新聞/.test(t)) return 6;
+  if(/目標價/.test(t)) return 16;   // 投資大行目標價：獨立選單
   if(/產品與服務/.test(t)) return 9;   // 產品與服務→獨立選單(排在關鍵財務指標前)
   if(/技術分析/.test(t)) return 7;
   return 0;
@@ -6039,8 +6046,6 @@ function showGroup(n){
   if(res){
     // 護城河選單(群組3)：護城河分析移最前、產品與服務移最後
     if(n===3){ const mo=document.getElementById('ai_moat')?.closest('.card'); if(mo) res.insertBefore(mo, res.firstChild); }
-    // 財經新聞選單(群組6)：最新新聞在上、投資大行目標價在下
-    if(n===6){ const nc=document.getElementById('newsList'); const nCard=nc&&nc.closest('.card'); const tg=document.getElementById('analystTargets'); const tCard=tg&&tg.closest('.card'); if(nCard&&tCard) nCard.insertAdjacentElement('afterend', tCard); }
     const showRes=(n!==10 && n!==15);   // 大盤指數已併入 n=2，自選股頁與投資主題頁不顯示分析結果
     res.style.display=showRes?'block':'none';   // .results 類別預設 display:none，需明確設 block 才顯示
     [...res.querySelectorAll('.card, .co-head')].forEach(c=>{ const show=cardGroup(c)===n; c.style.display=show?'':'none'; if(show) anyCard=true; });
