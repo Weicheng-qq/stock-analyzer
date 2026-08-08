@@ -732,7 +732,10 @@ function coLogoImg(symbol, code, isTw, cls){
   if(isTw){
     if(TW_LOGO_ALT[code]) return `<img class="${cls}" src="${TW_LOGO_ALT[code]}" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="this.outerHTML='${fallback}'">`;
     if(TW_LOGO_BAD.has(code)) return `<div class="${fbCls}">${fb}</div>`;
-    return `<img class="${cls}" src="https://financialmodelingprep.com/image-stock/${esc(code)}.TW.png" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="this.outerHTML='${fallback}'">`;
+    // FMP查無台股圖時，先試Parqet(以雙掛牌美股代碼或原始代碼)當第二來源，最後才退回文字頭像
+    const usEq=(typeof TW_US_EQUIV!=='undefined'&&TW_US_EQUIV[code])||null;
+    const parqetSym=usEq||code;
+    return `<img class="${cls}" src="https://financialmodelingprep.com/image-stock/${esc(code)}.TW.png" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="if(this.dataset.fb){this.outerHTML='${fallback}'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(parqetSym)}')}">`;
   }
   const src=LOGO_ALT[symbol]||('https://financialmodelingprep.com/image-stock/'+esc(symbol)+'.png');
   return `<img class="${cls}" src="${src}" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="if(this.dataset.fb){this.outerHTML='${fallback}'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(symbol)}')}">`;
@@ -2601,45 +2604,50 @@ function initIrCaptions(){ forceZhCaptions('irVideoFrame'); }
 const MASTER_VIDEOS=[
   {person:'華倫·巴菲特 Warren Buffett',icon:'🏛️',
     long:[
-      {id:'ERH8Hs9kWH0',title:'1998年佛羅里達大學經典演講 — 真人畫面全程實況(投資圈公認必看，「段永平看了十次」即此場)，英文原音'},
-      {id:'i45_qjgFmxg',title:'《成為巴菲特》HBO 紀錄片全長版(約1小時28分)— 深入巴菲特的人生哲學與投資之道(英文原音)'},
-      {id:'j1vGFpd49wM',title:'2025 波克夏·海瑟威股東大會 — CNBC 完整實況轉播(英文原音)'},
-      {id:'2hdDE7XYr30',title:'CNBC 專訪巴菲特、蒙格與比爾蓋茲 — 三大巨頭同台對談(英文原音)'}
+      {id:'ERH8Hs9kWH0',title:'1998年佛羅里達大學經典演講 — 真人畫面全程實況(投資圈公認必看，「段永平看了十次」即此場)'},
+      {id:'i45_qjgFmxg',title:'《成為巴菲特》HBO 紀錄片全長版(約1小時28分)— 深入巴菲特的人生哲學與投資之道'},
+      {id:'j1vGFpd49wM',title:'2025 波克夏·海瑟威股東大會 — CNBC 完整實況轉播'},
+      {id:'2hdDE7XYr30',title:'CNBC 專訪巴菲特、蒙格與比爾蓋茲 — 三大巨頭同台對談'}
     ],
     short:[
       {id:'lWu2fw6APM4',title:'20孔打卡投資哲學 — 巴菲特經典比喻：一生只能做20次投資決定'},
-      {id:'5mZUJThXM44',title:'巴菲特談如何成為億萬富翁 — 資本主義與財富累積的省思'}
+      {id:'5mZUJThXM44',title:'巴菲特談如何成為億萬富翁 — 資本主義與財富累積的省思'},
+      {id:'BAMiemNe2fk',title:'巴菲特的致富哲學「棒球理論」— 為什麼大多數人投資都不賺錢'}
     ],
     audiobook:[
-      {id:'HB6jsOvropU',title:'股神全傳：從奧馬哈小城到世界財富之巔，巴菲特是如何成功的？— 真人畫面全程燒錄繁體中文字幕，完整人生傳記敘事'}
+      {id:'ETs_T4UA0nE',title:'【有聲書】《巴菲特傳》(雪球)完整版（上）— 巴菲特唯一授權傳記'},
+      {id:'N-4CIroWFxw',title:'【有聲書】《巴菲特傳》(雪球)完整版（下）'}
     ]
   },
   {person:'彼得·林區 Peter Lynch',icon:'📈',
     long:[
-      {id:'DNllyjjRWTc',title:'1994年國家記者俱樂部經典演講 — 真人畫面全程實況，分享股票投資最重要的一課，英文原音'},
-      {id:'2GqVXPtx9Rw',title:'1994 國家記者俱樂部經典演講(另一場次) — 散戶如何打敗華爾街(英文原音)'},
-      {id:'myu4Nv0pt0U',title:'1997 股市投資演講 — 選股策略與市場觀察(英文原音)'}
+      {id:'DNllyjjRWTc',title:'1994年國家記者俱樂部經典演講 — 真人畫面全程實況，分享股票投資最重要的一課'},
+      {id:'2GqVXPtx9Rw',title:'1994 國家記者俱樂部經典演講(另一場次) — 散戶如何打敗華爾街'},
+      {id:'myu4Nv0pt0U',title:'1997 股市投資演講 — 選股策略與市場觀察'}
     ],
     short:[
       {id:'G1sHwpGHLWk',title:'該不該買股票？— 林區給新手的買股時機建議'},
-      {id:'SDfGXK8SQxQ',title:'投資人浪費太多時間 — 林區談過度關注股價的迷思'}
+      {id:'SDfGXK8SQxQ',title:'投資人浪費太多時間 — 林區談過度關注股價的迷思'},
+      {id:'oDK5XMB17fQ',title:'彼得林奇的成功投資之道 — 為什麼不要聽所謂專家的預測意見？'}
     ],
     audiobook:[
-      {id:'Hi9Qyr3VTk4',title:'股民寶典 彼得·林區 69句語錄，領悟大師的投資心法 — 真人畫面全程燒錄繁體中文字幕'}
+      {id:'AEy5inKA2UM',title:'【有聲書】《彼得林區選股戰略》(彼得·林奇的成功投资)完整版（上）'},
+      {id:'HHzqVIVFbHc',title:'【有聲書】《彼得林區選股戰略》(彼得·林奇的成功投资)完整版（下）'}
     ]
   },
   {person:'查理·蒙格 Charlie Munger',icon:'🧠',
     long:[
-      {id:'Gu_iovmjcJs',title:'（中英文字幕）蒙格生前最後一次訪談 — 真人畫面全程燒錄繁中字幕，100年人生智慧'},
-      {id:'pqzcCfUglws',title:'人類誤判心理學 — 完整演講（經典必看，英文原音）'},
-      {id:'9VVPO3KWj3A',title:'2023 每日期刊股東大會 — 談比亞迪、特斯拉、阿里巴巴與比特幣(英文原音)'}
+      {id:'Gu_iovmjcJs',title:'蒙格生前最後一次訪談 — 真人畫面全程實況，100年人生智慧'},
+      {id:'pqzcCfUglws',title:'人類誤判心理學 — 完整演講（經典必看）'},
+      {id:'9VVPO3KWj3A',title:'2023 每日期刊股東大會 — 談比亞迪、特斯拉、阿里巴巴與比特幣'}
     ],
     short:[
       {id:'p5vm2n49qp8',title:'蒙格談特斯拉與馬斯克 — 對市值估值的直白評論'},
       {id:'B8Ip21rA4sY',title:'給年輕人的十億美元建議 — 蒙格對年輕投資人的忠告'}
     ],
     audiobook:[
-      {id:'RLyL9pmu5P4',title:'查理·蒙格 一生的故事 — 真人畫面全程燒錄繁體中文字幕，完整人生傳記敘事'}
+      {id:'j0DbCfHNO_A',title:'【有聲書】《窮查理寶典》完整版（上）— 蒙格畢生思維智慧精華集'},
+      {id:'FGrCITMM_gE',title:'【有聲書】《窮查理寶典》完整版（下）'}
     ]
   }
 ];
@@ -2648,8 +2656,7 @@ const MASTER_TAB_LABEL={long:'🎬 長影片',short:'📱 短影音',audiobook:'
 function investmentMastersHtml(){
   let h=`<div class="master-tabs">`+Object.keys(MASTER_TAB_LABEL).map(t=>
     `<button class="master-tab-btn${__masterTab===t?' active':''}" onclick="setMasterTab('${t}')">${MASTER_TAB_LABEL[t]}</button>`).join('')
-    +`</div><div id="masterVidList">${masterVidListHtml()}</div>`
-    +`<div class="note" style="margin-top:8px">💬 標示「中文字幕」的影片為真人畫面燒錄繁中字幕，保證看得懂；有聲書全程中文口述。其餘英文原音影片可點播放器右下角<b>字幕圖示</b>開啟英文字幕，YouTube 會依您自己的帳號/瀏覽器語言設定提供即時翻譯選項(此為 YouTube 平台功能，需在字幕選單內手動選擇翻譯語言，無法由本站強制開啟)。</div>`;
+    +`</div><div id="masterVidList">${masterVidListHtml()}</div>`;
   return h;
 }
 function masterVidListHtml(){
