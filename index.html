@@ -292,6 +292,18 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
      doSearch()/watchlistAnalyze() 仍讀取此隱藏欄位的值，邏輯不用重寫 -->
 <input type="text" id="searchInput" style="display:none">
 
+<div class="modal-overlay" id="addWatchlistModal">
+  <div class="modal">
+    <h2>⭐ 加入自選股</h2>
+    <label>代碼或公司名</label>
+    <input type="text" id="addWatchlistModalInput" placeholder="例如 AAPL / 台積電" autocomplete="off">
+    <div class="modal-btns">
+      <button class="btn-sec" onclick="closeAddWatchlistModal()">取消</button>
+      <button class="btn-pri" onclick="confirmAddWatchlistModal()">加入</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="iosInstallModal">
   <div class="modal">
     <h2 id="installModalTitle">📲 安裝到主畫面</h2>
@@ -803,15 +815,27 @@ async function translateCompanyName(enName){
     return null;
   }catch(e){ return null; }
 }
-// 「+ 加入」移到自選股標題列後，改用瀏覽器原生 prompt() 詢問代碼/公司名(不再常駐顯示輸入框)，
-//   寫進隱藏的 #watchlistInput 後沿用原本 addToWatchlist() 邏輯，不用重寫查詢/驗證流程。
+// 「+ 加入」移到自選股標題列後，原本用瀏覽器原生 prompt() 詢問代碼/公司名，
+//   但部分環境(PWA獨立視窗模式/App內嵌瀏覽器)不支援window.prompt()、會直接拋錯(使用者回報)，
+//   改用站內自製對話框(#addWatchlistModal)，寫進隱藏的 #watchlistInput 後沿用原本 addToWatchlist() 邏輯。
 function addToWatchlistPrompt(){
-  const v=(prompt('輸入代碼或公司名，例如 AAPL / 台積電')||'').trim();
+  const modal=document.getElementById('addWatchlistModal');
+  const inp=document.getElementById('addWatchlistModalInput');
+  if(inp) inp.value='';
+  if(modal) modal.classList.add('open');
+  setTimeout(()=>{ if(inp) inp.focus(); }, 50);
+}
+function closeAddWatchlistModal(){ document.getElementById('addWatchlistModal')?.classList.remove('open'); }
+function confirmAddWatchlistModal(){
+  const v=(document.getElementById('addWatchlistModalInput')?.value||'').trim();
+  closeAddWatchlistModal();
   if(!v) return;
   const inp=document.getElementById('watchlistInput');
   if(inp) inp.value=v;
   addToWatchlist();
 }
+document.getElementById('addWatchlistModal')?.addEventListener('click', e=>{ if(e.target===e.currentTarget) closeAddWatchlistModal(); });
+document.getElementById('addWatchlistModalInput')?.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); confirmAddWatchlistModal(); } });
 async function addToWatchlist(){
   const inp=document.getElementById('watchlistInput');
   const raw=(inp?.value||'').trim(); if(!raw) return;
