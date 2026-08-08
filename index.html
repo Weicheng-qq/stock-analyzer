@@ -134,6 +134,10 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-move button:disabled { opacity:.25; cursor:default; }
 .wl-logo { flex:none; width:48px; height:48px; border-radius:9px; object-fit:contain; background:#fff; padding:3px; box-sizing:border-box; }
 .wl-logo-tw { background:var(--bg3); color:var(--text2); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; padding:0; }
+.comp-logo-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+.comp-logo-chip { display:flex; align-items:center; gap:6px; background:var(--bg3); border-radius:8px; padding:5px 10px 5px 5px; }
+.comp-logo-chip .co-logo { width:26px; height:26px; border-radius:5px; }
+.comp-logo-chip span { font-size:13px; font-weight:600; }
 /* 台股慣例：紅漲綠跌(與美股相反)。整站在台股模式時翻轉漲跌顏色 */
 .mkt-tw .wl-chg .pill.up { background:var(--red); }
 .mkt-tw .wl-chg .pill.down { background:var(--green); }
@@ -2216,7 +2220,10 @@ function renderAI(ai){
         :(window.__wikiData?`<div class="note" style="color:var(--green)">✅ 依維基百科最新公開資料（持續更新）整理　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a></div>`:`<div class="note">（未取得官方或維基資料，內容為 AI 一般認知，僅供參考）</div>`))
       +`</div>`);
   }
-  setAI('ai_competitors',`<div class="ai">${norm(ai.competitors)}</div>`);
+  // 前三大競爭對手logo：沿用ai.competitor_tickers(同一份供本益比比較用的美股代碼)，放在文字說明上方
+  const compTickers=(Array.isArray(ai?.competitor_tickers)?ai.competitor_tickers:[]).filter(t=>/^[A-Z.]{1,6}$/.test(String(t||''))).slice(0,3);
+  const compLogoRow=compTickers.length?`<div class="comp-logo-row">${compTickers.map(t=>`<div class="comp-logo-chip">${coLogoImg(t,t,false)}<span>${esc(TICKER_ZH[t]||t)}</span></div>`).join('')}</div>`:'';
+  setAI('ai_competitors',`<div class="ai">${compLogoRow}${norm(ai.competitors)}</div>`);
   // 法說會展望：有官方指引 → 顯示中文翻譯(忠實翻譯官方原文)+來源；無 → 不顯示臆測內容
   // 法說會口頭 Q&A 直達連結（官方逐字稿/影片為一手來源，一鍵可查）
   const coName=(window.__coNameForLinks||'').trim();
