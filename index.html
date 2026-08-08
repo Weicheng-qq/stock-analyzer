@@ -638,8 +638,11 @@ const ALIASES={
   '網飛':'NFLX','netflix':'NFLX','奇異':'GE','禮來':'LLY','eli lilly':'LLY',
   '聯合健康':'UNH','嬌生':'JNJ','寶僑':'PG','艾司摩爾':'ASML','asml':'ASML',
   '京東':'JD','拼多多':'PDD','百度':'BIDU','戴爾':'DELL','dell':'DELL',
-  '帕蘭泰爾':'PLTR','palantir':'PLTR','超微電腦':'SMCI','美超微':'SMCI'
+  '帕蘭泰爾':'PLTR','palantir':'PLTR','超微電腦':'SMCI','美超微':'SMCI',
+  '海力士':'SKHY','sk海力士':'SKHY','sk hynix':'SKHY','海力士半導體':'SKHY'
 };
+// 無SEC申報的外國公司(僅海外交易所上市，無美股ADR/CIK)：財務數據改用Yahoo Finance當地代碼，非走SEC XBRL
+const FOREIGN_YAHOO_FALLBACK={'SKHY':{yahooSym:'000660.KS', curr:'KRW'}};
 // 代碼→中文名反查表(挑ALIASES裡最長的中文別名當正式名稱，例如台積電優先於台積)，供自選股顯示中文公司名用
 const TICKER_ZH={};
 for(const k in ALIASES){ if(/[一-鿿]/.test(k)){ const t=ALIASES[k]; if(!TICKER_ZH[t]||k.length>TICKER_ZH[t].length) TICKER_ZH[t]=k; } }
@@ -675,6 +678,8 @@ async function loadTickerMap(){
   if(tickerMap) return tickerMap;
   const data=await fetchJson('https://www.sec.gov/files/company_tickers.json');
   tickerMap={}; Object.values(data).forEach(c=>{ tickerMap[c.ticker]={cik:String(c.cik_str).padStart(10,'0'),title:c.title}; });
+  // 手動補上無SEC申報但有官方法說會/產品內容的外國公司(如SK海力士，僅韓國交易所上市無美股ADR/CIK)
+  Object.keys(FOREIGN_YAHOO_FALLBACK).forEach(sym=>{ if(!tickerMap[sym]) tickerMap[sym]={cik:'0000000000',title:TICKER_ZH[sym]||sym}; });
   return tickerMap;
 }
 
@@ -1554,6 +1559,8 @@ async function doSearch(){
     if(!found) throw new Error(`找不到「${raw}」，請輸入美股代碼(如 AAPL)或公司名(如 台積電 / Apple)`);
     symbol=found.symbol;
     const co=found.co;
+    const fbFin=FOREIGN_YAHOO_FALLBACK[symbol];   // 無SEC申報外國公司(如SK海力士)：Yahoo當地代碼
+    const quoteSym=fbFin?fbFin.yahooSym:symbol;   // 所有Yahoo Finance查詢一律用這個(非SEC股票代碼)
     window.__coNameForLinks=co.title;   // 供法說會口頭Q&A直達連結使用
     window.__symbolForLinks=US_TW_EQUIV[symbol]||symbol;   // 雙掛牌ADR(如UMC聯電→2303):共用台股端已建的官方事實內容;其餘維持美股代碼
     logOk('cik',`找到：${co.title}（${symbol}）`);
@@ -1567,7 +1574,11 @@ async function doSearch(){
       mergeAll(co.cik,['WeightedAverageNumberOfDilutedSharesOutstanding','WeightedAverageNumberOfSharesOutstandingBasic','ifrs-full/WeightedAverageShares'],false),
       mergeAll(co.cik,['CostOfRevenue','CostOfGoodsAndServicesSold','CostOfGoodsAndServiceExcludingDepreciationDepletionAndAmortization','CostOfGoodsSold','CostOfServices','ifrs-full/CostOfSales'],false),
     ]);
-    const revM=rev.map,gpM=gp.map,niM=ni.map,eqM=eq.map,shM=sh.map,curr=rev.cur||'USD';
+    let revM=rev.map,gpM=gp.map,niM=ni.map,eqM=eq.map,shM=sh.map,curr=rev.cur||'USD';
+    if(!Object.keys(revM).length && fbFin){
+      // 無SEC申報之外國公司(如SK海力士)：財務數據改用Yahoo Finance年度資料，不依賴SEC XBRL
+      try{ const yfb=await loadYahooFin(quoteSym); revM=yfb.arY; gpM=yfb.agY; niM=yfb.anY; eqM=yfb.aeqY; shM={}; curr=fbFin.curr||'USD'; }catch(e){}
+    }
     if(!Object.keys(revM).length) throw new Error('此公司在 SEC 沒有可解析的年度營收（可能是金融股或非標準申報）');
     // 有些公司(如GOOGL/LLY)不直接申報「毛利」標籤，但有申報營收與成本，缺的年份用「營收-成本」補算
     for(const yr in revM){ if(gpM[yr]==null && cost.map[yr]!=null){ gpM[yr]=revM[yr]-cost.map[yr]; } }
@@ -1577,13 +1588,13 @@ async function doSearch(){
     const secMaxYr=Math.max(...Object.keys(revM).map(Number));
     logAdd('gap','載入最新年度/季度與本益比（Yahoo）...');
     let gapEstimated=false, cum=null, peInfo=null;
-    try{
-      const yf=await loadYahooFin(symbol);
+    if(!fbFin) try{
+      const yf=await loadYahooFin(quoteSym);
       // 真實本益比：現值(trailing) + 歷史季度 —— 獨立成自己的try/catch，不受下面年度補值/累計季度計算的失敗拖累
       const tk=Object.keys(yf.tpe).sort(), qk=Object.keys(yf.qpe).sort();
       const peCur = tk.length?yf.tpe[tk[tk.length-1]]:(qk.length?yf.qpe[qk[qk.length-1]]:null);
       let range5y=null;
-      try{ range5y = await computePe5yRange(symbol, peCur, yf.aeps); }catch(e){}   // 5年區間額外抓月線股價，失敗也不能連累現值本益比
+      try{ range5y = await computePe5yRange(quoteSym, peCur, yf.aeps); }catch(e){}   // 5年區間額外抓月線股價，失敗也不能連累現值本益比
       peInfo={ current: peCur, hist: qk.map(k=>({d:k,v:yf.qpe[k]})), range5y };
       // 幣別換算比例（用重疊年份核對；比率類數字不受影響）—— 同樣獨立，失敗不影響上面已經算好的本益比
       try{
@@ -1603,11 +1614,11 @@ async function doSearch(){
         }
       }catch(e){}
       logOk('gap','最新數據與本益比載入完成');
-    }catch(e){ logErr('gap','Yahoo 補充略過（不影響 SEC 資料）'); }
+    }catch(e){ logErr('gap','Yahoo 補充略過（不影響 SEC 資料）'); } else logOk('gap','略過(已用Yahoo為主要來源)');
 
     logAdd('price','載入即時股價...');
     let priceInfo=null;
-    try{ const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=1d`); const meta=ch?.chart?.result?.[0]?.meta; if(meta) priceInfo={price:meta.regularMarketPrice,prev:(meta.previousClose??meta.chartPreviousClose)}; logOk('price','股價載入完成'); }
+    try{ const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${quoteSym}?range=1d&interval=1d`); const meta=ch?.chart?.result?.[0]?.meta; if(meta) priceInfo={price:meta.regularMarketPrice,prev:(meta.previousClose??meta.chartPreviousClose)}; logOk('price','股價載入完成'); }
     catch(e){ logErr('price','股價載入失敗（不影響財務數據）'); }
 
     logAdd('render','繪製財務圖表...');
@@ -1617,7 +1628,7 @@ async function doSearch(){
 
     // 擷取官方指引/年報/維基（財務數據已載完，此時連線不擁塞）；最多等 14 秒
     logAdd('guid','擷取官方指引/年報/維基...');
-    try{ await Promise.race([Promise.all([fillGuidance(co.cik,gen), fillProductsSource(co.cik,gen), fetchWikipedia(co.title, symbol), fillAnalystTargets(symbol,gen,priceInfo?.price), fillNews(symbol,gen)]), new Promise(r=>setTimeout(r,14000))]); }catch(e){}
+    try{ await Promise.race([Promise.all([fillGuidance(co.cik,gen), fillProductsSource(co.cik,gen), fetchWikipedia(co.title, symbol), fillAnalystTargets(symbol,gen,priceInfo?.price), fillNews(quoteSym,gen)]), new Promise(r=>setTimeout(r,14000))]); }catch(e){}
     if(gen!==SEARCH_GEN) return;   // 已有更新的搜尋，放棄本次
     logOk('guid', (window.__guidanceData?'官方指引✓':'無指引')+' / '+(window.__productsData?'年報產品✓':(window.__wikiData?'維基✓':'—'))+' / '+(window.__wikiData?'維基✓':'—'));
 
@@ -1843,7 +1854,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 <div class="note" style="text-align:center;margin-top:8px">財務數據：美國 SEC EDGAR 官方10-K年報；股價：Yahoo Finance；質化分析：免費 AI 模型（Gemini / Groq / OpenRouter）。<b>僅供參考，不構成投資建議。</b></div>`;
 
   drawChart(rows);
-  loadTechnical(symbol, SEARCH_GEN);
+  loadTechnical((FOREIGN_YAHOO_FALLBACK[symbol]&&FOREIGN_YAHOO_FALLBACK[symbol].yahooSym)||symbol, SEARCH_GEN);
   applyGroupAfterRender();
 
   // 給 AI 的上下文
