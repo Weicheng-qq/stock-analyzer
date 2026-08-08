@@ -662,6 +662,17 @@ const US_ETF={
   'ARKK':'ARK創新 ETF','XLK':'標普科技類股 ETF','XLF':'標普金融類股 ETF','XLE':'標普能源類股 ETF',
   'GLD':'SPDR黃金 ETF','TLT':'iShares 20年期以上美債 ETF','SCHD':'Schwab美國高股息 ETF'
 };
+// ETF在FMP/Parqet查不到logo(它們的資料庫只收「公司」不收基金)，改用發行商品牌官網網域查Clearbit，
+//   比顯示代碼數字/單一文字更像正常logo。抓不到時仍會優雅退回文字頭像，不影響原本行為。
+const ETF_LOGO_DOMAIN={
+  'SPY':'ssga.com','DIA':'ssga.com','XLK':'ssga.com','XLF':'ssga.com','XLE':'ssga.com','GLD':'ssga.com',
+  'VOO':'vanguard.com','VTI':'vanguard.com',
+  'IVV':'ishares.com','IWM':'ishares.com','SOXX':'ishares.com','TLT':'ishares.com',
+  'QQQ':'invesco.com','SMH':'vaneck.com','ARKK':'ark-invest.com','SCHD':'schwab.com',
+  '0050':'yuantafunds.com','0056':'yuantafunds.com','00713':'yuantafunds.com',
+  '006208':'fubon.com','00878':'cathaysite.com.tw','00919':'capitalfund.com.tw',
+  '00929':'fsit.com.tw','0052':'fubon.com'
+};
 function findUsEtf(raw){
   const q=(raw||'').trim(); if(!q) return null; const U=q.toUpperCase();
   if(US_ETF[U]) return {symbol:U, name:US_ETF[U]};
@@ -721,6 +732,16 @@ const TW_LOGO_BAD=new Set([]);
 const TW_LOGO_ALT={'2317':'https://financialmodelingprep.com/image-stock/FXCOF.png'};
 // 美股 FMP 圖庫回「空白圖」的代碼→改用 parqet 圖庫(例:DIS迪士尼)
 const LOGO_ALT={'DIS':'https://assets.parqet.com/logos/symbol/DIS'};
+// 從網址取「可註冊網域」(給Clearbit查logo用)：investor.tsmc.com→tsmc.com；www.honhai.com.tw→honhai.com.tw(保留兩段式TLD)
+function rootDomain(url){
+  try{
+    const h=new URL(url).hostname;
+    const parts=h.split('.');
+    const twoPartTld=/^(com|co|org|net|gov|edu)\.(tw|jp|uk|cn|hk|kr)$/;
+    if(parts.length>=3 && twoPartTld.test(parts.slice(-2).join('.'))) return parts.slice(-3).join('.');
+    return parts.slice(-2).join('.');
+  }catch(e){ return null; }
+}
 function coLogoImg(symbol, code, isTw, cls){
   // cls：CSS class 名稱，預設 co-logo(56px，公司詳情頁用)；自選股/投資主題傳 'wl-logo'(48px)讓兩處視覺一致。
   cls=cls||'co-logo';
@@ -729,16 +750,30 @@ function coLogoImg(symbol, code, isTw, cls){
   const fb=esc(isTw?(twName?twName[0]:(code||symbol)):(symbol?symbol[0]:'?'));
   const fbCls=cls==='wl-logo'?'wl-logo wl-logo-tw':cls;
   const fallback=`<div class=&quot;${fbCls}&quot;>${fb}</div>`;
+  // ETF查不到公司logo(FMP/Parqet只收公司不收基金)，改用發行商品牌網域查Clearbit
+  const etfDomain=(typeof ETF_LOGO_DOMAIN!=='undefined')?(ETF_LOGO_DOMAIN[code]||ETF_LOGO_DOMAIN[symbol]):null;
+  if(etfDomain) return `<img class="${cls}" src="https://logo.clearbit.com/${esc(etfDomain)}" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="this.outerHTML='${fallback}'">`;
   if(isTw){
     if(TW_LOGO_ALT[code]) return `<img class="${cls}" src="${TW_LOGO_ALT[code]}" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="this.outerHTML='${fallback}'">`;
     if(TW_LOGO_BAD.has(code)) return `<div class="${fbCls}">${fb}</div>`;
-    // FMP查無台股圖時，先試Parqet(以雙掛牌美股代碼或原始代碼)當第二來源，最後才退回文字頭像
+    // FMP查無台股圖時，依序試：①Parqet(雙掛牌美股代碼或原始代碼) ②公司官網網域查Clearbit
+    //   (網域取自已建檔的IR_QUARTERLY_PAGE，同一份官方IR連結資料再利用，不用額外查證)，最後才退回文字頭像
     const usEq=(typeof TW_US_EQUIV!=='undefined'&&TW_US_EQUIV[code])||null;
     const parqetSym=usEq||code;
-    return `<img class="${cls}" src="https://financialmodelingprep.com/image-stock/${esc(code)}.TW.png" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="if(this.dataset.fb){this.outerHTML='${fallback}'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(parqetSym)}')}">`;
+    const irUrl=(typeof IR_QUARTERLY_PAGE!=='undefined')?IR_QUARTERLY_PAGE[code]:null;
+    const irDomain=irUrl?rootDomain(irUrl):null;
+    return `<img class="${cls}" src="https://financialmodelingprep.com/image-stock/${esc(code)}.TW.png" alt="" loading="lazy" data-fb="0" style="object-fit:contain;background:#fff;padding:4px" onerror="var s=+this.dataset.fb; if(s===0){this.dataset.fb='1'; this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(parqetSym)}');} else if(s===1 && '${irDomain?esc(irDomain):''}'){this.dataset.fb='2'; this.src='https://logo.clearbit.com/${irDomain?esc(irDomain):''}';} else {this.outerHTML='${fallback}';}">`;
   }
   const src=LOGO_ALT[symbol]||('https://financialmodelingprep.com/image-stock/'+esc(symbol)+'.png');
   return `<img class="${cls}" src="${src}" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="if(this.dataset.fb){this.outerHTML='${fallback}'}else{this.dataset.fb=1;this.src='https://assets.parqet.com/logos/symbol/'+encodeURIComponent('${esc(symbol)}')}">`;
+}
+// 依官網網域查logo(Clearbit)，用於沒有美股代碼的外國競爭對手(如三星samsung.com)；查無圖時退回公司名首字。
+function domainLogoImg(domain, label, cls){
+  cls=cls||'co-logo';
+  const fbCls=cls==='wl-logo'?'wl-logo wl-logo-tw':cls;
+  const fb=esc(label?label[0]:'?');
+  const fallback=`<div class=&quot;${fbCls}&quot;>${fb}</div>`;
+  return `<img class="${cls}" src="https://logo.clearbit.com/${esc(domain)}" alt="" loading="lazy" style="object-fit:contain;background:#fff;padding:4px" onerror="this.outerHTML='${fallback}'">`;
 }
 const WATCH_DEFAULT={
   us:[{symbol:'TSM',name:'台積電'},{symbol:'GOOGL',name:'谷歌'},{symbol:'NVDA',name:'輝達'},{symbol:'NVO',name:'諾和諾德'}],
@@ -2094,6 +2129,7 @@ ${window.__wikiData?'【維基百科最新公開資料（持續更新，比你�
  "products":"整理主要產品/服務（3-5項，用<br>分行）。若上方有官方年報的各產品營收金額，換算成佔總營收百分比呈現（格式：產品名（佔比XX%），不列金額只列%）；若『無官方營收數字』，則改用上方維基百科資料列出主要產品/事業線與各自的重要性或大致營收佔比並註明來源。務必列出實際產品，嚴禁只回『無公開資料』（維基一定有提供產品資訊）。最後可補一行最新產品/製程世代——但僅限於上方官方年報或維基資料裡有明確提到的內容，若這些資料都沒提到更新的世代，就只依官方營收表格現有項目整理，不要自行臆測表格外的新製程/新產品是否已存在。",
  "competitors":"前三大競爭對手，每個一行(格式:公司名 - 威脅說明)，最後一行給出該公司全球該產業排名。優先參考上方官方年報競爭段落與維基資料，不足處用你的產業常識補足。務必列出實際競爭對手公司名(例如晶圓代工對手三星、Intel；減肥藥對手禮來Eli Lilly)，嚴禁回『無公開資料』或留空。",
  "competitor_tickers":["前三大競爭對手中有美股上市者的股票代碼，例如 INTC、AMD，最多3個，無則空陣列"],
+ "competitor_domains":["對應competitors欄位前三大競爭對手『每一個』的官方網站網域(不含https://與www，例如三星→samsung.com、Google→google.com)，依competitors欄位同樣順序、剛好3個(即使該公司無美股代碼也要填網域，讓每個對手都能顯示logo)"],
  "guidance_zh":"${(__g&&__g.real)?'將上方官方指引原文完整翻譯成繁體中文（忠實翻譯，保留所有數字），這是官方原文翻譯不可添加內容':'回傳空字串'}",
  "capex_zh":"${window.__capexData?'將上方官方資本支出段落「摘要成2-3個重點條列」（每點以 • 開頭、<br>分行），只保留兩類資訊：①各年資本支出金額②未來年度預期金額與其成長意涵（例如較前一年成長多少%代表擴產動能）。金額只能保留原文幣別、換算成億/兆中文單位（例如「新台幣9,498億元」），格式就只寫這樣，句子裡「絕對不可以」出現任何括號附註的其他幣別換算數字（例如絕對不可以寫「（約409億美元）」這種東西）——你的匯率心算不準確、容易算錯位數，寫了等於編造錯誤數字。不要逐字翻譯、不要資金來源等細節、每點必須是完整句子':'回傳空字串'}",
  "catalysts":"未來利多3點（基於實際數據與官方指引），每點🟢開頭，<br>分行",
@@ -2244,9 +2280,19 @@ function renderAI(ai){
         :(window.__wikiData?`<div class="note" style="color:var(--green)">✅ 依維基百科最新公開資料（持續更新）整理　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a></div>`:`<div class="note">（未取得官方或維基資料，內容為 AI 一般認知，僅供參考）</div>`))
       +`</div>`);
   }
-  // 前三大競爭對手logo：沿用ai.competitor_tickers(同一份供本益比比較用的美股代碼)，放在文字說明上方
+  // 前三大競爭對手logo：優先用ai.competitor_domains(官網網域，透過Clearbit查logo，非美股上市的外國對手如三星也能顯示)；
+  //   舊快取的AI回應可能還沒有這個新欄位，退回用ai.competitor_tickers(僅美股上市者)當備援，兩者都沒有就不顯示logo列。
+  const compDomains=(Array.isArray(ai?.competitor_domains)?ai.competitor_domains:[]).filter(d=>/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(String(d||''))).slice(0,3);
   const compTickers=(Array.isArray(ai?.competitor_tickers)?ai.competitor_tickers:[]).filter(t=>/^[A-Z.]{1,6}$/.test(String(t||''))).slice(0,3);
-  const compLogoRow=compTickers.length?`<div class="comp-logo-row">${compTickers.map(t=>`<div class="comp-logo-chip">${coLogoImg(t,t,false)}<span>${esc(TICKER_ZH[t]||t)}</span></div>`).join('')}</div>`:'';
+  let compLogoRow='';
+  if(compDomains.length){
+    compLogoRow=`<div class="comp-logo-row">${compDomains.map(d=>{
+      const label=d.split('.')[0].replace(/^[a-z]/,c=>c.toUpperCase());
+      return `<div class="comp-logo-chip">${domainLogoImg(d,label)}<span>${esc(label)}</span></div>`;
+    }).join('')}</div>`;
+  } else if(compTickers.length){
+    compLogoRow=`<div class="comp-logo-row">${compTickers.map(t=>`<div class="comp-logo-chip">${coLogoImg(t,t,false)}<span>${esc(TICKER_ZH[t]||t)}</span></div>`).join('')}</div>`;
+  }
   setAI('ai_competitors',`<div class="ai">${compLogoRow}${norm(ai.competitors)}</div>`);
   // 法說會展望：有官方指引 → 顯示中文翻譯(忠實翻譯官方原文)+來源；無 → 不顯示臆測內容
   // 法說會口頭 Q&A 直達連結（官方逐字稿/影片為一手來源，一鍵可查）
