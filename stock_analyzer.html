@@ -647,7 +647,7 @@ const FOREIGN_YAHOO_FALLBACK={'SKHY':{yahooSym:'000660.KS', curr:'KRW'}};
 const TICKER_ZH={};
 for(const k in ALIASES){ if(/[一-鿿]/.test(k)){ const t=ALIASES[k]; if(!TICKER_ZH[t]||k.length>TICKER_ZH[t].length) TICKER_ZH[t]=k; } }
 // 指定顯示名稱覆蓋（避免自動挑到過長/不慣用的別名）
-Object.assign(TICKER_ZH, {'NVDA':'輝達','SKHY':'海力士','GOOGL':'谷歌','GOOG':'谷歌'});
+Object.assign(TICKER_ZH, {'NVDA':'輝達','SKHY':'海力士','GOOGL':'谷歌','GOOG':'谷歌','AXP':'美國運通','BAC':'美國銀行','CVX':'雪佛龍','OXY':'西方石油','KHC':'卡夫亨氏','MCO':'穆迪','DAL':'達美航空'});
 // 美股常見ETF：SEC company_tickers.json 只收錄「有申報10-K/10-Q的公司」，不含ETF(基金非公司)，
 //   findCompany() 查不到；ETF也沒有SEC財報可跑深度分析，故只用於加入自選股(僅需代碼+名稱+Yahoo報價)。
 const US_ETF={
@@ -809,8 +809,11 @@ const THEME_STOCKS={
   '儲能概念股':{tw:['1513','6121','2308','8996'],us:['TSLA','FLNC','ENPH','SEDG','BE']},
   'AI PC概念股':{tw:['2382','2324','3231','2356','4938','3260','4967','2451','2330'],us:['AMD','INTC','QCOM','NVDA','DELL','HPQ']},
   '高股息族群':{tw:['2412','2886','2892','5880','2891','1216','2884'],us:['KO','PG','JNJ','VZ','T','XOM','CVX','PEP']},
-  '減肥藥題材':{tw:[],us:['LLY','NVO','VKTX','AMGN','PFE']}
+  '減肥藥題材':{tw:[],us:['LLY','NVO','VKTX','AMGN','PFE']},
+  '巴菲特持倉':{tw:[],us:['AAPL','AXP','KO','BAC','CVX','GOOGL','OXY','KHC','MCO','DAL']}
 };
+// 巴菲特持倉來源：波克夏海瑟威官方SEC 13F-HR季度申報(最新為2026Q1，2026/05/15申報，Q2尚未公布)。
+// 前5大依申報市值排序(AAPL 22.0%/AXP 17.4%/KO 11.6%/BAC 9.5%/CVX 6.6%)，其餘為該季度顯著持股(GOOGL/OXY/KHC/MCO)與新建部位(DAL)。
 let __themeKey=null;
 function renderThemeChips(){
   const el=document.getElementById('themeChips'); if(!el) return;
