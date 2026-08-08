@@ -837,21 +837,42 @@ function renderThemeList(){
     <div class="wl-row">
       ${coLogoImg(r.symbol.replace(/\..*/,''), r.symbol.replace(/\..*/,''), mkt==='tw')}
       <div class="wl-name" title="${esc(r.name)}">${esc(r.name)}<span class="sym">${esc(r.symbol.replace(/\.(TW|TWO)$/i,''))}</span></div>
+      <svg class="wl-spark" id="ths_${esc(r.symbol)}" viewBox="0 0 72 26" preserveAspectRatio="none" aria-hidden="true"></svg>
       <div class="wl-pc">
         <div class="wl-price" id="thp_${esc(r.symbol)}">…</div>
+        <div class="wl-chg" id="thc_${esc(r.symbol)}">…</div>
       </div>
       <button class="wl-heart${have.has(r.symbol)?' added':''}" onclick="addThemeStockToWatchlist('${esc(r.symbol)}','${esc(r.name).replace(/'/g,"\\'")}',this)" ${have.has(r.symbol)?'disabled title="已在自選股清單"':'title="加入自選股"'}>${have.has(r.symbol)?'❤️':'🤍'}</button>
     </div></div>`).join('') || '<div class="note">此主題目前無資料</div>';
   loadThemePrices(rows);
 }
+// 投資主題：股價 + 漲跌幅(pill) + 當日走勢線(spark)，一次抓5分K涵蓋三者，作法與自選股loadWatchlistSpark一致
 async function loadThemePrices(rows){
   await Promise.all(rows.map(async r=>{
-    const pEl=document.getElementById('thp_'+r.symbol);
+    const pEl=document.getElementById('thp_'+r.symbol), cEl=document.getElementById('thc_'+r.symbol), sEl=document.getElementById('ths_'+r.symbol);
     try{
-      const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${r.symbol}?range=1d&interval=1d`);
-      const price=ch?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${r.symbol}?range=1d&interval=5m&includePrePost=true`);
+      const res=ch?.chart?.result?.[0]; const meta=res?.meta;
+      const price=meta?.regularMarketPrice, prev=meta?.previousClose??meta?.chartPreviousClose;
       if(pEl) pEl.textContent = price!=null?'$'+(+price).toFixed(2):'—';
-    }catch(e){ if(pEl) pEl.textContent='—'; }
+      if(cEl){
+        if(price!=null && prev){
+          const pct=(price-prev)/prev*100;
+          cEl.innerHTML = `<span class="pill ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span>`;
+        } else cEl.textContent='—';
+      }
+      if(sEl && res){
+        const ts=res.timestamp||[], cl=res.indicators?.quote?.[0]?.close||[];
+        const per=meta?.currentTradingPeriod?.regular, regStart=per?.start, regEnd=per?.end;
+        const pts=[]; for(let i=0;i<ts.length;i++){ if(cl[i]==null) continue; if(regStart&&regEnd&&(ts[i]<regStart||ts[i]>regEnd)) continue; pts.push(cl[i]); }
+        if(pts.length>=2){
+          const mn=Math.min(...pts), mx=Math.max(...pts), rng=(mx-mn)||1, W=70, H=26, pad=3;
+          const d=pts.map((v,idx)=>`${(idx/(pts.length-1)*(W-pad*2)+pad).toFixed(1)},${(H-pad-(v-mn)/rng*(H-pad*2)).toFixed(1)}`).join(' ');
+          const up=pts[pts.length-1]>=pts[0]; const tw=getMarket()==='tw'; const col=up?(tw?'#f85149':'#3fb950'):(tw?'#3fb950':'#f85149');
+          sEl.innerHTML=`<polyline points="${d}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+        }
+      }
+    }catch(e){ if(pEl) pEl.textContent='—'; if(cEl) cEl.textContent='—'; }
   }));
 }
 function addThemeStockToWatchlist(symbol,name,btn){
