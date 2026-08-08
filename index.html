@@ -1487,6 +1487,7 @@ async function loadTwInstitutional(code, gen){
 }
 async function doSearchTW(symbol){
   const gen=++SEARCH_GEN;
+  revealMenu();   // 按下分析立刻跳過封面、顯示選單區(使用者要求)，不用等封面倒數
   // 主動查詢預設查完跳「關鍵財務指標」。必須在「開頭」就設定，載入途中使用者若手動點選單
   //   (pickGroup 會把它清成 false)才蓋得掉；原本設在載入結尾，會反過來蓋掉使用者的選擇。
   if(!__autoLoading) __jumpAfterSearch=true;
@@ -1576,6 +1577,7 @@ async function doSearchTW(symbol){
 async function doSearch(){
   const raw=document.getElementById('searchInput').value.trim();
   if(!raw) return;
+  revealMenu();   // 按下分析立刻跳過封面、顯示選單區(使用者要求)，不用等封面倒數
   if(getMarket()==='tw'){
     const r=await resolveTwInput(raw);
     if(!r){ alert(`查不到台股「${raw}」，請輸入代碼(如 2330)或公司名(如 台積電 / 群聯)`); return; }
@@ -6087,7 +6089,15 @@ function applyGroupAfterRender(){ __autoLoading=false; if(__jumpAfterSearch){ __
 // 開場封面(#welcome)固定顯示 1.5 秒再切到自選股：讓老用戶開 App 先看到品牌封面、緊接著直接看到
 //   自選股股價(使用者要求)。價格/指數改為立即背景抓取(不等封面倒數)，讓 1.5 秒後盡量已有真實數字可看；
 //   showGroup(10) 內部仍會檢查 marketPicked()，首次使用者(尚未選過市場)封面照常維持到他們手動互動為止。
-window.addEventListener('load', function(){ initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000); setTimeout(function(){ const gm=document.getElementById('grpMenu'); if(gm) gm.style.display=''; showGroup(10); }, 2000); });
+// 顯示選單列(#grpMenu)並跳到自選股頁：回訪使用者一開App、或首次使用者按下「分析」/美股/台股按鈕時，
+//   立刻跳過封面介紹直接看到選單區(使用者要求)，不用等2秒倒數或手動往下滑。
+function revealMenu(){ const gm=document.getElementById('grpMenu'); if(gm) gm.style.display=''; showGroup(10); }
+window.addEventListener('load', function(){
+  initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000);
+  // 已選過市場的回訪使用者(含美股/台股按鈕切換造成的reload)：不用再等封面倒數，直接跳到選單區。
+  //   只有真正第一次使用(尚未選過市場)才維持2秒封面秀出品牌介紹。
+  if(marketPicked()) revealMenu(); else setTimeout(revealMenu, 2000);
+});
 
 // ⚠️ 暫時停用 Service Worker 註冊：先前的 SW 在部分裝置(桌面Chrome/Edge、Android PWA)造成整頁重載迴圈。
 // 不再主動註冊；已有舊 SW 的裝置，瀏覽器會自動抓到已改成 kill-switch 的 sw.js 並自我清除(清快取+unregister)，迴圈即中止。
