@@ -8613,23 +8613,24 @@ function showGroup(n){
 function applyGroupAfterRender(){ __autoLoading=false; if(__jumpAfterSearch){ __jumpAfterSearch=false; showGroup(2); } else { showGroup(__grp); } }
 // 預設進入「自選股」(選單第一項)。刻意不預設「大盤指數與關鍵財務指標」：該頁無資料時會觸發自動分析，
 //   一開 App 就跑會白白消耗免費 AI 額度；使用者主動點進去才載入。
-// 開場封面(#welcome)固定顯示3秒再切到自選股：不論新舊使用者、不論第幾次開App都一樣要看到封面
-//   (使用者明確要求)。封面期間只顯示品牌介紹+美股/台股按鈕，指數/自選股清單等其餘內容一律隱藏
+// 開場封面(#welcome)持續停留，直到使用者主動點「美股」或「台股」按鈕才切到自選股：
+//   不再有固定秒數自動消失(使用者2026-08-09明確要求，取代先前「固定顯示3秒」的做法)。
+//   點美股/台股按鈕會呼叫setMarket()，其內部location.reload()前先設sessionStorage一次性旗標
+//   skipSplashOnce，reload後靠這個旗標判斷「剛剛是使用者主動點過按鈕」，直接revealMenu()跳過封面；
+//   非此情況(例如全新打開App、或重新整理頁面)一律停留在封面，不會自動消失。
+//   封面期間只顯示品牌介紹+美股/台股按鈕，指數/自選股清單等其餘內容一律隱藏
 //   (indexTitle/indexBar/watchlistCard 預設 style="display:none"，revealMenu()執行showGroup(10)才顯示)，
 //   避免封面停留期間背景畫面就先冒出指數/清單造成畫面雜亂(使用者回報)。
-//   價格/指數改為立即背景抓取(不等封面倒數)，讓3秒後盡量已有真實數字可看。
+//   價格/指數改為立即背景抓取(不等封面)，讓使用者一按按鈕就盡量已有真實數字可看。
 //   __splashDone旗標控制showGroup()裡welcome的顯示/隱藏，revealMenu()執行後才變true。
 // 顯示選單列(#grpMenu)並跳到自選股頁。
-let __splashDone=false;   // false=封面倒數中(welcome可見)；revealMenu()執行後才變true(隱藏封面)
+let __splashDone=false;   // false=封面顯示中(welcome可見)；revealMenu()執行後才變true(隱藏封面)
 function revealMenu(){ __splashDone=true; const gm=document.getElementById('grpMenu'); if(gm) gm.style.display=''; showGroup(10); maybeRunDemo(); }
 window.addEventListener('load', function(){
   initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000);
-  // 封面固定顯示3秒才進選單區，每次開App(含第一次)都一樣——這是使用者原始需求，
-  //   讓所有使用者每次打開App都先看到品牌封面「美股AI深度分析工具...十年財務指標...」介紹。
-  //   例外：美股/台股切換按鈕造成的reload，用sessionStorage一次性旗標跳過封面直接進選單(setMarket()設定)，
-  //   因為那是使用者「已經在App裡」操作、不是重新打開App，不需要再看一次品牌封面。
+  // 只有「使用者剛點過美股/台股按鈕造成的reload」才跳過封面，其餘情況(含全新開App)一律停留在封面等待點擊。
   let skipSplash=false; try{ skipSplash=sessionStorage.getItem('skipSplashOnce')==='1'; sessionStorage.removeItem('skipSplashOnce'); }catch(e){}
-  if(skipSplash) revealMenu(); else setTimeout(revealMenu, 3000);
+  if(skipSplash) revealMenu();
 });
 
 // ⚠️ 暫時停用 Service Worker 註冊：先前的 SW 在部分裝置(桌面Chrome/Edge、Android PWA)造成整頁重載迴圈。
