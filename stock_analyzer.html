@@ -250,6 +250,10 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .master-tabs .master-tab-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
 .master-short-wrap { max-width:220px; padding-top:0 !important; aspect-ratio:9/16; margin:0 auto; }
 .master-short-wrap img, .master-short-wrap iframe { object-fit:cover; }
+.short-fs-btn { position:absolute; right:8px; bottom:8px; width:34px; height:34px; border-radius:8px; border:none; background:rgba(0,0,0,.6); color:#fff; font-size:18px; line-height:1; cursor:pointer; z-index:2; }
+.master-short-wrap:fullscreen, .master-short-wrap:-webkit-full-screen, .master-short-wrap:-moz-full-screen { max-width:none; width:100vw; height:100vh; aspect-ratio:auto; display:flex; align-items:center; justify-content:center; background:#000; }
+.master-short-wrap:fullscreen iframe, .master-short-wrap:-webkit-full-screen iframe, .master-short-wrap:-moz-full-screen iframe { width:auto; height:100%; max-width:100vw; aspect-ratio:9/16; border-radius:0; }
+.master-short-wrap:fullscreen .short-fs-btn, .master-short-wrap:-webkit-full-screen .short-fs-btn, .master-short-wrap:-moz-full-screen .short-fs-btn { right:16px; bottom:16px; }
 .index-title { font-size:18px; font-weight:800; color:var(--blue); margin:0 0 10px; letter-spacing:.3px; }
 .index-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:20px; }
 .index-bar .ix { background:var(--bg2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:11px 6px; text-align:center; min-width:0; }
@@ -2532,13 +2536,10 @@ const IR_CALL_VIDEO = {
   //   都是看得到高層本人簡報的完整場次。⚠️ 每季法說後需人工更新為最新一季影片(同 IR 三常數的更新節奏)。
   // ⚠️ 值為 {id, q}：q=該影片實際場次。文字摘要(IR_CALL_SUMMARY)已更新到 Q2，但公開完整影片
   //    多半只到 Q1，若不標示季度會讓人誤以為影片就是最新一季 → 一律在播放器下方標出場次。
-  // ⚠️⚠️ 已實測確認：YouTube「自動翻譯字幕」是 youtube.com 網頁版播放器的client端功能，
-  //    無法透過 IFrame API(setOption captions/track) 或 URL 參數(cc_lang_pref)強制觸發翻譯，
-  //    只能選擇「真實存在」的字幕軌(如影片本來就有的zh-Hant軌)。這類法說會影片來源多半只有
-  //    「英文(自動產生)」單一字幕軌，此軌無法被API強制翻譯成中文；要看中文翻譯字幕，使用者需自己
-  //    在播放器字幕選單內手動操作(YouTube會依使用者自己的帳號/瀏覽器語言設定決定是否提供翻譯選項)。
-  //    forceZhCaptions()/initIrCaptions() 保留「若真的有zh-Hant/zh-TW原生字幕軌就自動選用」的邏輯，
-  //    但不再對外宣稱能強制翻譯，UI文案已改誠實描述。
+  // 📝 2026-08-09 更新：先前註記「IFrame API 無法強制自動翻譯」是因為舊寫法漏了兩個關鍵：
+  //    ①沒有帶 translationLanguage 參數(只指定 languageCode:'zh-Hant'，但該軌根本不存在故失敗)
+  //    ②沒有監聽 onApiChange 事件(captions 模組要等這個事件才就緒，只在 onReady 設定必然失敗)。
+  //    現已改用正確寫法(見 _tryZhCaption)：對英文軌套用 translationLanguage 即可觸發繁中自動翻譯。
   'TSM': {id:'JOhMwPVXRHM', q:'2026 第二季（英文原音）'},   // 台積電 Q2 法說會【完整公開】魏哲家本人簡報
   '2454':{id:'qEn6dHlz1h4', q:'2026 第一季'},              // 聯發科 Q1 線上法說會【完整公開】
   '2303':{id:'UyyeZiz2RPA', q:'2026 第一季'},              // 聯電 Q1 法說會【完整公開】(成熟製程技術升級)
@@ -2557,28 +2558,59 @@ const IR_CALL_VIDEO = {
 let __ytApiLoading=false;
 const __ytPlayers={};
 let __ytPendingCaptions=[];
+// 核心：把播放器字幕切成繁體中文。分兩種情況：
+//   (A) 影片本身就有 zh-Hant/zh-TW 原生字幕軌 → 直接選那一軌。
+//   (B) 只有英文(含自動產生)字幕軌 → 用 captions 模組的「自動翻譯」：
+//       setOption('captions','track',{languageCode:'en', translationLanguage:{languageCode:'zh-Hant',...}})
+//       這是 YouTube HTML5 播放器 captions 模組的隱藏用法，可讓英文字幕即時翻成繁中顯示在影片上。
+//   ⚠️ 關鍵：captions 模組要等 onApiChange 事件才就緒(且該事件在影片開始播放後才觸發)，
+//      只在 onReady 設定會失敗——這是先前版本一直無法成功顯示中文字幕的真正原因。
+function _tryZhCaption(p){
+  try{
+    p.loadModule&&p.loadModule('captions');
+    p.setOption('captions','reload',true);
+    // 先看有沒有原生繁中字幕軌
+    let list=[]; try{ list=p.getOption('captions','tracklist')||[]; }catch(_){}
+    const native=list.find(t=>/^zh-(Hant|TW)/i.test(t.languageCode||''));
+    if(native){ p.setOption('captions','track',native); return true; }
+    // 沒有原生繁中軌 → 對現有字幕軌(通常是英文)套用自動翻譯成繁中
+    let tl=[]; try{ tl=p.getOption('captions','translationLanguages')||[]; }catch(_){}
+    const zh=tl.find(t=>/^zh-Hant$/i.test(t.languageCode||''))
+           ||tl.find(t=>/^zh-TW$/i.test(t.languageCode||''))
+           ||tl.find(t=>/^zh(-|$)/i.test(t.languageCode||''));
+    const base=list[0];
+    if(zh&&base){
+      p.setOption('captions','track',{languageCode:base.languageCode,
+        translationLanguage:{languageCode:zh.languageCode, languageName:zh.languageName||'中文（繁體）'}});
+      return true;
+    }
+    // 清單還沒就緒時的保底嘗試(不帶 tracklist 直接指定英文軌+繁中翻譯)
+    if(!list.length){
+      p.setOption('captions','track',{languageCode:'en',
+        translationLanguage:{languageCode:'zh-Hant', languageName:'中文（繁體）'}});
+    }
+  }catch(_){}
+  return false;
+}
 function _applyZhCaptions(iframeId){
   try{ if(__ytPlayers[iframeId]&&__ytPlayers[iframeId].destroy) __ytPlayers[iframeId].destroy(); }catch(e){}
   try{
+    let done=false;
+    const attempt=(p)=>{ if(done) return; if(_tryZhCaption(p)) done=true; };
     __ytPlayers[iframeId]=new YT.Player(iframeId,{
       events:{
-        onReady:function(e){
-          // YouTube 對繁中可能用 zh-Hant 或 zh-TW，兩個都試；並優先挑清單中真正存在的繁中軌
-          const force=()=>{ try{
-            e.target.setOption('captions','reload',true);
-            let list=[]; try{ list=e.target.getOption('captions','tracklist')||[]; }catch(_){}
-            const hit=list.find(t=>/^zh-(Hant|TW)/i.test(t.languageCode||''));
-            if(hit){ e.target.setOption('captions','track',hit); return; }
-            e.target.setOption('captions','track',{languageCode:'zh-Hant'});
-            e.target.setOption('captions','track',{languageCode:'zh-TW'});
-          }catch(_){}};
-          force();
-          // 字幕軌清單有時要等影片開始緩衝才就緒，隔一段時間再設一次
-          setTimeout(force, 1500); setTimeout(force, 4000);
+        // captions 模組就緒時才會觸發(通常在影片開始播放後)，這裡是最可靠的設定時機
+        onApiChange:function(e){
+          attempt(e.target);
+          // 字幕軌/翻譯語言清單有時稍晚才填好，再補幾次
+          setTimeout(()=>attempt(e.target), 800);
+          setTimeout(()=>attempt(e.target), 2500);
         },
+        onReady:function(e){ try{ e.target.loadModule&&e.target.loadModule('captions'); }catch(_){} },
         onStateChange:function(e){
           if(e.data===YT.PlayerState.PLAYING){
-            try{ e.target.setOption('captions','track',{languageCode:'zh-Hant'}); }catch(_){}
+            attempt(e.target);
+            setTimeout(()=>attempt(e.target), 1500);
           }
         }
       }
@@ -2654,7 +2686,8 @@ const MASTER_TAB_LABEL={long:'🎬 長影片',short:'📱 短影音',audiobook:'
 function investmentMastersHtml(){
   let h=`<div class="master-tabs">`+Object.keys(MASTER_TAB_LABEL).map(t=>
     `<button class="master-tab-btn${__masterTab===t?' active':''}" onclick="setMasterTab('${t}')">${MASTER_TAB_LABEL[t]}</button>`).join('')
-    +`</div><div id="masterVidList">${masterVidListHtml()}</div>`;
+    +`</div><div class="note" style="margin:10px 0 0">💬 英文影片會在開始播放後自動切換為<b>繁體中文字幕</b>（YouTube 即時翻譯）。若沒出現，請點播放器右下角 <b>字幕</b> 圖示 →「自動翻譯」→ 選「中文（繁體）」。</div>`
+    +`<div id="masterVidList">${masterVidListHtml()}</div>`;
   return h;
 }
 function masterVidListHtml(){
@@ -2690,9 +2723,24 @@ function loadMasterVid(el){
   const src=el.dataset.src; if(!src) return;
   const fid='masterVidFrame'+(++__masterVidSeq);
   const isShort=el.classList.contains('master-short-wrap');
-  el.innerHTML=`<iframe id="${fid}" src="${src}" title="投資大師影片" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen style="width:100%;height:100%;${isShort?'':'aspect-ratio:16/9;'}border-radius:8px"></iframe>`;
+  // 短影音(9:16)：YouTube 內嵌播放器本身的全螢幕鈕在手機上對直式短影音常失效(YouTube平台已知限制，
+  //   全螢幕會被強制轉橫向、兩側留黑或直接無反應)，改用自訂全螢幕鈕對「容器 div」呼叫 Fullscreen API，
+  //   由我們自己的CSS(:fullscreen)控制直式全螢幕排版，不依賴YouTube播放器內部的全螢幕邏輯。
+  const fsBtn=isShort?`<button class="short-fs-btn" onclick="event.stopPropagation();toggleShortFullscreen(this)" title="全螢幕">⛶</button>`:'';
+  el.innerHTML=`<iframe id="${fid}" src="${src}" title="投資大師影片" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen style="width:100%;height:100%;${isShort?'':'aspect-ratio:16/9;'}border-radius:8px"></iframe>${fsBtn}`;
   el.style.cursor='default'; el.onclick=null;
   setTimeout(()=>forceZhCaptions(fid), 300);
+}
+// 短影音自訂全螢幕：對縮圖/播放器的容器 div(.master-short-wrap)呼叫 Fullscreen API(含各瀏覽器前綴)，
+//   進入全螢幕後由CSS的:fullscreen規則把它撐滿螢幕高度、維持9:16比例、左右留黑，不依賴YouTube播放器按鈕。
+function toggleShortFullscreen(btn){
+  const wrap=btn.closest('.master-short-wrap'); if(!wrap) return;
+  const isFs=document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement;
+  if(isFs){
+    (document.exitFullscreen||document.webkitExitFullscreen||document.mozCancelFullScreen)?.call(document);
+  } else {
+    (wrap.requestFullscreen||wrap.webkitRequestFullscreen||wrap.mozRequestFullScreen)?.call(wrap);
+  }
 }
 // 產生「法說會影片」區塊(置於法說主旨最上方)：有內嵌影片→可播放/暫停/拖曳時間軸；否則給官方重播按鈕
 function irVideoBlock(sym, coName){
@@ -2708,7 +2756,7 @@ function irVideoBlock(sym, coName){
     return (vq ? `<div class="note" style="margin:0 0 6px"><b style="color:var(--blue)">🎬 影片場次：${esc(vq)}</b><span class="muted"> ｜ 下方文字摘要為最新一季，若場次不同以文字摘要為準</span></div>` : '')
       + `<div class="ir-video" data-vid="${esc(v)}" onclick="loadIrVideo(this)" style="cursor:pointer">`
       + `<img src="${thumb}" loading="lazy"><div class="ir-play-btn"><div></div></div></div>`
-      + `<div class="note" style="margin-top:6px">💬 點擊播放器右下角 <b>字幕</b> 圖示可開啟字幕；英文場次若要看繁體中文翻譯，需在字幕選單內手動選擇翻譯語言(此為 YouTube 平台的即時翻譯功能，依您自己的帳號/瀏覽器語言設定提供，本站無法強制開啟)。</div>`;
+      + `<div class="note" style="margin-top:6px">💬 本站會在影片開始播放後自動嘗試切換為<b>繁體中文字幕</b>（英文場次會用 YouTube 即時翻譯）。若沒出現，請點播放器右下角 <b>字幕</b> 圖示 →「自動翻譯」→ 選「中文（繁體）」。</div>`;
   }
   const watchUrl = (v && /^https?:/.test(v)) ? v : irPage;
   if(!watchUrl) return '';
