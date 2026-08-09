@@ -1325,8 +1325,8 @@ function renderTwPeChecklist(finRows, pe, pe5, pePos, price){
   const last3g=growths.slice(-3);
   const fastGrower=last3g.length===3&&last3g.every(g=>g>20);
   const checklist=[
-    {label:'稅後淨利率 > 40%', pass:last.nm!=null?last.nm>40:null, val:last.nm!=null?last.nm.toFixed(1)+'%':'無資料'},
-    {label:'毛利率 > 50%', pass:last.gm!=null?last.gm>50:null, val:last.gm!=null?last.gm.toFixed(1)+'%':'無資料'},
+    {label:'稅後淨利率 > 30%', pass:last.nm!=null?last.nm>30:null, val:last.nm!=null?last.nm.toFixed(1)+'%':'無資料'},
+    {label:'毛利率 > 40%', pass:last.gm!=null?last.gm>40:null, val:last.gm!=null?last.gm.toFixed(1)+'%':'無資料'},
     {label:'ROE > 20%', pass:lastRoe!=null?lastRoe>20:null, val:lastRoe!=null?lastRoe.toFixed(1)+'%':'無資料'},
     {label:'10年營收整體向上（≤2年下滑）', pass:growths.length?(declineYears<=2&&overallUp):null, val:'下滑'+declineYears+'年'},
     {label:'近3年營收成長皆 > 20%（快速成長）', pass:last3g.length===3?fastGrower:null, val:last3g.map(g=>g.toFixed(0)+'%').join(' / ')||'無資料'},
@@ -1821,8 +1821,8 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   // 彼得林區六大分類：不再用程式寫死的數字門檻公式判定，改交給AI依彼得林區原著（One Up on Wall Street）
   // 的分類邏輯，直接分析完整的多年財務數據自行判斷並說明理由（見下方 callGemini 的 prompt）。
   const checklist=[
-    {label:'稅後淨利率 > 40%', pass:last.nm!=null?last.nm>40:null, val:last.nm!=null?last.nm.toFixed(1)+'%':'無資料'},
-    {label:'毛利率 > 50%', pass:last.gm!=null?last.gm>50:null, val:last.gm!=null?last.gm.toFixed(1)+'%':'無資料'},
+    {label:'稅後淨利率 > 30%', pass:last.nm!=null?last.nm>30:null, val:last.nm!=null?last.nm.toFixed(1)+'%':'無資料'},
+    {label:'毛利率 > 40%', pass:last.gm!=null?last.gm>40:null, val:last.gm!=null?last.gm.toFixed(1)+'%':'無資料'},
     {label:'ROE > 20%', pass:lastRoe!=null?lastRoe>20:null, val:lastRoe!=null?lastRoe.toFixed(1)+'%':'無資料'},
     {label:'10年營收整體向上（≤2年下滑）', pass:growths.length?(declineYears<=2&&overallUp):null, val:`下滑${declineYears}年`},
     {label:'近3年營收成長皆 > 20%（快速成長）', pass:last3g.length===3?fastGrower:null, val:last3g.map(g=>g.toFixed(0)+'%').join(' / ')||'無資料'},
