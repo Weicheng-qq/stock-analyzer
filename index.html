@@ -754,19 +754,18 @@ function ccbAnalyze(){
 // 🏢 公司介紹：獨立於主分析JSON的一支小呼叫。
 //   原本把 company_intro 塞在15個欄位的大JSON裡，實測模型常常漏掉該欄位→使用者看不到公司介紹。
 //   改成「主分析有回傳就直接用；沒有就用這支輕量呼叫補上」，並快取到 localStorage 避免重複花額度。
+//   卡片標題(🏢 公司介紹)已由 .ct 提供，這裡只負責內文，不重複再寫一次標題。
 function renderCompanyIntro(text){
   const el=document.getElementById('ai_intro'); if(!el) return;
-  if(!text){ el.innerHTML=''; return; }
-  el.innerHTML=`<div style="margin-bottom:14px;padding:11px 13px;background:rgba(88,166,255,.08);border-left:3px solid var(--blue);border-radius:6px">`
-    +`<div style="color:var(--blue);font-size:12px;font-weight:700;margin-bottom:5px">🏢 公司介紹</div>`
-    +`<div style="line-height:1.85">${norm(text)}</div></div>`;
+  if(!text){ el.innerHTML='<div class="note">此公司暫無可用的介紹內容。</div>'; return; }
+  el.innerHTML=`<div class="ai" style="line-height:1.9">${norm(text)}</div>`;
+  window.__introDone=true;
 }
 async function loadCompanyIntro(symbol, coName, gen){
   const el=document.getElementById('ai_intro'); if(!el) return;
-  if(el.innerHTML.trim()) return;            // 主分析已經給過就不重複呼叫
+  if(window.__introDone) return;             // 主分析已經給過就不重複呼叫
   const key='intro_'+symbol;
   try{ const c=localStorage.getItem(key); if(c){ renderCompanyIntro(c); return; } }catch(e){}
-  el.innerHTML=`<div class="note" style="margin-bottom:12px">🏢 公司介紹載入中…</div>`;
   const isTW=/^\d/.test(String(symbol));
   const prompt=`用繁體中文寫「${coName||symbol}（${symbol}）」的公司介紹，2-3句白話文字，`
     +`讓完全不懂這家公司的人也能在10秒內明白：這家公司是做什麼的、屬於什麼產業、`
@@ -780,8 +779,8 @@ async function loadCompanyIntro(symbol, coName, gen){
     if(gen!=null && gen!==SEARCH_GEN) return;                 // 使用者已換一家公司就丟棄
     const t=r&&r.intro?String(r.intro).trim():'';
     if(t){ try{ localStorage.setItem(key,t); }catch(e){} renderCompanyIntro(t); }
-    else el.innerHTML='';
-  }catch(e){ el.innerHTML=''; }                                // 失敗就安靜不顯示，不影響其他區塊
+    else el.innerHTML='<div class="note">此公司暫無可用的介紹內容。</div>';
+  }catch(e){ el.innerHTML='<div class="note">公司介紹載入失敗，請稍後再試。</div>'; }
 }
 function marketPicked(){ try{ return localStorage.getItem('marketPicked')==='1'; }catch(e){ return false; } }
 // 常見台股代碼→中文名(加入自選股時用；查無再用 Yahoo 名稱)
@@ -1348,7 +1347,8 @@ function twResultsHtml(o){
   <div class="co-info"><h1>${esc(o.name)}</h1><div class="co-ticker">${esc(o.code)} · 台股 · Yahoo Finance ${o.mkt==='TWO'?'(上櫃)':'(上市)'}</div><div class="lynch-badge" id="lynchBadge">🔄 AI 分類中...</div></div>
   <div class="co-price"><div class="price-val">NT$${(+o.price).toFixed(2)}</div>${o.chg!=null?`<div style="font-weight:700;color:${upcol}">${chgTxt}</div>`:''}</div>
 </div>
-<div class="card"><div class="ct">🏭 產品與服務（營收來源）</div><div id="ai_intro"></div><div id="ai_products">${aiLoading()}</div></div>
+<div class="card"><div class="ct">🏢 公司介紹</div><div id="ai_intro">${aiLoading()}</div></div>
+<div class="card"><div class="ct">🏭 產品與服務（營收來源）</div><div id="ai_products">${aiLoading()}</div></div>
 <div class="card"><div class="ct">📊 最近10年財務指標</div><div id="tw_fin">${aiLoading()}</div></div>
 <div class="card"><div class="ct">💰 年營收 &amp; 成長率</div><div class="chart-wrap"><canvas id="revChart"></canvas></div></div>
 <div class="card"><div class="ct">📈 年營收明細與成長率（財政年度）</div><div id="tw_rev">${aiLoading()}</div></div>
@@ -1655,7 +1655,7 @@ async function doSearchTW(symbol){
   // 主動查詢預設查完跳「關鍵財務指標」。必須在「開頭」就設定，載入途中使用者若手動點選單
   //   (pickGroup 會把它清成 false)才蓋得掉；原本設在載入結尾，會反過來蓋掉使用者的選擇。
   if(!__autoLoading) __jumpAfterSearch=true;
-  window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__capexData=null; window.__wikiData=null;
+  window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__capexData=null; window.__wikiData=null; window.__introDone=false;
   document.getElementById('results').innerHTML=''; document.getElementById('logItems').innerHTML=''; logPanel(true); logAdd('p','抓取台股資料...');
   try{
     const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=1d`);
@@ -1736,7 +1736,7 @@ async function doSearch(){
   }
   let symbol;
   const gen=++SEARCH_GEN;   // 本次搜尋序號：避免上一次(較慢)的非同步回應蓋掉這次結果
-  window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__capexData=null; window.__wikiData=null; window.__guidanceData=null;
+  window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__capexData=null; window.__wikiData=null; window.__guidanceData=null; window.__introDone=false;
   // 網站介紹(#welcome)永久釘在標題與自選股之間、不隱藏；只清空/切換下方的分析結果
   document.getElementById('results').style.display='none';
   document.getElementById('results').innerHTML='';
@@ -1988,7 +1988,8 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 
 <div class="g2">
   <div class="card"><div class="ct">🏷️ 彼得林區六大分類</div><div id="ai_lynch">${aiLoading()}</div></div>
-  <div class="card"><div class="ct">🏭 產品與服務（營收來源）</div><div id="ai_intro"></div><div id="ai_products">${aiLoading()}</div></div>
+  <div class="card"><div class="ct">🏢 公司介紹</div><div id="ai_intro">${aiLoading()}</div></div>
+<div class="card"><div class="ct">🏭 產品與服務（營收來源）</div><div id="ai_products">${aiLoading()}</div></div>
 </div>
 <div class="g2">
   <div class="card"><div class="ct">⚔️ 前三大競爭對手 &amp; 世界排名</div><div id="ai_competitors">${aiLoading()}</div></div>
@@ -12400,7 +12401,7 @@ function cardGroup(c){
   if(/估值/.test(t)) return 4;
   if(/法說會|利多|利空|風險/.test(t)) return 5;
   if(/最新新聞/.test(t)) return 6;
-  if(/產品與服務/.test(t)) return 9;   // 產品與服務→獨立選單(排在關鍵財務指標前)
+  if(/產品與服務|公司介紹/.test(t)) return 9;   // 產品與服務＋公司介紹→同一個選單(公司介紹為獨立卡片，排在產品與服務上方)
   if(/技術分析/.test(t)) return 7;
   return 0;
 }
