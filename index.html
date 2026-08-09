@@ -722,6 +722,7 @@ const TW_NAMES={'2330':'台積電','2317':'鴻海','2454':'聯發科','2308':'�
 '3035':'智原','6643':'M31','4961':'天鈺','8016':'矽創','6531':'愛普','6533':'晶心科','6138':'茂達','6756':'威鋒電子','6695':'芯鼎',
 '2352':'佳世達','3706':'神達','2354':'鴻準','3005':'神基','2421':'建準','3013':'晟銘電','8210':'勤誠',
 '2313':'華通','6274':'台燿','3042':'晶技','2492':'華新科','6153':'嘉聯益','5469':'瀚宇博','6269':'台郡','2472':'立隆電','2375':'凱美','6120':'達運',
+'3583':'辛耘','3131':'弘塑','6187':'萬潤','3413':'京鼎','6196':'帆宣','3680':'家登','8996':'高力','3058':'立德','6230':'尼得科超眾',
 '006208':'富邦台50','00919':'群益台灣精選高息','00929':'復華台灣科技優息','0052':'富邦科技','00713':'元大台灣高息低波'};
 // 台股↔美股「雙掛牌」對照：台股代碼→美股代碼。若該美股已在 IR_CALL_SUMMARY/IR_PRODUCTS_SUMMARY
 //   建有「官方事實」內容，台股分析就直接共用同一份事實(產品/法說會展望/官方IR頁)，避免台股靠 AI 臆測、
@@ -2500,7 +2501,7 @@ function decodeHtmlEntities(s){ return String(s||'').replace(/&amp;/g,'&').repla
 // 任何外部連結若原文非中文，一律包一層 Google 翻譯（免費、免AI額度），點開後整頁自動翻成繁體中文
 function zhLink(url){ return `https://translate.google.com/translate?sl=auto&tl=zh-TW&u=${encodeURIComponent(url)}`; }
 // 已驗證過的公司官方法說會/財報專區直達頁面（非搜尋結果），優先於Google/YouTube搜尋
-const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/', 'GS': 'https://www.goldmansachs.com/investor-relations/', 'BAC': 'https://investor.bankofamerica.com/', 'MS': 'https://www.morganstanley.com/about-us-ir', 'ORCL': 'https://investor.oracle.com/', 'PLTR': 'https://investors.palantir.com/', 'IBM': 'https://www.ibm.com/investor', 'V': 'https://investor.visa.com/', 'MA': 'https://investor.mastercard.com/', 'WMT': 'https://stock.walmart.com/', 'PEP': 'https://www.pepsico.com/investors', 'MCD': 'https://www.investor.mcdonalds.com/', 'XOM': 'https://investor.exxonmobil.com/', 'CRWD': 'https://ir.crowdstrike.com/', 'PANW': 'https://investors.paloaltonetworks.com/', 'ANET': 'https://investors.arista.com/', 'MRVL': 'https://investor.marvell.com/', 'SMCI': 'https://ir.supermicro.com/', 'ARM': 'https://investors.arm.com/', 'ABNB': 'https://investors.airbnb.com/', 'VRT': 'https://investors.vertiv.com/', 'CVX': 'https://www.chevron.com/investors', 'UNH': 'https://www.unitedhealthgroup.com/investors.html', 'ABBV': 'https://investors.abbvie.com/', 'AMGN': 'https://investors.amgen.com/', 'LRCX': 'https://investor.lamresearch.com/', 'CAT': 'https://investors.caterpillar.com/', 'GE': 'https://www.geaerospace.com/investor-relations', 'T': 'https://investors.att.com/', 'NKE': 'https://investors.nike.com/', 'SPOT': 'https://investors.spotify.com/', 'BA': 'https://investors.boeing.com/', 'SHOP': 'https://investors.shopify.com/', 'PYPL': 'https://investor.pypl.com/', 'PG': 'https://us.pg.com/', 'MRK': 'https://www.merck.com/', 'VZ': 'https://www.verizon.com/', 'TXN': 'https://investor.ti.com/', 'HON': 'https://investor.honeywell.com/', 'ADBE': 'https://news.adobe.com/', 'KLAC': 'https://ir.kla.com/', 'NXPI': 'https://investors.nxp.com/', 'RTX': 'https://www.rtx.com/investors', 'AXP': 'https://ir.americanexpress.com/', 'PM': 'https://www.pmi.com/investor-relations', 'TMO': 'https://ir.thermofisher.com/', 'ABT': 'https://www.abbottinvestor.com/', 'DHR': 'https://investors.danaher.com/', 'LIN': 'https://www.linde.com/investors', 'UPS': 'https://investors.ups.com/', 'BLK': 'https://ir.blackrock.com/', 'MMM': 'https://investors.3m.com/', 'CMCSA': 'https://www.cmcsa.com/', 'MCHP': 'https://ir.microchip.com/', 'ON': 'https://investor.onsemi.com/', 'MPWR': 'https://ir.monolithicpower.com/', 'SWKS': 'https://investors.skyworksinc.com/', 'TER': 'https://investors.teradyne.com/', 'ENTG': 'https://investor.entegris.com/', 'LMT': 'https://investors.lockheedmartin.com/', 'ISRG': 'https://isrg.intuitive.com/', 'REGN': 'https://investor.regeneron.com/', 'VRTX': 'https://investors.vrtx.com/', 'GILD': 'https://investors.gilead.com/', 'NOC': 'https://investor.northropgrumman.com/', 'SYK': 'https://investors.stryker.com/', 'NEE': 'https://www.investor.nexteraenergy.com/', 'ETN': 'https://www.eaton.com/us/en-us/company/investor-relations.html', 'CEG': 'https://www.constellationenergy.com/', 'DLR': 'https://investors.digitalrealty.com/', 'EQIX': 'https://investor.equinix.com/', 'GD': 'https://investorrelations.gd.com/', 'LHX': 'https://investors.l3harris.com/', 'WFC': 'https://www.wellsfargo.com/about/investor-relations/', 'C': 'https://www.citigroup.com/global/investors', 'UNP': 'https://www.up.com/investor/', 'DE': 'https://investor.deere.com/', 'EMR': 'https://www.emerson.com/en-us/investors', 'MDT': 'https://investorrelations.medtronic.com/', 'CVS': 'https://investors.cvshealth.com/', 'SCHW': 'https://www.aboutschwab.com/investor-relations', 'ACN': 'https://investor.accenture.com/', 'ITW': 'https://www.itw.com/investors/', 'APD': 'https://investors.airproducts.com/', 'ELV': 'https://ir.elevancehealth.com/', 'HUM': 'https://humana.gcs-web.com/', 'BSX': 'https://investors.bostonscientific.com/', 'ZTS': 'https://investor.zoetis.com/', 'GM': 'https://investor.gm.com/', 'F': 'https://shareholder.ford.com/', 'WM': 'https://investors.wm.com/', 'PLD': 'https://ir.prologis.com/', 'AON': 'https://ir.aon.com/', 'MMC': 'https://ir.mmc.com/', 'SPGI': 'https://investor.spglobal.com/', 'ICE': 'https://ir.theice.com/', 'RSG': 'https://investor.republicservices.com/', 'CB': 'https://investors.chubb.com/', 'PGR': 'https://investors.progressive.com/', 'USB': 'https://investors.usbank.com/', 'TFC': 'https://ir.truist.com/', 'COF': 'https://investor.capitalone.com/', 'APH': 'https://ir.amphenol.com/', 'NOW': 'https://investors.servicenow.com/', 'DUK': 'https://duke-energy.com/investors', 'AMAT': 'https://ir.appliedmaterials.com/', 'SNPS': 'https://investor.synopsys.com/', 'CDNS': 'https://investor.cadence.com/', 'GEV': 'https://www.gevernova.com/investors', 'FI': 'https://investors.fiserv.com/', 'CMG': 'https://ir.chipotle.com/', 'HLT': 'https://ir.hilton.com/', 'YUM': 'https://ir.yum.com/', 'GIS': 'https://investors.generalmills.com/', 'CL': 'https://investor.colgatepalmolive.com/', 'KMB': 'https://investor.kimberly-clark.com/', 'KHC': 'https://ir.kraftheinzcompany.com/', 'MO': 'https://www.altria.com/investors', 'STZ': 'https://ir.cbrands.com/', 'AZO': 'https://corporate.autozone.com/investor-relations', 'ORLY': 'https://corporate.oreillyauto.com/investor-relations', 'BMY': 'https://investor.bms.com/', 'FDX': 'https://investors.fedex.com/', 'NSC': 'https://www.norfolksouthern.com/investors', 'CSX': 'https://investors.csx.com/', 'COP': 'https://www.conocophillips.com/investors/', 'SLB': 'https://investorcenter.slb.com/', 'ADP': 'https://investors.adp.com/', 'PH': 'https://investors.parker.com/', 'WDAY': 'https://investor.workday.com/', 'ADSK': 'https://investors.autodesk.com/', 'PAYX': 'https://investor.paychex.com/', 'CMI': 'https://investor.cummins.com/', 'KMI': 'https://ir.kindermorgan.com/', 'MCK': 'https://investor.mckesson.com/', 'GEHC': 'https://investor.gehealthcare.com/', 'BDX': 'https://investors.bd.com/', 'CRM': 'https://investor.salesforce.com/', 'CSCO': 'https://investor.cisco.com/', 'ADI': 'https://investor.analog.com/', 'HD': 'https://ir.homedepot.com/', 'LOW': 'https://corporate.lowes.com/', 'DDOG': 'https://investors.datadoghq.com/', 'NET': 'https://cloudflare.net/', 'SNOW': 'https://investors.snowflake.com/', 'TGT': 'https://corporate.target.com/', 'MDLZ': 'https://ir.mondelezinternational.com/', 'MELI': 'https://investor.mercadolibre.com/', 'SE': 'https://www.sea.com/investor', 'ROKU': 'https://ir.roku.com/', 'SNAP': 'https://investor.snap.com/', 'PINS': 'https://investor.pinterestinc.com/', 'EBAY': 'https://investors.ebayinc.com/', 'COIN': 'https://investor.coinbase.com/', 'MSTR': 'https://www.strategy.com/investor-relations', 'HOOD': 'https://investors.robinhood.com/', 'XYZ': 'https://investors.block.xyz/', 'U': 'https://investors.unity.com/', 'PATH': 'https://ir.uipath.com/', 'MDB': 'https://investors.mongodb.com/', 'TEAM': 'https://investors.atlassian.com/', 'DAL': 'https://ir.delta.com/', 'DASH': 'https://ir.doordash.com/', 'BRK.B': 'https://www.berkshirehathaway.com/', 'RBLX': 'https://ir.roblox.com/', 'OXY': 'https://www.oxy.com/investors/', 'MRNA': 'https://investors.modernatx.com/', 'HPQ': 'https://investor.hp.com/', 'HPE': 'https://investors.hpe.com/', 'CHWY': 'https://investor.chewy.com/', 'TWLO': 'https://investors.twilio.com/', 'DOCU': 'https://investor.docusign.com/', 'OKTA': 'https://investor.okta.com/', 'HUBS': 'https://ir.hubspot.com/', 'ZS': 'https://ir.zscaler.com/', 'MCO': 'https://ir.moodys.com/', 'ROK': 'https://ir.rockwellautomation.com/', 'CIEN': 'https://investor.ciena.com/', 'LITE': 'https://investor.lumentum.com/', 'COHR': 'https://investors.coherent.com/', 'AAOI': 'https://investors.ao-inc.com/', 'FN': 'https://investor.fabrinet.com/', 'ENPH': 'https://investor.enphase.com/', 'SEDG': 'https://investors.solaredge.com/', 'ABB': 'https://global.abb/group/en/investors', 'AI': 'https://investor.c3.ai/', 'ASTS': 'https://investors.ast-science.com/', 'BE': 'https://investor.bloomenergy.com/', 'FLNC': 'https://ir.fluenceenergy.com/', 'IRDM': 'https://investor.iridium.com/', 'NTAP': 'https://investors.netapp.com/', 'STX': 'https://investors.seagate.com/', 'VKTX': 'https://ir.vikingtherapeutics.com/', 'VST': 'https://investor.vistracorp.com/', 'WDC': 'https://investor.wdc.com/', '2454': 'https://www.mediatek.com/zh-tw/investor-relations', '2317': 'https://www.honhai.com/zh-tw/investor-relations', '2308': 'https://investor.deltaww.com/', '2303': 'https://www.umc.com/zh-TW/Investors/financial_information', '2382': 'https://www.quantatw.com/quanta/chinese/investor/index.aspx', '3711': 'https://www.aseglobal.com/investor-relations/', '8299': 'https://www.phison.com/zh-tw/investor-relations', '2345': 'https://www.accton.com/investor-relations/', '2412': 'https://www.cht.com.tw/zh-tw/corporate/investor', '3105': 'https://www.winfoundry.com/zh-TW/Invest/invest_index', '3034': 'https://www.novatek.com.tw/en/Investor', '2357': 'https://www.asus.com/tw/event/investor-relations/', '3231': 'https://www.wistron.com/CMS/Investor', '2324': 'https://www.compal.com/investor-relations', '2379': 'https://www.realtek.com/Investor', '4938': 'https://www.pegatroncorp.com/investor-relations', '3037': 'https://www.unimicron.com/investor.html', '3008': 'https://www.largan.com.tw/investor', '2395': 'https://www.advantech.com/en/investor-relations', '3443': 'https://www.guc-asic.com/investor-relations', '2368': 'https://www.gce.com.tw/', '2449': 'https://www.kyec.com.tw/', '2603': 'https://www.evergreen-marine.com/', '2892': 'https://ir.firstholding.com.tw/c/index.php', '3017': 'https://www.avc.co/', '3045': 'https://www.taiwanmobile.com/', '3653': 'https://www.jentech.com.tw/', '3661': 'https://www.alchip.com/', '3665': 'https://www.bizlinktech.com/', '4958': 'https://www.zdtco.com/tw/investor/events', '5880': 'https://www.tcfhc.com.tw/', '6505': 'https://www.fpcc.com.tw/', '2002': 'https://www.csc.com.tw/', '2207': 'https://www.hotaimotor.com.tw/', '2377': 'https://www.msi.com/', '2409': 'https://www.auo.com/', '2615': 'https://www.wanhai.com/', '2609': 'https://www.yangming.com/', '1326': 'https://www.fcfc.com.tw/', '5483': 'https://www.saswafer.com/', '2337': 'https://www.macronix.com/zh-tw/about/investor-relations/Pages/quarterly-results.aspx', '2356': 'https://www.inventec.com/', '2376': 'https://www.gigabyte.com/tw/', '3324': 'https://www.auras.com.tw/', '4966': 'https://www.paradetech.com/', '5274': 'https://www.aspeedtech.com/', '6415': 'https://www.silergy.com/', '8069': 'https://www.eink.com/', '1503': 'https://www.seec.com.tw/', '1513': 'https://www.chem.com.tw/', '1514': 'https://www.allis.com.tw/', '2634': 'https://www.aidc.com.tw/tw/', '2801': 'https://www.bankchb.com/', '3006': 'https://www.esmt.com.tw/zh-tw', '3227': 'https://www.pixart.com/index/tw/', '3491': 'https://www.umt-tw.com/', '1519': 'https://www.fortune.com.tw/', '1795': 'https://www.lotuspharm.com.tw/', '3529': 'https://www.ememory.com.tw/', '4919': 'https://www.nuvoton.com/', '6510': 'https://www.chpt.com.tw/', '6547': 'https://www.medigenvac.com/', '6753': 'https://www.lungteh.com/', '8033': 'https://www.thundertiger.com/tw/index.html', '1102': 'https://www.asiacement.com.tw/', '5871': 'http://www.chaileaseholding.com/', '9910': 'https://www.fengtay.com/', '1590': 'https://www.airtac.com/', '2618': 'https://www.evaair.com/', '2610': 'https://www.china-airlines.com/', '6446': 'https://www.pharmaessentia.com/', '6182': 'https://www.waferworks.com/tw/', '3035': 'https://www.globalunichip.com/', '6643': 'https://www.m31tech.com/', '4961': 'https://www.raydium.com.tw/', '8016': 'https://www.sitronix.com.tw/', '6531': 'https://www.apmemory.com/tw', '6533': 'https://www.andestech.com/', '6138': 'https://www.anpec.com.tw/', '6756': 'https://www.via-labs.com/', '6695': 'https://www.icatchtek.com/', '2352': 'https://www.qisda.com/', '3706': 'https://www.mitac.com/', '2354': 'https://www.foxconntech.com.tw/', '3005': 'https://www.getac.com/', '2421': 'https://www.sunon.com/', '3013': 'https://www.uneec.com/tw', '8210': 'https://www.chenbro.com/', '2313': 'https://www.unitech.com.tw/', '6274': 'https://www.elitematerial.com.tw/', '3042': 'https://www.txc.com.tw/', '2492': 'https://www.waltron.com.tw/', '6153': 'https://www.flexium.com.tw/', '5469': 'https://www.hannstarboard.com/', '6269': 'https://www.careertech.com.tw/', '2472': 'https://www.lith.com.tw/', '2375': 'https://www.kaimei.com.tw/', '6120': 'https://www.solartech.com.tw/' };
+const IR_QUARTERLY_PAGE = { 'TSM': 'https://investor.tsmc.com/english/quarterly-results', 'NVO': 'https://www.novonordisk.com/investors/financial-results.html', 'INTC': 'https://www.intc.com/financial-info/financial-results', 'LLY': 'https://investor.lilly.com/financial-information/quarterly-results', 'NVDA': 'https://investor.nvidia.com/financial-info/quarterly-results/', 'MU': 'https://investors.micron.com/financial-information', 'GOOGL': 'https://abc.xyz/investor/', 'GOOG': 'https://abc.xyz/investor/', 'AAPL': 'https://investor.apple.com/', 'META': 'https://investor.atmeta.com/financials/default.aspx', 'MSFT': 'https://www.microsoft.com/en-us/investor', 'AMZN': 'https://ir.aboutamazon.com/quarterly-results/default.aspx', 'TSLA': 'https://ir.tesla.com/', 'AMD': 'https://ir.amd.com/financial-information/financial-results', 'AVGO': 'https://investors.broadcom.com/financial-information/quarterly-results', 'ASML': 'https://www.asml.com/en/investors/financial-results', 'QCOM': 'https://investor.qualcomm.com/financial-info-sec-filings/historical-financial-results/default.aspx', 'UBER': 'https://investor.uber.com/financials/default.aspx', 'NFLX': 'https://ir.netflix.net/financials/quarterly-earnings/default.aspx', 'BKNG': 'https://ir.bookingholdings.com/financial-information/quarterly-results', 'JPM': 'https://www.jpmorganchase.com/ir/quarterly-earnings', 'JNJ': 'https://www.investor.jnj.com/', 'PFE': 'https://www.pfizer.com/investors', 'COST': 'https://investor.costco.com/', 'DELL': 'https://investors.delltechnologies.com/', 'KO': 'https://investors.coca-colacompany.com/', 'SBUX': 'https://investor.starbucks.com/', 'DIS': 'https://thewaltdisneycompany.com/investor-relations/', 'MAR': 'https://marriott.gcs-web.com/', 'IHG': 'https://www.ihgplc.com/en/investors', 'SKHY': 'https://news.skhynix.com/en/tag/quarterly-earnings/', 'GS': 'https://www.goldmansachs.com/investor-relations/', 'BAC': 'https://investor.bankofamerica.com/', 'MS': 'https://www.morganstanley.com/about-us-ir', 'ORCL': 'https://investor.oracle.com/', 'PLTR': 'https://investors.palantir.com/', 'IBM': 'https://www.ibm.com/investor', 'V': 'https://investor.visa.com/', 'MA': 'https://investor.mastercard.com/', 'WMT': 'https://stock.walmart.com/', 'PEP': 'https://www.pepsico.com/investors', 'MCD': 'https://www.investor.mcdonalds.com/', 'XOM': 'https://investor.exxonmobil.com/', 'CRWD': 'https://ir.crowdstrike.com/', 'PANW': 'https://investors.paloaltonetworks.com/', 'ANET': 'https://investors.arista.com/', 'MRVL': 'https://investor.marvell.com/', 'SMCI': 'https://ir.supermicro.com/', 'ARM': 'https://investors.arm.com/', 'ABNB': 'https://investors.airbnb.com/', 'VRT': 'https://investors.vertiv.com/', 'CVX': 'https://www.chevron.com/investors', 'UNH': 'https://www.unitedhealthgroup.com/investors.html', 'ABBV': 'https://investors.abbvie.com/', 'AMGN': 'https://investors.amgen.com/', 'LRCX': 'https://investor.lamresearch.com/', 'CAT': 'https://investors.caterpillar.com/', 'GE': 'https://www.geaerospace.com/investor-relations', 'T': 'https://investors.att.com/', 'NKE': 'https://investors.nike.com/', 'SPOT': 'https://investors.spotify.com/', 'BA': 'https://investors.boeing.com/', 'SHOP': 'https://investors.shopify.com/', 'PYPL': 'https://investor.pypl.com/', 'PG': 'https://us.pg.com/', 'MRK': 'https://www.merck.com/', 'VZ': 'https://www.verizon.com/', 'TXN': 'https://investor.ti.com/', 'HON': 'https://investor.honeywell.com/', 'ADBE': 'https://news.adobe.com/', 'KLAC': 'https://ir.kla.com/', 'NXPI': 'https://investors.nxp.com/', 'RTX': 'https://www.rtx.com/investors', 'AXP': 'https://ir.americanexpress.com/', 'PM': 'https://www.pmi.com/investor-relations', 'TMO': 'https://ir.thermofisher.com/', 'ABT': 'https://www.abbottinvestor.com/', 'DHR': 'https://investors.danaher.com/', 'LIN': 'https://www.linde.com/investors', 'UPS': 'https://investors.ups.com/', 'BLK': 'https://ir.blackrock.com/', 'MMM': 'https://investors.3m.com/', 'CMCSA': 'https://www.cmcsa.com/', 'MCHP': 'https://ir.microchip.com/', 'ON': 'https://investor.onsemi.com/', 'MPWR': 'https://ir.monolithicpower.com/', 'SWKS': 'https://investors.skyworksinc.com/', 'TER': 'https://investors.teradyne.com/', 'ENTG': 'https://investor.entegris.com/', 'LMT': 'https://investors.lockheedmartin.com/', 'ISRG': 'https://isrg.intuitive.com/', 'REGN': 'https://investor.regeneron.com/', 'VRTX': 'https://investors.vrtx.com/', 'GILD': 'https://investors.gilead.com/', 'NOC': 'https://investor.northropgrumman.com/', 'SYK': 'https://investors.stryker.com/', 'NEE': 'https://www.investor.nexteraenergy.com/', 'ETN': 'https://www.eaton.com/us/en-us/company/investor-relations.html', 'CEG': 'https://www.constellationenergy.com/', 'DLR': 'https://investors.digitalrealty.com/', 'EQIX': 'https://investor.equinix.com/', 'GD': 'https://investorrelations.gd.com/', 'LHX': 'https://investors.l3harris.com/', 'WFC': 'https://www.wellsfargo.com/about/investor-relations/', 'C': 'https://www.citigroup.com/global/investors', 'UNP': 'https://www.up.com/investor/', 'DE': 'https://investor.deere.com/', 'EMR': 'https://www.emerson.com/en-us/investors', 'MDT': 'https://investorrelations.medtronic.com/', 'CVS': 'https://investors.cvshealth.com/', 'SCHW': 'https://www.aboutschwab.com/investor-relations', 'ACN': 'https://investor.accenture.com/', 'ITW': 'https://www.itw.com/investors/', 'APD': 'https://investors.airproducts.com/', 'ELV': 'https://ir.elevancehealth.com/', 'HUM': 'https://humana.gcs-web.com/', 'BSX': 'https://investors.bostonscientific.com/', 'ZTS': 'https://investor.zoetis.com/', 'GM': 'https://investor.gm.com/', 'F': 'https://shareholder.ford.com/', 'WM': 'https://investors.wm.com/', 'PLD': 'https://ir.prologis.com/', 'AON': 'https://ir.aon.com/', 'MMC': 'https://ir.mmc.com/', 'SPGI': 'https://investor.spglobal.com/', 'ICE': 'https://ir.theice.com/', 'RSG': 'https://investor.republicservices.com/', 'CB': 'https://investors.chubb.com/', 'PGR': 'https://investors.progressive.com/', 'USB': 'https://investors.usbank.com/', 'TFC': 'https://ir.truist.com/', 'COF': 'https://investor.capitalone.com/', 'APH': 'https://ir.amphenol.com/', 'NOW': 'https://investors.servicenow.com/', 'DUK': 'https://duke-energy.com/investors', 'AMAT': 'https://ir.appliedmaterials.com/', 'SNPS': 'https://investor.synopsys.com/', 'CDNS': 'https://investor.cadence.com/', 'GEV': 'https://www.gevernova.com/investors', 'FI': 'https://investors.fiserv.com/', 'CMG': 'https://ir.chipotle.com/', 'HLT': 'https://ir.hilton.com/', 'YUM': 'https://ir.yum.com/', 'GIS': 'https://investors.generalmills.com/', 'CL': 'https://investor.colgatepalmolive.com/', 'KMB': 'https://investor.kimberly-clark.com/', 'KHC': 'https://ir.kraftheinzcompany.com/', 'MO': 'https://www.altria.com/investors', 'STZ': 'https://ir.cbrands.com/', 'AZO': 'https://corporate.autozone.com/investor-relations', 'ORLY': 'https://corporate.oreillyauto.com/investor-relations', 'BMY': 'https://investor.bms.com/', 'FDX': 'https://investors.fedex.com/', 'NSC': 'https://www.norfolksouthern.com/investors', 'CSX': 'https://investors.csx.com/', 'COP': 'https://www.conocophillips.com/investors/', 'SLB': 'https://investorcenter.slb.com/', 'ADP': 'https://investors.adp.com/', 'PH': 'https://investors.parker.com/', 'WDAY': 'https://investor.workday.com/', 'ADSK': 'https://investors.autodesk.com/', 'PAYX': 'https://investor.paychex.com/', 'CMI': 'https://investor.cummins.com/', 'KMI': 'https://ir.kindermorgan.com/', 'MCK': 'https://investor.mckesson.com/', 'GEHC': 'https://investor.gehealthcare.com/', 'BDX': 'https://investors.bd.com/', 'CRM': 'https://investor.salesforce.com/', 'CSCO': 'https://investor.cisco.com/', 'ADI': 'https://investor.analog.com/', 'HD': 'https://ir.homedepot.com/', 'LOW': 'https://corporate.lowes.com/', 'DDOG': 'https://investors.datadoghq.com/', 'NET': 'https://cloudflare.net/', 'SNOW': 'https://investors.snowflake.com/', 'TGT': 'https://corporate.target.com/', 'MDLZ': 'https://ir.mondelezinternational.com/', 'MELI': 'https://investor.mercadolibre.com/', 'SE': 'https://www.sea.com/investor', 'ROKU': 'https://ir.roku.com/', 'SNAP': 'https://investor.snap.com/', 'PINS': 'https://investor.pinterestinc.com/', 'EBAY': 'https://investors.ebayinc.com/', 'COIN': 'https://investor.coinbase.com/', 'MSTR': 'https://www.strategy.com/investor-relations', 'HOOD': 'https://investors.robinhood.com/', 'XYZ': 'https://investors.block.xyz/', 'U': 'https://investors.unity.com/', 'PATH': 'https://ir.uipath.com/', 'MDB': 'https://investors.mongodb.com/', 'TEAM': 'https://investors.atlassian.com/', 'DAL': 'https://ir.delta.com/', 'DASH': 'https://ir.doordash.com/', 'BRK.B': 'https://www.berkshirehathaway.com/', 'RBLX': 'https://ir.roblox.com/', 'OXY': 'https://www.oxy.com/investors/', 'MRNA': 'https://investors.modernatx.com/', 'HPQ': 'https://investor.hp.com/', 'HPE': 'https://investors.hpe.com/', 'CHWY': 'https://investor.chewy.com/', 'TWLO': 'https://investors.twilio.com/', 'DOCU': 'https://investor.docusign.com/', 'OKTA': 'https://investor.okta.com/', 'HUBS': 'https://ir.hubspot.com/', 'ZS': 'https://ir.zscaler.com/', 'MCO': 'https://ir.moodys.com/', 'ROK': 'https://ir.rockwellautomation.com/', 'CIEN': 'https://investor.ciena.com/', 'LITE': 'https://investor.lumentum.com/', 'COHR': 'https://investors.coherent.com/', 'AAOI': 'https://investors.ao-inc.com/', 'FN': 'https://investor.fabrinet.com/', 'ENPH': 'https://investor.enphase.com/', 'SEDG': 'https://investors.solaredge.com/', 'ABB': 'https://global.abb/group/en/investors', 'AI': 'https://investor.c3.ai/', 'ASTS': 'https://investors.ast-science.com/', 'BE': 'https://investor.bloomenergy.com/', 'FLNC': 'https://ir.fluenceenergy.com/', 'IRDM': 'https://investor.iridium.com/', 'NTAP': 'https://investors.netapp.com/', 'STX': 'https://investors.seagate.com/', 'VKTX': 'https://ir.vikingtherapeutics.com/', 'VST': 'https://investor.vistracorp.com/', 'WDC': 'https://investor.wdc.com/', '2454': 'https://www.mediatek.com/zh-tw/investor-relations', '2317': 'https://www.honhai.com/zh-tw/investor-relations', '2308': 'https://investor.deltaww.com/', '2303': 'https://www.umc.com/zh-TW/Investors/financial_information', '2382': 'https://www.quantatw.com/quanta/chinese/investor/index.aspx', '3711': 'https://www.aseglobal.com/investor-relations/', '8299': 'https://www.phison.com/zh-tw/investor-relations', '2345': 'https://www.accton.com/investor-relations/', '2412': 'https://www.cht.com.tw/zh-tw/corporate/investor', '3105': 'https://www.winfoundry.com/zh-TW/Invest/invest_index', '3034': 'https://www.novatek.com.tw/en/Investor', '2357': 'https://www.asus.com/tw/event/investor-relations/', '3231': 'https://www.wistron.com/CMS/Investor', '2324': 'https://www.compal.com/investor-relations', '2379': 'https://www.realtek.com/Investor', '4938': 'https://www.pegatroncorp.com/investor-relations', '3037': 'https://www.unimicron.com/investor.html', '3008': 'https://www.largan.com.tw/investor', '2395': 'https://www.advantech.com/en/investor-relations', '3443': 'https://www.guc-asic.com/investor-relations', '2368': 'https://www.gce.com.tw/', '2449': 'https://www.kyec.com.tw/', '2603': 'https://www.evergreen-marine.com/', '2892': 'https://ir.firstholding.com.tw/c/index.php', '3017': 'https://www.avc.co/', '3045': 'https://www.taiwanmobile.com/', '3653': 'https://www.jentech.com.tw/', '3661': 'https://www.alchip.com/', '3665': 'https://www.bizlinktech.com/', '4958': 'https://www.zdtco.com/tw/investor/events', '5880': 'https://www.tcfhc.com.tw/', '6505': 'https://www.fpcc.com.tw/', '2002': 'https://www.csc.com.tw/', '2207': 'https://www.hotaimotor.com.tw/', '2377': 'https://www.msi.com/', '2409': 'https://www.auo.com/', '2615': 'https://www.wanhai.com/', '2609': 'https://www.yangming.com/', '1326': 'https://www.fcfc.com.tw/', '5483': 'https://www.saswafer.com/', '2337': 'https://www.macronix.com/zh-tw/about/investor-relations/Pages/quarterly-results.aspx', '2356': 'https://www.inventec.com/', '2376': 'https://www.gigabyte.com/tw/', '3324': 'https://www.auras.com.tw/', '4966': 'https://www.paradetech.com/', '5274': 'https://www.aspeedtech.com/', '6415': 'https://www.silergy.com/', '8069': 'https://www.eink.com/', '1503': 'https://www.seec.com.tw/', '1513': 'https://www.chem.com.tw/', '1514': 'https://www.allis.com.tw/', '2634': 'https://www.aidc.com.tw/tw/', '2801': 'https://www.bankchb.com/', '3006': 'https://www.esmt.com.tw/zh-tw', '3227': 'https://www.pixart.com/index/tw/', '3491': 'https://www.umt-tw.com/', '1519': 'https://www.fortune.com.tw/', '1795': 'https://www.lotuspharm.com.tw/', '3529': 'https://www.ememory.com.tw/', '4919': 'https://www.nuvoton.com/', '6510': 'https://www.chpt.com.tw/', '6547': 'https://www.medigenvac.com/', '6753': 'https://www.lungteh.com/', '8033': 'https://www.thundertiger.com/tw/index.html', '1102': 'https://www.asiacement.com.tw/', '5871': 'http://www.chaileaseholding.com/', '9910': 'https://www.fengtay.com/', '1590': 'https://www.airtac.com/', '2618': 'https://www.evaair.com/', '2610': 'https://www.china-airlines.com/', '6446': 'https://www.pharmaessentia.com/', '6182': 'https://www.waferworks.com/tw/', '3035': 'https://www.globalunichip.com/', '6643': 'https://www.m31tech.com/', '4961': 'https://www.raydium.com.tw/', '8016': 'https://www.sitronix.com.tw/', '6531': 'https://www.apmemory.com/tw', '6533': 'https://www.andestech.com/', '6138': 'https://www.anpec.com.tw/', '6756': 'https://www.via-labs.com/', '6695': 'https://www.icatchtek.com/', '2352': 'https://www.qisda.com/', '3706': 'https://www.mitac.com/', '2354': 'https://www.foxconntech.com.tw/', '3005': 'https://www.getac.com/', '2421': 'https://www.sunon.com/', '3013': 'https://www.uneec.com/tw', '8210': 'https://www.chenbro.com/', '2313': 'https://www.unitech.com.tw/', '6274': 'https://www.elitematerial.com.tw/', '3042': 'https://www.txc.com.tw/', '2492': 'https://www.waltron.com.tw/', '6153': 'https://www.flexium.com.tw/', '5469': 'https://www.hannstarboard.com/', '6269': 'https://www.careertech.com.tw/', '2472': 'https://www.lith.com.tw/', '2375': 'https://www.kaimei.com.tw/', '6120': 'https://www.solartech.com.tw/', '3583': 'https://www.scientech.com.tw/', '3131': 'https://www.gptc.com.tw/', '6187': 'https://www.allring-tech.com.tw/', '3413': 'https://www.gpec.com.tw/', '6196': 'https://www.mic.com.tw/', '3680': 'https://www.gudeng.com/', '8996': 'https://www.kaori.com.tw/tw/', '3058': 'https://www.lei.com.tw/', '6230': 'https://www.ccic.com.tw/' };
 
 // 🎬 法說會影片（keyed by 代碼）：值可為 YouTube 影片 ID(11碼，內嵌可播放/暫停/拉時間軸) 或完整官方重播網址(外開)。
 // 人工逐間驗證後填入官方來源；未填者自動退回「官方法說會線上重播頁」按鈕(IR_QUARTERLY_PAGE，該頁本身即有播放器)。
@@ -6342,6 +6343,87 @@ NVIDIA GB200/META客製化ASIC AI伺服器訂單挹注成長。</div>`
 • Q1 EPS -0.15元(較去年全年-0.19元略收斂)。</div>
 <div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 動能</b><br>
 • 達運精密為光學元件與精密光電廠，產品應用涵蓋顯示光學元件。</div>`
+  },
+  '3583': {
+    quarter: '2026 第一季（Q2尚未公布）',
+    source: 'https://www.scientech.com.tw/',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 Q1創單季新高</b><br>
+• Q1營收31.2億元(季增11%、年增11%)，稅後淨利3.33億元，EPS 4.14元創單季新高。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 動能</b><br>
+• 半導體濕製程設備廠，國內最大12吋再生晶圓龍頭，CoWoS先進封裝設備需求為成長動能。</div>`
+  },
+  '3131': {
+    quarter: '2026 第一季（Q2尚未公布）',
+    source: 'https://www.gptc.com.tw/',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 Q1EPS強勁</b><br>
+• Q1 EPS 16.11元。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 動能</b><br>
+• 半導體濕製程設備龍頭廠，CoWoS先進封裝濕製程設備為核心成長動能。</div>`
+  },
+  '6187': {
+    quarter: '2026 第一季（Q2尚未公布）',
+    source: 'https://www.allring-tech.com.tw/',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 Q1獲利</b><br>
+• Q1 EPS 3.37元；營收以半導體設備為主(占比94.5%)。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 動能</b><br>
+• 半導體/光學設備廠，CoWoS先進封裝與晶圓級檢測設備為成長焦點。</div>`
+  },
+  '3413': {
+    quarter: '2026 第一季（Q2尚未公布）',
+    source: 'https://www.gpec.com.tw/',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 Q1稅率偏高影響獲利</b><br>
+• Q1 EPS 4.28元；本業毛利率23.84%、營益率13.07%穩健，但海外子公司(泰國新廠)初期費用推升有效稅率至31.8%，拖累稅後獲利表現。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 動能</b><br>
+• 半導體設備廠，美國大廠去中化趨勢下有望接獲轉單，全年獲利展望樂觀。</div>`
+  },
+  '6196': {
+    quarter: '2026 第一季（Q2尚未公布）',
+    source: 'https://www.mic.com.tw/',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 Q1獲利</b><br>
+• Q1 EPS 5.08元；3月營收54.32億元(年增17.5%)。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 動能</b><br>
+• 半導體設備系統整合廠，廠務工程與設備代理業務受惠台積電資本支出擴增。</div>`
+  },
+  '3680': {
+    quarter: '2026 第一季（Q2尚未公布）',
+    source: 'https://www.gudeng.com/',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 Q1獲利</b><br>
+• Q1 EPS 2.55元。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 動能</b><br>
+• 家登精密(Gudeng)為半導體EUV/DUV光罩盒(FOUP/Pod)龍頭廠，先進製程滲透率提升為成長動能。</div>`
+  },
+  '8996': {
+    quarter: '2026 第一季（Q2尚未公布）',
+    source: 'https://www.kaori.com.tw/tw/',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 Q1營收獲利雙創新高</b><br>
+• Q1營收34.2億元(年增239%)，稅後淨利6億元(年增362%)，EPS<b>6.54元</b>，營收獲利雙創歷史新高。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 動能</b><br>
+• 高力熱處理(KAORI)為板式熱交換器龍頭廠，AI伺服器液冷散熱系統需求為爆發性成長動能。</div>`
+  },
+  '3058': {
+    quarter: '2026 第一季（Q2尚未公布，虧損）',
+    source: 'https://www.lei.com.tw/',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 Q1仍虧損但收斂</b><br>
+• Q1 EPS -0.19元(季增80%、年增42%，虧損幅度收斂)。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 動能</b><br>
+• 立德電子(Leader)為交換式電源供應器廠，電動車車載充電器為新事業布局。</div>`
+  },
+  '6230': {
+    quarter: '2026 第一季（Q2尚未公布，虧損）',
+    source: 'https://www.ccic.com.tw/',
+    html: `
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 Q1仍虧損</b><br>
+• Q1 EPS -0.91元(季減20%、年增18%，虧損幅度較去年同期收斂)。</div>
+<div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 動能</b><br>
+• 尼得科超眾(Nidec Chaun-Choung)為散熱元件廠(隸屬日本尼得科集團)，伺服器/NB散熱模組為核心業務。</div>`
   }
 };
 // 產品/營收結構「人工判讀」最新一季官方數據（比年報更新）。來源同法說會官網簡報，每季需人工更新。
@@ -7620,6 +7702,87 @@ M31為<b>矽智財(IP)授權公司</b>，核心產品：<br>
 <b>顯示光學元件</b>｜<b>精密光電製品</b>。<br>
 <div style="margin-top:8px"><b style="color:var(--orange)">策略重點（2026 官網）</b><br>
 • 持續調整產品組合改善獲利結構，光電應用市場競爭仍激烈。</div>`
+  },
+  '3583': {
+    quarter: '官網 scientech.com.tw 業務結構（2026）',
+    source: 'https://www.scientech.com.tw/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（資料來源：辛耘官網 scientech.com.tw）</b></div>
+辛耘企業(SCIENTECH)為<b>半導體/光電先進製程設備廠</b>，核心業務：<br>
+<b>晶圓再生服務(12吋再生晶圓龍頭)</b>｜<b>半導體濕製程設備</b>｜<b>設備代理業務</b>。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">策略重點（2026 官網）</b><br>
+• CoWoS先進封裝設備需求為成長動能，晶圓再生業務為穩定現金流來源。</div>`
+  },
+  '3131': {
+    quarter: '官網 gptc.com.tw 業務結構（2026）',
+    source: 'https://www.gptc.com.tw/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（資料來源：弘塑官網 gptc.com.tw）</b></div>
+弘塑科技(Grand Process Technology)為<b>半導體濕製程設備龍頭廠</b>，核心業務：<br>
+<b>濕式製程設備</b>｜<b>化學品輸送系統</b>，為國內半導體濕製程設備領導品牌。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">策略重點（2026 官網）</b><br>
+• CoWoS先進封裝濕製程設備需求為核心成長動能。</div>`
+  },
+  '6187': {
+    quarter: '官網 allring-tech.com.tw 業務結構（2026）',
+    source: 'https://www.allring-tech.com.tw/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（資料來源：萬潤官網 allring-tech.com.tw）</b></div>
+萬潤科技(All Ring Tech)為<b>半導體/光學設備廠</b>，核心業務：<br>
+<b>半導體檢測設備</b>｜<b>先進封裝設備</b>｜<b>光學儀器</b>，半導體設備營收占比達94.5%。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">策略重點（2026 官網）</b><br>
+• CoWoS先進封裝相關設備為主要成長焦點。</div>`
+  },
+  '3413': {
+    quarter: '官網 gpec.com.tw 業務結構（2026）',
+    source: 'https://www.gpec.com.tw/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（資料來源：京鼎官網 gpec.com.tw）</b></div>
+京鼎精密(GPEC)為<b>半導體設備廠</b>，核心業務：<br>
+<b>半導體製程設備模組</b>｜<b>設備零組件代工</b>，為國際半導體設備大廠合作夥伴。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">策略重點（2026 官網）</b><br>
+• 美國大廠去中化趨勢下可望接獲轉單，泰國新廠布局擴大海外產能。</div>`
+  },
+  '6196': {
+    quarter: '官網 mic.com.tw 業務結構（2026）',
+    source: 'https://www.mic.com.tw/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（資料來源：帆宣官網 mic.com.tw）</b></div>
+帆宣系統科技(Marketech International)為<b>半導體設備系統整合廠</b>，核心業務：<br>
+<b>廠務工程(無塵室/氣體/化學品系統)</b>｜<b>設備代理業務</b>｜<b>系統整合服務</b>。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">策略重點（2026 官網）</b><br>
+• 受惠台積電與晶圓廠資本支出持續擴增，廠務工程訂單能見度佳。</div>`
+  },
+  '3680': {
+    quarter: '官網 gudeng.com 業務結構（2026）',
+    source: 'https://www.gudeng.com/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（資料來源：家登官網 gudeng.com）</b></div>
+家登精密(Gudeng)為<b>半導體光罩盒(FOUP/Pod)龍頭廠</b>，核心產品：<br>
+<b>EUV/DUV光罩盒</b>｜<b>晶圓傳送盒(FOUP)</b>｜<b>精密機構零組件</b>。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">策略重點（2026 官網）</b><br>
+• 先進製程(EUV)滲透率提升為主要成長動能，全球市占率領先。</div>`
+  },
+  '8996': {
+    quarter: '官網 kaori.com.tw 業務結構（2026）',
+    source: 'https://www.kaori.com.tw/tw/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（資料來源：高力官網 kaori.com.tw）</b></div>
+高力熱處理(KAORI)為<b>板式熱交換器龍頭廠</b>，核心產品：<br>
+<b>板式熱交換器</b>｜<b>AI伺服器液冷散熱系統</b>｜<b>工業熱處理設備</b>。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">策略重點（2026 官網）</b><br>
+• AI伺服器液冷散熱系統需求爆發性成長，帶動營收獲利雙創歷史新高。</div>`
+  },
+  '3058': {
+    quarter: '官網 lei.com.tw 業務結構（2026）',
+    source: 'https://www.lei.com.tw/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（資料來源：立德官網 lei.com.tw）</b></div>
+立德電子(Leader Electronics)為<b>交換式電源供應器廠</b>，核心產品：<br>
+<b>AC/DC電源供應器</b>｜<b>電動車車載充電器</b>，深耕電源管理利基市場。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">策略重點（2026 官網）</b><br>
+• 電動車車載充電器為新事業成長布局，虧損幅度逐季收斂。</div>`
+  },
+  '6230': {
+    quarter: '官網 ccic.com.tw 業務結構（2026）',
+    source: 'https://www.ccic.com.tw/',
+    html: `<div style="margin-bottom:6px"><b style="color:var(--blue)">業務結構（資料來源：尼得科超眾官網 ccic.com.tw）</b></div>
+尼得科超眾(Nidec Chaun-Choung)為<b>散熱元件廠</b>(隸屬日本尼得科集團)，核心產品：<br>
+<b>伺服器/桌機散熱模組</b>｜<b>筆電散熱系統</b>｜<b>均熱片(Vapor Chamber)</b>｜<b>LED散熱模組</b>。<br>
+<div style="margin-top:8px"><b style="color:var(--orange)">策略重點（2026 官網）</b><br>
+• 背靠日本尼得科集團國際化資源，持續拓展伺服器散熱應用市場。</div>`
   },
   'TSM': {
     quarter: '2026 第二季（2026/07/16）',
