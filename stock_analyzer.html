@@ -2690,7 +2690,7 @@ function loadMasterVid(el){
   const src=el.dataset.src; if(!src) return;
   const fid='masterVidFrame'+(++__masterVidSeq);
   const isShort=el.classList.contains('master-short-wrap');
-  el.innerHTML=`<iframe id="${fid}" src="${src}" title="投資大師影片" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="width:100%;height:100%;${isShort?'':'aspect-ratio:16/9;'}border-radius:8px"></iframe>`;
+  el.innerHTML=`<iframe id="${fid}" src="${src}" title="投資大師影片" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen style="width:100%;height:100%;${isShort?'':'aspect-ratio:16/9;'}border-radius:8px"></iframe>`;
   el.style.cursor='default'; el.onclick=null;
   setTimeout(()=>forceZhCaptions(fid), 300);
 }
@@ -2718,7 +2718,7 @@ function loadIrVideo(el){
   const v=el.dataset.vid; if(!v) return;
   const orig = (location.protocol==='http:'||location.protocol==='https:') ? '&origin='+encodeURIComponent(location.origin) : '';
   const src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(v)}?rel=0&enablejsapi=1&autoplay=1&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant${orig}`;
-  el.innerHTML=`<iframe id="irVideoFrame" src="${src}" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  el.innerHTML=`<iframe id="irVideoFrame" src="${src}" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>`;
   el.style.cursor='default'; el.onclick=null;
   setTimeout(initIrCaptions, 300);
 }
