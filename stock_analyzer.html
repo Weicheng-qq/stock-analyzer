@@ -245,6 +245,12 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .market-tabs { display:flex; gap:8px; margin:0 0 26px; }
 .market-tabs .mkt-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:10px; padding:11px 10px; font-size:15px; font-weight:700; cursor:pointer; }
 .market-tabs .mkt-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
+/* 封面投資名言 */
+.quote-wrap { display:flex; flex-direction:column; gap:12px; margin:4px 0 20px; }
+.quote-card { background:var(--bg2); border:1px solid var(--border); border-left:3px solid var(--blue); border-radius:10px; padding:14px 16px; }
+.quote-text { font-size:15px; line-height:1.75; color:var(--text); font-weight:600; }
+.quote-en { font-size:12px; line-height:1.55; color:var(--text2); margin-top:7px; font-style:italic; }
+.quote-by { font-size:12.5px; color:var(--blue); margin-top:9px; font-weight:700; }
 .current-company-bar { display:flex; align-items:center; gap:8px; margin:0 0 14px; padding:9px 14px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; font-size:14px; font-weight:700; color:var(--text); }
 .current-company-bar .ccb-ticker { color:var(--text2); font-weight:400; font-size:12px; }
 .master-tabs { display:flex; gap:8px; margin:0 0 16px; }
@@ -379,6 +385,8 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <button class="mkt-btn" data-mkt="us" onclick="setMarket('us')">🔵 美股</button>
     <button class="mkt-btn" data-mkt="tw" onclick="setMarket('tw')">🟢 台股</button>
   </div>
+  <!-- 封面名言區：只在開場封面(尚未點美股/台股)時顯示，填滿原本的大片空白 -->
+  <div class="quote-wrap" id="quoteWrap"></div>
   <div class="current-company-bar" id="currentCompanyBar" style="display:none"></div>
   <div class="grp-menu" id="grpMenu" style="display:none">
     <button class="grp-btn" data-g="2" onclick="pickGroup(2)">指數與財務指標</button>
@@ -12355,6 +12363,7 @@ function showGroup(n){
   // welcome(封面介紹)：每次開App固定停留在畫面上，直到revealMenu()結束2秒封面倒數才隱藏——
   //   不論是否已選過市場、不論第幾次開App都一樣，這是使用者明確要求(不是只有第一次使用者才看得到)。
   const e_wel=document.getElementById('welcome');       if(e_wel) e_wel.style.display=(showWl && !__splashDone)?'':'none';
+  const e_q  =document.getElementById('quoteWrap');     if(e_q  ) e_q  .style.display=(showWl && !__splashDone)?'':'none';
   const e_iT =document.getElementById('indexTitle');    if(e_iT ) e_iT .style.display=showIndex?'':'none';
   const e_iB =document.getElementById('indexBar');      if(e_iB ) e_iB .style.display=showIndex?'':'none';
   const e_wl =document.getElementById('watchlistCard'); if(e_wl ) e_wl .style.display=showWl   ?'':'none';
@@ -12408,9 +12417,49 @@ function applyGroupAfterRender(){ __autoLoading=false; if(__jumpAfterSearch){ __
 //   __splashDone旗標控制showGroup()裡welcome的顯示/隱藏，revealMenu()執行後才變true。
 // 顯示選單列(#grpMenu)並跳到自選股頁。
 let __splashDone=false;   // false=封面顯示中(welcome可見)；revealMenu()執行後才變true(隱藏封面)
-function revealMenu(){ __splashDone=true; const gm=document.getElementById('grpMenu'); if(gm) gm.style.display=''; showGroup(10); maybeRunDemo(); }
+function revealMenu(){ __splashDone=true; const gm=document.getElementById('grpMenu'); if(gm) gm.style.display=''; const q=document.getElementById('quoteWrap'); if(q) q.style.display='none'; showGroup(10); maybeRunDemo(); }
+// 📜 封面投資名言：三位大師各隨機挑一句，填滿封面下方原本的大片空白。
+//    全部為公開廣泛流傳、可查證的本人名言(非杜撰)，中文為忠實翻譯並附英文原句對照。
+const MASTER_QUOTES={
+  buffett:{name:'華倫·巴菲特 Warren Buffett',icon:'🏛️',list:[
+    {zh:'價格是你付出的，價值是你得到的。',en:'Price is what you pay. Value is what you get.'},
+    {zh:'在別人貪婪時恐懼，在別人恐懼時貪婪。',en:'Be fearful when others are greedy, and greedy when others are fearful.'},
+    {zh:'用合理的價格買一家很棒的公司，遠勝過用很棒的價格買一家平庸的公司。',en:"It's far better to buy a wonderful company at a fair price than a fair company at a wonderful price."},
+    {zh:'我們最喜歡的持股期限是「永遠」。',en:'Our favorite holding period is forever.'},
+    {zh:'風險來自於你不知道自己在做什麼。',en:"Risk comes from not knowing what you're doing."},
+    {zh:'只有退潮的時候，你才知道誰在裸泳。',en:"Only when the tide goes out do you discover who's been swimming naked."},
+    {zh:'第一條規則：永遠不要虧錢。第二條規則：永遠不要忘記第一條規則。',en:'Rule No.1: Never lose money. Rule No.2: Never forget rule No.1.'}
+  ]},
+  munger:{name:'查理·蒙格 Charlie Munger',icon:'🧠',list:[
+    {zh:'大錢不在買進賣出之中，而在等待之中。',en:'The big money is not in the buying and selling, but in the waiting.'},
+    {zh:'我只想知道我將來會死在哪裡，這樣我就永遠不去那個地方。',en:"All I want to know is where I'm going to die, so I'll never go there."},
+    {zh:'反過來想，永遠反過來想。',en:'Invert, always invert.'},
+    {zh:'像我們這種人，靠著「持續地不做蠢事」所獲得的長期優勢，遠比努力變得非常聰明還要多，這實在令人驚訝。',en:'It is remarkable how much long-term advantage people like us have gotten by trying to be consistently not stupid, instead of trying to be very intelligent.'},
+    {zh:'找到一個簡單的道理，然後認真地執行它。',en:'Take a simple idea and take it seriously.'},
+    {zh:'複利的第一條規則：絕不在沒有必要時打斷它。',en:'The first rule of compounding: Never interrupt it unnecessarily.'}
+  ]},
+  lynch:{name:'彼得·林區 Peter Lynch',icon:'📈',list:[
+    {zh:'了解你持有什麼，以及你為什麼持有它。',en:'Know what you own, and know why you own it.'},
+    {zh:'投資人為了「預先躲避股市修正」而損失的錢，遠比修正本身造成的損失還要多。',en:'Far more money has been lost by investors preparing for corrections, or trying to anticipate corrections, than has been lost in the corrections themselves.'},
+    {zh:'在股市裡最重要的器官是胃，而不是腦。',en:"In the stock market, the most important organ is the stomach. It's not the brain."},
+    {zh:'在股票上賺錢的關鍵，是不要被它們嚇跑。',en:'The key to making money in stocks is not to get scared out of them.'},
+    {zh:'每個人都有在股市賺錢的智力，但不是每個人都有那個承受力。',en:'Everyone has the brainpower to make money in stocks. Not everyone has the stomach.'},
+    {zh:'你不該因為一檔股票便宜而買它，而該因為你對它了解夠多才買。',en:'You should not buy a stock because it is cheap but because you know a lot about it.'}
+  ]}
+};
+function renderSplashQuotes(){
+  const box=document.getElementById('quoteWrap'); if(!box) return;
+  box.innerHTML=Object.keys(MASTER_QUOTES).map(k=>{
+    const g=MASTER_QUOTES[k];
+    const q=g.list[Math.floor(Math.random()*g.list.length)];   // 每次開App各自隨機挑一句
+    return `<div class="quote-card"><div class="quote-text">「${esc(q.zh)}」</div>`
+      +`<div class="quote-en">${esc(q.en)}</div>`
+      +`<div class="quote-by">${g.icon} ${esc(g.name)}</div></div>`;
+  }).join('');
+}
 window.addEventListener('load', function(){
   initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000);
+  renderSplashQuotes();   // 封面名言(每次開App隨機)
   // 只有「使用者剛點過美股/台股按鈕造成的reload」才跳過封面，其餘情況(含全新開App)一律停留在封面等待點擊。
   let skipSplash=false; try{ skipSplash=sessionStorage.getItem('skipSplashOnce')==='1'; sessionStorage.removeItem('skipSplashOnce'); }catch(e){}
   if(skipSplash) revealMenu();
