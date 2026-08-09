@@ -244,11 +244,16 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .market-tabs .mkt-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:10px; padding:11px 10px; font-size:15px; font-weight:700; cursor:pointer; }
 .market-tabs .mkt-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
 /* 封面投資名言 */
-.quote-wrap { display:flex; flex-direction:column; gap:12px; margin:4px 0 20px; }
-.quote-card { background:var(--bg2); border:1px solid var(--border); border-left:3px solid var(--blue); border-radius:10px; padding:14px 16px; }
-.quote-text { font-size:15px; line-height:1.75; color:var(--text); font-weight:600; }
+.quote-wrap { display:flex; flex-direction:column; gap:10px; margin:4px 0 12px; }
+.quote-card { background:var(--bg2); border:1px solid var(--border); border-left:3px solid var(--blue); border-radius:10px; padding:12px 14px; }
+.quote-text { font-size:15px; line-height:1.7; color:var(--text); font-weight:600; }
 .quote-en { font-size:12px; line-height:1.55; color:var(--text2); margin-top:7px; font-style:italic; }
-.quote-by { font-size:12.5px; color:var(--blue); margin-top:9px; font-weight:700; }
+.quote-by { font-size:12.5px; color:var(--blue); margin-top:8px; font-weight:700; }
+/* 空間不足時的緊湊模式(由 renderSplashQuotes 量測後套用) */
+.quote-wrap.tight { gap:8px; }
+.quote-wrap.tight .quote-card { padding:10px 13px; }
+.quote-wrap.tight .quote-text { font-size:14.5px; line-height:1.6; }
+.quote-wrap.tight .quote-by { margin-top:6px; }
 .current-company-bar { display:flex; align-items:center; gap:8px; margin:0 0 14px; padding:9px 10px 9px 14px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; font-size:14px; font-weight:700; color:var(--text); }
 .current-company-bar .ccb-name { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .current-company-bar .ccb-ticker { color:var(--text2); font-weight:400; font-size:12px; margin-left:6px; }
@@ -259,6 +264,12 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .master-short-wrap { max-width:220px; padding-top:0 !important; aspect-ratio:9/16; margin:0 auto; }
 .master-short-wrap img, .master-short-wrap iframe { object-fit:cover; }
 .vid-fs-btn { position:absolute; right:8px; bottom:8px; width:34px; height:34px; border-radius:8px; border:none; background:rgba(0,0,0,.6); color:#fff; font-size:18px; line-height:1; cursor:pointer; z-index:2; }
+/* 自製繁中字幕層：疊在「影片容器」底部，所以永遠貼著影片下緣(不會像YouTube內建字幕在全螢幕時跑到手機畫面最下方) */
+.vid-cap { position:absolute; left:0; right:0; bottom:8px; z-index:3; text-align:center; padding:0 8px; pointer-events:none; }
+.vid-cap span { display:inline-block; background:rgba(0,0,0,.78); color:#fff; font-size:15px; font-weight:600; line-height:1.5; padding:3px 9px; border-radius:5px; max-width:96%; }
+.ir-video:fullscreen .vid-cap span { font-size:20px; }
+.ir-video:-webkit-full-screen .vid-cap span { font-size:20px; }
+@media(max-width:430px){ .vid-cap span { font-size:13.5px; } }
 /* 全螢幕：容器鋪滿螢幕、影片等比縮到「寬高都不超過螢幕」，字幕才不會被推到畫面外看不到。
    ⚠️ 每個瀏覽器前綴必須「各自獨立成一條規則」——只要逗號清單裡有一個選擇器該瀏覽器不認得，
    整條規則會被整個丟棄(實測 :-moz-full-screen 會讓 Chrome 丟掉整條)，這是常見的CSS陷阱。 */
@@ -972,21 +983,20 @@ const THEME_STOCKS={
   '存儲題材':{tw:['2408','2344','6770','2337','3006','8299','3260'],us:['MU','WDC','STX','NTAP']},
   'AI伺服器題材':{tw:['2382','6669','3231','2317','2356','2376'],us:['SMCI','DELL','HPE']},
   'AI散熱題材':{tw:['3017','3324','3653'],us:['VRT']},
-  'AI電力題材':{tw:['1503','1513','1519','1514'],us:['ETN','CEG','VST']},
   '資料中心電力題材':{tw:['2382','6669','2345'],us:['VRT','ETN','DLR','EQIX']},
-  '國防軍工題材':{tw:['2634','8033','6753'],us:['LMT','NOC','RTX','GD','LHX']},
   '太空衛星題材':{tw:['3491'],us:['RKLB','ASTS','IRDM']},
   '儲能題材':{tw:['1513','6121','2308','8996'],us:['TSLA','FLNC','ENPH','SEDG','BE']},
   'AI PC題材':{tw:['2382','2324','3231','2356','4938','3260','4967','2451','2330'],us:['AMD','INTC','QCOM','NVDA','DELL','HPQ']},
   '高股息族群':{tw:['2412','2886','2892','5880','2891','1216','2884'],us:['KO','PG','JNJ','VZ','T','XOM','CVX','PEP']},
   '減肥藥題材':{tw:[],us:['LLY','NVO','VKTX','AMGN','PFE']},
-  '巴菲特持倉':{tw:[],us:['AAPL','AXP','KO','BAC','CVX','OXY','GOOGL','CB','MCO','KHC']}
+  '巴菲特持倉':{tw:[],us:['AAPL','AXP','KO','BAC','CVX','OXY','GOOGL','CB','MCO','KHC']},
+  '國防軍工題材':{tw:['2634','8033','6753'],us:['LMT','NOC','RTX','GD','LHX']}
 };
 // 巴菲特持倉來源：波克夏海瑟威官方SEC 13F-HR季度申報(最新為2026Q1，2026/05/15申報，Q2尚未公布)，每次接手更新前應重新查證是否有更新一季申報。
 // Top10依申報市值佔比排序：AAPL 22.0%/AXP 17.4%/KO 11.6%/BAC 9.5%/CVX 6.6%/OXY 6.55%/GOOGL 5.93%/CB(Chubb) 4.24%/MCO(Moody's) 4.09%/KHC 2.78%。
 // 2026-08-09更新：原清單第10名DAL(達美航空,新建小部位約26億美元)已跌出Top10，實際第8名為CB(Chubb)，OXY與GOOGL名次對調，KHC移至第10名；DAL仍可能是波克夏持股但非Top10，故從本主題移除(IR資料仍保留，不影響其他主題引用)。
-// AI電力題材＝台股「重電四雄」(士電/中興電/華城/亞力，受惠AI資料中心+電網升級訂單能見度達2028~2030年)。
 // 資料中心電力題材＝伺服器代工廠(廣達/緯穎/智邦)+海外資料中心電力/機房基礎設施(Vertiv/Eaton/Digital Realty/Equinix)。
+// 2026-08-09：依使用者要求刪除「AI電力題材」(台股重電四雄士電/中興電/華城/亞力)，並把「國防軍工題材」移到最後一個。
 let __themeKey=null;
 function renderThemeChips(){
   const el=document.getElementById('themeChips'); if(!el) return;
@@ -2700,6 +2710,54 @@ function forceZhCaptions(iframeId){
   }
 }
 function initIrCaptions(){ forceZhCaptions('irVideoFrame'); }
+
+// ===== 自製繁體中文字幕層 =====
+// 為什麼不用 YouTube 內建字幕？實測有三個無法從外部解決的問題：
+//   ①語言不一致(影片若有簡體原生軌，YouTube 會挑它)②全螢幕時字幕跑到手機畫面最下方、離影片很遠
+//   ③直播存檔沒有字幕軌。改成自己抓字幕資料、用自己的 DOM 疊在影片正下方，三點全部由我們掌控。
+// 字幕來源：/api/caption?v=影片ID → 由伺服器解析 YouTube 官方字幕軌並套用 tlang=zh-Hant(官方繁中翻譯)。
+// 取得失敗(例如該影片真的沒有任何字幕軌)就安靜退回 YouTube 內建字幕，不影響播放。
+const __capCache={};
+async function fetchZhCues(videoId){
+  if(__capCache[videoId]!==undefined) return __capCache[videoId];
+  const lsKey='cap_'+videoId;
+  try{ const c=localStorage.getItem(lsKey); if(c){ const j=JSON.parse(c); __capCache[videoId]=j; return j; } }catch(e){}
+  try{
+    const r=await fetch('/api/caption?v='+encodeURIComponent(videoId));
+    const j=await r.json();
+    const cues=(j&&j.ok&&Array.isArray(j.cues)&&j.cues.length)?j.cues:null;
+    __capCache[videoId]=cues;
+    if(cues){ try{ localStorage.setItem(lsKey, JSON.stringify(cues)); }catch(e){} }
+    return cues;
+  }catch(e){ __capCache[videoId]=null; return null; }
+}
+// 依播放時間即時顯示對應字幕(用 YT IFrame API 的 getCurrentTime 同步)
+function startZhCaptionOverlay(wrapEl, iframeId, videoId){
+  fetchZhCues(videoId).then(cues=>{
+    if(!cues || !wrapEl.isConnected) return;
+    // 我方字幕層可用 → 關掉 YouTube 內建字幕，避免同時出現兩層字幕
+    const killYtCap=()=>{ try{ const p=__ytPlayers[iframeId]; p&&p.setOption&&p.setOption('captions','track',{}); }catch(e){} };
+    [300,1200,3000,6000].forEach(d=>setTimeout(killYtCap,d));
+    let capEl=wrapEl.querySelector('.vid-cap');
+    if(!capEl){ capEl=document.createElement('div'); capEl.className='vid-cap'; wrapEl.appendChild(capEl); }
+    let last=-1;
+    const tick=()=>{
+      if(!wrapEl.isConnected){ clearInterval(timer); return; }
+      const p=__ytPlayers[iframeId];
+      let t=null; try{ t=p&&p.getCurrentTime&&p.getCurrentTime(); }catch(e){}
+      if(t==null) return;
+      // 二分搜尋目前時間落在哪一句
+      let lo=0,hi=cues.length-1,idx=-1;
+      while(lo<=hi){ const mid=(lo+hi)>>1; const c=cues[mid];
+        if(t<c.t) hi=mid-1; else if(t>c.t+c.d) lo=mid+1; else { idx=mid; break; } }
+      if(idx===last) return;
+      last=idx;
+      capEl.innerHTML = idx<0 ? '' : `<span>${esc(cues[idx].x)}</span>`;
+    };
+    const timer=setInterval(tick,200);
+    tick();
+  });
+}
 // 每人各自分 long(長影片,16:9)/short(短影音,9:16 Shorts)兩類，皆逐支核實為本人真實畫面、
 //   非文字卡/主持人畫面，並以觀看數高者優先。
 const MASTER_VIDEOS=[
@@ -2807,7 +2865,11 @@ function loadMasterVid(el){
   const fsBtn=`<button class="vid-fs-btn" onclick="event.stopPropagation();toggleVidFullscreen(this)" title="全螢幕">⛶</button>`;
   el.innerHTML=`<iframe id="${fid}" src="${src}" title="投資大師影片" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen style="width:100%;height:100%;${isShort?'':'aspect-ratio:16/9;'}border-radius:8px"></iframe>${fsBtn}`;
   el.style.cursor='default'; el.onclick=null;
-  if(!el.dataset.nocap) setTimeout(()=>forceZhCaptions(fid), 300);   // noCap影片不套用我方字幕層
+  if(!el.dataset.nocap){
+    setTimeout(()=>forceZhCaptions(fid), 300);        // 需要 YT Player 實例來讀播放時間
+    const vid=(src.match(/embed\/([\w-]{11})/)||[])[1];
+    if(vid) startZhCaptionOverlay(el, fid, vid);      // 自製繁中字幕層(疊在影片下緣)
+  }
 }
 // 自訂全螢幕：對影片容器div呼叫 Fullscreen API(含各瀏覽器前綴)，並在進入全螢幕後用
 //   Screen Orientation API 鎖成橫向(長影片)——這是手機上「全螢幕無法橫屏」的關鍵，
@@ -12502,15 +12564,35 @@ const MASTER_QUOTES={
     {zh:'你不該因為一檔股票便宜而買它，而該因為你對它了解夠多才買。',en:'You should not buy a stock because it is cheap but because you know a lot about it.'}
   ]}
 };
+// 封面名言：使用者要求「一個畫面就看完、不用往下滑」。
+//   作法：先量測封面剩餘可用高度，塞得下三位就放三位，塞不下就隨機放兩位(每次開App隨機挑人也隨機挑句)。
+//   英文原句在空間不足時自動隱藏(.tight)，優先確保中文名言與出處完整可見。
 function renderSplashQuotes(){
   const box=document.getElementById('quoteWrap'); if(!box) return;
-  box.innerHTML=Object.keys(MASTER_QUOTES).map(k=>{
+  const keys=Object.keys(MASTER_QUOTES);
+  const build=(ks,tight)=>ks.map(k=>{
     const g=MASTER_QUOTES[k];
     const q=g.list[Math.floor(Math.random()*g.list.length)];   // 每次開App各自隨機挑一句
     return `<div class="quote-card"><div class="quote-text">「${esc(q.zh)}」</div>`
-      +`<div class="quote-en">${esc(q.en)}</div>`
+      +(tight?'':`<div class="quote-en">${esc(q.en)}</div>`)
       +`<div class="quote-by">${g.icon} ${esc(g.name)}</div></div>`;
   }).join('');
+  const fits=()=>{
+    const r=box.getBoundingClientRect();
+    return (r.bottom <= (window.innerHeight||document.documentElement.clientHeight) - 6);
+  };
+  box.classList.remove('tight');
+  box.innerHTML=build(keys,false);
+  if(fits()) return;
+  // 1) 先拿掉英文原句
+  box.classList.add('tight');
+  box.innerHTML=build(keys,true);
+  if(fits()) return;
+  // 2) 還是放不下 → 隨機挑兩位大師(不固定同兩位)
+  const two=keys.slice().sort(()=>Math.random()-0.5).slice(0,2);
+  box.innerHTML=build(two,true);
+  if(fits()) return;
+  box.innerHTML=build(two.slice(0,2),true);
 }
 window.addEventListener('load', function(){
   initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000);
