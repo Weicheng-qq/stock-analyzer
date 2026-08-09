@@ -243,6 +243,8 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .market-tabs { display:flex; gap:8px; margin:0 0 26px; }
 .market-tabs .mkt-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:10px; padding:11px 10px; font-size:15px; font-weight:700; cursor:pointer; }
 .market-tabs .mkt-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
+.current-company-bar { display:flex; align-items:center; gap:8px; margin:0 0 14px; padding:9px 14px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; font-size:14px; font-weight:700; color:var(--text); }
+.current-company-bar .ccb-ticker { color:var(--text2); font-weight:400; font-size:12px; }
 .master-tabs { display:flex; gap:8px; margin:0 0 16px; }
 .master-tabs .master-tab-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:10px; padding:11px 10px; font-size:14px; font-weight:700; cursor:pointer; }
 .master-tabs .master-tab-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
@@ -361,6 +363,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <button class="mkt-btn" data-mkt="us" onclick="setMarket('us')">🔵 美股</button>
     <button class="mkt-btn" data-mkt="tw" onclick="setMarket('tw')">🟢 台股</button>
   </div>
+  <div class="current-company-bar" id="currentCompanyBar" style="display:none"></div>
   <div class="grp-menu" id="grpMenu" style="display:none">
     <button class="grp-btn" data-g="2" onclick="pickGroup(2)">指數與財務指標</button>
     <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
@@ -375,7 +378,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <button class="grp-btn" data-g="4" onclick="pickGroup(4)">股價估值評估</button>
     <button class="grp-btn" data-g="9" onclick="pickGroup(9)">產品與服務</button>
     <button class="grp-btn" data-g="11" onclick="pickGroup(11)">版主選股準則</button>
-    <button class="grp-btn" data-g="8" onclick="pickGroup(8)">投資總結</button>
+    <button class="grp-btn" data-g="8" onclick="pickGroup(8)">AI投資總結</button>
   </div>
   <div class="index-title" id="indexTitle" style="display:none">📊 四大指數</div>
   <div id="indexBar" class="index-bar" style="display:none"></div>
@@ -703,6 +706,13 @@ async function loadTickerMap(){
 // 市場模式：美股(us) / 台股(tw)。台股用 Yahoo「代碼.TW」，一套程式共用。
 function getMarket(){ try{ return localStorage.getItem('market')||'us'; }catch(e){ return 'us'; } }
 function setMarket(m){ try{ localStorage.setItem('market', m); localStorage.setItem('marketPicked','1'); sessionStorage.setItem('skipSplashOnce','1'); }catch(e){} location.reload(); }
+// 目前查看中公司名稱：顯示在美股/台股按鈕與選單之間，讓使用者切換選單分頁時仍能看到自己正在看哪一家公司
+function updateCurrentCompanyBar(name, code){
+  const bar=document.getElementById('currentCompanyBar'); if(!bar) return;
+  if(!name){ bar.style.display='none'; bar.innerHTML=''; return; }
+  bar.innerHTML=`🔎 ${esc(name)}${code?` <span class="ccb-ticker">${esc(code)}</span>`:''}`;
+  bar.style.display='';
+}
 function marketPicked(){ try{ return localStorage.getItem('marketPicked')==='1'; }catch(e){ return false; } }
 // 常見台股代碼→中文名(加入自選股時用；查無再用 Yahoo 名稱)
 const TW_NAMES={'2330':'台積電','2317':'鴻海','2454':'聯發科','2308':'台達電','2382':'廣達','2303':'聯電','3711':'日月光投控','2412':'中華電','2891':'中信金','2881':'富邦金','2882':'國泰金','2886':'兆豐金','2884':'玉山金','2603':'長榮','2609':'陽明','2615':'萬海','2379':'瑞昱','3034':'聯詠','2357':'華碩','2409':'友達','3231':'緯創','2356':'英業達','4938':'和碩','2377':'微星','6669':'緯穎','3661':'世芯-KY','3443':'創意','6488':'環球晶','6770':'力積電','5347':'世界先進','8046':'南電',
@@ -1292,7 +1302,7 @@ function twResultsHtml(o){
   <div id="tw_chk_note"><div class="note" style="margin:6px 0 12px">載入選股準則中...</div></div>
   <div id="tw_chk_verdict"></div>
 </div>
-<div class="card verdict"><div class="ct">🎯 投資總結</div>
+<div class="card verdict"><div class="ct">🎯 AI投資總結</div>
   <div id="ai_independent_box">
     <div style="font-size:13px;color:var(--text2);margin-bottom:8px">🤖 AI 獨立分析（依 AI 自己的專業判斷，不受版主選股準則限制）</div>
     <div id="ai_independent">${aiLoading()}</div>
@@ -1590,6 +1600,7 @@ async function doSearchTW(symbol){
     const usEquiv=twToUs(code);   // 雙掛牌(2330↔TSM/2303↔UMC/3711↔ASX/2412↔CHT):共用美股官方事實內容
     window.__symbolForLinks=usEquiv||code;   // 指向美股代碼,讓 IR 官方事實(產品/法說會展望/官方IR頁)直接渲染、與美股一致
     window.__coNameForLinks=name;
+    updateCurrentCompanyBar(name, code);
     document.getElementById('results').innerHTML=twResultsHtml({code,name,price,chg,pct,mkt});
     showGroup(__grp);   // 骨架剛渲染時所有卡片都還沒篩選,不先收斂會閃過公司股價/產品與服務等別的選單內容
     const gmKey=getGmKey(); const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1); const useServer=!gmKey && !isLocal;
@@ -1672,6 +1683,7 @@ async function doSearch(){
     const quoteSym=fbFin?fbFin.yahooSym:symbol;   // 所有Yahoo Finance查詢一律用這個(非SEC股票代碼)
     window.__coNameForLinks=co.title;   // 供法說會口頭Q&A直達連結使用
     window.__symbolForLinks=US_TW_EQUIV[symbol]||symbol;   // 雙掛牌ADR(如UMC聯電→2303):共用台股端已建的官方事實內容;其餘維持美股代碼
+    updateCurrentCompanyBar(co.title, symbol);
     logOk('cik',`找到：${co.title}（${symbol}）`);
 
     logAdd('fin','載入 SEC 官方財報...');
@@ -1947,7 +1959,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 </div>
 
 <div class="card verdict" style="margin-top:16px">
-  <div class="ct">🎯 投資總結</div>
+  <div class="ct">🎯 AI投資總結</div>
   <div id="ai_independent_box">
     <div style="font-size:13px;color:var(--text2);margin-bottom:8px">🤖 AI 獨立分析（依 AI 自己的專業判斷，不受版主選股準則限制）</div>
     <div id="ai_independent">${aiLoading()}</div>
