@@ -35,7 +35,8 @@ window.onerror = function(msg, src, line, col, err){
 }
 body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; min-height:100vh; }
 .header { background:var(--bg2); border-bottom:1px solid var(--border); padding:14px 20px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:100; flex-wrap:wrap; }
-.logo { font-size:23px; font-weight:700; color:var(--blue); white-space:nowrap; }
+.logo { font-size:23px; font-weight:700; color:var(--blue); white-space:nowrap; display:flex; align-items:center; gap:7px; }
+.logo-mark { width:30px; height:30px; border-radius:7px; flex:none; }
 .search-wrap { flex:1; min-width:200px; max-width:460px; position:relative; }
 .search-wrap input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:9px 14px 9px 36px; color:var(--text); font-size:14px; outline:none; }
 .search-wrap input:focus { border-color:var(--blue); }
@@ -250,10 +251,20 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .master-tabs .master-tab-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
 .master-short-wrap { max-width:220px; padding-top:0 !important; aspect-ratio:9/16; margin:0 auto; }
 .master-short-wrap img, .master-short-wrap iframe { object-fit:cover; }
-.short-fs-btn { position:absolute; right:8px; bottom:8px; width:34px; height:34px; border-radius:8px; border:none; background:rgba(0,0,0,.6); color:#fff; font-size:18px; line-height:1; cursor:pointer; z-index:2; }
-.master-short-wrap:fullscreen, .master-short-wrap:-webkit-full-screen, .master-short-wrap:-moz-full-screen { max-width:none; width:100vw; height:100vh; aspect-ratio:auto; display:flex; align-items:center; justify-content:center; background:#000; }
-.master-short-wrap:fullscreen iframe, .master-short-wrap:-webkit-full-screen iframe, .master-short-wrap:-moz-full-screen iframe { width:auto; height:100%; max-width:100vw; aspect-ratio:9/16; border-radius:0; }
-.master-short-wrap:fullscreen .short-fs-btn, .master-short-wrap:-webkit-full-screen .short-fs-btn, .master-short-wrap:-moz-full-screen .short-fs-btn { right:16px; bottom:16px; }
+.vid-fs-btn { position:absolute; right:8px; bottom:8px; width:34px; height:34px; border-radius:8px; border:none; background:rgba(0,0,0,.6); color:#fff; font-size:18px; line-height:1; cursor:pointer; z-index:2; }
+/* 全螢幕：容器鋪滿螢幕、影片等比縮到「寬高都不超過螢幕」，字幕才不會被推到畫面外看不到。
+   ⚠️ 每個瀏覽器前綴必須「各自獨立成一條規則」——只要逗號清單裡有一個選擇器該瀏覽器不認得，
+   整條規則會被整個丟棄(實測 :-moz-full-screen 會讓 Chrome 丟掉整條)，這是常見的CSS陷阱。 */
+.ir-video:fullscreen { max-width:none; width:100vw; height:100vh; padding-top:0 !important; aspect-ratio:auto; display:flex; align-items:center; justify-content:center; background:#000; }
+.ir-video:-webkit-full-screen { max-width:none; width:100vw; height:100vh; padding-top:0 !important; aspect-ratio:auto; display:flex; align-items:center; justify-content:center; background:#000; }
+/* 長影片 16:9：取 min() 讓寬高同時受限於螢幕，避免超出畫面而裁掉底部字幕 */
+.ir-video:fullscreen iframe { position:static; width:min(100vw, calc(100vh * 16 / 9)); height:min(100vh, calc(100vw * 9 / 16)); aspect-ratio:16/9; border-radius:0; }
+.ir-video:-webkit-full-screen iframe { position:static; width:min(100vw, calc(100vh * 16 / 9)); height:min(100vh, calc(100vw * 9 / 16)); aspect-ratio:16/9; border-radius:0; }
+/* 短影音 9:16 直式 */
+.master-short-wrap:fullscreen iframe { width:min(100vw, calc(100vh * 9 / 16)); height:min(100vh, calc(100vw * 16 / 9)); aspect-ratio:9/16; }
+.master-short-wrap:-webkit-full-screen iframe { width:min(100vw, calc(100vh * 9 / 16)); height:min(100vh, calc(100vw * 16 / 9)); aspect-ratio:9/16; }
+.ir-video:fullscreen .vid-fs-btn { right:16px; bottom:16px; }
+.ir-video:-webkit-full-screen .vid-fs-btn { right:16px; bottom:16px; }
 .index-title { font-size:18px; font-weight:800; color:var(--blue); margin:0 0 10px; letter-spacing:.3px; }
 .index-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:20px; }
 .index-bar .ix { background:var(--bg2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:11px 6px; text-align:center; min-width:0; }
@@ -290,7 +301,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 <body>
 
 <div class="header">
-  <div class="logo"><svg width="30" height="30" viewBox="0 0 192 192" style="vertical-align:-8px;margin-right:2px"><rect width="192" height="192" rx="40" fill="#0d1117"/><rect x="34" y="118" width="24" height="40" rx="6" fill="#58a6ff"/><rect x="74" y="94" width="24" height="64" rx="6" fill="#58a6ff"/><rect x="114" y="70" width="24" height="88" rx="6" fill="#58a6ff"/><rect x="154" y="34" width="24" height="124" rx="6" fill="#3fb950"/></svg> 美股AI深度分析</div>
+  <div class="logo"><img src="/icons/icon-192.png" alt="" width="30" height="30" class="logo-mark"> 美股AI深度分析</div>
   <button class="install-btn" id="installBtn" onclick="handleInstallClick()" title="安裝成手機/電腦App" style="display:none;margin-left:auto">📲 安裝 App</button>
   <button class="settings-btn" id="settingsBtn" onclick="openSettings()" title="AI 金鑰設定" style="margin-left:auto">⚙️</button>
 </div>
@@ -2569,6 +2580,8 @@ function _tryZhCaption(p){
   try{
     p.loadModule&&p.loadModule('captions');
     p.setOption('captions','reload',true);
+    // 放大字幕級距(captions 模組的 fontSize 範圍 -1~3，0為預設)：手機上預設字幕太小，設2較好讀
+    try{ p.setOption('captions','fontSize',2); }catch(_){}
     // 先看有沒有原生繁中字幕軌
     let list=[]; try{ list=p.getOption('captions','tracklist')||[]; }catch(_){}
     const native=list.find(t=>/^zh-(Hant|TW)/i.test(t.languageCode||''));
@@ -2723,25 +2736,40 @@ function loadMasterVid(el){
   const src=el.dataset.src; if(!src) return;
   const fid='masterVidFrame'+(++__masterVidSeq);
   const isShort=el.classList.contains('master-short-wrap');
-  // 短影音(9:16)：YouTube 內嵌播放器本身的全螢幕鈕在手機上對直式短影音常失效(YouTube平台已知限制，
-  //   全螢幕會被強制轉橫向、兩側留黑或直接無反應)，改用自訂全螢幕鈕對「容器 div」呼叫 Fullscreen API，
-  //   由我們自己的CSS(:fullscreen)控制直式全螢幕排版，不依賴YouTube播放器內部的全螢幕邏輯。
-  const fsBtn=isShort?`<button class="short-fs-btn" onclick="event.stopPropagation();toggleShortFullscreen(this)" title="全螢幕">⛶</button>`:'';
+  // 自訂全螢幕鈕(長影片/短影音都給)：YouTube 內嵌播放器自己的全螢幕鈕在手機上常無法橫向旋轉，
+  //   改用我們自己的鈕→對容器div呼叫 Fullscreen API + Screen Orientation API 強制橫向。
+  const fsBtn=`<button class="vid-fs-btn" onclick="event.stopPropagation();toggleVidFullscreen(this)" title="全螢幕">⛶</button>`;
   el.innerHTML=`<iframe id="${fid}" src="${src}" title="投資大師影片" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen style="width:100%;height:100%;${isShort?'':'aspect-ratio:16/9;'}border-radius:8px"></iframe>${fsBtn}`;
   el.style.cursor='default'; el.onclick=null;
   setTimeout(()=>forceZhCaptions(fid), 300);
 }
-// 短影音自訂全螢幕：對縮圖/播放器的容器 div(.master-short-wrap)呼叫 Fullscreen API(含各瀏覽器前綴)，
-//   進入全螢幕後由CSS的:fullscreen規則把它撐滿螢幕高度、維持9:16比例、左右留黑，不依賴YouTube播放器按鈕。
-function toggleShortFullscreen(btn){
-  const wrap=btn.closest('.master-short-wrap'); if(!wrap) return;
-  const isFs=document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement;
-  if(isFs){
+// 自訂全螢幕：對影片容器div呼叫 Fullscreen API(含各瀏覽器前綴)，並在進入全螢幕後用
+//   Screen Orientation API 鎖成橫向(長影片)——這是手機上「全螢幕無法橫屏」的關鍵，
+//   單靠 iframe 的 allowfullscreen 不會旋轉螢幕。短影音維持直式不鎖定。
+//   CSS(:fullscreen)負責把影片等比縮到「完整落在螢幕內」，避免字幕被擠出畫面外。
+function toggleVidFullscreen(btn){
+  const wrap=btn.closest('.ir-video'); if(!wrap) return;
+  const isShort=wrap.classList.contains('master-short-wrap');
+  const fsEl=document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement;
+  if(fsEl){
+    try{ screen.orientation&&screen.orientation.unlock&&screen.orientation.unlock(); }catch(_){}
     (document.exitFullscreen||document.webkitExitFullscreen||document.mozCancelFullScreen)?.call(document);
-  } else {
-    (wrap.requestFullscreen||wrap.webkitRequestFullscreen||wrap.mozRequestFullScreen)?.call(wrap);
+    return;
   }
+  const req=wrap.requestFullscreen||wrap.webkitRequestFullscreen||wrap.mozRequestFullScreen;
+  if(!req) return;
+  let r; try{ r=req.call(wrap); }catch(_){ return; }
+  // 進入全螢幕後才能鎖定方向；長影片(16:9)鎖橫向，短影音(9:16)維持直式
+  const lock=()=>{ if(isShort) return;
+    try{ screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(()=>{}); }catch(_){}
+  };
+  if(r&&r.then) r.then(lock).catch(()=>{}); else setTimeout(lock,100);
 }
+// 離開全螢幕(含使用者按系統返回鍵)時解除方向鎖定，避免整個App被卡在橫向
+['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,function(){
+  const fsEl=document.fullscreenElement||document.webkitFullscreenElement;
+  if(!fsEl){ try{ screen.orientation&&screen.orientation.unlock&&screen.orientation.unlock(); }catch(_){} }
+}));
 // 產生「法說會影片」區塊(置於法說主旨最上方)：有內嵌影片→可播放/暫停/拖曳時間軸；否則給官方重播按鈕
 function irVideoBlock(sym, coName){
   const raw = IR_CALL_VIDEO[sym];
@@ -2766,7 +2794,7 @@ function loadIrVideo(el){
   const v=el.dataset.vid; if(!v) return;
   const orig = (location.protocol==='http:'||location.protocol==='https:') ? '&origin='+encodeURIComponent(location.origin) : '';
   const src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(v)}?rel=0&enablejsapi=1&autoplay=1&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant${orig}`;
-  el.innerHTML=`<iframe id="irVideoFrame" src="${src}" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>`;
+  el.innerHTML=`<iframe id="irVideoFrame" src="${src}" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe><button class="vid-fs-btn" onclick="event.stopPropagation();toggleVidFullscreen(this)" title="全螢幕">⛶</button>`;
   el.style.cursor='default'; el.onclick=null;
   setTimeout(initIrCaptions, 300);
 }
