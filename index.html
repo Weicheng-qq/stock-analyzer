@@ -35,9 +35,7 @@ window.onerror = function(msg, src, line, col, err){
 }
 body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; min-height:100vh; }
 .header { background:var(--bg2); border-bottom:1px solid var(--border); padding:14px 20px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:100; flex-wrap:wrap; }
-.logo { font-size:23px; font-weight:700; color:var(--blue); white-space:nowrap; display:flex; align-items:center; gap:10px; line-height:1; }
-/* 圖示高度對齊文字視覺重量：38px 與 23px 粗體中文並排較平衡(30px 會顯得偏小、頭重腳輕) */
-.logo-mark { width:38px; height:38px; border-radius:9px; flex:none; display:block; }
+.logo { font-size:23px; font-weight:700; color:var(--blue); white-space:nowrap; }
 .search-wrap { flex:1; min-width:200px; max-width:460px; position:relative; }
 .search-wrap input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:9px 14px 9px 36px; color:var(--text); font-size:14px; outline:none; }
 .search-wrap input:focus { border-color:var(--blue); }
@@ -251,8 +249,10 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .quote-text { font-size:15px; line-height:1.75; color:var(--text); font-weight:600; }
 .quote-en { font-size:12px; line-height:1.55; color:var(--text2); margin-top:7px; font-style:italic; }
 .quote-by { font-size:12.5px; color:var(--blue); margin-top:9px; font-weight:700; }
-.current-company-bar { display:flex; align-items:center; gap:8px; margin:0 0 14px; padding:9px 14px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; font-size:14px; font-weight:700; color:var(--text); }
-.current-company-bar .ccb-ticker { color:var(--text2); font-weight:400; font-size:12px; }
+.current-company-bar { display:flex; align-items:center; gap:8px; margin:0 0 14px; padding:9px 10px 9px 14px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; font-size:14px; font-weight:700; color:var(--text); }
+.current-company-bar .ccb-name { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.current-company-bar .ccb-ticker { color:var(--text2); font-weight:400; font-size:12px; margin-left:6px; }
+.current-company-bar .ccb-ai { flex:none; background:var(--blue); color:#0d1117; border:none; border-radius:8px; padding:7px 13px; font-size:13px; font-weight:700; cursor:pointer; }
 .master-tabs { display:flex; gap:8px; margin:0 0 16px; }
 .master-tabs .master-tab-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:10px; padding:11px 10px; font-size:14px; font-weight:700; cursor:pointer; }
 .master-tabs .master-tab-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
@@ -308,7 +308,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 <body>
 
 <div class="header">
-  <div class="logo"><img src="/icons/icon-192.png" alt="" width="30" height="30" class="logo-mark"> 美股AI深度分析</div>
+  <div class="logo"><svg width="30" height="30" viewBox="0 0 192 192" style="vertical-align:-8px;margin-right:2px"><rect width="192" height="192" rx="40" fill="#0d1117"/><rect x="34" y="118" width="24" height="40" rx="6" fill="#58a6ff"/><rect x="74" y="94" width="24" height="64" rx="6" fill="#58a6ff"/><rect x="114" y="70" width="24" height="88" rx="6" fill="#58a6ff"/><rect x="154" y="34" width="24" height="124" rx="6" fill="#3fb950"/></svg> 美股AI深度分析</div>
   <button class="install-btn" id="installBtn" onclick="handleInstallClick()" title="安裝成手機/電腦App" style="display:none;margin-left:auto">📲 安裝 App</button>
   <button class="settings-btn" id="settingsBtn" onclick="openSettings()" title="AI 金鑰設定" style="margin-left:auto">⚙️</button>
 </div>
@@ -730,12 +730,58 @@ async function loadTickerMap(){
 // 市場模式：美股(us) / 台股(tw)。台股用 Yahoo「代碼.TW」，一套程式共用。
 function getMarket(){ try{ return localStorage.getItem('market')||'us'; }catch(e){ return 'us'; } }
 function setMarket(m){ try{ localStorage.setItem('market', m); localStorage.setItem('marketPicked','1'); sessionStorage.setItem('skipSplashOnce','1'); }catch(e){} location.reload(); }
-// 目前查看中公司名稱：顯示在美股/台股按鈕與選單之間，讓使用者切換選單分頁時仍能看到自己正在看哪一家公司
+// 目前查看中公司名稱：顯示在美股/台股按鈕與選單之間，讓使用者切換選單分頁時仍能看到自己正在看哪一家公司。
+//   名稱一律以 TICKER_ZH / TW_NAMES 這兩本「權威中文名字典」為準，與自選股用的是同一份資料，
+//   避免同一家公司(如台積電)在自選股顯示中文、在這裡卻顯示SEC英文名而不一致(使用者回報)。
+function ccbName(code, fallback){
+  const c=String(code||'').replace(/\.(TW|TWO)$/i,'');
+  return (typeof TICKER_ZH!=='undefined' && TICKER_ZH[c]) || (typeof TW_NAMES!=='undefined' && TW_NAMES[c]) || fallback || c;
+}
 function updateCurrentCompanyBar(name, code){
   const bar=document.getElementById('currentCompanyBar'); if(!bar) return;
-  if(!name){ bar.style.display='none'; bar.innerHTML=''; return; }
-  bar.innerHTML=`🔎 ${esc(name)}${code?` <span class="ccb-ticker">${esc(code)}</span>`:''}`;
+  if(!name && !code){ bar.style.display='none'; bar.innerHTML=''; window.__ccbSym=null; return; }
+  const sym=String(code||'');
+  window.__ccbSym=sym;
+  bar.innerHTML=`<span class="ccb-name">🔎 ${esc(ccbName(sym,name))}<span class="ccb-ticker">${esc(sym.replace(/\.(TW|TWO)$/i,''))}</span></span>`
+    +`<button class="ccb-ai" onclick="ccbAnalyze()">AI 分析</button>`;
   bar.style.display='';
+}
+// 重新對目前這家公司跑一次完整分析(與自選股的 AI 鈕同一套流程)
+function ccbAnalyze(){
+  const sym=window.__ccbSym; if(!sym) return;
+  watchlistAnalyze(sym);
+}
+// 🏢 公司介紹：獨立於主分析JSON的一支小呼叫。
+//   原本把 company_intro 塞在15個欄位的大JSON裡，實測模型常常漏掉該欄位→使用者看不到公司介紹。
+//   改成「主分析有回傳就直接用；沒有就用這支輕量呼叫補上」，並快取到 localStorage 避免重複花額度。
+function renderCompanyIntro(text){
+  const el=document.getElementById('ai_intro'); if(!el) return;
+  if(!text){ el.innerHTML=''; return; }
+  el.innerHTML=`<div style="margin-bottom:14px;padding:11px 13px;background:rgba(88,166,255,.08);border-left:3px solid var(--blue);border-radius:6px">`
+    +`<div style="color:var(--blue);font-size:12px;font-weight:700;margin-bottom:5px">🏢 公司介紹</div>`
+    +`<div style="line-height:1.85">${norm(text)}</div></div>`;
+}
+async function loadCompanyIntro(symbol, coName, gen){
+  const el=document.getElementById('ai_intro'); if(!el) return;
+  if(el.innerHTML.trim()) return;            // 主分析已經給過就不重複呼叫
+  const key='intro_'+symbol;
+  try{ const c=localStorage.getItem(key); if(c){ renderCompanyIntro(c); return; } }catch(e){}
+  el.innerHTML=`<div class="note" style="margin-bottom:12px">🏢 公司介紹載入中…</div>`;
+  const isTW=/^\d/.test(String(symbol));
+  const prompt=`用繁體中文寫「${coName||symbol}（${symbol}）」的公司介紹，2-3句白話文字，`
+    +`讓完全不懂這家公司的人也能在10秒內明白：這家公司是做什麼的、屬於什麼產業、`
+    +`最具代表性的產品或品牌是什麼${isTW?'（這是台灣上市／上櫃公司）':''}。`
+    +`不要用術語堆砌、不要列營收百分比、不要編造任何數字或未經證實的事件。`
+    +`只回傳 JSON：{"intro":"..."}`;
+  try{
+    const gmKey=getGmKey();
+    const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1);
+    const r=await callAIWithPrompt(prompt, gmKey, !gmKey && !isLocal);
+    if(gen!=null && gen!==SEARCH_GEN) return;                 // 使用者已換一家公司就丟棄
+    const t=r&&r.intro?String(r.intro).trim():'';
+    if(t){ try{ localStorage.setItem(key,t); }catch(e){} renderCompanyIntro(t); }
+    else el.innerHTML='';
+  }catch(e){ el.innerHTML=''; }                                // 失敗就安靜不顯示，不影響其他區塊
 }
 function marketPicked(){ try{ return localStorage.getItem('marketPicked')==='1'; }catch(e){ return false; } }
 // 常見台股代碼→中文名(加入自選股時用；查無再用 Yahoo 名稱)
@@ -1302,7 +1348,7 @@ function twResultsHtml(o){
   <div class="co-info"><h1>${esc(o.name)}</h1><div class="co-ticker">${esc(o.code)} · 台股 · Yahoo Finance ${o.mkt==='TWO'?'(上櫃)':'(上市)'}</div><div class="lynch-badge" id="lynchBadge">🔄 AI 分類中...</div></div>
   <div class="co-price"><div class="price-val">NT$${(+o.price).toFixed(2)}</div>${o.chg!=null?`<div style="font-weight:700;color:${upcol}">${chgTxt}</div>`:''}</div>
 </div>
-<div class="card"><div class="ct">🏭 產品與服務（營收來源）</div><div id="ai_products">${aiLoading()}</div></div>
+<div class="card"><div class="ct">🏭 產品與服務（營收來源）</div><div id="ai_intro"></div><div id="ai_products">${aiLoading()}</div></div>
 <div class="card"><div class="ct">📊 最近10年財務指標</div><div id="tw_fin">${aiLoading()}</div></div>
 <div class="card"><div class="ct">💰 年營收 &amp; 成長率</div><div class="chart-wrap"><canvas id="revChart"></canvas></div></div>
 <div class="card"><div class="ct">📈 年營收明細與成長率（財政年度）</div><div id="tw_rev">${aiLoading()}</div></div>
@@ -1624,11 +1670,12 @@ async function doSearchTW(symbol){
     const usEquiv=twToUs(code);   // 雙掛牌(2330↔TSM/2303↔UMC/3711↔ASX/2412↔CHT):共用美股官方事實內容
     window.__symbolForLinks=usEquiv||code;   // 指向美股代碼,讓 IR 官方事實(產品/法說會展望/官方IR頁)直接渲染、與美股一致
     window.__coNameForLinks=name;
-    updateCurrentCompanyBar(name, code);
+    updateCurrentCompanyBar(name, symbol);   // 傳完整代碼(含.TW/.TWO)，AI分析鈕才能正確走台股流程
     document.getElementById('results').innerHTML=twResultsHtml({code,name,price,chg,pct,mkt});
     showGroup(__grp);   // 骨架剛渲染時所有卡片都還沒篩選,不先收斂會閃過公司股價/產品與服務等別的選單內容
     const gmKey=getGmKey(); const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1); const useServer=!gmKey && !isLocal;
     loadTechnical(symbol, gen);
+    loadCompanyIntro(code, name, gen);   // 🏢 公司介紹(獨立小呼叫，不受主分析JSON漏欄位影響)
     loadTwMonthlyRevenue(code, gen);
     loadTwInstitutional(code, gen);
     // 雙掛牌(2330↔TSM)用美股代碼查新聞：Yahoo 對 2330.TW 與 TSM 會回不同結果，
@@ -1708,6 +1755,7 @@ async function doSearch(){
     window.__coNameForLinks=co.title;   // 供法說會口頭Q&A直達連結使用
     window.__symbolForLinks=US_TW_EQUIV[symbol]||symbol;   // 雙掛牌ADR(如UMC聯電→2303):共用台股端已建的官方事實內容;其餘維持美股代碼
     updateCurrentCompanyBar(co.title, symbol);
+    loadCompanyIntro(symbol, ccbName(symbol, co.title), gen);   // 🏢 公司介紹(獨立小呼叫)
     logOk('cik',`找到：${co.title}（${symbol}）`);
 
     logAdd('fin','載入 SEC 官方財報...');
@@ -1940,7 +1988,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 
 <div class="g2">
   <div class="card"><div class="ct">🏷️ 彼得林區六大分類</div><div id="ai_lynch">${aiLoading()}</div></div>
-  <div class="card"><div class="ct">🏭 產品與服務（營收來源）</div><div id="ai_products">${aiLoading()}</div></div>
+  <div class="card"><div class="ct">🏭 產品與服務（營收來源）</div><div id="ai_intro"></div><div id="ai_products">${aiLoading()}</div></div>
 </div>
 <div class="g2">
   <div class="card"><div class="ct">⚔️ 前三大競爭對手 &amp; 世界排名</div><div id="ai_competitors">${aiLoading()}</div></div>
@@ -2315,16 +2363,16 @@ function renderAI(ai){
   if(goEl){ const go=ai.growth_outlook||'無法判斷'; const mk=go==='符合'?'✅':go==='不符合'?'❌':'➖'; const cl=go==='符合'?'g':go==='不符合'?'r':'';
     goEl.innerHTML=`<div class="vr"><span class="vl">${mk} 法說會成長動能（CEO 對未來展望）</span><span class="vn ${cl}">${esc(go)}</span></div>`
       +(ai.growth_outlook_reason?`<div class="note" style="margin-top:2px">${norm(ai.growth_outlook_reason)}</div>`:''); }
-  // 🏢 公司介紹：2-3句白話文字，讓使用者短時間內秒懂這家公司在做什麼，置於「產品與服務」卡片最上方(手動/AI兩種來源都適用)
-  const introBlock = (ai.company_intro && String(ai.company_intro).trim())
-    ? `<div style="margin-bottom:14px;padding:10px 12px;background:var(--bg2,rgba(88,166,255,.08));border-left:3px solid var(--blue);border-radius:4px"><div style="color:var(--blue);font-size:12px;font-weight:700;margin-bottom:4px">🏢 公司介紹</div>${norm(ai.company_intro)}</div>`
-    : '';
+  // 🏢 公司介紹：改由 loadCompanyIntro() 獨立渲染到 #ai_intro(見下)，不再依賴主分析JSON裡的選填欄位
+  //   (實測模型在15個欄位的大JSON裡常會漏掉 company_intro，導致使用者看不到公司介紹)。
+  //   這裡仍接受主分析有回傳的情況，直接拿來用，省一次AI呼叫。
+  if(ai.company_intro && String(ai.company_intro).trim()) renderCompanyIntro(ai.company_intro);
   // 產品/營收結構：若有最新一季法說會官方數據(目前TSM)優先用它(比年報新)；否則走AI依年報整理
   const manualProd=IR_PRODUCTS_SUMMARY[window.__symbolForLinks];
   if(manualProd){
-    setAI('ai_products',`<div class="ai">${introBlock}${manualProd.html}</div>`);
+    setAI('ai_products',`<div class="ai">${manualProd.html}</div>`);
   } else {
-    setAI('ai_products',`<div class="ai">${introBlock}${norm(ai.products)}`
+    setAI('ai_products',`<div class="ai">${norm(ai.products)}`
       +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理${window.__wikiData?`　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
         :(window.__wikiData?`<div class="note" style="color:var(--green)">✅ 依維基百科最新公開資料（持續更新）整理　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a></div>`:`<div class="note">（未取得官方或維基資料，內容為 AI 一般認知，僅供參考）</div>`))
       +`</div>`);
@@ -2656,15 +2704,20 @@ function initIrCaptions(){ forceZhCaptions('irVideoFrame'); }
 const MASTER_VIDEOS=[
   {person:'華倫·巴菲特 Warren Buffett',icon:'🏛️',
     long:[
-      // ⚠️ 原本用 ERH8Hs9kWH0，該版本被上傳者「燒錄簡體中文字幕在畫面裡」(非字幕軌、無法關閉)，
-      //    會和我們自動開啟的繁中字幕重疊成兩層。已於2026-08-09實測換成無燒錄字幕的乾淨版本。
-      {id:'7Z6x-Ov1smU',title:'1998年佛羅里達大學經典演講 — 真人畫面全程實況(投資圈公認必看，「段永平看了十次」即此場)'},
+      // 📌 1998佛州演講的畫質取捨(2026-08-09 實測 getAvailableQualityLevels 逐支比對)：
+      //    ERH8Hs9kWH0 → hd1080 可用，但上傳者把簡體字幕「燒錄在畫面裡」(無法關閉)
+      //    7Z6x-Ov1smU / a2qU1FKikaA / nQPdclp8lDc → 皆只有 small(240p)+tiny，畫面明顯模糊
+      //    9lVc-6ZI5sU → embed 被封鎖無法播放
+      //    使用者反映模糊比字幕重疊更難接受 → 選 1080p 版，並用 noCap 關掉我們的字幕層，
+      //    讓畫面只保留影片自帶的中文字幕，避免兩層字幕重疊。
+      {id:'ERH8Hs9kWH0',noCap:true,title:'1998年佛羅里達大學經典演講 — 真人畫面全程實況(1080p高畫質版，影片自帶中文字幕)'},
       {id:'i45_qjgFmxg',title:'《成為巴菲特》HBO 紀錄片全長版(約1小時28分)— 深入巴菲特的人生哲學與投資之道'},
-      {id:'j1vGFpd49wM',title:'2025 波克夏·海瑟威股東大會 — CNBC 完整實況轉播'},
+      // ⚠️ 此為直播存檔(畫面左上角有LIVE標記)，YouTube直播沒有字幕軌，無法提供任何字幕(已實測確認)
+      {id:'j1vGFpd49wM',noCap:true,title:'2025 波克夏·海瑟威股東大會 — CNBC 完整實況轉播(直播存檔，YouTube無字幕軌可用)'},
       {id:'2hdDE7XYr30',title:'CNBC 專訪巴菲特、蒙格與比爾蓋茲 — 三大巨頭同台對談'}
     ],
     short:[
-      {id:'lWu2fw6APM4',title:'20孔打卡投資哲學 — 巴菲特經典比喻：一生只能做20次投資決定'},
+      // ⚠️ 已移除 lWu2fw6APM4「20孔打卡投資哲學」：使用者回報與下方 BAMiemNe2fk「棒球理論」是同一支影片(重複)。
       {id:'5mZUJThXM44',title:'巴菲特談如何成為億萬富翁 — 資本主義與財富累積的省思'},
       {id:'BAMiemNe2fk',title:'巴菲特的致富哲學「棒球理論」— 為什麼大多數人投資都不賺錢'}
     ],
@@ -2728,9 +2781,10 @@ function masterVidListHtml(){
       //   長影片/有聲書維持mqdefault即可(16:9容器不需放大)。
       const thumb=isShort?`https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`:`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`;
       const thumbFallback=`https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
-      const src=`https://www.youtube-nocookie.com/embed/${v.id}?rel=0&enablejsapi=1&autoplay=1&cc_load_policy=1&cc_lang_pref=zh-Hant&hl=zh-Hant${orig}`;
+      // noCap=影片自帶燒錄字幕或為直播存檔(無字幕軌)→關掉我們的字幕層，避免兩層字幕重疊或空轉
+      const src=`https://www.youtube-nocookie.com/embed/${v.id}?rel=0&enablejsapi=1&autoplay=1&cc_load_policy=${v.noCap?0:1}${v.noCap?'':'&cc_lang_pref=zh-Hant'}&hl=zh-Hant${orig}`;
       h+=`<div style="margin-bottom:28px"><div style="font-size:13px;color:var(--text2);margin-bottom:4px">${esc(v.title)}</div>`
-        +`<div class="ir-video master-thumb${isShort?' master-short-wrap':''}" data-src="${esc(src)}" onclick="loadMasterVid(this)" style="cursor:pointer">`
+        +`<div class="ir-video master-thumb${isShort?' master-short-wrap':''}" data-src="${esc(src)}"${v.noCap?' data-nocap="1"':''} onclick="loadMasterVid(this)" style="cursor:pointer">`
         +`<img src="${thumb}" loading="lazy"${isShort?` onerror="this.onerror=null;this.src='${thumbFallback}'"`:''}><div class="ir-play-btn"><div></div></div>`
         +`</div></div>`;
     });
@@ -2752,7 +2806,7 @@ function loadMasterVid(el){
   const fsBtn=`<button class="vid-fs-btn" onclick="event.stopPropagation();toggleVidFullscreen(this)" title="全螢幕">⛶</button>`;
   el.innerHTML=`<iframe id="${fid}" src="${src}" title="投資大師影片" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen style="width:100%;height:100%;${isShort?'':'aspect-ratio:16/9;'}border-radius:8px"></iframe>${fsBtn}`;
   el.style.cursor='default'; el.onclick=null;
-  setTimeout(()=>forceZhCaptions(fid), 300);
+  if(!el.dataset.nocap) setTimeout(()=>forceZhCaptions(fid), 300);   // noCap影片不套用我方字幕層
 }
 // 自訂全螢幕：對影片容器div呼叫 Fullscreen API(含各瀏覽器前綴)，並在進入全螢幕後用
 //   Screen Orientation API 鎖成橫向(長影片)——這是手機上「全螢幕無法橫屏」的關鍵，
