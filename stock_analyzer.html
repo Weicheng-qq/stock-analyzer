@@ -2130,6 +2130,7 @@ ${window.__wikiData?'【維基百科最新公開資料（持續更新，比你�
  "lynch_type":"六大分類擇一：快速成長股/穩定成長股/緩慢成長股/景氣循環股/轉機股/資產股（依你對彼得林區分類邏輯的理解，分析實際財務數據判斷，非套公式）",
  "lynch_reason":"判斷理由 2-3 句，須具體引用實際年度數字佐證",
  "lynch_trend":"依近幾年數字變化總結趨勢（轉強/轉弱/持平），引用實際數字，1-2句",
+ "company_intro":"公司介紹：用2-3句白話文字，讓完全不懂這家公司的人也能在10秒內秒懂——這家公司是做什麼的、屬於什麼產業、成立/上市背景或最具代表性的產品/品牌是什麼。不要用術語堆砌、不要重複products欄位的詳細百分比數字，這裡只要讓人快速建立整體印象。",
  "products":"整理主要產品/服務（3-5項，用<br>分行）。若上方有官方年報的各產品營收金額，換算成佔總營收百分比呈現（格式：產品名（佔比XX%），不列金額只列%）；若『無官方營收數字』，則改用上方維基百科資料列出主要產品/事業線與各自的重要性或大致營收佔比並註明來源。務必列出實際產品，嚴禁只回『無公開資料』（維基一定有提供產品資訊）。最後可補一行最新產品/製程世代——但僅限於上方官方年報或維基資料裡有明確提到的內容，若這些資料都沒提到更新的世代，就只依官方營收表格現有項目整理，不要自行臆測表格外的新製程/新產品是否已存在。",
  "competitors":"前三大競爭對手，每個一行(格式:公司名 - 威脅說明)，最後一行給出該公司全球該產業排名。優先參考上方官方年報競爭段落與維基資料，不足處用你的產業常識補足。務必列出實際競爭對手公司名(例如晶圓代工對手三星、Intel；減肥藥對手禮來Eli Lilly)，嚴禁回『無公開資料』或留空。",
  "competitor_tickers":["前三大競爭對手中有美股上市者的股票代碼，例如 INTC、AMD，最多3個，無則空陣列"],
@@ -2274,12 +2275,16 @@ function renderAI(ai){
   if(goEl){ const go=ai.growth_outlook||'無法判斷'; const mk=go==='符合'?'✅':go==='不符合'?'❌':'➖'; const cl=go==='符合'?'g':go==='不符合'?'r':'';
     goEl.innerHTML=`<div class="vr"><span class="vl">${mk} 法說會成長動能（CEO 對未來展望）</span><span class="vn ${cl}">${esc(go)}</span></div>`
       +(ai.growth_outlook_reason?`<div class="note" style="margin-top:2px">${norm(ai.growth_outlook_reason)}</div>`:''); }
+  // 🏢 公司介紹：2-3句白話文字，讓使用者短時間內秒懂這家公司在做什麼，置於「產品與服務」卡片最上方(手動/AI兩種來源都適用)
+  const introBlock = (ai.company_intro && String(ai.company_intro).trim())
+    ? `<div style="margin-bottom:14px;padding:10px 12px;background:var(--bg2,rgba(88,166,255,.08));border-left:3px solid var(--blue);border-radius:4px"><div style="color:var(--blue);font-size:12px;font-weight:700;margin-bottom:4px">🏢 公司介紹</div>${norm(ai.company_intro)}</div>`
+    : '';
   // 產品/營收結構：若有最新一季法說會官方數據(目前TSM)優先用它(比年報新)；否則走AI依年報整理
   const manualProd=IR_PRODUCTS_SUMMARY[window.__symbolForLinks];
   if(manualProd){
-    setAI('ai_products',`<div class="ai">${manualProd.html}</div>`);
+    setAI('ai_products',`<div class="ai">${introBlock}${manualProd.html}</div>`);
   } else {
-    setAI('ai_products',`<div class="ai">${norm(ai.products)}`
+    setAI('ai_products',`<div class="ai">${introBlock}${norm(ai.products)}`
       +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理${window.__wikiData?`　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
         :(window.__wikiData?`<div class="note" style="color:var(--green)">✅ 依維基百科最新公開資料（持續更新）整理　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a></div>`:`<div class="note">（未取得官方或維基資料，內容為 AI 一般認知，僅供參考）</div>`))
       +`</div>`);
