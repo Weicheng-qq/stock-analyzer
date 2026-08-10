@@ -12,6 +12,17 @@
 //       (該網址是 YouTube 簽章過的，帶 &tlang=zh-Hant 就是 YouTube 官方的繁中翻譯字幕)
 // 回傳：{ ok:true, cues:[{t:起始秒, d:持續秒, x:"字幕文字"}], lang:"zh-Hant" }
 // 失敗一律回 { ok:false, reason } —— 前端收到就安靜退回 YouTube 內建字幕，不影響播放。
+//
+// ⚠️⚠️ 2026-08-10 實測結果(重要，接手前必讀，不要重複踩這個坑)：
+//   本函式部署到 Vercel 後「一律失敗」，所有影片都回 {ok:false, reason:"no captionTracks"}。
+//   原因：YouTube 對『資料中心IP』(Vercel/AWS/GCP 這類雲主機)回傳的 watch 頁面不含 captionTracks，
+//   而且 timedtext 端點會直接回 429 Too Many Requests；改用 Innertube(youtubei/v1/player) 也回 400
+//   (舊版 API key 已失效，現在需要 PO Token)。同一支程式在一般住宅IP可以取到 captionTracks，
+//   但 timedtext 仍會 429，所以也無法在本機批次預先產生字幕檔。
+//   結論：在「純前端＋免費雲函式」這個架構下，無法自行取得任意 YouTube 影片的字幕逐字稿。
+//   目前實際生效的字幕方案是前端的 _tryZhCaption()(用 YouTube 播放器官方的自動翻譯強制切成繁中)。
+//   本檔案保留為「若日後 YouTube policy 放寬或改用自架代理就能直接啟用」的備援，
+//   前端取不到資料時會安靜退回 YouTube 內建字幕，不影響使用者。
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
 

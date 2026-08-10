@@ -803,7 +803,7 @@ function runSearchBar(){
 // 送出中的即時回饋：讓使用者知道「有按到、正在跑」，不會以為沒反應
 function sbBusy(on){
   const b=document.getElementById('sbGo'); if(!b) return;
-  b.disabled=!!on; b.textContent = on ? '分析中…' : 'AI 分析';
+  b.disabled=!!on; b.textContent = on ? 'AI深度分析中' : 'AI 分析';
 }
 // 查詢結束(成功跳頁或失敗)都要解除「分析中…」與該列的灰底，避免卡住讓使用者誤判
 function searchDone(){
@@ -1753,11 +1753,7 @@ async function doSearchTW(symbol){
     window.__coNameForLinks=name;
     updateCurrentCompanyBar(name, symbol);   // 傳完整代碼(含.TW/.TWO)，AI分析鈕才能正確走台股流程
     document.getElementById('results').innerHTML=twResultsHtml({code,name,price,chg,pct,mkt});
-    // ⚠️ 這裡就要跳到「指數與財務指標」，不能等到最後 AI 分析跑完才跳(美股路徑本來就是骨架一渲染就跳)。
-    //   先前台股只在最末尾呼叫 applyGroupAfterRender()，造成兩個使用者回報的問題：
-    //   ①按鈕早就恢復成「AI 分析」但畫面還沒跳，讓人以為跑完了 ②中途一有例外就整個不跳頁。
-    //   財務數字本來就是骨架渲染後才非同步填入，先跳頁不影響正確性，反而讓使用者立刻看到有反應。
-    applyGroupAfterRender();
+    showGroup(__grp);   // 骨架剛渲染時所有卡片都還沒篩選,不先收斂會閃過公司股價/產品與服務等別的選單內容
     const gmKey=getGmKey(); const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1); const useServer=!gmKey && !isLocal;
     loadTechnical(symbol, gen);
     loadCompanyIntro(code, name, gen);   // 🏢 公司介紹(獨立小呼叫，不受主分析JSON漏欄位影響)
@@ -1917,6 +1913,7 @@ async function doSearch(){
     if(!gmKey && !useServer){
       setAllAI(`<div class="ai" style="color:var(--text2)">需要免費 OpenRouter 金鑰才能產生此分析。<br><button class="retry-btn" onclick="openSettings()">⚙️ 設定免費金鑰</button></div>`);
       logPanel(false);
+      applyGroupAfterRender();   // 沒金鑰不會跑AI，直接跳頁，避免按鈕卡在「AI深度分析中」
     } else {
       logAdd('ai','AI 深度分析中（彼得林區/護城河/競爭對手/買入建議）...');
       let ai=null, aiErr=null, usedServer=useServer;
@@ -1935,6 +1932,7 @@ async function doSearch(){
         logErr('ai','AI 失敗：'+(aiErr.message==='DAILY_LIMIT'?'免費 AI 每日額度已用完（明早 8 點重置）':aiErr.message));
         showAIFail(aiErr, usedServer);
       }
+      applyGroupAfterRender();   // AI 跑完(成功或失敗)才跳到「指數與財務指標」並解除按鈕狀態
       setTimeout(()=>logPanel(false),1200);
     }
   }catch(e){
@@ -2131,7 +2129,9 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 
   drawChart(rows);
   loadTechnical((FOREIGN_YAHOO_FALLBACK[symbol]&&FOREIGN_YAHOO_FALLBACK[symbol].yahooSym)||symbol, SEARCH_GEN);
-  applyGroupAfterRender();
+  // 這裡先只收斂卡片、不跳頁；跳到「指數與財務指標」與解除按鈕狀態統一等 AI 跑完才做
+  //   (使用者要求：AI 沒跑完前按鈕維持「AI深度分析中」，跑完才跳頁並變回「AI 分析」)
+  showGroup(__grp);
 
   // 給 AI 的上下文
   const finText=rows.map(r=>`${r.yr}: 營收${cs}${fmtB(r.rev)}, 成長${r.gr!=null?r.gr.toFixed(1)+'%':'NA'}, 毛利率${r.gm!=null?r.gm.toFixed(1)+'%':'NA'}, 淨利率${r.nm!=null?r.nm.toFixed(1)+'%':'NA'}, ROE${r.roe!=null?r.roe.toFixed(1)+'%':'NA'}`).join('\n')
@@ -2712,6 +2712,7 @@ const IR_CALL_VIDEO = {
 //   此函式無法強制觸發YouTube的自動翻譯(已實測確認IFrame API不支援)，會靜默不生效，不影響播放。
 let __ytApiLoading=false;
 const __ytPlayers={};
+const __ytCapWatch={};   // 每支影片的「字幕語言看門狗」計時器
 let __ytPendingCaptions=[];
 // 核心：把播放器字幕切成繁體中文。分兩種情況：
 //   (A) 影片本身就有 zh-Hant/zh-TW 原生字幕軌 → 直接選那一軌。
@@ -2726,26 +2727,26 @@ function _tryZhCaption(p){
     p.setOption('captions','reload',true);
     // 放大字幕級距(captions 模組的 fontSize 範圍 -1~3，0為預設)：手機上預設字幕太小，設2較好讀
     try{ p.setOption('captions','fontSize',2); }catch(_){}
-    // 先看有沒有原生繁中字幕軌
     let list=[]; try{ list=p.getOption('captions','tracklist')||[]; }catch(_){}
-    const native=list.find(t=>/^zh-(Hant|TW)/i.test(t.languageCode||''));
-    if(native){ p.setOption('captions','track',native); return true; }
-    // 沒有原生繁中軌 → 對現有字幕軌(通常是英文)套用自動翻譯成繁中
+    // ①只接受「原生繁體中文軌」；原生簡體(zh-Hans/zh-CN)一律不採用——
+    //   這是先前「一下繁體一下簡體」的主因：影片若有簡中原生軌，YouTube 會自己挑它。
+    const hant=list.find(t=>/^zh-(Hant|TW|HK)/i.test(t.languageCode||''));
+    if(hant){ p.setOption('captions','track',hant); return true; }
+    // ②沒有原生繁中軌 → 挑一條「非中文」的軌(通常是英文/自動產生)，強制翻譯成繁中。
+    //   刻意跳過簡中軌當作翻譯來源，避免簡轉繁品質差。
     let tl=[]; try{ tl=p.getOption('captions','translationLanguages')||[]; }catch(_){}
     const zh=tl.find(t=>/^zh-Hant$/i.test(t.languageCode||''))
-           ||tl.find(t=>/^zh-TW$/i.test(t.languageCode||''))
-           ||tl.find(t=>/^zh(-|$)/i.test(t.languageCode||''));
-    const base=list[0];
+           ||tl.find(t=>/^zh-TW$/i.test(t.languageCode||''));
+    const base=list.find(t=>!/^zh/i.test(t.languageCode||'')) || list[0];
     if(zh&&base){
       p.setOption('captions','track',{languageCode:base.languageCode,
         translationLanguage:{languageCode:zh.languageCode, languageName:zh.languageName||'中文（繁體）'}});
       return true;
     }
-    // 清單還沒就緒時的保底嘗試(不帶 tracklist 直接指定英文軌+繁中翻譯)
-    if(!list.length){
-      p.setOption('captions','track',{languageCode:'en',
-        translationLanguage:{languageCode:'zh-Hant', languageName:'中文（繁體）'}});
-    }
+    // ③清單還沒就緒時的保底(直接指定英文軌+繁中翻譯)。回傳 false 讓外層繼續重試，
+    //   直到 tracklist 真的就緒後能走上面更精準的分支。
+    p.setOption('captions','track',{languageCode:'en',
+      translationLanguage:{languageCode:'zh-Hant', languageName:'中文（繁體）'}});
   }catch(_){}
   return false;
 }
@@ -2762,6 +2763,15 @@ function _applyZhCaptions(iframeId){
           // 字幕軌/翻譯語言清單有時稍晚才填好，再補幾次
           setTimeout(()=>attempt(e.target), 800);
           setTimeout(()=>attempt(e.target), 2500);
+          // 播放途中 YouTube 可能自行切回別的字幕軌(例如影片自帶的簡中軌)，
+          //   每8秒重新確認一次，確保整支影片語言一致，直到成功鎖定繁中為止。
+          if(!__ytCapWatch[iframeId]){
+            __ytCapWatch[iframeId]=setInterval(()=>{
+              const el=document.getElementById(iframeId);
+              if(!el||!el.isConnected){ clearInterval(__ytCapWatch[iframeId]); delete __ytCapWatch[iframeId]; return; }
+              if(!done) _tryZhCaption(e.target);
+            }, 8000);
+          }
         },
         onReady:function(e){ try{ e.target.loadModule&&e.target.loadModule('captions'); }catch(_){} },
         onStateChange:function(e){
@@ -3001,6 +3011,7 @@ function loadIrVideo(el){
   el.innerHTML=`<iframe id="irVideoFrame" src="${src}" title="法說會影片" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe><button class="vid-fs-btn" onclick="event.stopPropagation();toggleVidFullscreen(this)" title="全螢幕">⛶</button>`;
   el.style.cursor='default'; el.onclick=null;
   setTimeout(initIrCaptions, 300);
+  startZhCaptionOverlay(el, 'irVideoFrame', v);   // 自製繁中字幕層(法說會影片也套用，與投資大師影片同一套)
 }
 // 官方法說會逐字稿＋簡報「人工判讀」後的重點摘要（數字全部來自官方逐字稿/簡報，非AI臆測）。
 // 每季法說後需人工更新對應內容。來源：台積電投資人關係官網法人說明會逐字稿(TSMC 2Q26 Transcript)＋法人說明會簡報。
