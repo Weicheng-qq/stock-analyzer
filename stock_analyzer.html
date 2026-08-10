@@ -254,10 +254,17 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .quote-wrap.tight .quote-card { padding:10px 13px; }
 .quote-wrap.tight .quote-text { font-size:14.5px; line-height:1.6; }
 .quote-wrap.tight .quote-by { margin-top:6px; }
-.current-company-bar { display:flex; align-items:center; gap:8px; margin:0 0 14px; padding:9px 10px 9px 14px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; font-size:14px; font-weight:700; color:var(--text); }
-.current-company-bar .ccb-name { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.current-company-bar .ccb-ticker { color:var(--text2); font-weight:400; font-size:12px; margin-left:6px; }
-.current-company-bar .ccb-ai { flex:none; background:var(--blue); color:#0d1117; border:none; border-radius:8px; padding:7px 13px; font-size:13px; font-weight:700; cursor:pointer; }
+/* 主搜尋列(美股/台股按鈕下方)：預設台積電，點自選股/投資主題任一列會即時同步 */
+.search-bar { display:flex; align-items:center; gap:8px; margin:0 0 14px; padding:7px 8px 7px 12px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; }
+.search-bar .sb-ico { flex:none; font-size:15px; opacity:.85; }
+.search-bar input { flex:1; min-width:0; background:transparent; border:none; outline:none; color:var(--text); font-size:15px; font-weight:700; padding:4px 0; }
+.search-bar input::placeholder { color:var(--text2); font-weight:400; }
+.search-bar .sb-go { flex:none; background:var(--blue); color:#0d1117; border:none; border-radius:8px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; }
+.search-bar .sb-go:disabled { opacity:.6; cursor:default; }
+/* 點擊整列時的即時回饋(讓使用者知道有按到、已經在跑) */
+.wl-item.row-loading { position:relative; opacity:.72; }
+.wl-item.row-loading::after { content:'分析中…'; position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:12px; font-weight:700; color:var(--blue); background:var(--bg2); padding:3px 8px; border-radius:6px; }
+.wl-row { cursor:pointer; }
 .master-tabs { display:flex; gap:8px; margin:0 0 16px; }
 .master-tabs .master-tab-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:10px; padding:11px 10px; font-size:14px; font-weight:700; cursor:pointer; }
 .master-tabs .master-tab-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
@@ -323,9 +330,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   <button class="install-btn" id="installBtn" onclick="handleInstallClick()" title="安裝成手機/電腦App" style="display:none;margin-left:auto">📲 安裝 App</button>
   <button class="settings-btn" id="settingsBtn" onclick="openSettings()" title="AI 金鑰設定" style="margin-left:auto">⚙️</button>
 </div>
-<!-- 主搜尋框已移除(使用者要求)：查詢改走自選股「+ 加入」(prompt輸入)+ 各列AI鈕，
-     doSearch()/watchlistAnalyze() 仍讀取此隱藏欄位的值，邏輯不用重寫 -->
-<input type="text" id="searchInput" style="display:none">
+<!-- #searchInput 已移到主畫面的 .search-bar(美股/台股按鈕下方)，不再是隱藏欄位 -->
 
 <div class="modal-overlay" id="addWatchlistModal">
   <div class="modal">
@@ -398,7 +403,13 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
   <!-- 封面名言區：只在開場封面(尚未點美股/台股)時顯示，填滿原本的大片空白 -->
   <div class="quote-wrap" id="quoteWrap"></div>
-  <div class="current-company-bar" id="currentCompanyBar" style="display:none"></div>
+  <!-- 搜尋列：點美股/台股後就出現，預設台積電；點自選股/投資主題任一列會即時同步成該公司 -->
+  <div class="search-bar" id="searchBar" style="display:none">
+    <span class="sb-ico">🔎</span>
+    <input type="text" id="searchInput" autocomplete="off" spellcheck="false"
+           onkeydown="if(event.key==='Enter'){event.preventDefault();runSearchBar();}">
+    <button class="sb-go" id="sbGo" onclick="runSearchBar()">AI 分析</button>
+  </div>
   <div class="grp-menu" id="grpMenu" style="display:none">
     <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
     <button class="grp-btn" data-g="2" onclick="pickGroup(2)">指數與財務指標</button>
@@ -748,19 +759,60 @@ function ccbName(code, fallback){
   const c=String(code||'').replace(/\.(TW|TWO)$/i,'');
   return (typeof TICKER_ZH!=='undefined' && TICKER_ZH[c]) || (typeof TW_NAMES!=='undefined' && TW_NAMES[c]) || fallback || c;
 }
+// 搜尋列顯示目前這家公司(名稱＋代碼)。點自選股/投資主題任一列時也會即時同步過來。
 function updateCurrentCompanyBar(name, code){
-  const bar=document.getElementById('currentCompanyBar'); if(!bar) return;
-  if(!name && !code){ bar.style.display='none'; bar.innerHTML=''; window.__ccbSym=null; return; }
+  const inp=document.getElementById('searchInput'); if(!inp) return;
   const sym=String(code||'');
   window.__ccbSym=sym;
-  bar.innerHTML=`<span class="ccb-name">🔎 ${esc(ccbName(sym,name))}<span class="ccb-ticker">${esc(sym.replace(/\.(TW|TWO)$/i,''))}</span></span>`
-    +`<button class="ccb-ai" onclick="ccbAnalyze()">AI 分析</button>`;
-  bar.style.display='';
+  const bare=sym.replace(/\.(TW|TWO)$/i,'');
+  inp.value = bare ? `${ccbName(sym,name)}（${bare}）` : (name||'');
 }
-// 重新對目前這家公司跑一次完整分析(與自選股的 AI 鈕同一套流程)
-function ccbAnalyze(){
-  const sym=window.__ccbSym; if(!sym) return;
+// 顯示搜尋列並給預設值(台積電)——使用者一點美股/台股就要看得到搜尋功能
+function showSearchBar(){
+  const bar=document.getElementById('searchBar'); const inp=document.getElementById('searchInput');
+  if(!bar||!inp) return;
+  bar.style.display='flex';
+  if(!inp.value.trim()){
+    const tw=getMarket()==='tw';
+    inp.value = tw ? '台積電（2330）' : '台積電（TSM）';
+    window.__ccbSym = tw ? '2330.TW' : 'TSM';
+  }
+}
+// 按下搜尋列的「AI 分析」/Enter：優先用使用者手打的內容，內容沒改過就用目前選定的代碼
+function runSearchBar(){
+  const inp=document.getElementById('searchInput'); if(!inp) return;
+  const raw=inp.value.trim(); if(!raw) return;
+  // 「名稱（代碼）」格式 → 取出括號內代碼，直接精準查詢
+  const m=raw.match(/（([^（）]+)）\s*$/)||raw.match(/\(([^()]+)\)\s*$/);
+  const bare=m?m[1].trim():raw;
+  const sym=/^\d{4,6}$/.test(bare) ? (bare+'.'+twMkt(bare)) : bare;
+  sbBusy(true);
   watchlistAnalyze(sym);
+  setTimeout(()=>sbBusy(false), 1200);
+}
+// 送出中的即時回饋：讓使用者知道「有按到、正在跑」，不會以為沒反應
+function sbBusy(on){
+  const b=document.getElementById('sbGo'); if(!b) return;
+  b.disabled=!!on; b.textContent = on ? '分析中…' : 'AI 分析';
+}
+// 點自選股／投資主題「整列任一位置」就直接分析該公司(不用再找小小的AI鈕)。
+//   先立刻做三件看得到的事：①該列變灰+顯示「分析中…」②搜尋列同步成這家公司③捲到最上方，
+//   讓使用者一點就知道有反應，再開始真正的分析流程。
+function rowAnalyze(rowEl, symbol){
+  if(!symbol) return;
+  const item=rowEl&&rowEl.closest?rowEl.closest('.wl-item'):null;
+  document.querySelectorAll('.wl-item.row-loading').forEach(x=>x.classList.remove('row-loading'));
+  if(item) item.classList.add('row-loading');
+  const bare=String(symbol).replace(/\.(TW|TWO)$/i,'');
+  updateCurrentCompanyBar(ccbName(symbol), symbol);   // 搜尋列即時顯示所選公司
+  sbBusy(true);
+  window.scrollTo({top:0, behavior:'smooth'});
+  // 讓瀏覽器先把上面的視覺回饋畫出來，再跑較重的分析流程(否則會卡住看不到回饋)
+  setTimeout(()=>{
+    try{ watchlistAnalyze(symbol); }finally{
+      setTimeout(()=>{ if(item) item.classList.remove('row-loading'); sbBusy(false); }, 1200);
+    }
+  }, 30);
 }
 // 🏢 公司介紹：獨立於主分析JSON的一支小呼叫。
 //   原本把 company_intro 塞在15個欄位的大JSON裡，實測模型常常漏掉該欄位→使用者看不到公司介紹。
@@ -983,6 +1035,9 @@ const THEME_STOCKS={
   '存儲題材':{tw:['2408','2344','6770','2337','3006','8299','3260'],us:['MU','WDC','STX','NTAP']},
   'AI伺服器題材':{tw:['2382','6669','3231','2317','2356','2376'],us:['SMCI','DELL','HPE']},
   'AI散熱題材':{tw:['3017','3324','3653'],us:['VRT']},
+  // IC載板(ABF/BT載板)台廠三雄：欣興/景碩/南電。註：台光電(2383)、聯茂(6213)屬「銅箔基板CCL」、
+  //   AMKR屬「封測OSAT」，都不是IC載板廠，故不列入以免誤導。
+  'IC載板題材':{tw:['3037','3189','8046'],us:[]},
   '資料中心電力題材':{tw:['2382','6669','2345'],us:['VRT','ETN','DLR','EQIX']},
   '太空衛星題材':{tw:['3491'],us:['RKLB','ASTS','IRDM']},
   '儲能題材':{tw:['1513','6121','2308','8996'],us:['TSLA','FLNC','ENPH','SEDG','BE']},
@@ -1020,7 +1075,7 @@ function renderThemeList(){
   });
   listEl.innerHTML = rows.map(r=>`
     <div class="wl-item" data-sym="${esc(r.symbol)}">
-    <div class="wl-row">
+    <div class="wl-row" onclick="rowAnalyze(this,'${esc(r.symbol)}')">
       ${coLogoImg(r.symbol.replace(/\..*/,''), r.symbol.replace(/\..*/,''), mkt==='tw', 'wl-logo')}
       <div class="wl-name" title="${esc(r.name)}">${esc(r.name)}<span class="sym">${esc(r.symbol.replace(/\.(TW|TWO)$/i,''))}</span></div>
       <svg class="wl-spark" id="ths_${esc(r.symbol)}" viewBox="0 0 72 26" preserveAspectRatio="none" aria-hidden="true"></svg>
@@ -1028,8 +1083,9 @@ function renderThemeList(){
         <div class="wl-price" id="thp_${esc(r.symbol)}">…</div>
         <div class="wl-chg" id="thc_${esc(r.symbol)}">…</div>
       </div>
-      <button class="wl-heart${have.has(r.symbol)?' added':''}" onclick="addThemeStockToWatchlist('${esc(r.symbol)}','${esc(r.name).replace(/'/g,"\\'")}',this)" ${have.has(r.symbol)?'disabled title="已在自選股清單"':'title="加入自選股"'}>${have.has(r.symbol)?'❤️':'🤍'}</button>
+      <button class="wl-heart${have.has(r.symbol)?' added':''}" onclick="event.stopPropagation();addThemeStockToWatchlist('${esc(r.symbol)}','${esc(r.name).replace(/'/g,"\\'")}',this)" ${have.has(r.symbol)?'disabled title="已在自選股清單"':'title="加入自選股"'}>${have.has(r.symbol)?'❤️':'🤍'}</button>
     </div></div>`).join('') || '<div class="note">此主題目前無資料</div>';
+  window.__themeRows=rows;   // 供30秒自動更新股價時重用(不重新渲染整份清單，避免閃爍)
   loadThemePrices(rows);
 }
 // 投資主題：股價 + 漲跌幅(pill) + 當日走勢線(spark)，一次抓5分K涵蓋三者，作法與自選股loadWatchlistSpark一致
@@ -1139,8 +1195,8 @@ function renderWatchlist(){
   if(!list.length){ el.innerHTML='<div class="note">尚未加入任何自選股，在上方輸入後按「加入」</div>'; return; }
   el.innerHTML = list.map((it,i)=>`
     <div class="wl-item" data-sym="${esc(it.symbol)}">
-    <div class="wl-row">
-      ${__wlEdit?`<div class="wl-move"><button class="wl-mv" onclick="moveWatchlistItem('${esc(it.symbol)}',-1)" title="上移" ${i===0?'disabled':''}>▲</button><button class="wl-mv" onclick="moveWatchlistItem('${esc(it.symbol)}',1)" title="下移" ${i===list.length-1?'disabled':''}>▼</button></div>`:''}
+    <div class="wl-row" onclick="rowAnalyze(this,'${esc(it.symbol)}')">
+      ${__wlEdit?`<div class="wl-move" onclick="event.stopPropagation()"><button class="wl-mv" onclick="event.stopPropagation();moveWatchlistItem('${esc(it.symbol)}',-1)" title="上移" ${i===0?'disabled':''}>▲</button><button class="wl-mv" onclick="event.stopPropagation();moveWatchlistItem('${esc(it.symbol)}',1)" title="下移" ${i===list.length-1?'disabled':''}>▼</button></div>`:''}
       ${coLogoImg(it.symbol.replace(/\..*/,''), it.symbol.replace(/\..*/,''), /\.TW/i.test(it.symbol), 'wl-logo')}
       <div class="wl-name" title="${esc(it.name)}">${esc(it.name)}<span class="sym">${esc(it.symbol.replace(/\.(TW|TWO)$/i,''))}</span></div>
       <svg class="wl-spark" id="wls_${esc(it.symbol)}" viewBox="0 0 72 26" preserveAspectRatio="none" aria-hidden="true"></svg>
@@ -1148,8 +1204,7 @@ function renderWatchlist(){
         <div class="wl-price" id="wlp_${esc(it.symbol)}">…</div>
         <div class="wl-chg" id="wlc_${esc(it.symbol)}">…</div>
       </div>
-      <button class="wl-ai-btn" onclick="watchlistAnalyze('${esc(it.symbol)}')">AI</button>
-      ${__wlEdit?`<button class="wl-del" onclick="removeFromWatchlist('${esc(it.symbol)}')" title="刪除">✕</button>`:''}
+      ${__wlEdit?`<button class="wl-del" onclick="event.stopPropagation();removeFromWatchlist('${esc(it.symbol)}')" title="刪除">✕</button>`:''}
     </div>
     <div class="wl-ext" id="wle_${esc(it.symbol)}"></div>
     <div class="wl-ai-read" id="wlr_${esc(it.symbol)}"><span class="muted">💡 漲跌解讀載入中…</span></div>
@@ -12534,7 +12589,7 @@ function applyGroupAfterRender(){ __autoLoading=false; if(__jumpAfterSearch){ __
 //   __splashDone旗標控制showGroup()裡welcome的顯示/隱藏，revealMenu()執行後才變true。
 // 顯示選單列(#grpMenu)並跳到自選股頁。
 let __splashDone=false;   // false=封面顯示中(welcome可見)；revealMenu()執行後才變true(隱藏封面)
-function revealMenu(){ __splashDone=true; const gm=document.getElementById('grpMenu'); if(gm) gm.style.display=''; const q=document.getElementById('quoteWrap'); if(q) q.style.display='none'; showGroup(10); maybeRunDemo(); }
+function revealMenu(){ __splashDone=true; const gm=document.getElementById('grpMenu'); if(gm) gm.style.display=''; const q=document.getElementById('quoteWrap'); if(q) q.style.display='none'; showSearchBar(); showGroup(10); maybeRunDemo(); }
 // 📜 封面投資名言：三位大師各隨機挑一句，填滿封面下方原本的大片空白。
 //    全部為公開廣泛流傳、可查證的本人名言(非杜撰)，中文為忠實翻譯並附英文原句對照。
 const MASTER_QUOTES={
@@ -12545,7 +12600,20 @@ const MASTER_QUOTES={
     {zh:'我們最喜歡的持股期限是「永遠」。',en:'Our favorite holding period is forever.'},
     {zh:'風險來自於你不知道自己在做什麼。',en:"Risk comes from not knowing what you're doing."},
     {zh:'只有退潮的時候，你才知道誰在裸泳。',en:"Only when the tide goes out do you discover who's been swimming naked."},
-    {zh:'第一條規則：永遠不要虧錢。第二條規則：永遠不要忘記第一條規則。',en:'Rule No.1: Never lose money. Rule No.2: Never forget rule No.1.'}
+    {zh:'第一條規則：永遠不要虧錢。第二條規則：永遠不要忘記第一條規則。',en:'Rule No.1: Never lose money. Rule No.2: Never forget rule No.1.'},
+    {zh:'建立名聲需要二十年，毀掉它只要五分鐘。想通這一點，你做事就會不一樣。',en:'It takes 20 years to build a reputation and five minutes to ruin it. If you think about that, you\'ll do things differently.'},
+    {zh:'股市是一個把錢從沒有耐心的人手中，轉移到有耐心的人手中的裝置。',en:'The stock market is a device for transferring money from the impatient to the patient.'},
+    {zh:'今天有人能坐在樹蔭下乘涼，是因為很久以前有人種下了那棵樹。',en:'Someone is sitting in the shade today because someone planted a tree a long time ago.'},
+    {zh:'時間是好公司的朋友，卻是平庸公司的敵人。',en:'Time is the friend of the wonderful company, the enemy of the mediocre.'},
+    {zh:'一輩子你只需要做對很少幾件事，前提是你別做錯太多事。',en:"You only have to do a very few things right in your life so long as you don't do too many things wrong."},
+    {zh:'永遠不要投資你看不懂的生意。',en:'Never invest in a business you cannot understand.'},
+    {zh:'分散投資是對「無知」的保護；如果你很清楚自己在做什麼，就沒什麼道理過度分散。',en:'Diversification is protection against ignorance. It makes little sense if you know what you are doing.'},
+    {zh:'習慣的鎖鏈，在輕到讓你感覺不到的時候，已經重到讓你掙脫不了。',en:'Chains of habit are too light to be felt until they are too heavy to be broken.'},
+    {zh:'在商業世界裡，後照鏡永遠比擋風玻璃清晰。',en:'In the business world, the rearview mirror is always clearer than the windshield.'},
+    {zh:'機會不常出現。天上下金雨的時候，要拿水桶去接，不是拿頂針。',en:'Opportunities come infrequently. When it rains gold, put out the bucket, not the thimble.'},
+    {zh:'預測下雨不算什麼，造出方舟才算。',en:"Predicting rain doesn't count. Building arks does."},
+    {zh:'如果你發現自己坐在一艘長期漏水的船上，把力氣拿去換一艘船，會比拿去補洞更有生產力。',en:'Should you find yourself in a chronically leaking boat, energy devoted to changing vessels is likely to be more productive than energy devoted to patching leaks.'},
+    {zh:'投資人最重要的特質是性格，不是智力。',en:'The most important quality for an investor is temperament, not intellect.'}
   ]},
   munger:{name:'查理·蒙格 Charlie Munger',icon:'🧠',list:[
     {zh:'大錢不在買進賣出之中，而在等待之中。',en:'The big money is not in the buying and selling, but in the waiting.'},
@@ -12553,7 +12621,17 @@ const MASTER_QUOTES={
     {zh:'反過來想，永遠反過來想。',en:'Invert, always invert.'},
     {zh:'像我們這種人，靠著「持續地不做蠢事」所獲得的長期優勢，遠比努力變得非常聰明還要多，這實在令人驚訝。',en:'It is remarkable how much long-term advantage people like us have gotten by trying to be consistently not stupid, instead of trying to be very intelligent.'},
     {zh:'找到一個簡單的道理，然後認真地執行它。',en:'Take a simple idea and take it seriously.'},
-    {zh:'複利的第一條規則：絕不在沒有必要時打斷它。',en:'The first rule of compounding: Never interrupt it unnecessarily.'}
+    {zh:'複利的第一條規則：絕不在沒有必要時打斷它。',en:'The first rule of compounding: Never interrupt it unnecessarily.'},
+    {zh:'每天努力讓自己比早上醒來時，更聰明一點點。',en:'Spend each day trying to be a little wiser than you were when you woke up.'},
+    {zh:'我這輩子認識的聰明人裡，沒有一個不是天天閱讀的——一個都沒有，零。',en:"In my whole life, I have known no wise people who didn't read all the time – none, zero."},
+    {zh:'給我看誘因，我就能告訴你結果。',en:'Show me the incentive and I will show you the outcome.'},
+    {zh:'你不需要非常聰明，只需要平均而言比別人聰明一點點，然後持續很久很久。',en:'You don\'t have to be brilliant, only a little bit wiser than the other guys, on average, for a long, long time.'},
+    {zh:'用合理的價格買一家偉大的企業，勝過用很棒的價格買一家普通的企業。',en:'A great business at a fair price is superior to a fair business at a great price.'},
+    {zh:'知道自己「不知道什麼」，比聰明還有用。',en:"Knowing what you don't know is more useful than being brilliant."},
+    {zh:'投資本來就不該是簡單的。覺得投資很容易的人，都是笨蛋。',en:"It's not supposed to be easy. Anyone who finds it easy is stupid."},
+    {zh:'我們的投資只分三個籃子：可以、不行、太難懂。',en:'We have three baskets for investing: yes, no, and too hard to understand.'},
+    {zh:'嫉妒是最愚蠢的一種罪，因為它是唯一讓你完全得不到任何樂趣的罪。',en:"Envy is a really stupid sin because it's the only one you could never possibly have any fun at."},
+    {zh:'持續學習的人，會在人生中不斷向上。',en:'Those who keep learning will keep rising in life.'}
   ]},
   lynch:{name:'彼得·林區 Peter Lynch',icon:'📈',list:[
     {zh:'了解你持有什麼，以及你為什麼持有它。',en:'Know what you own, and know why you own it.'},
@@ -12561,7 +12639,15 @@ const MASTER_QUOTES={
     {zh:'在股市裡最重要的器官是胃，而不是腦。',en:"In the stock market, the most important organ is the stomach. It's not the brain."},
     {zh:'在股票上賺錢的關鍵，是不要被它們嚇跑。',en:'The key to making money in stocks is not to get scared out of them.'},
     {zh:'每個人都有在股市賺錢的智力，但不是每個人都有那個承受力。',en:'Everyone has the brainpower to make money in stocks. Not everyone has the stomach.'},
-    {zh:'你不該因為一檔股票便宜而買它，而該因為你對它了解夠多才買。',en:'You should not buy a stock because it is cheap but because you know a lot about it.'}
+    {zh:'你不該因為一檔股票便宜而買它，而該因為你對它了解夠多才買。',en:'You should not buy a stock because it is cheap but because you know a lot about it.'},
+    {zh:'每一張股票的背後都有一家公司，去弄清楚它到底在做什麼。',en:"Behind every stock is a company. Find out what it's doing."},
+    {zh:'永遠不要投資一個你沒辦法用蠟筆畫出來說明的點子。',en:"Never invest in any idea you can't illustrate with a crayon."},
+    {zh:'翻開最多石頭的人，就會贏得這場遊戲。',en:'The person that turns over the most rocks wins the game.'},
+    {zh:'選一個連笨蛋都能經營的生意——因為遲早會有笨蛋來經營它。',en:'Go for a business that any idiot can run – because sooner or later, any idiot probably is going to run it.'},
+    {zh:'當你持有的是優秀公司的股票時，時間站在你這一邊。',en:'Time is on your side when you own shares of superior companies.'},
+    {zh:'持有股票就像養小孩——不要養超過你能照顧的數量。',en:"Owning stocks is like having children — don't get involved with more than you can handle."},
+    {zh:'經濟會衰退、股市會下跌。如果你不明白這些一定會發生，你就還沒準備好，在市場上也不會有好結果。',en:"You get recessions, you have stock market declines. If you don't understand that's going to happen, then you're not ready, you won't do well in the markets."},
+    {zh:'如果你無法說服自己「當它跌了25%，我就是買家」，那你在股市裡永遠賺不到像樣的報酬。',en:'If you can\'t convince yourself "When I\'m down 25 percent, I\'m a buyer," you\'ll never make a decent profit in stocks.'}
   ]}
 };
 // 封面名言：使用者要求「一個畫面就看完、不用往下滑」。
@@ -12596,6 +12682,26 @@ function renderSplashQuotes(){
 }
 window.addEventListener('load', function(){
   initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000);
+  // 🔄 自選股/投資主題股價自動更新：原本只有大盤指數每60秒更新，個股價格只在「重新整理」時才會抓一次，
+  //   所以開盤時價格看起來像不會跳動(使用者回報)。這裡改為每30秒重抓一次報價。
+  //   只在「分頁可見」時更新，切到背景就跳過，避免無謂消耗 Yahoo 額度。
+  setInterval(function(){
+    if(document.hidden) return;
+    try{
+      const l=getWatchlist();
+      if(l&&l.length) loadWatchlistPrices(l);
+      if(typeof loadThemePrices==='function' && window.__themeRows && window.__themeRows.length) loadThemePrices(window.__themeRows);
+    }catch(e){}
+  }, 30000);
+  // 從背景切回前景(手機常見)立刻補抓一次，不用等下一個30秒
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden) return;
+    try{
+      const l=getWatchlist();
+      if(l&&l.length) loadWatchlistPrices(l);
+      if(typeof loadThemePrices==='function' && window.__themeRows && window.__themeRows.length) loadThemePrices(window.__themeRows);
+    }catch(e){}
+  });
   renderSplashQuotes();   // 封面名言(每次開App隨機)
   // 只有「使用者剛點過美股/台股按鈕造成的reload」才跳過封面，其餘情況(含全新開App)一律停留在封面等待點擊。
   let skipSplash=false; try{ skipSplash=sessionStorage.getItem('skipSplashOnce')==='1'; sessionStorage.removeItem('skipSplashOnce'); }catch(e){}
