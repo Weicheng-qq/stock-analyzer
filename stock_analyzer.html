@@ -249,11 +249,13 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .quote-text { font-size:15px; line-height:1.7; color:var(--text); font-weight:600; }
 .quote-en { font-size:12px; line-height:1.55; color:var(--text2); margin-top:7px; font-style:italic; }
 .quote-by { font-size:12.5px; color:var(--blue); margin-top:8px; font-weight:700; }
-/* 空間不足時的緊湊模式(由 renderSplashQuotes 量測後套用) */
-.quote-wrap.tight { gap:8px; }
-.quote-wrap.tight .quote-card { padding:10px 13px; }
-.quote-wrap.tight .quote-text { font-size:14.5px; line-height:1.6; }
-.quote-wrap.tight .quote-by { margin-top:6px; }
+/* 空間不足時的緊湊模式(由 renderSplashQuotes 量測後套用)。
+   注意：只縮間距與字級，英文原句一律保留顯示，不可在此隱藏 .quote-en */
+.quote-wrap.tight { gap:7px; }
+.quote-wrap.tight .quote-card { padding:9px 12px; }
+.quote-wrap.tight .quote-text { font-size:14px; line-height:1.55; }
+.quote-wrap.tight .quote-en { font-size:11px; line-height:1.45; margin-top:5px; }
+.quote-wrap.tight .quote-by { margin-top:5px; font-size:12px; }
 /* 主搜尋列(美股/台股按鈕下方)：預設台積電，點自選股/投資主題任一列會即時同步 */
 .search-bar { display:flex; align-items:center; gap:8px; margin:0 0 14px; padding:7px 8px 7px 12px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; }
 .search-bar .sb-ico { flex:none; font-size:15px; opacity:.85; }
@@ -412,8 +414,8 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
   <div class="grp-menu" id="grpMenu" style="display:none">
     <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
-    <button class="grp-btn" data-g="2" onclick="pickGroup(2)">指數與財務指標</button>
     <button class="grp-btn" data-g="15" onclick="pickGroup(15)">投資主題</button>
+    <button class="grp-btn" data-g="2" onclick="pickGroup(2)">指數與財務指標</button>
     <button class="grp-btn" data-g="6" onclick="pickGroup(6)">財經新聞</button>
     <button class="grp-btn tw-only" data-g="12" onclick="pickGroup(12)">每月營收</button>
     <button class="grp-btn tw-only" data-g="13" onclick="pickGroup(13)">三大法人</button>
@@ -757,7 +759,13 @@ function setMarket(m){ try{ localStorage.setItem('market', m); localStorage.setI
 //   避免同一家公司(如台積電)在自選股顯示中文、在這裡卻顯示SEC英文名而不一致(使用者回報)。
 function ccbName(code, fallback){
   const c=String(code||'').replace(/\.(TW|TWO)$/i,'');
-  return (typeof TICKER_ZH!=='undefined' && TICKER_ZH[c]) || (typeof TW_NAMES!=='undefined' && TW_NAMES[c]) || fallback || c;
+  // ⚠️ 查名字典的順序必須與自選股(renderWatchlist)、投資主題(renderThemeList)完全一致，
+  //    否則同一家公司會兩邊顯示不同名稱。TW_ALL 是台股全上市櫃對照表，不可漏掉——
+  //    例如大立光(3008)不在 TW_NAMES 裡，漏查 TW_ALL 就會變成只顯示代碼「3008」(使用者回報)。
+  return (typeof TICKER_ZH!=='undefined' && TICKER_ZH[c])
+      || (typeof TW_NAMES!=='undefined' && TW_NAMES[c])
+      || (typeof TW_ALL!=='undefined' && TW_ALL[c])
+      || fallback || c;
 }
 // 搜尋列顯示目前這家公司(名稱＋代碼)。點自選股/投資主題任一列時也會即時同步過來。
 function updateCurrentCompanyBar(name, code){
@@ -12650,35 +12658,40 @@ const MASTER_QUOTES={
     {zh:'如果你無法說服自己「當它跌了25%，我就是買家」，那你在股市裡永遠賺不到像樣的報酬。',en:'If you can\'t convince yourself "When I\'m down 25 percent, I\'m a buyer," you\'ll never make a decent profit in stocks.'}
   ]}
 };
-// 封面名言：使用者要求「一個畫面就看完、不用往下滑」。
-//   作法：先量測封面剩餘可用高度，塞得下三位就放三位，塞不下就隨機放兩位(每次開App隨機挑人也隨機挑句)。
-//   英文原句在空間不足時自動隱藏(.tight)，優先確保中文名言與出處完整可見。
+// 封面名言：使用者要求「一個畫面就看完、不用往下滑」，且「每句都要附英文原句」。
+//   ⚠️ 英文原句一律保留，絕不為了排版把它拿掉(先前版本會在空間不足時隱藏英文，使用者回報有的名言沒有英文)。
+//   空間不足時的取捨順序改為：①三位→縮排版(仍含英文) ②還不夠→隨機改放兩位(仍含英文)
+//   ③再不夠→兩位+縮排版。也就是寧可少一位大師，也不會少掉英文。
 function renderSplashQuotes(){
   const box=document.getElementById('quoteWrap'); if(!box) return;
   const keys=Object.keys(MASTER_QUOTES);
-  const build=(ks,tight)=>ks.map(k=>{
+  const build=ks=>ks.map(k=>{
     const g=MASTER_QUOTES[k];
     const q=g.list[Math.floor(Math.random()*g.list.length)];   // 每次開App各自隨機挑一句
     return `<div class="quote-card"><div class="quote-text">「${esc(q.zh)}」</div>`
-      +(tight?'':`<div class="quote-en">${esc(q.en)}</div>`)
+      +`<div class="quote-en">${esc(q.en)}</div>`
       +`<div class="quote-by">${g.icon} ${esc(g.name)}</div></div>`;
   }).join('');
-  const fits=()=>{
-    const r=box.getBoundingClientRect();
-    return (r.bottom <= (window.innerHeight||document.documentElement.clientHeight) - 6);
-  };
-  box.classList.remove('tight');
-  box.innerHTML=build(keys,false);
-  if(fits()) return;
-  // 1) 先拿掉英文原句
-  box.classList.add('tight');
-  box.innerHTML=build(keys,true);
-  if(fits()) return;
-  // 2) 還是放不下 → 隨機挑兩位大師(不固定同兩位)
-  const two=keys.slice().sort(()=>Math.random()-0.5).slice(0,2);
-  box.innerHTML=build(two,true);
-  if(fits()) return;
-  box.innerHTML=build(two.slice(0,2),true);
+  // 最後保底用：從較短的名言裡隨機挑(仍有隨機性，但不會爆版)
+  const buildShort=ks=>ks.map(k=>{
+    const g=MASTER_QUOTES[k];
+    const sorted=g.list.slice().sort((a,b)=>(a.zh.length+a.en.length)-(b.zh.length+b.en.length));
+    const pool=sorted.slice(0, Math.max(3, Math.ceil(sorted.length/2)));   // 取較短的一半
+    const q=pool[Math.floor(Math.random()*pool.length)];
+    return `<div class="quote-card"><div class="quote-text">「${esc(q.zh)}」</div>`
+      +`<div class="quote-en">${esc(q.en)}</div>`
+      +`<div class="quote-by">${g.icon} ${esc(g.name)}</div></div>`;
+  }).join('');
+  const fits=()=>box.getBoundingClientRect().bottom <= (window.innerHeight||document.documentElement.clientHeight) - 6;
+  const two=keys.slice().sort(()=>Math.random()-0.5).slice(0,2);   // 要縮減時隨機挑兩位，不固定同兩位
+  const plans=[
+    ()=>{ box.classList.remove('tight'); box.innerHTML=build(keys); },       // 三位 + 正常間距
+    ()=>{ box.classList.add('tight');    box.innerHTML=build(keys); },       // 三位 + 縮排版
+    ()=>{ box.classList.remove('tight'); box.innerHTML=build(two);  },       // 兩位 + 正常間距
+    ()=>{ box.classList.add('tight');    box.innerHTML=build(two);  },       // 兩位 + 縮排版
+    ()=>{ box.classList.add('tight');    box.innerHTML=buildShort(two); }    // 兩位 + 縮排版 + 挑較短的名言
+  ];
+  for(let i=0;i<plans.length;i++){ plans[i](); if(fits()) return; }
 }
 window.addEventListener('load', function(){
   initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000);
