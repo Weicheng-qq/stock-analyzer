@@ -796,12 +796,19 @@ function runSearchBar(){
   const sym=/^\d{4,6}$/.test(bare) ? (bare+'.'+twMkt(bare)) : bare;
   sbBusy(true);
   watchlistAnalyze(sym);
-  setTimeout(()=>sbBusy(false), 1200);
+  // 不用固定計時器解除：改由 applyGroupAfterRender()(畫面真的跳過去時)解除。
+  // 這裡只留一道保險，避免極端情況(例如查無此代碼直接return)讓按鈕卡在「分析中…」。
+  setTimeout(()=>sbBusy(false), 20000);
 }
 // 送出中的即時回饋：讓使用者知道「有按到、正在跑」，不會以為沒反應
 function sbBusy(on){
   const b=document.getElementById('sbGo'); if(!b) return;
   b.disabled=!!on; b.textContent = on ? '分析中…' : 'AI 分析';
+}
+// 查詢結束(成功跳頁或失敗)都要解除「分析中…」與該列的灰底，避免卡住讓使用者誤判
+function searchDone(){
+  sbBusy(false);
+  document.querySelectorAll('.wl-item.row-loading').forEach(x=>x.classList.remove('row-loading'));
 }
 // 點自選股／投資主題「整列任一位置」就直接分析該公司(不用再找小小的AI鈕)。
 //   先立刻做三件看得到的事：①該列變灰+顯示「分析中…」②搜尋列同步成這家公司③捲到最上方，
@@ -817,9 +824,10 @@ function rowAnalyze(rowEl, symbol){
   window.scrollTo({top:0, behavior:'smooth'});
   // 讓瀏覽器先把上面的視覺回饋畫出來，再跑較重的分析流程(否則會卡住看不到回饋)
   setTimeout(()=>{
-    try{ watchlistAnalyze(symbol); }finally{
-      setTimeout(()=>{ if(item) item.classList.remove('row-loading'); sbBusy(false); }, 1200);
-    }
+    try{ watchlistAnalyze(symbol); }catch(e){ if(item) item.classList.remove('row-loading'); sbBusy(false); }
+    // 正常情況由 applyGroupAfterRender() 在「畫面跳到指數與財務指標」時解除，
+    // 這裡只留保險，避免卡在「分析中…」
+    setTimeout(()=>{ if(item) item.classList.remove('row-loading'); sbBusy(false); }, 20000);
   }, 30);
 }
 // 🏢 公司介紹：獨立於主分析JSON的一支小呼叫。
@@ -1734,7 +1742,7 @@ async function doSearchTW(symbol){
     const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=1d`);
     if(gen!==SEARCH_GEN) return;
     const meta=ch?.chart?.result?.[0]?.meta;
-    if(!meta||meta.regularMarketPrice==null){ __autoLoading=false; document.getElementById('results').innerHTML='<div class="err-box">查不到此台股資料，請確認代碼</div>'; logPanel(false); return; }
+    if(!meta||meta.regularMarketPrice==null){ __autoLoading=false; document.getElementById('results').innerHTML='<div class="err-box">查不到此台股資料，請確認代碼</div>'; logPanel(false); searchDone(); return; }
     const code=symbol.replace(/\..*/,''); const mkt=/\.TWO$/i.test(symbol)?'TWO':'TW';
     const name=TW_NAMES[code]||meta.shortName||meta.longName||code;
     const price=meta.regularMarketPrice, prev=meta.previousClose??meta.chartPreviousClose;
@@ -1745,7 +1753,11 @@ async function doSearchTW(symbol){
     window.__coNameForLinks=name;
     updateCurrentCompanyBar(name, symbol);   // 傳完整代碼(含.TW/.TWO)，AI分析鈕才能正確走台股流程
     document.getElementById('results').innerHTML=twResultsHtml({code,name,price,chg,pct,mkt});
-    showGroup(__grp);   // 骨架剛渲染時所有卡片都還沒篩選,不先收斂會閃過公司股價/產品與服務等別的選單內容
+    // ⚠️ 這裡就要跳到「指數與財務指標」，不能等到最後 AI 分析跑完才跳(美股路徑本來就是骨架一渲染就跳)。
+    //   先前台股只在最末尾呼叫 applyGroupAfterRender()，造成兩個使用者回報的問題：
+    //   ①按鈕早就恢復成「AI 分析」但畫面還沒跳，讓人以為跑完了 ②中途一有例外就整個不跳頁。
+    //   財務數字本來就是骨架渲染後才非同步填入，先跳頁不影響正確性，反而讓使用者立刻看到有反應。
+    applyGroupAfterRender();
     const gmKey=getGmKey(); const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1); const useServer=!gmKey && !isLocal;
     loadTechnical(symbol, gen);
     loadCompanyIntro(code, name, gen);   // 🏢 公司介紹(獨立小呼叫，不受主分析JSON漏欄位影響)
@@ -1796,7 +1808,7 @@ async function doSearchTW(symbol){
       logPanel(false);
     } else { setAllAI('<div class="note">請點右上 ⚙️ 設定免費 AI 金鑰以顯示 AI 分析。</div>'); }
     applyGroupAfterRender();
-  }catch(e){ __autoLoading=false; document.getElementById('results').innerHTML='<div class="err-box">台股資料載入失敗，請稍後再試</div>'; logPanel(false); }
+  }catch(e){ __autoLoading=false; document.getElementById('results').innerHTML='<div class="err-box">台股資料載入失敗，請稍後再試</div>'; logPanel(false); searchDone(); }
 }
 async function doSearch(){
   const raw=document.getElementById('searchInput').value.trim();
@@ -1940,6 +1952,7 @@ async function doSearch(){
     } else {
       document.getElementById('results').innerHTML=`<div class="err-box">⚠️ ${esc(e.message)}<br><button class="retry-btn" onclick="doSearch()">🔄 重試</button></div>`;
     }
+    searchDone();   // 失敗也要解除「分析中…」，不然按鈕會一直卡住
   }
 }
 
@@ -12582,7 +12595,13 @@ function showGroup(n){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 // 分析完成後：若使用者主動查詢，跳到「關鍵財務指標」；否則(如開場範例)維持目前群組
-function applyGroupAfterRender(){ __autoLoading=false; if(__jumpAfterSearch){ __jumpAfterSearch=false; showGroup(2); } else { showGroup(__grp); } }
+function applyGroupAfterRender(){
+  __autoLoading=false;
+  if(__jumpAfterSearch){ __jumpAfterSearch=false; showGroup(2); } else { showGroup(__grp); }
+  // 畫面真的跳過去了才解除「分析中…」狀態(先前用固定1200ms計時器，會出現
+  //   「按鈕已恢復成AI分析、畫面卻還沒跳」而讓人誤以為跑完了的情況)
+  if(typeof searchDone==='function') searchDone();
+}
 // 預設進入「自選股」(選單第一項)。刻意不預設「大盤指數與關鍵財務指標」：該頁無資料時會觸發自動分析，
 //   一開 App 就跑會白白消耗免費 AI 額度；使用者主動點進去才載入。
 // 開場封面(#welcome)持續停留，直到使用者主動點「美股」或「台股」按鈕才切到自選股：
