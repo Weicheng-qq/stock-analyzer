@@ -806,16 +806,22 @@ function runSearchBar(){
   const m=raw.match(/（([^（）]+)）\s*$/)||raw.match(/\(([^()]+)\)\s*$/);
   const bare=m?m[1].trim():raw;
   const sym=/^\d{4,6}$/.test(bare) ? (bare+'.'+twMkt(bare)) : bare;
-  sbBusy(true);
+  sbBusy(true);   // 解除時機統一由 applyGroupAfterRender()(畫面真的跳過去時)負責，
+                  // 保險計時器已內建在 sbBusy() 裡(120秒)，這裡不再另外設，避免提早把狀態清掉。
   watchlistAnalyze(sym);
-  // 不用固定計時器解除：改由 applyGroupAfterRender()(畫面真的跳過去時)解除。
-  // 這裡只留一道保險，避免極端情況(例如查無此代碼直接return)讓按鈕卡在「分析中…」。
-  setTimeout(()=>sbBusy(false), 20000);
 }
 // 送出中的即時回饋：讓使用者知道「有按到、正在跑」，不會以為沒反應
+let __busyTimer=null;
 function sbBusy(on){
   const b=document.getElementById('sbGo'); if(!b) return;
-  b.disabled=!!on; b.textContent = on ? 'AI深度分析中' : 'AI 分析';
+  b.disabled=!!on; b.textContent = on ? 'AI深度分析中…' : 'AI 分析';
+  // 每次切換狀態都先清掉舊的保險計時器，避免上一次查詢的計時器把這一次的狀態提早解除
+  if(__busyTimer){ clearTimeout(__busyTimer); __busyTimer=null; }
+  if(on){
+    // ⚠️ 保險時間必須遠大於 AI 實際耗時(實測30~45秒)。先前設20秒，
+    //    導致「AI還在跑，按鈕卻已變回 AI 分析」讓使用者誤以為跑完了(使用者回報)。
+    __busyTimer=setTimeout(function(){ __busyTimer=null; sbBusy(false); }, 120000);
+  }
 }
 // 查詢結束(成功跳頁或失敗)都要解除「分析中…」與該列的灰底，避免卡住讓使用者誤判
 function searchDone(){
@@ -837,9 +843,7 @@ function rowAnalyze(rowEl, symbol){
   // 讓瀏覽器先把上面的視覺回饋畫出來，再跑較重的分析流程(否則會卡住看不到回饋)
   setTimeout(()=>{
     try{ watchlistAnalyze(symbol); }catch(e){ if(item) item.classList.remove('row-loading'); sbBusy(false); }
-    // 正常情況由 applyGroupAfterRender() 在「畫面跳到指數與財務指標」時解除，
-    // 這裡只留保險，避免卡在「分析中…」
-    setTimeout(()=>{ if(item) item.classList.remove('row-loading'); sbBusy(false); }, 20000);
+    // 解除時機由 applyGroupAfterRender() 負責(AI跑完真的跳頁時)；保險計時器已內建在 sbBusy()。
   }, 30);
 }
 // 🏢 公司介紹：獨立於主分析JSON的一支小呼叫。
