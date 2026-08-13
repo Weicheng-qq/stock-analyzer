@@ -250,6 +250,18 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .market-tabs { display:flex; gap:8px; margin:0 0 26px; }
 .market-tabs .mkt-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:10px; padding:11px 10px; font-size:15px; font-weight:700; cursor:pointer; }
 .market-tabs .mkt-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
+/* 進入主畫面後：市場切換鈕搬到標題列(App名稱右邊)並縮小，讓主畫面上方留給內容。
+   標題文字同步縮小、⚙️ 仍靠最右，整列才不會擠。 */
+.header.compact { padding:10px 14px; gap:8px; flex-wrap:nowrap; }
+.header.compact .logo { font-size:16px; gap:4px; }
+.header.compact .logo svg { width:22px; height:22px; vertical-align:-4px; margin-right:0; }
+.market-tabs.mkt-compact { margin:0; gap:6px; flex:0 0 auto; }
+.market-tabs.mkt-compact .mkt-btn { flex:0 0 auto; padding:5px 9px; font-size:12px; border-radius:8px; line-height:1.25; }
+@media(max-width:400px){
+  .header.compact .logo { font-size:14px; }
+  .header.compact .logo svg { width:19px; height:19px; }
+  .market-tabs.mkt-compact .mkt-btn { padding:5px 7px; font-size:11.5px; }
+}
 /* 封面投資名言 */
 .quote-wrap { display:flex; flex-direction:column; gap:10px; margin:4px 0 12px; }
 .quote-card { background:var(--bg2); border:1px solid var(--border); border-left:3px solid var(--blue); border-radius:10px; padding:12px 14px; }
@@ -12699,7 +12711,19 @@ function applyGroupAfterRender(){
 //   __splashDone旗標控制showGroup()裡welcome的顯示/隱藏，revealMenu()執行後才變true。
 // 顯示選單列(#grpMenu)並跳到自選股頁。
 let __splashDone=false;   // false=封面顯示中(welcome可見)；revealMenu()執行後才變true(隱藏封面)
-function revealMenu(){ __splashDone=true; const gm=document.getElementById('grpMenu'); if(gm) gm.style.display=''; const q=document.getElementById('quoteWrap'); if(q) q.style.display='none'; showSearchBar(); showGroup(10); maybeRunDemo(); }
+function revealMenu(){ __splashDone=true; const gm=document.getElementById('grpMenu'); if(gm) gm.style.display=''; const q=document.getElementById('quoteWrap'); if(q) q.style.display='none'; compactMarketTabs(); showSearchBar(); showGroup(10); maybeRunDemo(); }
+// 離開封面後把「美股/台股」切換鈕搬到標題列(App名稱右邊)並縮小，主畫面上方就留給內容。
+//   ⚙️ 設定鈕本來就有 margin-left:auto，會自動被推到最右邊，所以順序是：LOGO＋名稱 → 市場鈕 → ⚙️
+function compactMarketTabs(){
+  const hdr=document.querySelector('.header');
+  const tabs=document.getElementById('marketTabs');
+  const logo=hdr&&hdr.querySelector('.logo');
+  if(!hdr||!tabs||!logo) return;
+  if(tabs.parentElement===hdr) return;   // 已經搬過就不重複搬
+  logo.insertAdjacentElement('afterend', tabs);
+  tabs.classList.add('mkt-compact');
+  hdr.classList.add('compact');
+}
 // 📜 封面投資名言：三位大師各隨機挑一句，填滿封面下方原本的大片空白。
 //    全部為公開廣泛流傳、可查證的本人名言(非杜撰)，中文為忠實翻譯並附英文原句對照。
 const MASTER_QUOTES={
