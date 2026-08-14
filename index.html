@@ -262,6 +262,27 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   .header.compact .logo svg { width:21px; height:21px; }
   .market-tabs.mkt-compact .mkt-btn { padding:5px 7px; font-size:13px; }
 }
+/* ── ETF 投資 ── */
+.etf-row { display:flex; align-items:center; gap:8px; padding:11px 2px; border-bottom:1px solid rgba(48,54,61,.4); cursor:pointer; }
+.etf-row:last-child { border-bottom:none; }
+.etf-rank { flex:none; width:20px; text-align:center; font-size:12px; font-weight:800; color:var(--text2); }
+.etf-nm { flex:1 1 auto; min-width:0; font-size:14px; font-weight:600; line-height:1.35; }
+.etf-nm .sym { display:block; font-size:11.5px; color:var(--text2); font-weight:500; }
+.etf-num { flex:none; text-align:right; font-size:13px; line-height:1.35; }
+.etf-num .sub { font-size:11px; color:var(--text2); }
+.etf-cagr { flex:none; width:58px; text-align:right; font-size:14px; font-weight:800; }
+.etf-hd { display:flex; align-items:center; gap:8px; padding:6px 2px; font-size:11px; color:var(--text2); border-bottom:1px solid var(--border); }
+.etf-modal { max-width:520px; }
+.etf-kv { display:flex; justify-content:space-between; gap:10px; padding:7px 0; border-bottom:1px solid rgba(48,54,61,.5); font-size:13.5px; }
+.etf-kv:last-child { border-bottom:none; }
+.etf-kv b { font-weight:700; }
+.etf-hold { display:flex; justify-content:space-between; gap:8px; padding:5px 0; font-size:13px; border-bottom:1px solid rgba(48,54,61,.35); }
+.etf-form label { display:block; font-size:13px; color:var(--text2); margin:12px 0 5px; }
+.etf-form input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:10px 12px; color:var(--text); font-size:15px; }
+.etf-sec { margin-top:16px; font-size:14px; font-weight:700; }
+@media(max-width:400px){
+  .etf-nm { font-size:13px; } .etf-num { font-size:12px; } .etf-cagr { font-size:13px; width:52px; }
+}
 /* 封面投資名言 */
 .quote-wrap { display:flex; flex-direction:column; gap:10px; margin:4px 0 12px; }
 .quote-card { background:var(--bg2); border:1px solid var(--border); border-left:3px solid var(--blue); border-radius:10px; padding:12px 14px; }
@@ -434,6 +455,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   <div class="grp-menu" id="grpMenu" style="display:none">
     <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
     <button class="grp-btn" data-g="15" onclick="pickGroup(15)">投資主題</button>
+    <button class="grp-btn" data-g="16" onclick="pickGroup(16)">ETF投資</button>
     <button class="grp-btn" data-g="2" onclick="pickGroup(2)">指數與財務指標</button>
     <button class="grp-btn" data-g="6" onclick="pickGroup(6)">財經新聞</button>
     <button class="grp-btn tw-only" data-g="12" onclick="pickGroup(12)">每月營收</button>
@@ -467,6 +489,22 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <div class="ct">🧩 投資主題</div>
     <div id="themeChips" class="wl-theme-chips"></div>
     <div id="themeList"></div>
+  </div>
+
+  <div class="card" id="etfCard" style="margin-bottom:20px;display:none">
+    <div class="ct">📦 ETF 投資</div>
+    <div id="etfTabs" class="wl-theme-chips"></div>
+    <div id="etfBody"></div>
+  </div>
+
+  <div class="modal-overlay" id="etfInfoModal">
+    <div class="modal etf-modal">
+      <h2 id="etfInfoTitle">ETF 資料</h2>
+      <div id="etfInfoBody"></div>
+      <div class="modal-btns">
+        <button class="btn-pri" onclick="closeEtfInfo()" style="width:100%">關閉</button>
+      </div>
+    </div>
   </div>
 
   <div id="results" class="results"></div>
@@ -2948,6 +2986,341 @@ function startZhCaptionOverlay(wrapEl, iframeId, videoId){
 }
 // 每人各自分 long(長影片,16:9)/short(短影音,9:16 Shorts)兩類，皆逐支核實為本人真實畫面、
 //   非文字卡/主持人畫面，並以觀看數高者優先。
+// ══════════════════ 📦 ETF 投資 ══════════════════
+// 所有 ETF 代碼都用 Yahoo chart API 逐檔實測存在(2026-08-14)，沒有憑印象寫入的代碼。
+// 數字一律即時計算，不手動維護，避免放久了變成錯誤資料：
+//   年化報酬率 = 還原股價(adjclose,已含息與分割調整)的 CAGR，區間取實際可得資料(最長10年)
+//   年殖利率   = 近12個月現金配息合計 ÷ 現價
+//   費用率/資產規模/成立日/成分股 = 點開詳情時向 stockanalysis.com 取(該站台美股皆有收錄)
+const ETF_CATS=['大盤ETF','半導體/AI ETF','高股息ETF','主動型ETF','槓桿ETF'];
+const ETF_LISTS={
+  tw:{
+    '大盤ETF':['0050','006208','0051','00922','00923','00905','00692','00850','006204','00921'],
+    '半導體/AI ETF':['00891','00892','00904','00881','00929','00757','00935','00947','00941','00913'],
+    '高股息ETF':['0056','00878','00919','00713','00900','00915','00918','00939','00940','00932'],
+    '主動型ETF':['00981A','00980A','00982A','00983A','00984A','00985A','00986A','00987A','00990A','00991A'],
+    '槓桿ETF':['00631L','00675L','00663L','00685L','00637L','00640L','00647L','00670L']
+  },
+  us:{
+    '大盤ETF':['VOO','SPY','IVV','VTI','QQQ','DIA','SPLG','ITOT','SCHX','VOOG'],
+    '半導體/AI ETF':['SOXX','SMH','SOXQ','XSD','AIQ','BOTZ','ROBT','IGV','ARKQ','CHAT'],
+    '高股息ETF':['SCHD','VYM','DVY','HDV','SPYD','VIG','SDY','NOBL','DGRO','FDVV'],
+    '主動型ETF':['ARKK','ARKW','ARKG','JEPI','JEPQ','AVUV','DFAC','COWZ','CGGR','PAVE'],
+    '槓桿ETF':['TQQQ','SOXL','UPRO','SPXL','QLD','SSO','TECL','FNGU','USD','LABU']
+  }
+};
+// 繁體中文名稱：台股用發行商官方中文簡稱；美股用發行商英文原名的中譯(括號保留原文關鍵字方便對照)
+const ETF_ZH={
+  '0050':'元大台灣50','006208':'富邦台50','0051':'元大中型100','00922':'國泰台灣領袖50',
+  '00923':'群益台ESG低碳50','00905':'FT臺灣Smart','00692':'富邦公司治理','00850':'元大臺灣ESG永續',
+  '006204':'永豐臺灣加權','00921':'兆豐龍頭等權重',
+  '00891':'中信關鍵半導體','00892':'富邦台灣半導體','00904':'新光臺灣半導體30','00881':'國泰台灣5G+',
+  '00929':'復華台灣科技優息','00757':'統一FANG+','00935':'野村臺灣新科技50','00947':'台新臺灣IC設計動能',
+  '00941':'中信上游半導體','00913':'兆豐台灣晶圓製造',
+  '0056':'元大高股息','00878':'國泰永續高股息','00919':'群益台灣精選高息','00713':'元大台灣高息低波',
+  '00900':'富邦特選高股息30','00915':'凱基優選高股息30','00918':'大華優利高填息30',
+  '00939':'統一台灣高息動能','00940':'元大台灣價值高息','00932':'兆豐永續高息等權',
+  '00981A':'統一台股增長主動','00980A':'野村臺灣智慧優選主動','00982A':'群益台灣強棒主動',
+  '00983A':'中信ARK創新主動','00984A':'安聯台灣高息成長主動','00985A':'野村台灣50增強主動',
+  '00986A':'台新全球成長領航主動','00987A':'台新台灣優勢成長主動','00990A':'元大全球AI新經濟主動',
+  '00991A':'復華台灣未來50主動',
+  '00631L':'元大台灣50正2','00675L':'富邦臺灣加權正2','00663L':'國泰台灣加權正2','00685L':'群益臺灣加權正2',
+  '00637L':'元大滬深300正2','00640L':'富邦日本東證正2','00647L':'元大標普500正2','00670L':'富邦那斯達克100正2',
+  'VOO':'Vanguard 標普500','SPY':'SPDR 標普500','IVV':'iShares 核心標普500','VTI':'Vanguard 美國全市場',
+  'QQQ':'Invesco 那斯達克100','DIA':'SPDR 道瓊工業','SPLG':'SPDR 組合型標普500','ITOT':'iShares 美國全市場',
+  'SCHX':'Schwab 美國大型股','VOOG':'Vanguard 標普500成長',
+  'SOXX':'iShares 半導體','SMH':'VanEck 半導體','SOXQ':'Invesco 費城半導體','XSD':'SPDR 標普半導體',
+  'AIQ':'Global X 人工智慧與科技','BOTZ':'Global X 機器人與AI','ROBT':'First Trust AI與機器人',
+  'IGV':'iShares 擴展科技軟體','ARKQ':'ARK 自動化科技與機器人','CHAT':'Roundhill 生成式AI',
+  'SCHD':'Schwab 美國高股利','VYM':'Vanguard 高股利','DVY':'iShares 精選高股利','HDV':'iShares 核心高股利',
+  'SPYD':'SPDR 標普500高股利','VIG':'Vanguard 股利成長','SDY':'SPDR 標普高股利','NOBL':'ProShares 股利貴族',
+  'DGRO':'iShares 核心股利成長','FDVV':'Fidelity 高股利',
+  'ARKK':'ARK 創新','ARKW':'ARK 次世代網路','ARKG':'ARK 基因革命','JEPI':'摩根 股票溢價收益',
+  'JEPQ':'摩根 那斯達克股票溢價收益','AVUV':'Avantis 美國小型價值','DFAC':'Dimensional 美國核心股票',
+  'COWZ':'Pacer 美國現金牛100','CGGR':'Capital Group 成長','PAVE':'Global X 美國基建',
+  'TQQQ':'ProShares 那斯達克100 3倍','SOXL':'Direxion 半導體3倍','UPRO':'ProShares 標普500 3倍',
+  'SPXL':'Direxion 標普500 3倍','QLD':'ProShares 那斯達克100 2倍','SSO':'ProShares 標普500 2倍',
+  'TECL':'Direxion 科技3倍','FNGU':'MicroSectors FANG+ 3倍','USD':'ProShares 半導體2倍','LABU':'Direxion 生技3倍'
+};
+const ETF_TABS=['存股','自選ETF','排行榜'].concat(ETF_CATS);
+let __etfTab='存股';
+function etfSym(code){ return getMarket()==='tw' ? code+'.TW' : code; }
+function etfName(code){ return ETF_ZH[code]||code; }
+function etfCur(){ return getMarket()==='tw' ? 'NT$' : '$'; }
+// 一檔 ETF 的即時指標。單一 Yahoo 請求同時取得現價/漲跌/還原股價序列/配息紀錄。
+const __etfCache={};
+async function etfMetrics(code){
+  const sym=etfSym(code);
+  const c=__etfCache[sym];
+  if(c && Date.now()-c.t<180000) return c.v;   // 3分鐘快取：切換分頁不重打，但仍會跟著盤中更新
+  const out={code, sym, price:null, pct:null, cagr:null, yield:null, years:null, err:false};
+  try{
+    const d=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=10y&interval=1mo&events=div`);
+    const r=d?.chart?.result?.[0]; const m=r?.meta;
+    if(!m) throw new Error('no meta');
+    out.price=m.regularMarketPrice;
+    const ts=r.timestamp||[];
+    const ac=(r.indicators?.adjclose?.[0]?.adjclose||[]).filter(x=>x!=null);
+    if(ac.length>=13 && ts.length>=2){
+      const yrs=(ts[ts.length-1]-ts[0])/31557600;
+      if(yrs>=1 && ac[0]>0){ out.years=yrs; out.cagr=(Math.pow(ac[ac.length-1]/ac[0], 1/yrs)-1)*100; }
+    }
+    const divs=r.events?.dividends||{};
+    const now=Date.now()/1000; let sum=0, any=false;
+    for(const k in divs){ const v=divs[k]; if(v && now-v.date<=366*86400){ sum+=v.amount; any=true; } }
+    if(out.price) out.yield=any?sum/out.price*100:0;
+  }catch(e){ out.err=true; }
+  // 漲跌幅要用當日資料才準(10年月線的 chartPreviousClose 是十年前的值，不能拿來算今天漲跌)
+  try{
+    const d2=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=1d&interval=1d`);
+    const m2=d2?.chart?.result?.[0]?.meta;
+    if(m2){
+      if(m2.regularMarketPrice!=null) out.price=m2.regularMarketPrice;
+      const prev=m2.previousClose??m2.chartPreviousClose;
+      if(out.price!=null && prev) out.pct=(out.price-prev)/prev*100;
+    }
+  }catch(e){}
+  __etfCache[sym]={t:Date.now(), v:out};
+  return out;
+}
+// ── 自選 ETF ──
+const ETF_WATCH_DEFAULT={ tw:['0050','00981A','0056','00631L'], us:['VOO','SPY'] };
+function etfWlKey(){ return getMarket()==='tw' ? 'etfwatch_tw' : 'etfwatch_us'; }
+function getEtfWatch(){
+  try{ const raw=localStorage.getItem(etfWlKey()); if(raw===null) return ETF_WATCH_DEFAULT[getMarket()].slice(); return JSON.parse(raw); }
+  catch(e){ return ETF_WATCH_DEFAULT[getMarket()].slice(); }
+}
+function saveEtfWatch(l){ try{ localStorage.setItem(etfWlKey(), JSON.stringify(l)); }catch(e){} }
+function addEtfToWatch(code, btn){
+  const l=getEtfWatch(); if(l.indexOf(code)>-1) return;
+  l.push(code); saveEtfWatch(l);
+  if(btn){ btn.textContent='❤️'; btn.classList.add('added'); btn.disabled=true; btn.title='已在自選ETF'; }
+}
+function removeEtfFromWatch(code){ saveEtfWatch(getEtfWatch().filter(x=>x!==code)); renderEtfBody(); }
+// ── 畫面 ──
+function renderEtfTabs(){
+  const el=document.getElementById('etfTabs'); if(!el) return;
+  el.innerHTML=ETF_TABS.map(t=>`<div class="chip${__etfTab===t?' active':''}" onclick="setEtfTab('${esc(t)}')">${esc(t)}</div>`).join('');
+  renderEtfBody();
+}
+function setEtfTab(t){ __etfTab=t; renderEtfTabs(); }
+function renderEtfBody(){
+  const el=document.getElementById('etfBody'); if(!el) return;
+  if(__etfTab==='存股'){ el.innerHTML=etfSaverHtml(); restoreEtfSaverInputs(); return; }
+  if(__etfTab==='自選ETF'){
+    const codes=getEtfWatch();
+    if(!codes.length){ el.innerHTML='<div class="note">尚無自選ETF，可到「排行榜」或各分類點 🤍 加入</div>'; return; }
+    el.innerHTML=etfListShell(codes, true);
+    fillEtfRows(codes);
+    return;
+  }
+  // 排行榜=五大分類全部合併後依年化報酬率取前10；其餘分頁=該分類自己排序
+  const mkt=getMarket();
+  let codes;
+  if(__etfTab==='排行榜'){ codes=[]; ETF_CATS.forEach(c=>{ codes=codes.concat(ETF_LISTS[mkt][c]||[]); }); }
+  else codes=(ETF_LISTS[mkt][__etfTab]||[]).slice();
+  el.innerHTML=etfListShell(codes, false, __etfTab==='排行榜'?10:0);
+  fillEtfRows(codes, __etfTab==='排行榜'?10:0);
+}
+function etfListShell(codes, isWatch, topN){
+  const tip=isWatch?'':'<div class="note" style="margin:0 0 6px">依年化報酬率由高到低排序，載入完成後自動重排。</div>';
+  return tip
+    +`<div class="etf-hd"><span style="width:20px"></span><span style="flex:1">名稱／代碼</span>`
+    +`<span style="width:74px;text-align:right">股價／漲跌</span>`
+    +`<span style="width:58px;text-align:right">年化報酬</span>`
+    +`<span style="width:52px;text-align:right">年殖利率</span><span style="width:24px"></span></div>`
+    +`<div id="etfRows">${codes.map((c,i)=>etfRowHtml(c,i,isWatch)).join('')}</div>`
+    +(topN?`<div class="note" style="margin-top:8px">※ 前 ${topN} 名為五大分類合併後依年化報酬率排名。</div>`:'')
+    +`<div class="note" style="margin-top:8px">年化報酬率＝還原股價(含息)年複合成長率，取實際可得區間(最長10年)；年殖利率＝近12個月配息合計÷現價。皆為歷史數據，不代表未來績效。</div>`;
+}
+function etfRowHtml(code, i, isWatch){
+  const inWl=getEtfWatch().indexOf(code)>-1;
+  const btn=isWatch
+    ? `<button class="wl-heart added" onclick="event.stopPropagation();removeEtfFromWatch('${esc(code)}')" title="從自選ETF移除">✕</button>`
+    : `<button class="wl-heart${inWl?' added':''}" onclick="event.stopPropagation();addEtfToWatch('${esc(code)}',this)" ${inWl?'disabled title="已在自選ETF"':'title="加入自選ETF"'}>${inWl?'❤️':'🤍'}</button>`;
+  return `<div class="etf-row" id="etfrow_${esc(code)}" data-code="${esc(code)}" onclick="openEtfInfo('${esc(code)}')">
+    <div class="etf-rank" id="etfrk_${esc(code)}">${isWatch?'':(i+1)}</div>
+    <div class="etf-nm">${esc(etfName(code))}<span class="sym">${esc(code)}</span></div>
+    <div class="etf-num" style="width:74px"><div id="etfpx_${esc(code)}">…</div><div class="sub" id="etfpc_${esc(code)}"></div></div>
+    <div class="etf-cagr" id="etfcg_${esc(code)}">…</div>
+    <div class="etf-num" style="width:52px" id="etfyd_${esc(code)}">…</div>
+    ${btn}
+  </div>`;
+}
+async function fillEtfRows(codes, topN){
+  const results=await Promise.all(codes.map(c=>etfMetrics(c).catch(()=>({code:c,err:true}))));
+  const tw=getMarket()==='tw', cur=etfCur();
+  results.forEach(m=>{
+    const px=document.getElementById('etfpx_'+m.code), pc=document.getElementById('etfpc_'+m.code),
+          cg=document.getElementById('etfcg_'+m.code), yd=document.getElementById('etfyd_'+m.code);
+    if(px) px.textContent = m.price!=null?cur+(+m.price).toFixed(2):'—';
+    if(pc){
+      if(m.pct==null) pc.textContent='';
+      else{ const up=m.pct>=0; pc.style.color=tw?(up?'#f85149':'#3fb950'):(up?'#3fb950':'#f85149');
+            pc.textContent=`${up?'▲':'▼'}${Math.abs(m.pct).toFixed(2)}%`; }
+    }
+    if(cg){ cg.textContent = m.cagr==null?'—':(m.cagr>=0?'+':'')+m.cagr.toFixed(1)+'%';
+            cg.style.color = m.cagr==null?'var(--text2)':(m.cagr>=0?'var(--green)':'var(--red)'); }
+    if(yd) yd.textContent = m.yield==null?'—':m.yield.toFixed(2)+'%';
+  });
+  // 依年化報酬率重排(資料回來後才排，避免載入中畫面亂跳)。年化報酬率算不出來的排最後。
+  const box=document.getElementById('etfRows');
+  if(box && codes.length>1){
+    const order=results.slice().sort((a,b)=>(b.cagr==null?-1e9:b.cagr)-(a.cagr==null?-1e9:a.cagr));
+    const keep=topN?order.slice(0,topN):order;
+    const keepSet=new Set(keep.map(x=>x.code));
+    keep.forEach((m,i)=>{
+      const row=document.getElementById('etfrow_'+m.code); if(!row) return;
+      box.appendChild(row);
+      const rk=document.getElementById('etfrk_'+m.code); if(rk && rk.textContent.trim()!=='') rk.textContent=i+1;
+    });
+    if(topN) codes.forEach(c=>{ if(!keepSet.has(c)){ const row=document.getElementById('etfrow_'+c); if(row) row.remove(); } });
+  }
+}
+// ── ETF 詳情：介紹/成分股/費用率/成立年數/資產規模 ──
+// 來源 stockanalysis.com(免費、美股與台股ETF皆收錄)。抓不到就誠實顯示「查無資料」，不用推估數字填空。
+function etfSaUrl(code, holdings){
+  const tw=getMarket()==='tw';
+  const base=tw?`https://stockanalysis.com/quote/tpe/${code}/`:`https://stockanalysis.com/etf/${code.toLowerCase()}/`;
+  return holdings?base+'holdings/':base;
+}
+async function fetchTextViaProxy(url){
+  const r=await fetch(PROXY+encodeURIComponent(url));
+  if(!r.ok) throw new Error('HTTP_'+r.status);
+  return await r.text();
+}
+function saField(html, label){
+  // stockanalysis 的資料表結構固定為 <td>標籤</td><td ...>數值</td>，用標籤文字定位比依賴 class 名稱穩定
+  const re=new RegExp(label.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'<\\/td>\\s*<td[^>]*>([^<]{1,40})<\\/td>','i');
+  const m=html.match(re);
+  return m?m[1].trim():null;
+}
+function openEtfInfo(code){
+  const ov=document.getElementById('etfInfoModal'); if(!ov) return;
+  document.getElementById('etfInfoTitle').textContent=etfName(code)+'（'+code+'）';
+  const body=document.getElementById('etfInfoBody');
+  body.innerHTML='<div class="note">載入中…</div>';
+  ov.classList.add('open');
+  loadEtfInfo(code, body);
+}
+function closeEtfInfo(){ const ov=document.getElementById('etfInfoModal'); if(ov) ov.classList.remove('open'); }
+async function loadEtfInfo(code, body){
+  const m=await etfMetrics(code).catch(()=>null);
+  const cur=etfCur();
+  let h='';
+  const cat=(()=>{ const mk=getMarket(); for(const c of ETF_CATS){ if((ETF_LISTS[mk][c]||[]).indexOf(code)>-1) return c; } return null; })();
+  h+=`<div class="etf-kv"><span>分類</span><b>${cat?esc(cat):'—'}</b></div>`;
+  h+=`<div class="etf-kv"><span>現價</span><b>${m&&m.price!=null?cur+(+m.price).toFixed(2):'—'}</b></div>`;
+  h+=`<div class="etf-kv"><span>年化報酬率${m&&m.years?`（近${m.years.toFixed(1)}年，含息）`:''}</span><b>${m&&m.cagr!=null?(m.cagr>=0?'+':'')+m.cagr.toFixed(2)+'%':'—'}</b></div>`;
+  h+=`<div class="etf-kv"><span>年殖利率（近12個月）</span><b>${m&&m.yield!=null?m.yield.toFixed(2)+'%':'—'}</b></div>`;
+  h+=`<div id="etfSaBox"><div class="note" style="margin-top:10px">費用率／資產規模／成立年數／成分股載入中…</div></div>`;
+  body.innerHTML=h;
+  // 基本資料
+  let inceptionTxt='—';
+  try{
+    const html=await fetchTextViaProxy(etfSaUrl(code,false));
+    const exp=saField(html,'Expense Ratio'), aum=saField(html,'Assets')||saField(html,'Total Assets'), inc=saField(html,'Inception Date');
+    let yrs=null;
+    if(inc){ const d=new Date(inc); if(!isNaN(d)) yrs=(Date.now()-d.getTime())/(365.25*86400000); }
+    inceptionTxt = inc ? `${esc(inc)}${yrs!=null?`（約 ${yrs.toFixed(1)} 年）`:''}` : '查無資料';
+    const box=document.getElementById('etfSaBox');
+    if(box) box.innerHTML=
+       `<div class="etf-kv"><span>費用率（總開銷）</span><b>${exp?esc(exp):'查無資料'}</b></div>`
+      +`<div class="etf-kv"><span>資產規模</span><b>${aum?esc(aum):'查無資料'}</b></div>`
+      +`<div class="etf-kv"><span>成立日／成立年數</span><b>${inceptionTxt}</b></div>`
+      +`<div class="etf-sec">🏢 前十大成分股</div><div id="etfHoldBox"><div class="note">載入中…</div></div>`
+      +`<div class="note" style="margin-top:12px">資料來源：stockanalysis.com（費用率／資產規模／成立日／成分股）與 Yahoo Finance（價格／配息）。<a href="${esc(etfSaUrl(code,false))}" target="_blank" rel="noopener" style="color:var(--blue)">查看完整資料 ↗</a></div>`;
+  }catch(e){
+    const box=document.getElementById('etfSaBox');
+    if(box) box.innerHTML=`<div class="note" style="margin-top:10px">費用率／資產規模／成立年數目前查無資料（來源網站未回應）。<a href="${esc(etfSaUrl(code,false))}" target="_blank" rel="noopener" style="color:var(--blue)">直接前往查看 ↗</a></div>`;
+    return;
+  }
+  // 成分股
+  try{
+    const html=await fetchTextViaProxy(etfSaUrl(code,true));
+    const rows=[];
+    const re=/<a href="\/(?:stocks|quote)\/[^"]*?">([^<]{1,12})<\/a>[\s\S]{0,400}?<td class="shr[^"]*">([^<]{1,60})<\/td>[\s\S]{0,400}?<td[^>]*>(\d{1,2}\.\d{1,2})/g;
+    let mm;
+    while((mm=re.exec(html)) && rows.length<10) rows.push({sym:mm[1], name:mm[2], w:mm[3]});
+    const hb=document.getElementById('etfHoldBox');
+    if(hb) hb.innerHTML = rows.length
+      ? rows.map(r=>`<div class="etf-hold"><span>${esc(r.name)} <span style="color:var(--text2)">${esc(r.sym)}</span></span><b>${esc(r.w)}%</b></div>`).join('')
+      : `<div class="note">查無成分股資料，<a href="${esc(etfSaUrl(code,true))}" target="_blank" rel="noopener" style="color:var(--blue)">前往來源查看 ↗</a></div>`;
+  }catch(e){
+    const hb=document.getElementById('etfHoldBox');
+    if(hb) hb.innerHTML=`<div class="note">成分股查無資料，<a href="${esc(etfSaUrl(code,true))}" target="_blank" rel="noopener" style="color:var(--blue)">前往來源查看 ↗</a></div>`;
+  }
+}
+// ── 存股試算 ──
+// 用「該檔ETF自己的歷史年化報酬率」推算，不用假設的固定報酬率，數字才有依據。
+// 明確標示為情境試算(歷史績效不代表未來)，避免使用者誤以為是保證報酬。
+function etfSaverHtml(){
+  const def=getMarket()==='tw'?'0050':'VOO';
+  return `<div class="etf-form">
+    <label>每月定期定額存入金額（${etfCur()}）</label>
+    <input type="number" id="etfSaveAmt" inputmode="numeric" placeholder="例如 10000" oninput="runEtfSaver()">
+    <label>存股標的（ETF 代碼）</label>
+    <input type="text" id="etfSaveCode" autocomplete="off" spellcheck="false" placeholder="例如 ${def}" oninput="runEtfSaver()">
+    <div class="note" style="margin-top:6px">目前市場：${getMarket()==='tw'?'台股':'美股'}；可輸入本App任一ETF代碼（如 ${esc((ETF_LISTS[getMarket()]['大盤ETF']||[]).slice(0,3).join('、'))}）</div>
+  </div>
+  <div id="etfSaverOut"></div>`;
+}
+function restoreEtfSaverInputs(){
+  try{
+    const s=JSON.parse(localStorage.getItem('etfSaver_'+getMarket())||'null');
+    if(s){ const a=document.getElementById('etfSaveAmt'), c=document.getElementById('etfSaveCode');
+           if(a&&s.amt) a.value=s.amt; if(c&&s.code) c.value=s.code; if(s.amt&&s.code) runEtfSaver(); }
+  }catch(e){}
+}
+let __etfSaverSeq=0;
+async function runEtfSaver(){
+  const amt=parseFloat((document.getElementById('etfSaveAmt')||{}).value);
+  const code=((document.getElementById('etfSaveCode')||{}).value||'').trim().toUpperCase();
+  const out=document.getElementById('etfSaverOut'); if(!out) return;
+  if(!(amt>0) || !code){ out.innerHTML=''; return; }
+  try{ localStorage.setItem('etfSaver_'+getMarket(), JSON.stringify({amt, code})); }catch(e){}
+  const seq=++__etfSaverSeq;
+  out.innerHTML='<div class="note" style="margin-top:14px">計算中…</div>';
+  const m=await etfMetrics(code).catch(()=>null);
+  if(seq!==__etfSaverSeq) return;
+  if(!m || m.cagr==null){
+    out.innerHTML=`<div class="note" style="margin-top:14px">查不到「${esc(code)}」的歷史報酬資料，請確認代碼是否正確（目前為${getMarket()==='tw'?'台股':'美股'}市場）。</div>`;
+    return;
+  }
+  const r=m.cagr/100, mr=Math.pow(1+r,1/12)-1, cur=etfCur();
+  const yearsList=[3,5,10,15,20];
+  const rows=yearsList.map(y=>{
+    const n=y*12;
+    const fv= mr===0 ? amt*n : amt*((Math.pow(1+mr,n)-1)/mr)*(1+mr);
+    return {y, put:amt*n, fv};
+  });
+  const fmt=v=>cur+Math.round(v).toLocaleString('en-US');
+  out.innerHTML=`
+    <div class="etf-sec">📊 未來資產變化試算</div>
+    <div class="note" style="margin-top:4px">以 ${esc(etfName(code))}（${esc(code)}）近 ${m.years?m.years.toFixed(1):'—'} 年實際年化報酬率
+      <b style="color:${m.cagr>=0?'var(--green)':'var(--red)'}">${(m.cagr>=0?'+':'')+m.cagr.toFixed(2)}%</b> 推算，每月投入 ${fmt(amt)}。
+      這是<b>情境試算，不是保證報酬</b>——歷史績效不代表未來，實際結果會隨市場波動而不同。</div>
+    <div class="chart-wrap" style="margin-top:10px"><canvas id="etfSaverChart"></canvas></div>
+    <div style="margin-top:10px">${rows.map(x=>`<div class="etf-kv"><span>${x.y} 年後<span class="sub" style="color:var(--text2);font-size:11px">（累計投入 ${fmt(x.put)}）</span></span><b style="color:var(--blue)">${fmt(x.fv)}</b></div>`).join('')}</div>`;
+  drawEtfSaverChart(rows, cur);
+}
+function drawEtfSaverChart(rows, cur){
+  const cv=document.getElementById('etfSaverChart'); if(!cv || !window.Chart) return;
+  const old=Chart.getChart?Chart.getChart(cv):null; if(old) old.destroy();
+  new Chart(cv.getContext('2d'),{
+    type:'bar',
+    data:{ labels:rows.map(r=>r.y+'年'),
+      datasets:[
+        {label:'累計投入本金', data:rows.map(r=>Math.round(r.put)), backgroundColor:'#484f58'},
+        {label:'預估資產總值', data:rows.map(r=>Math.round(r.fv)), backgroundColor:'#58a6ff'}
+      ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{labels:{color:'#c9d1d9',font:{size:11}}},
+        tooltip:{callbacks:{label:c=>c.dataset.label+'：'+cur+Number(c.raw).toLocaleString('en-US')}}},
+      scales:{ x:{ticks:{color:'#8b949e'},grid:{color:'rgba(48,54,61,.5)'}},
+               y:{ticks:{color:'#8b949e',callback:v=>cur+(v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v)},grid:{color:'rgba(48,54,61,.5)'}}}}
+  });
+}
 const MASTER_VIDEOS=[
   {person:'華倫·巴菲特 Warren Buffett',icon:'🏛️',
     long:[
@@ -12820,6 +13193,7 @@ function showGroup(n){
   const showIndex = (n===2);
   const showWl    = (n===10);
   const showTheme = (n===15);
+  const showEtf   = (n===16);
   // welcome(封面介紹)：每次開App固定停留在畫面上，直到revealMenu()結束2秒封面倒數才隱藏——
   //   不論是否已選過市場、不論第幾次開App都一樣，這是使用者明確要求(不是只有第一次使用者才看得到)。
   const e_wel=document.getElementById('welcome');       if(e_wel) e_wel.style.display=(showWl && !__splashDone)?'':'none';
@@ -12828,13 +13202,15 @@ function showGroup(n){
   const e_iB =document.getElementById('indexBar');      if(e_iB ) e_iB .style.display=showIndex?'':'none';
   const e_wl =document.getElementById('watchlistCard'); if(e_wl ) e_wl .style.display=showWl   ?'':'none';
   const e_th =document.getElementById('themeCard');     if(e_th ) e_th .style.display=showTheme?'':'none';
+  const e_etf=document.getElementById('etfCard');      if(e_etf) e_etf.style.display=showEtf  ?'':'none';
   if(showTheme) renderThemeChips();   // 進入「投資主題」頁時(重新)渲染，反映當下市場/自選股狀態
+  if(showEtf) renderEtfTabs();        // 同理:ETF頁進入時才渲染，市場切換後數字/清單才會跟著換
   syncLogPanel();   // 載入進度歸屬大盤指數選單，切換選單時同步顯示/隱藏
   const res=document.getElementById('results'); let anyCard=false;
   if(res){
     // 護城河選單(群組3)：護城河分析移最前、產品與服務移最後
     if(n===3){ const mo=document.getElementById('ai_moat')?.closest('.card'); if(mo) res.insertBefore(mo, res.firstChild); }
-    const showRes=(n!==10 && n!==15);   // 大盤指數已併入 n=2，自選股頁與投資主題頁不顯示分析結果
+    const showRes=(n!==10 && n!==15 && n!==16);   // 大盤指數已併入 n=2，自選股/投資主題/ETF投資頁不顯示分析結果
     res.style.display=showRes?'block':'none';   // .results 類別預設 display:none，需明確設 block 才顯示
     [...res.querySelectorAll('.card, .co-head')].forEach(c=>{ const show=cardGroup(c)===n; c.style.display=show?'':'none'; if(show) anyCard=true; });
     res.querySelectorAll('.g2').forEach(g=>{ const vis=[...g.children].some(c=>c.style.display!=='none'); g.style.display=vis?'block':'none'; });
@@ -12842,7 +13218,7 @@ function showGroup(n){
   }
   const emp=document.getElementById('grpEmpty');
   if(emp){
-    const showEmp=(n>=2 && n!==10 && n!==15 && !anyCard);
+    const showEmp=(n>=2 && n!==10 && n!==15 && n!==16 && !anyCard);
     emp.style.display=showEmp?'block':'none';
     if(showEmp){
       // 無資料時不再顯示「建置中」(台股深度分析早已完成),改為自動載入自選股第一檔
