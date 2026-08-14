@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>美股AI深度分析（SEC財報 + AI分析）</title>
+<title>美股/台股AI深度分析（SEC財報 + AI分析）</title>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#0d1117">
 <link rel="icon" href="/icons/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="美股分析">
+<meta name="apple-mobile-web-app-title" content="美股/台股AI分析">
 <meta name="mobile-web-app-capable" content="yes">
 <script>
 // 錯誤顯示器：任何 JS 錯誤(含瀏覽器不支援新語法)直接在畫面頂端跳紅字
@@ -253,14 +253,14 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 /* 進入主畫面後：市場切換鈕搬到標題列(App名稱右邊)並縮小，讓主畫面上方留給內容。
    標題文字同步縮小、⚙️ 仍靠最右，整列才不會擠。 */
 .header.compact { padding:10px 14px; gap:8px; flex-wrap:nowrap; }
-.header.compact .logo { font-size:16px; gap:4px; }
-.header.compact .logo svg { width:22px; height:22px; vertical-align:-4px; margin-right:0; }
+.header.compact .logo { font-size:18px; gap:4px; }
+.header.compact .logo svg { width:24px; height:24px; vertical-align:-4px; margin-right:0; }
 .market-tabs.mkt-compact { margin:0; gap:6px; flex:0 0 auto; }
-.market-tabs.mkt-compact .mkt-btn { flex:0 0 auto; padding:5px 9px; font-size:12px; border-radius:8px; line-height:1.25; }
+.market-tabs.mkt-compact .mkt-btn { flex:0 0 auto; padding:5px 9px; font-size:13.5px; border-radius:8px; line-height:1.25; }
 @media(max-width:400px){
-  .header.compact .logo { font-size:14px; }
-  .header.compact .logo svg { width:19px; height:19px; }
-  .market-tabs.mkt-compact .mkt-btn { padding:5px 7px; font-size:11.5px; }
+  .header.compact .logo { font-size:16px; }
+  .header.compact .logo svg { width:21px; height:21px; }
+  .market-tabs.mkt-compact .mkt-btn { padding:5px 7px; font-size:13px; }
 }
 /* 封面投資名言 */
 .quote-wrap { display:flex; flex-direction:column; gap:10px; margin:4px 0 12px; }
@@ -347,7 +347,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 <body>
 
 <div class="header">
-  <div class="logo"><svg width="30" height="30" viewBox="0 0 192 192" style="vertical-align:-8px;margin-right:2px"><rect width="192" height="192" rx="40" fill="#0d1117"/><rect x="34" y="118" width="24" height="40" rx="6" fill="#58a6ff"/><rect x="74" y="94" width="24" height="64" rx="6" fill="#58a6ff"/><rect x="114" y="70" width="24" height="88" rx="6" fill="#58a6ff"/><rect x="154" y="34" width="24" height="124" rx="6" fill="#3fb950"/></svg> 美股AI深度分析</div>
+  <div class="logo"><svg width="30" height="30" viewBox="0 0 192 192" style="vertical-align:-8px;margin-right:2px"><rect width="192" height="192" rx="40" fill="#0d1117"/><rect x="34" y="118" width="24" height="40" rx="6" fill="#58a6ff"/><rect x="74" y="94" width="24" height="64" rx="6" fill="#58a6ff"/><rect x="114" y="70" width="24" height="88" rx="6" fill="#58a6ff"/><rect x="154" y="34" width="24" height="124" rx="6" fill="#3fb950"/></svg> 美股/台股AI深度分析</div>
   <button class="install-btn" id="installBtn" onclick="handleInstallClick()" title="安裝成手機/電腦App" style="display:none;margin-left:auto">📲 安裝 App</button>
   <button class="settings-btn" id="settingsBtn" onclick="openSettings()" title="AI 金鑰設定" style="margin-left:auto">⚙️</button>
 </div>
@@ -413,7 +413,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 
 <div class="main">
   <div id="welcome" class="welcome">
-    <h1>美股AI深度分析工具</h1>
+    <h1>美股/台股AI深度分析工具</h1>
     <p style="color:var(--blue);font-weight:700;margin-top:6px;font-size:15px">以合理低估價格 買入擁有強大護城河的公司</p>
     <p>10年財務指標 · 營收成長 · 彼得林區分類 · 護城河 · 競爭對手 · 買入建議</p>
   </div>
