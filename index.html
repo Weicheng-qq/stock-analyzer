@@ -3235,20 +3235,25 @@ async function loadEtfInfo(code, body){
     if(box) box.innerHTML=`<div class="note" style="margin-top:10px">費用率／資產規模／成立年數目前查無資料（來源網站未回應）。<a href="${esc(etfSaUrl(code,false))}" target="_blank" rel="noopener" style="color:var(--blue)">直接前往查看 ↗</a></div>`;
     return;
   }
-  // 成分股
-  try{
-    const html=await fetchTextViaProxy(etfSaUrl(code,true));
-    const rows=[];
-    const re=/<a href="\/(?:stocks|quote)\/[^"]*?">([^<]{1,12})<\/a>[\s\S]{0,400}?<td class="shr[^"]*">([^<]{1,60})<\/td>[\s\S]{0,400}?<td[^>]*>(\d{1,2}\.\d{1,2})/g;
-    let mm;
-    while((mm=re.exec(html)) && rows.length<10) rows.push({sym:mm[1], name:mm[2], w:mm[3]});
-    const hb=document.getElementById('etfHoldBox');
-    if(hb) hb.innerHTML = rows.length
-      ? rows.map(r=>`<div class="etf-hold"><span>${esc(r.name)} <span style="color:var(--text2)">${esc(r.sym)}</span></span><b>${esc(r.w)}%</b></div>`).join('')
-      : `<div class="note">查無成分股資料，<a href="${esc(etfSaUrl(code,true))}" target="_blank" rel="noopener" style="color:var(--blue)">前往來源查看 ↗</a></div>`;
-  }catch(e){
-    const hb=document.getElementById('etfHoldBox');
-    if(hb) hb.innerHTML=`<div class="note">成分股查無資料，<a href="${esc(etfSaUrl(code,true))}" target="_blank" rel="noopener" style="color:var(--blue)">前往來源查看 ↗</a></div>`;
+  // 成分股。⚠️ 實測 stockanalysis 只有美股ETF有 /holdings/ 分頁，台股ETF該分頁一律404；
+  //   TWSE openapi 的 ETFHolding 端點也已失效。因此台股不硬抓，誠實說明並導向官方查詢，
+  //   不用「這檔ETF大概持有哪些股票」的推測內容充數(違反不臆造鐵則)。
+  const hb=document.getElementById('etfHoldBox');
+  if(getMarket()==='tw'){
+    if(hb) hb.innerHTML=`<div class="note">台股 ETF 的成分股需以發行商官方每日公告(PCF)為準，本App的免費資料來源未提供，為避免顯示過期或推測的持股而未列出。請至 <a href="${esc(etfSaUrl(code,false))}" target="_blank" rel="noopener" style="color:var(--blue)">個股資料頁 ↗</a> 或發行商官網查詢最新成分股。</div>`;
+  } else {
+    try{
+      const html=await fetchTextViaProxy(etfSaUrl(code,true));
+      const rows=[];
+      const re=/<a href="\/(?:stocks|quote)\/[^"]*?"\s*>([^<]{1,12})<\/a>[\s\S]{0,400}?<td class="shr[^"]*">([^<]{1,60})<\/td>[\s\S]{0,400}?<td[^>]*>(\d{1,2}\.\d{1,2})/g;
+      let mm;
+      while((mm=re.exec(html)) && rows.length<10) rows.push({sym:mm[1], name:mm[2], w:mm[3]});
+      if(hb) hb.innerHTML = rows.length
+        ? rows.map(r=>`<div class="etf-hold"><span>${esc(r.name)} <span style="color:var(--text2)">${esc(r.sym)}</span></span><b>${esc(r.w)}%</b></div>`).join('')
+        : `<div class="note">查無成分股資料，<a href="${esc(etfSaUrl(code,true))}" target="_blank" rel="noopener" style="color:var(--blue)">前往來源查看 ↗</a></div>`;
+    }catch(e){
+      if(hb) hb.innerHTML=`<div class="note">成分股查無資料，<a href="${esc(etfSaUrl(code,true))}" target="_blank" rel="noopener" style="color:var(--blue)">前往來源查看 ↗</a></div>`;
+    }
   }
 }
 // ── 存股試算 ──
