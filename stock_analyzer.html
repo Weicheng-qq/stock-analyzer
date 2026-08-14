@@ -262,6 +262,11 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   .header.compact .logo svg { width:21px; height:21px; }
   .market-tabs.mkt-compact .mkt-btn { padding:5px 7px; font-size:13px; }
 }
+/* 盤中股價跳動提示：價格真的變了才閃一下，使用者才看得出來「有在動」 */
+@keyframes pxUp { 0%{background:rgba(63,185,80,.55)} 100%{background:transparent} }
+@keyframes pxDn { 0%{background:rgba(248,81,73,.55)} 100%{background:transparent} }
+.px-up { animation:pxUp .7s ease-out; border-radius:4px; }
+.px-dn { animation:pxDn .7s ease-out; border-radius:4px; }
 /* ── ETF 投資 ── */
 .etf-row { display:flex; align-items:center; gap:8px; padding:11px 2px; border-bottom:1px solid rgba(48,54,61,.4); cursor:pointer; }
 .etf-row:last-child { border-bottom:none; }
@@ -1368,13 +1373,18 @@ async function loadWatchlistPrices(list){
       const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${it.symbol}?range=1d&interval=1d`);
       const meta=ch?.chart?.result?.[0]?.meta;
       const price=meta?.regularMarketPrice, prev=meta?.previousClose??meta?.chartPreviousClose;
-      if(pEl) pEl.textContent = price!=null?'$'+(+price).toFixed(2):'—';
+      if(pEl){
+        const txt = price!=null?'$'+(+price).toFixed(2):'—';
+        const before=parseFloat((pEl.textContent||'').replace(/[^0-9.]/g,''));
+        setLiveText(pEl, txt, (price!=null && !isNaN(before) && price!==before) ? price>before : null);
+      }
       if(cEl){
         if(price!=null && prev){
           const pct=(price-prev)/prev*100;
           // 台股慣例：漲=紅底、跌=綠底、白字
-          cEl.innerHTML = `<span class="pill ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span>`;
-        } else cEl.textContent='—';
+          const html=`<span class="pill ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span>`;
+          if(cEl.innerHTML!==html) cEl.innerHTML=html;
+        } else if(cEl.textContent!=='—') cEl.textContent='—';
       }
     }catch(e){ if(pEl) pEl.textContent='—'; if(cEl) cEl.textContent='—'; }
   }));
@@ -3130,7 +3140,7 @@ function etfListShell(codes, isWatch, topN){
     +`<span style="width:58px;text-align:right">年化報酬</span>`
     +`<span style="width:52px;text-align:right">年殖利率</span><span style="width:24px"></span></div>`
     +`<div id="etfRows">${codes.map((c,i)=>etfRowHtml(c,i,isWatch)).join('')}</div>`
-    +(topN?`<div class="note" style="margin-top:8px">※ 前 ${topN} 名為五大分類合併後依年化報酬率排名。</div>`:'')
+    +(topN?`<div class="note" style="margin-top:8px">※ 前 ${topN} 名為五大分類合併後依年化報酬率排名，只納入<b>成立滿3年</b>的ETF，避免新上市基金把短期漲幅年化後失真。</div>`:'')
     +`<div class="note" style="margin-top:8px">年化報酬率＝還原股價(含息)年複合成長率，取實際可得區間(最長10年)；年殖利率＝近12個月配息合計÷現價。皆為歷史數據，不代表未來績效。</div>`;
 }
 function etfRowHtml(code, i, isWatch){
@@ -3142,7 +3152,7 @@ function etfRowHtml(code, i, isWatch){
     <div class="etf-rank" id="etfrk_${esc(code)}">${isWatch?'':(i+1)}</div>
     <div class="etf-nm">${esc(etfName(code))}<span class="sym">${esc(code)}</span></div>
     <div class="etf-num" style="width:74px"><div id="etfpx_${esc(code)}">…</div><div class="sub" id="etfpc_${esc(code)}"></div></div>
-    <div class="etf-cagr" id="etfcg_${esc(code)}">…</div>
+    <div class="etf-cagr"><div id="etfcg_${esc(code)}">…</div><div class="sub" id="etfcy_${esc(code)}"></div></div>
     <div class="etf-num" style="width:52px" id="etfyd_${esc(code)}">…</div>
     ${btn}
   </div>`;
@@ -3161,12 +3171,24 @@ async function fillEtfRows(codes, topN){
     }
     if(cg){ cg.textContent = m.cagr==null?'—':(m.cagr>=0?'+':'')+m.cagr.toFixed(1)+'%';
             cg.style.color = m.cagr==null?'var(--text2)':(m.cagr>=0?'var(--green)':'var(--red)'); }
+    // 一定要標出「這個年化是用幾年算的」：新上市ETF把不到2年的漲幅年化後會出現+140%這種
+    //   看起來很厲害但不能跟10年期相比的數字，不標期間會誤導使用者。
+    const cy=document.getElementById('etfcy_'+m.code);
+    if(cy) cy.textContent = m.years?`近${m.years.toFixed(1)}年`:'';
     if(yd) yd.textContent = m.yield==null?'—':m.yield.toFixed(2)+'%';
   });
   // 依年化報酬率重排(資料回來後才排，避免載入中畫面亂跳)。年化報酬率算不出來的排最後。
   const box=document.getElementById('etfRows');
   if(box && codes.length>1){
-    const order=results.slice().sort((a,b)=>(b.cagr==null?-1e9:b.cagr)-(a.cagr==null?-1e9:a.cagr));
+    let pool=results;
+    // 綜合排行榜只納入成立滿3年的ETF：把新上市不到2年的漲幅年化會得到+140%這種數字，
+    //   跟10年期的23%放在同一張榜上比較會嚴重誤導。分類頁不套這個門檻(同類多半年資相近)，
+    //   但每列都會標「近X年」讓使用者知道比較基準。
+    if(topN){
+      const mature=results.filter(m=>m.years!=null && m.years>=3);
+      if(mature.length>=topN) pool=mature;
+    }
+    const order=pool.slice().sort((a,b)=>(b.cagr==null?-1e9:b.cagr)-(a.cagr==null?-1e9:a.cagr));
     const keep=topN?order.slice(0,topN):order;
     const keepSet=new Set(keep.map(x=>x.code));
     keep.forEach((m,i)=>{
@@ -13386,19 +13408,34 @@ function isMarketOpenNow(){
     return tw ? (mins>=540 && mins<=810) : (mins>=570 && mins<=960);
   }catch(e){ return true; }   // 判斷失敗就當作開盤，寧可多更新也不要漏更新
 }
-let __lastPriceTick=0;
+let __lastPriceTick=0, __priceBusy=false;
 function refreshLivePrices(){
   if(document.hidden) return;
-  const gap=isMarketOpenNow()?5000:60000;      // 盤中5秒、收盤60秒
+  const gap=isMarketOpenNow()?1000:60000;      // 盤中每秒、收盤60秒(使用者要求盤中即時跳動)
   const now=Date.now();
   if(now-__lastPriceTick<gap) return;
-  __lastPriceTick=now;
+  if(__priceBusy) return;   // 上一輪還沒回來就不再發新請求，避免網路慢時請求疊在一起
+  __lastPriceTick=now; __priceBusy=true;
   try{
+    const jobs=[];
     const l=getWatchlist();
-    if(l&&l.length) loadWatchlistPrices(l);
-    if(typeof loadThemePrices==='function' && window.__themeRows && window.__themeRows.length) loadThemePrices(window.__themeRows);
-    updateDetailPrice();                        // 目前正在看的那家公司股價也要跟著跳
-  }catch(e){}
+    if(l&&l.length) jobs.push(loadWatchlistPrices(l));
+    if(typeof loadThemePrices==='function' && window.__themeRows && window.__themeRows.length) jobs.push(loadThemePrices(window.__themeRows));
+    jobs.push(updateDetailPrice());             // 目前正在看的那家公司股價也要跟著跳
+    Promise.all(jobs.map(p=>Promise.resolve(p).catch(()=>{}))).then(()=>{ __priceBusy=false; });
+  }catch(e){ __priceBusy=false; }
+}
+// 只在「數字真的變了」時才改DOM，並閃一下讓使用者看得到這次跳動。
+//   每秒無條件重寫相同文字會造成閃爍、也看不出有沒有在動(使用者要的是「有變化才跳」)。
+function setLiveText(el, txt, flashUp){
+  if(!el || el.textContent===txt) return false;
+  el.textContent=txt;
+  if(flashUp!=null){
+    el.classList.remove('px-up','px-dn');
+    void el.offsetWidth;                        // 強制重繪，連續同向變動才會每次都閃
+    el.classList.add(flashUp?'px-up':'px-dn');
+  }
+  return true;
 }
 // 更新公司詳情頁最上方的股價(下單前最在意的數字)
 async function updateDetailPrice(){
@@ -13410,21 +13447,25 @@ async function updateDetailPrice(){
     const price=meta.regularMarketPrice, prev=meta.previousClose??meta.chartPreviousClose;
     if(price==null) return;
     const isTw=/\.TW[O]?$/i.test(sym);
-    el.textContent=(isTw?'NT$':'$')+(+price).toFixed(2);
+    const before=parseFloat((el.textContent||'').replace(/[^0-9.]/g,''));
+    setLiveText(el, (isTw?'NT$':'$')+(+price).toFixed(2),
+                (!isNaN(before) && price!==before) ? price>before : null);
     const box=el.parentElement && el.parentElement.querySelector('div:nth-child(2)');
     if(box && prev){
       const chg=price-prev, pct=chg/prev*100;
       const up=chg>=0; const col=isTw?(up?'#f85149':'#3fb950'):(up?'#3fb950':'#f85149');
       box.style.color=col;
-      box.textContent=`${up?'▲':'▼'} ${Math.abs(chg).toFixed(2)} (${Math.abs(pct).toFixed(2)}%)`;
+      setLiveText(box, `${up?'▲':'▼'} ${Math.abs(chg).toFixed(2)} (${Math.abs(pct).toFixed(2)}%)`);
     }
   }catch(e){}
 }
 window.addEventListener('load', function(){
   initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000);
-  // 🔄 股價自動更新：開盤中每 5 秒更新一次(使用者要求「即時跳動」，因為會影響下單成本)，
+  // 🔄 股價自動更新：開盤中每 1 秒更新一次(使用者2026-08-14要求「只要價格有變化就每秒即時跳動」)，
   //   收盤/假日則降到每 60 秒(價格不會變，沒必要一直打 Yahoo)。分頁在背景時完全不更新。
-  setInterval(refreshLivePrices, 2000);
+  //   ⚠️ 前端輪詢頻率必須與 api/proxy.js 的 s-maxage 一起改，只改這裡沒用——
+  //      邊緣快取會擋住請求，前端拿到的仍是同一份舊資料(2026-08-14 實際踩過這個坑)。
+  setInterval(refreshLivePrices, 1000);
   // 從背景切回前景(手機常見)立刻補抓一次，不用等下一個週期
   document.addEventListener('visibilitychange', function(){ if(!document.hidden){ __lastPriceTick=0; refreshLivePrices(); } });
   renderSplashQuotes();   // 封面名言(每次開App隨機)

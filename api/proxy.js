@@ -24,12 +24,13 @@ export default async function handler(req, res) {
     });
     const body = await r.text();
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    // 即時報價(v8/finance/chart)快取5秒：使用者反映開盤期間股價不會跳動，根因是這裡原本
-    // 統一快取5分鐘，導致前端不管多頻繁輪詢，Vercel Edge在5分鐘內都回傳同一份舊資料。
+    // 即時報價(v8/finance/chart)快取1秒：使用者要求盤中「只要價格有變化就每秒即時跳動」。
+    // 原本統一快取5分鐘，導致前端不管多頻繁輪詢，Vercel Edge在5分鐘內都回傳同一份舊資料，
+    // 股價視覺上完全不動。s-maxage=1 讓邊緣快取最多只擋1秒，與前端每秒輪詢對齊。
     // 其餘(SEC/新聞/財務數據等不需要秒級更新的資料)維持原本5分鐘快取，降低重複請求。
     const isLiveQuote = /\/v8\/finance\/chart\//.test(target);
     res.setHeader('Cache-Control', isLiveQuote
-      ? 'public, max-age=0, s-maxage=5, stale-while-revalidate=10'
+      ? 'public, max-age=0, s-maxage=1, stale-while-revalidate=5'
       : 's-maxage=300, stale-while-revalidate=600');
     res.status(r.ok ? 200 : r.status).send(body);
   } catch (e) {
