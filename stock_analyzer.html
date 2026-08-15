@@ -265,12 +265,19 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .header.compact .logo { font-size:18px; gap:4px; }
 .header.compact .logo svg { width:24px; height:24px; vertical-align:-5px; margin-right:0; }
 .header.compact .settings-btn { padding:7px 8px; font-size:14px; }
-.market-tabs.mkt-compact { margin:0; gap:5px; flex:0 0 auto; }
+/* 美股/台股鈕靠右(使用者2026-08-15要求)：把剩餘空白全部推到 App名稱與市場鈕之間。
+   ⚠️ 安裝鈕與齒輪鈕的 margin-left:auto 是寫在 HTML 的 inline style，
+   CSS 一定要加 !important 才蓋得過，否則空白會被它們搶走、市場鈕還是貼在名稱旁邊。 */
+.market-tabs.mkt-compact { margin:0 0 0 auto; gap:5px; flex:0 0 auto; }
+.header.compact .install-btn, .header.compact .settings-btn { margin-left:0 !important; }
 .market-tabs.mkt-compact .mkt-btn { flex:0 0 auto; padding:5px 8px; font-size:15px; border-radius:8px; line-height:1.25; }
 @media(max-width:400px){
-  .header.compact { padding:10px 8px; gap:5px; }
+  /* ⚠️ 這一行在 390px 是「剛好塞滿」：名稱200＋市場鈕138＋齒輪35＝373，
+     再加內距與間距就會超過 390 造成整頁可左右滑動(先前放大字級時實測到 391px)。
+     內距/間距/圖示都壓到最小換出約 10px 餘裕，字級才能維持 18px 不動。 */
+  .header.compact { padding:10px 5px; gap:4px; }
   .header.compact .logo { font-size:18px; }   /* 同 .ct，窄螢幕也不再縮小 */
-  .header.compact .logo svg { width:23px; height:23px; }
+  .header.compact .logo svg { width:21px; height:21px; }
   .header.compact .settings-btn { padding:6px 7px; font-size:13.5px; }
   .market-tabs.mkt-compact { gap:4px; }
   /* 14.5px 是實測 360px 螢幕還能維持單行的上限(15px 就會擠成兩行) */
@@ -1668,14 +1675,16 @@ function renderTwPeChecklist(finRows, pe, pe5, pePos, price){
   const growths=baseRows.map(r=>r.gr).filter(g=>g!=null);
   const declineYears=growths.filter(g=>g<0).length;
   const overallUp=baseRows.length>=2&&baseRows[baseRows.length-1].rev!=null&&baseRows[0].rev!=null&&baseRows[baseRows.length-1].rev>baseRows[0].rev;
-  const last3g=growths.slice(-3);
-  const fastGrower=last3g.length===3&&last3g.every(g=>g>20);
+  // 快速成長判定由「近3年」改為「近2年」(使用者2026-08-15要求)：3年門檻太嚴，
+  //   常把近兩年才轉強的公司排除掉。變數名沿用 last3g 會誤導，一併改名為 lastG。
+  const lastG=growths.slice(-2);
+  const fastGrower=lastG.length===2&&lastG.every(g=>g>20);
   const checklist=[
     {label:'稅後淨利率 > 30%', pass:last.nm!=null?last.nm>30:null, val:last.nm!=null?last.nm.toFixed(1)+'%':'無資料'},
     {label:'毛利率 > 40%', pass:last.gm!=null?last.gm>40:null, val:last.gm!=null?last.gm.toFixed(1)+'%':'無資料'},
     {label:'ROE > 20%', pass:lastRoe!=null?lastRoe>20:null, val:lastRoe!=null?lastRoe.toFixed(1)+'%':'無資料'},
     {label:'10年營收整體向上（≤2年下滑）', pass:growths.length?(declineYears<=2&&overallUp):null, val:'下滑'+declineYears+'年'},
-    {label:'近3年營收成長皆 > 20%（快速成長）', pass:last3g.length===3?fastGrower:null, val:last3g.map(g=>g.toFixed(0)+'%').join(' / ')||'無資料'},
+    {label:'近2年營收成長皆 > 20%（快速成長）', pass:lastG.length===2?fastGrower:null, val:lastG.map(g=>g.toFixed(0)+'%').join(' / ')||'無資料'},
     {label:'本益比 < 13', pass:pe!=null?pe<13:null, cls:(pe!=null&&pe<13)?'g':(pePos!=null?(pePos<=50?'y':'r'):(pe!=null?'r':'')), val:pe!=null?pe.toFixed(1)+'x':'無資料'},
     {label:'本益比位於近5年區間偏低半部', pass:(pePos!=null)?pePos<50:null, cls:(pe!=null&&pe<13)?'g':(pePos==null?'':(pePos<=50?'y':'r')), val:(pe5&&pePos!=null)?'區間'+pe5.min.toFixed(0)+'~'+pe5.max.toFixed(0)+'x，現'+pePos.toFixed(0)+'%位置':'無資料'},
   ];
@@ -2169,8 +2178,9 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   const growths=rows.map(r=>r.gr).filter(g=>g!=null);
   const declineYears=growths.filter(g=>g<0).length;
   const overallUp=rows.length>=2 && rows[rows.length-1].rev!=null && rows[0].rev!=null && rows[rows.length-1].rev>rows[0].rev;
-  const last3g=growths.slice(-3);
-  const fastGrower=last3g.length===3 && last3g.every(g=>g>20);
+  // 同上：快速成長判定改為「近2年」(使用者2026-08-15要求)
+  const lastG=growths.slice(-2);
+  const fastGrower=lastG.length===2 && lastG.every(g=>g>20);
   // 彼得林區六大分類：不再用程式寫死的數字門檻公式判定，改交給AI依彼得林區原著（One Up on Wall Street）
   // 的分類邏輯，直接分析完整的多年財務數據自行判斷並說明理由（見下方 callGemini 的 prompt）。
   const checklist=[
@@ -2178,7 +2188,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
     {label:'毛利率 > 40%', pass:last.gm!=null?last.gm>40:null, val:last.gm!=null?last.gm.toFixed(1)+'%':'無資料'},
     {label:'ROE > 20%', pass:lastRoe!=null?lastRoe>20:null, val:lastRoe!=null?lastRoe.toFixed(1)+'%':'無資料'},
     {label:'10年營收整體向上（≤2年下滑）', pass:growths.length?(declineYears<=2&&overallUp):null, val:`下滑${declineYears}年`},
-    {label:'近3年營收成長皆 > 20%（快速成長）', pass:last3g.length===3?fastGrower:null, val:last3g.map(g=>g.toFixed(0)+'%').join(' / ')||'無資料'},
+    {label:'近2年營收成長皆 > 20%（快速成長）', pass:lastG.length===2?fastGrower:null, val:lastG.map(g=>g.toFixed(0)+'%').join(' / ')||'無資料'},
     {label:'本益比 < 13', pass:pe!=null?pe<13:null, cls:(pe!=null&&pe<13)?'g':(pePos!=null?(pePos<=50?'y':'r'):(pe!=null?'r':'')), val:pe!=null?pe.toFixed(1)+'x':'無資料'},
     {label:'本益比位於近5年區間偏低半部', pass:(pePos!=null)?pePos<50:null, cls:(pe!=null&&pe<13)?'g':(pePos==null?'':(pePos<=50?'y':'r')), val:(pe5&&pePos!=null)?`區間${pe5.min.toFixed(0)}~${pe5.max.toFixed(0)}x，現${pePos.toFixed(0)}%位置`:'無資料'},
   ];
