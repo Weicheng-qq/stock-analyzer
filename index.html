@@ -261,14 +261,15 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
    因此同時做三件事換空間：①縮小左右內距與間距 ②把齒輪鈕縮小(原本 47px 過寬)
    ③370px 以下允許換行(寧可變兩行，也不要整頁能左右滑動)。 */
 .header.compact { padding:10px 10px; gap:6px; flex-wrap:nowrap; }
-.header.compact .logo { font-size:20px; gap:4px; }
-.header.compact .logo svg { width:26px; height:26px; vertical-align:-5px; margin-right:0; }
+/* App名稱字級 = 各卡片標題(.ct)的 18px，兩者視覺一致(使用者2026-08-15要求) */
+.header.compact .logo { font-size:18px; gap:4px; }
+.header.compact .logo svg { width:24px; height:24px; vertical-align:-5px; margin-right:0; }
 .header.compact .settings-btn { padding:7px 8px; font-size:14px; }
 .market-tabs.mkt-compact { margin:0; gap:5px; flex:0 0 auto; }
 .market-tabs.mkt-compact .mkt-btn { flex:0 0 auto; padding:5px 8px; font-size:15px; border-radius:8px; line-height:1.25; }
 @media(max-width:400px){
   .header.compact { padding:10px 8px; gap:5px; }
-  .header.compact .logo { font-size:18px; }
+  .header.compact .logo { font-size:18px; }   /* 同 .ct，窄螢幕也不再縮小 */
   .header.compact .logo svg { width:23px; height:23px; }
   .header.compact .settings-btn { padding:6px 7px; font-size:13.5px; }
   .market-tabs.mkt-compact { gap:4px; }
