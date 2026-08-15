@@ -3537,6 +3537,9 @@ async function runEtfSaver(){
 const ETF_BAR_LABEL_FONT='700 9px -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif';
 const ETF_BAR_LABEL_H=11;        // 一行標籤的高度(往上錯開時的間距)
 const ETF_BAR_LABEL_LEVELS=3;    // 最多往上錯開幾層 → 決定圖表上方要留多少空白
+// 兩個同高度標籤之間至少要留的水平空白。原本只留 2px：數學上「沒有重疊」，
+// 但視覺上兩組數字幾乎黏在一起、看不出哪個屬於哪根長條(使用者回報)。加大到 8px。
+const ETF_BAR_LABEL_GAP=8;
 function etfWanText(v){
   const wan=Math.round(v/10000);
   return (wan>=1 ? wan.toLocaleString('en-US') : '<1')+'萬';
@@ -3567,13 +3570,19 @@ const ETF_BAR_LABEL_PLUGIN={
     const placed=[];
     const top=(chart.chartArea && chart.chartArea.top!=null) ? chart.chartArea.top : 0;
     items.forEach(it=>{
-      let lvl=0;
+      // 兩個標籤算「太近」的條件：水平間距不足 GAP，且垂直沒差到一整行
       const hit=y=>placed.some(p=>
-        Math.abs(p.x-it.x) < (p.w+it.w)/2 + 2 &&      // 水平投影重疊
-        Math.abs(p.y-y) < ETF_BAR_LABEL_H);            // 垂直距離不足一行
-      while(hit(it.y-lvl*ETF_BAR_LABEL_H) && lvl<ETF_BAR_LABEL_LEVELS) lvl++;
-      let y=it.y-lvl*ETF_BAR_LABEL_H;
-      if(y<top+2) y=top+2;                             // 不要超出畫布上緣被裁掉
+        Math.abs(p.x-it.x) < (p.w+it.w)/2 + ETF_BAR_LABEL_GAP &&
+        Math.abs(p.y-y) < ETF_BAR_LABEL_H);
+      let lvl=0, y=it.y;
+      while(hit(y) && lvl<ETF_BAR_LABEL_LEVELS){ lvl++; y=it.y-lvl*ETF_BAR_LABEL_H; }
+      // 往上會被畫布上緣裁掉時改成往下找：只往上單向處理的話，
+      //   最高那根長條的標籤會被壓回 top 附近，反而跟旁邊的黏在一起。
+      if(y<top+2){
+        y=it.y; let d=0;
+        while(hit(y) && d<ETF_BAR_LABEL_LEVELS){ d++; y=it.y+d*ETF_BAR_LABEL_H; }
+        if(y<top+2) y=top+2;
+      }
       it.y=y; placed.push(it);
       ctx.fillText(it.txt, it.x, it.y);
     });
