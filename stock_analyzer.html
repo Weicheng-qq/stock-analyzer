@@ -252,45 +252,36 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .market-tabs .mkt-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
 /* 進入主畫面後：市場切換鈕搬到標題列(App名稱右邊)並縮小，讓主畫面上方留給內容。
    標題文字同步縮小、⚙️ 仍靠最右，整列才不會擠。 */
-/* 第一行(標題列)：App名稱與美股/台股鈕再放大一級(使用者2026-08-15要求)。
-   390px 手機這一行是 logo＋市場鈕＋齒輪擠在同一列，只剩約15px餘裕，
-   因此放大字級的同時把左右內距與間距收窄換空間，實測不換行、不水平溢出。 */
-/* 第一行(標題列)：App名稱與美股/台股鈕再放大一級(使用者2026-08-15要求)。
-   ⚠️ 這一行在手機是 App名稱＋市場鈕＋齒輪擠在同一列，空間非常吃緊：
-   實測 390px 下總寬只有約 330px 可分配，字級一放大就會水平溢出。
-   因此同時做三件事換空間：①縮小左右內距與間距 ②把齒輪鈕縮小(原本 47px 過寬)
-   ③370px 以下允許換行(寧可變兩行，也不要整頁能左右滑動)。 */
-.header.compact { padding:10px 10px; gap:6px; flex-wrap:nowrap; }
-/* App名稱字級 = 各卡片標題(.ct)的 18px，兩者視覺一致(使用者2026-08-15要求) */
-.header.compact .logo { font-size:18px; gap:4px; }
-.header.compact .logo svg { width:27px; height:27px; vertical-align:-6px; margin-right:0; }
+/* 第一行(標題列)：App名稱字級調整為與封面第一行(.welcome h1，30px/700)一致
+   (使用者2026-08-15要求，含圖示等比放大)。
+   ⚠️ 30px 的App名稱單獨一行就已經很寬(實測約320px)，390/360px手機screen不可能
+   再跟市場鈕擠在同一行——因此改成「兩行式」：第一行App名稱獨占，
+   第二行市場鈕(＋本機開發版才有的齒輪鈕)靠右對齊。這是唯一能同時滿足
+   「字級=封面」又「不水平溢出」的排法，寧可變兩行也不要縮小字級或讓內容被裁切。 */
+.header.compact { padding:10px 12px; gap:6px 8px; flex-wrap:wrap; }
+/* App名稱字級/字重 = 封面 .welcome h1 (30px/700)，兩者視覺一致 */
+.header.compact .logo { font-size:30px; font-weight:700; gap:6px; flex:1 1 100%; }
+/* 圖示等比放大：沿用桌機版原始比例(23px字級配30px圖示、-8px垂直對齊)，
+   套用到 30px 字級 → 30/23≈1.3 倍，圖示約39px、垂直對齊約-10px。 */
+.header.compact .logo svg { width:39px; height:39px; vertical-align:-10px; margin-right:0; }
 .header.compact .settings-btn { padding:7px 8px; font-size:14px; }
-/* 美股/台股鈕靠右(使用者2026-08-15要求)：把剩餘空白全部推到 App名稱與市場鈕之間。
+/* 美股/台股鈕靠右：把第二行的剩餘空白全部推到左邊，鈕群貼右對齊。
    ⚠️ 安裝鈕與齒輪鈕的 margin-left:auto 是寫在 HTML 的 inline style，
-   CSS 一定要加 !important 才蓋得過，否則空白會被它們搶走、市場鈕還是貼在名稱旁邊。 */
+   CSS 一定要加 !important 才蓋得過，否則會各自被推開、順序跑掉。 */
 .market-tabs.mkt-compact { margin:0 0 0 auto; gap:5px; flex:0 0 auto; }
 .header.compact .install-btn, .header.compact .settings-btn { margin-left:0 !important; }
 /* ⚙️ 設定鈕在「線上/App版」是隱藏的(只有本機開發版才顯示，見 hideSettingsForUsers)，
    所以正式站上市場鈕右邊沒有東西擋著，會直接貼在畫面右緣看起來很擠。
    → 只有在沒有齒輪鈕時才補一段右邊距；本機有齒輪時不加，避免那一行被撐爆。 */
-/* 8px 是實測 360px 螢幕還能維持單行的上限(10px 就會把市場鈕擠到第二行)，
-   加上容器內距後離畫面右緣約 12px，看得出留白又不會換行。 */
 body.no-settings-btn .market-tabs.mkt-compact { margin-right:8px; }
 .market-tabs.mkt-compact .mkt-btn { flex:0 0 auto; padding:5px 8px; font-size:15px; border-radius:8px; line-height:1.25; }
 @media(max-width:400px){
-  /* ⚠️ 這一行在 390px 是「剛好塞滿」：名稱200＋市場鈕138＋齒輪35＝373，
-     再加內距與間距就會超過 390 造成整頁可左右滑動(先前放大字級時實測到 391px)。
-     內距/間距/圖示都壓到最小換出約 10px 餘裕，字級才能維持 18px 不動。 */
-  .header.compact { padding:10px 4px; gap:3px; }
-  .header.compact .logo { font-size:18px; }   /* 同 .ct，窄螢幕也不再縮小 */
-  .header.compact .logo svg { width:24px; height:24px; }
+  .header.compact { padding:10px 8px; gap:5px 6px; }
+  .header.compact .logo svg { width:34px; height:34px; vertical-align:-9px; }
   .header.compact .settings-btn { padding:6px 7px; font-size:13.5px; }
   .market-tabs.mkt-compact { gap:4px; }
   /* 14.5px 是實測 360px 螢幕還能維持單行的上限(15px 就會擠成兩行) */
   .market-tabs.mkt-compact .mkt-btn { padding:5px 6px; font-size:14.5px; }
-}
-@media(max-width:370px){
-  .header.compact { flex-wrap:wrap; }   /* 極窄螢幕改成兩行，避免整頁水平溢出 */
 }
 /* 盤中股價跳動提示：價格真的變了才閃一下，使用者才看得出來「有在動」 */
 @keyframes pxUp { 0%{background:rgba(63,185,80,.55)} 100%{background:transparent} }
@@ -2923,54 +2914,33 @@ const IR_CALL_VIDEO = {
 //   英文場次才會出現即時翻譯的繁中字幕(原音不變)。
 // 通用版：任何頁面上的 YouTube iframe(依 id) 都可呼叫此函式，嘗試切到繁中字幕。
 //   法說會影片(irVideoFrame)與投資大師影片(每支各自的 id)共用同一套邏輯。
-//   ⚠️ 只對「影片本身真的有zh-Hant/zh-TW原生字幕軌」有效；若只有「英文(自動產生)」單一軌，
-//   此函式無法強制觸發YouTube的自動翻譯(已實測確認IFrame API不支援)，會靜默不生效，不影響播放。
+//   ⚠️ 2026-08-15 使用者明確要求「投資大師的影片不要用 YouTube 自動翻譯的字幕」——
+//   已實測 17 支大師影片全部只有 en(asr) 軌、沒有任何原生中文軌，過去用「英文軌+
+//   translationLanguage」強制觸發 YouTube 自動翻譯的作法，等於整區都在用自動翻譯。
+//   已移除自動翻譯分支：此函式現在只做「選用真正的原生中文字幕軌」，
+//   找不到就什麼都不做(保持字幕關閉)，絕不再用自動翻譯頂替。
 let __ytApiLoading=false;
 const __ytPlayers={};
 const __ytCapWatch={};   // 每支影片的「字幕語言看門狗」計時器
 let __ytPendingCaptions=[];
-// 核心：把播放器字幕切成繁體中文。分兩種情況：
-//   (A) 影片本身就有 zh-Hant/zh-TW 原生字幕軌 → 直接選那一軌。
-//   (B) 只有英文(含自動產生)字幕軌 → 用 captions 模組的「自動翻譯」：
-//       setOption('captions','track',{languageCode:'en', translationLanguage:{languageCode:'zh-Hant',...}})
-//       這是 YouTube HTML5 播放器 captions 模組的隱藏用法，可讓英文字幕即時翻成繁中顯示在影片上。
+// 核心：只在影片「真的有原生中文字幕軌」時才開啟字幕，選用那一軌；
+//   否則不設定字幕(不觸發YouTube自動翻譯)，回傳 false 讓外層之後可再重試
+//   (例如 tracklist 稍晚才就緒)，但絕不會落到自動翻譯的保底分支。
 //   ⚠️ 關鍵：captions 模組要等 onApiChange 事件才就緒(且該事件在影片開始播放後才觸發)，
 //      只在 onReady 設定會失敗——這是先前版本一直無法成功顯示中文字幕的真正原因。
 function _tryZhCaption(p, preferHans){
   try{
     p.loadModule&&p.loadModule('captions');
     p.setOption('captions','reload',true);
-    // ⓪ preferHans=該支影片經實測「有上傳者自己做的中文字幕軌」(非YouTube自動翻譯)。
-    //   使用者2026-08-15明確要求「不要用YouTube自動翻譯的字幕」，因此這種影片一律直接
-    //   選用那條原生中文軌。只在有明確標記的影片生效，預設行為完全不變
-    //   (避免回到以前「一下繁體一下簡體」的問題)。
-    if(preferHans){
-      let l0=[]; try{ l0=p.getOption('captions','tracklist')||[]; }catch(_){}
-      const native=l0.find(t=>/^zh/i.test(t.languageCode||'') && t.kind!=='asr');
-      if(native){ try{ p.setOption('captions','fontSize',2); }catch(_){} p.setOption('captions','track',native); return true; }
-    }
-    // 放大字幕級距(captions 模組的 fontSize 範圍 -1~3，0為預設)：手機上預設字幕太小，設2較好讀
-    try{ p.setOption('captions','fontSize',2); }catch(_){}
+    try{ p.setOption('captions','fontSize',2); }catch(_){}   // 手機上預設字幕太小，設2較好讀
     let list=[]; try{ list=p.getOption('captions','tracklist')||[]; }catch(_){}
-    // ①只接受「原生繁體中文軌」；原生簡體(zh-Hans/zh-CN)一律不採用——
-    //   這是先前「一下繁體一下簡體」的主因：影片若有簡中原生軌，YouTube 會自己挑它。
-    const hant=list.find(t=>/^zh-(Hant|TW|HK)/i.test(t.languageCode||''));
-    if(hant){ p.setOption('captions','track',hant); return true; }
-    // ②沒有原生繁中軌 → 挑一條「非中文」的軌(通常是英文/自動產生)，強制翻譯成繁中。
-    //   刻意跳過簡中軌當作翻譯來源，避免簡轉繁品質差。
-    let tl=[]; try{ tl=p.getOption('captions','translationLanguages')||[]; }catch(_){}
-    const zh=tl.find(t=>/^zh-Hant$/i.test(t.languageCode||''))
-           ||tl.find(t=>/^zh-TW$/i.test(t.languageCode||''));
-    const base=list.find(t=>!/^zh/i.test(t.languageCode||'')) || list[0];
-    if(zh&&base){
-      p.setOption('captions','track',{languageCode:base.languageCode,
-        translationLanguage:{languageCode:zh.languageCode, languageName:zh.languageName||'中文（繁體）'}});
-      return true;
-    }
-    // ③清單還沒就緒時的保底(直接指定英文軌+繁中翻譯)。回傳 false 讓外層繼續重試，
-    //   直到 tracklist 真的就緒後能走上面更精準的分支。
-    p.setOption('captions','track',{languageCode:'en',
-      translationLanguage:{languageCode:'zh-Hant', languageName:'中文（繁體）'}});
+    // preferHans=該支影片經實測「有上傳者自己做的中文字幕軌」(非YouTube自動翻譯)，
+    //   簡體/繁體皆可接受；其餘影片一律只認原生繁體(zh-Hant/TW/HK)，避免簡轉繁品質差
+    //   或誤選到簡體軌(先前「一下繁體一下簡體」的主因)。
+    const native = preferHans
+      ? list.find(t=>/^zh/i.test(t.languageCode||'') && t.kind!=='asr')
+      : list.find(t=>/^zh-(Hant|TW|HK)/i.test(t.languageCode||''));
+    if(native){ p.setOption('captions','track',native); return true; }
   }catch(_){}
   return false;
 }
@@ -3717,7 +3687,11 @@ function masterVidListHtml(){
       const thumb=isShort?`https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`:`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`;
       const thumbFallback=`https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
       // noCap=影片自帶燒錄字幕或為直播存檔(無字幕軌)→關掉我們的字幕層，避免兩層字幕重疊或空轉
-      const src=`https://www.youtube-nocookie.com/embed/${v.id}?rel=0&enablejsapi=1&autoplay=1&cc_load_policy=${v.noCap?0:1}${v.noCap?'':'&cc_lang_pref=zh-Hant'}&hl=zh-Hant${orig}`;
+      // ⚠️ 2026-08-15 使用者要求關閉YouTube自動翻譯字幕：cc_load_policy=1 搭配 cc_lang_pref
+      //   會讓YouTube在「該語言沒有原生字幕軌」時自動即時翻譯頂替(這正是先前的問題來源)。
+      //   已實測17支大師影片只有 zhHans 標記的3支有原生中文軌，其餘一律不強制開字幕，
+      //   避免觸發自動翻譯；使用者仍可自行點播放器的字幕圖示手動開啟(不受此限制)。
+      const src=`https://www.youtube-nocookie.com/embed/${v.id}?rel=0&enablejsapi=1&autoplay=1&cc_load_policy=${v.zhHans?1:0}${v.zhHans?'&cc_lang_pref=zh-Hans':''}&hl=zh-Hant${orig}`;
       h+=`<div style="margin-bottom:28px"><div style="font-size:13px;color:var(--text2);margin-bottom:4px">${esc(v.title)}</div>`
         +`<div class="ir-video master-thumb${isShort?' master-short-wrap':''}" data-src="${esc(src)}"${v.noCap?' data-nocap="1"':''}${v.zhHans?' data-zhhans="1"':''} onclick="loadMasterVid(this)" style="cursor:pointer">`
         +`<img src="${thumb}" loading="lazy"${isShort?` onerror="this.onerror=null;this.src='${thumbFallback}'"`:''}><div class="ir-play-btn"><div></div></div>`
@@ -3741,11 +3715,13 @@ function loadMasterVid(el){
   const fsBtn=`<button class="vid-fs-btn" onclick="event.stopPropagation();toggleVidFullscreen(this)" title="全螢幕">⛶</button>`;
   el.innerHTML=`<iframe id="${fid}" src="${src}" title="投資大師影片" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen style="width:100%;height:100%;${isShort?'':'aspect-ratio:16/9;'}border-radius:8px"></iframe>${fsBtn}`;
   el.style.cursor='default'; el.onclick=null;
-  if(!el.dataset.nocap){
-    setTimeout(()=>forceZhCaptions(fid, el.dataset.zhhans==='1'), 300);   // 需要 YT Player 實例來讀播放時間
-    const vid=(src.match(/embed\/([\w-]{11})/)||[])[1];
-    if(vid) startZhCaptionOverlay(el, fid, vid);      // 自製繁中字幕層(疊在影片下緣)
-  }
+  // ⚠️ 2026-08-15 使用者要求關閉YouTube自動翻譯字幕：只在 zhHans(已實測有原生中文字幕軌)
+  //   時才用官方 captions 模組選那條原生軌(_tryZhCaption 只選軌、不翻譯，見該函式定義)。
+  //   ⚠️ 刻意不呼叫 startZhCaptionOverlay()：它背後的 /api/caption 對「非zh-Hant/TW的中文軌」
+  //   仍會加 &tlang=zh-Hant 觸發簡轉繁翻譯，屬於這次要關閉的「自動翻譯」之一，
+  //   且 _tryZhCaption 走YouTube官方captions API選軌已足夠，不需要這層自製字幕疊加。
+  //   其餘影片(既非noCap的燒錄字幕、也非zhHans的原生軌)一律不做任何字幕動作。
+  if(el.dataset.zhhans==='1') setTimeout(()=>forceZhCaptions(fid, true), 300);   // 需要 YT Player 實例來讀播放時間
 }
 // 自訂全螢幕：對影片容器div呼叫 Fullscreen API(含各瀏覽器前綴)，並在進入全螢幕後用
 //   Screen Orientation API 鎖成橫向(長影片)——這是手機上「全螢幕無法橫屏」的關鍵，
