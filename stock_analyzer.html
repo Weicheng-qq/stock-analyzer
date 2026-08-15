@@ -2913,10 +2913,19 @@ let __ytPendingCaptions=[];
 //       這是 YouTube HTML5 播放器 captions 模組的隱藏用法，可讓英文字幕即時翻成繁中顯示在影片上。
 //   ⚠️ 關鍵：captions 模組要等 onApiChange 事件才就緒(且該事件在影片開始播放後才觸發)，
 //      只在 onReady 設定會失敗——這是先前版本一直無法成功顯示中文字幕的真正原因。
-function _tryZhCaption(p){
+function _tryZhCaption(p, preferHans){
   try{
     p.loadModule&&p.loadModule('captions');
     p.setOption('captions','reload',true);
+    // ⓪ preferHans=該支影片經實測「有上傳者自己做的中文字幕軌」(非YouTube自動翻譯)。
+    //   使用者2026-08-15明確要求「不要用YouTube自動翻譯的字幕」，因此這種影片一律直接
+    //   選用那條原生中文軌。只在有明確標記的影片生效，預設行為完全不變
+    //   (避免回到以前「一下繁體一下簡體」的問題)。
+    if(preferHans){
+      let l0=[]; try{ l0=p.getOption('captions','tracklist')||[]; }catch(_){}
+      const native=l0.find(t=>/^zh/i.test(t.languageCode||'') && t.kind!=='asr');
+      if(native){ try{ p.setOption('captions','fontSize',2); }catch(_){} p.setOption('captions','track',native); return true; }
+    }
     // 放大字幕級距(captions 模組的 fontSize 範圍 -1~3，0為預設)：手機上預設字幕太小，設2較好讀
     try{ p.setOption('captions','fontSize',2); }catch(_){}
     let list=[]; try{ list=p.getOption('captions','tracklist')||[]; }catch(_){}
@@ -2942,11 +2951,11 @@ function _tryZhCaption(p){
   }catch(_){}
   return false;
 }
-function _applyZhCaptions(iframeId){
+function _applyZhCaptions(iframeId, preferHans){
   try{ if(__ytPlayers[iframeId]&&__ytPlayers[iframeId].destroy) __ytPlayers[iframeId].destroy(); }catch(e){}
   try{
     let done=false;
-    const attempt=(p)=>{ if(done) return; if(_tryZhCaption(p)) done=true; };
+    const attempt=(p)=>{ if(done) return; if(_tryZhCaption(p, preferHans)) done=true; };
     __ytPlayers[iframeId]=new YT.Player(iframeId,{
       events:{
         // captions 模組就緒時才會觸發(通常在影片開始播放後)，這裡是最可靠的設定時機
@@ -2961,7 +2970,7 @@ function _applyZhCaptions(iframeId){
             __ytCapWatch[iframeId]=setInterval(()=>{
               const el=document.getElementById(iframeId);
               if(!el||!el.isConnected){ clearInterval(__ytCapWatch[iframeId]); delete __ytCapWatch[iframeId]; return; }
-              if(!done) _tryZhCaption(e.target);
+              if(!done) _tryZhCaption(e.target, preferHans);
             }, 8000);
           }
         },
@@ -2976,15 +2985,15 @@ function _applyZhCaptions(iframeId){
     });
   }catch(e){}
 }
-function forceZhCaptions(iframeId){
+function forceZhCaptions(iframeId, preferHans){
   const frame=document.getElementById(iframeId); if(!frame) return;
-  if(window.YT && window.YT.Player){ _applyZhCaptions(iframeId); return; }
-  __ytPendingCaptions.push(iframeId);
+  if(window.YT && window.YT.Player){ _applyZhCaptions(iframeId, preferHans); return; }
+  __ytPendingCaptions.push({id:iframeId, hans:!!preferHans});
   if(!__ytApiLoading){
     __ytApiLoading=true;
     const s=document.createElement('script'); s.src='https://www.youtube.com/iframe_api';
     document.head.appendChild(s);
-    window.onYouTubeIframeAPIReady=function(){ __ytPendingCaptions.splice(0).forEach(_applyZhCaptions); };
+    window.onYouTubeIframeAPIReady=function(){ __ytPendingCaptions.splice(0).forEach(x=>_applyZhCaptions(x.id, x.hans)); };
   }
 }
 function initIrCaptions(){ forceZhCaptions('irVideoFrame'); }
@@ -3595,8 +3604,16 @@ const MASTER_VIDEOS=[
       //   GyCm3gpvl5w 是同一部《成為巴菲特》紀錄片，畫面為真實紀錄片影像(非後製插畫)且「中英雙語字幕直接燒錄在畫面裡」，
       //   已下載縮圖逐格確認字幕確實存在。因字幕已在畫面上，設 noCap 關掉我們的字幕層，避免兩層字幕重疊。
       {id:'GyCm3gpvl5w',noCap:true,title:'《成為巴菲特》紀錄片完整版 — 真實紀錄片影像，畫面自帶中英雙語字幕'},
-      // ⚠️ 此為直播存檔(畫面左上角有LIVE標記)，YouTube直播沒有字幕軌，無法提供任何字幕(已實測確認)
-      {id:'j1vGFpd49wM',noCap:true,title:'2025 波克夏·海瑟威股東大會 — CNBC 完整實況轉播(直播存檔，YouTube無字幕軌可用)'},
+      // 2026-08-15 換片：原 j1vGFpd49wM(CNBC直播存檔)實測「連一條字幕軌都沒有」，任何字幕方案都無效。
+      //   改用同一場會議、由上傳者自製中文字幕的三段完整版：
+      //   實測 playerCaptionsTracklistRenderer 有 zh-Hans 原生軌(非YouTube自動翻譯)，
+      //   三段長度 6391+6025+4011=16,427秒，與 CNBC 完整版 16,429 秒幾乎完全一致 → 確認是全場而非精華，
+      //   中段影格(i.ytimg.com/vi/.../2.jpg)可見會場實拍與 CNBC 字幕條 → 確認是真人實拍非投影片。
+      //   zhHans:true → 播放器直接選這條原生中文軌，不走 YouTube 自動翻譯(使用者明確要求)。
+      //   ⚠️ 這條原生軌是「簡體」；目前找不到同場次的原生繁體軌，簡體是唯一非自動翻譯的選擇。
+      {id:'2kqr19XZ7ak',zhHans:true,title:'2025 波克夏股東大會 完整場次（1/3）— 真人實拍，上傳者自製中文字幕（非自動翻譯）'},
+      {id:'p-UAcrwjEIk',zhHans:true,title:'2025 波克夏股東大會 完整場次（2/3）— 真人實拍，上傳者自製中文字幕（非自動翻譯）'},
+      {id:'-CHgwXRsymg',zhHans:true,title:'2025 波克夏股東大會 完整場次（3/3）— 真人實拍，上傳者自製中文字幕（非自動翻譯）'},
       {id:'2hdDE7XYr30',title:'CNBC 專訪巴菲特、蒙格與比爾蓋茲 — 三大巨頭同台對談'}
     ],
     short:[
@@ -3670,7 +3687,7 @@ function masterVidListHtml(){
       // noCap=影片自帶燒錄字幕或為直播存檔(無字幕軌)→關掉我們的字幕層，避免兩層字幕重疊或空轉
       const src=`https://www.youtube-nocookie.com/embed/${v.id}?rel=0&enablejsapi=1&autoplay=1&cc_load_policy=${v.noCap?0:1}${v.noCap?'':'&cc_lang_pref=zh-Hant'}&hl=zh-Hant${orig}`;
       h+=`<div style="margin-bottom:28px"><div style="font-size:13px;color:var(--text2);margin-bottom:4px">${esc(v.title)}</div>`
-        +`<div class="ir-video master-thumb${isShort?' master-short-wrap':''}" data-src="${esc(src)}"${v.noCap?' data-nocap="1"':''} onclick="loadMasterVid(this)" style="cursor:pointer">`
+        +`<div class="ir-video master-thumb${isShort?' master-short-wrap':''}" data-src="${esc(src)}"${v.noCap?' data-nocap="1"':''}${v.zhHans?' data-zhhans="1"':''} onclick="loadMasterVid(this)" style="cursor:pointer">`
         +`<img src="${thumb}" loading="lazy"${isShort?` onerror="this.onerror=null;this.src='${thumbFallback}'"`:''}><div class="ir-play-btn"><div></div></div>`
         +`</div></div>`;
     });
@@ -3693,7 +3710,7 @@ function loadMasterVid(el){
   el.innerHTML=`<iframe id="${fid}" src="${src}" title="投資大師影片" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen style="width:100%;height:100%;${isShort?'':'aspect-ratio:16/9;'}border-radius:8px"></iframe>${fsBtn}`;
   el.style.cursor='default'; el.onclick=null;
   if(!el.dataset.nocap){
-    setTimeout(()=>forceZhCaptions(fid), 300);        // 需要 YT Player 實例來讀播放時間
+    setTimeout(()=>forceZhCaptions(fid, el.dataset.zhhans==='1'), 300);   // 需要 YT Player 實例來讀播放時間
     const vid=(src.match(/embed\/([\w-]{11})/)||[])[1];
     if(vid) startZhCaptionOverlay(el, fid, vid);      // 自製繁中字幕層(疊在影片下緣)
   }
