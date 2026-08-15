@@ -263,21 +263,27 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .header.compact { padding:10px 10px; gap:6px; flex-wrap:nowrap; }
 /* App名稱字級 = 各卡片標題(.ct)的 18px，兩者視覺一致(使用者2026-08-15要求) */
 .header.compact .logo { font-size:18px; gap:4px; }
-.header.compact .logo svg { width:24px; height:24px; vertical-align:-5px; margin-right:0; }
+.header.compact .logo svg { width:27px; height:27px; vertical-align:-6px; margin-right:0; }
 .header.compact .settings-btn { padding:7px 8px; font-size:14px; }
 /* 美股/台股鈕靠右(使用者2026-08-15要求)：把剩餘空白全部推到 App名稱與市場鈕之間。
    ⚠️ 安裝鈕與齒輪鈕的 margin-left:auto 是寫在 HTML 的 inline style，
    CSS 一定要加 !important 才蓋得過，否則空白會被它們搶走、市場鈕還是貼在名稱旁邊。 */
 .market-tabs.mkt-compact { margin:0 0 0 auto; gap:5px; flex:0 0 auto; }
 .header.compact .install-btn, .header.compact .settings-btn { margin-left:0 !important; }
+/* ⚙️ 設定鈕在「線上/App版」是隱藏的(只有本機開發版才顯示，見 hideSettingsForUsers)，
+   所以正式站上市場鈕右邊沒有東西擋著，會直接貼在畫面右緣看起來很擠。
+   → 只有在沒有齒輪鈕時才補一段右邊距；本機有齒輪時不加，避免那一行被撐爆。 */
+/* 8px 是實測 360px 螢幕還能維持單行的上限(10px 就會把市場鈕擠到第二行)，
+   加上容器內距後離畫面右緣約 12px，看得出留白又不會換行。 */
+body.no-settings-btn .market-tabs.mkt-compact { margin-right:8px; }
 .market-tabs.mkt-compact .mkt-btn { flex:0 0 auto; padding:5px 8px; font-size:15px; border-radius:8px; line-height:1.25; }
 @media(max-width:400px){
   /* ⚠️ 這一行在 390px 是「剛好塞滿」：名稱200＋市場鈕138＋齒輪35＝373，
      再加內距與間距就會超過 390 造成整頁可左右滑動(先前放大字級時實測到 391px)。
      內距/間距/圖示都壓到最小換出約 10px 餘裕，字級才能維持 18px 不動。 */
-  .header.compact { padding:10px 5px; gap:4px; }
+  .header.compact { padding:10px 4px; gap:3px; }
   .header.compact .logo { font-size:18px; }   /* 同 .ct，窄螢幕也不再縮小 */
-  .header.compact .logo svg { width:21px; height:21px; }
+  .header.compact .logo svg { width:24px; height:24px; }
   .header.compact .settings-btn { padding:6px 7px; font-size:13.5px; }
   .market-tabs.mkt-compact { gap:4px; }
   /* 14.5px 是實測 360px 螢幕還能維持單行的上限(15px 就會擠成兩行) */
@@ -612,7 +618,9 @@ function getGmKey(){ return safeGet(); }
 (function hideSettingsForUsers(){
   try{
     var isLocalEnv=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1);
-    if(!isLocalEnv){ var b=document.getElementById('settingsBtn'); if(b) b.style.display='none'; }
+    if(!isLocalEnv){ var b=document.getElementById('settingsBtn'); if(b) b.style.display='none';
+      // 標記給 CSS 用：沒有齒輪鈕時，市場鈕才需要自己補右邊距(否則會貼齊畫面右緣)
+      try{ document.body.classList.add('no-settings-btn'); }catch(e){} }
   }catch(e){}
 })();
 function openSettings(){ try{ document.getElementById('gmKey').value=getGmKey(); }catch(e){} document.getElementById('settingsModal').classList.add('open'); }
