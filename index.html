@@ -252,15 +252,31 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .market-tabs .mkt-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
 /* 進入主畫面後：市場切換鈕搬到標題列(App名稱右邊)並縮小，讓主畫面上方留給內容。
    標題文字同步縮小、⚙️ 仍靠最右，整列才不會擠。 */
-.header.compact { padding:10px 14px; gap:8px; flex-wrap:nowrap; }
-.header.compact .logo { font-size:18px; gap:4px; }
-.header.compact .logo svg { width:24px; height:24px; vertical-align:-4px; margin-right:0; }
-.market-tabs.mkt-compact { margin:0; gap:6px; flex:0 0 auto; }
-.market-tabs.mkt-compact .mkt-btn { flex:0 0 auto; padding:5px 9px; font-size:13.5px; border-radius:8px; line-height:1.25; }
+/* 第一行(標題列)：App名稱與美股/台股鈕再放大一級(使用者2026-08-15要求)。
+   390px 手機這一行是 logo＋市場鈕＋齒輪擠在同一列，只剩約15px餘裕，
+   因此放大字級的同時把左右內距與間距收窄換空間，實測不換行、不水平溢出。 */
+/* 第一行(標題列)：App名稱與美股/台股鈕再放大一級(使用者2026-08-15要求)。
+   ⚠️ 這一行在手機是 App名稱＋市場鈕＋齒輪擠在同一列，空間非常吃緊：
+   實測 390px 下總寬只有約 330px 可分配，字級一放大就會水平溢出。
+   因此同時做三件事換空間：①縮小左右內距與間距 ②把齒輪鈕縮小(原本 47px 過寬)
+   ③370px 以下允許換行(寧可變兩行，也不要整頁能左右滑動)。 */
+.header.compact { padding:10px 10px; gap:6px; flex-wrap:nowrap; }
+.header.compact .logo { font-size:20px; gap:4px; }
+.header.compact .logo svg { width:26px; height:26px; vertical-align:-5px; margin-right:0; }
+.header.compact .settings-btn { padding:7px 8px; font-size:14px; }
+.market-tabs.mkt-compact { margin:0; gap:5px; flex:0 0 auto; }
+.market-tabs.mkt-compact .mkt-btn { flex:0 0 auto; padding:5px 8px; font-size:15px; border-radius:8px; line-height:1.25; }
 @media(max-width:400px){
-  .header.compact .logo { font-size:16px; }
-  .header.compact .logo svg { width:21px; height:21px; }
-  .market-tabs.mkt-compact .mkt-btn { padding:5px 7px; font-size:13px; }
+  .header.compact { padding:10px 8px; gap:5px; }
+  .header.compact .logo { font-size:18px; }
+  .header.compact .logo svg { width:23px; height:23px; }
+  .header.compact .settings-btn { padding:6px 7px; font-size:13.5px; }
+  .market-tabs.mkt-compact { gap:4px; }
+  /* 14.5px 是實測 360px 螢幕還能維持單行的上限(15px 就會擠成兩行) */
+  .market-tabs.mkt-compact .mkt-btn { padding:5px 6px; font-size:14.5px; }
+}
+@media(max-width:370px){
+  .header.compact { flex-wrap:wrap; }   /* 極窄螢幕改成兩行，避免整頁水平溢出 */
 }
 /* 盤中股價跳動提示：價格真的變了才閃一下，使用者才看得出來「有在動」 */
 @keyframes pxUp { 0%{background:rgba(63,185,80,.55)} 100%{background:transparent} }
@@ -290,9 +306,8 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .etf-form label { display:block; font-size:13px; color:var(--text2); margin:12px 0 5px; }
 .etf-form input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:10px 12px; color:var(--text); font-size:15px; }
 .etf-sec { margin-top:16px; font-size:14px; font-weight:700; }
-/* 自選ETF 的「+ 加入 / ✏️ 編輯」列，比照自選股標題列 */
-.etf-wl-bar { display:flex; gap:8px; margin:0 0 10px; }
-.etf-wl-bar .search-btn { flex:none; }
+/* 自選ETF 的「+ 加入 / ✏️ 編輯」已移到卡片標題列靠右(#etfWlActions)，與自選股一致 */
+#etfWlActions .search-btn, #etfWlActions .wl-edit-btn { flex:none; }
 @media(max-width:400px){
   .etf-nm { font-size:13.5px; } .etf-nm .sym { font-size:11px; }
   .etf-m .vl { font-size:12.5px; } .etf-r2 { gap:4px; margin-left:22px; }
@@ -519,7 +534,12 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
 
   <div class="card" id="etfCard" style="margin-bottom:20px;display:none">
-    <div class="ct">📦 ETF 投資</div>
+    <div class="ct" style="display:flex;justify-content:space-between;align-items:center">📦 ETF 投資
+      <span id="etfWlActions" style="display:none;gap:8px">
+        <button class="search-btn" onclick="addEtfPrompt()">+ 加入</button>
+        <button class="wl-edit-btn" id="etfWlEditBtn" onclick="toggleEtfWlEdit()">✏️ 編輯</button>
+      </span>
+    </div>
     <div id="etfTabs" class="wl-theme-chips"></div>
     <div id="etfBody"></div>
   </div>
@@ -3207,16 +3227,17 @@ function renderEtfTabs(){
 function setEtfTab(t){ __etfTab=t; renderEtfTabs(); }
 function renderEtfBody(){
   const el=document.getElementById('etfBody'); if(!el) return;
+  // 「+ 加入 / ✏️ 編輯」放在卡片標題列靠右(與自選股一致)，只有在「自選ETF」分頁才出現
+  const act=document.getElementById('etfWlActions');
+  if(act) act.style.display = (__etfTab==='自選ETF') ? 'flex' : 'none';
+  const eb=document.getElementById('etfWlEditBtn');
+  if(eb) eb.textContent = __etfWlEdit ? '✓ 完成' : '✏️ 編輯';
   if(__etfTab==='存股'){ el.innerHTML=etfSaverHtml(); restoreEtfSaverInputs(); return; }
   if(__etfTab==='自選ETF'){
     const codes=getEtfWatch();
-    const bar=`<div class="etf-wl-bar">
-      <button class="search-btn" onclick="addEtfPrompt()">+ 加入</button>
-      <button class="wl-edit-btn" onclick="toggleEtfWlEdit()">${__etfWlEdit?'✓ 完成':'✏️ 編輯'}</button>
-    </div>`;
-    if(!codes.length){ el.innerHTML=bar+'<div class="note">尚無自選ETF，可按上方「+ 加入」輸入代碼，或到「排行榜」與各分類點 🤍 加入</div>'; return; }
+    if(!codes.length){ el.innerHTML='<div class="note">尚無自選ETF，可按右上角「+ 加入」輸入代碼，或到「排行榜」與各分類點 🤍 加入</div>'; return; }
     // 自選ETF 是使用者自己排的順序，不能再按年化報酬率重排(會把手動排序洗掉)
-    el.innerHTML=bar+etfListShell(codes, true);
+    el.innerHTML=etfListShell(codes, true);
     fillEtfRows(codes, 0, true);
     return;
   }
@@ -3229,8 +3250,9 @@ function renderEtfBody(){
   fillEtfRows(codes, __etfTab==='排行榜'?10:0);
 }
 function etfListShell(codes, isWatch, topN){
+  // 自選ETF 不顯示排序說明文字(使用者要求移除)；仍維持「依使用者手動順序、不自動重排」的行為
   const tip=isWatch
-    ? '<div class="note" style="margin:0 0 6px">依你自己排的順序顯示（按「✏️ 編輯」可用 ▲▼ 調整順序或刪除）。</div>'
+    ? ''
     : '<div class="note" style="margin:0 0 6px">依年化報酬率由高到低排序，載入完成後自動重排。</div>';
   return tip
     +`<div id="etfRows">${codes.map((c,i)=>etfRowHtml(c,i,isWatch,codes.length)).join('')}</div>`
@@ -3312,6 +3334,8 @@ function etfSaUrl(code, holdings){
   const base=tw?`https://stockanalysis.com/quote/tpe/${code}/`:`https://stockanalysis.com/etf/${code.toLowerCase()}/`;
   return holdings?base+'holdings/':base;
 }
+// 台股 ETF 前十大持股來源（Yahoo 股市「持股分析」頁，伺服器端輸出的 HTML）
+function twEtfHoldUrl(code){ return `https://tw.stock.yahoo.com/quote/${code}.TW/holding`; }
 async function fetchTextViaProxy(url){
   const r=await fetch(PROXY+encodeURIComponent(url));
   if(!r.ok) throw new Error('HTTP_'+r.status);
@@ -3332,6 +3356,25 @@ function openEtfInfo(code){
   loadEtfInfo(code, body);
 }
 function closeEtfInfo(){ const ov=document.getElementById('etfInfoModal'); if(ov) ov.classList.remove('open'); }
+// stockanalysis 的資產規模是英文縮寫寫法（美股頁如 "$1.03T"、台股頁為無貨幣符號的 "2.36T"，
+//   台股頁該站標明幣別為 TWD），使用者要求改用中文單位顯示。
+// 一律換算成「億」（不足1億才用「萬」）並標出幣別，例如 "$1.03T" → "10,300 億美元"。
+// ⚠️ 解析不出來就原樣回傳來源字串，不自己猜數字（寧可顯示原文，也不能顯示錯的金額）。
+function etfAumZh(raw){
+  if(raw==null) return null;
+  const s=String(raw).trim();
+  const m=s.match(/(-?[\d,]+(?:\.\d+)?)\s*([TBMK])?\b/i);
+  if(!m) return s;
+  const n=parseFloat(m[1].replace(/,/g,''));
+  if(!isFinite(n)) return s;
+  const mul={T:1e12,B:1e9,M:1e6,K:1e3}[(m[2]||'').toUpperCase()]||1;
+  const v=n*mul;
+  const cn=etfCurName();
+  const fmt=x=> x>=1000 ? Math.round(x).toLocaleString('en-US') : (x>=100 ? x.toFixed(1) : x.toFixed(2));
+  if(v>=1e8) return fmt(v/1e8)+' 億'+cn;
+  if(v>=1e4) return fmt(v/1e4)+' 萬'+cn;
+  return Math.round(v).toLocaleString('en-US')+' '+cn;
+}
 async function loadEtfInfo(code, body){
   const m=await etfMetrics(code).catch(()=>null);
   const cur=etfCur();
@@ -3354,21 +3397,47 @@ async function loadEtfInfo(code, body){
     const box=document.getElementById('etfSaBox');
     if(box) box.innerHTML=
        `<div class="etf-kv"><span>費用率（總開銷）</span><b>${exp?esc(exp):'查無資料'}</b></div>`
-      +`<div class="etf-kv"><span>資產規模</span><b>${aum?esc(aum):'查無資料'}</b></div>`
+      +`<div class="etf-kv"><span>資產規模</span><b>${aum?esc(etfAumZh(aum)):'查無資料'}</b></div>`
       +`<div class="etf-kv"><span>成立日／成立年數</span><b>${inceptionTxt}</b></div>`
       +`<div class="etf-sec">🏢 前十大成分股</div><div id="etfHoldBox"><div class="note">載入中…</div></div>`
-      +`<div class="note" style="margin-top:12px">資料來源：stockanalysis.com（費用率／資產規模／成立日／成分股）與 Yahoo Finance（價格／配息）。<a href="${esc(etfSaUrl(code,false))}" target="_blank" rel="noopener" style="color:var(--blue)">查看完整資料 ↗</a></div>`;
+      +`<div class="note" style="margin-top:12px">資料來源：stockanalysis.com（費用率／資產規模／成立日）與 Yahoo（價格／配息／台股持股）。<a href="${esc(etfSaUrl(code,false))}" target="_blank" rel="noopener" style="color:var(--blue)">查看完整資料 ↗</a></div>`;
   }catch(e){
+    // ⚠️ 這裡以前是直接 return，導致 stockanalysis 掛掉時「成分股」整段連帶不顯示。
+    //   但成分股(台股)來源是 Yahoo、與這裡無關，不該被連坐 → 改成照樣建立成分股區塊再繼續。
     const box=document.getElementById('etfSaBox');
-    if(box) box.innerHTML=`<div class="note" style="margin-top:10px">費用率／資產規模／成立年數目前查無資料（來源網站未回應）。<a href="${esc(etfSaUrl(code,false))}" target="_blank" rel="noopener" style="color:var(--blue)">直接前往查看 ↗</a></div>`;
-    return;
+    if(box) box.innerHTML=`<div class="note" style="margin-top:10px">費用率／資產規模／成立年數目前查無資料（來源網站未回應）。<a href="${esc(etfSaUrl(code,false))}" target="_blank" rel="noopener" style="color:var(--blue)">直接前往查看 ↗</a></div>`
+      +`<div class="etf-sec">🏢 前十大成分股</div><div id="etfHoldBox"><div class="note">載入中…</div></div>`;
   }
-  // 成分股。⚠️ 實測 stockanalysis 只有美股ETF有 /holdings/ 分頁，台股ETF該分頁一律404；
-  //   TWSE openapi 的 ETFHolding 端點也已失效。因此台股不硬抓，誠實說明並導向官方查詢，
-  //   不用「這檔ETF大概持有哪些股票」的推測內容充數(違反不臆造鐵則)。
+  // 成分股。
+  // ⚠️ 台股來源沿革（2026-08-15 重新查證，先前記錄「台股抓不到」已不適用）：
+  //   stockanalysis 的 /holdings/ 對台股仍是 404、TWSE openapi 沒有持股端點、
+  //   Yahoo quoteSummary 的 topHoldings 需要 crumb 會回 Invalid Crumb ——這三條確實走不通，
+  //   但 Yahoo 台股的「持股分析」頁 tw.stock.yahoo.com/quote/{代碼}.TW/holding 是
+  //   伺服器端輸出的 HTML，含「前十大持股」名稱＋權重＋資料日期，實測 8 檔台股ETF 全部抓得到。
+  //   已把 tw.stock.yahoo.com 加進 api/proxy.js 白名單。
+  // 📌 解析要點：錨點必須用「前十大持股</h2>」。只比對「前十大持股」會先命中頁面 <meta> 描述
+  //   （"…包含前十大持股及資產分佈資訊"），位置完全錯掉、一列都抓不到。
   const hb=document.getElementById('etfHoldBox');
   if(getMarket()==='tw'){
-    if(hb) hb.innerHTML=`<div class="note">台股 ETF 的成分股需以發行商官方每日公告(PCF)為準，本App的免費資料來源未提供，為避免顯示過期或推測的持股而未列出。請至 <a href="${esc(etfSaUrl(code,false))}" target="_blank" rel="noopener" style="color:var(--blue)">個股資料頁 ↗</a> 或發行商官網查詢最新成分股。</div>`;
+    try{
+      const html=await fetchTextViaProxy(twEtfHoldUrl(code));
+      const i=html.indexOf('前十大持股</h2>');
+      if(i<0) throw new Error('no section');
+      const seg=html.slice(i, i+9000);
+      const dm=seg.match(/datatime="([\d/]+)"/);
+      const re=/>(\d{1,2})\.<\/div>([^<]{1,30})<\/div><div[^>]*>([\d.]+)%/g;
+      const rows=[]; let mm;
+      while((mm=re.exec(seg)) && rows.length<10) rows.push({name:mm[2], w:mm[3]});
+      if(!rows.length) throw new Error('no rows');
+      if(hb) hb.innerHTML=
+         rows.map(r=>`<div class="etf-hold"><span>${esc(r.name)}</span><b>${esc(r.w)}%</b></div>`).join('')
+        +`<div class="note" style="margin-top:8px">資料來源：Yahoo 股市「持股分析」${dm?`，資料時間 ${esc(dm[1])}`:''}。
+           持股每日變動，最新明細以發行商官方公告(PCF)為準。
+           <a href="${esc(twEtfHoldUrl(code))}" target="_blank" rel="noopener" style="color:var(--blue)">前往來源查看 ↗</a></div>`;
+    }catch(e){
+      if(hb) hb.innerHTML=`<div class="note">目前查不到這檔 ETF 的成分股（來源未回應或版面異動）。
+        <a href="${esc(twEtfHoldUrl(code))}" target="_blank" rel="noopener" style="color:var(--blue)">前往來源查看 ↗</a></div>`;
+    }
   } else {
     try{
       const html=await fetchTextViaProxy(etfSaUrl(code,true));
@@ -3441,9 +3510,13 @@ async function runEtfSaver(){
 // 長條上直接標金額，單位「萬」、四捨五入至整數(使用者要求)。
 // 沒有引用 chartjs-plugin-datalabels（外部CDN、且本App只載了 chart.js 本身），
 //   改用 inline plugin 自己畫，不新增任何外部相依。
-// 390px 手機上一組有兩根長條、共10根，橫排文字很容易互相重疊 →
-//   量測文字寬度，放不下就自動轉成直排(旋轉90度)，這樣任何金額位數都不會疊在一起。
-const ETF_BAR_LABEL_FONT='700 9.5px -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif';
+// ⚠️ 文字一律「橫向」(使用者2026-08-15指定，先前的直排版本已改掉)。
+//   390px 手機上一組兩根、共10根長條，每根只有約17px寬，橫向文字(最長約26px)必然相鄰重疊，
+//   因此改用「碰撞偵測＋自動往上錯開一層」的方式解決：由左到右逐一擺放，
+//   跟已擺好的標籤重疊就往上抬一行，直到不重疊為止。這樣維持全部橫向又不會疊在一起。
+const ETF_BAR_LABEL_FONT='700 9px -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif';
+const ETF_BAR_LABEL_H=11;        // 一行標籤的高度(往上錯開時的間距)
+const ETF_BAR_LABEL_LEVELS=3;    // 最多往上錯開幾層 → 決定圖表上方要留多少空白
 function etfWanText(v){
   const wan=Math.round(v/10000);
   return (wan>=1 ? wan.toLocaleString('en-US') : '<1')+'萬';
@@ -3455,6 +3528,10 @@ const ETF_BAR_LABEL_PLUGIN={
     ctx.save();
     ctx.font=ETF_BAR_LABEL_FONT;
     ctx.fillStyle='#c9d1d9';
+    ctx.textAlign='center';
+    ctx.textBaseline='bottom';
+    // 先算出每個標籤的位置與寬度，再統一處理重疊，最後才畫
+    const items=[];
     chart.data.datasets.forEach((ds,di)=>{
       const meta=chart.getDatasetMeta(di);
       if(meta.hidden) return;
@@ -3462,20 +3539,23 @@ const ETF_BAR_LABEL_PLUGIN={
         const v=ds.data[i];
         if(v==null || !isFinite(v)) return;
         const txt=etfWanText(v);
-        const tw=ctx.measureText(txt).width;
-        const bw=(bar.width!=null?bar.width:0);
-        if(tw<=bw-1){
-          ctx.textAlign='center'; ctx.textBaseline='bottom';
-          ctx.fillText(txt, bar.x, bar.y-3);
-        } else {
-          ctx.save();
-          ctx.translate(bar.x, bar.y-4);
-          ctx.rotate(-Math.PI/2);
-          ctx.textAlign='left'; ctx.textBaseline='middle';
-          ctx.fillText(txt, 0, 0);
-          ctx.restore();
-        }
+        const w=ctx.measureText(txt).width;
+        items.push({txt, x:bar.x, y:bar.y-3, w});
       });
+    });
+    items.sort((a,b)=>a.x-b.x);
+    const placed=[];
+    const top=(chart.chartArea && chart.chartArea.top!=null) ? chart.chartArea.top : 0;
+    items.forEach(it=>{
+      let lvl=0;
+      const hit=y=>placed.some(p=>
+        Math.abs(p.x-it.x) < (p.w+it.w)/2 + 2 &&      // 水平投影重疊
+        Math.abs(p.y-y) < ETF_BAR_LABEL_H);            // 垂直距離不足一行
+      while(hit(it.y-lvl*ETF_BAR_LABEL_H) && lvl<ETF_BAR_LABEL_LEVELS) lvl++;
+      let y=it.y-lvl*ETF_BAR_LABEL_H;
+      if(y<top+2) y=top+2;                             // 不要超出畫布上緣被裁掉
+      it.y=y; placed.push(it);
+      ctx.fillText(it.txt, it.x, it.y);
     });
     ctx.restore();
   }
@@ -3483,14 +3563,8 @@ const ETF_BAR_LABEL_PLUGIN={
 function drawEtfSaverChart(rows, cur){
   const cv=document.getElementById('etfSaverChart'); if(!cv || !window.Chart) return;
   const old=Chart.getChart?Chart.getChart(cv):null; if(old) old.destroy();
-  // 上方留白依「最長的一個金額標籤」實際量測決定，不用寫死的數字：
-  //   金額愈大字愈長，直排時往上延伸愈多，寫死的padding在大金額時會把標籤裁掉。
-  const mctx=cv.getContext('2d');
-  mctx.save(); mctx.font=ETF_BAR_LABEL_FONT;
-  let maxLabelW=0;
-  rows.forEach(r=>{ [r.put,r.fv].forEach(v=>{ const w=mctx.measureText(etfWanText(v)).width; if(w>maxLabelW) maxLabelW=w; }); });
-  mctx.restore();
-  const padTop=Math.max(24, Math.ceil(maxLabelW)+12);
+  // 上方留白 = 最高那根長條的標籤(1行) + 最多可能往上錯開的層數，避免被裁掉
+  const padTop=14+ETF_BAR_LABEL_H*ETF_BAR_LABEL_LEVELS;
   new Chart(cv.getContext('2d'),{
     type:'bar',
     data:{ labels:rows.map(r=>r.y+'年'),
