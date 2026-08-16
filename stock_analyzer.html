@@ -74,6 +74,10 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .welcome { text-align:center; padding:8px 0 22px; }
 .welcome h1 { font-size:30px; font-weight:700; margin-bottom:10px; }
 .welcome p { color:var(--text2); font-size:15px; }
+/* 法律免責聲明：不放在#welcome封面(離開封面後就消失)，改放在.main最下方、
+   結果區塊之後，讓App所有畫面狀態(封面/搜尋結果/自選股/主題...)都固定看得到，
+   為Google Play上架準備(使用者2026-08-16要求)。 */
+.app-disclaimer { color:var(--text2); font-size:11px; line-height:1.6; text-align:center; padding:16px 12px 4px; border-top:1px solid var(--border); margin-top:24px; }
 .free-tag { display:inline-block; background:rgba(63,185,80,.15); color:var(--green); border:1px solid rgba(63,185,80,.3); border-radius:14px; padding:4px 12px; font-size:12px; margin-top:12px; }
 .chips { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:18px; }
 .chip { background:var(--bg3); border:1px solid var(--border); border-radius:18px; padding:6px 14px; font-size:13px; cursor:pointer; }
@@ -561,6 +565,7 @@ body.no-settings-btn .market-tabs.mkt-compact { margin-right:8px; }
 
   <div id="results" class="results"></div>
   <div id="grpEmpty" class="grp-empty" style="display:none">請先回到「自選股」，點任一個股的「AI」按鈕完成分析，即可在此看到該主題內容。</div>
+  <div class="app-disclaimer">本App提供之資訊僅供研究與教育參考，不構成投資、財務或買賣建議。投資具有風險，使用者應自行判斷並承擔投資結果。</div>
 </div>
 
 <script>
