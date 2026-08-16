@@ -853,7 +853,12 @@ function findUsEtf(raw){
 let tickerMap=null;
 function findCompany(raw){
   const q=raw.trim(); const U=q.toUpperCase();
-  if(tickerMap[U]) return {symbol:U, co:tickerMap[U]};                 // 1. 直接是代碼
+  // A/B股代碼：SEC官方清單用連字號(如BRK-B)，但站內IR_CALL_SUMMARY等資料一律用點(BRK.B)存key，
+  // 故不論使用者輸入哪種格式，一律正規化成「點」格式回傳symbol，並用「連字號」格式去比對SEC代碼。
+  const UDot=U.replace(/-([A-Z])$/,'.$1');
+  const UDash=U.replace(/\.([A-Z])$/,'-$1');
+  if(tickerMap[U]) return {symbol:UDot, co:tickerMap[U]};              // 1. 直接是代碼
+  if(UDash!==U && tickerMap[UDash]) return {symbol:UDot, co:tickerMap[UDash]};  // 1b. 點格式輸入 → 換連字號再查一次
   if(ALIASES[q]) { const t=ALIASES[q]; if(tickerMap[t]) return {symbol:t,co:tickerMap[t]}; }   // 2. 中文/別名(原樣)
   const ql=q.toLowerCase();
   for(const a in ALIASES){ if(a.toLowerCase()===ql){ const t=ALIASES[a]; if(tickerMap[t]) return {symbol:t,co:tickerMap[t]}; } } // 別名(英文不分大小寫)
@@ -2034,7 +2039,7 @@ async function doSearch(){
     symbol=found.symbol;
     const co=found.co;
     const fbFin=FOREIGN_YAHOO_FALLBACK[symbol];   // 無SEC申報外國公司(如SK海力士)：Yahoo當地代碼
-    const quoteSym=fbFin?fbFin.yahooSym:symbol;   // 所有Yahoo Finance查詢一律用這個(非SEC股票代碼)
+    const quoteSym=(fbFin?fbFin.yahooSym:symbol).replace(/\./g,'-');   // 所有Yahoo Finance查詢一律用這個(非SEC股票代碼)；Yahoo對A/B股用連字號(如BRK-B)而非點(BRK.B)，故轉換
     window.__coNameForLinks=co.title;   // 供法說會口頭Q&A直達連結使用
     window.__symbolForLinks=US_TW_EQUIV[symbol]||symbol;   // 雙掛牌ADR(如UMC聯電→2303):共用台股端已建的官方事實內容;其餘維持美股代碼
     updateCurrentCompanyBar(co.title, symbol);
