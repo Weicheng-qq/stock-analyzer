@@ -292,6 +292,26 @@ body.no-settings-btn .market-tabs.mkt-compact { margin-right:8px; }
 @keyframes pxDn { 0%{background:rgba(248,81,73,.55)} 100%{background:transparent} }
 .px-up { animation:pxUp .7s ease-out; border-radius:4px; }
 .px-dn { animation:pxDn .7s ease-out; border-radius:4px; }
+/* 盤中股價跳動：整列亮一下(使用者2026-08-18要求)。
+   眼睛不會一直盯著小小的數字，整列一起亮才會在餘光就察覺「這檔在動」。
+   面積比單一數字大很多 → 透明度調低(.28 vs .55)、時間拉長(.9s vs .7s)，才不會刺眼。 */
+@keyframes rowUp { 0%{background:rgba(63,185,80,.28)} 100%{background:transparent} }
+@keyframes rowDn { 0%{background:rgba(248,81,73,.28)} 100%{background:transparent} }
+.wl-row.row-up { animation:rowUp .9s ease-out; border-radius:6px; }
+.wl-row.row-dn { animation:rowDn .9s ease-out; border-radius:6px; }
+/* 台股紅漲綠跌：整列閃光與數字閃光都要跟著翻轉，否則會與同一列的漲跌pill顏色互相矛盾 */
+@keyframes rowUpTw { 0%{background:rgba(248,81,73,.28)} 100%{background:transparent} }
+@keyframes rowDnTw { 0%{background:rgba(63,185,80,.28)} 100%{background:transparent} }
+.mkt-tw .wl-row.row-up { animation-name:rowUpTw; }
+.mkt-tw .wl-row.row-dn { animation-name:rowDnTw; }
+@keyframes pxUpTw { 0%{background:rgba(248,81,73,.55)} 100%{background:transparent} }
+@keyframes pxDnTw { 0%{background:rgba(63,185,80,.55)} 100%{background:transparent} }
+.mkt-tw .px-up { animation-name:pxUpTw; }
+.mkt-tw .px-dn { animation-name:pxDnTw; }
+/* 減少動態偏好：整列大面積閃爍對敏感使用者不友善，關掉動畫但保留數字更新 */
+@media (prefers-reduced-motion: reduce){
+  .wl-row.row-up, .wl-row.row-dn, .px-up, .px-dn { animation:none; }
+}
 /* ── ETF 投資 ──
    手機390px放不下「名稱+股價+漲跌+年化+殖利率」單行五欄(實測名稱欄只剩50px、整列被撐成91px高)，
    改成兩行式：第一行名稱/代碼+愛心，第二行四個數字各自帶標籤，手機桌機都好讀。 */
@@ -1429,17 +1449,26 @@ function renderWatchlist(){
     });
   });
 }
+// 自選股報價「世代」：renderWatchlist / refreshLiveData / 每秒輪詢三個入口都會呼叫
+//   loadWatchlistPrices，多輪請求會同時在飛。網路慢時舊那輪可能「後到」，把已經正確的
+//   價格覆蓋成舊數字(使用者2026-08-18回報盤後看到2405→2395→2400 的主因之一)。
+//   比照本檔既有的 SEARCH_GEN 做法：每發起新一輪就 +1，回應時世代不符一律丟棄不寫畫面。
+let __wlPriceGen=0;
 async function loadWatchlistPrices(list){
+  const gen=++__wlPriceGen;
   await Promise.all(list.map(async it=>{
     const pEl=document.getElementById('wlp_'+it.symbol), cEl=document.getElementById('wlc_'+it.symbol);
     try{
       const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${it.symbol}?range=1d&interval=1d`);
+      if(gen!==__wlPriceGen) return;            // 已有更新的一輪發出，這份是舊資料，丟棄
       const meta=ch?.chart?.result?.[0]?.meta;
       const price=meta?.regularMarketPrice, prev=meta?.previousClose??meta?.chartPreviousClose;
       if(pEl){
         const txt = price!=null?'$'+(+price).toFixed(2):'—';
         const before=parseFloat((pEl.textContent||'').replace(/[^0-9.]/g,''));
-        setLiveText(pEl, txt, (price!=null && !isNaN(before) && price!==before) ? price>before : null);
+        const dir = (price!=null && !isNaN(before) && price!==before) ? price>before : null;
+        setLiveText(pEl, txt, dir);
+        if(dir!=null) flashRow(pEl.closest('.wl-row'), dir);   // 價格真的變了才整列亮一下
       }
       if(cEl){
         if(price!=null && prev){
@@ -1449,7 +1478,10 @@ async function loadWatchlistPrices(list){
           if(cEl.innerHTML!==html) cEl.innerHTML=html;
         } else if(cEl.textContent!=='—') cEl.textContent='—';
       }
-    }catch(e){ if(pEl) pEl.textContent='—'; if(cEl) cEl.textContent='—'; }
+    }catch(e){
+      if(gen!==__wlPriceGen) return;            // 舊世代的失敗也不該把新價格擦掉
+      if(pEl) pEl.textContent='—'; if(cEl) cEl.textContent='—';
+    }
   }));
 }
 // 自選股：當日盤中走勢線(名稱右邊) + 盤前/盤後行情(股價下方小字)
@@ -23785,6 +23817,14 @@ function setLiveText(el, txt, flashUp){
     el.classList.add(flashUp?'px-up':'px-dn');
   }
   return true;
+}
+// 自選股整列閃一下(使用者要求「開盤時股價跳動，整列亮一下」)。
+//   只有價格真的變動才呼叫；動畫結束就把 class 拿掉，下次同向變動才會再次觸發。
+function flashRow(row, up){
+  if(!row) return;
+  row.classList.remove('row-up','row-dn');
+  void row.offsetWidth;                         // 強制重繪，連續同向變動才會每次都閃
+  row.classList.add(up?'row-up':'row-dn');
 }
 // 更新公司詳情頁最上方的股價(下單前最在意的數字)
 async function updateDetailPrice(){
