@@ -254,30 +254,20 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .market-tabs { display:flex; gap:8px; margin:0 0 26px; }
 .market-tabs .mkt-btn { flex:1; background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:10px; padding:11px 10px; font-size:15px; font-weight:700; cursor:pointer; }
 .market-tabs .mkt-btn.active { background:var(--blue); color:#0d1117; border-color:var(--blue); }
-/* 進入主畫面後：市場切換鈕搬到標題列(App名稱右邊)並縮小，讓主畫面上方留給內容。
-   標題文字同步縮小、⚙️ 仍靠最右，整列才不會擠。 */
-/* 第一行(標題列)：App名稱字級調整為與封面第一行(.welcome h1，30px/700)一致
-   (使用者2026-08-15要求，含圖示等比放大)。
-   ⚠️ 30px 的App名稱單獨一行就已經很寬(實測約320px)，390/360px手機screen不可能
-   再跟市場鈕擠在同一行——因此改成「兩行式」：第一行App名稱獨占，
-   第二行市場鈕(＋本機開發版才有的齒輪鈕)靠右對齊。這是唯一能同時滿足
-   「字級=封面」又「不水平溢出」的排法，寧可變兩行也不要縮小字級或讓內容被裁切。 */
+/* 進入主畫面後：市場切換鈕搬到標題列(App名稱文字右邊)並縮小，讓主畫面上方留給內容。
+   （使用者2026-08-26要求：市場鈕與標題文字同一行，不要分兩行）
+   ⚙️ 設定鈕(本機開發版才有)仍靠最右，若空間不夠 flex-wrap 會自動讓市場鈕折到第二行。 */
 .header.compact { padding:10px 12px; gap:6px 8px; flex-wrap:wrap; }
 /* App名稱字級/字重：原本=封面 .welcome h1(30px/700)，使用者2026-08-16回報
    稍微太大，下修至26px；2026-08-23再次回報仍稍大，續下修至23px，圖示等比縮小維持對齊。 */
-.header.compact .logo { font-size:23px; font-weight:700; gap:6px; flex:1 1 100%; }
+.header.compact .logo { font-size:23px; font-weight:700; gap:6px; }
 /* 圖示等比縮小：23/26≈0.88倍，圖示約30px、垂直對齊約-8px。 */
 .header.compact .logo svg { width:30px; height:30px; vertical-align:-8px; margin-right:0; }
 .header.compact .settings-btn { padding:7px 8px; font-size:14px; }
-/* 美股/台股鈕靠右：把第二行的剩餘空白全部推到左邊，鈕群貼右對齊。
-   ⚠️ 安裝鈕與齒輪鈕的 margin-left:auto 是寫在 HTML 的 inline style，
-   CSS 一定要加 !important 才蓋得過，否則會各自被推開、順序跑掉。 */
-.market-tabs.mkt-compact { margin:0 0 0 auto; gap:5px; flex:0 0 auto; }
-.header.compact .install-btn, .header.compact .settings-btn { margin-left:0 !important; }
-/* ⚙️ 設定鈕在「線上/App版」是隱藏的(只有本機開發版才顯示，見 hideSettingsForUsers)，
-   所以正式站上市場鈕右邊沒有東西擋著，會直接貼在畫面右緣看起來很擠。
-   → 只有在沒有齒輪鈕時才補一段右邊距；本機有齒輪時不加，避免那一行被撐爆。 */
-body.no-settings-btn .market-tabs.mkt-compact { margin-right:8px; }
+/* 市場鈕緊接在標題文字右邊(不再用 margin-left:auto 推到最右)。
+   ⚙️ 齒輪鈕仍保留自己 inline 的 margin-left:auto，靠最右對齊；安裝鈕取消 auto 避免搶位置。 */
+.market-tabs.mkt-compact { margin:0; gap:5px; flex:0 0 auto; }
+.header.compact .install-btn { margin-left:0 !important; }
 .market-tabs.mkt-compact .mkt-btn { flex:0 0 auto; padding:5px 8px; font-size:15px; border-radius:8px; line-height:1.25; }
 @media(max-width:400px){
   .header.compact { padding:10px 8px; gap:5px 6px; }
