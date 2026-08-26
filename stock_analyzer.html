@@ -1444,35 +1444,90 @@ function renderWatchlist(){
 //   價格覆蓋成舊數字(使用者2026-08-18回報盤後看到2405→2395→2400 的主因之一)。
 //   比照本檔既有的 SEARCH_GEN 做法：每發起新一輪就 +1，回應時世代不符一律丟棄不寫畫面。
 let __wlPriceGen=0;
-async function loadWatchlistPrices(list){
-  const gen=++__wlPriceGen;
-  await Promise.all(list.map(async it=>{
-    const pEl=document.getElementById('wlp_'+it.symbol), cEl=document.getElementById('wlc_'+it.symbol);
+// 台股即時報價改走證交所官方「盤中資訊系統」(mis.twse.com.tw)，不再用Yahoo Finance：
+//   Yahoo對.TW/.TWO報價實測常有十幾分鐘延遲，開盤時使用者會看到「股價不動、且與實際不符」
+//   (2026-08-26回報)。TWSE MIS是證交所自己看盤網頁用的免費公開端點，無需金鑰，資料是
+//   接近零延遲的真實成交價；已加入 api/proxy.js 白名單。支援一次查多檔(用|分隔)，
+//   比原本每檔各發一次Yahoo請求更省流量。若TWSE回應失敗才退回Yahoo，確保仍有資料可顯示。
+function twMisExch(symbol){ // '2330.TW'→'tse_2330.tw'；'5483.TWO'→'otc_5483.tw'
+  const m=/^(\d{4,6})\.(TWO?)$/i.exec(symbol||''); if(!m) return null;
+  return (m[2].toUpperCase()==='TWO'?'otc_':'tse_')+m[1]+'.tw';
+}
+async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(symbol → {price, prev})
+  const exList=symbols.map(twMisExch).filter(Boolean);
+  const out=new Map();
+  if(!exList.length) return out;
+  const url=`https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=${encodeURIComponent(exList.join('|'))}&json=1&delay=0`;
+  const j=await fetchJson(url);
+  const rows=j?.msgArray||[];
+  const byCode=new Map(rows.map(r=>[r.c, r]));
+  symbols.forEach(sym=>{
+    const code=(sym.match(/^(\d{4,6})/)||[])[1]; const row=code&&byCode.get(code);
+    if(!row) return;
+    const zRaw=row.z, yRaw=row.y;
+    const prev=parseFloat(yRaw);
+    let price=parseFloat(zRaw);
+    if(isNaN(price)) price=prev;               // 尚未成交(z為"-")時，以昨收顯示(漲跌0%)，避免顯示空白
+    if(!isNaN(price)) out.set(sym, {price, prev: isNaN(prev)?null:prev});
+  });
+  return out;
+}
+// 共用：把報價寫進自選股某一列的DOM(價格數字＋漲跌pill)，回傳是否有寫入新價格
+function applyWlPrice(symbol, price, prev){
+  const pEl=document.getElementById('wlp_'+symbol), cEl=document.getElementById('wlc_'+symbol);
+  if(pEl){
+    const txt = price!=null?'$'+(+price).toFixed(2):'—';
+    const before=parseFloat((pEl.textContent||'').replace(/[^0-9.]/g,''));
+    const dir = (price!=null && !isNaN(before) && price!==before) ? price>before : null;
+    setLiveText(pEl, txt, dir);
+    if(dir!=null) flashRow(pEl.closest('.wl-row'), dir);   // 價格真的變了才整列亮一下
+  }
+  if(cEl){
+    if(price!=null && prev){
+      const pct=(price-prev)/prev*100;
+      // 台股慣例：漲=紅底、跌=綠底、白字
+      const html=`<span class="pill ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span>`;
+      if(cEl.innerHTML!==html) cEl.innerHTML=html;
+    } else if(cEl.textContent!=='—') cEl.textContent='—';
+  }
+}
+async function loadWatchlistPricesYahoo(items, gen){   // 美股走原本Yahoo流程；台股在TWSE失敗時也退回這裡
+  await Promise.all(items.map(async it=>{
     try{
       const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${it.symbol}?range=1d&interval=1d`);
       if(gen!==__wlPriceGen) return;            // 已有更新的一輪發出，這份是舊資料，丟棄
       const meta=ch?.chart?.result?.[0]?.meta;
       const price=meta?.regularMarketPrice, prev=meta?.previousClose??meta?.chartPreviousClose;
-      if(pEl){
-        const txt = price!=null?'$'+(+price).toFixed(2):'—';
-        const before=parseFloat((pEl.textContent||'').replace(/[^0-9.]/g,''));
-        const dir = (price!=null && !isNaN(before) && price!==before) ? price>before : null;
-        setLiveText(pEl, txt, dir);
-        if(dir!=null) flashRow(pEl.closest('.wl-row'), dir);   // 價格真的變了才整列亮一下
-      }
-      if(cEl){
-        if(price!=null && prev){
-          const pct=(price-prev)/prev*100;
-          // 台股慣例：漲=紅底、跌=綠底、白字
-          const html=`<span class="pill ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span>`;
-          if(cEl.innerHTML!==html) cEl.innerHTML=html;
-        } else if(cEl.textContent!=='—') cEl.textContent='—';
-      }
+      applyWlPrice(it.symbol, price, prev);
     }catch(e){
       if(gen!==__wlPriceGen) return;            // 舊世代的失敗也不該把新價格擦掉
-      if(pEl) pEl.textContent='—'; if(cEl) cEl.textContent='—';
+      applyWlPrice(it.symbol, null, null);
     }
   }));
+}
+async function loadWatchlistPrices(list){
+  const gen=++__wlPriceGen;
+  const twItems=list.filter(it=>/\.TWO?$/i.test(it.symbol));
+  const usItems=list.filter(it=>!/\.TWO?$/i.test(it.symbol));
+  const jobs=[loadWatchlistPricesYahoo(usItems, gen)];
+  if(twItems.length){
+    jobs.push((async()=>{
+      try{
+        const quotes=await fetchTwMisQuotes(twItems.map(it=>it.symbol));
+        if(gen!==__wlPriceGen) return;
+        const missing=twItems.filter(it=>!quotes.has(it.symbol));
+        twItems.forEach(it=>{
+          const q=quotes.get(it.symbol);
+          if(q) applyWlPrice(it.symbol, q.price, q.prev);
+        });
+        if(missing.length) await loadWatchlistPricesYahoo(missing, gen);   // TWSE查無資料的個別代碼才退回Yahoo
+      }catch(e){
+        if(gen!==__wlPriceGen) return;
+        await loadWatchlistPricesYahoo(twItems, gen);   // TWSE整批失敗(如逾時)→全部退回Yahoo，確保仍有資料
+      }
+    })());
+  }
+  await Promise.all(jobs);
 }
 // 自選股：當日盤中走勢線(名稱右邊) + 盤前/盤後行情(股價下方小字)
 async function loadWatchlistSpark(list){
@@ -5285,12 +5340,12 @@ const IR_CALL_SUMMARY = {
 • 美國主要電力公用事業公司，資料中心用電需求帶動潛在50～100億美元資本支出上修空間，重申全年EPS財測$6.55～6.80。</div>`
   },
   'AMAT': {
-    quarter: 'FY2026 Q2（最新已公布，Q3將於2026/08/13公布）',
+    quarter: 'FY2026 Q3（官網財報，2026/08/13公布）',
     source: 'https://ir.appliedmaterials.com/',
     html: `
 <div style="margin-bottom:10px"><b style="color:var(--blue)">📈 創紀錄季度</b><br>
-• Q2營收<b>79.1億美元</b>創紀錄，GAAP EPS<b>$3.51</b>，連續四季優於市場預期。<br>
-• Q3財測：營收約89.5億美元(±5億)，調整後EPS $3.36(±0.20)，年增達35.5%。</div>
+• Q3營收<b>92.0億美元</b>創單季新高，年增25%；GAAP EPS $3.17(去年同期$2.22)，調整後EPS $3.50(優於預期$3.40)。非GAAP毛利率50.4%(年增150個基點)，資本支出7.07億美元。<br>
+• Q4財測：營收約102.5億美元(±5億)，調整後EPS $4.02(±$0.20)，AI基礎設施需求持續帶動半導體設備成長。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
 • 全球最大半導體設備廠，AI晶片先進製程投資帶動設備需求強勁。</div>`
   },
@@ -5615,43 +5670,42 @@ const IR_CALL_SUMMARY = {
 • 全球CRM雲端軟體龍頭，Agentforce(AI agent)產品線為新成長動能。</div>`
   },
   'CSCO': {
-    quarter: 'FY2026 Q3（最新已公布，Q4將於2026/08/19公布）',
+    quarter: 'FY2026 Q4（官網財報，2026/08/13公布，較原訂08/19提早）',
     source: 'https://investor.cisco.com/',
     html: `
-<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 優於預期</b><br>
-• Q3營收<b>158億美元（年增12%）</b>，非GAAP EPS $1.06；上修FY2026全年財測至營收628～630億美元、
-非GAAP EPS $4.27～4.29。<br>
-• Q4財測：營收167～169億美元、非GAAP EPS $1.16～1.18。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 全年財報：AI基礎建設訂單大增</b><br>
+• Q4營收<b>173億美元（年增18%）</b>，GAAP EPS $0.97、非GAAP EPS $1.22(優於預期$1.17)。全年FY2026營收633億美元(+12%)。AI基礎設施訂單約40億美元，網路產品訂單年增40%。<br>
+• FY2027財測：Q1營收180～182億美元、非GAAP EPS $1.32～1.34；全年營收722～734億美元、非GAAP EPS $5.05～5.11(含約75億美元超大規模AI基礎設施營收)。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
 • 全球網通設備龍頭，AI資料中心網通基礎建設訂單為成長動能。</div>`
   },
   'ADI': {
-    quarter: 'FY2026 Q2（最新已公布，Q3將於2026/08/19公布）',
+    quarter: 'FY2026 Q3（官網財報，2026/08/19公布）',
     source: 'https://investor.analog.com/',
     html: `
-<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 創紀錄季度</b><br>
-• Q2營收<b>36.2億美元（年增37%）</b>創紀錄，調整後EPS<b>$3.09（去年$1.85）</b>。<br>
-• Q3財測：營收39億美元(±1億)，調整後EPS $3.30(±0.15)。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 創紀錄季度，首次突破40億美元</b><br>
+• Q3營收<b>40.2億美元（年增40%、季增11%）</b>創紀錄，優於預期39.2億美元；調整後毛利率72.5%(年增330bp)、調整後營益率50%(年增780bp)，調整後EPS創紀錄$3.45(年增68%)。各終端市場皆強勁成長(工業+53%、通訊+84%)。<br>
+• Q4財測：營收43億美元(±1億)再創新高，調整後EPS $3.86(±$0.15)；管理層對FY2027展望樂觀(AI基礎設施與國防需求＋景氣循環復甦，客戶尚未開始回補庫存)。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
 • 全球類比/混合訊號IC大廠，工業與AI應用需求為主要成長動能。</div>`
   },
   'HD': {
-    quarter: 'FY2026 Q1（最新已公布，Q2將於2026/08/18公布）',
+    quarter: 'FY2026 Q2（官網財報，2026/08/18公布）',
     source: 'https://ir.homedepot.com/',
     html: `
-<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 Q1穩健成長</b><br>
-• Q1營收<b>418億美元（年增4.8%）</b>，淨利潤33億美元，EPS $3.30(去年同期$3.45)。<br>
-• 重申全年財測，法人估Q2 EPS約$4.71。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 同店銷售優於預期</b><br>
+• Q2營收<b>479億美元（年增5.7%）</b>，同店銷售+1.7%(優於預期+0.9%)；GAAP EPS $4.79(去年同期$4.58)、調整後EPS $4.92(去年同期$4.68)。CFO表示房市仍處於「凍結」狀態。<br>
+• 全年財測維持：同店銷售約持平至+2.0%，總營收成長約2.5%～4.5%，毛利率約33.1%，營益率約12.4～12.6%，調整後EPS約$14.69～15.28。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
 • 美國最大家居修繕零售商，SRS/GMS專業建材通路併購案挹注營收成長。</div>`
   },
   'LOW': {
-    quarter: 'FY2026 Q1（最新已公布，Q2將於2026/08/20公布）',
+    quarter: 'FY2026 Q2（官網財報，2026/08/19公布）',
     source: 'https://corporate.lowes.com/',
     html: `
-<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 Q1同店銷售轉正</b><br>
-• Q1營收<b>231億美元</b>，同店銷售成長0.6%；調整後EPS<b>$3.03（年增3.8%）</b>，線上銷售大增15.5%。<br>
-• 重申全年調整後EPS財測$12.25～12.75。</div>
+<div style="margin-bottom:10px"><b style="color:var(--red)">📉 同店銷售動能轉弱，全年財測下修</b><br>
+• Q2總營收<b>260億美元（年增8.3%）</b>，惟同店銷售僅+0.2%；GAAP EPS $4.27(與去年同期持平)，調整後EPS $4.40(+1.6%，含FBM/ADG併購稅前費用9,600萬美元及IEEPA關稅退款$0.11利益)。線上銷售+15.7%。<br>
+• ⚠️ 全年財測實質下修至區間下緣：總營收約920億美元(原920～940億)、同店銷售改為持平(原持平至+2%)、調整後EPS降為$12.25(原$12.25～12.75)，反映DIY端持續疲弱。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
 • 美國第二大家居修繕零售商，FBM/ADG併購案強化專業建材通路。</div>`
   },
@@ -5685,12 +5739,12 @@ const IR_CALL_SUMMARY = {
 • 雲端資料倉儲/AI資料平台龍頭，Cortex AI功能導入帶動客戶擴大採用。</div>`
   },
   'TGT': {
-    quarter: 'FY2026 Q1（最新已公布，Q2將於2026/08/19公布）',
+    quarter: 'FY2026 Q2（官網財報，2026/08/19公布）',
     source: 'https://corporate.target.com/',
     html: `
-<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 五季來首見同店銷售正成長</b><br>
-• Q1營收<b>254.4億美元（年增6.7%）</b>優於預期，EPS<b>$1.71</b>優於預期$1.65；同店銷售成長5.6%為近五季首見正成長。<br>
-• 數位同店銷售成長8.9%，當日到貨成長逾27%；上修全年營收成長財測至約4%。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 同店銷售與來客數雙雙成長，惟EPS含關稅退款一次性利益</b><br>
+• Q2營收<b>265.4億美元（年增5.3%）</b>優於預期261.3億美元；同店銷售+3.8%、來客數+3.6%。GAAP/調整後EPS $4.11(去年同期$2.05)。⚠️ <b>當季含9.94億美元關稅退款稅前利益(貢獻EPS約$1.65)，排除該一次性項目後調整後EPS為$2.46，年增20%，此為反映本業表現的正常基期數字</b>。<br>
+• 全年財測：營收成長目標上調至約5%(較先前上調1個百分點)，全年GAAP/調整後EPS guidance上調至$9.90～10.90(含關稅退款；排除退款後中位數較先前guidance $7.50～8.50上調約$0.75)。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
 • 美國大型連鎖零售商，數位通路與到貨服務為近期成長亮點。</div>`
   },
@@ -5714,14 +5768,14 @@ const IR_CALL_SUMMARY = {
 • 拉丁美洲最大電商與金融科技平台，電商與Mercado Pago金融服務雙引擎高速成長。</div>`
   },
   'SE': {
-    quarter: 'Q1 2026（最新已公布，Q2將於2026/08/11公布）',
+    quarter: 'Q2 2026（官網股東信＋SEC 6-K，2026/08/11公布）',
     source: 'https://www.sea.com/investor',
     html: `
-<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 三大事業全面成長</b><br>
-• Q1營收<b>71億美元（年增46.6%）</b>，淨利潤4.38億美元(年增6.7%)；Shopee GMV達373億美元創紀錄。<br>
-• Monee(原SeaMoney)營收大增57.8%，Garena訂閱金額成長20.1%為2021年來最佳單季。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 三大事業持續雙位數成長</b><br>
+• Q2 GAAP營收<b>78億美元（年增48.1%）</b>，毛利35億美元(+47.3%)，淨利4.581億美元(+10.6%)，調整後EBITDA 9.172億美元(+10.6%)，調整後EPS $0.70(略低於預期$0.83)。<br>
+• 三大業務均雙位數成長：Shopee核心電商營收+65.6%、GMV 383億美元(+28%)；Monee放款餘額111億美元(+62%)；Garena訂閱流水7.635億美元(+15.5%)。⚠️ 公司慣例不提供正式財測數字，未見公開展望，故不臆測。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
-• 東南亞電商(Shopee)/遊戲(Garena)/金融科技(Monee)三引擎集團，Shopee全年GMV展望年增約25%。</div>`
+• 東南亞電商(Shopee)/遊戲(Garena)/金融科技(Monee)三引擎集團，三大事業均維持雙位數成長動能。</div>`
   },
   'ROKU': {
     quarter: 'Q2 2026（官網財報）',
@@ -6021,12 +6075,12 @@ const IR_CALL_SUMMARY = {
 • 全球光通訊元件龍頭，AI資料中心800G/1.6T光模組需求為爆發性成長動能。</div>`
   },
   'COHR': {
-    quarter: 'FY2026 Q3（最新已公布，Q4將於2026/08/12公布）',
+    quarter: 'FY2026 Q4（官網財報，2026/08/12公布）',
     source: 'https://investors.coherent.com/',
     html: `
-<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 資料中心業務強勁</b><br>
-• Q3營收<b>18.1億美元</b>，EPS $0.97；資料中心與通訊事業群營收12.1億美元(年增34%)，占營收約72%。<br>
-• Q4財測：營收19.1～20.5億美元，非GAAP EPS $1.52～1.72。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 全年財報：資料中心/通訊事業群占比持續攀升</b><br>
+• Q4營收<b>20.5億美元</b>創新高，季增13%、年增34%；GAAP毛利率38.5%、GAAP EPS $1.19，非GAAP毛利率40.2%、非GAAP EPS $1.74。全年FY2026營收71.2億美元(+23%)、全年EPS $5.61(+59%)。資料中心與通訊部門占Q4營收79%，年增59%。<br>
+• Q1 FY2027財測：營收22～24億美元，非GAAP毛利率39.5～41.5%，非GAAP EPS $1.85～2.05；管理層目標FY2027底前單季營收突破30億美元。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
 • 全球光電元件與雷射技術大廠，AI資料中心光通訊模組為主要成長動能。</div>`
   },
@@ -6041,14 +6095,14 @@ const IR_CALL_SUMMARY = {
 • 光通訊收發模組廠，1.6T光模組已開始出貨，AI資料中心為核心成長動能。</div>`
   },
   'FN': {
-    quarter: 'FY2026 Q3（最新已公布，Q4將於2026/08/24公布）',
+    quarter: 'FY2026 Q4（官網財報，2026/08/17公布，較原訂08/24提早）',
     source: 'https://investor.fabrinet.com/',
     html: `
-<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 創紀錄季度</b><br>
-• Q3營收<b>12.1億美元</b>創紀錄，EPS<b>$3.72</b>優於預期；光通訊業務營收8.887億美元(年增35.3%)占比73.2%。<br>
-• Q4財測：營收12.5～12.9億美元，EPS $3.72～3.87。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 全年財報：資料中心DCI業務run-rate破10億美元</b><br>
+• Q4營收<b>13.16億美元</b>創新高，年增45%(優於財測)；非GAAP EPS $4.10(優於預期$3.81)，GAAP淨利1.393億美元、GAAP EPS $3.83。全年營收46億美元(+36%)，全年非GAAP EPS $14.09(+39%)。資料中心營收6.69億美元(+68%，占51%)，DCI產品年化營收run-rate已超過10億美元；通訊基礎設施營收4.13億美元(+40%)。<br>
+• Q1 FY2027財測：營收13.75～14.25億美元，非GAAP EPS $4.10～4.25。</div>
 <div style="margin-bottom:10px"><b style="color:var(--blue)">🔬 前景重點</b><br>
-• 全球主要光學元件代工廠(泰國生產)，資料中心互連(DCI)產品線年增逾90%。</div>`
+• 全球主要光學元件代工廠(泰國生產)，資料中心互連(DCI)產品線持續高速成長。</div>`
   },
   'ENPH': {
     quarter: 'Q2 2026（官網財報）',
@@ -8402,11 +8456,12 @@ NVIDIA GB200/META客製化ASIC AI伺服器訂單挹注成長。</div>`
 • 億光電子(Everlight)為LED封裝大廠，車用LED照明與感測元件為成長焦點。</div>`
   },
   '2388': {
-    quarter: '2026 第一季（Q2尚未公布，將於2026/08/06公布）',
+    quarter: '2026 第二季（官網財報，2026/08/05董事會通過）',
     source: 'https://www.via.com.tw/',
     html: `
-<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 Q1年增但季減</b><br>
-• Q1 EPS 0.08元(季減93%、年增3倍)；4月累計營收(1-4月)32.49億元(年增22%)。</div>
+<div style="margin-bottom:10px"><b style="color:var(--blue)">📈 由虧轉盈，營收年增逾6成</b><br>
+• <b>2026 第二季 EPS 0.25 元</b>（去年同期 -1.16 元，由虧轉盈），合併營收約 34.66 億元（年增 63.1%）。第一季 EPS 0.08 元（季減 93%）。<br>
+• 2026 年 7 月營收 11.36 億元（月減 8.98%、年增 43.29%）。年股利 0.05 元，配息規模有限。</div>
 <div style="margin-bottom:10px"><b style="color:var(--orange)">🏗️ 動能</b><br>
 • 威盛電子(VIA)為x86處理器/晶片組廠，近年積極轉型AI邊緣運算應用。</div>`
   },
@@ -29475,12 +29530,21 @@ function flashRow(row, up){
 async function updateDetailPrice(){
   const el=document.querySelector('.co-head .price-val'); if(!el) return;
   const sym=window.__ccbSym; if(!sym) return;
+  const isTw=/\.TW[O]?$/i.test(sym);
   try{
-    const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=1d&interval=1d`);
-    const meta=ch?.chart?.result?.[0]?.meta; if(!meta) return;
-    const price=meta.regularMarketPrice, prev=meta.previousClose??meta.chartPreviousClose;
+    let price=null, prev=null;
+    if(isTw){
+      // 台股改走TWSE官方即時報價(見loadWatchlistPrices的說明)，比Yahoo新鮮很多；查無資料才退回Yahoo
+      const quotes=await fetchTwMisQuotes([sym]);
+      const q=quotes.get(sym);
+      if(q){ price=q.price; prev=q.prev; }
+    }
+    if(price==null){
+      const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=1d&interval=1d`);
+      const meta=ch?.chart?.result?.[0]?.meta; if(!meta) return;
+      price=meta.regularMarketPrice; prev=meta.previousClose??meta.chartPreviousClose;
+    }
     if(price==null) return;
-    const isTw=/\.TW[O]?$/i.test(sym);
     const before=parseFloat((el.textContent||'').replace(/[^0-9.]/g,''));
     setLiveText(el, (isTw?'NT$':'$')+(+price).toFixed(2),
                 (!isNaN(before) && price!==before) ? price>before : null);

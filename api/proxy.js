@@ -9,9 +9,12 @@ export default async function handler(req, res) {
     res.status(400).json({ error: 'missing url' });
     return;
   }
-  // 只允許代理 SEC、Yahoo(含新聞feed、台股頁)、StockAnalysis(投資大行目標價)，避免被當成公開的萬用代理
+  // 只允許代理 SEC、Yahoo(含新聞feed、台股頁)、StockAnalysis(投資大行目標價)、TWSE即時報價，避免被當成公開的萬用代理
   // tw.stock.yahoo.com：台股 ETF 前十大持股的來源(stockanalysis 的 /holdings/ 對台股一律404)
-  if (!/^https:\/\/(data\.sec\.gov|www\.sec\.gov|query[12]\.finance\.yahoo\.com|feeds\.finance\.yahoo\.com|tw\.stock\.yahoo\.com|stockanalysis\.com)\//.test(target)) {
+  // mis.twse.com.tw：證交所官方即時盤中資訊系統(供一般網頁看盤小工具使用)，免費、無需金鑰，
+  //   實測比Yahoo Finance的台股報價新鮮很多(Yahoo對.TW常有十幾分鐘延遲，開盤時常顯示不動/錯誤的舊價，
+  //   使用者2026-08-26回報)。改用此源可讓台股即時價更貼近實際成交，仍完全免費符合零費用原則。
+  if (!/^https:\/\/(data\.sec\.gov|www\.sec\.gov|query[12]\.finance\.yahoo\.com|feeds\.finance\.yahoo\.com|tw\.stock\.yahoo\.com|stockanalysis\.com|mis\.twse\.com\.tw)\//.test(target)) {
     res.status(403).json({ error: 'host not allowed' });
     return;
   }
@@ -35,7 +38,7 @@ export default async function handler(req, res) {
     //   先看到2405、再開一次2395、刷新才出現正確收盤價2400，就是不同邊緣節點各自回傳
     //   盤中殘留的舊快照)。價格寧可慢一點也不能錯，故移除 SWR，只保留1秒的請求合併。
     // 其餘(SEC/新聞/財務數據等不需要秒級更新的資料)維持原本5分鐘快取，降低重複請求。
-    const isLiveQuote = /\/v8\/finance\/chart\//.test(target);
+    const isLiveQuote = /\/v8\/finance\/chart\//.test(target) || /mis\.twse\.com\.tw\/stock\/api\//.test(target);
     res.setHeader('Cache-Control', isLiveQuote
       ? 'public, max-age=0, s-maxage=1'
       : 's-maxage=300, stale-while-revalidate=600');
