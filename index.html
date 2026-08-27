@@ -1453,12 +1453,26 @@ function twMisExch(symbol){ // '2330.TW'→'tse_2330.tw'；'5483.TWO'→'otc_548
   const m=/^(\d{4,6})\.(TWO?)$/i.exec(symbol||''); if(!m) return null;
   return (m[2].toUpperCase()==='TWO'?'otc_':'tse_')+m[1]+'.tw';
 }
+// fetchJson沒有逾時機制——開盤瞬間許多App/使用者同時打TWSE MIS，若遇到伺服器回應變慢，
+//   fetch可能掛在那裡遲遲不resolve，導致__priceBusy一直是true、後續每秒輪詢全部被擋住，
+//   畫面就會停在上一次成功畫面（使用者2026-08-27回報「開盤股價完全不動」很可能是這個原因）。
+//   加上4秒逾時，逾時就視同失敗，讓外層立刻退回Yahoo，不會卡住整條輪詢。
+async function fetchJsonTimeout(url, ms){
+  const ac=new AbortController(); const t=setTimeout(()=>ac.abort(), ms);
+  try{
+    const r=await fetch(PROXY+encodeURIComponent(url), {signal: ac.signal});
+    if(!r.ok) throw new Error('UPSTREAM_'+r.status);
+    const data=await r.json();
+    if(data && data.error) throw new Error('UPSTREAM');
+    return data;
+  } finally { clearTimeout(t); }
+}
 async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(symbol → {price, prev})
   const exList=symbols.map(twMisExch).filter(Boolean);
   const out=new Map();
   if(!exList.length) return out;
   const url=`https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=${encodeURIComponent(exList.join('|'))}&json=1&delay=0`;
-  const j=await fetchJson(url);
+  const j=await fetchJsonTimeout(url, 4000);
   const rows=j?.msgArray||[];
   const byCode=new Map(rows.map(r=>[r.c, r]));
   symbols.forEach(sym=>{
@@ -1494,7 +1508,7 @@ function applyWlPrice(symbol, price, prev){
 async function loadWatchlistPricesYahoo(items, gen){   // 美股走原本Yahoo流程；台股在TWSE失敗時也退回這裡
   await Promise.all(items.map(async it=>{
     try{
-      const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${it.symbol}?range=1d&interval=1d`);
+      const ch=await fetchJsonTimeout(`https://query1.finance.yahoo.com/v8/finance/chart/${it.symbol}?range=1d&interval=1d`, 4000);   // 同樣加逾時，避免單一慢請求卡住整輪輪詢
       if(gen!==__wlPriceGen) return;            // 已有更新的一輪發出，這份是舊資料，丟棄
       const meta=ch?.chart?.result?.[0]?.meta;
       const price=meta?.regularMarketPrice, prev=meta?.previousClose??meta?.chartPreviousClose;
@@ -29860,7 +29874,7 @@ async function updateDetailPrice(){
       if(q){ price=q.price; prev=q.prev; }
     }
     if(price==null){
-      const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=1d&interval=1d`);
+      const ch=await fetchJsonTimeout(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=1d&interval=1d`, 4000);
       const meta=ch?.chart?.result?.[0]?.meta; if(!meta) return;
       price=meta.regularMarketPrice; prev=meta.previousClose??meta.chartPreviousClose;
     }
