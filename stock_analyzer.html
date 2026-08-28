@@ -543,6 +543,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
       </span>
     </div>
     <input type="text" id="watchlistInput" style="display:none">
+    <div id="wlLastUpdate" style="font-size:11px;color:var(--text2);text-align:right;margin:-4px 0 6px"></div>
     <div id="watchlistTable"><div class="note">尚未加入任何自選股，按上方「加入」新增</div></div>
   </div>
 
@@ -1523,6 +1524,15 @@ async function loadWatchlistPricesYahoo(items, gen){   // 美股走原本Yahoo�
     }
   }));
 }
+// 「最後更新」時間戳：使用者連續三次回報開盤股價異常，但事後查不到當下的伺服器log
+//   (Vercel免費方案log只留很短時間，過了就查不到)，只能靠事後推測。加這個小字讓使用者
+//   下次遇到時能直接截圖回報「幾點更新的、資料源是TWSE還是Yahoo備援」，才有真正的證據
+//   可以診斷，而不是每次都要我事後憑空推測。
+function updateWlTimestamp(source, ok){
+  const el=document.getElementById('wlLastUpdate'); if(!el) return;
+  const t=new Date().toLocaleTimeString('zh-TW',{hour12:false});
+  el.textContent = ok ? `最後更新 ${t}（${source}）` : `⚠️ ${t} 更新失敗（${source}）`;
+}
 async function loadWatchlistPrices(list){
   const gen=++__wlPriceGen;
   const twItems=list.filter(it=>/\.TWO?$/i.test(it.symbol));
@@ -1538,10 +1548,14 @@ async function loadWatchlistPrices(list){
           const q=quotes.get(it.symbol);
           if(q) applyWlPrice(it.symbol, q.price, q.prev);
         });
-        if(missing.length) await loadWatchlistPricesYahoo(missing, gen);   // TWSE查無資料的個別代碼才退回Yahoo
+        if(missing.length){
+          await loadWatchlistPricesYahoo(missing, gen);   // TWSE查無資料的個別代碼才退回Yahoo
+          if(gen===__wlPriceGen) updateWlTimestamp(`TWSE+Yahoo備援${missing.length}檔`, true);
+        } else if(gen===__wlPriceGen){ updateWlTimestamp('TWSE', true); }
       }catch(e){
         if(gen!==__wlPriceGen) return;
         await loadWatchlistPricesYahoo(twItems, gen);   // TWSE整批失敗(如逾時)→全部退回Yahoo，確保仍有資料
+        if(gen===__wlPriceGen) updateWlTimestamp('Yahoo備援(TWSE整批失敗:'+(e&&e.message||e)+')', true);
       }
     })());
   }
