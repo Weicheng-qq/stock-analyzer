@@ -1457,10 +1457,14 @@ function twMisExch(symbol){ // '2330.TW'→'tse_2330.tw'；'5483.TWO'→'otc_548
 //   fetch可能掛在那裡遲遲不resolve，導致__priceBusy一直是true、後續每秒輪詢全部被擋住，
 //   畫面就會停在上一次成功畫面（使用者2026-08-27回報「開盤股價完全不動」很可能是這個原因）。
 //   加上4秒逾時，逾時就視同失敗，讓外層立刻退回Yahoo，不會卡住整條輪詢。
+// ⚠️ 使用者連續三次(08-26/08-27/08-28)回報同一症狀，改用TWSE+加逾時後仍未解決，
+//   故這裡額外加 cache:'no-store'（配合 api/proxy.js 同步改用 no-store），排除瀏覽器
+//   自己的HTTP快取或任何中間層快取殘留舊回應的可能性，寧可犧牲一點點效能也要確保每次
+//   都是真正的網路請求，不是讀到快取。
 async function fetchJsonTimeout(url, ms){
   const ac=new AbortController(); const t=setTimeout(()=>ac.abort(), ms);
   try{
-    const r=await fetch(PROXY+encodeURIComponent(url), {signal: ac.signal});
+    const r=await fetch(PROXY+encodeURIComponent(url), {signal: ac.signal, cache: 'no-store'});
     if(!r.ok) throw new Error('UPSTREAM_'+r.status);
     const data=await r.json();
     if(data && data.error) throw new Error('UPSTREAM');

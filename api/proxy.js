@@ -28,19 +28,15 @@ export default async function handler(req, res) {
     });
     const body = await r.text();
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    // 即時報價(v8/finance/chart)快取1秒：使用者要求盤中「只要價格有變化就每秒即時跳動」。
-    // 原本統一快取5分鐘，導致前端不管多頻繁輪詢，Vercel Edge在5分鐘內都回傳同一份舊資料，
-    // 股價視覺上完全不動。s-maxage=1 讓邊緣快取最多只擋1秒，與前端每秒輪詢對齊。
-    //
-    // ⚠️ 報價「絕對不能」用 stale-while-revalidate：
-    //   原本設 stale-while-revalidate=5，代表快取過期後邊緣仍會「先回舊價格」再背景更新。
-    //   對股價而言回傳已知過期的數字＝直接顯示錯的價格(使用者2026-08-18回報：盤後開App
-    //   先看到2405、再開一次2395、刷新才出現正確收盤價2400，就是不同邊緣節點各自回傳
-    //   盤中殘留的舊快照)。價格寧可慢一點也不能錯，故移除 SWR，只保留1秒的請求合併。
-    // 其餘(SEC/新聞/財務數據等不需要秒級更新的資料)維持原本5分鐘快取，降低重複請求。
+    // 即時報價完全不快取(no-store)：使用者連續三次回報開盤股價「不動、且顯示昨收」，
+    //   即使已改用TWSE官方即時來源+4秒逾時仍未解決，故不再信任任何形式的邊緣/共享快取，
+    //   改為徹底停用快取，讓每一次前端輪詢都真正打到TWSE/Yahoo原始伺服器，排除快取層
+    //   本身是問題根源的可能性(即使s-maxage=1理論上只擋1秒，仍無法排除CDN在高流量下
+    //   實際行為與HTTP語意不完全一致的風險)。個人專案流量低，不快取的額外負擔可忽略。
+    //   其餘(SEC/新聞/財務數據等不需要秒級更新的資料)維持原本5分鐘快取，降低重複請求。
     const isLiveQuote = /\/v8\/finance\/chart\//.test(target) || /mis\.twse\.com\.tw\/stock\/api\//.test(target);
     res.setHeader('Cache-Control', isLiveQuote
-      ? 'public, max-age=0, s-maxage=1'
+      ? 'no-store'
       : 's-maxage=300, stale-while-revalidate=600');
     res.status(r.ok ? 200 : r.status).send(body);
   } catch (e) {
