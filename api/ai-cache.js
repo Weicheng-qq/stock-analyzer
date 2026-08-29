@@ -20,10 +20,19 @@
 const REPO = 'Weicheng-qq/stock-analyzer';
 const DIR = 'data/ai';
 
-// 只接受這些前綴，避免被當成任意檔案寫入的後門
-const ALLOWED_PREFIX = /^(gem|indep)_/;
-// 鍵只允許英數、底線、連字號、點（擋掉 ../ 這類路徑穿越）
-const SAFE_KEY = /^[A-Za-z0-9_.-]{3,120}$/;
+// 【防濫用】本端點是公開的，任何人都能 POST，而每次寫入都會在 repo 產生一個 commit。
+//   實測發現若只檢查前綴，用隨便編的 key（如 gem_TEST_INVALID）就能寫進垃圾檔，
+//   等於開放任何人污染 repo。因此鍵必須完全符合前端實際會產生的格式：
+//     {前綴}_{股票代碼}_{季度標記}
+//   例如 gem_2454_2026Q2、indep_TSM_2026Q2、gem_GOOGL_2025FY
+//   季度標記對應 __quarterTag() 的四種輸出：季(Q1-4)／全年(FY)／半年(H1,H2)／
+//   非制式寫法的雜湊(H+base36)／尚無IR常數時的年月(M01-M12)。
+//   最後的 XH... 是 quarter 字串裡連年份都沒有時的退路（例如「官方揭露業務結構」這種寫法）。
+const KEY_SHAPE = /^(gem|indep)_[A-Za-z0-9.-]{1,10}_(20\d\d(Q[1-4]|FY|H[12]|H[0-9a-z]{1,10}|M(0[1-9]|1[0-2]))|XH[0-9a-z]{1,10})$/;
+
+// 分析結果至少要有幾個預期欄位，擋掉空物件或亂塞的內容
+const EXPECTED_FIELDS = ['products', 'moat', 'catalysts', 'risks', 'valuation', 'verdict', 'rating',
+  'reason', 'double', 'lynch_type', 'revenue', 'eps', 'margins', 'outlook', 'keyPoints'];
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -39,10 +48,13 @@ export default async function handler(req, res) {
   if (!body || !body.key || !body.result) { res.status(400).json({ error: 'bad body' }); return; }
 
   const key = String(body.key);
-  if (!SAFE_KEY.test(key) || !ALLOWED_PREFIX.test(key)) { res.status(400).json({ error: 'bad key' }); return; }
+  if (!KEY_SHAPE.test(key)) { res.status(400).json({ error: 'bad key' }); return; }
 
   // 結果必須是物件，且序列化後不得過大（正常一份分析約 3~6KB，20KB 已遠超正常值）
-  if (typeof body.result !== 'object' || Array.isArray(body.result)) { res.status(400).json({ error: 'bad result' }); return; }
+  if (typeof body.result !== 'object' || Array.isArray(body.result) || body.result === null) { res.status(400).json({ error: 'bad result' }); return; }
+  // 必須看起來像一份真正的分析結果，擋掉空物件／隨意內容
+  const nFields = EXPECTED_FIELDS.filter(f => typeof body.result[f] === 'string' && body.result[f].trim()).length;
+  if (nFields < 3) { res.status(400).json({ error: 'result does not look like an analysis' }); return; }
   const payload = JSON.stringify({
     key,
     quarter: body.quarter ? String(body.quarter).slice(0, 60) : '',
