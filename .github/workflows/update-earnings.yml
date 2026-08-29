@@ -1,0 +1,81 @@
+# 每日法說會／財報自動更新
+#
+# 【為什麼用 GitHub Actions 而不是 Vercel Cron】
+# 本 repo 是 public，public repo 使用 GitHub-hosted runner 是「免費且不計分鐘數」，
+# 完全符合使用者「永久零費用、不綁任何付款方式」的硬性規定。
+#
+# 【流程】
+#   1. detect-events：從 SEC 每日索引 + TWSE/TPEx 官方 OpenAPI 找出「今天真的有新事件」的公司
+#      （一天只要幾個請求，而不是逐家掃描 5,000~6,000 家）
+#   2. analyze-earnings：只分析佇列裡的公司，同一家同一季只分析一次，額度用完就停
+#   3. 把結果 commit 回 repo → Vercel 自動部署 → 所有使用者共用同一份分析
+#
+# 【費用保證】只使用 Gemini 免費層。免費層超額的行為是「拒絕請求」而非「開始計費」，
+#   只要那個 Google Cloud 專案不啟用帳單，就不可能產生任何費用。
+
+name: 每日法說會更新
+
+on:
+  schedule:
+    # 台灣時間每天早上 7:00（UTC 23:00），台股法說會多在前一日盤後、美股財報多在美東盤後，
+    # 這個時間點兩邊的新資料都已經出來了，使用者早上打開 App 就是最新的。
+    - cron: '0 23 * * *'
+  workflow_dispatch:        # 允許手動觸發，方便測試與補跑
+    inputs:
+      max_analyses:
+        description: '本次最多分析幾家公司'
+        required: false
+        default: '40'
+      lookback_days:
+        description: 'SEC 回看天數'
+        required: false
+        default: '3'
+
+# 只授予寫入 repo 內容的最小權限
+permissions:
+  contents: write
+
+# 避免前一次還沒跑完就被下一次觸發，導致 commit 互相衝突
+concurrency:
+  group: update-earnings
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 偵測新事件（SEC + TWSE + TPEx）
+        env:
+          LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '3' }}
+        run: node scripts/detect-events.mjs
+
+      - name: AI 分析（僅處理有新事件者，額度用完自動停止）
+        env:
+          GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
+          MAX_ANALYSES: ${{ github.event.inputs.max_analyses || '40' }}
+        run: node scripts/analyze-earnings.mjs
+
+      - name: 提交結果
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add data/
+          if git diff --staged --quiet; then
+            echo "今日無新資料，不產生 commit"
+          else
+            n=$(git diff --staged --name-only | grep -c '^data/ai/' || true)
+            git commit -m "自動更新：新增 ${n} 家公司的法說會 AI 分析
+
+          由 GitHub Actions 每日排程產生，資料來源為 SEC EDGAR 與
+          TWSE/TPEx 官方 OpenAPI，AI 分析使用 Gemini 免費層。"
+            # 期間若有其他 commit（例如人工批次），先 rebase 再推，避免覆蓋他人變更
+            git pull --rebase --autostash origin main
+            git push
+          fi
