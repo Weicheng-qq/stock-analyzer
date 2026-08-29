@@ -56,7 +56,9 @@ async function loadTwFinancials() {
         name: r[src.n], year: rocToAd(r[src.y]), season: Number(r[src.s]),
         營業收入: toYi(r['營業收入']), 營業毛利: toYi(r['營業毛利（毛損）淨額'] ?? r['營業毛利（毛損）']),
         營業利益: toYi(r['營業利益（損失）']), 稅前淨利: toYi(r['稅前淨利（淨損）']),
-        本期淨利: toYi(r['本期淨利（淨損）']), 母公司業主淨利: toYi(r['母公司業主（淨利／淨損）']),
+        // ⚠️ 官方欄位名稱是「淨利（淨損）歸屬於母公司業主」，先前寫成「母公司業主（淨利／淨損）」
+        //    抓不到值而一律變成 0.00（首次自動執行的 10 個檔都有這個問題）
+        本期淨利: toYi(r['本期淨利（淨損）']), 母公司業主淨利: toYi(r['淨利（淨損）歸屬於母公司業主']),
         基本每股盈餘: num(r['基本每股盈餘（元）'])
       };
     }
@@ -169,7 +171,9 @@ for (const item of sorted) {
   }, null, 1));
   done++;
   console.log(`  ✓ ${item.symbol} ${f.name} ${f.year}Q${f.season}`);
-  await new Promise(r => setTimeout(r, 4500));   // 免費層有每分鐘請求數限制，放慢避免被限流
+  // 免費層每分鐘請求數上限約 10 次。原本設 4.5 秒 ≒ 每分鐘 13 次，超過上限，
+  //   首次自動執行時就在第 10 家觸發 429 而提前停止。改為 7 秒 ≒ 每分鐘 8.5 次，留安全餘裕。
+  await new Promise(r => setTimeout(r, 7000));
 }
 
 console.log(`✅ 完成：新分析 ${done} 家、略過(已有或無官方數字) ${skipped} 家、失敗 ${failed} 家${stoppedByQuota ? '（因免費額度用盡提前結束）' : ''}`);

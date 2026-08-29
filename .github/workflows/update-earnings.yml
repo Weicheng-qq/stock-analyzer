@@ -45,11 +45,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 50
     steps:
-      - uses: actions/checkout@v4
+      # v4 會觸發「Node.js 20 is deprecated」警告（GitHub 已強制改用 Node 24 執行），改用 v5
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: 偵測新事件（SEC + TWSE + TPEx）
         env:
