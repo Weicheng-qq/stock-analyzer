@@ -2067,6 +2067,7 @@ async function doSearchTW(symbol){
     const usEquiv=twToUs(code);   // 雙掛牌(2330↔TSM/2303↔UMC/3711↔ASX/2412↔CHT):共用美股官方事實內容
     window.__symbolForLinks=usEquiv||code;   // 指向美股代碼,讓 IR 官方事實(產品/法說會展望/官方IR頁)直接渲染、與美股一致
     await ensureIR(window.__symbolForLinks);   // IR全文改為延遲載入,渲染前必須先備妥這一家的資料
+    await loadAutoEarnings(window.__symbolForLinks);   // 每日排程自動產生的最新財報摘要(官方數字)
     window.__coNameForLinks=name;
     updateCurrentCompanyBar(name, symbol);   // 傳完整代碼(含.TW/.TWO)，AI分析鈕才能正確走台股流程
     document.getElementById('results').innerHTML=twResultsHtml({code,name,price,chg,pct,mkt});
@@ -2153,6 +2154,7 @@ async function doSearch(){
     window.__coNameForLinks=co.title;   // 供法說會口頭Q&A直達連結使用
     window.__symbolForLinks=US_TW_EQUIV[symbol]||symbol;   // 雙掛牌ADR(如UMC聯電→2303):共用台股端已建的官方事實內容;其餘維持美股代碼
     await ensureIR(window.__symbolForLinks);   // IR全文改為延遲載入,渲染前必須先備妥這一家的資料
+    await loadAutoEarnings(window.__symbolForLinks);   // 每日排程自動產生的最新財報摘要(官方數字)
     updateCurrentCompanyBar(co.title, symbol);
     loadCompanyIntro(symbol, ccbName(symbol, co.title), gen);   // 🏢 公司介紹(獨立小呼叫)
     logOk('cik',`找到：${co.title}（${symbol}）`);
@@ -2594,6 +2596,49 @@ async function ensureIR(sym){
     if(IR_PRODUCTS_SUMMARY[src]) IR_PRODUCTS_SUMMARY[a]=IR_PRODUCTS_SUMMARY[src];
   }
 }
+// ── 自動產生的最新財報摘要 ──
+// 由 GitHub Actions 每日排程產生（scripts/analyze-earnings.mjs），資料來源是
+//   台股：TWSE/TPEx 官方 OpenAPI 季度損益表；美股：SEC EDGAR XBRL 官方申報。
+//   數字全部來自官方，AI 只做整理判讀；官方沒提供的欄位一律標「未提供」不編造。
+// 檔名用「代碼」而非季度：公司的會計季別與人工 IR 記錄的季度常不一致
+//   （例如 NVDA 的 SEC 會計期間是 FY2027Q2，人工記錄寫「2026 第二季」），
+//   用季度當檔名會對不上而永遠找不到檔案。季度資訊寫在檔案內容裡。
+async function loadAutoEarnings(sym){
+  window.__autoEarnings=null;
+  if(!sym) return null;
+  try{
+    const r=await fetch(`/data/earnings/${encodeURIComponent(sym)}.json`);
+    if(!r.ok) return null;
+    const j=await r.json();
+    if(j&&j.result&&j.official){ window.__autoEarnings=j; return j; }
+  }catch(e){}
+  return null;
+}
+function earningsBlock(j){
+  const o=j.official||{}, r=j.result||{};
+  const unit=o.currency||'';
+  const row=(label,val)=>val==null?'':`<span style="display:inline-block;margin-right:14px"><span style="color:var(--text2)">${label}</span> <b>${esc(String(val))}</b></span>`;
+  const item=(label,val)=>{
+    const t=(val==null?'':String(val)).trim();
+    if(!t||t==='未提供') return '';   // 官方沒提供的欄位不佔版面
+    return `<div style="margin-bottom:7px"><b style="color:var(--blue)">${label}</b><br>${t}</div>`;
+  };
+  return `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">
+    <div style="color:var(--green);font-size:12px;margin-bottom:8px">
+      📊 最新財報自動摘要（${esc(j.quarter||'')}）— 數字來自${esc(j.source||'官方申報')}
+    </div>
+    <div style="font-size:13px;margin-bottom:10px;line-height:1.9">
+      ${row('營收',o.營業收入&&o.營業收入+unit)}${row('營業利益',o.營業利益&&o.營業利益+unit)}${row('淨利',o.本期淨利&&o.本期淨利+unit)}${row('EPS',o.每股盈餘)}
+    </div>
+    ${item('營收表現',r.revenue)}${item('每股盈餘',r.eps)}${item('獲利率',r.margins)}
+    ${item('自由現金流',r.fcf)}${item('資本支出',r.capex)}${item('官方財測',r.guidance)}
+    ${item('營運狀況',r.outlook)}${item('本季亮點',r.highlights)}${item('須留意之處',r.concerns)}
+    ${item('財務風險',r.risks)}${item('投資人最該注意的事',r.keyPoints)}
+    <div style="color:var(--text2);font-size:11px;margin-top:8px">
+      本摘要由 AI 依上述官方數字整理，未提供之項目一律標示「未提供」，不做臆測或預測。
+    </div>
+  </div>`;
+}
 // 共用快取（全體使用者共用，存在 repo 的 data/ai/ 靜態檔）
 //   讀：直接抓靜態檔，走 CDN、不經任何函式、不花任何額度。
 //   寫：POST /api/ai-cache 由伺服器端 commit 進 repo，之後所有人共用。
@@ -2893,8 +2938,15 @@ function renderAI(ai){
   // 若有「官方法說會逐字稿人工判讀摘要」(目前TSM)，優先且完整顯示它(內容比SEC新聞稿的季度財測更完整)，其餘公司走原本SEC擷取邏輯
   const videoBlock = irVideoBlock(window.__symbolForLinks, coName);   // 🎬 法說會影片，置於法說主旨最上方
   const manualCall=IR_CALL_SUMMARY[window.__symbolForLinks];
+  // 自動產生的最新財報摘要（data/earnings/{代碼}.json，由每日排程從 TWSE/SEC 官方數字產生）。
+  //   人工建置的 IR 內容品質較高（含法說會發言與人工判讀），所以仍以 manualCall 為主，
+  //   這份自動摘要接在後面當補充；人工內容還沒建到的公司則單獨顯示這份。
+  const autoEarn=window.__autoEarnings;
+  const autoBlock=autoEarn?earningsBlock(autoEarn):'';
   if(manualCall){
-    setAI('ai_guidance',`<div class="ai">${videoBlock}${manualCall.html}</div>`);
+    setAI('ai_guidance',`<div class="ai">${videoBlock}${manualCall.html}${autoBlock}</div>`);
+  } else if(autoEarn){
+    setAI('ai_guidance',`<div class="ai">${videoBlock}${autoBlock}${linksBlock}</div>`);
   } else if(window.__guidanceReal && window.__guidanceData){
     const gd=window.__guidanceData;
     const zh=(ai.guidance_zh&&String(ai.guidance_zh).trim())?ai.guidance_zh:null;
