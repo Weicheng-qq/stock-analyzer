@@ -67,7 +67,9 @@ jobs:
         working-directory: scripts
         run: |
           npm install --no-audit --no-fund --silent
-          npx playwright install --with-deps chromium --only-shell
+          # 用「本地安裝的」playwright CLI，版本才會與 playwright-core 一致。
+          #   直接 npx playwright 會臨時抓最新版，可能裝到不相容的 chromium。
+          ./node_modules/.bin/playwright install --with-deps chromium --only-shell
 
       - name: 偵測新事件（SEC + TWSE + TPEx）
         env:
