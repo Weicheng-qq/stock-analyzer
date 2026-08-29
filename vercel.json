@@ -26,6 +26,13 @@
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
+    },
+    {
+      "comment": "IR全文與AI分析：內容只在該公司出新一季法說會時才變動，可長時間快取。用 stale-while-revalidate 讓使用者先看到既有內容、背景再更新，不會有等待感。這裡與報價不同，即使短暫拿到前一版也不會顯示錯誤數字（季度標示本身就在內容裡）。",
+      "source": "/data/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=600, s-maxage=3600, stale-while-revalidate=86400" }
+      ]
     }
   ]
 }
