@@ -23,6 +23,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { fetchLatestEarningsRelease, focusExcerpt } from './lib/sec-press-release.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT_DIR = path.join(ROOT, 'data', 'earnings');
@@ -161,7 +162,8 @@ async function loadUsFinancials(cik) {
 }
 
 // ── 提示詞 ──
-function buildPrompt(symbol, f) {
+// pr = 公司自己發布的財報新聞稿節錄（僅美股有；台股的 OpenAPI 只有數字沒有文字說明）
+function buildPrompt(symbol, f, pr) {
   const isTw = f.market === 'tw';
   const period = isTw ? `${f.year} 年第 ${f.season} 季`
     : `會計年度 ${f.year} ${f.season}（期間 ${f.periodStart} ～ ${f.periodEnd}，申報表單 ${f.form}）`;
@@ -180,11 +182,22 @@ function buildPrompt(symbol, f) {
     `每股盈餘（EPS）：${f.每股盈餘 ?? '未提供'} ${isTw ? '元' : '美元'}`
   ].filter(Boolean).join('\n');
 
+  // 有新聞稿時，額外要求萃取「官方展望」與「分部／產品別營收」——這兩樣是數字 API 沒有的，
+  //   但公司自己寫在新聞稿裡，屬於官方原文，不是臆測。
+  const prBlock = pr ? `
+
+【公司官方財報新聞稿節錄（${pr.filedAt} 向 SEC 申報的 ${pr.form}，原文未經改寫）】
+${pr.excerpt}
+` : '';
+  const prFields = pr ? `,
+ "guidanceOfficial":"從上方新聞稿節錄中，找出公司對『下一季或全年』的官方展望／財測，忠實翻成繁體中文並保留所有數字與單位（例如「第三季營收預期 1,080 億美元，正負 2%；毛利率預期 74.0%，正負 50 個基點」）。這必須是新聞稿裡實際出現的文字，嚴禁自行推算或補充。若新聞稿沒有提供展望（例如 Apple 不公布書面財測），寫「公司未於本次新聞稿提供財測」。",
+ "segments":"從上方新聞稿節錄中，整理各部門／產品別的營收與增減（例如「資料中心：890 億美元，季增 18%、年增 117%」），每項以•開頭、<br>分行。只能列出新聞稿實際提到的部門與數字，嚴禁自行分類或估算佔比。若新聞稿未揭露分部數字，寫「新聞稿未揭露分部營收」。"` : '';
+
   return `你是專業的財報分析師。以下是${isTw ? '台股' : '美股'} ${f.name}（代碼 ${symbol}）${period}的官方財務數字，
 來源為${src}。
 
 【官方數字（金額單位：${f.currency}）】
-${lines}
+${lines}${prBlock}
 
 【鐵則 — 務必嚴格遵守】
 1. 所有財務數字「只能」使用上方提供的官方數字，嚴禁自行推算、臆測或用你的訓練記憶補充。
@@ -202,12 +215,12 @@ ${lines}
  "margins":"毛利率／營業利益率／淨利率的水準與意涵，引用上方算出的百分比，2-3句",
  "fcf":"自由現金流狀況（若上方未提供則寫「未提供」）",
  "capex":"資本支出狀況（若上方未提供則寫「未提供」）",
- "guidance":"官方財測／展望（本資料未含法說會內容，請寫「未提供」）",
+ "guidance":"${pr ? '官方財測／展望的一句話摘要（詳細內容放在 guidanceOfficial 欄位）' : '官方財測／展望（本資料未含新聞稿，請寫「未提供」）'}",
  "outlook":"僅根據上方數字可合理說明的營運狀況，不得預測，2-3句",
  "highlights":"本季主要亮點2-3點，每點以•開頭、<br>分行，只能根據上方數字",
  "concerns":"本季須留意之處2-3點，每點以•開頭、<br>分行，只能根據上方數字",
  "risks":"從財務結構可觀察到的風險2點，<br>分行",
- "keyPoints":"投資人最需要注意的3件事，<br>分行，須引用實際數字"
+ "keyPoints":"投資人最需要注意的3件事，<br>分行，須引用實際數字"${prFields}
 }`;
 }
 
@@ -295,9 +308,18 @@ for (const item of sorted) {
     } catch (e) {}
   }
 
-  const prompt = buildPrompt(item.symbol, f);
+  // 美股額外抓公司自己發布的財報新聞稿：官方展望與分部營收都寫在裡面，
+  //   這兩樣是純數字 API 給不了、但又最有價值的內容。
+  let pr = null;
+  if (item.market !== 'tw') {
+    const raw = await fetchLatestEarningsRelease(tk2cik.get(item.symbol));
+    if (raw) { pr = { filedAt: raw.filedAt, form: raw.form, url: raw.url, excerpt: focusExcerpt(raw.text) }; }
+    await new Promise(r => setTimeout(r, 250));
+  }
+
+  const prompt = buildPrompt(item.symbol, f, pr);
   if (DRY_RUN) {
-    console.log(`  [DRY] ${item.market.toUpperCase()} ${item.symbol} ${f.name} ${qTag} 營收${f.營業收入} EPS ${f.每股盈餘}`);
+    console.log(`  [DRY] ${item.market.toUpperCase()} ${item.symbol} ${f.name} ${qTag} 營收${f.營業收入} EPS ${f.每股盈餘}${pr ? ' ｜新聞稿 ' + pr.excerpt.length + '字' : (item.market !== 'tw' ? ' ｜無新聞稿' : '')}`);
     done++; stat[item.market]++; continue;
   }
 
@@ -313,7 +335,9 @@ for (const item of sorted) {
     quarter: f.market === 'tw' ? `${f.year} 第${f.season}季` : `${f.year} ${f.season}（${f.periodStart}～${f.periodEnd}）`,
     quarterTag: qTag,
     source: f.market === 'tw' ? '臺灣證券交易所／櫃買中心 公開資訊 OpenAPI（官方）' : 'SEC EDGAR XBRL 官方申報資料',
-    official: f, savedAt: new Date().toISOString(), result: r.result
+    official: f,
+    pressRelease: pr ? { filedAt: pr.filedAt, form: pr.form, url: pr.url } : null,
+    savedAt: new Date().toISOString(), result: r.result
   }, null, 1));
   done++; stat[item.market]++;
   console.log(`  ✓ ${item.market.toUpperCase()} ${item.symbol} ${f.name} ${qTag}`);

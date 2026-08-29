@@ -2623,6 +2623,14 @@ function earningsBlock(j){
     if(!t||t==='未提供') return '';   // 官方沒提供的欄位不佔版面
     return `<div style="margin-bottom:7px"><b style="color:var(--blue)">${label}</b><br>${t}</div>`;
   };
+  // 官方展望與分部營收來自公司自己發布的財報新聞稿原文（美股 8-K/6-K 的 EX-99.1），
+  //   不是 AI 推算，價值最高故獨立醒目呈現、排在最前面。
+  const notGiven=v=>!v||!String(v).trim()||/未提供|未於本次新聞稿提供|未揭露/.test(String(v));
+  const guide=notGiven(r.guidanceOfficial)?'':
+    `<div style="margin-bottom:10px;padding:9px 10px;background:rgba(88,166,255,.09);border-left:3px solid var(--blue);border-radius:5px">
+       <b style="color:var(--blue)">📢 公司官方展望（財報新聞稿原文）</b><br>${r.guidanceOfficial}</div>`;
+  const seg=notGiven(r.segments)?'':
+    `<div style="margin-bottom:10px"><b style="color:var(--blue)">🧩 分部／產品別營收</b><br>${r.segments}</div>`;
   return `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">
     <div style="color:var(--green);font-size:12px;margin-bottom:8px">
       📊 最新財報自動摘要（${esc(j.quarter||'')}）— 數字來自${esc(j.source||'官方申報')}
@@ -2630,12 +2638,15 @@ function earningsBlock(j){
     <div style="font-size:13px;margin-bottom:10px;line-height:1.9">
       ${row('營收',o.營業收入&&o.營業收入+unit)}${row('營業利益',o.營業利益&&o.營業利益+unit)}${row('淨利',o.本期淨利&&o.本期淨利+unit)}${row('EPS',o.每股盈餘)}
     </div>
+    ${guide}${seg}
     ${item('營收表現',r.revenue)}${item('每股盈餘',r.eps)}${item('獲利率',r.margins)}
-    ${item('自由現金流',r.fcf)}${item('資本支出',r.capex)}${item('官方財測',r.guidance)}
+    ${item('自由現金流',r.fcf)}${item('資本支出',r.capex)}${guide?'':item('官方財測',r.guidance)}
     ${item('營運狀況',r.outlook)}${item('本季亮點',r.highlights)}${item('須留意之處',r.concerns)}
     ${item('財務風險',r.risks)}${item('投資人最該注意的事',r.keyPoints)}
     <div style="color:var(--text2);font-size:11px;margin-top:8px">
-      本摘要由 AI 依上述官方數字整理，未提供之項目一律標示「未提供」，不做臆測或預測。
+      本摘要由 AI 依上述官方數字${j.pressRelease?'與公司官方財報新聞稿原文':''}整理，
+      未提供之項目一律標示「未提供」，不做臆測或預測。
+      ${j.pressRelease?`<a href="${esc(j.pressRelease.url)}" target="_blank" rel="noopener" style="color:var(--blue)">查看官方新聞稿原文 ↗</a>`:''}
     </div>
   </div>`;
 }
