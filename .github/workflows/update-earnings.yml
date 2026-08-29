@@ -52,6 +52,10 @@ jobs:
         with:
           node-version: '24'
 
+      # 台股法說會簡報是 PDF，需要 pdftotext 轉純文字（poppler-utils 提供）
+      - name: 安裝 PDF 文字擷取工具
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+
       - name: 偵測新事件（SEC + TWSE + TPEx）
         env:
           LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '3' }}

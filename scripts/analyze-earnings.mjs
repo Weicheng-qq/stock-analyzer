@@ -24,6 +24,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fetchLatestEarningsRelease, focusExcerpt } from './lib/sec-press-release.mjs';
+import { fetchCallIndex, fetchCallPdfText, focusExcerptTw } from './lib/mops-earnings-call.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT_DIR = path.join(ROOT, 'data', 'earnings');
@@ -184,14 +185,17 @@ function buildPrompt(symbol, f, pr) {
 
   // 有新聞稿時，額外要求萃取「官方展望」與「分部／產品別營收」——這兩樣是數字 API 沒有的，
   //   但公司自己寫在新聞稿裡，屬於官方原文，不是臆測。
+  const srcLabel = pr ? (pr.kind === 'deck'
+    ? `公司法人說明會簡報節錄（${pr.filedAt} 上傳至公開資訊觀測站，原文未經改寫）`
+    : `公司官方財報新聞稿節錄（${pr.filedAt} 向 SEC 申報的 ${pr.form}，原文未經改寫）`) : '';
   const prBlock = pr ? `
 
-【公司官方財報新聞稿節錄（${pr.filedAt} 向 SEC 申報的 ${pr.form}，原文未經改寫）】
+【${srcLabel}】
 ${pr.excerpt}
 ` : '';
   const prFields = pr ? `,
- "guidanceOfficial":"從上方新聞稿節錄中，找出公司對『下一季或全年』的官方展望／財測，忠實翻成繁體中文並保留所有數字與單位（例如「第三季營收預期 1,080 億美元，正負 2%；毛利率預期 74.0%，正負 50 個基點」）。這必須是新聞稿裡實際出現的文字，嚴禁自行推算或補充。若新聞稿沒有提供展望（例如 Apple 不公布書面財測），寫「公司未於本次新聞稿提供財測」。",
- "segments":"從上方新聞稿節錄中，整理各部門／產品別的營收與增減（例如「資料中心：890 億美元，季增 18%、年增 117%」），每項以•開頭、<br>分行。只能列出新聞稿實際提到的部門與數字，嚴禁自行分類或估算佔比。若新聞稿未揭露分部數字，寫「新聞稿未揭露分部營收」。"` : '';
+ "guidanceOfficial":"從上方${pr.kind==='deck'?'法說會簡報':'新聞稿'}節錄中，找出公司對『下一季或全年』的官方展望／財測，忠實翻成繁體中文並保留所有數字與單位（例如「第三季營收預期 1,080 億美元，正負 2%；毛利率預期 74.0%，正負 50 個基點」）。這必須是原文裡實際出現的文字，嚴禁自行推算或補充。若原文沒有提供展望（例如 Apple 不公布書面財測），寫「公司未於本次資料提供財測」。",
+ "segments":"從上方${pr.kind==='deck'?'法說會簡報':'新聞稿'}節錄中，整理各部門／產品別的營收與增減（例如「資料中心：890 億美元，季增 18%、年增 117%」），每項以•開頭、<br>分行。只能列出原文實際提到的部門與數字，嚴禁自行分類或估算佔比。若原文未揭露分部數字，寫「本次資料未揭露分部營收」。"` : '';
 
   return `你是專業的財報分析師。以下是${isTw ? '台股' : '美股'} ${f.name}（代碼 ${symbol}）${period}的官方財務數字，
 來源為${src}。
@@ -215,7 +219,7 @@ ${lines}${prBlock}
  "margins":"毛利率／營業利益率／淨利率的水準與意涵，引用上方算出的百分比，2-3句",
  "fcf":"自由現金流狀況（若上方未提供則寫「未提供」）",
  "capex":"資本支出狀況（若上方未提供則寫「未提供」）",
- "guidance":"${pr ? '官方財測／展望的一句話摘要（詳細內容放在 guidanceOfficial 欄位）' : '官方財測／展望（本資料未含新聞稿，請寫「未提供」）'}",
+ "guidance":"${pr ? '官方財測／展望的一句話摘要（詳細內容放在 guidanceOfficial 欄位）' : '官方財測／展望（本次無法說會簡報或新聞稿可依據，請寫「未提供」）'}",
  "outlook":"僅根據上方數字可合理說明的營運狀況，不得預測，2-3句",
  "highlights":"本季主要亮點2-3點，每點以•開頭、<br>分行，只能根據上方數字",
  "concerns":"本季須留意之處2-3點，每點以•開頭、<br>分行，只能根據上方數字",
@@ -273,6 +277,10 @@ const twFin = await loadTwFinancials();
 console.log(`  已載入台股官方季度財務 ${Object.keys(twFin).length} 家`);
 
 // 美股需要 CIK 才能查 SEC，先取對照表
+// 台股法說會簡報索引（近 4 個月，一次抓好供整輪使用）
+const twCalls = await fetchCallIndex(4);
+console.log(`  已載入台股法說會簡報索引 ${twCalls.size} 家`);
+
 const tickMap = await getJson('https://www.sec.gov/files/company_tickers.json', UA_SEC);
 const tk2cik = new Map();
 for (const v of Object.values(tickMap || {})) tk2cik.set(v.ticker, v.cik_str);
@@ -311,15 +319,23 @@ for (const item of sorted) {
   // 美股額外抓公司自己發布的財報新聞稿：官方展望與分部營收都寫在裡面，
   //   這兩樣是純數字 API 給不了、但又最有價值的內容。
   let pr = null;
-  if (item.market !== 'tw') {
+  if (item.market === 'tw') {
+    // 台股：法說會簡報 PDF（MOPS）。小型公司多半沒開法說會，取不到屬正常
+    const info = twCalls.get(item.symbol);
+    if (info) {
+      const txt = await fetchCallPdfText(info.pdf);
+      if (txt) pr = { kind: 'deck', filedAt: info.date, form: '法說會簡報', url: `https://mopsov.twse.com.tw/nas/STR/${info.pdf}`, excerpt: focusExcerptTw(txt) };
+      await new Promise(r => setTimeout(r, 400));
+    }
+  } else {
     const raw = await fetchLatestEarningsRelease(tk2cik.get(item.symbol));
-    if (raw) { pr = { filedAt: raw.filedAt, form: raw.form, url: raw.url, excerpt: focusExcerpt(raw.text) }; }
+    if (raw) pr = { kind: 'press', filedAt: raw.filedAt, form: raw.form, url: raw.url, excerpt: focusExcerpt(raw.text) };
     await new Promise(r => setTimeout(r, 250));
   }
 
   const prompt = buildPrompt(item.symbol, f, pr);
   if (DRY_RUN) {
-    console.log(`  [DRY] ${item.market.toUpperCase()} ${item.symbol} ${f.name} ${qTag} 營收${f.營業收入} EPS ${f.每股盈餘}${pr ? ' ｜新聞稿 ' + pr.excerpt.length + '字' : (item.market !== 'tw' ? ' ｜無新聞稿' : '')}`);
+    console.log(`  [DRY] ${item.market.toUpperCase()} ${item.symbol} ${f.name} ${qTag} 營收${f.營業收入} EPS ${f.每股盈餘}${pr ? ' ｜' + (pr.kind==='deck'?'法說簡報 ':'新聞稿 ') + pr.excerpt.length + '字' : ' ｜無簡報/新聞稿'}`);
     done++; stat[item.market]++; continue;
   }
 

@@ -2614,7 +2614,7 @@ async function loadAutoEarnings(sym){
   }catch(e){}
   return null;
 }
-function earningsBlock(j){
+function earningsBlock(j, isNewer){
   const o=j.official||{}, r=j.result||{};
   const unit=o.currency||'';
   const row=(label,val)=>val==null?'':`<span style="display:inline-block;margin-right:14px"><span style="color:var(--text2)">${label}</span> <b>${esc(String(val))}</b></span>`;
@@ -2626,14 +2626,16 @@ function earningsBlock(j){
   // 官方展望與分部營收來自公司自己發布的財報新聞稿原文（美股 8-K/6-K 的 EX-99.1），
   //   不是 AI 推算，價值最高故獨立醒目呈現、排在最前面。
   const notGiven=v=>!v||!String(v).trim()||/未提供|未於本次新聞稿提供|未揭露/.test(String(v));
+  // 來源標示要跟實際文件一致：台股是法說會簡報、美股是財報新聞稿
+  const srcName=(j.pressRelease&&j.pressRelease.form==='法說會簡報')?'法說會簡報原文':'財報新聞稿原文';
   const guide=notGiven(r.guidanceOfficial)?'':
     `<div style="margin-bottom:10px;padding:9px 10px;background:rgba(88,166,255,.09);border-left:3px solid var(--blue);border-radius:5px">
-       <b style="color:var(--blue)">📢 公司官方展望（財報新聞稿原文）</b><br>${r.guidanceOfficial}</div>`;
+       <b style="color:var(--blue)">📢 公司官方展望（${srcName}）</b><br>${r.guidanceOfficial}</div>`;
   const seg=notGiven(r.segments)?'':
     `<div style="margin-bottom:10px"><b style="color:var(--blue)">🧩 分部／產品別營收</b><br>${r.segments}</div>`;
-  return `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">
+  return `<div style="${isNewer?'':'margin-top:14px;padding-top:12px;border-top:1px solid var(--line)'}">
     <div style="color:var(--green);font-size:12px;margin-bottom:8px">
-      📊 最新財報自動摘要（${esc(j.quarter||'')}）— 數字來自${esc(j.source||'官方申報')}
+      📊 最新財報自動摘要（${esc(j.quarter||'')}）${isNewer?'<b>· 比下方人工整理的內容更新一季</b>':''} — 數字來自${esc(j.source||'官方申報')}
     </div>
     <div style="font-size:13px;margin-bottom:10px;line-height:1.9">
       ${row('營收',o.營業收入&&o.營業收入+unit)}${row('營業利益',o.營業利益&&o.營業利益+unit)}${row('淨利',o.本期淨利&&o.本期淨利+unit)}${row('EPS',o.每股盈餘)}
@@ -2644,9 +2646,9 @@ function earningsBlock(j){
     ${item('營運狀況',r.outlook)}${item('本季亮點',r.highlights)}${item('須留意之處',r.concerns)}
     ${item('財務風險',r.risks)}${item('投資人最該注意的事',r.keyPoints)}
     <div style="color:var(--text2);font-size:11px;margin-top:8px">
-      本摘要由 AI 依上述官方數字${j.pressRelease?'與公司官方財報新聞稿原文':''}整理，
+      本摘要由 AI 依上述官方數字${j.pressRelease?("與公司"+srcName):""}整理，
       未提供之項目一律標示「未提供」，不做臆測或預測。
-      ${j.pressRelease?`<a href="${esc(j.pressRelease.url)}" target="_blank" rel="noopener" style="color:var(--blue)">查看官方新聞稿原文 ↗</a>`:''}
+      ${j.pressRelease?`<a href="${esc(j.pressRelease.url)}" target="_blank" rel="noopener" style="color:var(--blue)">查看官方原文 ↗</a>`:''}
     </div>
   </div>`;
 }
@@ -2949,12 +2951,45 @@ function renderAI(ai){
   // 若有「官方法說會逐字稿人工判讀摘要」(目前TSM)，優先且完整顯示它(內容比SEC新聞稿的季度財測更完整)，其餘公司走原本SEC擷取邏輯
   const videoBlock = irVideoBlock(window.__symbolForLinks, coName);   // 🎬 法說會影片，置於法說主旨最上方
   const manualCall=IR_CALL_SUMMARY[window.__symbolForLinks];
+  // 人工建置的內容判讀較深，但實測台股人工版有 59% 已落後官方一季（做完那批之後又出新財報，
+  //   沒有機制回頭更新）。把過期內容放在最新內容上面，違反「資料要盡可能最新」的第一原則。
+  //   因此改為「比季度新舊決定順序」：自動摘要明顯較新時才提到前面，同一季則維持人工優先
+  //   （同一季時人工版含法說會問答與人工判讀，內容更豐富）。
+  // ⚠️ 不能直接比季別數字：美股會計年度與日曆季不對齊（NVDA 的 SEC 期間是 FY2027Q2，
+  //   人工記錄寫「2026 第二季」），數字比會誤判。改以「期間結束日」比較。
+  const __periodEnd=(s)=>{
+    if(!s) return null;
+    const d=String(s).match(/(20\d\d)[\/\-](\d{1,2})[\/\-](\d{1,2})/);   // 內含明確日期者最準
+    if(d) return new Date(+d[1], +d[2]-1, +d[3]);
+    const y=(String(s).match(/20\d\d/)||[])[0];
+    if(!y) return null;
+    const q=String(s).match(/第?\s*([一二三四1-4])\s*季/);
+    if(q){ const n={'一':1,'二':2,'三':3,'四':4}[q[1]]||+q[1]; return new Date(+y, n*3, 0); }
+    if(/上半年/.test(s)) return new Date(+y, 6, 0);
+    if(/下半年|全年|年度/.test(s)) return new Date(+y, 12, 0);
+    return new Date(+y, 12, 0);
+  };
   // 自動產生的最新財報摘要（data/earnings/{代碼}.json，由每日排程從 TWSE/SEC 官方數字產生）。
   //   人工建置的 IR 內容品質較高（含法說會發言與人工判讀），所以仍以 manualCall 為主，
   //   這份自動摘要接在後面當補充；人工內容還沒建到的公司則單獨顯示這份。
   const autoEarn=window.__autoEarnings;
-  const autoBlock=autoEarn?earningsBlock(autoEarn):'';
-  if(manualCall){
+  // 自動摘要比人工版新「超過 45 天」才視為真的跨了一季（同一季內兩者日期本就會差幾天，
+  //   例如 NVDA 人工記法說會日 7/16、官方期間結束 7/26，那不算更新一季）
+  let __autoNewer=false;
+  if(autoEarn&&manualCall){
+    const a=__periodEnd(autoEarn.official&&autoEarn.official.periodEnd)||__periodEnd(autoEarn.quarter);
+    const m=__periodEnd(manualCall.quarter);
+    __autoNewer = !!(a&&m&&(a-m)/86400000>45);
+  }
+  const autoBlock=autoEarn?earningsBlock(autoEarn,__autoNewer):'';
+  if(manualCall&&__autoNewer){
+    // 自動摘要較新 → 放前面；人工內容降為補充，但保留（那裡有自動化做不到的人工判讀）
+    setAI('ai_guidance',`<div class="ai">${videoBlock}${autoBlock}
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">
+        <div style="color:var(--text2);font-size:12px;margin-bottom:8px">
+          📝 人工整理的前一季內容（${esc(manualCall.quarter||'')}）— 含法說會問答與人工判讀，可對照參考
+        </div>${manualCall.html}</div></div>`);
+  } else if(manualCall){
     setAI('ai_guidance',`<div class="ai">${videoBlock}${manualCall.html}${autoBlock}</div>`);
   } else if(autoEarn){
     setAI('ai_guidance',`<div class="ai">${videoBlock}${autoBlock}${linksBlock}</div>`);
