@@ -239,8 +239,22 @@ const { queue } = JSON.parse(fs.readFileSync(qPath, 'utf8'));
 
 fs.mkdirSync(OUT_DIR, { recursive: true });
 const rank = { HIGH: 0, MEDIUM: 1, LOW: 2 };
-const sorted = [...queue].sort((a, b) => rank[a.priority] - rank[b.priority]);
-console.log(`▶ 佇列 ${sorted.length} 家，本次上限 ${MAX_ANALYSES} 家`);
+// 依優先序排序後，「兩個市場交錯」取用。
+//   ⚠️ 原本只依優先序排，而有法說會事件的台股全是 HIGH、美股是 MEDIUM，
+//   結果每天的預算會先被 63 家台股吃光，美股永遠輪不到（實測第二次執行 3 家全是台股）。
+//   改為在同一優先層內台股／美股輪流，確保兩邊每天都有進度。
+//   注意：必須「跨優先層」交錯，不能只在同一層內交錯。因為有法說會事件的台股全在 HIGH、
+//   美股全在 MEDIUM，若只在層內交錯，仍要先做完 63 家 HIGH 台股才輪得到美股（實測仍是 12:0）。
+//   作法：兩個市場各自依優先序排好，再一左一右交替取用，兩邊都能每天有進度。
+const byRank = m => queue.filter(x => (m === 'tw' ? x.market === 'tw' : x.market !== 'tw'))
+  .sort((a, b) => rank[a.priority] - rank[b.priority]);
+const twQ = byRank('tw'), usQ = byRank('us');
+const sorted = [];
+for (let i = 0; i < Math.max(twQ.length, usQ.length); i++) {
+  if (i < twQ.length) sorted.push(twQ[i]);
+  if (i < usQ.length) sorted.push(usQ[i]);
+}
+console.log(`▶ 佇列 ${sorted.length} 家，本次上限 ${MAX_ANALYSES} 家（台股／美股交錯處理）`);
 
 const twFin = await loadTwFinancials();
 console.log(`  已載入台股官方季度財務 ${Object.keys(twFin).length} 家`);
@@ -266,7 +280,10 @@ for (const item of sorted) {
     f = await loadUsFinancials(cik);
     await new Promise(r => setTimeout(r, 250));   // 遵守 SEC 存取頻率規範
   }
-  if (!f || f.營業收入 == null) { skipped++; continue; }
+  // 營收為 0 或空白者略過：這類多是尚無實質營運的空殼／早期公司（實測 iBio、FIRST BREACH
+  //   等營收 0.00 億、EPS 空白）。對它們做分析只會產出沒有內容的文字，還白白消耗免費額度，
+  //   應該把額度留給真正有營運的公司。
+  if (!f || f.營業收入 == null || Number(f.營業收入) <= 0) { skipped++; continue; }
 
   // 季度識別：同一家公司同一季只分析一次
   const qTag = f.market === 'tw' ? `${f.year}Q${f.season}` : `${f.year}${f.season}`;
