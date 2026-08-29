@@ -30,6 +30,10 @@ on:
         description: 'SEC 回看天數'
         required: false
         default: '3'
+      transcript_max:
+        description: '本次最多用無頭瀏覽器抓幾家官網逐字稿'
+        required: false
+        default: '12'
 
 # 只授予寫入 repo 內容的最小權限
 permissions:
@@ -56,6 +60,15 @@ jobs:
       - name: 安裝 PDF 文字擷取工具
         run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
 
+      # 無頭瀏覽器：現代 IR 網站多為 JavaScript 動態渲染，純 fetch 抓到的是空殼
+      #   （實測 NVIDIA 純 fetch 得到 0 個 PDF、用瀏覽器得到 10 個含逐字稿）。
+      #   --only-shell 只裝精簡版 chromium，體積與時間都比完整版省很多。
+      - name: 安裝無頭瀏覽器
+        working-directory: scripts
+        run: |
+          npm install --no-audit --no-fund --silent
+          npx playwright install --with-deps chromium --only-shell
+
       - name: 偵測新事件（SEC + TWSE + TPEx）
         env:
           LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '3' }}
@@ -65,6 +78,9 @@ jobs:
         env:
           GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
           MAX_ANALYSES: ${{ github.event.inputs.max_analyses || '40' }}
+          # 逐字稿路徑每家多花 15~30 秒，設上限避免整輪執行時間爆掉
+          TRANSCRIPT_MAX: ${{ github.event.inputs.transcript_max || '12' }}
+          NODE_PATH: scripts/node_modules
         run: node scripts/analyze-earnings.mjs
 
       - name: 提交結果

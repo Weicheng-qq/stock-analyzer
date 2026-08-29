@@ -25,6 +25,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fetchLatestEarningsRelease, focusExcerpt } from './lib/sec-press-release.mjs';
 import { fetchCallIndex, fetchCallPdfText, focusExcerptTw } from './lib/mops-earnings-call.mjs';
+import { fetchIrDocument, focusExcerptIr, closeBrowser } from './lib/ir-transcript.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT_DIR = path.join(ROOT, 'data', 'earnings');
@@ -35,6 +36,25 @@ const MAX_ANALYSES = Number(process.env.MAX_ANALYSES || 40);
 const DRY_RUN = process.env.DRY_RUN === '1';
 const KEY = process.env.GEMINI_KEY;
 if (!KEY && !DRY_RUN) { console.error('❌ 未設定 GEMINI_KEY，中止（不會嘗試任何付費替代方案）'); process.exit(1); }
+
+// 公司官網 IR 頁網址：使用者人工整理的 1,270 筆，正是「抓官網逐字稿」路徑的入口。
+//   人工建置的成果在這裡繼續發揮價值——不是白做的。
+function loadIrPages() {
+  try {
+    const html = fs.readFileSync(path.join(ROOT, 'stock_analyzer.html'), 'utf8');
+    const i = html.indexOf('const IR_QUARTERLY_PAGE');
+    const st = html.indexOf('{', i);
+    let d = 0, j = st;
+    for (; j < html.length; j++) {
+      if (html[j] === '{') d++;
+      else if (html[j] === '}') { d--; if (d === 0) { j++; break; } }
+    }
+    return new Function('return ' + html.slice(st, j))();
+  } catch (e) { return {}; }
+}
+// 逐字稿路徑每家要多花 15~30 秒，不可能整輪都用。只給「有官網 IR 頁」的公司，
+//   且每輪設上限，優先做排在前面（優先序較高）的。其餘退回 SEC 8-K 新聞稿。
+const TRANSCRIPT_MAX = Number(process.env.TRANSCRIPT_MAX || 12);
 
 const rocToAd = y => Number(y) + 1911;
 const num = v => { const n = Number(String(v ?? '').replace(/,/g, '')); return Number.isFinite(n) ? n : null; };
@@ -185,9 +205,11 @@ function buildPrompt(symbol, f, pr) {
 
   // 有新聞稿時，額外要求萃取「官方展望」與「分部／產品別營收」——這兩樣是數字 API 沒有的，
   //   但公司自己寫在新聞稿裡，屬於官方原文，不是臆測。
-  const srcLabel = pr ? (pr.kind === 'deck'
-    ? `公司法人說明會簡報節錄（${pr.filedAt} 上傳至公開資訊觀測站，原文未經改寫）`
-    : `公司官方財報新聞稿節錄（${pr.filedAt} 向 SEC 申報的 ${pr.form}，原文未經改寫）`) : '';
+  const srcLabel = !pr ? '' :
+    pr.kind === 'transcript' ? '公司法說會逐字稿節錄（來自公司官網投資人關係專區，原文未經改寫）' :
+    pr.kind === 'irdoc' ? '公司官網投資人關係文件節錄（原文未經改寫）' :
+    pr.kind === 'deck' ? `公司法人說明會簡報節錄（${pr.filedAt} 上傳至公開資訊觀測站，原文未經改寫）` :
+    `公司官方財報新聞稿節錄（${pr.filedAt} 向 SEC 申報的 ${pr.form}，原文未經改寫）`;
   const prBlock = pr ? `
 
 【${srcLabel}】
@@ -195,7 +217,9 @@ ${pr.excerpt}
 ` : '';
   const prFields = pr ? `,
  "guidanceOfficial":"從上方${pr.kind==='deck'?'法說會簡報':'新聞稿'}節錄中，找出公司對『下一季或全年』的官方展望／財測，忠實翻成繁體中文並保留所有數字與單位（例如「第三季營收預期 1,080 億美元，正負 2%；毛利率預期 74.0%，正負 50 個基點」）。這必須是原文裡實際出現的文字，嚴禁自行推算或補充。若原文沒有提供展望（例如 Apple 不公布書面財測），寫「公司未於本次資料提供財測」。",
- "segments":"從上方${pr.kind==='deck'?'法說會簡報':'新聞稿'}節錄中，整理各部門／產品別的營收與增減（例如「資料中心：890 億美元，季增 18%、年增 117%」），每項以•開頭、<br>分行。只能列出原文實際提到的部門與數字，嚴禁自行分類或估算佔比。若原文未揭露分部數字，寫「本次資料未揭露分部營收」。"` : '';
+ "segments":"從上方${pr.kind==='deck'?'法說會簡報':'原文'}節錄中，整理各部門／產品別的營收與增減（例如「資料中心：890 億美元，季增 18%、年增 117%」），每項以•開頭、<br>分行。只能列出原文實際提到的部門與數字，嚴禁自行分類或估算佔比。若原文未揭露分部數字，寫「本次資料未揭露分部營收」。"${pr.kind === 'transcript' ? `,
+ "mgmtRemarks":"這份是完整法說會逐字稿，請萃取『管理層親口說過、且投資人最該知道』的關鍵發言 3-5 點，每點以•開頭、<br>分行。要求：①必須是原文出現過的內容，可註明是誰說的（例如「執行長表示…」）②優先選：對未來需求的看法、財測是否上修或下修、產能與資本支出計畫、對競爭或風險的說法 ③保留原文的具體數字與措辭強度（例如「比之前更強」「需求極為強勁」不可淡化成「表現良好」）④嚴禁把分析師的提問寫成公司的說法。若逐字稿中找不到明確的管理層前瞻發言，寫「逐字稿未包含明確前瞻發言」。",
+ "capexPlan":"從逐字稿中整理資本支出／產能擴充計畫（金額、年度、用途配置），保留原文數字。沒有提到就寫「未提供」。"` : ''}` : '';
 
   return `你是專業的財報分析師。以下是${isTw ? '台股' : '美股'} ${f.name}（代碼 ${symbol}）${period}的官方財務數字，
 來源為${src}。
@@ -281,12 +305,15 @@ console.log(`  已載入台股官方季度財務 ${Object.keys(twFin).length} �
 const twCalls = await fetchCallIndex(4);
 console.log(`  已載入台股法說會簡報索引 ${twCalls.size} 家`);
 
+const irPages = loadIrPages();
+console.log(`  已載入公司官網 IR 頁 ${Object.keys(irPages).length} 家（逐字稿路徑入口）`);
+
 const tickMap = await getJson('https://www.sec.gov/files/company_tickers.json', UA_SEC);
 const tk2cik = new Map();
 for (const v of Object.values(tickMap || {})) tk2cik.set(v.ticker, v.cik_str);
 console.log(`  已載入美股代碼→CIK 對照 ${tk2cik.size} 家`);
 
-let done = 0, skipped = 0, failed = 0, stoppedByQuota = false;
+let done = 0, skipped = 0, failed = 0, stoppedByQuota = false, usedTranscript = 0;
 const stat = { tw: 0, us: 0 };
 
 for (const item of sorted) {
@@ -328,14 +355,26 @@ for (const item of sorted) {
       await new Promise(r => setTimeout(r, 400));
     }
   } else {
-    const raw = await fetchLatestEarningsRelease(tk2cik.get(item.symbol));
-    if (raw) pr = { kind: 'press', filedAt: raw.filedAt, form: raw.form, url: raw.url, excerpt: focusExcerpt(raw.text) };
+    // 美股：①優先用公司官網 IR 的逐字稿／簡報（品質最高，含管理層問答原話）
+    //      ②取不到才退回 SEC 8-K 財報新聞稿（可靠度接近 100%，但沒有問答內容）
+    if (usedTranscript < TRANSCRIPT_MAX && irPages[item.symbol]) {
+      const doc = await fetchIrDocument(item.symbol, irPages[item.symbol]);
+      if (doc) {
+        usedTranscript++;
+        pr = { kind: doc.kind === 'transcript' ? 'transcript' : 'irdoc', filedAt: '', form: doc.kind === 'transcript' ? '法說會逐字稿' : '公司官網文件', url: doc.url, excerpt: focusExcerptIr(doc.text) };
+        console.log(`     ↳ 官網${doc.kind === 'transcript' ? '逐字稿' : '文件'} ${doc.text.length} 字`);
+      }
+    }
+    if (!pr) {
+      const raw = await fetchLatestEarningsRelease(tk2cik.get(item.symbol));
+      if (raw) pr = { kind: 'press', filedAt: raw.filedAt, form: raw.form, url: raw.url, excerpt: focusExcerpt(raw.text) };
+    }
     await new Promise(r => setTimeout(r, 250));
   }
 
   const prompt = buildPrompt(item.symbol, f, pr);
   if (DRY_RUN) {
-    console.log(`  [DRY] ${item.market.toUpperCase()} ${item.symbol} ${f.name} ${qTag} 營收${f.營業收入} EPS ${f.每股盈餘}${pr ? ' ｜' + (pr.kind==='deck'?'法說簡報 ':'新聞稿 ') + pr.excerpt.length + '字' : ' ｜無簡報/新聞稿'}`);
+    console.log(`  [DRY] ${item.market.toUpperCase()} ${item.symbol} ${f.name} ${qTag} 營收${f.營業收入} EPS ${f.每股盈餘}${pr ? ' ｜' + ({transcript:'逐字稿 ',irdoc:'官網文件 ',deck:'法說簡報 ',press:'新聞稿 '}[pr.kind]||'') + pr.excerpt.length + '字' : ' ｜無簡報/新聞稿'}`);
     done++; stat[item.market]++; continue;
   }
 
@@ -363,4 +402,6 @@ for (const item of sorted) {
   await new Promise(r => setTimeout(r, 7000));
 }
 
+await closeBrowser();
 console.log(`✅ 完成：新分析 ${done} 家（台股 ${stat.tw}、美股 ${stat.us}）、略過 ${skipped} 家、失敗 ${failed} 家${stoppedByQuota ? '（因免費額度用盡提前結束）' : ''}`);
+console.log(`   其中 ${usedTranscript} 家使用了公司官網逐字稿／文件（品質最高的來源）`);
