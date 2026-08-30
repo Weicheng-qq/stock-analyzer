@@ -2741,7 +2741,7 @@ function __dmStockBlock(g, extra){
     ${hi.length?`<div class="dm-alert">⚡ ${esc(hi[0])}</div>`:''}
     <div class="dm-why">📰 <b>今天為什麼動？</b><br>${esc(why)}</div>
     ${mean?`<div class="dm-why">💡 <b>對投資人代表什麼？</b><br>${esc(mean)}</div>`:''}
-    <div class="dm-vd">AI判讀：<span style="color:${st.c}">${st.e} ${st.t}</span>${(st.note&&why===__DM_NO_NEWS)?`<span class="dm-sub">${esc(st.note)}</span>`:''}${g.score!=null?`<span class="dm-sub">綜合評分 ${g.score}/100</span>`:''}${extra||''}</div>
+    <div class="dm-vd">AI判讀：<span style="color:${st.c}">${st.e} ${st.t}</span>${(st.note&&why===__DM_NO_NEWS)?`<span class="dm-sub">${esc(st.note)}</span>`:''}${g.score!=null?`<span class="dm-sub">體質評分 ${g.score}/100</span>`:''}${extra||''}</div>
   </div>`;
 }
 // 主題圖示：只是視覺標記，依主題名稱關鍵字對應；主題文字本身一律由當日實際資料產生，不是固定清單
@@ -2905,7 +2905,13 @@ function __dmRenderAll(){
   if(meta){
     const w=new Date().getDay();
     const stale=(d.tradeDate&&d.tradeDate!==__dmToday())||((!d.tradeDate)&&(w===0||w===6));
-    meta.textContent=`資料日期 ${d.date||''}${stale?'（休市中，數字為最近交易日收盤）':''}｜由每日排程統一產生，所有使用者共用同一份分析`;
+    // ⚠️ 實測發現 Autodesk 出現「AI判讀 🔴 偏負面」卻「評分 71/100（全頁最高）」，
+    //   使用者會覺得自相矛盾。兩者衡量的其實是不同的東西：AI判讀只看今天的消息方向，
+    //   評分是基本面／估值／技術面的綜合體質。已把評分改名為「體質評分」並在這裡說明，
+    //   避免被當成「分數高＝今天利多」或「分數＝可以買」。
+    meta.innerHTML=`AI判讀＝今天的<b>消息方向</b>；體質評分＝基本面、估值、技術面的<b>綜合體質</b>，`
+      +`兩者不同向是正常的，都不是買賣建議。<br>資料日期 ${esc(d.date||'')}`
+      +`${stale?'（休市中，數字為最近交易日收盤）':''}｜由每日排程統一產生，所有使用者共用同一份分析`;
   }
   __renderDailyUnread();
 }
