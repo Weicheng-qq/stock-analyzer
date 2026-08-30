@@ -1,4 +1,10 @@
-﻿.claude/
+﻿# .claude 預設不進版控（交接記錄是個人開發日誌，這個 repo 是 public）
+.claude/*
+# 但「可重複使用的方法論 skill」要跟著專案走，換裝置或重新 clone 才不會不見
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/測試skill/
+!.claude/skills/股票APP/
 _*.json
 *.log
 ~$*
