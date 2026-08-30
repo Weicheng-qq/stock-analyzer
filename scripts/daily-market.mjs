@@ -101,6 +101,7 @@ async function fetchQuote(code) {
   const price = num(m1.regularMarketPrice), prev = num(m1.previousClose ?? m1.chartPreviousClose);
   if (price == null || prev == null || !prev) return null;
 
+  await new Promise(r => setTimeout(r, 180));   // 同一檔的多個請求之間也要間隔，避免被 Yahoo 限流
   const j = await getJson(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=3mo&interval=1d`);
   const r = j?.chart?.result?.[0];
   const m = r?.meta || m1;
@@ -134,9 +135,38 @@ function newsQuerySymbols(code) {
   if (!/^\d{4}$/.test(code)) out.push(code);
   return [...new Set(out)];
 }
+// 台股中文新聞：Yahoo 台股 RSS。實測 `tw.stock.yahoo.com/rss?s=2330.TW` 有 20 則當日中文新聞，
+//   遠比英文的 finance search 適合台股（後者對台股代碼回傳的多是無關內容）。
+// ⚠️ 但 RSS 會混入大盤與其他公司的新聞（實測 2330 的 RSS 裡出現「精材」「輝達」的報導），
+//   因此必須用「公司中文名出現在標題裡」過濾，否則又會餵給 AI 不相關的素材。
+const TW_ALL = readConst('TW_ALL') || {};
+async function fetchNewsTw(code, limit = 6) {
+  const name = TW_ALL[code];
+  if (!name) return [];
+  try {
+    const r = await fetch(`https://tw.stock.yahoo.com/rss?s=${encodeURIComponent(yahooSym(code))}`, { headers: { 'User-Agent': UA } });
+    if (!r.ok) return [];
+    const xml = await r.text();
+    const cutoff = Date.now() - 4 * 86400000;
+    const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(m => {
+      const g = re => { const x = m[1].match(re); return x ? x[1].replace(/<!\[CDATA\[|\]\]>/g, '').trim() : ''; };
+      return { title: g(/<title>([\s\S]*?)<\/title>/), link: g(/<link>([\s\S]*?)<\/link>/), time: Date.parse(g(/<pubDate>([\s\S]*?)<\/pubDate>/)) || 0, publisher: 'Yahoo 股市' };
+    });
+    return items
+      .filter(x => x.title && (!x.time || x.time > cutoff))
+      .filter(x => x.title.includes(name))   // 只留標題真的提到這家公司的
+      .slice(0, limit);
+  } catch (e) { return []; }
+}
+
 async function fetchNews(code, limit = 6) {
   const cutoff = Date.now() / 1000 - 3 * 86400;   // 只看近三天，確保「今日」的時效性
   const wanted = new Set([code, yahooSym(code), TW_US_EQUIV[code]].filter(Boolean).map(s => String(s).toUpperCase()));
+  // 台股優先用中文 RSS（英文 search 對台股代碼幾乎抓不到相關新聞）
+  if (/^\d{4}$/.test(code)) {
+    const tw = await fetchNewsTw(code, limit);
+    if (tw.length) return tw;
+  }
   for (const q of newsQuerySymbols(code)) {
     const j = await getJson(`https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(q)}&newsCount=${limit * 2}&quotesCount=0&lang=en-US&region=US`);
     const rows = (j?.news || [])
@@ -366,9 +396,13 @@ for (const code of codes) {
   if (!q) continue;
   let earn = null;
   try { earn = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'earnings', `${code}.json`), 'utf8')); } catch (e) {}
+  await new Promise(r => setTimeout(r, 180));
   const pe = await fetchPe(code);          // 估值面向；取不到就 null，不亂編
   rows.push({ code, q, earn, pe, base: computeScores(q, earn, pe) });
-  await new Promise(r => setTimeout(r, 220));
+  // ⚠️ 每檔現在要發 3 個 Yahoo 請求（當日報價／3個月序列／本益比）。
+  //   原本間隔 220ms 等於每秒約 13 個請求，實測 60 檔時被限流，
+  //   股票池從 31 檔掉到只剩 12 檔。放慢到 600ms（每秒約 5 個請求）。
+  await new Promise(r => setTimeout(r, 600));
 }
 console.log(`  取得報價 ${rows.length} 檔`);
 
@@ -412,7 +446,11 @@ for (const r of rows) {
 }
 
 // 6) 今日必看：有 AI 判讀者依「重要程度 × 漲跌幅」排序取前 5
-const musts = rows.filter(r => r.ai)
+// ⚠️ 排除「AI 自己說沒有相關新聞」的項目：實測出現過一則內容是
+//   「事實：近期無明確相關新聞／判讀：缺乏具體營運數據…」卻被放進今日必看，
+//   對使用者毫無價值。沒有實質內容就不該佔版面。
+const NO_CONTENT = /無明確相關新聞|無相關新聞|資訊不足|未提供/;
+const musts = rows.filter(r => r.ai && !NO_CONTENT.test(r.ai.fact || ''))
   .map(r => ({
     symbol: r.code, name: r.q.name,
     changePct: Number(r.q.changePct.toFixed(2)),
