@@ -2175,7 +2175,14 @@ async function doSearchTW(symbol){
       logPanel(false);
     } else { setAllAI('<div class="note">請點右上 ⚙️ 設定免費 AI 金鑰以顯示 AI 分析。</div>'); }
     applyGroupAfterRender();
-  }catch(e){ __autoLoading=false; document.getElementById('results').innerHTML='<div class="err-box">台股資料載入失敗，請稍後再試</div>'; logPanel(false); searchDone(); }
+  }catch(e){
+    // ⚠️ 實測輸入不存在的代碼(9999/0000)會走到這裡，原本一律顯示「載入失敗，請稍後再試」，
+    //   使用者會以為是網路問題而不斷重試，實際上是代碼根本不存在。要把兩種情況分開講。
+    __autoLoading=false;
+    const __c=String(symbol||'').replace(/\.(TW|TWO)$/i,'');
+    document.getElementById('results').innerHTML='<div class="err-box">查不到代碼「'+esc(__c)+'」的台股資料。<br>請確認代碼是否正確（上市櫃代碼為 4 碼數字）；若代碼無誤，可能是資料來源暫時異常，請稍後再試。</div>';
+    logPanel(false); searchDone();
+  }
 }
 async function doSearch(){
   const raw=document.getElementById('searchInput').value.trim();
@@ -2858,7 +2865,9 @@ function __dmRenderAll(){
           ${byDate[dt].map(e=>{
             const isMine=e.symbol&&mine.includes(e.symbol);
             const can=e.symbol&&__dmClickable(e.symbol);
-            const nm=e.symbol?__dailyName(e.symbol,e.name||e.title):(e.title||'');
+            // ⚠️ 有代碼時不要拿 title 當備援：title 是「MDB 財報公布」這種整句，
+            //   會和後面的代碼與分類重複，顯示成「MDB 財報公布MDB 財報」。
+            const nm=e.symbol?__dailyName(e.symbol,e.name||''):(e.title||'');
             return `<div class="dm-evr${can?' dm-tap':''}" ${can?`onclick="doSearchFromDaily('${esc(e.symbol)}')"`:''}>
               ${e.symbol?`<span class="dm-nm">${esc(nm)}</span><span class="dm-cd">${esc(e.symbol)}</span>`:`<span class="dm-nm">${esc(e.title||'')}</span>`}
               <span class="dm-cat">${esc(e.category||'')}</span>
