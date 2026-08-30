@@ -4,8 +4,8 @@
 // 1. Gemini 只負責「分析已經取得的官方數字」，絕不讓它去搜尋公司（那是 detect-events 的工作）。
 // 2. 同一家公司、同一季只分析一次：輸出檔已存在且季度相同就跳過。
 // 3. 依優先序 HIGH → MEDIUM → LOW，額度用完就停，HIGH 永遠先做。
-// 4. 【零費用鐵則】只用 Gemini 免費層。免費層超額的行為是「拒絕請求(429)」而不是「開始收費」，
-//    只要那個 Google Cloud 專案「永遠不要啟用帳單(billing)」，就不可能產生任何費用。
+// 4. 【零費用鐵則】三層免費備援 Gemini→Groq→OpenRouter（見 lib/ai-call.mjs，與網站 /api/ai 一致）。
+//    三家都只用免費層，超額一律是「拒絕請求」而非計費，三家都用完就停止。
 //    ⚠️ Gemini 一旦啟用帳單，免費層會整個消失、從第一個 token 就計費。
 // 5. 所有財務數字必須來自官方原始資料，AI 只做整理與判讀；資料沒有的一律寫「未提供」。
 //
@@ -26,6 +26,8 @@ import path from 'node:path';
 import { fetchLatestEarningsRelease, focusExcerpt } from './lib/sec-press-release.mjs';
 import { fetchCallIndex, fetchCallPdfText, focusExcerptTw } from './lib/mops-earnings-call.mjs';
 import { fetchIrDocument, focusExcerptIr, closeBrowser } from './lib/ir-transcript.mjs';
+// 三層備援(Gemini→Groq→OpenRouter)，與網站 /api/ai 行為一致
+import { callAI, aiStats, shouldStop } from './lib/ai-call.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT_DIR = path.join(ROOT, 'data', 'earnings');
@@ -34,8 +36,10 @@ const UA_SEC = 'StockAnalyzer/1.0 (personal project; aa910517@gmail.com)';
 
 const MAX_ANALYSES = Number(process.env.MAX_ANALYSES || 40);
 const DRY_RUN = process.env.DRY_RUN === '1';
-const KEY = process.env.GEMINI_KEY;
-if (!KEY && !DRY_RUN) { console.error('❌ 未設定 GEMINI_KEY，中止（不會嘗試任何付費替代方案）'); process.exit(1); }
+// 三把免費金鑰任一把有就能運作(與網站 /api/ai 相同的備援策略)
+if (!process.env.GEMINI_KEY && !process.env.GROQ_KEY && !process.env.OPENROUTER_KEY && !DRY_RUN) {
+  console.error('❌ 未設定任何 AI 金鑰(GEMINI_KEY/GROQ_KEY/OPENROUTER_KEY)，中止（不會嘗試任何付費方案）'); process.exit(1);
+}
 
 // 公司官網 IR 頁網址：使用者人工整理的 1,270 筆，正是「抓官網逐字稿」路徑的入口。
 //   人工建置的成果在這裡繼續發揮價值——不是白做的。
@@ -252,26 +256,13 @@ ${lines}${prBlock}
 }`;
 }
 
+// 改用共用的三層備援模組（原本只用 Gemini、沒有備援，額度用完就整個停止）
 async function callGemini(prompt) {
-  // 只用免費層可用的 Flash 系列。Pro 已於 2026 年 4 月移出免費層，不可使用。
-  for (const model of ['gemini-3.5-flash', 'gemini-3.1-flash-lite']) {
-    try {
-      const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 60000);
-      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
-        method: 'POST', signal: ctl.signal,
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + KEY },
-        body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }], temperature: 0.3 })
-      });
-      clearTimeout(to);
-      if (r.status === 429) return { rateLimited: true };   // 免費額度用盡 → 停止，絕不改用付費
-      if (!r.ok) continue;
-      const j = await r.json();
-      const m = (j?.choices?.[0]?.message?.content || '').match(/\{[\s\S]*\}/);
-      if (m) { try { return { result: JSON.parse(m[0]) }; } catch (e) {} }
-    } catch (e) {}
-  }
-  return { failed: true };
+  const r = await callAI(prompt);
+  if (r) return { result: r };
+  return shouldStop() ? { rateLimited: true } : { failed: true };
 }
+
 
 // ── 主流程 ──
 const qPath = path.join(ROOT, 'data', 'events', 'queue.json');
@@ -403,5 +394,6 @@ for (const item of sorted) {
 }
 
 await closeBrowser();
+console.log(`   AI 來源：Gemini ${aiStats.gemini}／Groq ${aiStats.groq}／OpenRouter ${aiStats.openrouter}`);
 console.log(`✅ 完成：新分析 ${done} 家（台股 ${stat.tw}、美股 ${stat.us}）、略過 ${skipped} 家、失敗 ${failed} 家${stoppedByQuota ? '（因免費額度用盡提前結束）' : ''}`);
 console.log(`   其中 ${usedTranscript} 家使用了公司官網逐字稿／文件（品質最高的來源）`);

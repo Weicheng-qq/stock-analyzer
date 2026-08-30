@@ -23,6 +23,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 // 複用既有模組取得 MOPS 法說會場次（含未來日期），不重寫一份
 import { fetchCallIndex } from './lib/mops-earnings-call.mjs';
+// 三層備援(Gemini→Groq→OpenRouter)，與網站 /api/ai 行為一致
+import { callAI, aiStats, shouldStop } from './lib/ai-call.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const DAILY = path.join(ROOT, 'data', 'daily');
@@ -32,8 +34,10 @@ const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 const MAX_POOL = Number(process.env.DAILY_POOL || 60);      // 股票池上限
 const MAX_AI = Number(process.env.DAILY_AI || 25);           // 本次最多幾次 AI 呼叫
 const DRY_RUN = process.env.DRY_RUN === '1';
-const KEY = process.env.GEMINI_KEY;
-if (!KEY && !DRY_RUN) { console.error('❌ 未設定 GEMINI_KEY，中止（不會嘗試任何付費替代方案）'); process.exit(1); }
+// 三把免費金鑰任一把有就能運作(與網站 /api/ai 相同的備援策略)
+if (!process.env.GEMINI_KEY && !process.env.GROQ_KEY && !process.env.OPENROUTER_KEY && !DRY_RUN) {
+  console.error('❌ 未設定任何 AI 金鑰(GEMINI_KEY/GROQ_KEY/OPENROUTER_KEY)，中止（不會嘗試任何付費方案）'); process.exit(1);
+}
 
 const todayStr = () => {
   const d = new Date();
@@ -261,25 +265,7 @@ ${list}
   };
 }
 
-async function callGemini(prompt) {
-  for (const model of ['gemini-3.5-flash', 'gemini-3.1-flash-lite']) {
-    try {
-      const c = new AbortController(); const t = setTimeout(() => c.abort(), 45000);
-      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
-        method: 'POST', signal: c.signal,
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + KEY },
-        body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }], temperature: 0.3 })
-      });
-      clearTimeout(t);
-      if (r.status === 429) { rateLimited = true; return null; }   // 額度用盡：停止，絕不改用付費
-      if (!r.ok) continue;
-      const j = await r.json();
-      const m = (j?.choices?.[0]?.message?.content || '').match(/\{[\s\S]*\}/);
-      if (m) { try { return JSON.parse(m[0]); } catch (e) {} }
-    } catch (e) {}
-  }
-  return null;
-}
+const callGemini = callAI;   // 改用共用的三層備援
 let rateLimited = false;
 
 // 綜合評分：把各面向加權平均（null 的面向不計入，不用預設值硬湊）
@@ -392,7 +378,7 @@ rows.sort((a, b) => Math.abs(b.q.changePct) - Math.abs(a.q.changePct));
 // 4) AI 新聞判讀（只給前 MAX_AI 檔，額度用盡即停）
 let aiUsed = 0;
 for (const r of rows) {
-  if (aiUsed >= MAX_AI || rateLimited) break;
+  if (aiUsed >= MAX_AI || shouldStop()) break;
   // 變化太小且無事件的就不花額度
   if (Math.abs(r.q.changePct) < 1.2 && aiUsed > 8) continue;
   const news = await fetchNews(r.code);
@@ -402,7 +388,7 @@ for (const r of rows) {
   if (ai) { r.ai = ai; r.news = news; aiUsed++; }
   await new Promise(x => setTimeout(x, 7000));   // 免費層每分鐘約 10 次，7 秒留餘裕
 }
-console.log(`  AI 新聞判讀 ${aiUsed} 檔${rateLimited ? '（免費額度用盡提前停止）' : ''}`);
+console.log(`  AI 新聞判讀 ${aiUsed} 檔（Gemini ${aiStats.gemini}／Groq ${aiStats.groq}／OpenRouter ${aiStats.openrouter}，失敗 ${aiStats.failed}）`);
 
 // 5) 寫出每檔評分（保留昨日值，供「昨天vs今天」使用）
 for (const r of rows) {
@@ -441,7 +427,7 @@ const musts = rows.filter(r => r.ai)
 
 // 7) 市場總結（50~100 字，只根據上面已取得的事實）
 let summary = null;
-if (!DRY_RUN && !rateLimited && musts.length) {
+if (!DRY_RUN && !shouldStop() && musts.length) {
   const brief = musts.map(m => `${m.name}(${m.symbol}) ${m.changePct >= 0 ? '+' : ''}${m.changePct}%：${m.fact}`).join('\n');
   const r = await callGemini(`以下是今日市場中變化最顯著的幾檔股票與其新聞重點（皆為已取得的事實，不可添加其他資訊）：
 ${brief}

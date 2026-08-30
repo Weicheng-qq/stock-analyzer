@@ -95,6 +95,10 @@ jobs:
         continue-on-error: true
         env:
           GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
+          # 備援金鑰：Gemini 免費額度用完時自動改用，與網站 /api/ai 相同策略。
+          #   沒設也能跑，只是少了備援（首次執行就是因為只有 Gemini 而卡住）。
+          GROQ_KEY: ${{ secrets.GROQ_KEY }}
+          OPENROUTER_KEY: ${{ secrets.OPENROUTER_KEY }}
           DAILY_POOL: ${{ github.event.inputs.daily_pool || '60' }}
           DAILY_AI: ${{ github.event.inputs.daily_ai || '25' }}
         run: node scripts/daily-market.mjs
@@ -102,6 +106,8 @@ jobs:
       - name: AI 分析（僅處理有新事件者，額度用完自動停止）
         env:
           GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
+          GROQ_KEY: ${{ secrets.GROQ_KEY }}
+          OPENROUTER_KEY: ${{ secrets.OPENROUTER_KEY }}
           MAX_ANALYSES: ${{ github.event.inputs.max_analyses || '40' }}
           # 逐字稿路徑每家多花 15~30 秒，設上限避免整輪執行時間爆掉
           TRANSCRIPT_MAX: ${{ github.event.inputs.transcript_max || '12' }}
