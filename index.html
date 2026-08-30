@@ -554,10 +554,12 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <div class="ct" style="display:flex;justify-content:space-between;align-items:center">📅 今日市場
       <span id="dailyUnread" style="font-size:12px;font-weight:normal;color:var(--text2)"></span>
     </div>
+    <!-- 排列順序＝使用者每天回訪最想先看到的：總結 → 我的股票有沒有事 → 今日必看 → 本週事件。
+         ⚠️ 「今日必看」是這個功能的核心價值，實測放太後面會被重大異動清單擠掉，故提前。 -->
     <div id="dailySummary"></div>
     <div id="dailyAlerts"></div>
-    <div id="dailyMine"></div>
     <div id="dailyMusts"><div class="note">載入中…</div></div>
+    <div id="dailyMine"></div>
     <div id="dailyEvents"></div>
     <div id="dailyMeta" style="font-size:11px;color:var(--text2);text-align:right;margin-top:8px"></div>
   </div>
@@ -2640,8 +2642,8 @@ async function loadDailyMarket(){
     al.sort((a,b)=>(mine.includes(b.symbol)?1:0)-(mine.includes(a.symbol)?1:0));
     boxA.innerHTML = al.length ? `
       <div style="margin:12px 0;padding:10px 12px;background:rgba(248,81,73,.10);border-left:3px solid var(--red);border-radius:5px">
-        <b style="color:var(--red)">⚡ 今日重大異動 ${al.length} 檔</b>
-        ${al.slice(0,6).map(x=>`<div style="margin-top:6px;font-size:13px;line-height:1.7">
+        <b style="color:var(--red)">⚡ 今日重大異動 ${al.length} 檔</b>${al.length>4?'<span style="font-size:11px;color:var(--text2)">（顯示前 4 檔）</span>':''}
+        ${al.slice(0,4).map(x=>`<div style="margin-top:6px;font-size:13px;line-height:1.7">
           <b>${esc(x.name||x.symbol)}</b>${mine.includes(x.symbol)?' <span style="color:var(--blue);font-size:11px">你的自選股</span>':''}
           ${__pctHtml(x.changePct)}<br>${x.items.map(i=>'• '+esc(i.text)).join('<br>')}
         </div>`).join('')}
