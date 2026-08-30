@@ -1,0 +1,32 @@
+{
+ "symbol": "7714",
+ "name": "UFTC",
+ "date": "2026-08-30",
+ "price": 174.5,
+ "changePct": -5.16,
+ "volRatio": 1.76,
+ "score": 57,
+ "scores": {
+  "sentiment": 28,
+  "technical": 82,
+  "fundamental": null,
+  "valuation": 56,
+  "news": null
+ },
+ "pe": {
+  "cur": 23.9,
+  "lo": 17.6,
+  "hi": 30.5
+ },
+ "alerts": [
+  {
+   "type": "price",
+   "level": "mid",
+   "text": "股價明顯下跌 -5.16%"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-08-30T04:21:09.821Z"
+}

@@ -1,0 +1,37 @@
+{
+ "symbol": "3664",
+ "name": "ARRAY INC",
+ "date": "2026-08-30",
+ "price": 6.28,
+ "changePct": 9.98,
+ "volRatio": 2.61,
+ "score": 68,
+ "scores": {
+  "sentiment": 92,
+  "technical": 42,
+  "fundamental": null,
+  "valuation": 85,
+  "news": null
+ },
+ "pe": {
+  "cur": 52.9,
+  "lo": 52.9,
+  "hi": 124.7
+ },
+ "alerts": [
+  {
+   "type": "price",
+   "level": "high",
+   "text": "股價大漲 9.98%"
+  },
+  {
+   "type": "volume",
+   "level": "high",
+   "text": "成交量放大至近月均量的 2.6 倍"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-08-30T04:21:09.821Z"
+}

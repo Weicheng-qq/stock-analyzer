@@ -1,0 +1,32 @@
+{
+ "symbol": "3701",
+ "name": "FIC GLOBAL INC",
+ "date": "2026-08-30",
+ "price": 41.05,
+ "changePct": -2.03,
+ "volRatio": 0.37,
+ "score": 27,
+ "scores": {
+  "sentiment": 32,
+  "technical": 42,
+  "fundamental": 14,
+  "valuation": 27,
+  "news": null
+ },
+ "pe": {
+  "cur": 59.1,
+  "lo": 27.2,
+  "hi": 60
+ },
+ "alerts": [
+  {
+   "type": "earnings",
+   "level": "high",
+   "text": "最新財報摘要已更新（2026 第2季）"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-08-30T04:21:09.822Z"
+}

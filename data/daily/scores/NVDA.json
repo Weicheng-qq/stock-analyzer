@@ -1,0 +1,32 @@
+{
+ "symbol": "NVDA",
+ "name": "NVIDIA Corporation",
+ "date": "2026-08-30",
+ "price": 217.55,
+ "changePct": -4.57,
+ "volRatio": 1.52,
+ "score": 51,
+ "scores": {
+  "sentiment": 28,
+  "technical": 58,
+  "fundamental": null,
+  "valuation": 85,
+  "news": null
+ },
+ "pe": {
+  "cur": 28.8,
+  "lo": 28.8,
+  "hi": 75.6
+ },
+ "alerts": [
+  {
+   "type": "price",
+   "level": "mid",
+   "text": "股價明顯下跌 -4.57%"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-08-30T04:21:09.822Z"
+}

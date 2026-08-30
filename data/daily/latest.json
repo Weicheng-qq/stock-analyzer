@@ -1,0 +1,134 @@
+{
+ "date": "2026-08-30",
+ "alerts": [
+  {
+   "symbol": "3664",
+   "name": "ARRAY INC",
+   "changePct": 9.98,
+   "items": [
+    {
+     "type": "price",
+     "level": "high",
+     "text": "股價大漲 9.98%"
+    },
+    {
+     "type": "volume",
+     "level": "high",
+     "text": "成交量放大至近月均量的 2.6 倍"
+    }
+   ]
+  },
+  {
+   "symbol": "8358",
+   "name": "CO-TECH DEVELOPMENT CORP",
+   "changePct": 9.92,
+   "items": [
+    {
+     "type": "price",
+     "level": "high",
+     "text": "股價大漲 9.92%"
+    }
+   ]
+  },
+  {
+   "symbol": "6415",
+   "name": "SILERGY CORP",
+   "changePct": -2.66,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "6224",
+   "name": "POLYTRONICS TECHNOLOGY CORP",
+   "changePct": -2.23,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "3701",
+   "name": "FIC GLOBAL INC",
+   "changePct": -2.03,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "4188",
+   "name": "AMCAD BIOMED CORPORATION",
+   "changePct": 0.62,
+   "items": [
+    {
+     "type": "volume",
+     "level": "high",
+     "text": "成交量放大至近月均量的 9.1 倍"
+    }
+   ]
+  },
+  {
+   "symbol": "5904",
+   "name": "POYA INTERNATIONAL CO LTD",
+   "changePct": 0.13,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  }
+ ],
+ "events": [
+  {
+   "date": "2026-09-01",
+   "kind": "scheduled",
+   "category": "經濟數據",
+   "symbol": null,
+   "title": "美國 ISM 製造業指數",
+   "note": "依慣例為每月第一個工作日，非官方公告日期"
+  },
+  {
+   "date": "2026-09-01",
+   "kind": "confirmed",
+   "category": "財報",
+   "symbol": "MDB",
+   "title": "MDB 財報公布",
+   "note": "公司於前次財報中預告"
+  },
+  {
+   "date": "2026-09-02",
+   "kind": "scheduled",
+   "category": "經濟數據",
+   "symbol": null,
+   "title": "美國 ADP 就業報告",
+   "note": "依慣例為非農前的週三，非官方公告日期"
+  },
+  {
+   "date": "2026-09-04",
+   "kind": "scheduled",
+   "category": "經濟數據",
+   "symbol": null,
+   "title": "美國非農就業報告",
+   "note": "依慣例為每月第一個週五，非官方公告日期"
+  }
+ ],
+ "generatedAt": "2026-08-30T04:21:53.367Z",
+ "summary": null,
+ "musts": [],
+ "poolSize": 31,
+ "aiUsed": 0,
+ "note": "fact＝新聞標題明確講到的已確認事實；inference＝AI 推論，僅供參考，非確定性預測。"
+}

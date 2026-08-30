@@ -1,0 +1,32 @@
+{
+ "symbol": "6415",
+ "name": "SILERGY CORP",
+ "date": "2026-08-30",
+ "price": 458,
+ "changePct": -2.66,
+ "volRatio": 1.37,
+ "score": 58,
+ "scores": {
+  "sentiment": 38,
+  "technical": 42,
+  "fundamental": 77,
+  "valuation": 79,
+  "news": null
+ },
+ "pe": {
+  "cur": 64.2,
+  "lo": 35.6,
+  "hi": 318.8
+ },
+ "alerts": [
+  {
+   "type": "earnings",
+   "level": "high",
+   "text": "最新財報摘要已更新（2026 第2季）"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-08-30T04:21:09.822Z"
+}

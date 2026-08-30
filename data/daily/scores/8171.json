@@ -1,0 +1,32 @@
+{
+ "symbol": "8171",
+ "name": "FORMOSA ELECTRONIC INDUSTRIES I",
+ "date": "2026-08-30",
+ "price": 20.2,
+ "changePct": 0.75,
+ "volRatio": 1.99,
+ "score": 57,
+ "scores": {
+  "sentiment": 64,
+  "technical": 42,
+  "fundamental": null,
+  "valuation": 85,
+  "news": null
+ },
+ "pe": {
+  "cur": 35.6,
+  "lo": 35.6,
+  "hi": 36.6
+ },
+ "alerts": [
+  {
+   "type": "volume",
+   "level": "mid",
+   "text": "成交量放大至近月均量的 2.0 倍"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-08-30T04:21:09.822Z"
+}

@@ -1,0 +1,32 @@
+{
+ "symbol": "8358",
+ "name": "CO-TECH DEVELOPMENT CORP",
+ "date": "2026-08-30",
+ "price": 543,
+ "changePct": 9.92,
+ "volRatio": 1.52,
+ "score": 66,
+ "scores": {
+  "sentiment": 85,
+  "technical": 66,
+  "fundamental": null,
+  "valuation": 25,
+  "news": null
+ },
+ "pe": {
+  "cur": 73.5,
+  "lo": 30.6,
+  "hi": 73.5
+ },
+ "alerts": [
+  {
+   "type": "price",
+   "level": "high",
+   "text": "股價大漲 9.92%"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-08-30T04:21:09.821Z"
+}
