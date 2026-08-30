@@ -558,6 +558,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <div id="dailyAlerts"></div>
     <div id="dailyMine"></div>
     <div id="dailyMusts"><div class="note">載入中…</div></div>
+    <div id="dailyEvents"></div>
     <div id="dailyMeta" style="font-size:11px;color:var(--text2);text-align:right;margin-top:8px"></div>
   </div>
 
@@ -2667,6 +2668,34 @@ async function loadDailyMarket(){
         </div>
       </div>`;
     }).join('')}` : '<div class="note">今日沒有偵測到值得特別注意的變化。</div>';
+  // 【Phase 3】本週重要事件
+  const boxE=document.getElementById('dailyEvents');
+  if(boxE){
+    const ev=d.events||[];
+    let mine=[]; try{ mine=getWatchlist().map(x=>String((x&&x.symbol)||x).replace(/\.(TW|TWO)$/i,'')); }catch(e){}
+    const byDate={};
+    ev.forEach(e=>{ (byDate[e.date]=byDate[e.date]||[]).push(e); });
+    const wd=['日','一','二','三','四','五','六'];
+    boxE.innerHTML = ev.length ? `
+      <div style="font-weight:700;margin:16px 0 8px">🗓️ 本週重要事件</div>
+      ${Object.keys(byDate).sort().map(dt=>{
+        const dd=new Date(dt+'T00:00:00');
+        return `<div style="padding:7px 0;border-bottom:1px solid var(--line)">
+          <div style="font-size:12px;color:var(--text2)">${esc(dt)}（週${wd[dd.getDay()]||''}）</div>
+          ${byDate[dt].map(e=>{
+            const isMine=e.symbol&&mine.includes(e.symbol);
+            return `<div style="font-size:13px;line-height:1.75;margin-top:2px">
+              ${isMine?'<span style="color:var(--blue);font-size:11px">你的自選股 </span>':''}${esc(e.title)}
+              <span style="font-size:11px;color:${e.kind==='confirmed'?'var(--green)':'var(--text2)'}">
+                ${e.kind==='confirmed'?'官方公告':'依慣例推算'}</span>
+            </div>`;
+          }).join('')}
+        </div>`;
+      }).join('')}
+      <div style="font-size:11px;color:var(--text2);margin-top:6px">
+        「官方公告」為公司或主管機關已公布的確定日期；「依慣例推算」是依長期固定的發布規律估算，非官方公告，實際日期以官方為準。
+      </div>` : '';
+  }
   if(meta) meta.textContent = `資料日期 ${d.date||''}｜由每日排程產生，所有使用者共用同一份分析`;
   __renderDailyUnread();
   __renderDailyMine();
@@ -2708,6 +2737,54 @@ async function __renderDailyMine(){
       </div>`;
     }).join('')}`;
 }
+// 【Phase 3】站內通知：在「今日市場」按鈕上顯示紅點與未讀數。
+//   ⚠️ 這裡刻意「只做站內提示」，不做瀏覽器推播 —— 推播必須註冊 Service Worker，
+//   而本專案的鐵則是「永遠不要再加回 SW」（曾造成無限重載迴圈，見交接文件 6.1）。
+//   使用者已確認接受此限制。
+// ⚠️ 只提示「與使用者自選股相關的重大異動」，避免變成垃圾訊息（使用者明確要求）。
+async function initDailyBadge(){
+  try{
+    const r=await fetch('/data/daily/latest.json',{cache:'no-cache'});
+    if(!r.ok) return;
+    const d=await r.json();
+    let mine=[]; try{ mine=getWatchlist().map(x=>String((x&&x.symbol)||x).replace(/\.(TW|TWO)$/i,'')); }catch(e){}
+    // 我的自選股的重大異動 + 尚未看過的今日必看
+    const mineAlerts=(d.alerts||[]).filter(a=>mine.includes(a.symbol));
+    const read=__dailyRead();
+    const unreadMust=(d.musts||[]).filter(m=>!read.includes(m.symbol)).length;
+    const n=mineAlerts.length+ (mineAlerts.length?0:0);
+    const btn=document.querySelector('#grpMenu .grp-btn[data-g="17"]');
+    if(btn && (mineAlerts.length||unreadMust)){
+      if(!btn.querySelector('.daily-dot')){
+        const dot=document.createElement('span');
+        dot.className='daily-dot';
+        dot.style.cssText='display:inline-block;margin-left:5px;padding:1px 6px;border-radius:9px;background:var(--red);color:#fff;font-size:11px;font-weight:700;vertical-align:middle';
+        dot.textContent = mineAlerts.length ? String(mineAlerts.length) : String(unreadMust);
+        btn.appendChild(dot);
+      }
+    }
+    // 自選股有重大異動才跳橫幅，一天只提示一次（避免變成垃圾訊息）
+    if(mineAlerts.length){
+      const seenKey='dailyBannerSeen_'+__todayKey();
+      if(!localStorage.getItem(seenKey)){
+        const bar=document.createElement('div');
+        bar.style.cssText='position:fixed;left:10px;right:10px;bottom:14px;z-index:9999;padding:11px 13px;border-radius:10px;background:var(--card,#161b22);border:1px solid var(--red);box-shadow:0 6px 22px rgba(0,0,0,.5);font-size:13.5px;line-height:1.7;cursor:pointer';
+        bar.innerHTML=`<b style="color:var(--red)">⚡ 你的股票有重大變化</b>
+          <span style="float:right;color:var(--text2);font-size:12px" onclick="event.stopPropagation();this.parentNode.remove()">✕</span><br>
+          ${mineAlerts.slice(0,3).map(a=>esc(a.name||a.symbol)+'：'+esc((a.items[0]||{}).text||'')).join('<br>')}
+          <div style="margin-top:5px;font-size:12px;color:var(--blue)">點此查看今日市場 →</div>`;
+        bar.onclick=()=>{ try{ localStorage.setItem(seenKey,'1'); }catch(e){} bar.remove(); pickGroup(17); };
+        document.body.appendChild(bar);
+        try{ localStorage.setItem(seenKey,'1'); }catch(e){}
+        // 清掉前幾天的記錄
+        Object.keys(localStorage).forEach(k=>{ if(/^dailyBannerSeen_/.test(k) && k!==seenKey) localStorage.removeItem(k); });
+      }
+    }
+  }catch(e){}
+}
+// 開場動畫結束後才提示，不干擾既有的啟動流程
+setTimeout(()=>{ try{ initDailyBadge(); }catch(e){} }, 3500);
+
 // 【Phase 2】個股頁的「AI 每日更新」：不重新介紹公司，只講今天和昨天有什麼不同。
 //   卡片附加在 #results 尾端，由既有的 cardGroup() 依標題文字歸到群組 2（搜尋完的預設落點）。
 //   ⚠️ 完全不修改 twResultsHtml / renderAI 等既有渲染邏輯，只在渲染完成後追加一張卡片。

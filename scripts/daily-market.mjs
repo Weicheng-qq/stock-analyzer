@@ -21,6 +21,8 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+// 複用既有模組取得 MOPS 法說會場次（含未來日期），不重寫一份
+import { fetchCallIndex } from './lib/mops-earnings-call.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const DAILY = path.join(ROOT, 'data', 'daily');
@@ -288,6 +290,61 @@ function overall(s) {
   return wsum ? Math.round(sum / wsum) : null;
 }
 
+// ── 【Phase 3】本週重要事件 ──
+// ⚠️ 誠實區分兩種來源，前端會用不同標示呈現：
+//   confirmed＝官方已公告的確定日期（MOPS 法說會場次、法定申報期限）
+//   scheduled＝依固定慣例推算（美國非農＝每月第一個週五等），標明是推算不是官方公告
+// ⚠️ 美股個別公司的財報日期：Yahoo 相關端點（quoteSummary / v7 quote）現已全部需要
+//   crumb 驗證，免費拿不到。因此本清單不包含美股公司財報日，不用猜的硬湊。
+function weekEvents(twCalls) {
+  const out = [];
+  const now = new Date();
+  const end = new Date(now); end.setDate(end.getDate() + 7);
+  const fmt = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const inRange = d => d >= new Date(now.getFullYear(), now.getMonth(), now.getDate()) && d <= end;
+
+  // ① 台股法說會（MOPS 官方公告的場次，含未來日期）—— 確定事實
+  for (const [code, info] of (twCalls || new Map())) {
+    const m = String(info.date || '').match(/^(\d{3})\/(\d{2})\/(\d{2})/);   // 民國年
+    if (!m) continue;
+    const d = new Date(Number(m[1]) + 1911, Number(m[2]) - 1, Number(m[3]));
+    if (!inRange(d)) continue;
+    out.push({ date: fmt(d), kind: 'confirmed', category: '法說會', symbol: code, title: `${info.name || code} 法人說明會`, note: (info.summary || '').slice(0, 60) });
+  }
+
+  // ② 台股月營收：證交法規定每月 10 日前公告上月營收 —— 法定期限，屬確定
+  const tenth = new Date(now.getFullYear(), now.getMonth(), 10);
+  if (inRange(tenth)) out.push({ date: fmt(tenth), kind: 'confirmed', category: '月營收', symbol: null, title: '台股上市櫃公司月營收公告期限', note: '依規定每月 10 日前公告上月營收' });
+
+  // ③ 美國主要經濟數據：規則明確且長期穩定者才列，日期會變動的（CPI/FOMC）一律不猜
+  const firstBiz = (y, mo) => { const d = new Date(y, mo, 1); while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() + 1); return d; };
+  const firstFri = (y, mo) => { const d = new Date(y, mo, 1); while (d.getDay() !== 5) d.setDate(d.getDate() + 1); return d; };
+  for (const mo of [now.getMonth(), now.getMonth() + 1]) {
+    const y = now.getFullYear();
+    const ism = firstBiz(y, mo);
+    if (inRange(ism)) out.push({ date: fmt(ism), kind: 'scheduled', category: '經濟數據', symbol: null, title: '美國 ISM 製造業指數', note: '依慣例為每月第一個工作日，非官方公告日期' });
+    const nfp = firstFri(y, mo);
+    if (inRange(nfp)) out.push({ date: fmt(nfp), kind: 'scheduled', category: '經濟數據', symbol: null, title: '美國非農就業報告', note: '依慣例為每月第一個週五，非官方公告日期' });
+    const adp = new Date(nfp); adp.setDate(adp.getDate() - 2);
+    if (inRange(adp)) out.push({ date: fmt(adp), kind: 'scheduled', category: '經濟數據', symbol: null, title: '美國 ADP 就業報告', note: '依慣例為非農前的週三，非官方公告日期' });
+  }
+
+  // ④ 既有 IR 常數裡公司自己預告的財報日（數量少，但屬官方預告）
+  try {
+    const dir = path.join(ROOT, 'data', 'ir');
+    for (const f of fs.readdirSync(dir)) {
+      const j = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+      const m = String(j.call?.quarter || '').match(/將於\s*(20\d\d)[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+      if (!m) continue;
+      const d = new Date(+m[1], +m[2] - 1, +m[3]);
+      if (!inRange(d)) continue;
+      out.push({ date: fmt(d), kind: 'confirmed', category: '財報', symbol: j.symbol, title: `${j.symbol} 財報公布`, note: '公司於前次財報中預告' });
+    }
+  } catch (e) {}
+
+  return out.sort((a, b) => a.date.localeCompare(b.date) || a.category.localeCompare(b.category)).slice(0, 40);
+}
+
 // ── 主流程 ──
 const today = todayStr();
 console.log(`▶ 每日市場資料產生（${today}）`);
@@ -403,9 +460,18 @@ const alerts = rows.map(r => ({ symbol: r.code, name: r.q.name, changePct: Numbe
   .filter(x => x.items.length)
   .sort((a, b) => b.items.length - a.items.length || Math.abs(b.changePct) - Math.abs(a.changePct));
 
+// 本週重要事件（Phase 3）
+let events = [];
+try {
+  const twCalls = await fetchCallIndex(2);   // 近兩個月的法說會場次，含未來日期
+  events = weekEvents(twCalls);
+  console.log(`  本週重要事件 ${events.length} 筆`);
+} catch (e) { console.warn('⚠️ 本週事件產生失敗（不影響其他功能）'); }
+
 fs.writeFileSync(path.join(DAILY, 'latest.json'), JSON.stringify({
   date: today,
   alerts,
+  events,
   generatedAt: new Date().toISOString(),
   summary,
   musts,
