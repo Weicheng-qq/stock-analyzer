@@ -243,8 +243,14 @@ function detectAlerts(q, earnings, ai, news) {
   else if (p >= 4) a.push({ type: 'price', level: 'mid', text: `股價${q.changePct >= 0 ? '明顯上漲' : '明顯下跌'} ${q.changePct.toFixed(2)}%` });
   if (q.volRatio && q.volRatio >= 2.5) a.push({ type: 'volume', level: 'high', text: `成交量放大至近月均量的 ${q.volRatio.toFixed(1)} 倍` });
   else if (q.volRatio && q.volRatio >= 1.8) a.push({ type: 'volume', level: 'mid', text: `成交量放大至近月均量的 ${q.volRatio.toFixed(1)} 倍` });
-  // 新財報：data/earnings 產生時間在近三天內
-  if (earnings?.savedAt && (Date.now() - new Date(earnings.savedAt)) / 86400000 <= 3) {
+  // 新財報：⚠️ 不能只看「我們何時產生這份摘要」，那只代表排程剛好補到這家公司，
+  //   不代表公司真的有新財報。實測 STRT 的財報期間結束於 2026-03-29（5個月前），
+  //   卻因為摘要是今天產生的而被標成「重大異動」——這會誤導使用者以為今天發生了事情。
+  //   必須「摘要是新產生的」且「財報期間本身也夠新」兩個條件同時成立。
+  const perEnd = earnings?.official?.periodEnd ||
+    (earnings?.official?.year && earnings?.official?.season ? `${earnings.official.year}-${String(earnings.official.season * 3).padStart(2, '0')}-01` : null);
+  const perFresh = perEnd ? (Date.now() - new Date(perEnd)) / 86400000 <= 100 : false;
+  if (earnings?.savedAt && (Date.now() - new Date(earnings.savedAt)) / 86400000 <= 3 && perFresh) {
     a.push({ type: 'earnings', level: 'high', text: `最新財報摘要已更新（${earnings.quarter || ''}）` });
   }
   // 官方展望：只有真的取得逐字稿/新聞稿才示警
@@ -476,6 +482,7 @@ ${brief}
 3. 繁體中文。
 只回傳 JSON：{"summary":"..."}`);
   if (r && r.summary) summary = String(r.summary).slice(0, 220);
+  else console.warn('⚠️ 市場總結未產生（三層 AI 都沒回傳有效結果）');
 }
 
 // 重大異動彙總：只收 level=high 者，避免變成雜訊（使用者要求「重大事件才通知」）
@@ -501,6 +508,7 @@ fs.writeFileSync(path.join(DAILY, 'latest.json'), JSON.stringify({
   musts,
   poolSize: rows.length,
   aiUsed,
+  aiSource: { gemini: aiStats.gemini, groq: aiStats.groq, openrouter: aiStats.openrouter, failed: aiStats.failed },
   note: 'fact＝新聞標題明確講到的已確認事實；inference＝AI 推論，僅供參考，非確定性預測。'
 }, null, 1));
 
