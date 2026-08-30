@@ -5,13 +5,13 @@
  "price": 217.55,
  "changePct": -4.57,
  "volRatio": 1.52,
- "score": 58,
+ "score": 51,
  "scores": {
   "sentiment": 28,
-  "technical": 82,
+  "technical": 58,
   "fundamental": null,
   "valuation": 85,
-  "news": 50
+  "news": null
  },
  "pe": {
   "cur": 28.8,
@@ -25,29 +25,8 @@
    "text": "股價明顯下跌 -4.57%"
   }
  ],
- "ai": {
-  "fact": "(DRY)",
-  "inference": "(DRY)",
-  "newsScore": 50,
-  "importance": 3
- },
- "newsTop": [
-  {
-   "title": "Iren's Earnings Weren't Groundbreaking, but 2027 Looks Very Promising",
-   "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/97815947-8ffc-3e95-a67e-e2c2e9987bd9/iren%27s-earnings-weren%27t.html"
-  },
-  {
-   "title": "The Most Active Stocks Today Include Tesla, Nvidia, and Apple: Here's My Contrarian Take on All Three",
-   "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/b26537e8-427f-3ab2-946b-60217688c598/the-most-active-stocks-today.html"
-  },
-  {
-   "title": "Wall Street Isn't Giving Up on CVS Health -- and Its Valuation Looks Stronger Than Investors Think",
-   "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/945e95b2-86ea-3e6e-8dc3-a847875095c4/wall-street-isn%27t-giving-up.html"
-  }
- ],
+ "ai": null,
+ "newsTop": [],
  "prev": null,
- "generatedAt": "2026-08-30T06:10:10.020Z"
+ "generatedAt": "2026-08-30T04:21:09.822Z"
 }
