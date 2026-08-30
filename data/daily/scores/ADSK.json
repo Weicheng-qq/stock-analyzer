@@ -1,0 +1,73 @@
+{
+ "symbol": "ADSK",
+ "name": "Autodesk, Inc.",
+ "nameZh": null,
+ "date": "2026-08-30",
+ "tradeDate": "2026-08-28",
+ "price": 260.66,
+ "changePct": -3.67,
+ "volRatio": 1.82,
+ "score": 71,
+ "scores": {
+  "sentiment": 36,
+  "technical": 82,
+  "fundamental": 100,
+  "valuation": 83,
+  "news": 45
+ },
+ "pe": {
+  "cur": 35,
+  "lo": 34.2,
+  "hi": 66.7
+ },
+ "alerts": [
+  {
+   "type": "volume",
+   "level": "mid",
+   "text": "成交量放大至近月均量的 1.8 倍"
+  },
+  {
+   "type": "earnings",
+   "level": "high",
+   "text": "最新財報摘要已更新（2027 Q2（2026-05-01～2026-07-31））"
+  },
+  {
+   "type": "guidance",
+   "level": "mid",
+   "text": "公司已公布官方財測／展望"
+  },
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "Q3 營利展望較弱，導致股價下跌"
+  }
+ ],
+ "ai": {
+  "why": "Q3 營利展望較弱，導致股價下跌",
+  "meaning": "投資人擔心未來獲利成長放緩",
+  "fact": "Q3 營利展望較弱，導致股價下跌",
+  "inference": "投資人擔心未來獲利成長放緩",
+  "stance": "neg",
+  "newsScore": 45,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "Autodesk (ADSK) Q2 Beat Meets Softer Q3 Profit Outlook",
+   "publisher": "Simply Wall St.",
+   "link": "https://finance.yahoo.com/markets/stocks/articles/autodesk-adsk-q2-beat-meets-110634879.html"
+  },
+  {
+   "title": "Autodesk (ADSK) Grew Revenue 16% but Remaining Performance Obligations Rose Only 2%",
+   "publisher": "Insider Monkey",
+   "link": "https://finance.yahoo.com/markets/stocks/articles/autodesk-adsk-grew-revenue-16-031814593.html"
+  },
+  {
+   "title": "Is Adobe Stock’s AI Strategy Worth The Near-Term Risk?",
+   "publisher": "Trefis",
+   "link": "https://finance.yahoo.com/m/0723e892-2dfd-359a-8b60-8516ae0d72d7/is-adobe-stock%E2%80%99s-ai-strategy.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-08-30T12:21:11.232Z"
+}

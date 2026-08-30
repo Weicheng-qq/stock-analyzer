@@ -1,7 +1,9 @@
 {
  "symbol": "6415",
  "name": "SILERGY CORP",
+ "nameZh": "矽力*-KY",
  "date": "2026-08-30",
+ "tradeDate": "2026-08-28",
  "price": 458,
  "changePct": -2.66,
  "volRatio": 1.37,
@@ -26,10 +28,13 @@
   }
  ],
  "ai": {
-  "fact": "矽力*-KY公告受邀參加線上法說會，且董事會已通過115年度第二季合併財務報告。",
-  "inference": "法說會的召開與新財報的發布，可能提高市場對公司營運展望的關注度。今日股價下跌，反映市場在法說會前可能持較為審慎的觀望態度。",
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
   "newsScore": 50,
-  "importance": 3
+  "importance": 2
  },
  "newsTop": [
   {
@@ -44,5 +49,5 @@
   }
  ],
  "prev": null,
- "generatedAt": "2026-08-30T06:50:48.300Z"
+ "generatedAt": "2026-08-30T12:21:11.233Z"
 }

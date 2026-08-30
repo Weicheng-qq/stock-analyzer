@@ -1,53 +1,28 @@
 {
  "symbol": "KOSS",
  "name": "Koss Corporation",
+ "nameZh": null,
  "date": "2026-08-30",
+ "tradeDate": "2026-08-28",
  "price": 3.5,
  "changePct": 1.45,
  "volRatio": 1.3,
- "score": 43,
+ "score": 34,
  "scores": {
   "sentiment": 62,
   "technical": 18,
   "fundamental": 29,
   "valuation": null,
-  "news": 70
+  "news": null
  },
  "pe": {
   "cur": 5.1,
   "lo": 5.1,
   "hi": 5.1
  },
- "alerts": [
-  {
-   "type": "earnings",
-   "level": "high",
-   "text": "最新財報摘要已更新（2026 Q3（2026-01-01～2026-03-31））"
-  },
-  {
-   "type": "news",
-   "level": "mid",
-   "text": "Koss 公布第四季及全年財報，營收上升且盈餘波動。"
-  }
- ],
- "ai": {
-  "fact": "Koss 公布第四季及全年財報，營收上升且盈餘波動。",
-  "inference": "營收成長可能提升市場信心，盈餘波動則顯示未來獲利仍有不確定性。",
-  "newsScore": 70,
-  "importance": 4
- },
- "newsTop": [
-  {
-   "title": "Koss Swings Earnings in Fiscal Q4, Revenue Rises",
-   "publisher": "MT Newswires",
-   "link": "https://finance.yahoo.com/markets/stocks/articles/koss-swings-earnings-fiscal-q4-214408786.html"
-  },
-  {
-   "title": "Koss Corporation Releases Fourth Quarter and Full Year Results",
-   "publisher": "GlobeNewswire",
-   "link": "https://finance.yahoo.com/markets/stocks/articles/koss-corporation-releases-fourth-quarter-211500828.html"
-  }
- ],
+ "alerts": [],
+ "ai": null,
+ "newsTop": [],
  "prev": null,
- "generatedAt": "2026-08-30T06:50:48.301Z"
+ "generatedAt": "2026-08-30T12:21:11.234Z"
 }

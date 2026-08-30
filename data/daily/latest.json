@@ -1,22 +1,56 @@
 {
  "date": "2026-08-30",
+ "tradeDate": "2026-08-28",
  "alerts": [
   {
-   "symbol": "STRT",
-   "name": "STRATTEC SECURITY CORPORATION",
-   "changePct": 6.76,
+   "symbol": "1213",
+   "name": "OCEANIC BEVERAGES CO INC",
+   "nameZh": "大飲",
+   "changePct": 4.9,
+   "items": [
+    {
+     "type": "volume",
+     "level": "high",
+     "text": "成交量放大至近月均量的 3.9 倍"
+    },
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "ADSK",
+   "name": "Autodesk, Inc.",
+   "nameZh": null,
+   "changePct": -3.67,
    "items": [
     {
      "type": "earnings",
      "level": "high",
-     "text": "最新財報摘要已更新（2026 Q3（2025-12-29～2026-03-29））"
+     "text": "最新財報摘要已更新（2027 Q2（2026-05-01～2026-07-31））"
     }
    ]
   },
   {
    "symbol": "6415",
    "name": "SILERGY CORP",
+   "nameZh": "矽力*-KY",
    "changePct": -2.66,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "1219",
+   "name": "FWUSOW INDUSTRY CO LTD",
+   "nameZh": "福壽",
+   "changePct": -2.54,
    "items": [
     {
      "type": "earnings",
@@ -28,6 +62,7 @@
   {
    "symbol": "6224",
    "name": "POLYTRONICS TECHNOLOGY CORP",
+   "nameZh": "聚鼎",
    "changePct": -2.23,
    "items": [
     {
@@ -40,6 +75,7 @@
   {
    "symbol": "3701",
    "name": "FIC GLOBAL INC",
+   "nameZh": "大眾控",
    "changePct": -2.03,
    "items": [
     {
@@ -52,6 +88,7 @@
   {
    "symbol": "1203",
    "name": "VE WONG CORPORATION",
+   "nameZh": "味王",
    "changePct": -1.74,
    "items": [
     {
@@ -62,20 +99,35 @@
    ]
   },
   {
-   "symbol": "KOSS",
-   "name": "Koss Corporation",
-   "changePct": 1.45,
+   "symbol": "1233",
+   "name": "TEN REN TEA CO",
+   "nameZh": "天仁",
+   "changePct": 1.58,
    "items": [
     {
      "type": "earnings",
      "level": "high",
-     "text": "最新財報摘要已更新（2026 Q3（2026-01-01～2026-03-31））"
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "1225",
+   "name": "FORMOSA OILSEED PROCESSING",
+   "nameZh": "福懋油",
+   "changePct": -1.55,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
     }
    ]
   },
   {
    "symbol": "WSM",
    "name": "Williams-Sonoma, Inc.",
+   "nameZh": null,
    "changePct": -1.39,
    "items": [
     {
@@ -88,6 +140,7 @@
   {
    "symbol": "1101",
    "name": "TCC GROUP HOLDINGS CO LTD",
+   "nameZh": "台泥",
    "changePct": 0.83,
    "items": [
     {
@@ -100,7 +153,73 @@
   {
    "symbol": "1109",
    "name": "HSING TA CEMENT CO LTD",
+   "nameZh": "信大",
    "changePct": -0.74,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "1227",
+   "name": "STANDARD FOODS CORPORATION",
+   "nameZh": "佳格",
+   "changePct": -0.69,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "1231",
+   "name": "LIAN HWA FOODS CORP",
+   "nameZh": "聯華食",
+   "changePct": -0.49,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "1103",
+   "name": "CHIA HSIN CEMENT CORPORATION",
+   "nameZh": "嘉泥",
+   "changePct": -0.38,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "1218",
+   "name": "TAISUN ENTERPRISE CO. LTD.",
+   "nameZh": "泰山",
+   "changePct": -0.34,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "1232",
+   "name": "TTET UNION CORP",
+   "nameZh": "大統益",
+   "changePct": -0.32,
    "items": [
     {
      "type": "earnings",
@@ -112,6 +231,7 @@
   {
    "symbol": "1217",
    "name": "AGV PRODUCTS",
+   "nameZh": "愛之味",
    "changePct": -0.3,
    "items": [
     {
@@ -124,6 +244,7 @@
   {
    "symbol": "5904",
    "name": "POYA INTERNATIONAL CO LTD",
+   "nameZh": "寶雅",
    "changePct": 0.13,
    "items": [
     {
@@ -134,20 +255,9 @@
    ]
   },
   {
-   "symbol": "JKHY",
-   "name": "Jack Henry & Associates, Inc.",
-   "changePct": 0.05,
-   "items": [
-    {
-     "type": "earnings",
-     "level": "high",
-     "text": "最新財報摘要已更新（2026 Q3（2026-01-01～2026-03-31））"
-    }
-   ]
-  },
-  {
    "symbol": "1108",
    "name": "LUCKY CEMENT CO.",
+   "nameZh": "幸福",
    "changePct": 0,
    "items": [
     {
@@ -164,6 +274,7 @@
    "kind": "confirmed",
    "category": "法說會",
    "symbol": "1101",
+   "name": "台泥",
    "title": "台泥 法人說明會",
    "note": "本公司受邀參加富邦證券舉辦之法人座談會，\r\n會中說明本公司營運簡介、ESG、公司未來展望"
   },
@@ -172,6 +283,7 @@
    "kind": "confirmed",
    "category": "法說會",
    "symbol": "1504",
+   "name": "東元",
    "title": "東元 法人說明會",
    "note": "本公司受邀參加Goldman Sachs舉辦之 Asia Leaders Conference 2026，並就本公司營運"
   },
@@ -180,6 +292,7 @@
    "kind": "confirmed",
    "category": "法說會",
    "symbol": "2412",
+   "name": "中華電",
    "title": "中華電 法人說明會",
    "note": "會議由Goldman Sachs主辦"
   },
@@ -188,6 +301,7 @@
    "kind": "confirmed",
    "category": "法說會",
    "symbol": "2881",
+   "name": "富邦金",
    "title": "富邦金 法人說明會",
    "note": "討論富邦金控財務及業務相關資訊"
   },
@@ -196,6 +310,7 @@
    "kind": "confirmed",
    "category": "法說會",
    "symbol": "2884",
+   "name": "玉山金",
    "title": "玉山金 法人說明會",
    "note": "2026年第2季財業務資訊"
   },
@@ -204,6 +319,7 @@
    "kind": "confirmed",
    "category": "法說會",
    "symbol": "2885",
+   "name": "元大金",
    "title": "元大金 法人說明會",
    "note": "公告本公司擬於民國115年8月31日至9月1日受邀參加高盛證券於香港舉行之投資人會議—Goldman Sachs Asi"
   },
@@ -212,6 +328,7 @@
    "kind": "confirmed",
    "category": "法說會",
    "symbol": "2890",
+   "name": "永豐金",
    "title": "永豐金 法人說明會",
    "note": "永豐金控將於115年8月31日至9月9日赴紐約及倫敦會晤當地投資機構，說明115年第二季財務業務相關資訊"
   },
@@ -248,71 +365,134 @@
    "note": "依慣例為每月第一個週五，非官方公告日期"
   }
  ],
- "generatedAt": "2026-08-30T06:51:02.758Z",
- "summary": null,
+ "generatedAt": "2026-08-30T12:21:21.251Z",
+ "summary": "今日多檔股因公司消息波動，Strattec 受毛利與新業務提振上漲，Autodesk、Nvidia、TSMC 等因缺乏利好或展望弱化下跌。",
+ "themes": [
+  {
+   "name": "毛利與新業務",
+   "why": "Strattec 宣佈聚焦提升毛利、開發新客戶及數位鑰匙業務"
+  },
+  {
+   "name": "設備投資",
+   "why": "聯發科取得價值28.3億營業設備，顯示資本支出加碼"
+  },
+  {
+   "name": "營運展望弱化",
+   "why": "Autodesk 公布 Q3 營利展望較弱，致股價下跌"
+  },
+  {
+   "name": "公司治理更正",
+   "why": "大眾控更正關係人交易資訊，福懋油召開臨時會調整董事"
+  },
+  {
+   "name": "藥品競爭與上市",
+   "why": "Novo 受 Eli Lilly 新藥領先及中國上市較慢影響"
+  }
+ ],
+ "watchpoints": [
+  "觀察 Strattec 數位鑰匙業務進度",
+  "留意聯發科 新設備投資效益",
+  "關注 Autodesk Q3 營利實際表現"
+ ],
  "musts": [
   {
-   "symbol": "STRT",
-   "name": "STRATTEC SECURITY CORPORATION",
-   "changePct": 6.76,
-   "price": 75.04,
+   "symbol": "ADSK",
+   "name": "Autodesk, Inc.",
+   "nameZh": null,
+   "tradeDate": "2026-08-28",
+   "changePct": -3.67,
+   "price": 260.66,
    "currency": "USD",
-   "fact": "Strattec Security 目標提升毛利、開發新客戶、擴大數位鑰匙業務。",
-   "inference": "若目標達成，可能提升公司獲利與營收，並增強其在數位鑰匙市場的競爭力。",
+   "fact": "Q3 營利展望較弱，導致股價下跌",
+   "inference": "投資人擔心未來獲利成長放緩",
+   "why": "Q3 營利展望較弱，導致股價下跌",
+   "meaning": "投資人擔心未來獲利成長放緩",
+   "stance": "neg",
+   "newsScore": 45,
    "importance": 4,
-   "score": 54,
-   "link": "https://finance.yahoo.com/m/7e576d68-78bd-39f9-8994-30083d25d99f/strattec-security-targets.html"
+   "score": 71,
+   "link": "https://finance.yahoo.com/markets/stocks/articles/autodesk-adsk-q2-beat-meets-110634879.html"
   },
   {
    "symbol": "2454",
    "name": "MEDIATEK INC",
+   "nameZh": "聯發科",
+   "tradeDate": "2026-08-28",
    "changePct": 3.1,
    "price": 3985,
    "currency": "TWD",
-   "fact": "聯發科向大綜等取得營業設備一批，金額約28.3億元",
-   "inference": "此項設備取得可能顯示公司擴充產能或升級技術，對未來營運有正面期待，但同時亦代表短期資金支出",
+   "fact": "聯發科取得價值28.3億營業設備",
+   "inference": "擴充產能有望提升營收",
+   "why": "聯發科取得價值28.3億營業設備",
+   "meaning": "擴充產能有望提升營收",
+   "stance": "pos",
+   "newsScore": 70,
    "importance": 4,
-   "score": 59,
+   "score": 62,
    "link": "https://tw.stock.yahoo.com/news/%E8%81%AF%E7%99%BC%E7%A7%91%E5%90%91%E5%A4%A7%E7%B6%9C%E7%AD%89%E5%8F%96%E5%BE%97%E7%87%9F%E6%A5%AD%E8%A8%AD%E5%82%99-%E6%89%B9-%E8%A8%8828-3%E5%84%84%E5%85%83-153200007.html"
   },
   {
-   "symbol": "KOSS",
-   "name": "Koss Corporation",
-   "changePct": 1.45,
-   "price": 3.5,
+   "symbol": "NVO",
+   "name": "Novo Nordisk A/S",
+   "nameZh": null,
+   "tradeDate": "2026-08-28",
+   "changePct": -1.41,
+   "price": 45.61,
    "currency": "USD",
-   "fact": "Koss 公布第四季及全年財報，營收上升且盈餘波動。",
-   "inference": "營收成長可能提升市場信心，盈餘波動則顯示未來獲利仍有不確定性。",
+   "fact": "競爭對手Eli Lilly新藥獲批且市場領先，Novo在中國上市較慢",
+   "inference": "顯示Novo在GLP‑1領域面臨競爭壓力，短期可能影響營收",
+   "why": "競爭對手Eli Lilly新藥獲批且市場領先，Novo在中國上市較慢",
+   "meaning": "顯示Novo在GLP‑1領域面臨競爭壓力，短期可能影響營收",
+   "stance": "neg",
+   "newsScore": 45,
    "importance": 4,
-   "score": 43,
-   "link": "https://finance.yahoo.com/markets/stocks/articles/koss-swings-earnings-fiscal-q4-214408786.html"
+   "score": 39,
+   "link": "https://finance.yahoo.com/m/fe93d3c2-f4a5-3a9d-90a3-faa56d6d9b0c/has-novo-nordisk-finally.html"
   },
   {
-   "symbol": "6415",
-   "name": "SILERGY CORP",
-   "changePct": -2.66,
-   "price": 458,
-   "currency": "TWD",
-   "fact": "矽力*-KY公告受邀參加線上法說會，且董事會已通過115年度第二季合併財務報告。",
-   "inference": "法說會的召開與新財報的發布，可能提高市場對公司營運展望的關注度。今日股價下跌，反映市場在法說會前可能持較為審慎的觀望態度。",
-   "importance": 3,
-   "score": 57,
-   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%9F%BD%E5%8A%9B-ky%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0jp-morgan%E6%89%80%E8%88%89%E8%BE%A6%E4%B9%8B%E7%B7%9A%E4%B8%8A%E6%B3%95%E8%AA%AA%E6%9C%83-091552968.html"
-  },
-  {
-   "symbol": "1101",
-   "name": "TCC GROUP HOLDINGS CO LTD",
-   "changePct": 0.83,
-   "price": 24.3,
-   "currency": "TWD",
-   "fact": "台泥受邀參加富邦證券舉辦之法人座談會。",
-   "inference": "此邀請顯示法人投資人對台泥的關注度提升，可能帶來較正面的市場觀感與後續互動機會。",
+   "symbol": "STRT",
+   "name": "STRATTEC SECURITY CORPORATION",
+   "nameZh": null,
+   "tradeDate": "2026-08-28",
+   "changePct": 6.76,
+   "price": 75.04,
+   "currency": "USD",
+   "fact": "公司宣佈聚焦提升毛利、開發新客戶及數位鑰匙業務",
+   "inference": "顯示營收與獲利前景看好，投資人感到樂觀",
+   "why": "公司宣佈聚焦提升毛利、開發新客戶及數位鑰匙業務",
+   "meaning": "顯示營收與獲利前景看好，投資人感到樂觀",
+   "stance": "pos",
+   "newsScore": 70,
    "importance": 3,
    "score": 54,
-   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%8F%B0%E6%B3%A5%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E5%AF%8C%E9%82%A6%E8%AD%89%E5%88%B8%E8%88%89%E8%BE%A6%E4%B9%8B%E6%B3%95%E4%BA%BA%E5%BA%A7%E8%AB%87%E6%9C%83-065422902.html"
+   "link": "https://finance.yahoo.com/m/7e576d68-78bd-39f9-8994-30083d25d99f/strattec-security-targets.html"
+  },
+  {
+   "symbol": "1225",
+   "name": "FORMOSA OILSEED PROCESSING",
+   "nameZh": "福懋油",
+   "tradeDate": "2026-08-28",
+   "changePct": -1.55,
+   "price": 25.45,
+   "currency": "TWD",
+   "fact": "公司召開第115年第二次股東臨時會，決議補選3席董事並解除競業限制",
+   "inference": "投資人需留意董事變動與競業限制解除，可能影響公司治理",
+   "why": "公司召開第115年第二次股東臨時會，決議補選3席董事並解除競業限制",
+   "meaning": "投資人需留意董事變動與競業限制解除，可能影響公司治理",
+   "stance": "neu",
+   "newsScore": 50,
+   "importance": 3,
+   "score": 39,
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%A6%8F%E6%87%8B%E6%B2%B9115%E5%B9%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%82%A1%E6%9D%B1%E8%87%A8%E6%99%82%E6%9C%83%E9%87%8D%E8%A6%81%E6%B1%BA%E8%AD%B0%E4%BA%8B%E9%A0%85-071346702.html"
   }
  ],
- "poolSize": 21,
- "aiUsed": 8,
+ "poolSize": 31,
+ "aiUsed": 10,
+ "aiSource": {
+  "gemini": 0,
+  "groq": 11,
+  "openrouter": 0,
+  "failed": 0
+ },
  "note": "fact＝新聞標題明確講到的已確認事實；inference＝AI 推論，僅供參考，非確定性預測。"
 }

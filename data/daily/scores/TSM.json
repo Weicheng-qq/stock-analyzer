@@ -1,17 +1,19 @@
 {
  "symbol": "TSM",
  "name": "Taiwan Semiconductor Manufactur",
+ "nameZh": null,
  "date": "2026-08-30",
+ "tradeDate": "2026-08-28",
  "price": 417.52,
  "changePct": -2.29,
  "volRatio": 0.88,
- "score": 30,
+ "score": 38,
  "scores": {
   "sentiment": 35,
   "technical": 18,
   "fundamental": null,
   "valuation": 49,
-  "news": null
+  "news": 55
  },
  "pe": {
   "cur": 31.9,
@@ -19,8 +21,32 @@
   "hi": 36.7
  },
  "alerts": [],
- "ai": null,
- "newsTop": [],
+ "ai": {
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 55,
+  "importance": 2
+ },
+ "newsTop": [
+  {
+   "title": "Apple Was Always 1 Step Behind in AI. In Chipmaking, It’s Now 1 Step Ahead.",
+   "publisher": "Barchart",
+   "link": "https://finance.yahoo.com/m/0578bf34-9d3a-3463-9fc8-174096f454a4/apple-was-always-1-step.html"
+  },
+  {
+   "title": "TSMC vs. ASML: Which Semiconductor Giant Is the Better Stock Buy?",
+   "publisher": "Motley Fool",
+   "link": "https://finance.yahoo.com/m/793c4003-bf43-3cca-8bba-23c57440b605/tsmc-vs.-asml%3A-which.html"
+  },
+  {
+   "title": "Taiwan Semiconductor Manufacturing (TSM) Stock Looks Stretched As Its 363% Run Continues",
+   "publisher": "Simply Wall St.",
+   "link": "https://finance.yahoo.com/markets/stocks/articles/taiwan-semiconductor-manufacturing-tsm-stock-070946891.html"
+  }
+ ],
  "prev": null,
- "generatedAt": "2026-08-30T06:50:48.300Z"
+ "generatedAt": "2026-08-30T12:21:11.233Z"
 }

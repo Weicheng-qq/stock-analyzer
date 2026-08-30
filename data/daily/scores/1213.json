@@ -1,0 +1,44 @@
+{
+ "symbol": "1213",
+ "name": "OCEANIC BEVERAGES CO INC",
+ "nameZh": "大飲",
+ "date": "2026-08-30",
+ "tradeDate": "2026-08-28",
+ "price": 7.7,
+ "changePct": 4.9,
+ "volRatio": 3.86,
+ "score": 50,
+ "scores": {
+  "sentiment": 91,
+  "technical": 66,
+  "fundamental": 5,
+  "valuation": 85,
+  "news": null
+ },
+ "pe": {
+  "cur": 1.1,
+  "lo": 1.1,
+  "hi": 1.5
+ },
+ "alerts": [
+  {
+   "type": "price",
+   "level": "mid",
+   "text": "股價明顯上漲 4.90%"
+  },
+  {
+   "type": "volume",
+   "level": "high",
+   "text": "成交量放大至近月均量的 3.9 倍"
+  },
+  {
+   "type": "earnings",
+   "level": "high",
+   "text": "最新財報摘要已更新（2026 第2季）"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-08-30T12:21:11.232Z"
+}

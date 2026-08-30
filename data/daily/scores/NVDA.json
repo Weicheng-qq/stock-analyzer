@@ -1,7 +1,9 @@
 {
  "symbol": "NVDA",
  "name": "NVIDIA Corporation",
+ "nameZh": null,
  "date": "2026-08-30",
+ "tradeDate": "2026-08-28",
  "price": 217.55,
  "changePct": -4.57,
  "volRatio": 1.52,
@@ -11,7 +13,7 @@
   "technical": 58,
   "fundamental": null,
   "valuation": 85,
-  "news": null
+  "news": 50
  },
  "pe": {
   "cur": 28.8,
@@ -25,8 +27,32 @@
    "text": "股價明顯下跌 -4.57%"
   }
  ],
- "ai": null,
- "newsTop": [],
+ "ai": {
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 50,
+  "importance": 1
+ },
+ "newsTop": [
+  {
+   "title": "Why I Think Realty Income Is the Best Monthly Dividend Stock You Can Buy",
+   "publisher": "Motley Fool",
+   "link": "https://finance.yahoo.com/m/d1018180-8803-3688-b0f0-8b0db3717ab5/why-i-think-realty-income-is.html"
+  },
+  {
+   "title": "Prediction: This Investment Could Crush the Market Over the Next 20 Years",
+   "publisher": "Motley Fool",
+   "link": "https://finance.yahoo.com/m/c0ba58a0-4b60-3431-abc4-b711f85dd63f/prediction%3A-this-investment.html"
+  },
+  {
+   "title": "Prediction: If Artificial Intelligence (AI) Leads to Unprecedented Economic Growth, These 2 S&P 500 Stocks Are Once-in-a-Decade Buying Opportunities Right Now",
+   "publisher": "Motley Fool",
+   "link": "https://finance.yahoo.com/m/e54398ed-bb2a-319b-aaf3-3e81093b081a/prediction%3A-if-artificial.html"
+  }
+ ],
  "prev": null,
- "generatedAt": "2026-08-30T06:50:48.300Z"
+ "generatedAt": "2026-08-30T12:21:11.232Z"
 }

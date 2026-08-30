@@ -1,17 +1,19 @@
 {
  "symbol": "JKHY",
  "name": "Jack Henry & Associates, Inc.",
+ "nameZh": null,
  "date": "2026-08-30",
+ "tradeDate": "2026-08-28",
  "price": 169.73,
  "changePct": 0.05,
  "volRatio": 0.93,
- "score": 60,
+ "score": 62,
  "scores": {
   "sentiment": 50,
   "technical": 82,
   "fundamental": 53,
   "valuation": 72,
-  "news": 50
+  "news": null
  },
  "pe": {
   "cur": 24.3,
@@ -20,29 +22,13 @@
  },
  "alerts": [
   {
-   "type": "earnings",
-   "level": "high",
-   "text": "最新財報摘要已更新（2026 Q3（2026-01-01～2026-03-31））"
-  },
-  {
    "type": "guidance",
    "level": "mid",
    "text": "公司已公布官方財測／展望"
   }
  ],
- "ai": {
-  "fact": "文章探討華爾街分析師對Jack Henry & Associates股票的目標價。",
-  "inference": "此議題顯示市場對公司未來表現有關注，若分析師普遍上調目標價，可能提升投資者信心；若下調，則可能帶來負面情緒。",
-  "newsScore": 50,
-  "importance": 3
- },
- "newsTop": [
-  {
-   "title": "What Are Wall Street Analysts' Target Price for Jack Henry & Associates Stock?",
-   "publisher": "Barchart",
-   "link": "https://finance.yahoo.com/m/21279a4e-a45a-3dbb-bbbe-325b52230dc0/what-are-wall-street.html"
-  }
- ],
+ "ai": null,
+ "newsTop": [],
  "prev": null,
- "generatedAt": "2026-08-30T06:50:48.303Z"
+ "generatedAt": "2026-08-30T12:21:11.236Z"
 }

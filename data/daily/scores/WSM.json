@@ -1,17 +1,19 @@
 {
  "symbol": "WSM",
  "name": "Williams-Sonoma, Inc.",
+ "nameZh": null,
  "date": "2026-08-30",
+ "tradeDate": "2026-08-28",
  "price": 235.09,
  "changePct": -1.39,
  "volRatio": 0.92,
- "score": 63,
+ "score": 64,
  "scores": {
   "sentiment": 41,
   "technical": 58,
   "fundamental": 86,
   "valuation": 36,
-  "news": null
+  "news": 70
  },
  "pe": {
   "cur": 24.5,
@@ -30,8 +32,32 @@
    "text": "公司已公布官方財測／展望"
   }
  ],
- "ai": null,
- "newsTop": [],
+ "ai": {
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "pos",
+  "newsScore": 70,
+  "importance": 3
+ },
+ "newsTop": [
+  {
+   "title": "MarketBeat Week in Review – 08/24 - 08/28",
+   "publisher": "MarketBeat",
+   "link": "https://finance.yahoo.com/m/8e8a23cf-2b98-3a5b-ad45-028685c5c84a/marketbeat-week-in-review-%E2%80%93.html"
+  },
+  {
+   "title": "Williams-Sonoma (WSM) Grew Comparable Brand Revenue While Non-GAAP Operating Margin Fell. Can Demand Restore Operating Leverage?",
+   "publisher": "Insider Monkey",
+   "link": "https://finance.yahoo.com/markets/stocks/articles/williams-sonoma-wsm-grew-comparable-025451462.html"
+  },
+  {
+   "title": "Jim Cramer Says Williams-Sonoma (WSM) Selloff Was Wrong After Strong Earnings",
+   "publisher": "Insider Monkey",
+   "link": "https://finance.yahoo.com/markets/stocks/articles/jim-cramer-says-williams-sonoma-205613663.html"
+  }
+ ],
  "prev": null,
- "generatedAt": "2026-08-30T06:50:48.301Z"
+ "generatedAt": "2026-08-30T12:21:11.234Z"
 }

@@ -1,7 +1,9 @@
 {
  "symbol": "3701",
  "name": "FIC GLOBAL INC",
+ "nameZh": "大眾控",
  "date": "2026-08-30",
+ "tradeDate": "2026-08-28",
  "price": 41.05,
  "changePct": -2.03,
  "volRatio": 0.37,
@@ -26,10 +28,13 @@
   }
  ],
  "ai": {
-  "fact": "近期未見與本公司直接相關之明確新聞資訊報導",
-  "inference": "因缺乏直接資訊，市場對公司短期走勢的預期仍不明朗",
+  "why": "大眾控更正115年6月關係人交易自結申報資訊",
+  "meaning": "投資人需留意關係人交易資訊是否正確",
+  "fact": "大眾控更正115年6月關係人交易自結申報資訊",
+  "inference": "投資人需留意關係人交易資訊是否正確",
+  "stance": "neu",
   "newsScore": 50,
-  "importance": 1
+  "importance": 2
  },
  "newsTop": [
   {
@@ -39,5 +44,5 @@
   }
  ],
  "prev": null,
- "generatedAt": "2026-08-30T06:50:48.301Z"
+ "generatedAt": "2026-08-30T12:21:11.233Z"
 }
