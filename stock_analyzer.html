@@ -199,6 +199,9 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-add input { flex:1; background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:9px 12px; font-size:13px; }
 
 .chart-wrap { position:relative; height:250px; }
+/* ⚠️ 實測 320px 極窄螢幕時 Chart.js 的 canvas 會超出容器（scrollWidth 351 > 320），
+   造成整頁可以左右晃動。390px 沒有這個問題，但舊機型會遇到。 */
+.chart-wrap canvas, #results canvas { max-width:100% !important; }
 .tech-wrap { height:320px; }
 @media(max-width:560px){ .tech-wrap { height:240px; } }
 .tech-opts { display:flex; flex-wrap:wrap; gap:8px 16px; margin:14px 0 4px; }
@@ -1821,7 +1824,7 @@ function twResultsHtml(o){
 function renderTwPeChecklist(finRows, pe, pe5, pePos, price){
   const peArea=document.getElementById('tw_pe_area');
   if(peArea){
-    let h=`<div class="vr"><span class="vl">本益比 P/E（Yahoo 實際 trailing）</span><span class="vn">${pe!=null?pe.toFixed(1)+'x':'—'}</span></div>`;
+    let h=`<div class="vr"><span class="vl">本益比 P/E（Yahoo 實際 trailing）${__peAsOfNote()}</span><span class="vn">${pe!=null?pe.toFixed(1)+'x':'—'}</span></div>`;
     h+=`<div style="margin-top:14px" class="ct">📊 本益比：與自己歷史相比</div>`;
     if(pe5){
       h+=`<div class="vr"><span class="vl">近5年本益比區間</span><span class="vn">${pe5.min.toFixed(1)}x ~ ${pe5.max.toFixed(1)}x</span></div>`;
@@ -1851,7 +1854,8 @@ function renderTwPeChecklist(finRows, pe, pe5, pePos, price){
     {label:'ROE > 20%', pass:lastRoe!=null?lastRoe>20:null, val:lastRoe!=null?lastRoe.toFixed(1)+'%':'無資料'},
     {label:'10年營收整體向上（≤2年下滑）', pass:growths.length?(declineYears<=2&&overallUp):null, val:'下滑'+declineYears+'年'},
     {label:'近2年營收成長皆 > 20%（快速成長）', pass:lastG.length===2?fastGrower:null, val:lastG.map(g=>g.toFixed(0)+'%').join(' / ')||'無資料'},
-    {label:'本益比 < 13', pass:pe!=null?pe<13:null, cls:(pe!=null&&pe<13)?'g':(pePos!=null?(pePos<=50?'y':'r'):(pe!=null?'r':'')), val:pe!=null?pe.toFixed(1)+'x':'無資料'},
+    // ⚠️ 本益比若是好幾個月前的舊值，不可以拿來打勾說「符合便宜」——改判「無法判斷」。
+    {label:'本益比 < 13', pass:(pe!=null&&!__peStale())?pe<13:null, cls:__peStale()?'':((pe!=null&&pe<13)?'g':(pePos!=null?(pePos<=50?'y':'r'):(pe!=null?'r':''))), val:pe==null?'無資料':(__peStale()?pe.toFixed(1)+'x（資料過舊，不採計）':pe.toFixed(1)+'x')},
     {label:'本益比位於近5年區間偏低半部', pass:(pePos!=null)?pePos<50:null, cls:(pe!=null&&pe<13)?'g':(pePos==null?'':(pePos<=50?'y':'r')), val:(pe5&&pePos!=null)?'區間'+pe5.min.toFixed(0)+'~'+pe5.max.toFixed(0)+'x，現'+pePos.toFixed(0)+'%位置':'無資料'},
   ];
   const passCount=checklist.filter(c=>c.pass===true).length;
@@ -1863,6 +1867,9 @@ function renderTwPeChecklist(finRows, pe, pe5, pePos, price){
   let mvClass, mvText;
   if(qualityOk&&cheap){ mvClass='s-buy'; mvText='通過 <b>'+passCount+'/'+chkTotal+'</b> 項選股準則，且 '+posText+'（相對<b>便宜</b>）。<b>符合版主邏輯</b>——強護城河好公司＋合理低估價格，屬<b>值得關注的買入觀察區</b>。'; }
   else if(qualityOk){ mvClass='s-hold'; mvText='通過 <b>'+passCount+'/'+chkTotal+'</b> 項選股準則，基本面與護城河佳，但 '+posText+'（估值'+(pricey?'<b>偏高</b>':'不算便宜')+'）。<b>好公司、但價格尚未到合理低估</b>——建議耐心等待較便宜的價位再進場。'; }
+  // ⚠️ 七項全部「無資料」時不可以結論成「僅通過 0/7、不符合版主標準」——那是「不適用」不是「不合格」。
+  //   實測 0050 這類 ETF 七項全部無資料，卻被寫成「基本面尚未完全符合」，使用者會誤以為 0050 是爛標的。
+  else if(checklist.every(c=>c.pass===null)){ mvClass='s-hold'; mvText='這個標的沒有可用的個別公司財務指標（例如 ETF 是一籃子股票，沒有自己的毛利率／ROE），<b>版主選股準則不適用</b>——這不等於「不合格」，請改用成分股、費用率與追蹤指數來評估。'; }
   else { mvClass='s-sell'; mvText='僅通過 <b>'+passCount+'/'+chkTotal+'</b> 項選股準則，基本面尚未完全符合版主「強護城河」核心標準（'+posText+'）。<b>暫不符合版主選股條件</b>，宜再觀察或尋找更優質標的。'; }
   const itemsEl=document.getElementById('tw_chk_items');
   if(itemsEl) itemsEl.innerHTML=chkHtml;
@@ -2101,6 +2108,7 @@ async function doSearchTW(symbol){
   //   (pickGroup 會把它清成 false)才蓋得掉；原本設在載入結尾，會反過來蓋掉使用者的選擇。
   if(!__autoLoading) __jumpAfterSearch=true;
   window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__capexData=null; window.__wikiData=null; window.__introDone=false;
+  window.__peAsOf=null;   // ⚠️ 每次搜尋都要清掉，否則新股沒有本益比資料時會沿用上一支股票的日期
   document.getElementById('results').innerHTML=''; document.getElementById('logItems').innerHTML=''; logPanel(true); logAdd('p','抓取台股資料...');
   try{
     const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=1d`);
@@ -2108,7 +2116,13 @@ async function doSearchTW(symbol){
     const meta=ch?.chart?.result?.[0]?.meta;
     if(!meta||meta.regularMarketPrice==null){ __autoLoading=false; document.getElementById('results').innerHTML='<div class="err-box">查不到此台股資料，請確認代碼</div>'; logPanel(false); searchDone(); return; }
     const code=symbol.replace(/\..*/,''); const mkt=/\.TWO$/i.test(symbol)?'TWO':'TW';
-    const name=TW_NAMES[code]||meta.shortName||meta.longName||code;
+    // ⚠️⚠️ 一定要走 ccbName()（權威中文名字典：TICKER_ZH → TW_NAMES → TW_ALL）。
+    //   原本只查 TW_NAMES，但 TW_NAMES 只有 239 檔熱門股，TW_ALL 有 1,983 檔——
+    //   實測 1,753 檔台股（88.4%）在個股頁顯示成英文名，例如 1213 顯示
+    //   「OCEANIC BEVERAGES CO INC」而不是「大飲」，可是自選股／今日市場／搜尋列
+    //   都顯示中文名，同一家公司在 App 裡出現兩種名字。
+    //   交接記錄早有同類教訓（大立光 3008 不在 TW_NAMES 裡），這裡是同一個坑的另一處。
+    const name=ccbName(code, meta.shortName||meta.longName||code);
     const price=meta.regularMarketPrice, prev=meta.previousClose??meta.chartPreviousClose;
     const chg=(price!=null&&prev!=null)?price-prev:null, pct=(chg!=null&&prev)?chg/prev*100:null;
     logOk('p','台股資料載入完成'); logPanel(false);
@@ -2142,6 +2156,7 @@ async function doSearchTW(symbol){
       const yf=await loadYahooFin(symbol);
       const tk=Object.keys(yf.tpe).sort(), qk=Object.keys(yf.qpe).sort();
       const peCur=tk.length?yf.tpe[tk[tk.length-1]]:(qk.length?yf.qpe[qk[qk.length-1]]:null);
+      window.__peAsOf = tk.length?tk[tk.length-1]:(qk.length?qk[qk.length-1]:null);   // 這個本益比是哪一天的
       let range5y=null;
       try{ range5y=await computePe5yRange(symbol, peCur, yf.aeps); }catch(e){}
       peInfo={ current:peCur, range5y };
@@ -2196,6 +2211,7 @@ async function doSearch(){
   let symbol;
   const gen=++SEARCH_GEN;   // 本次搜尋序號：避免上一次(較慢)的非同步回應蓋掉這次結果
   window.__guidanceReal=false; window.__guidanceData=null; window.__productsData=null; window.__competitionData=null; window.__capexData=null; window.__wikiData=null; window.__guidanceData=null; window.__introDone=false;
+  window.__peAsOf=null;   // ⚠️ 同上：避免沿用上一支股票的本益比日期
   // 網站介紹(#welcome)永久釘在標題與自選股之間、不隱藏；只清空/切換下方的分析結果
   document.getElementById('results').style.display='none';
   document.getElementById('results').innerHTML='';
@@ -2247,6 +2263,7 @@ async function doSearch(){
       // 真實本益比：現值(trailing) + 歷史季度 —— 獨立成自己的try/catch，不受下面年度補值/累計季度計算的失敗拖累
       const tk=Object.keys(yf.tpe).sort(), qk=Object.keys(yf.qpe).sort();
       const peCur = tk.length?yf.tpe[tk[tk.length-1]]:(qk.length?yf.qpe[qk[qk.length-1]]:null);
+      window.__peAsOf = tk.length?tk[tk.length-1]:(qk.length?qk[qk.length-1]:null);   // 這個本益比是哪一天的
       let range5y=null;
       try{ range5y = await computePe5yRange(quoteSym, peCur, yf.aeps); }catch(e){}   // 5年區間額外抓月線股價，失敗也不能連累現值本益比
       peInfo={ current: peCur, hist: qk.map(k=>({d:k,v:yf.qpe[k]})), range5y };
@@ -2375,7 +2392,8 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
     {label:'ROE > 20%', pass:lastRoe!=null?lastRoe>20:null, val:lastRoe!=null?lastRoe.toFixed(1)+'%':'無資料'},
     {label:'10年營收整體向上（≤2年下滑）', pass:growths.length?(declineYears<=2&&overallUp):null, val:`下滑${declineYears}年`},
     {label:'近2年營收成長皆 > 20%（快速成長）', pass:lastG.length===2?fastGrower:null, val:lastG.map(g=>g.toFixed(0)+'%').join(' / ')||'無資料'},
-    {label:'本益比 < 13', pass:pe!=null?pe<13:null, cls:(pe!=null&&pe<13)?'g':(pePos!=null?(pePos<=50?'y':'r'):(pe!=null?'r':'')), val:pe!=null?pe.toFixed(1)+'x':'無資料'},
+    // ⚠️ 本益比若是好幾個月前的舊值，不可以拿來打勾說「符合便宜」——改判「無法判斷」。
+    {label:'本益比 < 13', pass:(pe!=null&&!__peStale())?pe<13:null, cls:__peStale()?'':((pe!=null&&pe<13)?'g':(pePos!=null?(pePos<=50?'y':'r'):(pe!=null?'r':''))), val:pe==null?'無資料':(__peStale()?pe.toFixed(1)+'x（資料過舊，不採計）':pe.toFixed(1)+'x')},
     {label:'本益比位於近5年區間偏低半部', pass:(pePos!=null)?pePos<50:null, cls:(pe!=null&&pe<13)?'g':(pePos==null?'':(pePos<=50?'y':'r')), val:(pe5&&pePos!=null)?`區間${pe5.min.toFixed(0)}~${pe5.max.toFixed(0)}x，現${pePos.toFixed(0)}%位置`:'無資料'},
   ];
   const passCount=checklist.filter(c=>c.pass===true).length;
@@ -2388,6 +2406,8 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   let mvClass, mvText;
   if(qualityOk && cheap){ mvClass='s-buy'; mvText=`通過 <b>${passCount}/${chkTotal}</b> 項選股準則，且 ${posText}（相對<b>便宜</b>）。<b>符合版主邏輯</b>——強護城河好公司＋合理低估價格，屬<b>值得關注的買入觀察區</b>。`; }
   else if(qualityOk){ mvClass='s-hold'; mvText=`通過 <b>${passCount}/${chkTotal}</b> 項選股準則，基本面與護城河佳，但 ${posText}（估值${pricey?'<b>偏高</b>':'不算便宜'}）。<b>好公司、但價格尚未到合理低估</b>——建議耐心等待較便宜的價位再進場。`; }
+  // ⚠️ 同台股：七項全部無資料是「不適用」，不是「不合格」。
+  else if(checklist.every(c=>c.pass===null)){ mvClass='s-hold'; mvText='這個標的沒有可用的個別公司財務指標（例如 ETF 是一籃子股票，沒有自己的毛利率／ROE），<b>版主選股準則不適用</b>——這不等於「不合格」，請改用成分股、費用率與追蹤指數來評估。'; }
   else { mvClass='s-sell'; mvText=`僅通過 <b>${passCount}/${chkTotal}</b> 項選股準則，基本面尚未完全符合版主「強護城河」核心標準（${posText}）。<b>暫不符合版主選股條件</b>，宜再觀察或尋找更優質標的。`; }
   // 年營收欄位統一單位：依最大金額自動選 兆／十億／百萬，單位標在欄名右邊，數字乾淨好懂
   const rUnit = pickRevUnit([...rows.map(r=>r.rev), cum?cum.rev:null]);
@@ -2468,7 +2488,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   <div class="card">
     <div class="ct">💹 股價估值評估</div>
     <div class="vr"><span class="vl">目前股價</span><span class="vn">${price!=null?cs+(+price).toFixed(2):'—'}</span></div>
-    <div class="vr"><span class="vl">本益比 P/E（Yahoo 實際 trailing）</span><span class="vn">${pe!=null?pe.toFixed(1)+'x':'—'}</span></div>
+    <div class="vr"><span class="vl">本益比 P/E（Yahoo 實際 trailing）${__peAsOfNote()}</span><span class="vn">${pe!=null?pe.toFixed(1)+'x':'—'}</span></div>
     <div style="margin-top:14px" class="ct">📊 本益比：與自己歷史相比</div>
     ${pe5?`
     <div class="vr"><span class="vl">近5年本益比區間</span><span class="vn">${pe5.min.toFixed(1)}x ~ ${pe5.max.toFixed(1)}x</span></div>
@@ -4667,6 +4687,22 @@ async function translateNewsTitles(items, gen){
     const el=document.getElementById('newsList'); if(!el) return;
     el.innerHTML=items.map((it,i)=>newsItemHtml(String(arr[i]||it.title),it.link,it.pub,it.img)).join('');
   }catch(e){}   // 翻譯失敗就維持英文原文，不影響功能
+}
+
+// ── 本益比資料新鮮度 ────────────────────────────────────────────
+// ⚠️⚠️ Yahoo 的 trailingPeRatio 對冷門股可能是好幾個月前的值。
+//   實測 1213 大飲最後一筆是 2026-03-13（170 天前），卻與「今天的股價」並列顯示成
+//   「目前本益比 1.1x」，還讓版主選股準則的「✅ 本益比 < 13」在一家 EPS -0.85 的
+//   虧損公司上打勾，看起來像是「便宜的好標的」。（台積電同一欄位是 3 天前，所以熱門股沒事。）
+//   → 超過 90 天一律標示資料日期，且不參與選股準則判定（改判「無法判斷」）。
+const PE_STALE_DAYS=90;
+function __peStale(){
+  const d=window.__peAsOf; if(!d) return false;
+  const t=new Date(d).getTime(); if(!Number.isFinite(t)) return false;
+  return (Date.now()-t)/86400000 > PE_STALE_DAYS;
+}
+function __peAsOfNote(){
+  return __peStale() ? `<span style="color:var(--text2);font-size:11px;margin-left:6px">資料截至 ${esc(window.__peAsOf)}</span>` : '';
 }
 
 // 一次載入 Yahoo 免費財務數據：年度/季度損益 + 真實本益比（現值與歷史季度）
