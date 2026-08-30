@@ -411,6 +411,31 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .err-box { background:rgba(248,81,73,.1); border:1px solid rgba(248,81,73,.3); border-radius:9px; padding:18px; color:var(--red); font-size:13px; line-height:1.7; }
 .note { font-size:11px; color:var(--text2); margin-top:6px; line-height:1.5; }
 .retry-btn { background:var(--blue); color:#0d1117; border:none; border-radius:7px; padding:8px 16px; font-weight:600; cursor:pointer; font-size:13px; margin-top:12px; }
+/* ── 今日市場（#dailyCard）專屬樣式 ──────────────────────────────
+   ⚠️ 選擇器一律以 #dailyCard 開頭，確保不會影響 App 其他任何頁面。
+   手機優先：字級/行距以 390px 為準，一支股票 4~5 行內講完，可快速掃描。 */
+#dailyCard .dm-sum{margin:2px 0 4px;padding:10px 12px;background:rgba(88,166,255,.09);border-left:3px solid var(--blue);border-radius:5px;font-size:13.5px;line-height:1.75}
+#dailyCard .dm-sum b{color:var(--blue)}
+#dailyCard .dm-sec{margin:20px 0 2px;font-weight:700;font-size:15px}
+#dailyCard .dm-row{padding:11px 0;border-bottom:1px solid var(--line)}
+#dailyCard .dm-tap{cursor:pointer}
+#dailyCard .dm-tap:active{background:rgba(255,255,255,.04)}
+#dailyCard .dm-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+#dailyCard .dm-nm{font-size:15px;font-weight:700}
+#dailyCard .dm-cd{color:var(--text2);font-size:12px;margin-left:5px}
+#dailyCard .dm-why{margin-top:6px;font-size:13px;line-height:1.65}
+#dailyCard .dm-why b{color:var(--text2);font-weight:600;font-size:12.5px}
+#dailyCard .dm-alert{margin-top:5px;font-size:12.5px;color:var(--red)}
+#dailyCard .dm-vd{margin-top:7px;font-size:12.5px}
+#dailyCard .dm-sub{color:var(--text2);font-size:11.5px;margin-left:10px}
+#dailyCard .dm-note{color:var(--text2);font-size:11.5px;line-height:1.6}
+#dailyCard .dm-more{display:inline-block;margin-top:10px;padding:2px 0;color:var(--blue);font-size:12.5px;cursor:pointer}
+#dailyCard .dm-ev{padding:8px 0;border-bottom:1px solid var(--line)}
+#dailyCard .dm-evd{font-size:12px;color:var(--text2);margin-bottom:3px}
+#dailyCard .dm-evr{font-size:13.5px;line-height:1.9}
+#dailyCard .dm-cat{margin-left:8px;font-size:12px;color:var(--text2)}
+#dailyCard .dm-kind{margin-left:8px;font-size:11px}
+#dailyCard .dm-mine{margin-left:8px;font-size:11px;color:var(--blue)}
 </style>
 </head>
 <body>
@@ -554,13 +579,15 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <div class="ct" style="display:flex;justify-content:space-between;align-items:center">📅 今日市場
       <span id="dailyUnread" style="font-size:12px;font-weight:normal;color:var(--text2)"></span>
     </div>
-    <!-- 排列順序＝使用者每天回訪最想先看到的：總結 → 我的股票有沒有事 → 今日必看 → 本週事件。
-         ⚠️ 「今日必看」是這個功能的核心價值，實測放太後面會被重大異動清單擠掉，故提前。 -->
+    <!-- 資訊架構＝「發生什麼 → 為什麼 → 重要嗎 → 接下來要注意什麼」的閱讀順序。
+         ⚠️ 每個區塊沒有當日實際資料時整塊不顯示，絕不為了版面完整而補內容。 -->
     <div id="dailySummary"></div>
-    <div id="dailyAlerts"></div>
     <div id="dailyMusts"><div class="note">載入中…</div></div>
     <div id="dailyMine"></div>
+    <div id="dailyThemes"></div>
     <div id="dailyEvents"></div>
+    <div id="dailyWatch"></div>
+    <div id="dailyAlerts"></div>
     <div id="dailyMeta" style="font-size:11px;color:var(--text2);text-align:right;margin-top:8px"></div>
   </div>
 
@@ -2012,12 +2039,16 @@ async function loadTwMonthlyRevenue(code, gen){
       const pm=byYM[prevMK], py=byYM[prevYK];
       const mom=pm?(c.rev-pm.rev)/pm.rev*100:null;
       const yoy=py?(c.rev-py.rev)/py.rev*100:null;
-      let cumCur=0, cumPrev=0, cumYoy=null;
+      let cumCur=0, cumPrev=0, cumYoy=null, nCur=0, nPrev=0;
       for(let i=1;i<=c.m;i++){
         const ck=byYM[c.y*100+i], pk=byYM[(c.y-1)*100+i];
-        if(ck) cumCur+=ck.rev; if(pk) cumPrev+=pk.rev;
+        if(ck){ cumCur+=ck.rev; nCur++; } if(pk){ cumPrev+=pk.rev; nPrev++; }
       }
-      if(cumPrev>0) cumYoy=(cumCur-cumPrev)/cumPrev*100;
+      // ⚠️⚠️ 只有「今年 1~m 月」與「去年 1~m 月」兩邊都完整取得，累計YoY 才算得準。
+      //   資料視窗只抓兩年，最舊那幾列的「去年同期」只有 1~2 個月，照算會得到荒謬數字——
+      //   實測台積電 2025/08 顯示「累計YoY +869.4%」（分母只有 2 個月），而且標著
+      //   「資料來源：MOPS 公開資訊觀測站」，使用者會當成官方數字。寧可顯示「—」也不能顯示錯的。
+      if(cumPrev>0 && nCur===c.m && nPrev===c.m) cumYoy=(cumCur-cumPrev)/cumPrev*100;
       return {y:c.y,m:c.m,rev:c.rev,mom,yoy,cumYoy};
     });
     const show=rows.slice(-12).reverse();
@@ -2083,6 +2114,11 @@ async function doSearchTW(symbol){
     logOk('p','台股資料載入完成'); logPanel(false);
     const usEquiv=twToUs(code);   // 雙掛牌(2330↔TSM/2303↔UMC/3711↔ASX/2412↔CHT):共用美股官方事實內容
     window.__symbolForLinks=usEquiv||code;   // 指向美股代碼,讓 IR 官方事實(產品/法說會展望/官方IR頁)直接渲染、與美股一致
+    // ⚠️ 目前市場實際看的代碼。IR 官方事實可以兩市場共用，但「每日評分」不行——
+    //   技術面/市場情緒/估值都是由股價算出來的，2330 與 TSM(ADR) 是不同的價格與本益比。
+    //   實測台股台積電頁曾顯示 TSM 的本益比 31.9、技術面 18，與同一頁「本益比 28.2、
+    //   股價強勢站穩所有均線」正好相反，也與今日市場頁的 60 分不一致。
+    window.__mktCode=code;
     await ensureIR(window.__symbolForLinks);   // IR全文改為延遲載入,渲染前必須先備妥這一家的資料
     await loadAutoEarnings(window.__symbolForLinks);   // 每日排程自動產生的最新財報摘要(官方數字)
     window.__coNameForLinks=name;
@@ -2612,132 +2648,276 @@ function __renderDailyUnread(){
 }
 // 沿用既有的 .pill up/down 元件：它已內建「台股紅漲綠跌」的翻轉（body.mkt-tw 控制），
 //   自己另寫顏色會與全站規則不一致，也會漏掉台股翻轉。
-const __pctHtml=v=>`<span class="pill ${v>=0?'up':'down'}">${v>=0?'▲':'▼'}${Math.abs(v).toFixed(2)}%</span>`;
-const __stars=n=>'★'.repeat(Math.max(1,Math.min(5,n||3)))+'☆'.repeat(5-Math.max(1,Math.min(5,n||3)));
+// ⚠️ 漲跌幅缺漏時要顯示「—」，不能因為 null 被當成 0 而印出「▲0.00%」——
+//   那是憑空生出來的數字，使用者會以為今天真的平盤。
+const __pctHtml=v=>(v==null||!Number.isFinite(Number(v)))
+  ? '<span style="color:var(--text2)">—</span>'
+  : `<span class="pill ${v>=0?'up':'down'}">${v>=0?'▲':'▼'}${Math.abs(Number(v)).toFixed(2)}%</span>`;
+const __codeOf=s=>String(s||'').replace(/\.(TW|TWO)$/i,'');
+// ── 交易日標籤 ────────────────────────────────────────────────
+// ⚠️⚠️ 週末與休市日不可以寫「今日」。實測 2026-08-30 是星期日，市場沒有開盤，
+//   但畫面寫「今日 ▲3.10%」「今日重大異動」——那其實是 8/28（週五）的收盤變化，
+//   使用者會以為今天發生了事情。這對投資判斷是實質誤導，必須據實標示。
+function __dmToday(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function __dmDayLabel(g){
+  const t=g&&g.tradeDate;
+  if(t){ if(t===__dmToday()) return '今日'; const p=t.split('-'); return `${+p[1]}/${+p[2]} 收盤`; }
+  // 舊資料檔沒有 tradeDate：至少在週末不要謊稱「今日」
+  const w=new Date().getDay();
+  return (w===0||w===6) ? '最近交易日' : '今日';
+}
+
+// ── 公司名稱：中文名優先，代號在後 ────────────────────────────────
+// ⚠️ 一律走既有的權威中文名字典 ccbName()（自選股 renderWatchlist、投資主題、搜尋列用同一份），
+//   避免同一家公司在這裡顯示 "TAIWAN SEMICONDUCTOR MANUFACTUR"、在自選股卻顯示「台積電」。
+//   排程產生的 JSON 存的是 Yahoo 的英文 shortName，所以中文化必須在前端做 ——
+//   這樣今天既有的資料檔不用重跑，畫面也會立刻正確。
+function __dailyName(sym, fallback){
+  const c=__codeOf(sym);
+  let n=''; try{ n=ccbName(c,''); }catch(e){}
+  if(n && n!==c) return n;
+  // 字典查無（多為中小型美股）：保留英文，但去掉冗長的公司型態字尾並轉成一般大小寫，
+  //   手機上不讓一長串全大寫英文佔滿整行。
+  let t=String(fallback||c)
+    .replace(/\b(CORPORATION|CORP|INCORPORATED|INC|LIMITED|LTD|COMPANY|HOLDINGS|GROUP|PLC|SA|NV|AG|CO)\b\.?/gi,' ')
+    .replace(/\s{2,}/g,' ').replace(/[\s,.\-]+$/,'').trim();
+  if(/^[A-Z0-9 .\-&']+$/.test(t)) t=t.replace(/[A-Z]{2,}/g, w=>w.charAt(0)+w.slice(1).toLowerCase());
+  if(t.length>20) t=t.slice(0,20)+'…';
+  return t||c;
+}
+const __nameLine=(sym,fallback)=>`<span class="dm-nm">${esc(__dailyName(sym,fallback))}</span><span class="dm-cd">${esc(__codeOf(sym))}</span>`;
+
+// ── AI 判讀：🟢 偏正面／🟡 中性／🔴 偏負面 ────────────────────────
+// ⚠️ 沒有新聞可依據時一律給「中性」並註明「今日無明確消息」，
+//   不拿股價漲跌回推情緒 —— 那是循環論證（漲就說偏正面），等於讓 AI 用猜的。
+function __stanceOf(g){
+  const ai=(g&&g.ai)||null;
+  const s=String((ai&&ai.stance)||'');
+  if(/pos|正面/.test(s)) return {t:'偏正面',e:'🟢',c:'var(--green)'};
+  if(/neg|負面/.test(s)) return {t:'偏負面',e:'🔴',c:'var(--red)'};
+  if(/neu|中性/.test(s)) return {t:'中性',e:'🟡',c:'var(--text2)'};
+  const n=ai&&ai.newsScore;
+  if(n!=null&&n>=60) return {t:'偏正面',e:'🟢',c:'var(--green)'};
+  if(n!=null&&n<=40) return {t:'偏負面',e:'🔴',c:'var(--red)'};
+  if(n!=null) return {t:'中性',e:'🟡',c:'var(--text2)'};
+  return {t:'中性',e:'🟡',c:'var(--text2)',note:'今日無明確消息'};
+}
+// AI 自己說「查無相關新聞」時，不要把那句話當成解釋顯示給使用者
+const __dmNoContent=/無明確相關新聞|無相關新聞|資訊不足|未提供|近期無/;
+const __DM_NO_NEWS='目前沒有重大公司消息，今天股價主要受市場交易情緒影響。';
+function __dmWhy(g){
+  const ai=g&&g.ai; if(!ai) return __DM_NO_NEWS;
+  const t=String(ai.why||ai.fact||'').trim();
+  return (!t||__dmNoContent.test(t)) ? __DM_NO_NEWS : t;
+}
+function __dmMeaning(g){
+  const ai=g&&g.ai; if(!ai) return '';
+  const t=String(ai.meaning||ai.inference||'').trim();
+  return (!t||__dmNoContent.test(t)) ? '' : t;
+}
+// 點一列進個股頁：市場不符就不給點（切換市場會 reload，體驗差），避免使用者點了沒反應
+function __dmClickable(sym){
+  const isTw=/^\d{4}$/.test(__codeOf(sym));
+  try{ return isTw===(getMarket()==='tw'); }catch(e){ return false; }
+}
+// 一檔股票的統一呈現：名稱＋代號＋今日漲跌 →「為什麼動」→「代表什麼」→ AI 判讀。
+//   評分刻意放在最後、字最小 —— 它不是買賣建議，不該是第一眼看到的東西（使用者明確要求）。
+function __dmStockBlock(g, extra){
+  const why=__dmWhy(g), mean=__dmMeaning(g), st=__stanceOf(g);
+  const can=__dmClickable(g.symbol);
+  const hi=(Array.isArray(g.alerts)?g.alerts:[]).filter(a=>a&&a.level==='high').map(a=>a.text);
+  return `<div class="dm-row${can?' dm-tap':''}" ${can?`onclick="__markDailyRead('${esc(g.symbol)}');doSearchFromDaily('${esc(g.symbol)}')"`:''}>
+    <div class="dm-head">
+      <span>${__nameLine(g.symbol,g.nameZh||g.name)}</span>
+      <span style="white-space:nowrap">${esc(__dmDayLabel(g))} ${__pctHtml(g.changePct)}</span>
+    </div>
+    ${hi.length?`<div class="dm-alert">⚡ ${esc(hi[0])}</div>`:''}
+    <div class="dm-why">📰 <b>今天為什麼動？</b><br>${esc(why)}</div>
+    ${mean?`<div class="dm-why">💡 <b>對投資人代表什麼？</b><br>${esc(mean)}</div>`:''}
+    <div class="dm-vd">AI判讀：<span style="color:${st.c}">${st.e} ${st.t}</span>${(st.note&&why===__DM_NO_NEWS)?`<span class="dm-sub">${esc(st.note)}</span>`:''}${g.score!=null?`<span class="dm-sub">綜合評分 ${g.score}/100</span>`:''}${extra||''}</div>
+  </div>`;
+}
+// 主題圖示：只是視覺標記，依主題名稱關鍵字對應；主題文字本身一律由當日實際資料產生，不是固定清單
+function __themeIcon(name){
+  const s=String(name||'');
+  if(/AI|人工智慧|半導體|晶片|IC/i.test(s)) return '🤖';
+  if(/記憶體|DRAM|NAND|儲存/.test(s)) return '💾';
+  if(/藥|生技|醫療|減重/.test(s)) return '💊';
+  if(/電力|能源|電網|綠能|太陽/.test(s)) return '⚡';
+  if(/金融|銀行|保險|升息|降息|利率/.test(s)) return '🏦';
+  if(/航運|海運|貨櫃|航空/.test(s)) return '🚢';
+  if(/車|電動車|汽車/.test(s)) return '🚗';
+  if(/房|營建|地產|水泥/.test(s)) return '🏠';
+  if(/消費|零售|食品|通路/.test(s)) return '🛒';
+  if(/關稅|匯率|經濟|通膨|景氣/.test(s)) return '🌏';
+  return '📌';
+}
+let __dmExpand={musts:false, alerts:false, events:false};
+function __dmToggle(k){ __dmExpand[k]=!__dmExpand[k]; try{ __dmRenderAll(); }catch(e){} }
 
 async function loadDailyMarket(){
-  if(__dailyState.loaded) { __renderDailyMine(); return; }   // 同一次開啟只抓一次
+  if(__dailyState.loaded) { __dmRenderAll(); return; }   // 同一次開啟只抓一次
   __dailyState.loaded=true;
   let d=null;
   try{ const r=await fetch('/data/daily/latest.json',{cache:'no-cache'}); if(r.ok) d=await r.json(); }catch(e){}
   __dailyState.data=d;
-  const boxS=document.getElementById('dailySummary');
-  const boxM=document.getElementById('dailyMusts');
-  const meta=document.getElementById('dailyMeta');
   if(!d){
-    if(boxM) boxM.innerHTML='<div class="note">今日資料尚未產生（每日排程於台灣時間早上 7:00 更新）。</div>';
-    if(boxS) boxS.innerHTML=''; return;
+    // ⚠️ 失敗時必須把其他區塊一併清空，否則會殘留上一次的「資料日期 …」頁尾，
+    //   使用者會誤以為今天的資料已經更新。
+    ['dailySummary','dailyMine','dailyThemes','dailyEvents','dailyWatch','dailyAlerts','dailyMeta']
+      .forEach(id=>{ const e=document.getElementById(id); if(e) e.innerHTML=''; });
+    const boxM=document.getElementById('dailyMusts');
+    if(boxM) boxM.innerHTML='<div class="note">今日資料暫時無法取得（每日排程於台灣時間早上 7:00 更新）。</div>';
+    const un=document.getElementById('dailyUnread'); if(un) un.textContent='';
+    return;
   }
-  // AI 今日市場總結（50~100 字）
-  if(boxS) boxS.innerHTML = d.summary
-    ? `<div style="margin-bottom:14px;padding:10px 12px;background:rgba(88,166,255,.09);border-left:3px solid var(--blue);border-radius:5px">
-         <b style="color:var(--blue)">🤖 AI 今日市場總結</b><br><span style="line-height:1.75">${esc(d.summary)}</span></div>` : '';
-  // 【Phase 2】重大異動：只顯示 level=high 者，避免變成雜訊（對應「重大事件才通知」的要求）
-  const boxA=document.getElementById('dailyAlerts');
-  if(boxA){
-    let mine=[];
-    try{ mine=getWatchlist().map(x=>String((x&&x.symbol)||x).replace(/\.(TW|TWO)$/i,'')); }catch(e){}
-    const al=(d.alerts||[]);
-    // 自己的自選股排前面（使用者最在意「我的股票有重大變化」）
-    al.sort((a,b)=>(mine.includes(b.symbol)?1:0)-(mine.includes(a.symbol)?1:0));
-    boxA.innerHTML = al.length ? `
-      <div style="margin:12px 0;padding:10px 12px;background:rgba(248,81,73,.10);border-left:3px solid var(--red);border-radius:5px">
-        <b style="color:var(--red)">⚡ 今日重大異動 ${al.length} 檔</b>${al.length>4?'<span style="font-size:11px;color:var(--text2)">（顯示前 4 檔）</span>':''}
-        ${al.slice(0,4).map(x=>`<div style="margin-top:6px;font-size:13px;line-height:1.7">
-          <b>${esc(x.name||x.symbol)}</b>${mine.includes(x.symbol)?' <span style="color:var(--blue);font-size:11px">你的自選股</span>':''}
-          ${__pctHtml(x.changePct)}<br>${x.items.map(i=>'• '+esc(i.text)).join('<br>')}
-        </div>`).join('')}
-      </div>` : '';
-  }
-  // 今日必看
-  const musts=d.musts||[];
-  if(boxM) boxM.innerHTML = musts.length ? `
-    <div style="font-weight:700;margin:6px 0 8px">🔥 今日必看 ${musts.length} 件</div>
-    ${musts.map((m,i)=>{
-      const read=__dailyRead().includes(m.symbol);
-      return `<div class="wl-row" style="display:block;padding:10px 0;border-bottom:1px solid var(--line);opacity:${read?'.62':'1'}"
-                   onclick="__markDailyRead('${esc(m.symbol)}');doSearchFromDaily('${esc(m.symbol)}')">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
-          <span><b>${i+1}. ${esc(m.name||m.symbol)}</b> <span style="color:var(--text2);font-size:12px">${esc(m.symbol)}</span></span>
-          <span>${__pctHtml(m.changePct)}</span>
-        </div>
-        <div style="margin-top:5px;font-size:13px;line-height:1.7">
-          <span style="color:var(--green)">已確認事實</span>：${esc(m.fact||'')}<br>
-          <span style="color:var(--text2)">AI 判讀</span>：${esc(m.inference||'')}
-        </div>
-        <div style="margin-top:4px;font-size:12px;color:var(--text2)">
-          影響程度 <span style="color:var(--blue)">${__stars(m.importance)}</span>${read?' ｜ 已看過 ✓':''}
-        </div>
-      </div>`;
-    }).join('')}` : '<div class="note">今日沒有偵測到值得特別注意的變化。</div>';
-  // 【Phase 3】本週重要事件
-  const boxE=document.getElementById('dailyEvents');
-  if(boxE){
-    const ev=d.events||[];
-    let mine=[]; try{ mine=getWatchlist().map(x=>String((x&&x.symbol)||x).replace(/\.(TW|TWO)$/i,'')); }catch(e){}
-    const byDate={};
-    ev.forEach(e=>{ (byDate[e.date]=byDate[e.date]||[]).push(e); });
-    const wd=['日','一','二','三','四','五','六'];
-    boxE.innerHTML = ev.length ? `
-      <div style="font-weight:700;margin:16px 0 8px">🗓️ 本週重要事件</div>
-      ${Object.keys(byDate).sort().map(dt=>{
-        const dd=new Date(dt+'T00:00:00');
-        return `<div style="padding:7px 0;border-bottom:1px solid var(--line)">
-          <div style="font-size:12px;color:var(--text2)">${esc(dt)}（週${wd[dd.getDay()]||''}）</div>
-          ${byDate[dt].map(e=>{
-            const isMine=e.symbol&&mine.includes(e.symbol);
-            return `<div style="font-size:13px;line-height:1.75;margin-top:2px">
-              ${isMine?'<span style="color:var(--blue);font-size:11px">你的自選股 </span>':''}${esc(e.title)}
-              <span style="font-size:11px;color:${e.kind==='confirmed'?'var(--green)':'var(--text2)'}">
-                ${e.kind==='confirmed'?'官方公告':'依慣例推算'}</span>
-            </div>`;
-          }).join('')}
-        </div>`;
-      }).join('')}
-      <div style="font-size:11px;color:var(--text2);margin-top:6px">
-        「官方公告」為公司或主管機關已公布的確定日期；「依慣例推算」是依長期固定的發布規律估算，非官方公告，實際日期以官方為準。
-      </div>` : '';
-  }
-  if(meta) meta.textContent = `資料日期 ${d.date||''}｜由每日排程產生，所有使用者共用同一份分析`;
-  __renderDailyUnread();
-  __renderDailyMine();
+  __dmRenderAll();
 }
 
-// 我的股票今日變化：讀使用者自選股（localStorage），對每檔取排程算好的評分
+// 整頁渲染。資訊架構＝使用者每天回訪的閱讀順序：
+//   今日總結 → 今天最值得注意 → 我的股票 → 市場主題 → 接下來的事件 → 今天要注意什麼
+// ⚠️ 每一區塊「沒有資料就整塊不顯示」，絕不為了版面完整而編內容。
+function __dmRenderAll(){
+  const d=__dailyState.data; if(!d) return;
+  const $=id=>document.getElementById(id);
+  let mine=[]; try{ mine=getWatchlist().map(x=>__codeOf((x&&x.symbol)||x)); }catch(e){}
+
+  // ① AI 今日市場總結（10 秒看懂今天發生什麼）
+  const boxS=$('dailySummary');
+  if(boxS) boxS.innerHTML = d.summary
+    ? `<div class="dm-sum"><b>🤖 今天市場一句話</b><br><span>${esc(d.summary)}</span></div>` : '';
+
+  // ② 🔥 今天最值得注意的事情（預設 3 則，其餘收合）
+  const boxM=$('dailyMusts');
+  const musts=(Array.isArray(d.musts)?d.musts:[]).map(m=>({
+    symbol:m.symbol, name:m.name, nameZh:m.nameZh, changePct:m.changePct, score:m.score,
+    ai:{ why:m.why, fact:m.fact, meaning:m.meaning, inference:m.inference,
+         stance:m.stance, newsScore:m.newsScore, importance:m.importance }
+  }));
+  if(boxM){
+    if(!musts.length){
+      boxM.innerHTML='<div class="dm-sec">🔥 今天最值得注意的事情</div><div class="note">今天沒有偵測到需要特別注意的變化。</div>';
+    }else{
+      // 目前所在市場（台股／美股）的股票排前面：台股使用者不該第一眼看到美國小型股。
+      //   只調整順序，一筆都不刪，展開後仍看得到全部。
+      musts.sort((a,b)=>(__dmClickable(a.symbol)?0:1)-(__dmClickable(b.symbol)?0:1));
+      const show=__dmExpand.musts?musts:musts.slice(0,3);
+      boxM.innerHTML=`<div class="dm-sec">🔥 今天最值得注意的事情</div>`
+        + show.map(m=>__dmStockBlock(m, __dailyRead().includes(m.symbol)?'<span class="dm-sub">已看過 ✓</span>':'')).join('')
+        + (musts.length>3?`<span class="dm-more" onclick="__dmToggle('musts')">${__dmExpand.musts?'收合':'看其餘 '+(musts.length-3)+' 則'} ▾</span>`:'');
+    }
+  }
+
+  // ③ 📊 我的股票今日變化（讀使用者自選股，資料為排程已算好的靜態檔）
+  __renderDailyMine();
+
+  // ④ 🔥 今天市場最重要（主題由當日實際新聞歸納，沒素材就整塊不出現）
+  const boxT=$('dailyThemes');
+  if(boxT){
+    const th=(Array.isArray(d.themes)?d.themes:[]).filter(t=>t&&(t.name||t.title));
+    boxT.innerHTML = th.length ? `<div class="dm-sec">🔥 今天市場最重要</div>`
+      + th.slice(0,5).map(t=>{
+          const nm=t.name||t.title;
+          return `<div class="dm-row"><div class="dm-nm">${__themeIcon(nm)} ${esc(nm)}</div>
+            ${t.why?`<div class="dm-why">${esc(t.why)}</div>`:''}</div>`;
+        }).join('') : '';
+  }
+
+  // ⑤ 📅 接下來重要事件（自選股優先；今天／明天用白話標示）
+  const boxE=$('dailyEvents');
+  if(boxE){
+    const today=new Date(); today.setHours(0,0,0,0);
+    const dayLabel=dt=>{
+      const dd=new Date(dt+'T00:00:00'); const diff=Math.round((dd-today)/86400000);
+      if(diff===0) return '今天'; if(diff===1) return '明天';
+      const wd=['日','一','二','三','四','五','六'];
+      return `${dd.getMonth()+1}月${dd.getDate()}日（週${wd[dd.getDay()]}）`;
+    };
+    // 只看未來 5 天，自選股排最前面；上限 8 筆，避免整頁被法說會清單洗版
+    // ⚠️ 依目前市場過濾「個股類」事件：實測在美股模式下，這裡整排都是台泥／東元／中華電
+    //   等台股法說會，對美股使用者完全不相關而且點不進去。
+    //   總體類事件（無個股代碼，如美國經濟數據、台股月營收公告期限）兩個市場都保留。
+    const isTwMkt=(()=>{ try{ return getMarket()==='tw'; }catch(e){ return false; } })();
+    const ev=(Array.isArray(d.events)?d.events:[]).filter(e=>{
+      if(!e||!e.date) return false;
+      const dd=new Date(e.date+'T00:00:00'); const diff=Math.round((dd-today)/86400000);
+      if(!(diff>=0 && diff<=5)) return false;
+      if(e.symbol) return /^\d{4}$/.test(__codeOf(e.symbol))===isTwMkt;
+      return true;
+    });
+    ev.sort((a,b)=>{
+      const ma=(a.symbol&&mine.includes(a.symbol))?0:1, mb=(b.symbol&&mine.includes(b.symbol))?0:1;
+      return (ma-mb) || a.date.localeCompare(b.date);
+    });
+    const show=__dmExpand.events?ev:ev.slice(0,8);
+    const byDate={}; show.forEach(e=>{ (byDate[e.date]=byDate[e.date]||[]).push(e); });
+    boxE.innerHTML = show.length ? `<div class="dm-sec">📅 接下來重要事件</div>`
+      + Object.keys(byDate).sort().map(dt=>`
+        <div class="dm-ev">
+          <div class="dm-evd">${esc(dayLabel(dt))}</div>
+          ${byDate[dt].map(e=>{
+            const isMine=e.symbol&&mine.includes(e.symbol);
+            const can=e.symbol&&__dmClickable(e.symbol);
+            const nm=e.symbol?__dailyName(e.symbol,e.name||e.title):(e.title||'');
+            return `<div class="dm-evr${can?' dm-tap':''}" ${can?`onclick="doSearchFromDaily('${esc(e.symbol)}')"`:''}>
+              ${e.symbol?`<span class="dm-nm">${esc(nm)}</span><span class="dm-cd">${esc(e.symbol)}</span>`:`<span class="dm-nm">${esc(e.title||'')}</span>`}
+              <span class="dm-cat">${esc(e.category||'')}</span>
+              <span class="dm-kind" style="color:${e.kind==='confirmed'?'var(--green)':'var(--text2)'}">${e.kind==='confirmed'?'🟢 官方公告':'依慣例推算'}</span>
+              ${isMine?'<span class="dm-mine">你的自選股</span>':''}
+            </div>`;
+          }).join('')}
+        </div>`).join('')
+      + (ev.length>8?`<span class="dm-more" onclick="__dmToggle('events')">${__dmExpand.events?'收合':'看全部 '+ev.length+' 筆'} ▾</span>`:'')
+      + `<div class="dm-note" style="margin-top:6px">「官方公告」為公司或主管機關已公布的確定日期；「依慣例推算」是依長期固定的發布規律估算，非官方公告。</div>` : '';
+  }
+
+  // ⑥ 🎯 今天你應該注意什麼（最多 3 件，由當日資料產生；沒有就不顯示）
+  const boxW=$('dailyWatch');
+  if(boxW){
+    const wp=(Array.isArray(d.watchpoints)?d.watchpoints:[]).map(w=>typeof w==='string'?w:((w&&(w.text||w.title))||'')).filter(Boolean);
+    boxW.innerHTML = wp.length ? `<div class="dm-sec">🎯 今天你應該注意什麼</div>`
+      + `<div class="dm-row">${wp.slice(0,3).map((w,i)=>`<div class="dm-why" style="margin-top:${i?8:2}px">${['①','②','③'][i]} ${esc(w)}</div>`).join('')}</div>` : '';
+  }
+
+  // ⑦ 其他重大異動：⚠️ 原本是頂部的大紅框，實測 13 檔（且多為誤報）把核心內容整個擠到看不見。
+  //    自選股的異動已直接顯示在上方每一列裡，這裡只留一行收合摘要，需要才展開。
+  const boxA=$('dailyAlerts');
+  if(boxA){
+    const rest=(Array.isArray(d.alerts)?d.alerts:[]).filter(a=>a&&a.symbol&&Array.isArray(a.items)&&!mine.includes(a.symbol));
+    boxA.innerHTML = rest.length ? `
+      <span class="dm-more" onclick="__dmToggle('alerts')">另有 ${rest.length} 檔非自選股出現重大異動 ▾</span>
+      ${__dmExpand.alerts?rest.slice(0,10).map(x=>`<div class="dm-ev"><div class="dm-evr">
+        <span class="dm-nm">${esc(__dailyName(x.symbol,x.nameZh||x.name))}</span><span class="dm-cd">${esc(x.symbol)}</span>
+        ${__pctHtml(x.changePct)}<div class="dm-note">${x.items.map(i=>esc(i.text)).join('／')}</div>
+      </div></div>`).join(''):''}` : '';
+  }
+
+  const meta=$('dailyMeta');
+  if(meta){
+    const w=new Date().getDay();
+    const stale=(d.tradeDate&&d.tradeDate!==__dmToday())||((!d.tradeDate)&&(w===0||w===6));
+    meta.textContent=`資料日期 ${d.date||''}${stale?'（休市中，數字為最近交易日收盤）':''}｜由每日排程統一產生，所有使用者共用同一份分析`;
+  }
+  __renderDailyUnread();
+}
+
+// 我的股票今日變化：讀使用者自選股（localStorage），對每檔取排程算好的評分檔
+// ⚠️ 原本這裡顯示「基本面— 市場情緒→ 新聞— 技術面→」四個箭頭，對一般投資人沒有可行動的意義，
+//    已移除；那些面向的完整資料仍保留在個股頁的「📅 AI 每日更新」卡片裡，功能沒有消失。
 async function __renderDailyMine(){
   const box=document.getElementById('dailyMine'); if(!box) return;
   let list=[];
-  try{ list=getWatchlist().map(x=>String((x&&x.symbol)||x).replace(/\.(TW|TWO)$/i,'')).filter(Boolean).slice(0,12); }catch(e){}
-  if(!list.length){ box.innerHTML=''; return; }
+  try{ list=getWatchlist().map(x=>__codeOf((x&&x.symbol)||x)).filter(Boolean).slice(0,12); }catch(e){}
+  if(!list.length){ box.innerHTML='<div class="dm-sec">📊 我的股票今日變化</div><div class="note">尚未加入自選股，到「自選股」選單加入後，這裡會顯示你每一檔股票今天發生什麼事。</div>'; return; }
   const rows=await Promise.all(list.map(async code=>{
     try{ const r=await fetch(`/data/daily/scores/${encodeURIComponent(code)}.json`,{cache:'no-cache'}); if(r.ok) return await r.json(); }catch(e){}
     return null;
   }));
   const got=rows.filter(Boolean);
-  if(!got.length){ box.innerHTML=''; return; }
-  const arrow=(now,was)=>{ if(now==null) return '<span style="color:var(--text2)">—</span>';
-    if(was==null) return '<span style="color:var(--text2)">→</span>';
-    return now>was+2?'<span style="color:var(--green)">↑</span>':(now<was-2?'<span style="color:var(--red)">↓</span>':'<span style="color:var(--text2)">→</span>'); };
-  box.innerHTML=`
-    <div style="font-weight:700;margin:14px 0 8px">📊 我的股票今日變化</div>
-    ${got.map(g=>{
-      const p=g.prev||{}; const ps=p.scores||{};
-      const diff=(g.score!=null&&p.score!=null)?(g.score-p.score):null;
-      return `<div style="padding:9px 0;border-bottom:1px solid var(--line)">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
-          <b>${esc(g.name||g.symbol)}</b>
-          <span>今日 ${__pctHtml(g.changePct)}</span>
-        </div>
-        <div style="margin-top:4px;font-size:12.5px;color:var(--text2)">
-          基本面 ${arrow(g.scores?.fundamental,ps.fundamental)}　市場情緒 ${arrow(g.scores?.sentiment,ps.sentiment)}　新聞 ${arrow(g.scores?.news,ps.news)}　技術面 ${arrow(g.scores?.technical,ps.technical)}
-        </div>
-        ${g.score!=null?`<div style="margin-top:4px;font-size:12.5px">
-          AI 評分 <b style="color:var(--blue)">${g.score}</b>/100
-          ${diff!=null?`<span style="color:${diff>0?'var(--green)':(diff<0?'var(--red)':'var(--text2)')}">（昨天 ${p.score}，${diff>0?'+':''}${diff}）</span>`:'<span style="color:var(--text2)">（首日，尚無昨日對比）</span>'}
-        </div>`:''}
-        ${g.ai&&g.ai.inference?`<div style="margin-top:4px;font-size:12.5px;line-height:1.65"><span style="color:var(--text2)">AI 今日結論</span>：${esc(g.ai.inference)}</div>`:''}
-      </div>`;
-    }).join('')}`;
+  const missing=list.length-got.length;
+  box.innerHTML=`<div class="dm-sec">📊 我的股票今日變化</div>`
+    + (got.length?got.map(g=>__dmStockBlock(g)).join(''):'')
+    + (missing?`<div class="dm-note" style="padding:8px 0">另有 ${missing} 檔自選股今日尚無分析資料（每日排程涵蓋範圍有限，不會為了湊數而顯示未經查證的內容）。</div>`:'');
 }
 // 【Phase 3】站內通知：在「今日市場」按鈕上顯示紅點與未讀數。
 //   ⚠️ 這裡刻意「只做站內提示」，不做瀏覽器推播 —— 推播必須註冊 Service Worker，
@@ -2793,7 +2973,10 @@ setTimeout(()=>{ try{ initDailyBadge(); }catch(e){} }, 3500);
 async function renderDailyStockCard(){
   const res=document.getElementById('results'); if(!res) return;
   document.getElementById('dailyStockCard')?.remove();   // 重複渲染時先移除舊的，避免堆疊
-  const sym=window.__symbolForLinks; if(!sym) return;
+  // 每日評分是「以股價計算」的，必須讀目前所在市場那一檔的資料（台股看 2330、美股看 TSM），
+  //   不能沿用指向美股的 __symbolForLinks，否則台股頁會顯示 ADR 的評分與本益比（自相矛盾）。
+  const sym=((typeof getMarket==='function'&&getMarket()==='tw')&&window.__mktCode)?window.__mktCode:window.__symbolForLinks;
+  if(!sym) return;
   let g=null;
   try{ const r=await fetch(`/data/daily/scores/${encodeURIComponent(sym)}.json`,{cache:'no-cache'}); if(r.ok) g=await r.json(); }catch(e){}
   if(!g) return;   // 沒有當日資料就什麼都不加，維持原本頁面
@@ -2809,7 +2992,7 @@ async function renderDailyStockCard(){
   const diff=(g.score!=null&&p.score!=null)?(g.score-p.score):null;
   const alertHtml=(g.alerts||[]).length
     ? `<div style="margin:10px 0;padding:9px 10px;background:rgba(248,81,73,.10);border-left:3px solid var(--red);border-radius:5px">
-         <b style="color:var(--red)">⚡ 今日重大異動</b><br>${g.alerts.map(a=>'• '+esc(a.text)).join('<br>')}</div>` : '';
+         <b style="color:var(--red)">⚡ ${esc(__dmDayLabel(g))}重大異動</b><br>${g.alerts.map(a=>'• '+esc(a.text)).join('<br>')}</div>` : '';
   const card=document.createElement('div');
   card.className='card'; card.id='dailyStockCard'; card.style.marginBottom='20px';
   card.innerHTML=`
@@ -2821,7 +3004,7 @@ async function renderDailyStockCard(){
       ${cmp(cs.technical,ps.technical,'技術面')}　${cmp(cs.fundamental,ps.fundamental,'基本面')}　${cmp(cs.valuation,ps.valuation,'估值')}
     </div>
     ${g.score!=null?`<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line)">
-      <b>AI 今日評分</b>　<span style="font-size:22px;font-weight:800;color:var(--blue)">${g.score}</span><span style="color:var(--text2)"> / 100</span>
+      <b>AI 評分（${esc(__dmDayLabel(g))}）</b>　<span style="font-size:22px;font-weight:800;color:var(--blue)">${g.score}</span><span style="color:var(--text2)"> / 100</span>
       ${diff!=null?`<span style="margin-left:8px;color:${diff>0?'var(--green)':(diff<0?'var(--red)':'var(--text2)')}">昨天 ${p.score} → 今天 ${g.score}（${diff>0?'+':''}${diff}）</span>`
         :'<span style="margin-left:8px;color:var(--text2)">首日記錄，明天起會有對比</span>'}
       <div style="margin-top:8px;font-size:12.5px;color:var(--text2);line-height:1.9">
@@ -4433,11 +4616,20 @@ async function fillNews(symbol, gen){
     // 改用 Yahoo finance/search：回傳新聞含縮圖(thumbnail.resolutions)，可在每則新聞右側顯示畫面
     const ns=await fetchJson(`https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(symbol)}&newsCount=15&quotesCount=0&lang=en-US&region=US`);
     if(gen!=null && gen!==SEARCH_GEN) return false;
-    const items=(ns?.news||[]).map(n=>{
+    // ⚠️ Yahoo 的 search 會夾帶同類股但與本公司無關的新聞。實測台積電頁曾出現
+    //   「摩根士丹利揭示 Cisco 的隱形優勢」「美銀說 Amkor 是被低估的受益者」「忘記 SMH 基金…」，
+    //   使用者會誤以為那是台積電的消息。改用 Yahoo 自己回傳的 relatedTickers 過濾。
+    //   ⚠️ 但不能過濾到一則不剩——若過濾後全空，退回未過濾的結果（有總比沒有好），
+    //   這與每日排程腳本 fetchNews() 的處理原則一致。
+    const __want=String(symbol||'').toUpperCase();
+    const __raw=(ns?.news||[]).map(n=>{
       const res=(n.thumbnail&&n.thumbnail.resolutions)||[];
       let img=''; if(res.length){ const pick=res.find(r=>r.tag==='140x140')||res[res.length-1]; img=(pick&&pick.url)||''; }
-      return {title:(n.title||'').trim(), link:(n.link||'').trim(), pub:n.providerPublishTime, img};
-    }).filter(x=>x.title && x.link).slice(0,10);
+      return {title:(n.title||'').trim(), link:(n.link||'').trim(), pub:n.providerPublishTime, img,
+              rel:(Array.isArray(n.relatedTickers)?n.relatedTickers:[]).map(t=>String(t).toUpperCase())};
+    }).filter(x=>x.title && x.link);
+    const __rel=__raw.filter(x=>x.rel.includes(__want));
+    const items=(__rel.length?__rel:__raw).slice(0,10);
     window.__newsData=items;
     if(!items.length){ el.innerHTML='<div class="note">目前沒有相關新聞</div>'; return true; }
     el.innerHTML=items.map(it=>newsItemHtml(it.title,it.link,it.pub,it.img)).join('');

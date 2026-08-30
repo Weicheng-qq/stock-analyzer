@@ -111,9 +111,18 @@ async function fetchQuote(code) {
   const ma60 = closes.length >= 60 ? closes.slice(-60).reduce((a, b) => a + b, 0) / 60 : null;
   const avgVol = vols.length >= 20 ? vols.slice(-20).reduce((a, b) => a + b, 0) / 20 : null;
   const todayVol = vols.length ? vols[vols.length - 1] : null;
+  // ⚠️⚠️ 這筆漲跌到底屬於哪一個「交易日」，必須跟著資料一起存。
+  //   週末與休市日排程照跑，拿到的是上一個交易日的收盤價；若前端一律寫「今日」，
+  //   使用者星期日打開會以為今天市場有這些變動（實測 2026-08-30 週日就是這個狀況）。
+  //   regularMarketTime 是 UTC 秒數，要加上該交易所的 gmtoffset 才是當地交易日。
+  let tradeDate = null;
+  try {
+    const t = num(m1.regularMarketTime), off = num(m1.gmtoffset) ?? 0;
+    if (t) tradeDate = new Date((t + off) * 1000).toISOString().slice(0, 10);
+  } catch (e) {}
   return {
     name: m1.shortName || m1.longName || m.shortName || code,
-    price, prev, changePct: (price - prev) / prev * 100,
+    price, prev, changePct: (price - prev) / prev * 100, tradeDate,
     ma20, ma60, avgVol, todayVol,
     volRatio: (avgVol && todayVol) ? todayVol / avgVol : null,
     currency: m.currency || ''
@@ -140,6 +149,9 @@ function newsQuerySymbols(code) {
 // ⚠️ 但 RSS 會混入大盤與其他公司的新聞（實測 2330 的 RSS 裡出現「精材」「輝達」的報導），
 //   因此必須用「公司中文名出現在標題裡」過濾，否則又會餵給 AI 不相關的素材。
 const TW_ALL = readConst('TW_ALL') || {};
+const TW_NAMES = readConst('TW_NAMES') || {};
+// 台股中文名：TW_ALL 是全上市櫃對照表、TW_NAMES 另含 ETF。查不到就回 null，不硬湊。
+const zhName = c => TW_ALL[c] || TW_NAMES[c] || null;
 async function fetchNewsTw(code, limit = 6) {
   const name = TW_ALL[code];
   if (!name) return [];
@@ -265,11 +277,20 @@ function detectAlerts(q, earnings, ai, news) {
 }
 
 // ── AI：只負責「新聞判讀」這一項，並嚴格區分事實與推論 ──
+// ⚠️⚠️ 提示詞在 2026-08-30 重寫過一次。原因：使用者實測後回報
+//   「這種內容一般投資人不容易理解，也不會產生每天回來看的動機」。
+//   舊版產出的是財經報告體（實際例子：「此項設備取得可能顯示公司擴充產能或升級技術，
+//   對未來營運有正面期待，但同時亦代表短期資金支出」）—— 又長又抽象。
+//   新版強制拆成兩個一般人看得懂的問題：「今天為什麼動？」「對投資人代表什麼？」，
+//   各限 40 字內、白話、禁止堆疊模糊措辭。
+//   ⚠️ 欄位仍同時輸出舊的 fact/inference（個股頁「AI 每日更新」卡片在用），
+//   值等同 why/meaning，確保既有畫面不會因為改欄位而壞掉。
 async function aiNewsRead(code, name, q, news) {
   if (!news.length) return null;
   const list = news.map((n, i) => `${i + 1}. 「${n.title}」（來源：${n.publisher || '未標示'}）`).join('\n');
   const dir = q.changePct >= 0 ? '上漲' : '下跌';
-  const prompt = `你是專業的市場分析師。以下是 ${name}（代碼 ${code}）近三日的新聞標題，以及今日股價變化。
+  const prompt = `你是幫一般散戶看盤的分析師，說話要像跟朋友解釋，不要寫成研究報告。
+以下是 ${name}（代碼 ${code}）近三日的新聞標題，以及今日股價變化。
 
 【今日股價】${dir} ${Math.abs(q.changePct).toFixed(2)}%
 【近三日新聞標題（原文，未經改寫）】
@@ -277,25 +298,35 @@ ${list}
 
 【鐵則 — 務必嚴格遵守】
 1. 你只能根據上方新聞標題判讀，嚴禁引用標題以外的任何資訊，嚴禁用訓練記憶補充。
-2. 必須區分「已確認事實」與「推論」：
-   - fact 欄位：只能寫新聞標題明確講到的事情，不可加油添醋。
-   - inference 欄位：你的判讀，必須使用「市場預期」「可能」「有所提高」這類措辭，
-     嚴禁寫成「一定會」「必然」這種確定性斷言。
-3. 一律使用繁體中文。若新聞標題與這家公司無關或資訊不足，newsScore 給 50 並在 fact 寫「近期無明確相關新聞」。
-4. 不得預測股價、不得給目標價。
+2. 如果上面的標題「無法解釋今天的股價變化」，why 就直接寫「今日無明確公司消息」，
+   不要硬把不相關的新聞說成原因。寧可說不知道，也不要猜。
+3. 一律使用繁體中文白話文。禁止使用「綜上所述」「值得留意的是」這類報告用語。
+4. 不得預測股價、不得給目標價、不得建議買賣。
+
+【寫法要求】
+- why（今天為什麼動）：一句話、40 字內，講「發生了什麼事」，要具體，
+  例如「拿下某客戶訂單」「法說會下修全年展望」，不要空泛地說「受市場關注」。
+- meaning（對投資人代表什麼）：一句話、40 字內，講這件事為什麼重要。
+  ⚠️「可能」「或許」「有機會」這類字最多出現一次，不可連續堆疊。
+  真的無法判斷就回傳空字串，不要硬寫。
 
 只回傳 JSON，不要任何其他文字、不要 markdown：
 {
- "fact":"新聞標題明確講到的事情，1句話，20-40字",
- "inference":"這件事為什麼重要／對公司的可能影響，1-2句，須用推測性措辭",
+ "why":"今天為什麼動，一句話 40 字內",
+ "meaning":"對投資人代表什麼，一句話 40 字內；無法判斷就給空字串",
+ "stance":"pos 或 neu 或 neg —— 這則消息對這家公司偏正面／中性／偏負面",
  "newsScore":"0-100 的整數，代表近期新聞面偏正面(>50)或偏負面(<50)，中性給50",
  "importance":"1-5 的整數，代表這則資訊對投資人的重要程度"
 }`;
   const r = await callGemini(prompt);
   if (!r) return null;
+  const why = String(r.why || r.fact || '').slice(0, 120);
+  const meaning = String(r.meaning || r.inference || '').slice(0, 120);
+  const st = String(r.stance || '').toLowerCase().match(/pos|neg|neu/);
   return {
-    fact: String(r.fact || '').slice(0, 120),
-    inference: String(r.inference || '').slice(0, 200),
+    why, meaning,
+    fact: why, inference: meaning,          // 舊欄位名保留，個股頁沿用
+    stance: st ? st[0] : null,
     newsScore: clamp(Math.round(num(r.newsScore) ?? 50), 0, 100),
     importance: clamp(Math.round(num(r.importance) ?? 3), 1, 5)
   };
@@ -331,7 +362,7 @@ function weekEvents(twCalls) {
     if (!m) continue;
     const d = new Date(Number(m[1]) + 1911, Number(m[2]) - 1, Number(m[3]));
     if (!inRange(d)) continue;
-    out.push({ date: fmt(d), kind: 'confirmed', category: '法說會', symbol: code, title: `${info.name || code} 法人說明會`, note: (info.summary || '').slice(0, 60) });
+    out.push({ date: fmt(d), kind: 'confirmed', category: '法說會', symbol: code, name: info.name || zhName(code) || code, title: `${info.name || code} 法人說明會`, note: (info.summary || '').slice(0, 60) });
   }
 
   // ② 台股月營收：證交法規定每月 10 日前公告上月營收 —— 法定期限，屬確定
@@ -438,7 +469,7 @@ for (const r of rows) {
   let prev = null;
   try { const old = JSON.parse(fs.readFileSync(f, 'utf8')); if (old.date !== today) prev = { date: old.date, score: old.score, scores: old.scores }; else prev = old.prev || null; } catch (e) {}
   fs.writeFileSync(f, JSON.stringify({
-    symbol: r.code, name: r.q.name, date: today,
+    symbol: r.code, name: r.q.name, nameZh: zhName(r.code), date: today, tradeDate: r.q.tradeDate || null,
     price: r.q.price, changePct: Number(r.q.changePct.toFixed(2)),
     volRatio: r.q.volRatio ? Number(r.q.volRatio.toFixed(2)) : null,
     score, scores: s,
@@ -458,10 +489,11 @@ for (const r of rows) {
 const NO_CONTENT = /無明確相關新聞|無相關新聞|資訊不足|未提供/;
 const musts = rows.filter(r => r.ai && !NO_CONTENT.test(r.ai.fact || ''))
   .map(r => ({
-    symbol: r.code, name: r.q.name,
+    symbol: r.code, name: r.q.name, nameZh: zhName(r.code), tradeDate: r.q.tradeDate || null,
     changePct: Number(r.q.changePct.toFixed(2)),
     price: r.q.price, currency: r.q.currency,
     fact: r.ai.fact, inference: r.ai.inference,
+    why: r.ai.why, meaning: r.ai.meaning, stance: r.ai.stance, newsScore: r.ai.newsScore,
     importance: r.ai.importance,
     score: overall({ ...r.base, news: r.ai.newsScore }),
     link: (r.news || [])[0]?.link || null
@@ -469,24 +501,56 @@ const musts = rows.filter(r => r.ai && !NO_CONTENT.test(r.ai.fact || ''))
   .sort((a, b) => (b.importance - a.importance) || (Math.abs(b.changePct) - Math.abs(a.changePct)))
   .slice(0, 5);
 
-// 7) 市場總結（50~100 字，只根據上面已取得的事實）
-let summary = null;
+// 7) 今日市場總結 ＋ 市場焦點主題 ＋ 今天要注意什麼
+// ⚠️⚠️ 成本：這三樣是「同一次 AI 呼叫」一起產出的，呼叫次數與改版前完全相同（1 次），
+//   沒有新增任何 API、沒有新增任何費用。素材只用上面已經查證過的事實，不另外抓資料。
+// ⚠️ 主題與注意事項若無法從當日素材歸納，一律回傳空陣列 —— 前端會整塊不顯示，
+//   絕不為了「每天都要有內容」而讓 AI 憑空生出固定主題（使用者明確要求）。
+let summary = null, themes = [], watchpoints = [];
 if (!DRY_RUN && !shouldStop() && musts.length) {
-  const brief = musts.map(m => `${m.name}(${m.symbol}) ${m.changePct >= 0 ? '+' : ''}${m.changePct}%：${m.fact}`).join('\n');
-  const r = await callGemini(`以下是今日市場中變化最顯著的幾檔股票與其新聞重點（皆為已取得的事實，不可添加其他資訊）：
-${brief}
+  // 素材＝今天所有取得 AI 判讀且有實質內容的個股（不只前 5 名，主題才歸納得出來）
+  const material = rows.filter(r => r.ai && !NO_CONTENT.test(r.ai.fact || '')).slice(0, 12)
+    .map(r => `${zhName(r.code) || r.q.name}(${r.code}) ${r.q.changePct >= 0 ? '+' : ''}${r.q.changePct.toFixed(2)}%：${r.ai.fact}`)
+    .join('\n');
+  const r = await callGemini(`以下是今日市場中，各檔股票「已查證的新聞重點」與當日漲跌（皆為已取得的事實，不可添加其他資訊）：
+${material}
 
-請寫一段「今日市場總結」，要求：
-1. **50～100 字**，讓讀者 10 秒內理解今天市場發生什麼事，不要寫成長篇文章。
-2. 只能根據上方內容歸納，嚴禁引用上方沒有的資訊、嚴禁預測後市。
-3. 繁體中文。
-只回傳 JSON：{"summary":"..."}`);
-  if (r && r.summary) summary = String(r.summary).slice(0, 220);
-  else console.warn('⚠️ 市場總結未產生（三層 AI 都沒回傳有效結果）');
+請產出三樣東西，全部用繁體中文白話文，讓一般投資人 1 分鐘看懂。不要寫成研究報告。
+
+1. summary：今日市場總結，50～80 字。講「今天市場發生什麼」，不要預測後市、不要建議買賣。
+
+2. themes：今天市場真正的焦點主題，3～5 個。
+   - name：2～8 字的主題名（例如「AI／半導體」「記憶體」「電力」）。
+   - why：一句話、30 字內，說明「今天為什麼值得注意」，要講出原因，
+     不可只寫「受到關注」「市場熱門」這種等於沒說的話。
+   - ⚠️ 主題必須是從上方內容真正歸納出來的。上方沒出現的主題一律不准寫。
+     若上方素材不足以歸納出任何主題，themes 直接回傳空陣列 []。
+
+3. watchpoints：接下來要觀察什麼，最多 3 條，每條 25 字內。
+   - 必須直接對應上方出現過的事實（例如某公司財測、某族群的訂單消息）。
+   - ⚠️ 不得寫成買賣建議、不得預測漲跌、不得出現目標價。
+     無法從上方內容導出就回傳空陣列 []。
+
+只回傳 JSON，不要 markdown：
+{"summary":"...","themes":[{"name":"...","why":"..."}],"watchpoints":["...","..."]}`);
+  if (r) {
+    if (r.summary) summary = String(r.summary).slice(0, 220);
+    if (Array.isArray(r.themes)) {
+      themes = r.themes
+        .filter(t => t && t.name)
+        .map(t => ({ name: String(t.name).slice(0, 12), why: String(t.why || '').slice(0, 60) }))
+        .slice(0, 5);
+    }
+    if (Array.isArray(r.watchpoints)) {
+      watchpoints = r.watchpoints
+        .map(w => String(typeof w === 'string' ? w : (w && (w.text || w.title)) || '').trim())
+        .filter(Boolean).map(w => w.slice(0, 50)).slice(0, 3);
+    }
+  } else console.warn('⚠️ 市場總結／主題未產生（三層 AI 都沒回傳有效結果）');
 }
 
 // 重大異動彙總：只收 level=high 者，避免變成雜訊（使用者要求「重大事件才通知」）
-const alerts = rows.map(r => ({ symbol: r.code, name: r.q.name, changePct: Number(r.q.changePct.toFixed(2)),
+const alerts = rows.map(r => ({ symbol: r.code, name: r.q.name, nameZh: zhName(r.code), changePct: Number(r.q.changePct.toFixed(2)),
     items: detectAlerts(r.q, r.earn, r.ai, r.news).filter(a => a.level === 'high') }))
   .filter(x => x.items.length)
   .sort((a, b) => b.items.length - a.items.length || Math.abs(b.changePct) - Math.abs(a.changePct));
@@ -499,12 +563,18 @@ try {
   console.log(`  本週重要事件 ${events.length} 筆`);
 } catch (e) { console.warn('⚠️ 本週事件產生失敗（不影響其他功能）'); }
 
+// 整份資料的交易日＝各檔裡最新的那一個（同一天內各市場可能不同，取最新者代表「這份資料的最新交易日」）
+const tradeDate = rows.map(r => r.q.tradeDate).filter(Boolean).sort().pop() || null;
+
 fs.writeFileSync(path.join(DAILY, 'latest.json'), JSON.stringify({
   date: today,
+  tradeDate,
   alerts,
   events,
   generatedAt: new Date().toISOString(),
   summary,
+  themes,
+  watchpoints,
   musts,
   poolSize: rows.length,
   aiUsed,
