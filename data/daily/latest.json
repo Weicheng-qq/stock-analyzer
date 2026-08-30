@@ -2,35 +2,6 @@
  "date": "2026-08-30",
  "alerts": [
   {
-   "symbol": "3664",
-   "name": "ARRAY INC",
-   "changePct": 9.98,
-   "items": [
-    {
-     "type": "price",
-     "level": "high",
-     "text": "股價大漲 9.98%"
-    },
-    {
-     "type": "volume",
-     "level": "high",
-     "text": "成交量放大至近月均量的 2.6 倍"
-    }
-   ]
-  },
-  {
-   "symbol": "8358",
-   "name": "CO-TECH DEVELOPMENT CORP",
-   "changePct": 9.92,
-   "items": [
-    {
-     "type": "price",
-     "level": "high",
-     "text": "股價大漲 9.92%"
-    }
-   ]
-  },
-  {
    "symbol": "6415",
    "name": "SILERGY CORP",
    "changePct": -2.66,
@@ -67,18 +38,6 @@
    ]
   },
   {
-   "symbol": "4188",
-   "name": "AMCAD BIOMED CORPORATION",
-   "changePct": 0.62,
-   "items": [
-    {
-     "type": "volume",
-     "level": "high",
-     "text": "成交量放大至近月均量的 9.1 倍"
-    }
-   ]
-  },
-  {
    "symbol": "5904",
    "name": "POYA INTERNATIONAL CO LTD",
    "changePct": 0.13,
@@ -92,6 +51,62 @@
   }
  ],
  "events": [
+  {
+   "date": "2026-08-31",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "1101",
+   "title": "台泥 法人說明會",
+   "note": "本公司受邀參加富邦證券舉辦之法人座談會，\r\n會中說明本公司營運簡介、ESG、公司未來展望"
+  },
+  {
+   "date": "2026-08-31",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "1504",
+   "title": "東元 法人說明會",
+   "note": "本公司受邀參加Goldman Sachs舉辦之 Asia Leaders Conference 2026，並就本公司營運"
+  },
+  {
+   "date": "2026-08-31",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "2412",
+   "title": "中華電 法人說明會",
+   "note": "會議由Goldman Sachs主辦"
+  },
+  {
+   "date": "2026-08-31",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "2881",
+   "title": "富邦金 法人說明會",
+   "note": "討論富邦金控財務及業務相關資訊"
+  },
+  {
+   "date": "2026-08-31",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "2884",
+   "title": "玉山金 法人說明會",
+   "note": "2026年第2季財業務資訊"
+  },
+  {
+   "date": "2026-08-31",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "2885",
+   "title": "元大金 法人說明會",
+   "note": "公告本公司擬於民國115年8月31日至9月1日受邀參加高盛證券於香港舉行之投資人會議—Goldman Sachs Asi"
+  },
+  {
+   "date": "2026-08-31",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "2890",
+   "title": "永豐金 法人說明會",
+   "note": "永豐金控將於115年8月31日至9月9日赴紐約及倫敦會晤當地投資機構，說明115年第二季財務業務相關資訊"
+  },
   {
    "date": "2026-09-01",
    "kind": "scheduled",
@@ -125,10 +140,23 @@
    "note": "依慣例為每月第一個週五，非官方公告日期"
   }
  ],
- "generatedAt": "2026-08-30T04:21:53.367Z",
- "summary": null,
- "musts": [],
- "poolSize": 31,
- "aiUsed": 0,
+ "generatedAt": "2026-08-30T06:35:24.552Z",
+ "summary": "今日市場中，唯一顯著變化的股票是 NVIDIA（NVDA），股價下跌 4.57%。公司近期無明確相關新聞，其他股票未見顯著波動。",
+ "musts": [
+  {
+   "symbol": "NVDA",
+   "name": "NVIDIA Corporation",
+   "changePct": -4.57,
+   "price": 217.55,
+   "currency": "USD",
+   "fact": "近期無明確相關新聞",
+   "inference": "由於目前資訊僅提及該公司為熱門交易個股而缺乏具體營運數據，市場可能暫時無法評估其對未來營運的實質影響。",
+   "importance": 1,
+   "score": 51,
+   "link": "https://finance.yahoo.com/m/a6805278-1f4f-3200-89df-cc8032233a23/are-oklo-and-nuscale-power.html"
+  }
+ ],
+ "poolSize": 12,
+ "aiUsed": 1,
  "note": "fact＝新聞標題明確講到的已確認事實；inference＝AI 推論，僅供參考，非確定性預測。"
 }
