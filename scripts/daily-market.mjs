@@ -145,8 +145,26 @@ async function fetchNews(code, limit = 6) {
   return [];   // 查無相關新聞：新聞面不給分，不硬湊
 }
 
+// ── 本益比（估值面向用）──
+// 沿用網站既有的 Yahoo fundamentals-timeseries 端點與 trailingPeRatio 欄位，
+//   不另外找來源，確保與個股頁顯示的本益比同源、不會出現兩處數字打架。
+async function fetchPe(code) {
+  const sym = yahooSym(code);
+  const now = Math.floor(Date.now() / 1000), p1 = now - 60 * 60 * 24 * 365 * 6;
+  const j = await getJson(`https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/${encodeURIComponent(sym)}?symbol=${encodeURIComponent(sym)}&type=trailingPeRatio&period1=${p1}&period2=${now}`);
+  const s = (j?.timeseries?.result || []).find(x => x.meta?.type?.[0] === 'trailingPeRatio');
+  const pts = (s?.trailingPeRatio || []).filter(p => p?.reportedValue?.raw != null)
+    .map(p => ({ d: p.asOfDate, v: p.reportedValue.raw }))
+    .sort((a, b) => a.d.localeCompare(b.d));
+  if (!pts.length) return null;
+  const cur = pts[pts.length - 1].v;
+  const vals = pts.map(p => p.v).filter(v => v > 0 && v < 500);   // 濾掉極端值(虧損期的PE無意義)
+  if (!vals.length || !(cur > 0)) return null;
+  return { cur, lo: Math.min(...vals), hi: Math.max(...vals) };
+}
+
 // ── 四個「可直接計算」的面向：不用 AI，可重現、不會幻覺 ──
-function computeScores(q, earnings) {
+function computeScores(q, earnings, pe) {
   const s = {};
   // 市場情緒：當日漲跌 + 量能
   let senti = 50 + clamp(q.changePct * 6, -30, 30);
@@ -171,9 +189,37 @@ function computeScores(q, earnings) {
     if (nm != null) f += clamp((nm - 8) * 0.8, -12, 15);
     s.fundamental = Math.round(clamp(f, 0, 100));
   } else s.fundamental = null;
-  // 估值：需要本益比，Yahoo chart 沒有，先留 null（不亂編）
-  s.valuation = null;
+  // 估值：本益比在近年區間中的相對位置——越接近區間低點分數越高。
+  //   沒有本益比（虧損公司、ETF、資料缺漏）就給 null，不亂編一個數字出來。
+  if (pe && pe.cur > 0 && pe.hi > pe.lo) {
+    const pos = clamp((pe.cur - pe.lo) / (pe.hi - pe.lo), 0, 1);   // 0=區間低點, 1=區間高點
+    s.valuation = Math.round(clamp(85 - pos * 60, 0, 100));
+  } else s.valuation = null;
   return s;
+}
+
+// ── 重大異動偵測（Phase 2）──
+// 全部依「可驗證的客觀條件」判斷，不讓 AI 自由發揮要不要示警。
+function detectAlerts(q, earnings, ai, news) {
+  const a = [];
+  const p = Math.abs(q.changePct);
+  if (p >= 7) a.push({ type: 'price', level: 'high', text: `股價${q.changePct >= 0 ? '大漲' : '大跌'} ${q.changePct.toFixed(2)}%` });
+  else if (p >= 4) a.push({ type: 'price', level: 'mid', text: `股價${q.changePct >= 0 ? '明顯上漲' : '明顯下跌'} ${q.changePct.toFixed(2)}%` });
+  if (q.volRatio && q.volRatio >= 2.5) a.push({ type: 'volume', level: 'high', text: `成交量放大至近月均量的 ${q.volRatio.toFixed(1)} 倍` });
+  else if (q.volRatio && q.volRatio >= 1.8) a.push({ type: 'volume', level: 'mid', text: `成交量放大至近月均量的 ${q.volRatio.toFixed(1)} 倍` });
+  // 新財報：data/earnings 產生時間在近三天內
+  if (earnings?.savedAt && (Date.now() - new Date(earnings.savedAt)) / 86400000 <= 3) {
+    a.push({ type: 'earnings', level: 'high', text: `最新財報摘要已更新（${earnings.quarter || ''}）` });
+  }
+  // 官方展望：只有真的取得逐字稿/新聞稿才示警
+  if (earnings?.result?.guidanceOfficial && !/未提供|未於本次/.test(earnings.result.guidanceOfficial)) {
+    a.push({ type: 'guidance', level: 'mid', text: '公司已公布官方財測／展望' });
+  }
+  // 新聞面：AI 判定重要程度 4 星以上才算重大
+  if (ai && ai.importance >= 4 && news?.length) {
+    a.push({ type: 'news', level: ai.importance >= 5 ? 'high' : 'mid', text: ai.fact || '出現重要新聞' });
+  }
+  return a;
 }
 
 // ── AI：只負責「新聞判讀」這一項，並嚴格區分事實與推論 ──
@@ -277,7 +323,8 @@ for (const code of codes) {
   if (!q) continue;
   let earn = null;
   try { earn = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'earnings', `${code}.json`), 'utf8')); } catch (e) {}
-  rows.push({ code, q, earn, base: computeScores(q, earn) });
+  const pe = await fetchPe(code);          // 估值面向；取不到就 null，不亂編
+  rows.push({ code, q, earn, pe, base: computeScores(q, earn, pe) });
   await new Promise(r => setTimeout(r, 220));
 }
 console.log(`  取得報價 ${rows.length} 檔`);
@@ -312,6 +359,8 @@ for (const r of rows) {
     price: r.q.price, changePct: Number(r.q.changePct.toFixed(2)),
     volRatio: r.q.volRatio ? Number(r.q.volRatio.toFixed(2)) : null,
     score, scores: s,
+    pe: r.pe ? { cur: Number(r.pe.cur.toFixed(1)), lo: Number(r.pe.lo.toFixed(1)), hi: Number(r.pe.hi.toFixed(1)) } : null,
+    alerts: detectAlerts(r.q, r.earn, r.ai, r.news),
     ai: r.ai || null,
     newsTop: (r.news || []).slice(0, 3).map(n => ({ title: n.title, publisher: n.publisher, link: n.link })),
     prev,
@@ -348,8 +397,15 @@ ${brief}
   if (r && r.summary) summary = String(r.summary).slice(0, 220);
 }
 
+// 重大異動彙總：只收 level=high 者，避免變成雜訊（使用者要求「重大事件才通知」）
+const alerts = rows.map(r => ({ symbol: r.code, name: r.q.name, changePct: Number(r.q.changePct.toFixed(2)),
+    items: detectAlerts(r.q, r.earn, r.ai, r.news).filter(a => a.level === 'high') }))
+  .filter(x => x.items.length)
+  .sort((a, b) => b.items.length - a.items.length || Math.abs(b.changePct) - Math.abs(a.changePct));
+
 fs.writeFileSync(path.join(DAILY, 'latest.json'), JSON.stringify({
   date: today,
+  alerts,
   generatedAt: new Date().toISOString(),
   summary,
   musts,
@@ -358,4 +414,4 @@ fs.writeFileSync(path.join(DAILY, 'latest.json'), JSON.stringify({
   note: 'fact＝新聞標題明確講到的已確認事實；inference＝AI 推論，僅供參考，非確定性預測。'
 }, null, 1));
 
-console.log(`✅ 完成：今日必看 ${musts.length} 則、評分 ${rows.length} 檔、市場總結 ${summary ? '已產生' : '未產生'}`);
+console.log(`✅ 完成：今日必看 ${musts.length} 則、評分 ${rows.length} 檔、重大異動 ${alerts.length} 檔、市場總結 ${summary ? '已產生' : '未產生'}`);
