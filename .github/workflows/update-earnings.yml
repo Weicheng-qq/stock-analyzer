@@ -34,6 +34,14 @@ on:
         description: '本次最多用無頭瀏覽器抓幾家官網逐字稿'
         required: false
         default: '12'
+      daily_pool:
+        description: '每日市場：股票池上限'
+        required: false
+        default: '60'
+      daily_ai:
+        description: '每日市場：最多幾次 AI 新聞判讀'
+        required: false
+        default: '25'
 
 # 只授予寫入 repo 內容的最小權限
 permissions:
@@ -84,6 +92,16 @@ jobs:
           TRANSCRIPT_MAX: ${{ github.event.inputs.transcript_max || '12' }}
           NODE_PATH: scripts/node_modules
         run: node scripts/analyze-earnings.mjs
+
+      # 【新增】每日市場資料（今日必看／我的股票今日變化／AI每日評分）
+      #   獨立腳本，不影響上面兩步；即使它失敗也不該讓整個排程失敗，故加 continue-on-error
+      - name: 產生每日市場資料
+        continue-on-error: true
+        env:
+          GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
+          DAILY_POOL: ${{ github.event.inputs.daily_pool || '60' }}
+          DAILY_AI: ${{ github.event.inputs.daily_ai || '25' }}
+        run: node scripts/daily-market.mjs
 
       - name: 提交結果
         run: |

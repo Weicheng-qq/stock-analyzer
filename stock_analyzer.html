@@ -515,6 +515,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
   <div class="grp-menu" id="grpMenu" style="display:none">
     <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
+<button class="grp-btn" data-g="17" onclick="pickGroup(17)">今日市場</button>
     <button class="grp-btn" data-g="15" onclick="pickGroup(15)">投資主題</button>
     <button class="grp-btn" data-g="16" onclick="pickGroup(16)">ETF投資</button>
     <button class="grp-btn" data-g="2" onclick="pickGroup(2)">指數與財務指標</button>
@@ -545,6 +546,18 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <input type="text" id="watchlistInput" style="display:none">
     <div id="wlLastUpdate" style="font-size:11px;color:var(--text2);text-align:right;margin:-4px 0 6px"></div>
     <div id="watchlistTable"><div class="note">尚未加入任何自選股，按上方「加入」新增</div></div>
+  </div>
+
+  <!-- 【新增區塊：今日市場】完全獨立的新卡片，不影響任何既有元素。
+       比照 themeCard / etfCard 的既有模式：卡片 display:none，由 showGroup() 控制顯示。 -->
+  <div class="card" id="dailyCard" style="margin-bottom:20px;display:none">
+    <div class="ct" style="display:flex;justify-content:space-between;align-items:center">📅 今日市場
+      <span id="dailyUnread" style="font-size:12px;font-weight:normal;color:var(--text2)"></span>
+    </div>
+    <div id="dailySummary"></div>
+    <div id="dailyMine"></div>
+    <div id="dailyMusts"><div class="note">載入中…</div></div>
+    <div id="dailyMeta" style="font-size:11px;color:var(--text2);text-align:right;margin-top:8px"></div>
   </div>
 
   <div class="card" id="themeCard" style="margin-bottom:20px;display:none">
@@ -2568,6 +2581,127 @@ function __aiKey(prefix, fallbackSymbol){
   if(!canon) return null;
   return `${prefix}_${canon}_${__quarterTag(canon)}`;
 }
+// ════════════════════════════════════════════════════════════════
+// 【新增功能：今日市場】完全獨立的區塊，沒有修改任何既有函式。
+//   資料由 GitHub Actions 每日排程產生成靜態 JSON（scripts/daily-market.mjs），
+//   前端只讀不算 —— 不論多少使用者、重新整理幾次，都不會多呼叫一次 AI。
+//   這直接滿足「不要因為重新整理就重複產生昂貴的 AI 分析」的要求。
+// ════════════════════════════════════════════════════════════════
+const __dailyState={ loaded:false, data:null };
+function __todayKey(){ const d=new Date(); return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`; }
+// 已讀記錄：只新增一個 localStorage 鍵，不動現有任何鍵
+function __dailyRead(){ try{ return JSON.parse(localStorage.getItem('dailyRead_'+__todayKey())||'[]'); }catch(e){ return []; } }
+function __markDailyRead(sym){
+  try{
+    const r=__dailyRead(); if(r.includes(sym)) return;
+    r.push(sym); localStorage.setItem('dailyRead_'+__todayKey(), JSON.stringify(r));
+    // 清掉前幾天的已讀記錄，避免累積
+    Object.keys(localStorage).forEach(k=>{ if(/^dailyRead_/.test(k) && k!=='dailyRead_'+__todayKey()) localStorage.removeItem(k); });
+    __renderDailyUnread();
+  }catch(e){}
+}
+function __renderDailyUnread(){
+  const el=document.getElementById('dailyUnread'); if(!el||!__dailyState.data) return;
+  const total=(__dailyState.data.musts||[]).length;
+  const read=__dailyRead().filter(s=>(__dailyState.data.musts||[]).some(m=>m.symbol===s)).length;
+  el.textContent = total? (read>=total ? `今日 ${total} 件已全部看過 ✓` : `今日 ${total} 件，還有 ${total-read} 件未看`) : '';
+}
+// 沿用既有的 .pill up/down 元件：它已內建「台股紅漲綠跌」的翻轉（body.mkt-tw 控制），
+//   自己另寫顏色會與全站規則不一致，也會漏掉台股翻轉。
+const __pctHtml=v=>`<span class="pill ${v>=0?'up':'down'}">${v>=0?'▲':'▼'}${Math.abs(v).toFixed(2)}%</span>`;
+const __stars=n=>'★'.repeat(Math.max(1,Math.min(5,n||3)))+'☆'.repeat(5-Math.max(1,Math.min(5,n||3)));
+
+async function loadDailyMarket(){
+  if(__dailyState.loaded) { __renderDailyMine(); return; }   // 同一次開啟只抓一次
+  __dailyState.loaded=true;
+  let d=null;
+  try{ const r=await fetch('/data/daily/latest.json',{cache:'no-cache'}); if(r.ok) d=await r.json(); }catch(e){}
+  __dailyState.data=d;
+  const boxS=document.getElementById('dailySummary');
+  const boxM=document.getElementById('dailyMusts');
+  const meta=document.getElementById('dailyMeta');
+  if(!d){
+    if(boxM) boxM.innerHTML='<div class="note">今日資料尚未產生（每日排程於台灣時間早上 7:00 更新）。</div>';
+    if(boxS) boxS.innerHTML=''; return;
+  }
+  // AI 今日市場總結（50~100 字）
+  if(boxS) boxS.innerHTML = d.summary
+    ? `<div style="margin-bottom:14px;padding:10px 12px;background:rgba(88,166,255,.09);border-left:3px solid var(--blue);border-radius:5px">
+         <b style="color:var(--blue)">🤖 AI 今日市場總結</b><br><span style="line-height:1.75">${esc(d.summary)}</span></div>` : '';
+  // 今日必看
+  const musts=d.musts||[];
+  if(boxM) boxM.innerHTML = musts.length ? `
+    <div style="font-weight:700;margin:6px 0 8px">🔥 今日必看 ${musts.length} 件</div>
+    ${musts.map((m,i)=>{
+      const read=__dailyRead().includes(m.symbol);
+      return `<div class="wl-row" style="display:block;padding:10px 0;border-bottom:1px solid var(--line);opacity:${read?'.62':'1'}"
+                   onclick="__markDailyRead('${esc(m.symbol)}');doSearchFromDaily('${esc(m.symbol)}')">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+          <span><b>${i+1}. ${esc(m.name||m.symbol)}</b> <span style="color:var(--text2);font-size:12px">${esc(m.symbol)}</span></span>
+          <span>${__pctHtml(m.changePct)}</span>
+        </div>
+        <div style="margin-top:5px;font-size:13px;line-height:1.7">
+          <span style="color:var(--green)">已確認事實</span>：${esc(m.fact||'')}<br>
+          <span style="color:var(--text2)">AI 判讀</span>：${esc(m.inference||'')}
+        </div>
+        <div style="margin-top:4px;font-size:12px;color:var(--text2)">
+          影響程度 <span style="color:var(--blue)">${__stars(m.importance)}</span>${read?' ｜ 已看過 ✓':''}
+        </div>
+      </div>`;
+    }).join('')}` : '<div class="note">今日沒有偵測到值得特別注意的變化。</div>';
+  if(meta) meta.textContent = `資料日期 ${d.date||''}｜由每日排程產生，所有使用者共用同一份分析`;
+  __renderDailyUnread();
+  __renderDailyMine();
+}
+
+// 我的股票今日變化：讀使用者自選股（localStorage），對每檔取排程算好的評分
+async function __renderDailyMine(){
+  const box=document.getElementById('dailyMine'); if(!box) return;
+  let list=[];
+  try{ list=getWatchlist().map(x=>String((x&&x.symbol)||x).replace(/\.(TW|TWO)$/i,'')).filter(Boolean).slice(0,12); }catch(e){}
+  if(!list.length){ box.innerHTML=''; return; }
+  const rows=await Promise.all(list.map(async code=>{
+    try{ const r=await fetch(`/data/daily/scores/${encodeURIComponent(code)}.json`,{cache:'no-cache'}); if(r.ok) return await r.json(); }catch(e){}
+    return null;
+  }));
+  const got=rows.filter(Boolean);
+  if(!got.length){ box.innerHTML=''; return; }
+  const arrow=(now,was)=>{ if(now==null) return '<span style="color:var(--text2)">—</span>';
+    if(was==null) return '<span style="color:var(--text2)">→</span>';
+    return now>was+2?'<span style="color:var(--green)">↑</span>':(now<was-2?'<span style="color:var(--red)">↓</span>':'<span style="color:var(--text2)">→</span>'); };
+  box.innerHTML=`
+    <div style="font-weight:700;margin:14px 0 8px">📊 我的股票今日變化</div>
+    ${got.map(g=>{
+      const p=g.prev||{}; const ps=p.scores||{};
+      const diff=(g.score!=null&&p.score!=null)?(g.score-p.score):null;
+      return `<div style="padding:9px 0;border-bottom:1px solid var(--line)">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+          <b>${esc(g.name||g.symbol)}</b>
+          <span>今日 ${__pctHtml(g.changePct)}</span>
+        </div>
+        <div style="margin-top:4px;font-size:12.5px;color:var(--text2)">
+          基本面 ${arrow(g.scores?.fundamental,ps.fundamental)}　市場情緒 ${arrow(g.scores?.sentiment,ps.sentiment)}　新聞 ${arrow(g.scores?.news,ps.news)}　技術面 ${arrow(g.scores?.technical,ps.technical)}
+        </div>
+        ${g.score!=null?`<div style="margin-top:4px;font-size:12.5px">
+          AI 評分 <b style="color:var(--blue)">${g.score}</b>/100
+          ${diff!=null?`<span style="color:${diff>0?'var(--green)':(diff<0?'var(--red)':'var(--text2)')}">（昨天 ${p.score}，${diff>0?'+':''}${diff}）</span>`:'<span style="color:var(--text2)">（首日，尚無昨日對比）</span>'}
+        </div>`:''}
+        ${g.ai&&g.ai.inference?`<div style="margin-top:4px;font-size:12.5px;line-height:1.65"><span style="color:var(--text2)">AI 今日結論</span>：${esc(g.ai.inference)}</div>`:''}
+      </div>`;
+    }).join('')}`;
+}
+// 從今日必看點進個股：沿用既有搜尋流程，不另外造一套
+function doSearchFromDaily(sym){
+  try{
+    const isTw=/^\d{4}$/.test(sym);
+    if(isTw && getMarket()!=='tw') return;      // 市場不符就不強制切換（切換會 reload，體驗差）
+    if(!isTw && getMarket()==='tw') return;
+    const box=document.getElementById('searchInput');
+    if(box){ box.value=sym; }
+    if(isTw) doSearchTW(sym); else doSearch();
+  }catch(e){}
+}
+
 // ── IR 全文延遲載入 ──
 // IR_CALL_SUMMARY / IR_PRODUCTS_SUMMARY 的全文原本內嵌在 HTML（合計 1.46MB，佔全部 JS 的 82%），
 //   代表每個手機使用者每次開 App 都要下載全部 1423 家公司的法說會內容，但一次只會看其中一家。
@@ -4549,6 +4683,7 @@ function showGroup(n){
   const showWl    = (n===10);
   const showTheme = (n===15);
   const showEtf   = (n===16);
+  const showDaily = (n===17);   // 【新增】今日市場，比照上面兩個既有卡片的做法
   // welcome(封面介紹)：每次開App固定停留在畫面上，直到revealMenu()結束2秒封面倒數才隱藏——
   //   不論是否已選過市場、不論第幾次開App都一樣，這是使用者明確要求(不是只有第一次使用者才看得到)。
   const e_wel=document.getElementById('welcome');       if(e_wel) e_wel.style.display=(showWl && !__splashDone)?'':'none';
@@ -4558,6 +4693,8 @@ function showGroup(n){
   const e_wl =document.getElementById('watchlistCard'); if(e_wl ) e_wl .style.display=showWl   ?'':'none';
   const e_th =document.getElementById('themeCard');     if(e_th ) e_th .style.display=showTheme?'':'none';
   const e_etf=document.getElementById('etfCard');      if(e_etf) e_etf.style.display=showEtf  ?'':'none';
+  const e_dl =document.getElementById('dailyCard');     if(e_dl ) e_dl .style.display=showDaily?'':'none';
+  if(showDaily) loadDailyMarket();   // 【新增】只在切到這個群組時才載入，不影響其他頁面效能
   if(showTheme) renderThemeChips();   // 進入「投資主題」頁時(重新)渲染，反映當下市場/自選股狀態
   if(showEtf) renderEtfTabs();        // 同理:ETF頁進入時才渲染，市場切換後數字/清單才會跟著換
   syncLogPanel();   // 載入進度歸屬大盤指數選單，切換選單時同步顯示/隱藏

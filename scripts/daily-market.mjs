@@ -1,0 +1,361 @@
+// 每日市場資料產生器 —— 支援「今日必看 / 我的股票今日變化 / 昨天vs今天 / AI每日評分」
+//
+// 【設計原則：完全不動現有架構】
+// 本腳本是「新增」的獨立檔案，不修改 detect-events.mjs / analyze-earnings.mjs 的任何邏輯，
+// 只「讀取」它們的產出（data/events/queue.json、data/earnings/*.json）。
+//
+// 【成本控制（使用者最強調的一點）】
+// 資料更新 → AI 分析一次 → 存成靜態 JSON → 所有使用者讀快取。
+// 使用者無論重新整理幾次、有多少人同時使用，都不會多呼叫一次 AI。
+// 五個評分面向裡，四個用「官方數字直接計算」（可重現、不會幻覺），
+// 只有「新聞」這一項需要 AI 判讀 —— 這樣既省額度又更符合「以事實為依據」。
+//
+// 【AI 內容的鐵則（對應使用者第十一點）】
+// 產出一律區分 fact（已確認事實，來自新聞標題/官方數字原文）與 inference（AI 推論），
+// 前端以不同樣式呈現。AI 推論必須使用「市場預期／可能／有所提高」這類措辭，
+// 不得寫成「一定會」這種確定性斷言。
+//
+// 【輸出】
+//   data/daily/latest.json          今日必看 + 市場總結 + 本週事件
+//   data/daily/scores/{代碼}.json   每日評分（保留昨日值以支援「昨天vs今天」）
+
+import fs from 'node:fs';
+import path from 'node:path';
+
+const ROOT = path.resolve(import.meta.dirname, '..');
+const DAILY = path.join(ROOT, 'data', 'daily');
+const SCORES = path.join(DAILY, 'scores');
+const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
+
+const MAX_POOL = Number(process.env.DAILY_POOL || 60);      // 股票池上限
+const MAX_AI = Number(process.env.DAILY_AI || 25);           // 本次最多幾次 AI 呼叫
+const DRY_RUN = process.env.DRY_RUN === '1';
+const KEY = process.env.GEMINI_KEY;
+if (!KEY && !DRY_RUN) { console.error('❌ 未設定 GEMINI_KEY，中止（不會嘗試任何付費替代方案）'); process.exit(1); }
+
+const todayStr = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
+const num = v => { const n = Number(v); return Number.isFinite(n) ? n : null; };
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+async function getJson(url, ua = UA) {
+  for (let i = 0; i < 3; i++) {
+    try {
+      const c = new AbortController(); const t = setTimeout(() => c.abort(), 20000);
+      const r = await fetch(url, { headers: { 'User-Agent': ua }, signal: c.signal });
+      clearTimeout(t);
+      if (r.ok) return await r.json();
+      if (r.status === 404) return null;
+    } catch (e) {}
+    await new Promise(r => setTimeout(r, 1200 * (i + 1)));
+  }
+  return null;
+}
+
+// ── 從現有 HTML 讀出常數（只讀不改；網站本體是單一 HTML，常數就寫在裡面）──
+// ⚠️ 這些常數的形式不一：WATCH_DEFAULT 是 {us:[{symbol,name}...]}、TW_OTC 是 new Set([...])。
+//    不能假設都是物件字面值，要從 `=` 之後整段取到該行結束的分號再求值。
+const HTML_SRC = fs.readFileSync(path.join(ROOT, 'stock_analyzer.html'), 'utf8');
+function readConst(name) {
+  const i = HTML_SRC.indexOf('const ' + name);
+  if (i < 0) return null;
+  const eq = HTML_SRC.indexOf('=', i);
+  // 從 = 後找出對應的結束位置：追蹤括號深度直到回到 0 且遇到分號
+  let d = 0, j = eq + 1, started = false;
+  for (; j < HTML_SRC.length; j++) {
+    const c = HTML_SRC[j];
+    if (c === '{' || c === '[' || c === '(') { d++; started = true; }
+    else if (c === '}' || c === ']' || c === ')') { d--; }
+    else if (c === ';' && d <= 0 && started) break;
+  }
+  try { return new Function('return (' + HTML_SRC.slice(eq + 1, j) + ')')(); } catch (e) { return null; }
+}
+
+// 台股代碼要加 Yahoo 後綴；上櫃用 .TWO
+const TW_OTC = readConst('TW_OTC') || new Set();
+const isOtc = c => (typeof TW_OTC.has === 'function') ? TW_OTC.has(c) : false;
+// 代碼正規化：WATCH_DEFAULT 的台股是 '2330.TW' 這種帶後綴的形式，統一去掉後綴當內部代碼
+const normCode = s => String(s || '').replace(/\.(TW|TWO)$/i, '');
+const yahooSym = code => /^\d{4}$/.test(code) ? `${code}.${isOtc(code) ? 'TWO' : 'TW'}` : code.replace(/\./g, '-');
+
+// ── 即時報價（Yahoo chart，與網站前端同一個免費來源）──
+// ⚠️⚠️ 當日漲跌幅一定要用 `range=1d` 來算，這也是網站既有自選股的做法。
+//   實測 `range=3mo` 時 `previousClose` 是 undefined，會退回 `chartPreviousClose`，
+//   而那是「三個月前」的價格 —— 算出來變成三個月漲跌幅。
+//   實際踩到：GOOGL 正確是 +1.74%，用 3mo 算出 -11.16%；台積電正確 +0.41%，算出 +5.45%。
+//   顯示錯誤的漲跌幅會直接摧毀使用者信任，因此分成兩個請求：
+//     ①range=1d → 當日漲跌（正確來源）  ②range=3mo → 均線與量能（只取歷史序列）
+async function fetchQuote(code) {
+  const sym = encodeURIComponent(yahooSym(code));
+  const d1 = await getJson(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=1d&interval=1d`);
+  const m1 = d1?.chart?.result?.[0]?.meta;
+  if (!m1) return null;
+  const price = num(m1.regularMarketPrice), prev = num(m1.previousClose ?? m1.chartPreviousClose);
+  if (price == null || prev == null || !prev) return null;
+
+  const j = await getJson(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=3mo&interval=1d`);
+  const r = j?.chart?.result?.[0];
+  const m = r?.meta || m1;
+  const closes = (r?.indicators?.quote?.[0]?.close || []).filter(x => x != null);
+  const vols = (r?.indicators?.quote?.[0]?.volume || []).filter(x => x != null);
+  const ma20 = closes.length >= 20 ? closes.slice(-20).reduce((a, b) => a + b, 0) / 20 : null;
+  const ma60 = closes.length >= 60 ? closes.slice(-60).reduce((a, b) => a + b, 0) / 60 : null;
+  const avgVol = vols.length >= 20 ? vols.slice(-20).reduce((a, b) => a + b, 0) / 20 : null;
+  const todayVol = vols.length ? vols[vols.length - 1] : null;
+  return {
+    name: m1.shortName || m1.longName || m.shortName || code,
+    price, prev, changePct: (price - prev) / prev * 100,
+    ma20, ma60, avgVol, todayVol,
+    volRatio: (avgVol && todayVol) ? todayVol / avgVol : null,
+    currency: m.currency || ''
+  };
+}
+
+// ── 當日新聞（Yahoo search，與前端 fillNews 同一個來源）──
+// ⚠️⚠️ 兩個關鍵修正，攸關「AI 不會胡亂推測」這條鐵則：
+//  ①台股代碼查不到相關新聞：實測 `2330.TW` 回傳的是 Tillamook 乳製品公司的更正啟事等
+//    完全無關的內容。若把這種新聞餵給 AI，會產出「台積電受乳製品消息影響」的荒謬結論。
+//    → 台股一律先試美股 ADR 代碼（2330→TSM），沒有對應才用原代碼。
+//  ②用 Yahoo 回傳的 `relatedTickers` 過濾：只保留真的與這檔股票相關的新聞。
+//    寧可完全沒有新聞分數，也不能拿無關新聞硬湊。
+const TW_US_EQUIV = readConst('TW_US_EQUIV') || {};
+function newsQuerySymbols(code) {
+  const out = [];
+  if (/^\d{4}$/.test(code) && TW_US_EQUIV[code]) out.push(TW_US_EQUIV[code]);   // 雙掛牌優先用美股代碼
+  out.push(yahooSym(code));
+  if (!/^\d{4}$/.test(code)) out.push(code);
+  return [...new Set(out)];
+}
+async function fetchNews(code, limit = 6) {
+  const cutoff = Date.now() / 1000 - 3 * 86400;   // 只看近三天，確保「今日」的時效性
+  const wanted = new Set([code, yahooSym(code), TW_US_EQUIV[code]].filter(Boolean).map(s => String(s).toUpperCase()));
+  for (const q of newsQuerySymbols(code)) {
+    const j = await getJson(`https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(q)}&newsCount=${limit * 2}&quotesCount=0&lang=en-US&region=US`);
+    const rows = (j?.news || [])
+      .filter(n => !n.providerPublishTime || n.providerPublishTime > cutoff)
+      // 只留 relatedTickers 真的包含本檔股票的新聞
+      .filter(n => Array.isArray(n.relatedTickers) && n.relatedTickers.some(t => wanted.has(String(t).toUpperCase())))
+      .map(n => ({ title: n.title, publisher: n.publisher, time: n.providerPublishTime, link: n.link }))
+      .slice(0, limit);
+    if (rows.length) return rows;
+    await new Promise(r => setTimeout(r, 250));
+  }
+  return [];   // 查無相關新聞：新聞面不給分，不硬湊
+}
+
+// ── 四個「可直接計算」的面向：不用 AI，可重現、不會幻覺 ──
+function computeScores(q, earnings) {
+  const s = {};
+  // 市場情緒：當日漲跌 + 量能
+  let senti = 50 + clamp(q.changePct * 6, -30, 30);
+  if (q.volRatio) senti += clamp((q.volRatio - 1) * 10, -8, 12);
+  s.sentiment = Math.round(clamp(senti, 0, 100));
+  // 技術面：站上均線與否 + 均線多空排列
+  let tech = 50;
+  if (q.ma20) tech += q.price > q.ma20 ? 12 : -12;
+  if (q.ma60) tech += q.price > q.ma60 ? 12 : -12;
+  if (q.ma20 && q.ma60) tech += q.ma20 > q.ma60 ? 8 : -8;
+  s.technical = Math.round(clamp(tech, 0, 100));
+  // 基本面：用官方季度損益表算獲利率（有 data/earnings 才給分，沒有就 null 不亂猜）
+  const o = earnings?.official;
+  if (o && num(o.營業收入)) {
+    const rev = num(o.營業收入);
+    const gm = num(o.營業毛利) != null ? num(o.營業毛利) / rev * 100 : null;
+    const om = num(o.營業利益) != null ? num(o.營業利益) / rev * 100 : null;
+    const nm = num(o.本期淨利) != null ? num(o.本期淨利) / rev * 100 : null;
+    let f = 50;
+    if (gm != null) f += clamp((gm - 25) * 0.7, -18, 22);
+    if (om != null) f += clamp((om - 10) * 0.8, -15, 18);
+    if (nm != null) f += clamp((nm - 8) * 0.8, -12, 15);
+    s.fundamental = Math.round(clamp(f, 0, 100));
+  } else s.fundamental = null;
+  // 估值：需要本益比，Yahoo chart 沒有，先留 null（不亂編）
+  s.valuation = null;
+  return s;
+}
+
+// ── AI：只負責「新聞判讀」這一項，並嚴格區分事實與推論 ──
+async function aiNewsRead(code, name, q, news) {
+  if (!news.length) return null;
+  const list = news.map((n, i) => `${i + 1}. 「${n.title}」（來源：${n.publisher || '未標示'}）`).join('\n');
+  const dir = q.changePct >= 0 ? '上漲' : '下跌';
+  const prompt = `你是專業的市場分析師。以下是 ${name}（代碼 ${code}）近三日的新聞標題，以及今日股價變化。
+
+【今日股價】${dir} ${Math.abs(q.changePct).toFixed(2)}%
+【近三日新聞標題（原文，未經改寫）】
+${list}
+
+【鐵則 — 務必嚴格遵守】
+1. 你只能根據上方新聞標題判讀，嚴禁引用標題以外的任何資訊，嚴禁用訓練記憶補充。
+2. 必須區分「已確認事實」與「推論」：
+   - fact 欄位：只能寫新聞標題明確講到的事情，不可加油添醋。
+   - inference 欄位：你的判讀，必須使用「市場預期」「可能」「有所提高」這類措辭，
+     嚴禁寫成「一定會」「必然」這種確定性斷言。
+3. 一律使用繁體中文。若新聞標題與這家公司無關或資訊不足，newsScore 給 50 並在 fact 寫「近期無明確相關新聞」。
+4. 不得預測股價、不得給目標價。
+
+只回傳 JSON，不要任何其他文字、不要 markdown：
+{
+ "fact":"新聞標題明確講到的事情，1句話，20-40字",
+ "inference":"這件事為什麼重要／對公司的可能影響，1-2句，須用推測性措辭",
+ "newsScore":"0-100 的整數，代表近期新聞面偏正面(>50)或偏負面(<50)，中性給50",
+ "importance":"1-5 的整數，代表這則資訊對投資人的重要程度"
+}`;
+  const r = await callGemini(prompt);
+  if (!r) return null;
+  return {
+    fact: String(r.fact || '').slice(0, 120),
+    inference: String(r.inference || '').slice(0, 200),
+    newsScore: clamp(Math.round(num(r.newsScore) ?? 50), 0, 100),
+    importance: clamp(Math.round(num(r.importance) ?? 3), 1, 5)
+  };
+}
+
+async function callGemini(prompt) {
+  for (const model of ['gemini-3.5-flash', 'gemini-3.1-flash-lite']) {
+    try {
+      const c = new AbortController(); const t = setTimeout(() => c.abort(), 45000);
+      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
+        method: 'POST', signal: c.signal,
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + KEY },
+        body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }], temperature: 0.3 })
+      });
+      clearTimeout(t);
+      if (r.status === 429) { rateLimited = true; return null; }   // 額度用盡：停止，絕不改用付費
+      if (!r.ok) continue;
+      const j = await r.json();
+      const m = (j?.choices?.[0]?.message?.content || '').match(/\{[\s\S]*\}/);
+      if (m) { try { return JSON.parse(m[0]); } catch (e) {} }
+    } catch (e) {}
+  }
+  return null;
+}
+let rateLimited = false;
+
+// 綜合評分：把各面向加權平均（null 的面向不計入，不用預設值硬湊）
+function overall(s) {
+  const w = { fundamental: 0.3, news: 0.22, technical: 0.22, sentiment: 0.18, valuation: 0.08 };
+  let sum = 0, wsum = 0;
+  for (const k of Object.keys(w)) if (s[k] != null) { sum += s[k] * w[k]; wsum += w[k]; }
+  return wsum ? Math.round(sum / wsum) : null;
+}
+
+// ── 主流程 ──
+const today = todayStr();
+console.log(`▶ 每日市場資料產生（${today}）`);
+fs.mkdirSync(SCORES, { recursive: true });
+
+// 1) 組股票池：預設自選股 + 今日有事件的公司 + 已有財報摘要的公司
+const WATCH_DEFAULT = readConst('WATCH_DEFAULT') || {};
+const pool = new Set();
+// ⚠️ WATCH_DEFAULT 的元素是 {symbol,name} 物件，且台股帶 .TW 後綴，要取 .symbol 再正規化
+for (const arr of Object.values(WATCH_DEFAULT)) {
+  for (const it of (arr || [])) {
+    const c = normCode(typeof it === 'string' ? it : (it && it.symbol));
+    if (c) pool.add(c);
+  }
+}
+try {
+  const q = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'events', 'queue.json'), 'utf8'));
+  for (const it of (q.queue || []).filter(x => x.priority === 'HIGH')) pool.add(it.symbol);
+} catch (e) {}
+try {
+  for (const f of fs.readdirSync(path.join(ROOT, 'data', 'earnings')).filter(f => f.endsWith('.json'))) {
+    if (pool.size >= MAX_POOL) break;
+    pool.add(f.replace(/\.json$/, ''));
+  }
+} catch (e) {}
+const codes = [...pool].slice(0, MAX_POOL);
+console.log(`  股票池 ${codes.length} 檔（預設自選股 + 今日事件股 + 已有財報摘要者）`);
+
+// 2) 逐檔取報價 + 計算可算的面向
+const rows = [];
+for (const code of codes) {
+  const q = await fetchQuote(code);
+  if (!q) continue;
+  let earn = null;
+  try { earn = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'earnings', `${code}.json`), 'utf8')); } catch (e) {}
+  rows.push({ code, q, earn, base: computeScores(q, earn) });
+  await new Promise(r => setTimeout(r, 220));
+}
+console.log(`  取得報價 ${rows.length} 檔`);
+
+// 3) 依「值得關注程度」排序，AI 額度優先給變化最大的
+rows.sort((a, b) => Math.abs(b.q.changePct) - Math.abs(a.q.changePct));
+
+// 4) AI 新聞判讀（只給前 MAX_AI 檔，額度用盡即停）
+let aiUsed = 0;
+for (const r of rows) {
+  if (aiUsed >= MAX_AI || rateLimited) break;
+  // 變化太小且無事件的就不花額度
+  if (Math.abs(r.q.changePct) < 1.2 && aiUsed > 8) continue;
+  const news = await fetchNews(r.code);
+  if (!news.length) continue;
+  if (DRY_RUN) { r.ai = { fact: '(DRY)', inference: '(DRY)', newsScore: 50, importance: 3 }; r.news = news; aiUsed++; continue; }
+  const ai = await aiNewsRead(r.code, r.q.name, r.q, news);
+  if (ai) { r.ai = ai; r.news = news; aiUsed++; }
+  await new Promise(x => setTimeout(x, 7000));   // 免費層每分鐘約 10 次，7 秒留餘裕
+}
+console.log(`  AI 新聞判讀 ${aiUsed} 檔${rateLimited ? '（免費額度用盡提前停止）' : ''}`);
+
+// 5) 寫出每檔評分（保留昨日值，供「昨天vs今天」使用）
+for (const r of rows) {
+  const s = { ...r.base, news: r.ai ? r.ai.newsScore : null };
+  const score = overall(s);
+  const f = path.join(SCORES, `${r.code}.json`);
+  let prev = null;
+  try { const old = JSON.parse(fs.readFileSync(f, 'utf8')); if (old.date !== today) prev = { date: old.date, score: old.score, scores: old.scores }; else prev = old.prev || null; } catch (e) {}
+  fs.writeFileSync(f, JSON.stringify({
+    symbol: r.code, name: r.q.name, date: today,
+    price: r.q.price, changePct: Number(r.q.changePct.toFixed(2)),
+    volRatio: r.q.volRatio ? Number(r.q.volRatio.toFixed(2)) : null,
+    score, scores: s,
+    ai: r.ai || null,
+    newsTop: (r.news || []).slice(0, 3).map(n => ({ title: n.title, publisher: n.publisher, link: n.link })),
+    prev,
+    generatedAt: new Date().toISOString()
+  }, null, 1));
+}
+
+// 6) 今日必看：有 AI 判讀者依「重要程度 × 漲跌幅」排序取前 5
+const musts = rows.filter(r => r.ai)
+  .map(r => ({
+    symbol: r.code, name: r.q.name,
+    changePct: Number(r.q.changePct.toFixed(2)),
+    price: r.q.price, currency: r.q.currency,
+    fact: r.ai.fact, inference: r.ai.inference,
+    importance: r.ai.importance,
+    score: overall({ ...r.base, news: r.ai.newsScore }),
+    link: (r.news || [])[0]?.link || null
+  }))
+  .sort((a, b) => (b.importance - a.importance) || (Math.abs(b.changePct) - Math.abs(a.changePct)))
+  .slice(0, 5);
+
+// 7) 市場總結（50~100 字，只根據上面已取得的事實）
+let summary = null;
+if (!DRY_RUN && !rateLimited && musts.length) {
+  const brief = musts.map(m => `${m.name}(${m.symbol}) ${m.changePct >= 0 ? '+' : ''}${m.changePct}%：${m.fact}`).join('\n');
+  const r = await callGemini(`以下是今日市場中變化最顯著的幾檔股票與其新聞重點（皆為已取得的事實，不可添加其他資訊）：
+${brief}
+
+請寫一段「今日市場總結」，要求：
+1. **50～100 字**，讓讀者 10 秒內理解今天市場發生什麼事，不要寫成長篇文章。
+2. 只能根據上方內容歸納，嚴禁引用上方沒有的資訊、嚴禁預測後市。
+3. 繁體中文。
+只回傳 JSON：{"summary":"..."}`);
+  if (r && r.summary) summary = String(r.summary).slice(0, 220);
+}
+
+fs.writeFileSync(path.join(DAILY, 'latest.json'), JSON.stringify({
+  date: today,
+  generatedAt: new Date().toISOString(),
+  summary,
+  musts,
+  poolSize: rows.length,
+  aiUsed,
+  note: 'fact＝新聞標題明確講到的已確認事實；inference＝AI 推論，僅供參考，非確定性預測。'
+}, null, 1));
+
+console.log(`✅ 完成：今日必看 ${musts.length} 則、評分 ${rows.length} 檔、市場總結 ${summary ? '已產生' : '未產生'}`);
