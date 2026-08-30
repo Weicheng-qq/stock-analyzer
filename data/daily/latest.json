@@ -2,6 +2,18 @@
  "date": "2026-08-30",
  "alerts": [
   {
+   "symbol": "STRT",
+   "name": "STRATTEC SECURITY CORPORATION",
+   "changePct": 6.76,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 Q3（2025-12-29～2026-03-29））"
+    }
+   ]
+  },
+  {
    "symbol": "6415",
    "name": "SILERGY CORP",
    "changePct": -2.66,
@@ -38,9 +50,105 @@
    ]
   },
   {
+   "symbol": "1203",
+   "name": "VE WONG CORPORATION",
+   "changePct": -1.74,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "KOSS",
+   "name": "Koss Corporation",
+   "changePct": 1.45,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 Q3（2026-01-01～2026-03-31））"
+    }
+   ]
+  },
+  {
+   "symbol": "WSM",
+   "name": "Williams-Sonoma, Inc.",
+   "changePct": -1.39,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 Q2（2026-05-04～2026-08-02））"
+    }
+   ]
+  },
+  {
+   "symbol": "1101",
+   "name": "TCC GROUP HOLDINGS CO LTD",
+   "changePct": 0.83,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "1109",
+   "name": "HSING TA CEMENT CO LTD",
+   "changePct": -0.74,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "1217",
+   "name": "AGV PRODUCTS",
+   "changePct": -0.3,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
    "symbol": "5904",
    "name": "POYA INTERNATIONAL CO LTD",
    "changePct": 0.13,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 第2季）"
+    }
+   ]
+  },
+  {
+   "symbol": "JKHY",
+   "name": "Jack Henry & Associates, Inc.",
+   "changePct": 0.05,
+   "items": [
+    {
+     "type": "earnings",
+     "level": "high",
+     "text": "最新財報摘要已更新（2026 Q3（2026-01-01～2026-03-31））"
+    }
+   ]
+  },
+  {
+   "symbol": "1108",
+   "name": "LUCKY CEMENT CO.",
+   "changePct": 0,
    "items": [
     {
      "type": "earnings",
@@ -140,23 +248,71 @@
    "note": "依慣例為每月第一個週五，非官方公告日期"
   }
  ],
- "generatedAt": "2026-08-30T06:35:24.552Z",
- "summary": "今日市場中，唯一顯著變化的股票是 NVIDIA（NVDA），股價下跌 4.57%。公司近期無明確相關新聞，其他股票未見顯著波動。",
+ "generatedAt": "2026-08-30T06:51:02.758Z",
+ "summary": null,
  "musts": [
   {
-   "symbol": "NVDA",
-   "name": "NVIDIA Corporation",
-   "changePct": -4.57,
-   "price": 217.55,
+   "symbol": "STRT",
+   "name": "STRATTEC SECURITY CORPORATION",
+   "changePct": 6.76,
+   "price": 75.04,
    "currency": "USD",
-   "fact": "近期無明確相關新聞",
-   "inference": "由於目前資訊僅提及該公司為熱門交易個股而缺乏具體營運數據，市場可能暫時無法評估其對未來營運的實質影響。",
-   "importance": 1,
-   "score": 51,
-   "link": "https://finance.yahoo.com/m/a6805278-1f4f-3200-89df-cc8032233a23/are-oklo-and-nuscale-power.html"
+   "fact": "Strattec Security 目標提升毛利、開發新客戶、擴大數位鑰匙業務。",
+   "inference": "若目標達成，可能提升公司獲利與營收，並增強其在數位鑰匙市場的競爭力。",
+   "importance": 4,
+   "score": 54,
+   "link": "https://finance.yahoo.com/m/7e576d68-78bd-39f9-8994-30083d25d99f/strattec-security-targets.html"
+  },
+  {
+   "symbol": "2454",
+   "name": "MEDIATEK INC",
+   "changePct": 3.1,
+   "price": 3985,
+   "currency": "TWD",
+   "fact": "聯發科向大綜等取得營業設備一批，金額約28.3億元",
+   "inference": "此項設備取得可能顯示公司擴充產能或升級技術，對未來營運有正面期待，但同時亦代表短期資金支出",
+   "importance": 4,
+   "score": 59,
+   "link": "https://tw.stock.yahoo.com/news/%E8%81%AF%E7%99%BC%E7%A7%91%E5%90%91%E5%A4%A7%E7%B6%9C%E7%AD%89%E5%8F%96%E5%BE%97%E7%87%9F%E6%A5%AD%E8%A8%AD%E5%82%99-%E6%89%B9-%E8%A8%8828-3%E5%84%84%E5%85%83-153200007.html"
+  },
+  {
+   "symbol": "KOSS",
+   "name": "Koss Corporation",
+   "changePct": 1.45,
+   "price": 3.5,
+   "currency": "USD",
+   "fact": "Koss 公布第四季及全年財報，營收上升且盈餘波動。",
+   "inference": "營收成長可能提升市場信心，盈餘波動則顯示未來獲利仍有不確定性。",
+   "importance": 4,
+   "score": 43,
+   "link": "https://finance.yahoo.com/markets/stocks/articles/koss-swings-earnings-fiscal-q4-214408786.html"
+  },
+  {
+   "symbol": "6415",
+   "name": "SILERGY CORP",
+   "changePct": -2.66,
+   "price": 458,
+   "currency": "TWD",
+   "fact": "矽力*-KY公告受邀參加線上法說會，且董事會已通過115年度第二季合併財務報告。",
+   "inference": "法說會的召開與新財報的發布，可能提高市場對公司營運展望的關注度。今日股價下跌，反映市場在法說會前可能持較為審慎的觀望態度。",
+   "importance": 3,
+   "score": 57,
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%9F%BD%E5%8A%9B-ky%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0jp-morgan%E6%89%80%E8%88%89%E8%BE%A6%E4%B9%8B%E7%B7%9A%E4%B8%8A%E6%B3%95%E8%AA%AA%E6%9C%83-091552968.html"
+  },
+  {
+   "symbol": "1101",
+   "name": "TCC GROUP HOLDINGS CO LTD",
+   "changePct": 0.83,
+   "price": 24.3,
+   "currency": "TWD",
+   "fact": "台泥受邀參加富邦證券舉辦之法人座談會。",
+   "inference": "此邀請顯示法人投資人對台泥的關注度提升，可能帶來較正面的市場觀感與後續互動機會。",
+   "importance": 3,
+   "score": 54,
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%8F%B0%E6%B3%A5%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E5%AF%8C%E9%82%A6%E8%AD%89%E5%88%B8%E8%88%89%E8%BE%A6%E4%B9%8B%E6%B3%95%E4%BA%BA%E5%BA%A7%E8%AB%87%E6%9C%83-065422902.html"
   }
  ],
- "poolSize": 12,
- "aiUsed": 1,
+ "poolSize": 21,
+ "aiUsed": 8,
  "note": "fact＝新聞標題明確講到的已確認事實；inference＝AI 推論，僅供參考，非確定性預測。"
 }

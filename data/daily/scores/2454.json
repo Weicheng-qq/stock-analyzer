@@ -5,22 +5,49 @@
  "price": 3985,
  "changePct": 3.1,
  "volRatio": 0.56,
- "score": 58,
+ "score": 59,
  "scores": {
   "sentiment": 64,
   "technical": 66,
   "fundamental": null,
   "valuation": 25,
-  "news": null
+  "news": 60
  },
  "pe": {
   "cur": 63.8,
   "lo": 19.8,
   "hi": 64
  },
- "alerts": [],
- "ai": null,
- "newsTop": [],
+ "alerts": [
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "聯發科向大綜等取得營業設備一批，金額約28.3億元"
+  }
+ ],
+ "ai": {
+  "fact": "聯發科向大綜等取得營業設備一批，金額約28.3億元",
+  "inference": "此項設備取得可能顯示公司擴充產能或升級技術，對未來營運有正面期待，但同時亦代表短期資金支出",
+  "newsScore": 60,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "聯發科向大綜等取得營業設備一批，計28.3億元",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E8%81%AF%E7%99%BC%E7%A7%91%E5%90%91%E5%A4%A7%E7%B6%9C%E7%AD%89%E5%8F%96%E5%BE%97%E7%87%9F%E6%A5%AD%E8%A8%AD%E5%82%99-%E6%89%B9-%E8%A8%8828-3%E5%84%84%E5%85%83-153200007.html"
+  },
+  {
+   "title": "【公告】聯發科取得營業設備",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E8%81%AF%E7%99%BC%E7%A7%91%E5%8F%96%E5%BE%97%E7%87%9F%E6%A5%AD%E8%A8%AD%E5%82%99-093223662.html"
+  },
+  {
+   "title": "聯發科 公告本公司取得營業設備",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E8%81%AF%E7%99%BC%E7%A7%91-%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E5%8F%96%E5%BE%97%E7%87%9F%E6%A5%AD%E8%A8%AD%E5%82%99-091900752.html"
+  }
+ ],
  "prev": null,
- "generatedAt": "2026-08-30T06:35:15.144Z"
+ "generatedAt": "2026-08-30T06:50:48.300Z"
 }

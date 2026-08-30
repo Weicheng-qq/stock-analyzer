@@ -5,13 +5,13 @@
  "price": 458,
  "changePct": -2.66,
  "volRatio": 1.37,
- "score": 58,
+ "score": 57,
  "scores": {
   "sentiment": 38,
   "technical": 42,
   "fundamental": 77,
   "valuation": 79,
-  "news": null
+  "news": 50
  },
  "pe": {
   "cur": 64.2,
@@ -25,8 +25,24 @@
    "text": "最新財報摘要已更新（2026 第2季）"
   }
  ],
- "ai": null,
- "newsTop": [],
+ "ai": {
+  "fact": "矽力*-KY公告受邀參加線上法說會，且董事會已通過115年度第二季合併財務報告。",
+  "inference": "法說會的召開與新財報的發布，可能提高市場對公司營運展望的關注度。今日股價下跌，反映市場在法說會前可能持較為審慎的觀望態度。",
+  "newsScore": 50,
+  "importance": 3
+ },
+ "newsTop": [
+  {
+   "title": "【公告】矽力*-KY受邀參加JP Morgan所舉辦之線上法說會",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%9F%BD%E5%8A%9B-ky%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0jp-morgan%E6%89%80%E8%88%89%E8%BE%A6%E4%B9%8B%E7%B7%9A%E4%B8%8A%E6%B3%95%E8%AA%AA%E6%9C%83-091552968.html"
+  },
+  {
+   "title": "【公告】矽力*-KY董事會通過115年度第二季合併財務報告",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%9F%BD%E5%8A%9B-ky%E8%91%A3%E4%BA%8B%E6%9C%83%E9%80%9A%E9%81%8E115%E5%B9%B4%E5%BA%A6%E7%AC%AC%E4%BA%8C%E5%AD%A3%E5%90%88%E4%BD%B5%E8%B2%A1%E5%8B%99%E5%A0%B1%E5%91%8A-064432037.html"
+  }
+ ],
  "prev": null,
- "generatedAt": "2026-08-30T06:35:15.144Z"
+ "generatedAt": "2026-08-30T06:50:48.300Z"
 }

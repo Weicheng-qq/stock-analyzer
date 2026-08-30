@@ -1,0 +1,53 @@
+{
+ "symbol": "STRT",
+ "name": "STRATTEC SECURITY CORPORATION",
+ "date": "2026-08-30",
+ "price": 75.04,
+ "changePct": 6.76,
+ "volRatio": 1.27,
+ "score": 54,
+ "scores": {
+  "sentiment": 83,
+  "technical": 34,
+  "fundamental": 34,
+  "valuation": 70,
+  "news": 70
+ },
+ "pe": {
+  "cur": 14.1,
+  "lo": 9.5,
+  "hi": 28.1
+ },
+ "alerts": [
+  {
+   "type": "price",
+   "level": "mid",
+   "text": "股價明顯上漲 6.76%"
+  },
+  {
+   "type": "earnings",
+   "level": "high",
+   "text": "最新財報摘要已更新（2026 Q3（2025-12-29～2026-03-29））"
+  },
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "Strattec Security 目標提升毛利、開發新客戶、擴大數位鑰匙業務。"
+  }
+ ],
+ "ai": {
+  "fact": "Strattec Security 目標提升毛利、開發新客戶、擴大數位鑰匙業務。",
+  "inference": "若目標達成，可能提升公司獲利與營收，並增強其在數位鑰匙市場的競爭力。",
+  "newsScore": 70,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "Strattec Security Targets Margin Gains, New Customers and Digital Key Growth",
+   "publisher": "MarketBeat",
+   "link": "https://finance.yahoo.com/m/7e576d68-78bd-39f9-8994-30083d25d99f/strattec-security-targets.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-08-30T06:50:48.300Z"
+}
