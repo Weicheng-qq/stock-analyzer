@@ -1530,16 +1530,38 @@ async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(sy
   symbols.forEach(sym=>{
     const code=(sym.match(/^(\d{4,6})/)||[])[1]; const row=code&&byCode.get(code);
     if(!row) return;
-    const zRaw=row.z, yRaw=row.y;
-    const prev=parseFloat(yRaw);
-    let price=parseFloat(zRaw);
-    if(isNaN(price)) price=prev;               // 尚未成交(z為"-")時，以昨收顯示(漲跌0%)，避免顯示空白
-    if(!isNaN(price)) out.set(sym, {price, prev: isNaN(prev)?null:prev});
+    // ⚠️⚠️ 2026-08-31 修正（使用者第四次回報「開盤股價不動、且與實際不符」）
+    //   TWSE 的 z（最新成交價）在「這一筆快照剛好沒有新成交」時會回 "-"。
+    //   原本的寫法是 `if(isNaN(price)) price=prev;` —— 直接拿【昨收】當現價顯示，
+    //   於是畫面出現「昨天的收盤價 + ▲0.00% + 很新的『最後更新 09:20:01（TWSE）』」，
+    //   看起來像即時價，其實整天不動。
+    //   實測證據：2026-08-31 上午 09:20 台積電顯示 2420（＝8/28 收盤），使用者用籌碼K線
+    //   對照當時實際約 2380；當天 TWSE 官方資料 o=2395、l=2375、收盤 z=2405，
+    //   2420 只可能來自 y（昨收）。同一天大飲 1213 的 z 也是 "-"，但 h=7.70／l=7.31
+    //   顯示當天確實有交易 —— 證明 z="-" 不代表沒成交，只代表這一筆快照沒有新成交。
+    //   ⚠️ 前三次（08-26／08-27／08-28）的修法是換資料源、加逾時、加 no-store，
+    //   都在處理「拿不到資料」，但真正的問題是「拿不到最新成交時，程式主動顯示了昨收」。
+    //   正確順序：最新成交 → 前次成交(pz) → 委買賣一檔中價 → 今日開盤(o)；
+    //   全部都沒有，才是真的尚未開始交易，這時必須明講「尚未成交」，不可冒充現價。
+    const n=v=>{ const x=parseFloat(v); return Number.isFinite(x)?x:null; };
+    const first=str=>n(String(str||'').split('_')[0]);
+    const prev=n(row.y);
+    let price=n(row.z), src='成交';
+    if(price==null){ price=n(row.pz); src='前次成交'; }
+    if(price==null){
+      const b=first(row.b), a=first(row.a);
+      if(b!=null&&a!=null){ price=(b+a)/2; src='委買賣中價'; }
+      else if(b!=null){ price=b; src='委買'; }
+      else if(a!=null){ price=a; src='委賣'; }
+    }
+    if(price==null){ price=n(row.o); src='開盤'; }
+    if(price==null){ price=prev; src='昨收'; }   // 真的完全沒有當日交易資料
+    if(price!=null) out.set(sym, {price, prev, src, stale: src==='昨收'});
   });
   return out;
 }
 // 共用：把報價寫進自選股某一列的DOM(價格數字＋漲跌pill)，回傳是否有寫入新價格
-function applyWlPrice(symbol, price, prev){
+function applyWlPrice(symbol, price, prev, stale){
   const pEl=document.getElementById('wlp_'+symbol), cEl=document.getElementById('wlc_'+symbol);
   if(pEl){
     const txt = price!=null?'$'+(+price).toFixed(2):'—';
@@ -1549,7 +1571,12 @@ function applyWlPrice(symbol, price, prev){
     if(dir!=null) flashRow(pEl.closest('.wl-row'), dir);   // 價格真的變了才整列亮一下
   }
   if(cEl){
-    if(price!=null && prev){
+    if(stale){
+      // ⚠️ 這個價格其實是昨收（今天完全沒有成交資料），不可以顯示成「▲0.00%」——
+      //   那會讓使用者以為今天開盤了而且平盤。要明講今天還沒有成交。
+      const html='<span style="color:var(--text2);font-size:11.5px">尚未成交</span>';
+      if(cEl.innerHTML!==html) cEl.innerHTML=html;
+    } else if(price!=null && prev){
       const pct=(price-prev)/prev*100;
       // 台股慣例：漲=紅底、跌=綠底、白字
       const html=`<span class="pill ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span>`;
@@ -1593,12 +1620,17 @@ async function loadWatchlistPrices(list){
         const missing=twItems.filter(it=>!quotes.has(it.symbol));
         twItems.forEach(it=>{
           const q=quotes.get(it.symbol);
-          if(q) applyWlPrice(it.symbol, q.price, q.prev);
+          if(q) applyWlPrice(it.symbol, q.price, q.prev, q.stale);
         });
         if(missing.length){
           await loadWatchlistPricesYahoo(missing, gen);   // TWSE查無資料的個別代碼才退回Yahoo
           if(gen===__wlPriceGen) updateWlTimestamp(`TWSE+Yahoo備援${missing.length}檔`, true);
-        } else if(gen===__wlPriceGen){ updateWlTimestamp('TWSE', true); }
+        } else if(gen===__wlPriceGen){
+          // ⚠️ 把「價格是從哪個欄位來的」一併顯示。前三次事後查不到原因，就是因為
+          //   只知道資料源是 TWSE，卻不知道拿到的是成交價還是昨收。有非成交來源就標出來。
+          const odd=[...quotes.values()].map(q=>q&&q.src).filter(x=>x&&x!=='成交');
+          updateWlTimestamp(odd.length?('TWSE·'+[...new Set(odd)].join('/')):'TWSE', true);
+        }
       }catch(e){
         if(gen!==__wlPriceGen) return;
         await loadWatchlistPricesYahoo(twItems, gen);   // TWSE整批失敗(如逾時)→全部退回Yahoo，確保仍有資料
@@ -5319,7 +5351,9 @@ async function updateDetailPrice(){
       // 台股改走TWSE官方即時報價(見loadWatchlistPrices的說明)，比Yahoo新鮮很多；查無資料才退回Yahoo
       const quotes=await fetchTwMisQuotes([sym]);
       const q=quotes.get(sym);
-      if(q){ price=q.price; prev=q.prev; }
+      // ⚠️ q.stale＝今天完全沒有成交資料、價格其實是昨收。這種情況寧可退回 Yahoo，
+      //   也不要把昨收當成個股頁上的「目前股價」。
+      if(q && !q.stale){ price=q.price; prev=q.prev; }
     }
     if(price==null){
       const ch=await fetchJsonTimeout(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=1d&interval=1d`, 4000);
