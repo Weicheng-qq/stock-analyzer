@@ -56,6 +56,65 @@ function loadIrPages() {
     return new Function('return ' + html.slice(st, j))();
   } catch (e) { return {}; }
 }
+// 雙掛牌對照（2330↔TSM 等）。⚠️ 實測台積電的官網 IR 頁登記在美股代碼 TSM 底下，
+//   台股代碼 2330 查 irPages 會是 undefined，於是永遠進不了逐字稿路徑。
+//   這是本專案反覆踩到的同一個雙掛牌坑。
+function loadTwUsEquiv() {
+  try {
+    const html = fs.readFileSync(path.join(ROOT, 'stock_analyzer.html'), 'utf8');
+    const i = html.indexOf('const TW_US_EQUIV');
+    const st = html.indexOf('{', i), en = html.indexOf('}', st);
+    return new Function('return ' + html.slice(st, en + 1))();
+  } catch (e) { return {}; }
+}
+const TW_US_EQUIV = loadTwUsEquiv();
+// 「使用者最可能在意的公司」名單。⚠️ 不是我另外編的：TW_NAMES 是網站既有的熱門台股
+//   中文名字典（239 檔，含 2330／2454／2317／2308…），TICKER_ZH 是美股熱門股中文名，
+//   兩份都是專案長期維護、代表「台灣投資人最常交易的標的」。
+//   用它當排序第一順位，才不會每輪都把預算花在 1101、1102、1103 這種代碼順序在前的公司。
+function loadHotList() {
+  try {
+    const html = fs.readFileSync(path.join(ROOT, 'stock_analyzer.html'), 'utf8');
+    const grab = name => {
+      const i = html.indexOf('const ' + name);
+      if (i < 0) return {};
+      const st = html.indexOf('{', i);
+      let d = 0, j = st;
+      for (; j < html.length; j++) {
+        if (html[j] === '{') d++;
+        else if (html[j] === '}') { d--; if (d === 0) { j++; break; } }
+      }
+      try { return new Function('return ' + html.slice(st, j))(); } catch (e) { return {}; }
+    };
+    // ⚠️ 必須用「原始碼裡的出現順序」，不能用 Object.keys()。
+    //   '2330' 這種純數字字串在 JS 物件裡屬於整數索引鍵，Object.keys() 會由小到大重排，
+    //   於是 1101 會跑到 2330 前面 —— 而 TW_NAMES 原始碼是人工「依重要性」排的
+    //   （2330 台積電、2317 鴻海、2454 聯發科… 依序），那個順序才是我們要的。
+    const seg = name => {
+      const i = html.indexOf('const ' + name);
+      if (i < 0) return '';
+      const st = html.indexOf('{', i);
+      let d = 0, j = st;
+      for (; j < html.length; j++) {
+        if (html[j] === '{') d++;
+        else if (html[j] === '}') { d--; if (d === 0) { j++; break; } }
+      }
+      return html.slice(st, j);
+    };
+    const order = [];
+    for (const m of seg('TW_NAMES').matchAll(/['"](\d{4,6})['"]\s*:/g)) order.push(m[1]);
+    const us = grab('ALIASES');   // 中文名→美股代碼，值就是熱門美股代碼
+    for (const k in us) if (typeof us[k] === 'string' && !order.includes(us[k])) order.push(us[k]);
+    return order;
+  } catch (e) { return []; }
+}
+const HOT_ORDER = loadHotList();
+const HOT_IDX = new Map(HOT_ORDER.map((c, i) => [c, i]));
+// 取得某一檔的官網 IR 頁：先查自己的代碼，再查雙掛牌對應的美股代碼
+function irPageOf(pages, sym) {
+  return pages[sym] || (TW_US_EQUIV[sym] ? pages[TW_US_EQUIV[sym]] : null) || null;
+}
+
 // 逐字稿路徑每家要多花 15~30 秒，不可能整輪都用。只給「有官網 IR 頁」的公司，
 //   且每輪設上限，優先做排在前面（優先序較高）的。其餘退回 SEC 8-K 新聞稿。
 const TRANSCRIPT_MAX = Number(process.env.TRANSCRIPT_MAX || 12);
@@ -278,16 +337,6 @@ const rank = { HIGH: 0, MEDIUM: 1, LOW: 2 };
 //   注意：必須「跨優先層」交錯，不能只在同一層內交錯。因為有法說會事件的台股全在 HIGH、
 //   美股全在 MEDIUM，若只在層內交錯，仍要先做完 63 家 HIGH 台股才輪得到美股（實測仍是 12:0）。
 //   作法：兩個市場各自依優先序排好，再一左一右交替取用，兩邊都能每天有進度。
-const byRank = m => queue.filter(x => (m === 'tw' ? x.market === 'tw' : x.market !== 'tw'))
-  .sort((a, b) => rank[a.priority] - rank[b.priority]);
-const twQ = byRank('tw'), usQ = byRank('us');
-const sorted = [];
-for (let i = 0; i < Math.max(twQ.length, usQ.length); i++) {
-  if (i < twQ.length) sorted.push(twQ[i]);
-  if (i < usQ.length) sorted.push(usQ[i]);
-}
-console.log(`▶ 佇列 ${sorted.length} 家，本次上限 ${MAX_ANALYSES} 家（台股／美股交錯處理）`);
-
 const twFin = await loadTwFinancials();
 console.log(`  已載入台股官方季度財務 ${Object.keys(twFin).length} 家`);
 
@@ -298,6 +347,36 @@ console.log(`  已載入台股法說會簡報索引 ${twCalls.size} 家`);
 
 const irPages = loadIrPages();
 console.log(`  已載入公司官網 IR 頁 ${Object.keys(irPages).length} 家（逐字稿路徑入口）`);
+
+// ⚠️⚠️ 排序必須放在載入 IR 頁「之後」，因為第一順位鍵就是「這家公司有沒有官網 IR 頁」。
+//   實測問題：佇列 1,910 家裡有 1,908 家是 LOW（多為沒有法說會的中小型股），
+//   而排序只看優先序時，這些小公司會依代碼順序（1101、1102、1103…）先被處理，
+//   每輪 MAX_ANALYSES=40 家的預算全部用在它們身上。
+//   台積電 2330 排在第 315 位 —— 永遠輪不到，逐字稿路徑因此一次都沒真正跑過
+//   （實測 64 份自動摘要中，帶管理層原話的：0 份）。
+//   使用者的目標是「達到人工建置的品質」，而品質差異就來自逐字稿，
+//   所以「拿得到官網逐字稿的公司」必須排在最前面。
+const hasIr = x => irPageOf(irPages, x.symbol) ? 0 : 1;
+// 熱門股名次：數字越小越重要（TW_NAMES 原始碼順序）；不在名單內給一個很大的數字排到後面
+const hotIdx = x => {
+  const a = HOT_IDX.has(x.symbol) ? HOT_IDX.get(x.symbol) : null;
+  const b = TW_US_EQUIV[x.symbol] && HOT_IDX.has(TW_US_EQUIV[x.symbol]) ? HOT_IDX.get(TW_US_EQUIV[x.symbol]) : null;
+  const v = (a == null) ? b : (b == null ? a : Math.min(a, b));
+  return v == null ? 99999 : v;
+};
+// 排序三層：①使用者最在意的熱門股 ②拿得到官網逐字稿 ③原本的事件優先序。
+//   ⚠️ 只用「有沒有 IR 頁」排不夠：684 家都有 IR 頁，同層之間仍照代碼順序，
+//   實測台積電還是排第 260 位，每輪 40 家仍然輪不到（改版前是第 315 位）。
+const byRank = m => queue.filter(x => (m === 'tw' ? x.market === 'tw' : x.market !== 'tw'))
+  .sort((a, b) => (hotIdx(a) - hotIdx(b)) || (hasIr(a) - hasIr(b)) || (rank[a.priority] - rank[b.priority]));
+const twQ = byRank('tw'), usQ = byRank('us');
+const sorted = [];
+for (let i = 0; i < Math.max(twQ.length, usQ.length); i++) {
+  if (i < twQ.length) sorted.push(twQ[i]);
+  if (i < usQ.length) sorted.push(usQ[i]);
+}
+const irCount = queue.filter(x => !hasIr(x)).length, hotCount = queue.filter(x => hotIdx(x) < 99999).length;
+console.log(`▶ 佇列 ${sorted.length} 家（熱門股 ${hotCount} 家、有官網 IR 頁 ${irCount} 家，已依序排到最前面），本次上限 ${MAX_ANALYSES} 家`);
 
 const tickMap = await getJson('https://www.sec.gov/files/company_tickers.json', UA_SEC);
 const tk2cik = new Map();
@@ -337,29 +416,33 @@ for (const item of sorted) {
   // 美股額外抓公司自己發布的財報新聞稿：官方展望與分部營收都寫在裡面，
   //   這兩樣是純數字 API 給不了、但又最有價值的內容。
   let pr = null;
-  if (item.market === 'tw') {
-    // 台股：法說會簡報 PDF（MOPS）。小型公司多半沒開法說會，取不到屬正常
+  // ⚠️⚠️ 官網逐字稿是「達到人工建置品質」的唯一來源（管理層原話與問答都在裡面）。
+  //   原本這段寫在下面的 else 分支裡，等於「只有美股會走逐字稿路徑」，台股一律只拿
+  //   MOPS 法說會簡報。這是 64 份自動摘要中 0 份有管理層原話的主因之一。
+  //   改為：不分市場，只要查得到官網 IR 頁就先試逐字稿；取不到才走各自市場的備援。
+  const irUrl = irPageOf(irPages, item.symbol);
+  if (usedTranscript < TRANSCRIPT_MAX && irUrl) {
+    // 雙掛牌時 IR 頁登記在美股代碼底下（2330 的頁在 TSM），要用登記的那個代碼去抓
+    const irSym = irPages[item.symbol] ? item.symbol : (TW_US_EQUIV[item.symbol] || item.symbol);
+    const doc = await fetchIrDocument(irSym, irUrl);
+    if (doc) {
+      usedTranscript++;
+      pr = { kind: doc.kind === 'transcript' ? 'transcript' : 'irdoc', filedAt: '', form: doc.kind === 'transcript' ? '法說會逐字稿' : '公司官網文件', url: doc.url, excerpt: focusExcerptIr(doc.text) };
+      console.log(`     ↳ 官網${doc.kind === 'transcript' ? '逐字稿' : '文件'} ${doc.text.length} 字`);
+    }
+  }
+  if (!pr && item.market === 'tw') {
+    // 台股備援：法說會簡報 PDF（MOPS）。小型公司多半沒開法說會，取不到屬正常
     const info = twCalls.get(item.symbol);
     if (info) {
       const txt = await fetchCallPdfText(info.pdf);
       if (txt) pr = { kind: 'deck', filedAt: info.date, form: '法說會簡報', url: `https://mopsov.twse.com.tw/nas/STR/${info.pdf}`, excerpt: focusExcerptTw(txt) };
       await new Promise(r => setTimeout(r, 400));
     }
-  } else {
-    // 美股：①優先用公司官網 IR 的逐字稿／簡報（品質最高，含管理層問答原話）
-    //      ②取不到才退回 SEC 8-K 財報新聞稿（可靠度接近 100%，但沒有問答內容）
-    if (usedTranscript < TRANSCRIPT_MAX && irPages[item.symbol]) {
-      const doc = await fetchIrDocument(item.symbol, irPages[item.symbol]);
-      if (doc) {
-        usedTranscript++;
-        pr = { kind: doc.kind === 'transcript' ? 'transcript' : 'irdoc', filedAt: '', form: doc.kind === 'transcript' ? '法說會逐字稿' : '公司官網文件', url: doc.url, excerpt: focusExcerptIr(doc.text) };
-        console.log(`     ↳ 官網${doc.kind === 'transcript' ? '逐字稿' : '文件'} ${doc.text.length} 字`);
-      }
-    }
-    if (!pr) {
-      const raw = await fetchLatestEarningsRelease(tk2cik.get(item.symbol));
-      if (raw) pr = { kind: 'press', filedAt: raw.filedAt, form: raw.form, url: raw.url, excerpt: focusExcerpt(raw.text) };
-    }
+  } else if (!pr) {
+    // 美股備援：SEC 8-K 財報新聞稿（可靠度接近 100%，但沒有問答內容）
+    const raw = await fetchLatestEarningsRelease(tk2cik.get(item.symbol));
+    if (raw) pr = { kind: 'press', filedAt: raw.filedAt, form: raw.form, url: raw.url, excerpt: focusExcerpt(raw.text) };
     await new Promise(r => setTimeout(r, 250));
   }
 
