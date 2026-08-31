@@ -2,7 +2,7 @@
  "symbol": "1233",
  "name": "TEN REN TEA CO",
  "nameZh": "天仁",
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 28.9,
  "changePct": 1.58,
@@ -20,15 +20,19 @@
   "lo": 30.9,
   "hi": 61.4
  },
- "alerts": [
-  {
-   "type": "earnings",
-   "level": "high",
-   "text": "最新財報摘要已更新（2026 第2季）"
-  }
- ],
+ "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.234Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 64,
+  "scores": {
+   "sentiment": 52,
+   "technical": 66,
+   "fundamental": 65,
+   "valuation": 85,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.929Z"
 }

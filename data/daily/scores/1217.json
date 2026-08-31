@@ -2,7 +2,7 @@
  "symbol": "1217",
  "name": "AGV PRODUCTS",
  "nameZh": "愛之味",
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 9.97,
  "changePct": -0.3,
@@ -20,15 +20,19 @@
   "lo": 15.3,
   "hi": 90.5
  },
- "alerts": [
-  {
-   "type": "earnings",
-   "level": "high",
-   "text": "最新財報摘要已更新（2026 第2季）"
-  }
- ],
+ "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.235Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 54,
+  "scores": {
+   "sentiment": 46,
+   "technical": 66,
+   "fundamental": 41,
+   "valuation": 85,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.931Z"
 }

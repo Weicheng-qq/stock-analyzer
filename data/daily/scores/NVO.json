@@ -2,57 +2,61 @@
  "symbol": "NVO",
  "name": "Novo Nordisk A/S",
  "nameZh": null,
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 45.61,
  "changePct": -1.41,
  "volRatio": 0.61,
- "score": 39,
+ "score": 38,
  "scores": {
   "sentiment": 38,
   "technical": 18,
   "fundamental": null,
-  "valuation": 84,
-  "news": 45
+  "valuation": 85,
+  "news": 40
  },
  "pe": {
   "cur": 11.3,
-  "lo": 10.7,
+  "lo": 11.3,
   "hi": 49.4
  },
- "alerts": [
-  {
-   "type": "news",
-   "level": "mid",
-   "text": "競爭對手Eli Lilly新藥獲批且市場領先，Novo在中國上市較慢"
-  }
- ],
+ "alerts": [],
  "ai": {
-  "why": "競爭對手Eli Lilly新藥獲批且市場領先，Novo在中國上市較慢",
-  "meaning": "顯示Novo在GLP‑1領域面臨競爭壓力，短期可能影響營收",
-  "fact": "競爭對手Eli Lilly新藥獲批且市場領先，Novo在中國上市較慢",
-  "inference": "顯示Novo在GLP‑1領域面臨競爭壓力，短期可能影響營收",
+  "why": "Novo Wegovy 進入中國市場較 Lilly 落後，市場擔憂競爭力受限",
+  "meaning": "投資人可能擔心 Novo 在糖尿病/減重市場的成長動能受阻",
+  "fact": "Novo Wegovy 進入中國市場較 Lilly 落後，市場擔憂競爭力受限",
+  "inference": "投資人可能擔心 Novo 在糖尿病/減重市場的成長動能受阻",
   "stance": "neg",
-  "newsScore": 45,
-  "importance": 4
+  "newsScore": 40,
+  "importance": 3
  },
  "newsTop": [
+  {
+   "title": "Viking Therapeutics Stock Is Down 66% From Its Peak. Here's What Comes Next.",
+   "publisher": "Motley Fool",
+   "link": "https://finance.yahoo.com/m/e1e02767-8666-391c-9316-071e32b83ce1/viking-therapeutics-stock-is.html"
+  },
+  {
+   "title": "Should Eli Lilly Investors Be Worried About a Threat From Amylyx?",
+   "publisher": "Motley Fool",
+   "link": "https://finance.yahoo.com/m/88e01702-7421-3d74-ac2d-fffebb4fc163/should-eli-lilly-investors-be.html"
+  },
   {
    "title": "Has Novo Nordisk Finally Found the Catalyst That Could Flip the Script on Eli Lilly?",
    "publisher": "Motley Fool",
    "link": "https://finance.yahoo.com/m/fe93d3c2-f4a5-3a9d-90a3-faa56d6d9b0c/has-novo-nordisk-finally.html"
-  },
-  {
-   "title": "Novo's Wegovy Pill Enters China Behind Lilly",
-   "publisher": "GuruFocus.com",
-   "link": "https://finance.yahoo.com/healthcare/articles/novos-wegovy-pill-enters-china-175059315.html"
-  },
-  {
-   "title": "Eli Lilly's diabetes drug Mounjaro gets approval for a new use",
-   "publisher": "USA TODAY",
-   "link": "https://finance.yahoo.com/m/59ba0a67-1d30-394e-80ae-3cd5f1c40a2e/eli-lilly%27s-diabetes-drug.html"
   }
  ],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.234Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 39,
+  "scores": {
+   "sentiment": 38,
+   "technical": 18,
+   "fundamental": null,
+   "valuation": 84,
+   "news": 45
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.929Z"
 }

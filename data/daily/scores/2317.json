@@ -2,7 +2,7 @@
  "symbol": "2317",
  "name": "HON HAI PRECISION INDUSTRY",
  "nameZh": "鴻海",
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 253,
  "changePct": 0.4,
@@ -23,6 +23,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.235Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 53,
+  "scores": {
+   "sentiment": 50,
+   "technical": 58,
+   "fundamental": null,
+   "valuation": 46,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.930Z"
 }

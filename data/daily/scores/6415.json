@@ -2,7 +2,7 @@
  "symbol": "6415",
  "name": "SILERGY CORP",
  "nameZh": "矽力*-KY",
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 458,
  "changePct": -2.66,
@@ -20,13 +20,7 @@
   "lo": 35.6,
   "hi": 318.8
  },
- "alerts": [
-  {
-   "type": "earnings",
-   "level": "high",
-   "text": "最新財報摘要已更新（2026 第2季）"
-  }
- ],
+ "alerts": [],
  "ai": {
   "why": "今日無明確公司消息",
   "meaning": "",
@@ -48,6 +42,16 @@
    "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%9F%BD%E5%8A%9B-ky%E8%91%A3%E4%BA%8B%E6%9C%83%E9%80%9A%E9%81%8E115%E5%B9%B4%E5%BA%A6%E7%AC%AC%E4%BA%8C%E5%AD%A3%E5%90%88%E4%BD%B5%E8%B2%A1%E5%8B%99%E5%A0%B1%E5%91%8A-064432037.html"
   }
  ],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.233Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 57,
+  "scores": {
+   "sentiment": 38,
+   "technical": 42,
+   "fundamental": 77,
+   "valuation": 79,
+   "news": 50
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.927Z"
 }

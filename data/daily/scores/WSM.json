@@ -2,7 +2,7 @@
  "symbol": "WSM",
  "name": "Williams-Sonoma, Inc.",
  "nameZh": null,
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 235.09,
  "changePct": -1.39,
@@ -30,34 +30,49 @@
    "type": "guidance",
    "level": "mid",
    "text": "公司已公布官方財測／展望"
+  },
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "市場已將強勁財報與上調指引的正面因素提前反映，今日出現回檔。"
   }
  ],
  "ai": {
-  "why": "今日無明確公司消息",
-  "meaning": "",
-  "fact": "今日無明確公司消息",
-  "inference": "",
+  "why": "市場已將強勁財報與上調指引的正面因素提前反映，今日出現回檔。",
+  "meaning": "投資人需留意股價已含未來成長預期，短期可能波動。",
+  "fact": "市場已將強勁財報與上調指引的正面因素提前反映，今日出現回檔。",
+  "inference": "投資人需留意股價已含未來成長預期，短期可能波動。",
   "stance": "pos",
   "newsScore": 70,
-  "importance": 3
+  "importance": 4
  },
  "newsTop": [
+  {
+   "title": "Williams-Sonoma (WSM) Lifts Guidance On Strong Q2 Results But Is The Valuation Already Priced In",
+   "publisher": "Simply Wall St.",
+   "link": "https://finance.yahoo.com/markets/stocks/articles/williams-sonoma-wsm-lifts-guidance-002430763.html"
+  },
+  {
+   "title": "3 Retail Stocks to Watch After a Big Consumer Earnings Week",
+   "publisher": "MarketBeat",
+   "link": "https://finance.yahoo.com/m/00f79212-a637-3fab-a572-0408ce4c5de4/3-retail-stocks-to-watch.html"
+  },
   {
    "title": "MarketBeat Week in Review – 08/24 - 08/28",
    "publisher": "MarketBeat",
    "link": "https://finance.yahoo.com/m/8e8a23cf-2b98-3a5b-ad45-028685c5c84a/marketbeat-week-in-review-%E2%80%93.html"
-  },
-  {
-   "title": "Williams-Sonoma (WSM) Grew Comparable Brand Revenue While Non-GAAP Operating Margin Fell. Can Demand Restore Operating Leverage?",
-   "publisher": "Insider Monkey",
-   "link": "https://finance.yahoo.com/markets/stocks/articles/williams-sonoma-wsm-grew-comparable-025451462.html"
-  },
-  {
-   "title": "Jim Cramer Says Williams-Sonoma (WSM) Selloff Was Wrong After Strong Earnings",
-   "publisher": "Insider Monkey",
-   "link": "https://finance.yahoo.com/markets/stocks/articles/jim-cramer-says-williams-sonoma-205613663.html"
   }
  ],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.234Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 64,
+  "scores": {
+   "sentiment": 41,
+   "technical": 58,
+   "fundamental": 86,
+   "valuation": 36,
+   "news": 70
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.929Z"
 }

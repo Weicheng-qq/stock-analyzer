@@ -2,39 +2,33 @@
  "symbol": "2454",
  "name": "MEDIATEK INC",
  "nameZh": "聯發科",
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 3985,
  "changePct": 3.1,
  "volRatio": 0.56,
- "score": 62,
+ "score": 59,
  "scores": {
   "sentiment": 64,
   "technical": 66,
   "fundamental": null,
   "valuation": 25,
-  "news": 70
+  "news": 60
  },
  "pe": {
   "cur": 63.8,
   "lo": 19.8,
   "hi": 64
  },
- "alerts": [
-  {
-   "type": "news",
-   "level": "mid",
-   "text": "聯發科取得價值28.3億營業設備"
-  }
- ],
+ "alerts": [],
  "ai": {
-  "why": "聯發科取得價值28.3億營業設備",
-  "meaning": "擴充產能有望提升營收",
-  "fact": "聯發科取得價值28.3億營業設備",
-  "inference": "擴充產能有望提升營收",
+  "why": "聯發科取得價值28.3億營業設備，提升產能",
+  "meaning": "提升產能有望帶動營收成長",
+  "fact": "聯發科取得價值28.3億營業設備，提升產能",
+  "inference": "提升產能有望帶動營收成長",
   "stance": "pos",
-  "newsScore": 70,
-  "importance": 4
+  "newsScore": 60,
+  "importance": 3
  },
  "newsTop": [
   {
@@ -53,6 +47,16 @@
    "link": "https://tw.stock.yahoo.com/news/%E8%81%AF%E7%99%BC%E7%A7%91-%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E5%8F%96%E5%BE%97%E7%87%9F%E6%A5%AD%E8%A8%AD%E5%82%99-091900752.html"
   }
  ],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.232Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 62,
+  "scores": {
+   "sentiment": 64,
+   "technical": 66,
+   "fundamental": null,
+   "valuation": 25,
+   "news": 70
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.927Z"
 }

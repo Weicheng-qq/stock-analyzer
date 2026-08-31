@@ -2,7 +2,7 @@
  "symbol": "6224",
  "name": "POLYTRONICS TECHNOLOGY CORP",
  "nameZh": "聚鼎",
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 74.5,
  "changePct": -2.23,
@@ -20,15 +20,19 @@
   "lo": 18.3,
   "hi": 69.2
  },
- "alerts": [
-  {
-   "type": "earnings",
-   "level": "high",
-   "text": "最新財報摘要已更新（2026 第2季）"
-  }
- ],
+ "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.233Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 51,
+  "scores": {
+   "sentiment": 39,
+   "technical": 66,
+   "fundamental": 53,
+   "valuation": 31,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.928Z"
 }

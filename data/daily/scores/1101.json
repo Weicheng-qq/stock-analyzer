@@ -2,7 +2,7 @@
  "symbol": "1101",
  "name": "TCC GROUP HOLDINGS CO LTD",
  "nameZh": "台泥",
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 24.3,
  "changePct": 0.83,
@@ -20,15 +20,19 @@
   "lo": 23.8,
   "hi": 31.1
  },
- "alerts": [
-  {
-   "type": "earnings",
-   "level": "high",
-   "text": "最新財報摘要已更新（2026 第2季）"
-  }
- ],
+ "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.235Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 53,
+  "scores": {
+   "sentiment": 51,
+   "technical": 58,
+   "fundamental": 42,
+   "valuation": 82,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.930Z"
 }

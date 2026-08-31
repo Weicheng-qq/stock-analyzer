@@ -2,7 +2,7 @@
  "symbol": "5904",
  "name": "POYA INTERNATIONAL CO LTD",
  "nameZh": "寶雅",
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 74.2,
  "changePct": 0.13,
@@ -20,15 +20,19 @@
   "lo": 16.7,
   "hi": 27.9
  },
- "alerts": [
-  {
-   "type": "earnings",
-   "level": "high",
-   "text": "最新財報摘要已更新（2026 第2季）"
-  }
- ],
+ "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.236Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 61,
+  "scores": {
+   "sentiment": 45,
+   "technical": 58,
+   "fundamental": 73,
+   "valuation": 57,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.931Z"
 }

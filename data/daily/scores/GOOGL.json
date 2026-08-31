@@ -2,7 +2,7 @@
  "symbol": "GOOGL",
  "name": "Alphabet Inc.",
  "nameZh": null,
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 346.59,
  "changePct": 1.74,
@@ -23,6 +23,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.233Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 45,
+  "scores": {
+   "sentiment": 61,
+   "technical": 18,
+   "fundamental": null,
+   "valuation": 85,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.928Z"
 }

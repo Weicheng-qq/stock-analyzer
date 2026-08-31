@@ -2,7 +2,7 @@
  "symbol": "1203",
  "name": "VE WONG CORPORATION",
  "nameZh": "味王",
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 45.2,
  "changePct": -1.74,
@@ -20,15 +20,19 @@
   "lo": 14,
   "hi": 26.7
  },
- "alerts": [
-  {
-   "type": "earnings",
-   "level": "high",
-   "text": "最新財報摘要已更新（2026 第2季）"
-  }
- ],
+ "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.234Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 54,
+  "scores": {
+   "sentiment": 36,
+   "technical": 58,
+   "fundamental": 64,
+   "valuation": 48,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.928Z"
 }

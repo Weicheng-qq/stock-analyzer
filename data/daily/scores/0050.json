@@ -2,14 +2,14 @@
  "symbol": "0050",
  "name": "YUANTA SECURITIES INV TRUST CO ",
  "nameZh": "元大台灣50",
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 106.95,
  "changePct": 0.85,
- "volRatio": 1.01,
- "score": 70,
+ "volRatio": 0.72,
+ "score": 68,
  "scores": {
-  "sentiment": 55,
+  "sentiment": 52,
   "technical": 82,
   "fundamental": null,
   "valuation": null,
@@ -19,6 +19,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.234Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 70,
+  "scores": {
+   "sentiment": 55,
+   "technical": 82,
+   "fundamental": null,
+   "valuation": null,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.930Z"
 }

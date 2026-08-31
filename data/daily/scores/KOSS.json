@@ -2,7 +2,7 @@
  "symbol": "KOSS",
  "name": "Koss Corporation",
  "nameZh": null,
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 3.5,
  "changePct": 1.45,
@@ -23,6 +23,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.234Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 34,
+  "scores": {
+   "sentiment": 62,
+   "technical": 18,
+   "fundamental": 29,
+   "valuation": null,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.929Z"
 }

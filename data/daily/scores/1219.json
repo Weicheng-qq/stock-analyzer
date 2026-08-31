@@ -2,7 +2,7 @@
  "symbol": "1219",
  "name": "FWUSOW INDUSTRY CO LTD",
  "nameZh": "福壽",
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 11.5,
  "changePct": -2.54,
@@ -20,15 +20,19 @@
   "lo": 19.4,
   "hi": 50.2
  },
- "alerts": [
-  {
-   "type": "earnings",
-   "level": "high",
-   "text": "最新財報摘要已更新（2026 第2季）"
-  }
- ],
+ "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.233Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 33,
+  "scores": {
+   "sentiment": 35,
+   "technical": 42,
+   "fundamental": 15,
+   "valuation": 75,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.928Z"
 }

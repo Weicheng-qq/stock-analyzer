@@ -2,7 +2,7 @@
  "symbol": "1232",
  "name": "TTET UNION CORP",
  "nameZh": "大統益",
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 156.5,
  "changePct": -0.32,
@@ -20,15 +20,19 @@
   "lo": 17.4,
   "hi": 20.7
  },
- "alerts": [
-  {
-   "type": "earnings",
-   "level": "high",
-   "text": "最新財報摘要已更新（2026 第2季）"
-  }
- ],
+ "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.235Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 57,
+  "scores": {
+   "sentiment": 44,
+   "technical": 82,
+   "fundamental": 40,
+   "valuation": 85,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.930Z"
 }

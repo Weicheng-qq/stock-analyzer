@@ -2,7 +2,7 @@
  "symbol": "ADSK",
  "name": "Autodesk, Inc.",
  "nameZh": null,
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 260.66,
  "changePct": -3.67,
@@ -44,9 +44,9 @@
  ],
  "ai": {
   "why": "Q3 營利展望較弱，導致股價下跌",
-  "meaning": "投資人擔心未來獲利成長放緩",
+  "meaning": "投資人擔憂未來獲利成長放緩，可能影響估值",
   "fact": "Q3 營利展望較弱，導致股價下跌",
-  "inference": "投資人擔心未來獲利成長放緩",
+  "inference": "投資人擔憂未來獲利成長放緩，可能影響估值",
   "stance": "neg",
   "newsScore": 45,
   "importance": 4
@@ -68,6 +68,16 @@
    "link": "https://finance.yahoo.com/m/0723e892-2dfd-359a-8b60-8516ae0d72d7/is-adobe-stock%E2%80%99s-ai-strategy.html"
   }
  ],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.232Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 71,
+  "scores": {
+   "sentiment": 36,
+   "technical": 82,
+   "fundamental": 100,
+   "valuation": 83,
+   "news": 45
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.927Z"
 }

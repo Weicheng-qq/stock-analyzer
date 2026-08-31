@@ -2,7 +2,7 @@
  "symbol": "JKHY",
  "name": "Jack Henry & Associates, Inc.",
  "nameZh": null,
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 169.73,
  "changePct": 0.05,
@@ -29,6 +29,16 @@
  ],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.236Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 62,
+  "scores": {
+   "sentiment": 50,
+   "technical": 82,
+   "fundamental": 53,
+   "valuation": 72,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.931Z"
 }

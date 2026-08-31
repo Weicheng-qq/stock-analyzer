@@ -2,18 +2,18 @@
  "symbol": "STRT",
  "name": "STRATTEC SECURITY CORPORATION",
  "nameZh": null,
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 75.04,
  "changePct": 6.76,
  "volRatio": 1.27,
- "score": 54,
+ "score": 55,
  "scores": {
   "sentiment": 83,
   "technical": 34,
   "fundamental": 34,
   "valuation": 70,
-  "news": 70
+  "news": 75
  },
  "pe": {
   "cur": 14.1,
@@ -28,12 +28,12 @@
   }
  ],
  "ai": {
-  "why": "公司宣佈聚焦提升毛利、開發新客戶及數位鑰匙業務",
-  "meaning": "顯示營收與獲利前景看好，投資人感到樂觀",
-  "fact": "公司宣佈聚焦提升毛利、開發新客戶及數位鑰匙業務",
-  "inference": "顯示營收與獲利前景看好，投資人感到樂觀",
+  "why": "公司宣布要提升毛利率、開拓新客戶並發展數位鑰匙業務。",
+  "meaning": "這代表公司正朝高毛利轉型，未來獲利能力有機會提升。",
+  "fact": "公司宣布要提升毛利率、開拓新客戶並發展數位鑰匙業務。",
+  "inference": "這代表公司正朝高毛利轉型，未來獲利能力有機會提升。",
   "stance": "pos",
-  "newsScore": 70,
+  "newsScore": 75,
   "importance": 3
  },
  "newsTop": [
@@ -43,6 +43,16 @@
    "link": "https://finance.yahoo.com/m/7e576d68-78bd-39f9-8994-30083d25d99f/strattec-security-targets.html"
   }
  ],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.232Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 54,
+  "scores": {
+   "sentiment": 83,
+   "technical": 34,
+   "fundamental": 34,
+   "valuation": 70,
+   "news": 70
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.926Z"
 }

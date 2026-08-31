@@ -2,7 +2,7 @@
  "symbol": "1109",
  "name": "HSING TA CEMENT CO LTD",
  "nameZh": "信大",
- "date": "2026-08-30",
+ "date": "2026-08-31",
  "tradeDate": "2026-08-28",
  "price": 13.5,
  "changePct": -0.74,
@@ -20,15 +20,19 @@
   "lo": 9.7,
   "hi": 19.7
  },
- "alerts": [
-  {
-   "type": "earnings",
-   "level": "high",
-   "text": "最新財報摘要已更新（2026 第2季）"
-  }
- ],
+ "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T12:21:11.235Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 27,
+  "scores": {
+   "sentiment": 41,
+   "technical": 18,
+   "fundamental": 27,
+   "valuation": 25,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-08-31T01:22:12.930Z"
 }
