@@ -509,56 +509,69 @@ const musts = rows.filter(r => r.ai && !NO_CONTENT.test(r.ai.fact || ''))
   .sort((a, b) => (b.importance - a.importance) || (Math.abs(b.changePct) - Math.abs(a.changePct)))
   .slice(0, 5);
 
-// 7) 今日市場總結 ＋ 市場焦點主題 ＋ 今天要注意什麼
-// ⚠️⚠️ 成本：這三樣是「同一次 AI 呼叫」一起產出的，呼叫次數與改版前完全相同（1 次），
-//   沒有新增任何 API、沒有新增任何費用。素材只用上面已經查證過的事實，不另外抓資料。
+// 7) 今日市場總結 ＋ 市場焦點主題 ＋ 今天要注意什麼（分市場產出）
+// ⚠️⚠️ 成本：仍然只有「一次」AI 呼叫，與改版前相同。沒有新增任何 API、沒有任何費用。
+// ⚠️⚠️ 2026-08-31 改為分市場：使用者回報「資訊太雜、很多無用的資訊」——
+//   台股使用者看到「留意 STRATTEC 毛利率」「關注 Autodesk 營利展望」這些美國小型股
+//   完全沒有意義。改成台股與美股各自一份，前端依目前市場只顯示對應那一份。
+// ⚠️ 公司名一律要求照抄（多為中文）。實測 AI 會自作主張把「聯發科」寫成「MediaTek」，
+//   使用者明確要求公司名要用中文。
 // ⚠️ 主題與注意事項若無法從當日素材歸納，一律回傳空陣列 —— 前端會整塊不顯示，
-//   絕不為了「每天都要有內容」而讓 AI 憑空生出固定主題（使用者明確要求）。
-let summary = null, themes = [], watchpoints = [];
+//   絕不為了「每天都要有內容」而讓 AI 憑空生出固定主題。
+let summary = null, themes = [], watchpoints = [], byMarket = { tw: null, us: null };
 if (!DRY_RUN && !shouldStop() && musts.length) {
-  // 素材＝今天所有取得 AI 判讀且有實質內容的個股（不只前 5 名，主題才歸納得出來）
-  const material = rows.filter(r => r.ai && !NO_CONTENT.test(r.ai.fact || '')).slice(0, 12)
-    .map(r => `${zhName(r.code) || r.q.name}(${r.code}) ${r.q.changePct >= 0 ? '+' : ''}${r.q.changePct.toFixed(2)}%：${r.ai.fact}`)
-    .join('\n');
-  const r = await callGemini(`以下是今日市場中，各檔股票「已查證的新聞重點」與當日漲跌（皆為已取得的事實，不可添加其他資訊）：
-${material}
+  const line = r => `${zhName(r.code) || r.q.name}(${r.code}) ${r.q.changePct >= 0 ? '+' : ''}${r.q.changePct.toFixed(2)}%：${r.ai.fact}`;
+  const usable = rows.filter(r => r.ai && !NO_CONTENT.test(r.ai.fact || ''));
+  const twMat = usable.filter(r => /^\d{4}$/.test(r.code)).slice(0, 10).map(line).join('\n');
+  const usMat = usable.filter(r => !/^\d{4}$/.test(r.code)).slice(0, 10).map(line).join('\n');
 
-請產出三樣東西，全部用繁體中文白話文，讓一般投資人 1 分鐘看懂。不要寫成研究報告。
+  const r = await callGemini(`以下是今日「已查證的新聞重點」與當日漲跌（皆為已取得的事實，不可添加其他資訊）。
+分成台股與美股兩組：
 
-1. summary：今日市場總結，50～80 字。講「今天市場發生什麼」，不要預測後市、不要建議買賣。
+【台股】
+${twMat || '（今日無素材）'}
 
-2. themes：今天市場真正的焦點主題，最多 5 個，寧缺勿濫。
-   - name：2～8 字的**產業／族群／題材**名稱，例如「AI／半導體」「記憶體」「金融」「減重藥」。
-   - why：一句話、30 字內，說明「今天為什麼值得注意」，要講出原因，
-     不可只寫「受到關注」「市場熱門」這種等於沒說的話。
-   - ⚠️⚠️ **主題必須是族群層級，不可以是單一公司的事件描述。**
-     「設備投資」「營運展望弱化」「公司治理更正」這種都是錯的——那只是把某一檔股票的
-     新聞換句話說，和前面的個股清單完全重複，讀者等於看了兩次同樣的東西。
-   - ⚠️ 一個族群至少要有兩家以上公司出現相關消息，才算得上是「市場主題」。
-     只有一家公司有消息就不要列。**寧可只回 1～2 個真正的主題，也不要湊到 5 個。**
-   - ⚠️ 主題必須是從上方內容真正歸納出來的，上方沒出現的一律不准寫。
-     歸納不出來就直接回傳空陣列 []，那是可以接受的答案。
+【美股】
+${usMat || '（今日無素材）'}
 
-3. watchpoints：接下來要觀察什麼，最多 3 條，每條 25 字內。
-   - 必須直接對應上方出現過的事實（例如某公司財測、某族群的訂單消息）。
-   - ⚠️ 不得寫成買賣建議、不得預測漲跌、不得出現目標價。
-     無法從上方內容導出就回傳空陣列 []。
+請【分別】為台股與美股各產出三樣東西，全部用繁體中文白話文，讓一般投資人 1 分鐘看懂。不要寫成研究報告。
+
+1. summary：該市場的今日總結，50～80 字。講「今天這個市場發生什麼」，不要預測後市、不要建議買賣。
+2. themes：該市場今天真正的焦點主題，最多 5 個。
+   - name：2～8 字的**產業／族群／題材**名稱（例如「AI／半導體」「記憶體」「金融」）。
+   - why：一句話、30 字內，說明「今天為什麼值得注意」，要講出原因。
+   - ⚠️ **必須是族群層級，不可以是單一公司的事件描述。**「設備投資」「營運展望弱化」
+     這種只是把某一檔股票的新聞換句話說，和個股清單完全重複，是錯的。
+   - ⚠️ 一個族群至少要有兩家以上公司出現相關消息才算主題。只有一家就不要列。
+     **寧可只回 1～2 個真正的主題，也不要湊到 5 個。**
+3. watchpoints：接下來要觀察什麼，最多 3 條，每條 25 字內，必須對應上方出現過的事實。
+   ⚠️ 不得寫成買賣建議、不得預測漲跌、不得出現目標價。
+
+【共同鐵則】
+- **公司名一律照抄上方我給你的名稱**（多為中文，例如「聯發科」）。
+  嚴禁自行翻譯成英文或改用英文代碼（不可寫成 MediaTek、TSMC）。
+- 只能根據上方對應市場的內容歸納，該市場沒有素材就三個欄位全部給空值／空陣列。
+- 台股那一份只能講台股的公司，美股那一份只能講美股的公司，不可互相混入。
 
 只回傳 JSON，不要 markdown：
-{"summary":"...","themes":[{"name":"...","why":"..."}],"watchpoints":["...","..."]}`);
+{"tw":{"summary":"...","themes":[{"name":"...","why":"..."}],"watchpoints":["..."]},
+ "us":{"summary":"...","themes":[{"name":"...","why":"..."}],"watchpoints":["..."]}}`);
+
+  const clean = o => {
+    if (!o || typeof o !== 'object') return null;
+    const t = Array.isArray(o.themes) ? o.themes.filter(x => x && x.name)
+      .map(x => ({ name: String(x.name).slice(0, 12), why: String(x.why || '').slice(0, 60) })).slice(0, 5) : [];
+    const w = Array.isArray(o.watchpoints) ? o.watchpoints
+      .map(x => String(typeof x === 'string' ? x : (x && (x.text || x.title)) || '').trim())
+      .filter(Boolean).map(x => x.slice(0, 50)).slice(0, 3) : [];
+    const sm = o.summary ? String(o.summary).slice(0, 220) : null;
+    return (sm || t.length || w.length) ? { summary: sm, themes: t, watchpoints: w } : null;
+  };
   if (r) {
-    if (r.summary) summary = String(r.summary).slice(0, 220);
-    if (Array.isArray(r.themes)) {
-      themes = r.themes
-        .filter(t => t && t.name)
-        .map(t => ({ name: String(t.name).slice(0, 12), why: String(t.why || '').slice(0, 60) }))
-        .slice(0, 5);
-    }
-    if (Array.isArray(r.watchpoints)) {
-      watchpoints = r.watchpoints
-        .map(w => String(typeof w === 'string' ? w : (w && (w.text || w.title)) || '').trim())
-        .filter(Boolean).map(w => w.slice(0, 50)).slice(0, 3);
-    }
+    byMarket = { tw: clean(r.tw), us: clean(r.us) };
+    // 舊欄位保留：萬一前端是舊版，至少還有東西可顯示（取有內容的那一份）
+    const any = byMarket.tw || byMarket.us;
+    if (any) { summary = any.summary; themes = any.themes; watchpoints = any.watchpoints; }
   } else console.warn('⚠️ 市場總結／主題未產生（三層 AI 都沒回傳有效結果）');
 }
 
@@ -588,6 +601,7 @@ fs.writeFileSync(path.join(DAILY, 'latest.json'), JSON.stringify({
   summary,
   themes,
   watchpoints,
+  markets: byMarket,   // 分市場的總結／主題／注意事項（前端依目前市場取用）
   musts,
   poolSize: rows.length,
   aiUsed,

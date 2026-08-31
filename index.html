@@ -2700,10 +2700,10 @@ function __markDailyRead(sym){
   }catch(e){}
 }
 function __renderDailyUnread(){
-  const el=document.getElementById('dailyUnread'); if(!el||!__dailyState.data) return;
-  const total=(__dailyState.data.musts||[]).length;
-  const read=__dailyRead().filter(s=>(__dailyState.data.musts||[]).some(m=>m.symbol===s)).length;
-  el.textContent = total? (read>=total ? `今日 ${total} 件已全部看過 ✓` : `今日 ${total} 件，還有 ${total-read} 件未看`) : '';
+  // ⚠️ 2026-08-31：使用者回報「資訊太雜、很多無用的資訊」。
+  //   標題列那行「今日 5 件，還有 5 件未看」對投資判斷沒有任何幫助，已移除。
+  //   已讀狀態仍保留（每一列右側的「已看過 ✓」與選單紅點），只是不再重複統計一次。
+  const el=document.getElementById('dailyUnread'); if(el) el.textContent='';
 }
 // 沿用既有的 .pill up/down 元件：它已內建「台股紅漲綠跌」的翻轉（body.mkt-tw 控制），
 //   自己另寫顏色會與全站規則不一致，也會漏掉台股翻轉。
@@ -2763,7 +2763,9 @@ function __stanceOf(g){
 }
 // AI 自己說「查無相關新聞」時，不要把那句話當成解釋顯示給使用者
 const __dmNoContent=/無明確相關新聞|無相關新聞|資訊不足|未提供|近期無/;
-const __DM_NO_NEWS='目前沒有重大公司消息，今天股價主要受市場交易情緒影響。';
+// ⚠️ 這句話在「我的股票」會對每一檔沒有消息的股票重複出現，原本是 24 個字，
+//   四檔就佔掉將近四行。縮短成一句話，意思不變。
+const __DM_NO_NEWS='沒有明確消息，主要受市場情緒影響。';
 function __dmWhy(g){
   const ai=g&&g.ai; if(!ai) return __DM_NO_NEWS;
   const t=String(ai.why||ai.fact||'').trim();
@@ -2793,7 +2795,7 @@ function __dmStockBlock(g, extra){
     ${hi.length?`<div class="dm-alert">⚡ ${esc(hi[0])}</div>`:''}
     <div class="dm-why">📰 <b>今天為什麼動？</b><br>${esc(why)}</div>
     ${mean?`<div class="dm-why">💡 <b>對投資人代表什麼？</b><br>${esc(mean)}</div>`:''}
-    <div class="dm-vd">AI判讀：<span style="color:${st.c}">${st.e} ${st.t}</span>${(st.note&&why===__DM_NO_NEWS)?`<span class="dm-sub">${esc(st.note)}</span>`:''}${g.score!=null?`<span class="dm-sub">體質評分 ${g.score}/100</span>`:''}${extra||''}</div>
+    <div class="dm-vd">AI判讀：<span style="color:${st.c}">${st.e} ${st.t}</span>${extra||''}</div>
   </div>`;
 }
 // 主題圖示：只是視覺標記，依主題名稱關鍵字對應；主題文字本身一律由當日實際資料產生，不是固定清單
@@ -2843,23 +2845,36 @@ function __dmRenderAll(){
 
   // ① AI 今日市場總結（10 秒看懂今天發生什麼）
   const boxS=$('dailySummary');
-  if(boxS) boxS.innerHTML = d.summary
-    ? `<div class="dm-sum"><b>🤖 今天市場一句話</b><br><span>${esc(d.summary)}</span></div>` : '';
+  if(boxS) boxS.innerHTML = __summary
+    ? `<div class="dm-sum"><b>🤖 今天市場一句話</b><br><span>${esc(__summary)}</span></div>` : '';
 
   // ② 🔥 今天最值得注意的事情（預設 3 則，其餘收合）
   const boxM=$('dailyMusts');
-  const musts=(Array.isArray(d.musts)?d.musts:[]).map(m=>({
-    symbol:m.symbol, name:m.name, nameZh:m.nameZh, changePct:m.changePct, score:m.score,
-    ai:{ why:m.why, fact:m.fact, meaning:m.meaning, inference:m.inference,
-         stance:m.stance, newsScore:m.newsScore, importance:m.importance }
-  }));
+  // ⚠️ tradeDate 一定要帶過來。漏掉的話 __dmDayLabel() 找不到日期會退回「今日」，
+  //   結果同一檔聯發科在這裡顯示「今日 ▲3.10%」、在下面「我的股票」顯示「8/28 收盤」，
+  //   同一頁兩個互相矛盾的日期（2026-08-31 實測到）。
+  // ⚠️ 並且只留「目前市場」的股票：使用者回報「資訊太雜、很多無用的資訊」，
+  //   台股使用者看到 Autodesk／STRATTEC／Williams-Sonoma 這些美股小型股完全沒有意義，
+  //   而且它們沒有中文名，畫面上就會出現一排英文。
+  const __isTwMkt=(()=>{ try{ return getMarket()==='tw'; }catch(e){ return false; } })();
+  // 分市場的總結／主題／注意事項（2026-08-31 起排程會分別產出）。
+  //   舊資料沒有 markets 欄位時退回舊的全域欄位，畫面不會空掉。
+  const __mk=(d.markets&&d.markets[__isTwMkt?'tw':'us'])||null;
+  const __summary=__mk?__mk.summary:d.summary;
+  const __themes=__mk?__mk.themes:d.themes;
+  const __watch=__mk?__mk.watchpoints:d.watchpoints;
+  const musts=(Array.isArray(d.musts)?d.musts:[])
+    .filter(m=>m&&m.symbol&&(/^\d{4}$/.test(__codeOf(m.symbol))===__isTwMkt))
+    .map(m=>({
+      symbol:m.symbol, name:m.name, nameZh:m.nameZh, changePct:m.changePct, score:m.score,
+      tradeDate:m.tradeDate,
+      ai:{ why:m.why, fact:m.fact, meaning:m.meaning, inference:m.inference,
+           stance:m.stance, newsScore:m.newsScore, importance:m.importance }
+    }));
   if(boxM){
     if(!musts.length){
-      boxM.innerHTML='<div class="dm-sec">🔥 今天最值得注意的事情</div><div class="note">今天沒有偵測到需要特別注意的變化。</div>';
+      boxM.innerHTML=`<div class="dm-sec">🔥 今天最值得注意的事情</div><div class="note">今天${__isTwMkt?'台股':'美股'}沒有偵測到需要特別注意的變化。</div>`;
     }else{
-      // 目前所在市場（台股／美股）的股票排前面：台股使用者不該第一眼看到美國小型股。
-      //   只調整順序，一筆都不刪，展開後仍看得到全部。
-      musts.sort((a,b)=>(__dmClickable(a.symbol)?0:1)-(__dmClickable(b.symbol)?0:1));
       const show=__dmExpand.musts?musts:musts.slice(0,3);
       boxM.innerHTML=`<div class="dm-sec">🔥 今天最值得注意的事情</div>`
         + show.map(m=>__dmStockBlock(m, __dailyRead().includes(m.symbol)?'<span class="dm-sub">已看過 ✓</span>':'')).join('')
@@ -2873,7 +2888,7 @@ function __dmRenderAll(){
   // ④ 🔥 今天市場最重要（主題由當日實際新聞歸納，沒素材就整塊不出現）
   const boxT=$('dailyThemes');
   if(boxT){
-    const th=(Array.isArray(d.themes)?d.themes:[]).filter(t=>t&&(t.name||t.title));
+    const th=(Array.isArray(__themes)?__themes:[]).filter(t=>t&&(t.name||t.title));
     boxT.innerHTML = th.length ? `<div class="dm-sec">🔥 今天市場最重要</div>`
       + th.slice(0,5).map(t=>{
           const nm=t.name||t.title;
@@ -2929,13 +2944,13 @@ function __dmRenderAll(){
           }).join('')}
         </div>`).join('')
       + (ev.length>8?`<span class="dm-more" onclick="__dmToggle('events')">${__dmExpand.events?'收合':'看全部 '+ev.length+' 筆'} ▾</span>`:'')
-      + `<div class="dm-note" style="margin-top:6px">「官方公告」為公司或主管機關已公布的確定日期；「依慣例推算」是依長期固定的發布規律估算，非官方公告。</div>` : '';
+      + `<div class="dm-note" style="margin-top:6px">🟢 官方公告＝已公布的確定日期；其餘為依固定規律推算，非官方公告。</div>` : '';
   }
 
   // ⑥ 🎯 今天你應該注意什麼（最多 3 件，由當日資料產生；沒有就不顯示）
   const boxW=$('dailyWatch');
   if(boxW){
-    const wp=(Array.isArray(d.watchpoints)?d.watchpoints:[]).map(w=>typeof w==='string'?w:((w&&(w.text||w.title))||'')).filter(Boolean);
+    const wp=(Array.isArray(__watch)?__watch:[]).map(w=>typeof w==='string'?w:((w&&(w.text||w.title))||'')).filter(Boolean);
     boxW.innerHTML = wp.length ? `<div class="dm-sec">🎯 今天你應該注意什麼</div>`
       + `<div class="dm-row">${wp.slice(0,3).map((w,i)=>`<div class="dm-why" style="margin-top:${i?8:2}px">${['①','②','③'][i]} ${esc(w)}</div>`).join('')}</div>` : '';
   }
@@ -2961,9 +2976,11 @@ function __dmRenderAll(){
     //   使用者會覺得自相矛盾。兩者衡量的其實是不同的東西：AI判讀只看今天的消息方向，
     //   評分是基本面／估值／技術面的綜合體質。已把評分改名為「體質評分」並在這裡說明，
     //   避免被當成「分數高＝今天利多」或「分數＝可以買」。
-    meta.innerHTML=`AI判讀＝今天的<b>消息方向</b>；體質評分＝基本面、估值、技術面的<b>綜合體質</b>，`
-      +`兩者不同向是正常的，都不是買賣建議。<br>資料日期 ${esc(d.date||'')}`
-      +`${stale?'（休市中，數字為最近交易日收盤）':''}｜由每日排程統一產生，所有使用者共用同一份分析`;
+    // ⚠️ 說明文字也精簡：原本兩行說明＋一行資料來源共三行，使用者反映太雜。
+    //   體質評分已從每一列移除（完整五面向仍保留在個股頁的「AI 每日更新」卡片），
+    //   所以那段解釋也不需要了。
+    meta.innerHTML=`資料日期 ${esc(d.date||'')}${stale?'（休市中，數字為最近交易日收盤）':''}`
+      +`｜AI判讀為今天的消息方向，非買賣建議`;
   }
   __renderDailyUnread();
 }
