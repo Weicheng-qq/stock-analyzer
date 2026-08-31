@@ -2842,6 +2842,13 @@ function __dmRenderAll(){
   const d=__dailyState.data; if(!d) return;
   const $=id=>document.getElementById(id);
   let mine=[]; try{ mine=getWatchlist().map(x=>__codeOf((x&&x.symbol)||x)); }catch(e){}
+  const __isTwMkt=(()=>{ try{ return getMarket()==='tw'; }catch(e){ return false; } })();
+  // 分市場的總結／主題／注意事項（2026-08-31 起排程會分別產出）。
+  //   舊資料沒有 markets 欄位時退回舊的全域欄位，畫面不會空掉。
+  const __mk=(d.markets&&d.markets[__isTwMkt?'tw':'us'])||null;
+  const __summary=__mk?__mk.summary:d.summary;
+  const __themes=__mk?__mk.themes:d.themes;
+  const __watch=__mk?__mk.watchpoints:d.watchpoints;
 
   // ① AI 今日市場總結（10 秒看懂今天發生什麼）
   const boxS=$('dailySummary');
@@ -2856,13 +2863,6 @@ function __dmRenderAll(){
   // ⚠️ 並且只留「目前市場」的股票：使用者回報「資訊太雜、很多無用的資訊」，
   //   台股使用者看到 Autodesk／STRATTEC／Williams-Sonoma 這些美股小型股完全沒有意義，
   //   而且它們沒有中文名，畫面上就會出現一排英文。
-  const __isTwMkt=(()=>{ try{ return getMarket()==='tw'; }catch(e){ return false; } })();
-  // 分市場的總結／主題／注意事項（2026-08-31 起排程會分別產出）。
-  //   舊資料沒有 markets 欄位時退回舊的全域欄位，畫面不會空掉。
-  const __mk=(d.markets&&d.markets[__isTwMkt?'tw':'us'])||null;
-  const __summary=__mk?__mk.summary:d.summary;
-  const __themes=__mk?__mk.themes:d.themes;
-  const __watch=__mk?__mk.watchpoints:d.watchpoints;
   const musts=(Array.isArray(d.musts)?d.musts:[])
     .filter(m=>m&&m.symbol&&(/^\d{4}$/.test(__codeOf(m.symbol))===__isTwMkt))
     .map(m=>({
