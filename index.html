@@ -2845,10 +2845,14 @@ function __dmRenderAll(){
   const __isTwMkt=(()=>{ try{ return getMarket()==='tw'; }catch(e){ return false; } })();
   // 分市場的總結／主題／注意事項（2026-08-31 起排程會分別產出）。
   //   舊資料沒有 markets 欄位時退回舊的全域欄位，畫面不會空掉。
+  // ⚠️ 舊資料（2026-08-31 之前產生）沒有 markets 欄位，那份文字是台股美股混在一起、
+  //   而且公司名是英文（實測出現「MediaTek 擴產設備」「留意 STRATTEC 毛利率」）。
+  //   對台股使用者那是雜訊，寧可整塊不顯示，等下一次排程產生分市場版本再出現——
+  //   這與本頁「沒有當日資料就整塊不顯示」的原則一致。
   const __mk=(d.markets&&d.markets[__isTwMkt?'tw':'us'])||null;
-  const __summary=__mk?__mk.summary:d.summary;
-  const __themes=__mk?__mk.themes:d.themes;
-  const __watch=__mk?__mk.watchpoints:d.watchpoints;
+  const __summary=__mk?__mk.summary:null;
+  const __themes=__mk?__mk.themes:null;
+  const __watch=__mk?__mk.watchpoints:null;
 
   // ① AI 今日市場總結（10 秒看懂今天發生什麼）
   const boxS=$('dailySummary');
