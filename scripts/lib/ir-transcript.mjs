@@ -155,7 +155,13 @@ const FOCUS_IR = [
   /gross margin|operating margin|capital expenditure|capex/gi,
   /demand|growth|ramp|capacity|backlog/gi,
   /展望|財測|預估|預期|資本支出|毛利率|營業利益率|需求|成長/g,
-  /we (?:believe|see|anticipate|plan|will)/gi
+  /we (?:believe|see|anticipate|plan|will)/gi,
+  // ⚠️ 2026-08-31 補上「技術路線圖」關鍵詞。實測台積電：A14／N2 有被節錄到，
+  //   但 nanosheet、3 nanometer、2028 這些製程時程被切掉了，而人工建置版本
+  //   最有價值的一段正是「A14 較 N2 快 10~15%、2027 風險試產、2028 量產」。
+  //   節錄若把它切掉，AI 再怎麼寫也補不回來。
+  /nanometer|nanosheet|node|tape[- ]?out|risk production|volume production|process technology/gi,
+  /奈米|製程|量產|試產|技術藍圖|先進封裝/g
 ];
 export function focusExcerptIr(text, maxLen = 14000) {
   const spans = [];

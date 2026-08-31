@@ -3197,6 +3197,11 @@ function earningsBlock(j, isNewer){
        <b style="color:var(--green)">🎙️ 管理層法說會發言重點（逐字稿原文）</b><br>${r.mgmtRemarks}</div>`;
   const capexP=notGiven(r.capexPlan)?'':
     `<div style="margin-bottom:10px"><b style="color:var(--blue)">🏗️ 資本支出／產能計畫</b><br>${r.capexPlan}</div>`;
+  // ⚠️ 技術路線圖：實測比對人工建置的台積電版本後補上的欄位。人工版最有價值的一段
+  //   （A14 規格、N2 量產時程、各地擴廠）自動版原本完全沒有，因為提示詞沒有這個欄位——
+  //   AI 只會填被要求填的欄位，材料在節錄裡也沒用。
+  const techR=notGiven(r.techRoadmap)?'':
+    `<div style="margin-bottom:10px"><b style="color:var(--orange)">🔬 技術／產品路線圖</b><br>${r.techRoadmap}</div>`;
   return `<div style="${isNewer?'':'margin-top:14px;padding-top:12px;border-top:1px solid var(--line)'}">
     <div style="color:var(--green);font-size:12px;margin-bottom:8px">
       📊 最新財報自動摘要（${esc(j.quarter||'')}）${isNewer?'<b>· 比下方人工整理的內容更新一季</b>':''} — 數字來自${esc(j.source||'官方申報')}
@@ -3204,7 +3209,7 @@ function earningsBlock(j, isNewer){
     <div style="font-size:13px;margin-bottom:10px;line-height:1.9">
       ${row('營收',o.營業收入&&o.營業收入+unit)}${row('營業利益',o.營業利益&&o.營業利益+unit)}${row('淨利',o.本期淨利&&o.本期淨利+unit)}${row('EPS',o.每股盈餘)}
     </div>
-    ${mgmt}${guide}${capexP}${seg}
+    ${mgmt}${guide}${capexP}${techR}${seg}
     ${item('營收表現',r.revenue)}${item('每股盈餘',r.eps)}${item('獲利率',r.margins)}
     ${item('自由現金流',r.fcf)}${item('資本支出',r.capex)}${guide?'':item('官方財測',r.guidance)}
     ${item('營運狀況',r.outlook)}${item('本季亮點',r.highlights)}${item('須留意之處',r.concerns)}

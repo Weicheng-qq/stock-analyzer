@@ -47,6 +47,30 @@ async function tryEndpoint(url, key, models, prompt, extra = {}) {
 export async function callAI(prompt) {
   const gk = process.env.GEMINI_KEY, qk = process.env.GROQ_KEY, ok = process.env.OPENROUTER_KEY;
 
+  // 【測試用逃生口】設了 AI_PROXY_URL 就改打網站既有的 /api/ai（它自己也有同樣的三層備援）。
+  //   用途：本機沒有金鑰時也能把整條管線跑完做品質驗證，不必等雲端排程。
+  //   ⚠️ GitHub Actions 的 workflow 不會設這個變數，正式排程行為完全不變。
+  //   ⚠️ 一樣只走免費層，不會產生任何費用。
+  if (process.env.AI_PROXY_URL) {
+    try {
+      const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 120000);
+      const r = await fetch(process.env.AI_PROXY_URL, {
+        method: 'POST', signal: ctl.signal,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: 'gemini-3.5-flash', messages: [{ role: 'user', content: prompt }], temperature: 0.3 })
+      });
+      clearTimeout(to);
+      if (r.ok) {
+        const j = await r.json();
+        const txt = j?.choices?.[0]?.message?.content || '';
+        const m = txt.match(/\{[\s\S]*\}/);
+        if (m) { try { const o = JSON.parse(m[0]); aiStats.gemini++; return o; } catch (e) {} }
+      }
+    } catch (e) {}
+    aiStats.failed++;
+    return null;
+  }
+
   if (gk) {
     const r = await tryEndpoint('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', gk, GEMINI_MODELS, prompt);
     if (r.result) { aiStats.gemini++; return r.result; }
