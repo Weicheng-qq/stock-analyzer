@@ -2,18 +2,18 @@
  "symbol": "NVO",
  "name": "Novo Nordisk A/S",
  "nameZh": null,
- "date": "2026-08-31",
- "tradeDate": "2026-08-28",
- "price": 45.61,
- "changePct": -1.41,
- "volRatio": 0.61,
+ "date": "2026-09-01",
+ "tradeDate": "2026-08-31",
+ "price": 45.33,
+ "changePct": -0.61,
+ "volRatio": 0.55,
  "score": 38,
  "scores": {
-  "sentiment": 38,
+  "sentiment": 42,
   "technical": 18,
   "fundamental": null,
   "valuation": 85,
-  "news": 40
+  "news": null
  },
  "pe": {
   "cur": 11.3,
@@ -21,42 +21,18 @@
   "hi": 49.4
  },
  "alerts": [],
- "ai": {
-  "why": "Novo Wegovy 進入中國市場較 Lilly 落後，市場擔憂競爭力受限",
-  "meaning": "投資人可能擔心 Novo 在糖尿病/減重市場的成長動能受阻",
-  "fact": "Novo Wegovy 進入中國市場較 Lilly 落後，市場擔憂競爭力受限",
-  "inference": "投資人可能擔心 Novo 在糖尿病/減重市場的成長動能受阻",
-  "stance": "neg",
-  "newsScore": 40,
-  "importance": 3
- },
- "newsTop": [
-  {
-   "title": "Viking Therapeutics Stock Is Down 66% From Its Peak. Here's What Comes Next.",
-   "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/e1e02767-8666-391c-9316-071e32b83ce1/viking-therapeutics-stock-is.html"
-  },
-  {
-   "title": "Should Eli Lilly Investors Be Worried About a Threat From Amylyx?",
-   "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/88e01702-7421-3d74-ac2d-fffebb4fc163/should-eli-lilly-investors-be.html"
-  },
-  {
-   "title": "Has Novo Nordisk Finally Found the Catalyst That Could Flip the Script on Eli Lilly?",
-   "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/fe93d3c2-f4a5-3a9d-90a3-faa56d6d9b0c/has-novo-nordisk-finally.html"
-  }
- ],
+ "ai": null,
+ "newsTop": [],
  "prev": {
-  "date": "2026-08-30",
-  "score": 39,
+  "date": "2026-08-31",
+  "score": 38,
   "scores": {
    "sentiment": 38,
    "technical": 18,
    "fundamental": null,
-   "valuation": 84,
-   "news": 45
+   "valuation": 85,
+   "news": 40
   }
  },
- "generatedAt": "2026-08-31T01:22:12.929Z"
+ "generatedAt": "2026-09-01T01:49:11.060Z"
 }

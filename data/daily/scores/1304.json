@@ -1,0 +1,34 @@
+{
+ "symbol": "1304",
+ "name": "USI CORPORATION",
+ "nameZh": "台聚",
+ "date": "2026-09-01",
+ "tradeDate": "2026-09-01",
+ "price": 12.8,
+ "changePct": 1.19,
+ "volRatio": 1,
+ "score": 41,
+ "scores": {
+  "sentiment": 57,
+  "technical": 66,
+  "fundamental": 18,
+  "valuation": 25,
+  "news": null
+ },
+ "pe": {
+  "cur": 17.7,
+  "lo": 10.1,
+  "hi": 17.7
+ },
+ "alerts": [
+  {
+   "type": "guidance",
+   "level": "mid",
+   "text": "公司已公布官方財測／展望"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-09-01T01:49:11.059Z"
+}

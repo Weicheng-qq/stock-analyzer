@@ -2,29 +2,54 @@
  "symbol": "2317",
  "name": "HON HAI PRECISION INDUSTRY",
  "nameZh": "鴻海",
- "date": "2026-08-31",
- "tradeDate": "2026-08-28",
- "price": 253,
- "changePct": 0.4,
- "volRatio": 0.72,
- "score": 53,
+ "date": "2026-09-01",
+ "tradeDate": "2026-09-01",
+ "price": 254.5,
+ "changePct": 1.8,
+ "volRatio": 0.22,
+ "score": 67,
  "scores": {
-  "sentiment": 50,
-  "technical": 58,
+  "sentiment": 53,
+  "technical": 82,
   "fundamental": null,
   "valuation": 46,
-  "news": null
+  "news": 70
  },
  "pe": {
   "cur": 16.7,
   "lo": 10.2,
   "hi": 20.1
  },
- "alerts": [],
- "ai": null,
- "newsTop": [],
+ "alerts": [
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "鴻海子公司取得深圳廠房使用權，且其客戶之一的耐特獲證交所批准上市。"
+  }
+ ],
+ "ai": {
+  "why": "鴻海子公司取得深圳廠房使用權，且其客戶之一的耐特獲證交所批准上市。",
+  "meaning": "顯示公司擴產與供應鏈需求持續增長，利好營收。",
+  "fact": "鴻海子公司取得深圳廠房使用權，且其客戶之一的耐特獲證交所批准上市。",
+  "inference": "顯示公司擴產與供應鏈需求持續增長，利好營收。",
+  "stance": "pos",
+  "newsScore": 70,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "鴻海 代子公司富泰華工業(深圳)有限公司公告取得廠房之使用權資產",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E9%B4%BB%E6%B5%B7-%E4%BB%A3%E5%AD%90%E5%85%AC%E5%8F%B8%E5%AF%8C%E6%B3%B0%E8%8F%AF%E5%B7%A5%E6%A5%AD-%E6%B7%B1%E5%9C%B3-%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%91%8A%E5%8F%96%E5%BE%97%E5%BB%A0%E6%88%BF%E4%B9%8B%E4%BD%BF%E7%94%A8%E6%AC%8A%E8%B3%87%E7%94%A2-092900853.html"
+  },
+  {
+   "title": "日月光、鴻海等都是它客戶！耐特股票上市案 證交所通過",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E6%97%A5%E6%9C%88%E5%85%89%E3%80%81%E9%B4%BB%E6%B5%B7%E7%AD%89%E9%83%BD%E6%98%AF%E5%AE%83%E5%AE%A2%E6%88%B6%EF%BC%81%E8%80%90%E7%89%B9%E8%82%A1%E7%A5%A8%E4%B8%8A%E5%B8%82%E6%A1%88-%E8%AD%89%E4%BA%A4%E6%89%80%E9%80%9A%E9%81%8E-093423075.html"
+  }
+ ],
  "prev": {
-  "date": "2026-08-30",
+  "date": "2026-08-31",
   "score": 53,
   "scores": {
    "sentiment": 50,
@@ -34,5 +59,5 @@
    "news": null
   }
  },
- "generatedAt": "2026-08-31T01:22:12.930Z"
+ "generatedAt": "2026-09-01T01:49:11.058Z"
 }

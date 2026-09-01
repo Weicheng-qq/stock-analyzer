@@ -2,18 +2,18 @@
  "symbol": "GOOGL",
  "name": "Alphabet Inc.",
  "nameZh": null,
- "date": "2026-08-31",
- "tradeDate": "2026-08-28",
- "price": 346.59,
- "changePct": 1.74,
- "volRatio": 1.04,
- "score": 45,
+ "date": "2026-09-01",
+ "tradeDate": "2026-08-31",
+ "price": 339.35,
+ "changePct": -2.09,
+ "volRatio": 1.38,
+ "score": 42,
  "scores": {
-  "sentiment": 61,
+  "sentiment": 41,
   "technical": 18,
   "fundamental": null,
   "valuation": 85,
-  "news": null
+  "news": 50
  },
  "pe": {
   "cur": 17.1,
@@ -21,10 +21,34 @@
   "hi": 28.4
  },
  "alerts": [],
- "ai": null,
- "newsTop": [],
+ "ai": {
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 50,
+  "importance": 1
+ },
+ "newsTop": [
+  {
+   "title": "GOOGL Stock Delivers Like The Leader, Priced Like The Laggard",
+   "publisher": "Trefis",
+   "link": "https://finance.yahoo.com/m/b0ae5812-87dd-3768-b555-0d935261b0a6/googl-stock-delivers-like-the.html"
+  },
+  {
+   "title": "Stock Market Today: Dow Skids As Trump Gives This AI Warning; Tesla Pops Ahead Of Key Event",
+   "publisher": "Investor's Business Daily",
+   "link": "https://finance.yahoo.com/m/c57f0554-71e8-33dd-9dcc-a2cad75076ba/stock-market-today%3A-dow-skids.html"
+  },
+  {
+   "title": "Is Broadcom (AVGO) Stock a Buy Before Its Q3 Earnings?",
+   "publisher": "Zacks",
+   "link": "https://finance.yahoo.com/markets/stocks/articles/broadcom-avgo-stock-buy-q3-203900190.html"
+  }
+ ],
  "prev": {
-  "date": "2026-08-30",
+  "date": "2026-08-31",
   "score": 45,
   "scores": {
    "sentiment": 61,
@@ -34,5 +58,5 @@
    "news": null
   }
  },
- "generatedAt": "2026-08-31T01:22:12.928Z"
+ "generatedAt": "2026-09-01T01:49:11.058Z"
 }

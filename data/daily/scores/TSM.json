@@ -2,18 +2,18 @@
  "symbol": "TSM",
  "name": "Taiwan Semiconductor Manufactur",
  "nameZh": null,
- "date": "2026-08-31",
- "tradeDate": "2026-08-28",
- "price": 417.52,
- "changePct": -2.29,
- "volRatio": 0.88,
- "score": 38,
+ "date": "2026-09-01",
+ "tradeDate": "2026-08-31",
+ "price": 415.32,
+ "changePct": -0.53,
+ "volRatio": 0.67,
+ "score": 33,
  "scores": {
-  "sentiment": 35,
+  "sentiment": 44,
   "technical": 18,
   "fundamental": null,
   "valuation": 49,
-  "news": 55
+  "news": null
  },
  "pe": {
   "cur": 31.9,
@@ -21,34 +21,10 @@
   "hi": 36.7
  },
  "alerts": [],
- "ai": {
-  "why": "今日無明確公司消息",
-  "meaning": "",
-  "fact": "今日無明確公司消息",
-  "inference": "",
-  "stance": "neu",
-  "newsScore": 55,
-  "importance": 2
- },
- "newsTop": [
-  {
-   "title": "Not Nvidia. Not AMD. This Semiconductor Giant Will Be the Ultimate Winner of the Artificial Intelligence (AI) Hardware Race.",
-   "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/88f9c5d3-d1ba-346b-97c6-e14b48672220/not-nvidia.-not-amd.-this.html"
-  },
-  {
-   "title": "Apple Was Always 1 Step Behind in AI. In Chipmaking, It’s Now 1 Step Ahead.",
-   "publisher": "Barchart",
-   "link": "https://finance.yahoo.com/m/0578bf34-9d3a-3463-9fc8-174096f454a4/apple-was-always-1-step.html"
-  },
-  {
-   "title": "TSMC vs. ASML: Which Semiconductor Giant Is the Better Stock Buy?",
-   "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/793c4003-bf43-3cca-8bba-23c57440b605/tsmc-vs.-asml%3A-which.html"
-  }
- ],
+ "ai": null,
+ "newsTop": [],
  "prev": {
-  "date": "2026-08-30",
+  "date": "2026-08-31",
   "score": 38,
   "scores": {
    "sentiment": 35,
@@ -58,5 +34,5 @@
    "news": 55
   }
  },
- "generatedAt": "2026-08-31T01:22:12.928Z"
+ "generatedAt": "2026-09-01T01:49:11.060Z"
 }

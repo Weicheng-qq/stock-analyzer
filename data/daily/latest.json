@@ -1,12 +1,43 @@
 {
- "date": "2026-08-31",
- "tradeDate": "2026-08-28",
+ "date": "2026-09-01",
+ "tradeDate": "2026-09-01",
  "alerts": [
+  {
+   "symbol": "2454",
+   "name": "MEDIATEK INC",
+   "nameZh": "聯發科",
+   "changePct": 9.94,
+   "items": [
+    {
+     "type": "price",
+     "level": "high",
+     "text": "股價大漲 9.94%"
+    },
+    {
+     "type": "news",
+     "level": "high",
+     "text": "輝達斥資數十億美元認購聯發科發行的可轉換公司債。"
+    }
+   ]
+  },
+  {
+   "symbol": "8499",
+   "name": "TOP BRIGHT HOLDING",
+   "nameZh": "鼎炫-KY",
+   "changePct": 0,
+   "items": [
+    {
+     "type": "volume",
+     "level": "high",
+     "text": "成交量放大至近月均量的 3.8 倍"
+    }
+   ]
+  },
   {
    "symbol": "1213",
    "name": "OCEANIC BEVERAGES CO INC",
    "nameZh": "大飲",
-   "changePct": 4.9,
+   "changePct": 0,
    "items": [
     {
      "type": "volume",
@@ -14,97 +45,161 @@
      "text": "成交量放大至近月均量的 3.9 倍"
     }
    ]
-  },
-  {
-   "symbol": "ADSK",
-   "name": "Autodesk, Inc.",
-   "nameZh": null,
-   "changePct": -3.67,
-   "items": [
-    {
-     "type": "earnings",
-     "level": "high",
-     "text": "最新財報摘要已更新（2027 Q2（2026-05-01～2026-07-31））"
-    }
-   ]
-  },
-  {
-   "symbol": "WSM",
-   "name": "Williams-Sonoma, Inc.",
-   "nameZh": null,
-   "changePct": -1.39,
-   "items": [
-    {
-     "type": "earnings",
-     "level": "high",
-     "text": "最新財報摘要已更新（2026 Q2（2026-05-04～2026-08-02））"
-    }
-   ]
   }
  ],
  "events": [
   {
-   "date": "2026-08-31",
+   "date": "2026-09-01",
    "kind": "confirmed",
    "category": "法說會",
-   "symbol": "1101",
-   "name": "台泥",
-   "title": "台泥 法人說明會",
-   "note": "本公司受邀參加富邦證券舉辦之法人座談會，\r\n會中說明本公司營運簡介、ESG、公司未來展望"
+   "symbol": "1590",
+   "name": "亞德客-KY",
+   "title": "亞德客-KY 法人說明會",
+   "note": "本公司受邀參加香港上海匯豐證券舉辦之法人說明會「13th Annual China Conference」，說明本公司2"
   },
   {
-   "date": "2026-08-31",
+   "date": "2026-09-01",
    "kind": "confirmed",
    "category": "法說會",
-   "symbol": "1504",
-   "name": "東元",
-   "title": "東元 法人說明會",
-   "note": "本公司受邀參加Goldman Sachs舉辦之 Asia Leaders Conference 2026，並就本公司營運"
+   "symbol": "1795",
+   "name": "美時",
+   "title": "美時 法人說明會",
+   "note": "本公司受邀參加元大證券舉辦之中文法人說明會，將就本公司財務及營運狀況向投資法人說明。"
   },
   {
-   "date": "2026-08-31",
+   "date": "2026-09-01",
    "kind": "confirmed",
    "category": "法說會",
-   "symbol": "2412",
-   "name": "中華電",
-   "title": "中華電 法人說明會",
-   "note": "會議由Goldman Sachs主辦"
+   "symbol": "2356",
+   "name": "英業達",
+   "title": "英業達 法人說明會",
+   "note": "本公司受邀參加Goldman Sachs Asia Leaders Conference 2026，說明本公司營運概況"
   },
   {
-   "date": "2026-08-31",
+   "date": "2026-09-01",
    "kind": "confirmed",
    "category": "法說會",
-   "symbol": "2881",
-   "name": "富邦金",
-   "title": "富邦金 法人說明會",
-   "note": "討論富邦金控財務及業務相關資訊"
+   "symbol": "2882",
+   "name": "國泰金",
+   "title": "國泰金 法人說明會",
+   "note": "本公司受邀參加Goldman Sachs舉辦之投資人會議，說明公司營運概況。"
   },
   {
-   "date": "2026-08-31",
+   "date": "2026-09-01",
    "kind": "confirmed",
    "category": "法說會",
-   "symbol": "2884",
-   "name": "玉山金",
-   "title": "玉山金 法人說明會",
-   "note": "2026年第2季財業務資訊"
+   "symbol": "5471",
+   "name": "松翰",
+   "title": "松翰 法人說明會",
+   "note": "本公司受邀參加華南永昌證券舉辦之法人說明會，報告本公司營運狀況。"
   },
   {
-   "date": "2026-08-31",
+   "date": "2026-09-01",
    "kind": "confirmed",
    "category": "法說會",
-   "symbol": "2885",
-   "name": "元大金",
-   "title": "元大金 法人說明會",
-   "note": "公告本公司擬於民國115年8月31日至9月1日受邀參加高盛證券於香港舉行之投資人會議—Goldman Sachs Asi"
+   "symbol": "5871",
+   "name": "中租-KY",
+   "title": "中租-KY 法人說明會",
+   "note": "報告公司財務業務狀況及經營績效"
   },
   {
-   "date": "2026-08-31",
+   "date": "2026-09-01",
    "kind": "confirmed",
    "category": "法說會",
-   "symbol": "2890",
-   "name": "永豐金",
-   "title": "永豐金 法人說明會",
-   "note": "永豐金控將於115年8月31日至9月9日赴紐約及倫敦會晤當地投資機構，說明115年第二季財務業務相關資訊"
+   "symbol": "6658",
+   "name": "聯策",
+   "title": "聯策 法人說明會",
+   "note": "受邀參加櫃買中心及永豐金證券舉辦之2026年半導體展高峰論壇，說明本公司營運及業務狀況。"
+  },
+  {
+   "date": "2026-09-01",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "7721",
+   "name": "微程式",
+   "title": "微程式 法人說明會",
+   "note": "本公司受邀參加櫃買中心暨永豐金證券合作舉辦之「2026年半導體展高峰論壇」，說明本公司簡介與營運概況。"
+  },
+  {
+   "date": "2026-09-01",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "7768",
+   "name": "頌勝科技",
+   "title": "頌勝科技 法人說明會",
+   "note": "受邀參加櫃買中心及永豐金證券舉辦之2026年半導體展高峰論壇，說明本公司營運及財務概況。"
+  },
+  {
+   "date": "2026-09-01",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "3680",
+   "name": "家登",
+   "title": "家登 法人說明會",
+   "note": "本公司受邀參加櫃買中心與永豐金證券共同舉辦之TPEx &amp; SinoPac Pre-Semicon Taiwan "
+  },
+  {
+   "date": "2026-09-01",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "4542",
+   "name": "科嶠",
+   "title": "科嶠 法人說明會",
+   "note": "本公司受邀參加櫃買中心暨永豐金證券合作舉辦之「2026年半導體展高峰論壇」，說明本公司簡介與營運概況。"
+  },
+  {
+   "date": "2026-09-01",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "4772",
+   "name": "台特化",
+   "title": "台特化 法人說明會",
+   "note": "本公司受邀參加2026櫃買中心暨永豐金證券半導體展高峰論壇"
+  },
+  {
+   "date": "2026-09-01",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "6510",
+   "name": "精測",
+   "title": "精測 法人說明會",
+   "note": "本公司受邀參加櫃買中心與永豐金證券舉辦之「2026年半導體展高峰論壇」，會中就本公司7/29法說會已公開之財務數字、經營"
+  },
+  {
+   "date": "2026-09-01",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "6570",
+   "name": "維田",
+   "title": "維田 法人說明會",
+   "note": "應櫃買中心邀請，參加「2026櫃買中心暨永豐金證券半導體展高峰論壇」，說明本公司營運概況及展望。"
+  },
+  {
+   "date": "2026-09-01",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "6664",
+   "name": "群翊",
+   "title": "群翊 法人說明會",
+   "note": "本公司受邀參加櫃買中心與永豐金證券合作舉辦之「2026年半導體展高峰論壇」，說明公司產業概況及經營績效。"
+  },
+  {
+   "date": "2026-09-01",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "6823",
+   "name": "濾能",
+   "title": "濾能 法人說明會",
+   "note": "本公司受邀參加櫃買中心暨永豐金證券合作舉辦之「2026年半導體展高峰論壇」，說明本公司簡介與營運概況。"
+  },
+  {
+   "date": "2026-09-01",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "7556",
+   "name": "意德士科技",
+   "title": "意德士科技 法人說明會",
+   "note": "本公司受邀參加櫃買中心暨永豐金證券合作舉辦之「2026年半導體展高峰論壇」，說明本公司簡介與營運概況。"
   },
   {
    "date": "2026-09-01",
@@ -124,11 +219,101 @@
   },
   {
    "date": "2026-09-02",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "2511",
+   "name": "太子",
+   "title": "太子 法人說明會",
+   "note": "受邀參加兆豐證券舉辦之法人說明會，說明本公司財務及營運展望。"
+  },
+  {
+   "date": "2026-09-02",
    "kind": "scheduled",
    "category": "經濟數據",
    "symbol": null,
    "title": "美國 ADP 就業報告",
    "note": "依慣例為非農前的週三，非官方公告日期"
+  },
+  {
+   "date": "2026-09-03",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "1456",
+   "name": "怡華",
+   "title": "怡華 法人說明會",
+   "note": "簡報說明公司營運情形\r\n5."
+  },
+  {
+   "date": "2026-09-03",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "4904",
+   "name": "遠傳",
+   "title": "遠傳 法人說明會",
+   "note": "說明本公司115年度第二季營運與財務概況"
+  },
+  {
+   "date": "2026-09-03",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "6805",
+   "name": "富世達",
+   "title": "富世達 法人說明會",
+   "note": "本公司於115/09/03受邀參加由Citi舉辦之 &quot;Citi 2026 Semicon Tour&quot;"
+  },
+  {
+   "date": "2026-09-03",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "7610",
+   "name": "聯友金屬-創",
+   "title": "聯友金屬-創 法人說明會",
+   "note": "本公司受邀參加證交所及富邦證券舉辦之法人說明會，說明本公司財務、業務、營運概況及未來展望。"
+  },
+  {
+   "date": "2026-09-03",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "3081",
+   "name": "聯亞",
+   "title": "聯亞 法人說明會",
+   "note": "本公司受邀參加Citi 2026 Semicon Tour，說明本公司之營運概況。"
+  },
+  {
+   "date": "2026-09-03",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "6223",
+   "name": "旺矽",
+   "title": "旺矽 法人說明會",
+   "note": "本公司受邀參加永豐金證券舉辦之2026紐約&amp;倫敦Corporate Access Day，說明本公司簡介與營運概"
+  },
+  {
+   "date": "2026-09-04",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "2327",
+   "name": "國巨*",
+   "title": "國巨* 法人說明會",
+   "note": "本公司於115/09/04受邀參加由Citi舉辦之 &quot;Citi 2026 Semicon Tour&quot;"
+  },
+  {
+   "date": "2026-09-04",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "2352",
+   "name": "佳世達",
+   "title": "佳世達 法人說明會",
+   "note": "本公司受邀參加統一證券投資論壇"
+  },
+  {
+   "date": "2026-09-04",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "6491",
+   "name": "晶碩",
+   "title": "晶碩 法人說明會",
+   "note": "本公司受邀參加統一證券所舉辦之投資論壇，會中就本公司之財務數字、經營績效等相關資訊做說明。"
   },
   {
    "date": "2026-09-04",
@@ -137,113 +322,179 @@
    "symbol": null,
    "title": "美國非農就業報告",
    "note": "依慣例為每月第一個週五，非官方公告日期"
+  },
+  {
+   "date": "2026-09-07",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "7750",
+   "name": "新代",
+   "title": "新代 法人說明會",
+   "note": "本公司受邀參加 Macquarie Asia Technology Conference 2026，說明本公司2026年"
+  },
+  {
+   "date": "2026-09-07",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "7786",
+   "name": "東方風能",
+   "title": "東方風能 法人說明會",
+   "note": "本公司受邀參加永豐金證券主辦之SinoPac Taiwan Corporate Access Day，向投資人說明本公司"
+  },
+  {
+   "date": "2026-09-07",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "3529",
+   "name": "力旺",
+   "title": "力旺 法人說明會",
+   "note": "本公司受邀參加Macquarie 舉辦之Macquarie NEXT INNOVATIONS Tech Conferen"
+  },
+  {
+   "date": "2026-09-08",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "4441",
+   "name": "振大環球",
+   "title": "振大環球 法人說明會",
+   "note": "本公司受邀參加國票證券舉辦之法人說明會"
   }
  ],
- "generatedAt": "2026-08-31T01:22:30.302Z",
- "summary": "今日多檔股因公司消息波動，STRATTEC提升毛利率、MediaTek擴產設備、Autodesk營利展望弱化，整體小幅下跌。",
- "themes": [],
- "watchpoints": [
-  "留意STRATTEC毛利率提升與新客戶開拓進度。",
-  "關注MediaTek新設備投產能擴張情形。",
-  "觀察Autodesk營利展望是否持續疲弱。"
+ "generatedAt": "2026-09-01T01:49:28.596Z",
+ "summary": "台股今日受半導體題材帶動，聯發科因 NVIDIA 投資大漲近 10%，其他股多呈現波動，鴻海因深圳廠房取得權小幅上揚。市場整體呈現漲跌交錯，投資人持觀望態度。",
+ "themes": [
+  {
+   "name": "半導體",
+   "why": "聯發科獲 NVIDIA 投資、頌勝科技受邀參展，顯示產業受關注"
+  }
  ],
+ "watchpoints": [
+  "關注 NVIDIA 投資聯發科可轉債的後續動向",
+  "留意半導體展會對參展廠商股價的短期影響",
+  "觀察鴻海深圳廠房使用權對營收貢獻的實際落實"
+ ],
+ "markets": {
+  "tw": {
+   "summary": "台股今日受半導體題材帶動，聯發科因 NVIDIA 投資大漲近 10%，其他股多呈現波動，鴻海因深圳廠房取得權小幅上揚。市場整體呈現漲跌交錯，投資人持觀望態度。",
+   "themes": [
+    {
+     "name": "半導體",
+     "why": "聯發科獲 NVIDIA 投資、頌勝科技受邀參展，顯示產業受關注"
+    }
+   ],
+   "watchpoints": [
+    "關注 NVIDIA 投資聯發科可轉債的後續動向",
+    "留意半導體展會對參展廠商股價的短期影響",
+    "觀察鴻海深圳廠房使用權對營收貢獻的實際落實"
+   ]
+  },
+  "us": {
+   "summary": "美股今日整體走弱，Alphabet 下跌逾2%，NVIDIA 小幅上漲 1.48% 受分析報告提振，市場情緒偏謹慎，科技股表現分化，投資人持觀望態度，等待後續財報與宏觀數據。",
+   "themes": [],
+   "watchpoints": [
+    "關注 Trefis 對 NVIDIA 長期成長的分析影響",
+    "留意 Alphabet 股價是否受其他消息牽動",
+    "觀察科技板塊整體走勢對大盤的帶動效應"
+   ]
+  }
+ },
  "musts": [
-  {
-   "symbol": "ADSK",
-   "name": "Autodesk, Inc.",
-   "nameZh": null,
-   "tradeDate": "2026-08-28",
-   "changePct": -3.67,
-   "price": 260.66,
-   "currency": "USD",
-   "fact": "Q3 營利展望較弱，導致股價下跌",
-   "inference": "投資人擔憂未來獲利成長放緩，可能影響估值",
-   "why": "Q3 營利展望較弱，導致股價下跌",
-   "meaning": "投資人擔憂未來獲利成長放緩，可能影響估值",
-   "stance": "neg",
-   "newsScore": 45,
-   "importance": 4,
-   "score": 71,
-   "link": "https://finance.yahoo.com/markets/stocks/articles/autodesk-adsk-q2-beat-meets-110634879.html"
-  },
-  {
-   "symbol": "WSM",
-   "name": "Williams-Sonoma, Inc.",
-   "nameZh": null,
-   "tradeDate": "2026-08-28",
-   "changePct": -1.39,
-   "price": 235.09,
-   "currency": "USD",
-   "fact": "市場已將強勁財報與上調指引的正面因素提前反映，今日出現回檔。",
-   "inference": "投資人需留意股價已含未來成長預期，短期可能波動。",
-   "why": "市場已將強勁財報與上調指引的正面因素提前反映，今日出現回檔。",
-   "meaning": "投資人需留意股價已含未來成長預期，短期可能波動。",
-   "stance": "pos",
-   "newsScore": 70,
-   "importance": 4,
-   "score": 64,
-   "link": "https://finance.yahoo.com/markets/stocks/articles/williams-sonoma-wsm-lifts-guidance-002430763.html"
-  },
-  {
-   "symbol": "STRT",
-   "name": "STRATTEC SECURITY CORPORATION",
-   "nameZh": null,
-   "tradeDate": "2026-08-28",
-   "changePct": 6.76,
-   "price": 75.04,
-   "currency": "USD",
-   "fact": "公司宣布要提升毛利率、開拓新客戶並發展數位鑰匙業務。",
-   "inference": "這代表公司正朝高毛利轉型，未來獲利能力有機會提升。",
-   "why": "公司宣布要提升毛利率、開拓新客戶並發展數位鑰匙業務。",
-   "meaning": "這代表公司正朝高毛利轉型，未來獲利能力有機會提升。",
-   "stance": "pos",
-   "newsScore": 75,
-   "importance": 3,
-   "score": 55,
-   "link": "https://finance.yahoo.com/m/7e576d68-78bd-39f9-8994-30083d25d99f/strattec-security-targets.html"
-  },
   {
    "symbol": "2454",
    "name": "MEDIATEK INC",
    "nameZh": "聯發科",
-   "tradeDate": "2026-08-28",
-   "changePct": 3.1,
-   "price": 3985,
+   "tradeDate": "2026-09-01",
+   "changePct": 9.94,
+   "price": 4315,
    "currency": "TWD",
-   "fact": "聯發科取得價值28.3億營業設備，提升產能",
-   "inference": "提升產能有望帶動營收成長",
-   "why": "聯發科取得價值28.3億營業設備，提升產能",
-   "meaning": "提升產能有望帶動營收成長",
+   "fact": "輝達斥資數十億美元認購聯發科發行的可轉換公司債。",
+   "inference": "雙方深化在AI、邊緣運算及車用電子的合作關係。",
+   "why": "輝達斥資數十億美元認購聯發科發行的可轉換公司債。",
+   "meaning": "雙方深化在AI、邊緣運算及車用電子的合作關係。",
+   "stance": "pos",
+   "newsScore": 95,
+   "importance": 5,
+   "score": 72,
+   "link": "https://tw.stock.yahoo.com/news/%E8%BC%9D%E9%81%94%E9%87%8D%E9%87%91%E5%85%A5%E8%82%A1%E8%81%AF%E7%99%BC%E7%A7%91%E3%80%81%E5%8F%B0%E7%A9%8D%E9%9B%BB%E5%8F%97%E6%83%A0%EF%BC%81%E8%B7%8C15%E5%85%83%E5%BE%8C%E7%BF%BB%E7%B4%85-%E5%88%86%E6%9E%90%E5%B8%AB%E7%9C%8B%E5%A4%9A-012506836.html"
+  },
+  {
+   "symbol": "2317",
+   "name": "HON HAI PRECISION INDUSTRY",
+   "nameZh": "鴻海",
+   "tradeDate": "2026-09-01",
+   "changePct": 1.8,
+   "price": 254.5,
+   "currency": "TWD",
+   "fact": "鴻海子公司取得深圳廠房使用權，且其客戶之一的耐特獲證交所批准上市。",
+   "inference": "顯示公司擴產與供應鏈需求持續增長，利好營收。",
+   "why": "鴻海子公司取得深圳廠房使用權，且其客戶之一的耐特獲證交所批准上市。",
+   "meaning": "顯示公司擴產與供應鏈需求持續增長，利好營收。",
+   "stance": "pos",
+   "newsScore": 70,
+   "importance": 4,
+   "score": 67,
+   "link": "https://tw.stock.yahoo.com/news/%E9%B4%BB%E6%B5%B7-%E4%BB%A3%E5%AD%90%E5%85%AC%E5%8F%B8%E5%AF%8C%E6%B3%B0%E8%8F%AF%E5%B7%A5%E6%A5%AD-%E6%B7%B1%E5%9C%B3-%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%91%8A%E5%8F%96%E5%BE%97%E5%BB%A0%E6%88%BF%E4%B9%8B%E4%BD%BF%E7%94%A8%E6%AC%8A%E8%B3%87%E7%94%A2-092900853.html"
+  },
+  {
+   "symbol": "7768",
+   "name": "PRAISE VICTOR INDUSTRIAL CO LTD",
+   "nameZh": "頌勝科技",
+   "tradeDate": "2026-09-01",
+   "changePct": 2.57,
+   "price": 299,
+   "currency": "TWD",
+   "fact": "受邀參加2026年半導體展高峰論壇，提升曝光度",
+   "inference": "顯示公司受業界重視，或提升合作機會",
+   "why": "受邀參加2026年半導體展高峰論壇，提升曝光度",
+   "meaning": "顯示公司受業界重視，或提升合作機會",
+   "stance": "pos",
+   "newsScore": 70,
+   "importance": 3,
+   "score": 57,
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E9%A0%8C%E5%8B%9D%E7%A7%91%E6%8A%80%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E6%AB%83%E8%B2%B7%E4%B8%AD%E5%BF%83%E5%8F%8A%E6%B0%B8%E8%B1%90%E9%87%91%E8%AD%89%E5%88%B8%E5%90%88%E4%BD%9C%E8%88%89%E8%BE%A6%E4%B9%8B2026%E5%B9%B4%E5%8D%8A%E5%B0%8E%E9%AB%94%E5%B1%95%E9%AB%98%E5%B3%B0%E8%AB%96%E5%A3%87-064517539.html"
+  },
+  {
+   "symbol": "6101",
+   "name": "KWAN'S INTERNATIONAL CO LTD",
+   "nameZh": "寬魚國際",
+   "tradeDate": "2026-09-01",
+   "changePct": 1.69,
+   "price": 39.05,
+   "currency": "TWD",
+   "fact": "受邀參加群益金鼎證券法人說明會，顯示受機構關注",
+   "inference": "可能提升投資人信心，對股價有正面助益",
+   "why": "受邀參加群益金鼎證券法人說明會，顯示受機構關注",
+   "meaning": "可能提升投資人信心，對股價有正面助益",
    "stance": "pos",
    "newsScore": 60,
    "importance": 3,
-   "score": 59,
-   "link": "https://tw.stock.yahoo.com/news/%E8%81%AF%E7%99%BC%E7%A7%91%E5%90%91%E5%A4%A7%E7%B6%9C%E7%AD%89%E5%8F%96%E5%BE%97%E7%87%9F%E6%A5%AD%E8%A8%AD%E5%82%99-%E6%89%B9-%E8%A8%8828-3%E5%84%84%E5%85%83-153200007.html"
+   "score": 55,
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%AF%AC%E9%AD%9A%E5%9C%8B%E9%9A%9B%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E7%BE%A4%E7%9B%8A%E9%87%91%E9%BC%8E%E8%AD%89%E5%88%B8%E8%88%89%E8%BE%A6%E4%B9%8B%E6%B3%95%E4%BA%BA%E8%AA%AA%E6%98%8E%E6%9C%83-081330920.html"
   },
   {
-   "symbol": "1225",
-   "name": "FORMOSA OILSEED PROCESSING",
-   "nameZh": "福懋油",
-   "tradeDate": "2026-08-28",
-   "changePct": -1.55,
-   "price": 25.45,
-   "currency": "TWD",
-   "fact": "公司召開第二次股東臨時會，決議補選3位董事並解除競業限制",
-   "inference": "投資人應關注董事人事變動與競業限制解除，或影響公司治理",
-   "why": "公司召開第二次股東臨時會，決議補選3位董事並解除競業限制",
-   "meaning": "投資人應關注董事人事變動與競業限制解除，或影響公司治理",
-   "stance": "neu",
-   "newsScore": 50,
+   "symbol": "NVDA",
+   "name": "NVIDIA Corporation",
+   "nameZh": null,
+   "tradeDate": "2026-08-31",
+   "changePct": 1.48,
+   "price": 220.78,
+   "currency": "USD",
+   "fact": "Trefis 發布《NVDA Stock: Where Compounding Could Take The Price》分析，提及長期成長潛力",
+   "inference": "顯示市場對 Nvidia 未來獲利持正面預期，提升投資者信心",
+   "why": "Trefis 發布《NVDA Stock: Where Compounding Could Take The Price》分析，提及長期成長潛力",
+   "meaning": "顯示市場對 Nvidia 未來獲利持正面預期，提升投資者信心",
+   "stance": "pos",
+   "newsScore": 60,
    "importance": 3,
-   "score": 39,
-   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%A6%8F%E6%87%8B%E6%B2%B9115%E5%B9%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%82%A1%E6%9D%B1%E8%87%A8%E6%99%82%E6%9C%83%E9%87%8D%E8%A6%81%E6%B1%BA%E8%AD%B0%E4%BA%8B%E9%A0%85-071346702.html"
+   "score": 70,
+   "link": "https://finance.yahoo.com/technology/ai/articles/cathie-wood-drops-124-million-014651640.html"
   }
  ],
- "poolSize": 32,
- "aiUsed": 10,
+ "poolSize": 60,
+ "aiUsed": 14,
  "aiSource": {
   "gemini": 3,
-  "groq": 8,
+  "groq": 12,
   "openrouter": 0,
   "failed": 0
  },

@@ -1,0 +1,34 @@
+{
+ "symbol": "8499",
+ "name": "TOP BRIGHT HOLDING",
+ "nameZh": "鼎炫-KY",
+ "date": "2026-09-01",
+ "tradeDate": "2026-08-31",
+ "price": 260,
+ "changePct": 0,
+ "volRatio": 3.83,
+ "score": 36,
+ "scores": {
+  "sentiment": 62,
+  "technical": 18,
+  "fundamental": null,
+  "valuation": 25,
+  "news": null
+ },
+ "pe": {
+  "cur": 29,
+  "lo": 7.4,
+  "hi": 29
+ },
+ "alerts": [
+  {
+   "type": "volume",
+   "level": "high",
+   "text": "成交量放大至近月均量的 3.8 倍"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-09-01T01:49:11.062Z"
+}

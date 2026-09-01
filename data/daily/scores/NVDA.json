@@ -2,59 +2,53 @@
  "symbol": "NVDA",
  "name": "NVIDIA Corporation",
  "nameZh": null,
- "date": "2026-08-31",
- "tradeDate": "2026-08-28",
- "price": 217.55,
- "changePct": -4.57,
- "volRatio": 1.52,
- "score": 51,
+ "date": "2026-09-01",
+ "tradeDate": "2026-08-31",
+ "price": 220.78,
+ "changePct": 1.48,
+ "volRatio": 0.97,
+ "score": 70,
  "scores": {
-  "sentiment": 28,
-  "technical": 58,
+  "sentiment": 59,
+  "technical": 82,
   "fundamental": null,
   "valuation": 85,
-  "news": 50
+  "news": 60
  },
  "pe": {
   "cur": 28.8,
   "lo": 28.8,
   "hi": 75.6
  },
- "alerts": [
-  {
-   "type": "price",
-   "level": "mid",
-   "text": "股價明顯下跌 -4.57%"
-  }
- ],
+ "alerts": [],
  "ai": {
-  "why": "今日無明確公司消息",
-  "meaning": "",
-  "fact": "今日無明確公司消息",
-  "inference": "",
-  "stance": "neu",
-  "newsScore": 50,
-  "importance": 1
+  "why": "Trefis 發布《NVDA Stock: Where Compounding Could Take The Price》分析，提及長期成長潛力",
+  "meaning": "顯示市場對 Nvidia 未來獲利持正面預期，提升投資者信心",
+  "fact": "Trefis 發布《NVDA Stock: Where Compounding Could Take The Price》分析，提及長期成長潛力",
+  "inference": "顯示市場對 Nvidia 未來獲利持正面預期，提升投資者信心",
+  "stance": "pos",
+  "newsScore": 60,
+  "importance": 3
  },
  "newsTop": [
   {
-   "title": "Dow Jones Futures Fall, Oil Prices Pop As U.S. Strikes Iran",
-   "publisher": "Investor's Business Daily",
-   "link": "https://finance.yahoo.com/m/5851be5e-4456-36df-acc2-e391c82c51f8/dow-jones-futures-fall%2C-oil.html"
+   "title": "Cathie Wood Drops $124 Million on AI Stocks, Dumps AMD",
+   "publisher": "GuruFocus.com",
+   "link": "https://finance.yahoo.com/technology/ai/articles/cathie-wood-drops-124-million-014651640.html"
   },
   {
-   "title": "1 Top Warren Buffett Stock for Dividend Investors",
-   "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/af750ca6-19c1-38e6-ba1a-090cb600ae50/1-top-warren-buffett-stock.html"
+   "title": "Vistra Stock Is Down, But Is This Power Producer's Dip An Opportunity?",
+   "publisher": "Trefis",
+   "link": "https://finance.yahoo.com/m/3e8ea3ec-1cc2-3b88-a800-05e5a4644ffd/vistra-stock-is-down%2C-but-is.html"
   },
   {
-   "title": "According to BlackRock, Bitcoin Is Still a Great Portfolio Diversifier. So How Much Bitcoin Should You Be Holding in Your Portfolio?",
+   "title": "Down 14% From Its High, Is Genesis Energy a Buy?",
    "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/b1f65d8f-51bb-3f1d-9c40-a0ac1258432f/according-to-blackrock%2C.html"
+   "link": "https://finance.yahoo.com/m/75032db0-9abd-3e51-906d-02fec7675e9a/down-14%25-from-its-high%2C-is.html"
   }
  ],
  "prev": {
-  "date": "2026-08-30",
+  "date": "2026-08-31",
   "score": 51,
   "scores": {
    "sentiment": 28,
@@ -64,5 +58,5 @@
    "news": 50
   }
  },
- "generatedAt": "2026-08-31T01:22:12.927Z"
+ "generatedAt": "2026-09-01T01:49:11.059Z"
 }

@@ -1,0 +1,42 @@
+{
+ "symbol": "2360",
+ "name": "CHROMA ATE INC",
+ "nameZh": "致茂",
+ "date": "2026-09-01",
+ "tradeDate": "2026-09-01",
+ "price": 2025,
+ "changePct": 3.32,
+ "volRatio": 0.11,
+ "score": 43,
+ "scores": {
+  "sentiment": 62,
+  "technical": 18,
+  "fundamental": null,
+  "valuation": 50,
+  "news": 50
+ },
+ "pe": {
+  "cur": 50.9,
+  "lo": 30.4,
+  "hi": 65.8
+ },
+ "alerts": [],
+ "ai": {
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 50,
+  "importance": 1
+ },
+ "newsTop": [
+  {
+   "title": "台達電：Delta Electronics(Thailand)6/6~8/28向致茂取得機器設備，計約3170萬美元",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%8F%B0%E9%81%94%E9%9B%BB-delta-electronics-thailand-6-153200903.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-01T01:49:11.057Z"
+}

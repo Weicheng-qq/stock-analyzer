@@ -2,18 +2,18 @@
  "symbol": "5904",
  "name": "POYA INTERNATIONAL CO LTD",
  "nameZh": "寶雅",
- "date": "2026-08-31",
- "tradeDate": "2026-08-28",
- "price": 74.2,
- "changePct": 0.13,
- "volRatio": 0.41,
- "score": 61,
+ "date": "2026-09-01",
+ "tradeDate": "2026-09-01",
+ "price": 73.8,
+ "changePct": -1.6,
+ "volRatio": 0.1,
+ "score": 56,
  "scores": {
-  "sentiment": 45,
+  "sentiment": 32,
   "technical": 58,
   "fundamental": 73,
   "valuation": 57,
-  "news": null
+  "news": 50
  },
  "pe": {
   "cur": 21.9,
@@ -21,10 +21,34 @@
   "hi": 27.9
  },
  "alerts": [],
- "ai": null,
- "newsTop": [],
+ "ai": {
+  "why": "公司公告將股票面額由10元降至1元",
+  "meaning": "面額下調不改實際價值，投資人需留意未來可能的股本變動",
+  "fact": "公司公告將股票面額由10元降至1元",
+  "inference": "面額下調不改實際價值，投資人需留意未來可能的股本變動",
+  "stance": "neu",
+  "newsScore": 50,
+  "importance": 2
+ },
+ "newsTop": [
+  {
+   "title": "寶雅* 公告本公司股票面額變更由「新台幣10元」變更為「新台幣1元」公告期間：115年7月2日至115年10月1日",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%AF%B6%E9%9B%85-%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E8%82%A1%E7%A5%A8%E9%9D%A2%E9%A1%8D%E8%AE%8A%E6%9B%B4%E7%94%B1-%E6%96%B0%E5%8F%B0%E5%B9%A310%E5%85%83-%E8%AE%8A%E6%9B%B4%E7%82%BA-%E6%96%B0%E5%8F%B0%E5%B9%A31%E5%85%83-230400738.html"
+  },
+  {
+   "title": "寶雅* 公告本公司股票面額變更由「新台幣10元」變更為「新台幣1元」公告期間：115年7月2日至115年10月1日",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%AF%B6%E9%9B%85-%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E8%82%A1%E7%A5%A8%E9%9D%A2%E9%A1%8D%E8%AE%8A%E6%9B%B4%E7%94%B1-%E6%96%B0%E5%8F%B0%E5%B9%A310%E5%85%83-%E8%AE%8A%E6%9B%B4%E7%82%BA-%E6%96%B0%E5%8F%B0%E5%B9%A31%E5%85%83-230400453.html"
+  },
+  {
+   "title": "【公告】寶雅*股票面額變更由「新台幣10元」變更為「新台幣1元」公告期間：115年7月2日至115年10月1日",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%AF%B6%E9%9B%85-%E8%82%A1%E7%A5%A8%E9%9D%A2%E9%A1%8D%E8%AE%8A%E6%9B%B4%E7%94%B1-%E6%96%B0%E5%8F%B0%E5%B9%A310%E5%85%83-%E8%AE%8A%E6%9B%B4%E7%82%BA-013350393.html"
+  }
+ ],
  "prev": {
-  "date": "2026-08-30",
+  "date": "2026-08-31",
   "score": 61,
   "scores": {
    "sentiment": 45,
@@ -34,5 +58,5 @@
    "news": null
   }
  },
- "generatedAt": "2026-08-31T01:22:12.931Z"
+ "generatedAt": "2026-09-01T01:49:11.058Z"
 }

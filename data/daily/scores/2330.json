@@ -2,16 +2,16 @@
  "symbol": "2330",
  "name": "TAIWAN SEMICONDUCTOR MANUFACTUR",
  "nameZh": "台積電",
- "date": "2026-08-31",
- "tradeDate": "2026-08-28",
- "price": 2420,
- "changePct": 0.41,
- "volRatio": 0.7,
- "score": 60,
+ "date": "2026-09-01",
+ "tradeDate": "2026-09-01",
+ "price": 2425,
+ "changePct": 0.83,
+ "volRatio": 0.25,
+ "score": 75,
  "scores": {
-  "sentiment": 50,
+  "sentiment": 47,
   "technical": 82,
-  "fundamental": null,
+  "fundamental": 100,
   "valuation": 25,
   "news": null
  },
@@ -20,19 +20,25 @@
   "lo": 19.9,
   "hi": 28.2
  },
- "alerts": [],
+ "alerts": [
+  {
+   "type": "guidance",
+   "level": "mid",
+   "text": "公司已公布官方財測／展望"
+  }
+ ],
  "ai": null,
  "newsTop": [],
  "prev": {
-  "date": "2026-08-30",
-  "score": 63,
+  "date": "2026-08-31",
+  "score": 60,
   "scores": {
    "sentiment": 50,
    "technical": 82,
    "fundamental": null,
-   "valuation": 41,
+   "valuation": 25,
    "news": null
   }
  },
- "generatedAt": "2026-08-31T01:22:12.930Z"
+ "generatedAt": "2026-09-01T01:49:11.059Z"
 }
