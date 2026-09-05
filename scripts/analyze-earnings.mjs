@@ -246,15 +246,27 @@ async function loadUsFinancials(cik) {
   };
 }
 
+// 台股財報依 IFRS 慣例採「累計」編製：第2季＝上半年累計、第3季＝前三季累計、
+//   第4季／全年＝全年累計，只有第1季等於單季。回傳這一季在中文裡該怎麼稱呼，
+//   以及是不是累計數（供提示詞與欄位標籤共用，確保兩處講法一致不矛盾）。
+function twSeasonLabel(season) {
+  if (season === 1) return { label: '第1季（單季）', cum: false };
+  if (season === 2) return { label: '上半年（累計）', cum: true };
+  if (season === 3) return { label: '前三季（累計）', cum: true };
+  return { label: '全年（累計）', cum: true };
+}
+
 // ── 提示詞 ──
 // pr = 公司自己發布的財報新聞稿節錄（僅美股有；台股的 OpenAPI 只有數字沒有文字說明）
 function buildPrompt(symbol, f, pr) {
   const isTw = f.market === 'tw';
-  const period = isTw ? `${f.year} 年第 ${f.season} 季`
+  const twSeason = isTw ? twSeasonLabel(f.season) : null;
+  const period = isTw ? `${f.year} 年${twSeason.label}`
     : `會計年度 ${f.year} ${f.season}（期間 ${f.periodStart} ～ ${f.periodEnd}，申報表單 ${f.form}）`;
   const src = isTw ? '臺灣證券交易所／證券櫃檯買賣中心公開資訊（政府官方開放資料）'
     : '美國證券交易委員會（SEC）EDGAR XBRL 官方申報資料';
   const lines = [
+    isTw && twSeason.cum ? `⚠️ 以下數字是「${twSeason.label}」的累計數字，不是單一季度的數字，你的分析與用詞都必須反映這是累計期間，禁止寫成「本季」或暗示這是三個月的表現。` : null,
     `營業收入：${f.營業收入 ?? '未提供'}`,
     `營業毛利：${f.營業毛利 ?? '未提供'}（毛利率 ${pct(f.營業毛利, f.營業收入)}）`,
     `營業利益：${f.營業利益 ?? '未提供'}（營業利益率 ${pct(f.營業利益, f.營業收入)}）`,
@@ -311,8 +323,8 @@ ${lines}${prBlock}
  "capex":"資本支出狀況（若上方未提供則寫「未提供」）",
  "guidance":"${pr ? '官方財測／展望的一句話摘要（詳細內容放在 guidanceOfficial 欄位）' : '官方財測／展望（本次無法說會簡報或新聞稿可依據，請寫「未提供」）'}",
  "outlook":"僅根據上方數字可合理說明的營運狀況，不得預測，2-3句",
- "highlights":"本季主要亮點2-3點，每點以•開頭、<br>分行，只能根據上方數字",
- "concerns":"本季須留意之處2-3點，每點以•開頭、<br>分行，只能根據上方數字",
+ "highlights":"${isTw && twSeason.cum ? '這段累計期間' : '本季'}主要亮點2-3點，每點以•開頭、<br>分行，只能根據上方數字",
+ "concerns":"${isTw && twSeason.cum ? '這段累計期間' : '本季'}須留意之處2-3點，每點以•開頭、<br>分行，只能根據上方數字",
  "risks":"從財務結構可觀察到的風險2點，<br>分行",
  "keyPoints":"投資人最需要注意的3件事，<br>分行，須引用實際數字"${prFields}
 }`;
@@ -464,7 +476,7 @@ for (const item of sorted) {
 
   fs.writeFileSync(out, JSON.stringify({
     symbol: item.symbol, market: f.market, name: f.name,
-    quarter: f.market === 'tw' ? `${f.year} 第${f.season}季` : `${f.year} ${f.season}（${f.periodStart}～${f.periodEnd}）`,
+    quarter: f.market === 'tw' ? `${f.year} ${twSeasonLabel(f.season).label}` : `${f.year} ${f.season}（${f.periodStart}～${f.periodEnd}）`,
     quarterTag: qTag,
     source: f.market === 'tw' ? '臺灣證券交易所／櫃買中心 公開資訊 OpenAPI（官方）' : 'SEC EDGAR XBRL 官方申報資料',
     official: f,
