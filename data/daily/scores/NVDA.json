@@ -2,61 +2,37 @@
  "symbol": "NVDA",
  "name": "NVIDIA Corporation",
  "nameZh": null,
- "date": "2026-09-01",
- "tradeDate": "2026-08-31",
- "price": 220.78,
- "changePct": 1.48,
- "volRatio": 0.97,
- "score": 70,
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 230.36,
+ "changePct": 0.84,
+ "volRatio": 1.03,
+ "score": 72,
  "scores": {
-  "sentiment": 59,
+  "sentiment": 55,
   "technical": 82,
   "fundamental": null,
   "valuation": 85,
-  "news": 60
+  "news": null
  },
  "pe": {
-  "cur": 28.8,
-  "lo": 28.8,
+  "cur": 28.4,
+  "lo": 28.4,
   "hi": 75.6
  },
  "alerts": [],
- "ai": {
-  "why": "Trefis 發布《NVDA Stock: Where Compounding Could Take The Price》分析，提及長期成長潛力",
-  "meaning": "顯示市場對 Nvidia 未來獲利持正面預期，提升投資者信心",
-  "fact": "Trefis 發布《NVDA Stock: Where Compounding Could Take The Price》分析，提及長期成長潛力",
-  "inference": "顯示市場對 Nvidia 未來獲利持正面預期，提升投資者信心",
-  "stance": "pos",
-  "newsScore": 60,
-  "importance": 3
- },
- "newsTop": [
-  {
-   "title": "Cathie Wood Drops $124 Million on AI Stocks, Dumps AMD",
-   "publisher": "GuruFocus.com",
-   "link": "https://finance.yahoo.com/technology/ai/articles/cathie-wood-drops-124-million-014651640.html"
-  },
-  {
-   "title": "Vistra Stock Is Down, But Is This Power Producer's Dip An Opportunity?",
-   "publisher": "Trefis",
-   "link": "https://finance.yahoo.com/m/3e8ea3ec-1cc2-3b88-a800-05e5a4644ffd/vistra-stock-is-down%2C-but-is.html"
-  },
-  {
-   "title": "Down 14% From Its High, Is Genesis Energy a Buy?",
-   "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/75032db0-9abd-3e51-906d-02fec7675e9a/down-14%25-from-its-high%2C-is.html"
-  }
- ],
+ "ai": null,
+ "newsTop": [],
  "prev": {
-  "date": "2026-08-31",
-  "score": 51,
+  "date": "2026-09-01",
+  "score": 70,
   "scores": {
-   "sentiment": 28,
-   "technical": 58,
+   "sentiment": 59,
+   "technical": 82,
    "fundamental": null,
    "valuation": 85,
-   "news": 50
+   "news": 60
   }
  },
- "generatedAt": "2026-09-01T01:49:11.059Z"
+ "generatedAt": "2026-09-05T00:59:11.810Z"
 }

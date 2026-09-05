@@ -2,29 +2,35 @@
  "symbol": "6805",
  "name": "FOSITEK CORP",
  "nameZh": "富世達",
- "date": "2026-09-01",
- "tradeDate": "2026-09-01",
- "price": 2220,
- "changePct": -3.69,
- "volRatio": 0.47,
- "score": 53,
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 2200,
+ "changePct": 5.01,
+ "volRatio": 0.26,
+ "score": 66,
  "scores": {
-  "sentiment": 23,
+  "sentiment": 73,
   "technical": 82,
   "fundamental": null,
-  "valuation": 45,
+  "valuation": 49,
   "news": 50
  },
  "pe": {
-  "cur": 47.6,
+  "cur": 45.2,
   "lo": 18.4,
   "hi": 62.7
  },
- "alerts": [],
+ "alerts": [
+  {
+   "type": "price",
+   "level": "mid",
+   "text": "股價明顯上漲 5.01%"
+  }
+ ],
  "ai": {
-  "why": "今日無明確公司消息。",
+  "why": "今日無明確公司消息",
   "meaning": "",
-  "fact": "今日無明確公司消息。",
+  "fact": "今日無明確公司消息",
   "inference": "",
   "stance": "neu",
   "newsScore": 50,
@@ -32,11 +38,21 @@
  },
  "newsTop": [
   {
-   "title": "【公告】富世達受邀參加由Citi舉辦之 \"Citi 2026 Semicon Tour\"",
+   "title": "【公告】富世達受邀參加永豐金證券2026Q3產業投資論壇",
    "publisher": "Yahoo 股市",
-   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%AF%8C%E4%B8%96%E9%81%94%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E7%94%B1citi%E8%88%89%E8%BE%A6%E4%B9%8B-citi-2026-semicon-094735611.html"
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%AF%8C%E4%B8%96%E9%81%94%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E6%B0%B8%E8%B1%90%E9%87%91%E8%AD%89%E5%88%B82026q3%E7%94%A2%E6%A5%AD%E6%8A%95%E8%B3%87%E8%AB%96%E5%A3%87-070641051.html"
   }
  ],
- "prev": null,
- "generatedAt": "2026-09-01T01:49:11.057Z"
+ "prev": {
+  "date": "2026-09-01",
+  "score": 53,
+  "scores": {
+   "sentiment": 23,
+   "technical": 82,
+   "fundamental": null,
+   "valuation": 45,
+   "news": 50
+  }
+ },
+ "generatedAt": "2026-09-05T00:59:11.807Z"
 }

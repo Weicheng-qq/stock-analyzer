@@ -1,0 +1,58 @@
+{
+ "symbol": "3665",
+ "name": "BIZLINK HOLDING INC",
+ "nameZh": "貿聯-KY",
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 2145,
+ "changePct": 2.14,
+ "volRatio": 0.49,
+ "score": 64,
+ "scores": {
+  "sentiment": 58,
+  "technical": 58,
+  "fundamental": null,
+  "valuation": 36,
+  "news": 85
+ },
+ "pe": {
+  "cur": 39.9,
+  "lo": 13,
+  "hi": 45.7
+ },
+ "alerts": [
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "貿聯-KY公布八月營收年增近54%，前八月累計營收也年增超過38%。"
+  }
+ ],
+ "ai": {
+  "why": "貿聯-KY公布八月營收年增近54%，前八月累計營收也年增超過38%。",
+  "meaning": "這代表公司業績成長力道非常強勁，對後續營運是個好兆頭。",
+  "fact": "貿聯-KY公布八月營收年增近54%，前八月累計營收也年增超過38%。",
+  "inference": "這代表公司業績成長力道非常強勁，對後續營運是個好兆頭。",
+  "stance": "pos",
+  "newsScore": 85,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "【公告】貿聯-KY115年8月份自結合併營收",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E8%B2%BF%E8%81%AF-ky115%E5%B9%B48%E6%9C%88%E4%BB%BD%E8%87%AA%E7%B5%90%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B6-083606523.html"
+  },
+  {
+   "title": "【公告】貿聯-KY 2026年8月合併營收88.92億元 年增53.99%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E8%B2%BF%E8%81%AF-ky-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B688-92%E5%84%84%E5%85%83-083337083.html"
+  },
+  {
+   "title": "貿聯-KY自結前8月合併營收19.73億美元，年增38.19%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E8%B2%BF%E8%81%AF-ky%E8%87%AA%E7%B5%90%E5%89%8D8%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B619-73%E5%84%84%E7%BE%8E%E5%85%83-%E5%B9%B4%E5%A2%9E38-19-083000508.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-05T00:59:11.809Z"
+}

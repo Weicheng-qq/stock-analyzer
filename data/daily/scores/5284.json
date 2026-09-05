@@ -1,0 +1,58 @@
+{
+ "symbol": "5284",
+ "name": "JPP HOLDING COMPANY LIMITED",
+ "nameZh": "jpp-KY",
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 330,
+ "changePct": 2.17,
+ "volRatio": 2.02,
+ "score": 73,
+ "scores": {
+  "sentiment": 73,
+  "technical": 66,
+  "fundamental": null,
+  "valuation": 84,
+  "news": 75
+ },
+ "pe": {
+  "cur": 22.4,
+  "lo": 22,
+  "hi": 64.1
+ },
+ "alerts": [
+  {
+   "type": "volume",
+   "level": "mid",
+   "text": "成交量放大至近月均量的 2.0 倍"
+  }
+ ],
+ "ai": {
+  "why": "八月營收年增超過一成，加上公司要參加兩場論壇，好消息讓股價往上走。",
+  "meaning": "營收成長代表公司營運狀況不錯，接下來可以關注論壇上釋出的最新展望。",
+  "fact": "八月營收年增超過一成，加上公司要參加兩場論壇，好消息讓股價往上走。",
+  "inference": "營收成長代表公司營運狀況不錯，接下來可以關注論壇上釋出的最新展望。",
+  "stance": "pos",
+  "newsScore": 75,
+  "importance": 3
+ },
+ "newsTop": [
+  {
+   "title": "【公告】jpp-KY 2026年8月合併營收3.62億元 年增13.17%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-jpp-ky-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B63-62%E5%84%84%E5%85%83-095301972.html"
+  },
+  {
+   "title": "【公告】jpp-KY受邀參加第一證券舉辦之2026第三季投資論壇",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-jpp-ky%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E7%AC%AC-%E8%AD%89%E5%88%B8%E8%88%89%E8%BE%A6%E4%B9%8B2026%E7%AC%AC%E4%B8%89%E5%AD%A3%E6%8A%95%E8%B3%87%E8%AB%96%E5%A3%87-071503696.html"
+  },
+  {
+   "title": "【公告】jpp-KY受邀參加宏遠證券舉辦之產業趨勢論壇",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-jpp-ky%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E5%AE%8F%E9%81%A0%E8%AD%89%E5%88%B8%E8%88%89%E8%BE%A6%E4%B9%8B%E7%94%A2%E6%A5%AD%E8%B6%A8%E5%8B%A2%E8%AB%96%E5%A3%87-071500381.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-05T00:59:11.809Z"
+}

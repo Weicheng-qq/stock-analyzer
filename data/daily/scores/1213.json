@@ -2,15 +2,15 @@
  "symbol": "1213",
  "name": "OCEANIC BEVERAGES CO INC",
  "nameZh": "大飲",
- "date": "2026-09-01",
- "tradeDate": "2026-08-31",
- "price": 7.31,
- "changePct": 0,
- "volRatio": 3.86,
- "score": 30,
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 7.7,
+ "changePct": 3.08,
+ "volRatio": 0.18,
+ "score": 43,
  "scores": {
-  "sentiment": 62,
-  "technical": 18,
+  "sentiment": 60,
+  "technical": 66,
   "fundamental": 5,
   "valuation": 85,
   "news": null
@@ -20,25 +20,19 @@
   "lo": 1.1,
   "hi": 1.5
  },
- "alerts": [
-  {
-   "type": "volume",
-   "level": "high",
-   "text": "成交量放大至近月均量的 3.9 倍"
-  }
- ],
+ "alerts": [],
  "ai": null,
  "newsTop": [],
  "prev": {
-  "date": "2026-08-31",
-  "score": 50,
+  "date": "2026-09-01",
+  "score": 30,
   "scores": {
-   "sentiment": 91,
-   "technical": 66,
+   "sentiment": 62,
+   "technical": 18,
    "fundamental": 5,
    "valuation": 85,
    "news": null
   }
  },
- "generatedAt": "2026-09-01T01:49:11.063Z"
+ "generatedAt": "2026-09-05T00:59:11.808Z"
 }

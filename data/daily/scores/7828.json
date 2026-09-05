@@ -1,0 +1,58 @@
+{
+ "symbol": "7828",
+ "name": "INNOSTAR",
+ "nameZh": "創新服務",
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 1930,
+ "changePct": 9.97,
+ "volRatio": 2.23,
+ "score": 66,
+ "scores": {
+  "sentiment": 92,
+  "technical": 66,
+  "fundamental": null,
+  "valuation": 52,
+  "news": 50
+ },
+ "pe": {
+  "cur": 168.8,
+  "lo": 83.2,
+  "hi": 239.2
+ },
+ "alerts": [
+  {
+   "type": "price",
+   "level": "high",
+   "text": "股價大漲 9.97%"
+  },
+  {
+   "type": "volume",
+   "level": "mid",
+   "text": "成交量放大至近月均量的 2.2 倍"
+  }
+ ],
+ "ai": {
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 50,
+  "importance": 1
+ },
+ "newsTop": [
+  {
+   "title": "【公告】創新服務受邀參加中國信託證券舉辦之“中國信託證券2026年第三季前瞻論壇”",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%89%B5%E6%96%B0%E6%9C%8D%E5%8B%99%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E4%B8%AD%E5%9C%8B%E4%BF%A1%E8%A8%97%E8%AD%89%E5%88%B8%E8%88%89%E8%BE%A6%E4%B9%8B-%E4%B8%AD%E5%9C%8B%E4%BF%A1%E8%A8%97%E8%AD%89%E5%88%B82026%E5%B9%B4%E7%AC%AC%E4%B8%89%E5%AD%A3%E5%89%8D%E7%9E%BB%E8%AB%96%E5%A3%87-094044957.html"
+  },
+  {
+   "title": "【公告】說明創新服務部份資訊系統遭受網路勒索病毒攻擊事件",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E8%AA%AA%E6%98%8E%E5%89%B5%E6%96%B0%E6%9C%8D%E5%8B%99%E9%83%A8%E4%BB%BD%E8%B3%87%E8%A8%8A%E7%B3%BB%E7%B5%B1%E9%81%AD%E5%8F%97%E7%B6%B2%E8%B7%AF%E5%8B%92%E7%B4%A2%E7%97%85%E6%AF%92%E6%94%BB%E6%93%8A%E4%BA%8B%E4%BB%B6-110354474.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-05T00:59:11.807Z"
+}

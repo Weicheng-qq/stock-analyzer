@@ -2,14 +2,14 @@
  "symbol": "1101",
  "name": "TCC GROUP HOLDINGS CO LTD",
  "nameZh": "台泥",
- "date": "2026-09-01",
- "tradeDate": "2026-09-01",
- "price": 25.4,
- "changePct": 4.1,
- "volRatio": 1.47,
- "score": 66,
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 24.6,
+ "changePct": 0.61,
+ "volRatio": 0.35,
+ "score": 59,
  "scores": {
-  "sentiment": 79,
+  "sentiment": 47,
   "technical": 82,
   "fundamental": 42,
   "valuation": 82,
@@ -20,25 +20,19 @@
   "lo": 23.8,
   "hi": 31.1
  },
- "alerts": [
-  {
-   "type": "price",
-   "level": "mid",
-   "text": "股價明顯上漲 4.10%"
-  }
- ],
+ "alerts": [],
  "ai": null,
  "newsTop": [],
  "prev": {
-  "date": "2026-08-31",
-  "score": 53,
+  "date": "2026-09-01",
+  "score": 66,
   "scores": {
-   "sentiment": 51,
-   "technical": 58,
+   "sentiment": 79,
+   "technical": 82,
    "fundamental": 42,
    "valuation": 82,
    "news": null
   }
  },
- "generatedAt": "2026-09-01T01:49:11.057Z"
+ "generatedAt": "2026-09-05T00:59:11.811Z"
 }

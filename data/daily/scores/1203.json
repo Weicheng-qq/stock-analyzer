@@ -2,21 +2,21 @@
  "symbol": "1203",
  "name": "VE WONG CORPORATION",
  "nameZh": "味王",
- "date": "2026-09-01",
- "tradeDate": "2026-09-01",
- "price": 43.9,
- "changePct": -0.45,
- "volRatio": 0.17,
- "score": 48,
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 44.7,
+ "changePct": 3.47,
+ "volRatio": 1.41,
+ "score": 52,
  "scores": {
-  "sentiment": 39,
-  "technical": 34,
+  "sentiment": 75,
+  "technical": 18,
   "fundamental": 64,
-  "valuation": 48,
+  "valuation": 51,
   "news": null
  },
  "pe": {
-  "cur": 21.9,
+  "cur": 21.1,
   "lo": 14,
   "hi": 26.7
  },
@@ -24,15 +24,15 @@
  "ai": null,
  "newsTop": [],
  "prev": {
-  "date": "2026-08-31",
-  "score": 54,
+  "date": "2026-09-01",
+  "score": 48,
   "scores": {
-   "sentiment": 36,
-   "technical": 58,
+   "sentiment": 39,
+   "technical": 34,
    "fundamental": 64,
    "valuation": 48,
    "news": null
   }
  },
- "generatedAt": "2026-09-01T01:49:11.061Z"
+ "generatedAt": "2026-09-05T00:59:11.808Z"
 }

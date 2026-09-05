@@ -2,27 +2,37 @@
  "symbol": "1201",
  "name": "WEI CHUAN FOOD CORP",
  "nameZh": "味全",
- "date": "2026-09-01",
- "tradeDate": "2026-09-01",
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
  "price": 12.25,
- "changePct": 0,
- "volRatio": 0.07,
- "score": 45,
+ "changePct": 0.82,
+ "volRatio": 1.39,
+ "score": 42,
  "scores": {
-  "sentiment": 42,
-  "technical": 42,
+  "sentiment": 59,
+  "technical": 18,
   "fundamental": 38,
   "valuation": 85,
   "news": null
  },
  "pe": {
-  "cur": 19.9,
+  "cur": 20,
   "lo": 19.9,
   "hi": 35.8
  },
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-01T01:49:11.063Z"
+ "prev": {
+  "date": "2026-09-01",
+  "score": 45,
+  "scores": {
+   "sentiment": 42,
+   "technical": 42,
+   "fundamental": 38,
+   "valuation": 85,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-05T00:59:11.810Z"
 }

@@ -2,21 +2,21 @@
  "symbol": "1104",
  "name": "UNIVERSAL CEMENT CORPORATION",
  "nameZh": "環泥",
- "date": "2026-09-01",
- "tradeDate": "2026-09-01",
- "price": 27.05,
- "changePct": 1.5,
- "volRatio": 0.44,
- "score": 57,
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 27.7,
+ "changePct": -0.36,
+ "volRatio": 0.56,
+ "score": 62,
  "scores": {
-  "sentiment": 53,
-  "technical": 42,
+  "sentiment": 43,
+  "technical": 66,
   "fundamental": 67,
-  "valuation": 73,
+  "valuation": 71,
   "news": null
  },
  "pe": {
-  "cur": 9.9,
+  "cur": 10,
   "lo": 8.9,
   "hi": 13.8
  },
@@ -29,6 +29,16 @@
  ],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-01T01:49:11.059Z"
+ "prev": {
+  "date": "2026-09-01",
+  "score": 57,
+  "scores": {
+   "sentiment": 53,
+   "technical": 42,
+   "fundamental": 67,
+   "valuation": 73,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-05T00:59:11.811Z"
 }

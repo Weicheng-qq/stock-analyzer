@@ -2,37 +2,67 @@
  "symbol": "TSM",
  "name": "Taiwan Semiconductor Manufactur",
  "nameZh": null,
- "date": "2026-09-01",
- "tradeDate": "2026-08-31",
- "price": 415.32,
- "changePct": -0.53,
- "volRatio": 0.67,
- "score": 33,
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 428.91,
+ "changePct": 2.85,
+ "volRatio": 1.33,
+ "score": 72,
  "scores": {
-  "sentiment": 44,
-  "technical": 18,
+  "sentiment": 70,
+  "technical": 66,
   "fundamental": null,
-  "valuation": 49,
-  "news": null
+  "valuation": 54,
+  "news": 85
  },
  "pe": {
-  "cur": 31.9,
+  "cur": 30.8,
   "lo": 24.7,
   "hi": 36.7
  },
- "alerts": [],
- "ai": null,
- "newsTop": [],
+ "alerts": [
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "台積電蓋了三公頃的實驗室解決封裝瓶頸，而且買設備的胃口還翻倍。"
+  }
+ ],
+ "ai": {
+  "why": "台積電蓋了三公頃的實驗室解決封裝瓶頸，而且買設備的胃口還翻倍。",
+  "meaning": "這代表產能卡關的問題正在解決，我們有機會看到更多出貨。",
+  "fact": "台積電蓋了三公頃的實驗室解決封裝瓶頸，而且買設備的胃口還翻倍。",
+  "inference": "這代表產能卡關的問題正在解決，我們有機會看到更多出貨。",
+  "stance": "pos",
+  "newsScore": 85,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "Dow Jones Futures: Nvidia, Micron, Sandisk Flash Buy Signals; Apple, Inflation Reports Ahead",
+   "publisher": "Investor's Business Daily",
+   "link": "https://finance.yahoo.com/m/d5001ca0-1c20-3379-83c3-ddca4526f9c2/dow-jones-futures%3A-nvidia%2C.html"
+  },
+  {
+   "title": "TSMC (TSM) Increases Despite Market Slip: Here's What You Need to Know",
+   "publisher": "Zacks",
+   "link": "https://finance.yahoo.com/markets/stocks/articles/tsmc-tsm-increases-despite-market-214503083.html"
+  },
+  {
+   "title": "Prediction: Taiwan Semiconductor Stock Will Surge by 22% Before 2026 Ends",
+   "publisher": "Motley Fool",
+   "link": "https://finance.yahoo.com/m/bcaca36a-eca3-374a-87e3-edb0dee16a00/prediction%3A-taiwan.html"
+  }
+ ],
  "prev": {
-  "date": "2026-08-31",
-  "score": 38,
+  "date": "2026-09-01",
+  "score": 33,
   "scores": {
-   "sentiment": 35,
+   "sentiment": 44,
    "technical": 18,
    "fundamental": null,
    "valuation": 49,
-   "news": 55
+   "news": null
   }
  },
- "generatedAt": "2026-09-01T01:49:11.060Z"
+ "generatedAt": "2026-09-05T00:59:11.808Z"
 }

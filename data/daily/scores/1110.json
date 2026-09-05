@@ -2,27 +2,37 @@
  "symbol": "1110",
  "name": "SOUTH EAST CEMENT CO LTD.",
  "nameZh": "東泥",
- "date": "2026-09-01",
- "tradeDate": "2026-09-01",
- "price": 15.95,
- "changePct": 0,
- "volRatio": 0.14,
- "score": 54,
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 16.3,
+ "changePct": 1.24,
+ "volRatio": 0.91,
+ "score": 64,
  "scores": {
-  "sentiment": 42,
-  "technical": 58,
+  "sentiment": 57,
+  "technical": 82,
   "fundamental": 49,
   "valuation": 85,
   "news": null
  },
  "pe": {
-  "cur": 25.5,
+  "cur": 25.8,
   "lo": 25.5,
   "hi": 161.8
  },
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-01T01:49:11.063Z"
+ "prev": {
+  "date": "2026-09-01",
+  "score": 54,
+  "scores": {
+   "sentiment": 42,
+   "technical": 58,
+   "fundamental": 49,
+   "valuation": 85,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-05T00:59:11.810Z"
 }

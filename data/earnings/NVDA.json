@@ -1,0 +1,50 @@
+{
+ "symbol": "NVDA",
+ "market": "us",
+ "name": "NVIDIA CORP",
+ "quarter": "2027 Q2（2026-04-27～2026-07-26）",
+ "quarterTag": "2027Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "NVIDIA CORP",
+  "currency": "億美元",
+  "periodStart": "2026-04-27",
+  "periodEnd": "2026-07-26",
+  "year": 2027,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "962.21",
+  "營業毛利": "721.42",
+  "營業利益": "637.34",
+  "本期淨利": "596.88",
+  "每股盈餘": 2.46,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "",
+  "form": "法說會逐字稿",
+  "url": "https://s201.q4cdn.com/141608511/files/content_files/TRANSCRIPT_-NVIDIA-Corp-NVDA-US-Q2-2027-Earnings-Call-26-August-2026-5_00-PM-ET.pdf"
+ },
+ "savedAt": "2026-09-05T01:00:37.535Z",
+ "result": {
+  "revenue": "本季營收為 962.21 億美元，創下新高。",
+  "eps": "每股盈餘 (EPS) 為 2.46 美元。",
+  "margins": "毛利率為 75.0%，營業利益率為 66.2%，淨利率為 62.0%；顯示公司在高毛利產品組合下仍維持強勁獲利。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期下一季營收約 1,080 億美元，正負 2%。",
+  "outlook": "依據本季高毛利率與營收規模，顯示需求仍相當強勁；同時公司指出供應仍受限，將持續影響成長速度；庫存與應收天數上升亦需留意資金週轉。",
+  "highlights": "• 營收創新高 962.21 億美元，營業利益 637.34 億美元，EPS 2.46 美元。<br>• 資料中心營收 890 億美元，較上季成長 18%；其中超大規模客戶 (hyperscale) 490 億美元，ACIE 400 億美元。<br>• 向股東回饋創紀錄 260 億美元，其中回購 200 億美元，發放股息 60 億美元。",
+  "concerns": "• 供應受限仍是主要瓶頸，預期至 FY2028 仍會影響成長。<br>• 庫存累積至 320 億美元，天數銷售應收延長至 60 天，顯示資金週轉壓力。<br>• 中國出貨低於 1% 且毛利被稀釋，未來地緣政治風險仍存。",
+  "risks": "1. 高庫存與延長的應收天數可能削減自由現金流。<br>2. 供應鏈瓶頸與元件成本上升可能壓縮毛利。",
+  "keyPoints": "1. 營收 962.21 億美元，創下歷史新高。<br>2. 營業利益 637.34 億美元，營業利益率 66.2%。<br>3. 向股東回饋 260 億美元，顯示強勁現金產生能力。",
+  "guidanceOfficial": "預期總營收為 1,080 億美元，正負 2%。 初步預估 2028 財政年度營收年增長約 70%。",
+  "segments": "• 資料中心：890 億美元，季增 18%。<br>• 超大規模客戶 (hyperscale)：490 億美元，季增 13%。<br>• ACIE：400 億美元，季增 25%。",
+  "mgmtRemarks": "• Colette Kress 表示：「We delivered another outstanding quarter with record revenue, operating income, and EPS. Total revenue of $96 billion, more than doubled year-over-year...」<br>• 她補充：「We expect to grow revenue by approximately 70% in fiscal 2028. This is a supply-constrained outlook.」<br>• 她說：「Today, we are delighted to announce an expansion of our partnership with AWS... deploying an additional 2 million GPUs...」<br>• 她指出：「In Q2, we returned a record $26 billion to shareholders, $20 billion through share repurchases and $6 billion through our quarterly dividend of $0.25 per share.」<br>• 她說：「Vera Rubin accounting for about 20% of data center revenue in Q3... fastest product ramp in NVIDIA's history.」",
+  "capexPlan": "• 投資近 500 億美元於前沿 AI 實驗室，屬於自由現金流的一小部分。<br>• 與六大資本提供者（Apollo、BlackRock、Blackstone、Brookfield、Goldman Sachs、KKR）合作，籌集超過 5,000 億美元的第三方資金，用於基礎建設支出。",
+  "techRoadmap": "• Vera Rubin 已於本月開始量產，預計在 2029 財政年度第二季前完成 2 百萬顆 GPU 的部署。<br>• Vera CPU 已全線生產，效能提升 1.8 倍，帶寬提升 5 倍。<br>• Grace CPU 12 個月營收已超過 50 億美元，持續擴大市場。<br>• Spectrum‑X Ethernet 產品年增長 2.6 倍，推動公司成為全球最快成長的網路公司。<br>• Hopper 200 產品在中國出貨低於 1%，因美國政府授權限制，對毛利造成稀釋。"
+ }
+}

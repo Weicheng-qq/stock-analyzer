@@ -2,37 +2,61 @@
  "symbol": "NVO",
  "name": "Novo Nordisk A/S",
  "nameZh": null,
- "date": "2026-09-01",
- "tradeDate": "2026-08-31",
- "price": 45.33,
- "changePct": -0.61,
- "volRatio": 0.55,
- "score": 38,
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 46.6,
+ "changePct": -1.92,
+ "volRatio": 0.57,
+ "score": 44,
  "scores": {
-  "sentiment": 42,
-  "technical": 18,
+  "sentiment": 34,
+  "technical": 42,
   "fundamental": null,
-  "valuation": 85,
-  "news": null
+  "valuation": 84,
+  "news": 40
  },
  "pe": {
-  "cur": 11.3,
-  "lo": 11.3,
+  "cur": 11.5,
+  "lo": 10.7,
   "hi": 49.4
  },
  "alerts": [],
- "ai": null,
- "newsTop": [],
+ "ai": {
+  "why": "Wegovy進軍德國市場，且市場對公司獲利前景存有疑慮，導致股價下跌。",
+  "meaning": "減肥藥雖然擴大歐洲版圖，但市場開始質疑高成長能否持續，需要留意財報表現。",
+  "fact": "Wegovy進軍德國市場，且市場對公司獲利前景存有疑慮，導致股價下跌。",
+  "inference": "減肥藥雖然擴大歐洲版圖，但市場開始質疑高成長能否持續，需要留意財報表現。",
+  "stance": "neg",
+  "newsScore": 40,
+  "importance": 3
+ },
+ "newsTop": [
+  {
+   "title": "Sector Update: Healthcare Stocks Decline Late Afternoon",
+   "publisher": "MT Newswires",
+   "link": "https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-decline-afternoon-194843740.html"
+  },
+  {
+   "title": "Novo Nordisk (CPSE:NOVO B) Stock Looks Below Fair Value But Faces Earnings Doubts",
+   "publisher": "Simply Wall St.",
+   "link": "https://finance.yahoo.com/markets/stocks/articles/novo-nordisk-cpse-novo-b-190938443.html"
+  },
+  {
+   "title": "Sector Update: Healthcare Stocks Decline Friday Afternoon",
+   "publisher": "MT Newswires",
+   "link": "https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-decline-friday-174105757.html"
+  }
+ ],
  "prev": {
-  "date": "2026-08-31",
+  "date": "2026-09-01",
   "score": 38,
   "scores": {
-   "sentiment": 38,
+   "sentiment": 42,
    "technical": 18,
    "fundamental": null,
    "valuation": 85,
-   "news": 40
+   "news": null
   }
  },
- "generatedAt": "2026-09-01T01:49:11.060Z"
+ "generatedAt": "2026-09-05T00:59:11.809Z"
 }

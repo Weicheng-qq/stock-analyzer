@@ -2,27 +2,37 @@
  "symbol": "2838",
  "name": "UNION BANK OF TAIWAN",
  "nameZh": "聯邦銀",
- "date": "2026-09-01",
- "tradeDate": "2026-09-01",
- "price": 20.3,
- "changePct": 0.25,
- "volRatio": 0.15,
- "score": 49,
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 20.85,
+ "changePct": 0.97,
+ "volRatio": 0.77,
+ "score": 63,
  "scores": {
-  "sentiment": 43,
-  "technical": 42,
+  "sentiment": 54,
+  "technical": 66,
   "fundamental": null,
-  "valuation": 79,
+  "valuation": 78,
   "news": null
  },
  "pe": {
-  "cur": 15.9,
+  "cur": 16,
   "lo": 15,
   "hi": 23
  },
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-01T01:49:11.062Z"
+ "prev": {
+  "date": "2026-09-01",
+  "score": 49,
+  "scores": {
+   "sentiment": 43,
+   "technical": 42,
+   "fundamental": null,
+   "valuation": 79,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-05T00:59:11.810Z"
 }

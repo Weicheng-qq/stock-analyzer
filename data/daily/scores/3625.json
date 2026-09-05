@@ -1,0 +1,49 @@
+{
+ "symbol": "3625",
+ "name": "C-TECH UNITED CORP.",
+ "nameZh": "西勝",
+ "date": "2026-09-05",
+ "tradeDate": "2026-09-04",
+ "price": 12.35,
+ "changePct": -5.36,
+ "volRatio": 0.38,
+ "score": 28,
+ "scores": {
+  "sentiment": 14,
+  "technical": 18,
+  "fundamental": null,
+  "valuation": null,
+  "news": 50
+ },
+ "pe": null,
+ "alerts": [
+  {
+   "type": "price",
+   "level": "mid",
+   "text": "股價明顯下跌 -5.36%"
+  }
+ ],
+ "ai": {
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 50,
+  "importance": 2
+ },
+ "newsTop": [
+  {
+   "title": "【公告】西勝減資資本額變更登記完成",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E8%A5%BF%E5%8B%9D%E6%B8%9B%E8%B3%87%E8%B3%87%E6%9C%AC%E9%A1%8D%E8%AE%8A%E6%9B%B4%E7%99%BB%E8%A8%98%E5%AE%8C%E6%88%90-090512791.html"
+  },
+  {
+   "title": "【公告】西勝 2026年8月合併營收5050.5萬元 年增39.62%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E8%A5%BF%E5%8B%9D-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B65050-5%E8%90%AC%E5%85%83-%E5%B9%B4%E5%A2%9E39-072226943.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-05T00:59:11.807Z"
+}

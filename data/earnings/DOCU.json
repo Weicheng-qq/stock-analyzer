@@ -1,0 +1,50 @@
+{
+ "symbol": "DOCU",
+ "market": "us",
+ "name": "DOCUSIGN, INC.",
+ "quarter": "2027 Q2（2026-05-01～2026-07-31）",
+ "quarterTag": "2027Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "DOCUSIGN, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-05-01",
+  "periodEnd": "2026-07-31",
+  "year": 2027,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "8.76",
+  "營業毛利": "6.98",
+  "營業利益": "1.18",
+  "本期淨利": "0.78",
+  "每股盈餘": 0.4,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "",
+  "form": "法說會逐字稿",
+  "url": "https://s21.q4cdn.com/706790701/files/doc_earnings/2027/q2/transcript/2Q27-Earnings-Call.pdf"
+ },
+ "savedAt": "2026-09-05T01:03:06.946Z",
+ "result": {
+  "revenue": "本季營收為 8.76 億美元，較去年同期成長 9%。",
+  "eps": "本季每股盈餘（EPS）為 0.4 美元。",
+  "margins": "毛利率為 79.7%，顯示公司在成本控制上仍具優勢；營業利益率為 13.5%，說明營運效率提升；淨利率為 8.9%，代表稅後盈餘佔營收的比例。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "營收持續成長且毛利率維持在高水準，營業與淨利率亦保持正向。公司未透露未來的具體營收或盈餘指引。",
+  "highlights": "• 營收達 8.76 億美元，年增 9%。<br>• 毛利率高達 79.7%。<br>• GAAP 每股盈餘 0.4 美元。",
+  "concerns": "• 雖然毛利率高，但營業利益率僅 13.5%，顯示營運成本仍有壓力。<br>• 本季自由現金流與資本支出資訊未提供，無法評估現金產生能力。<br>• 公司未公布未來營收或盈餘指引，缺乏明確前瞻指標。",
+  "risks": "• 現金流與資本支出資訊缺乏，可能影響投資者對資金運用的判斷。<br>• 若 IAM 產品成長未如預期，可能影響未來營收與利潤率。",
+  "keyPoints": "• 營收 8.76 億美元，年增 9%。<br>• 毛利 6.98 億美元，毛利率 79.7%。<br>• 營業利益 1.18 億美元，營業利益率 13.5%。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "本次資料未揭露分部營收。",
+  "mgmtRemarks": "• Allan Thygesen 表示，IAM 功能已延伸至客戶工作工具，且 IAM 現在佔總 ARR 的 15.1%，較 Q1 的 12.6% 上升。<br>• Blake Grayson 強調，公司在本季維持營運紀律，營業利潤率提升，並持續將資本投入核心成長引擎。<br>• 管理層指出，隨著 IAM 採用率提升，預期將進一步推動客戶價值與收入成長。",
+  "capexPlan": "未提供",
+  "techRoadmap": "• 推出 AI 助理與代理功能，支援合約分析、紅線與工作流程自動化。<br>• 新增與 Perplexity 的整合，協助團隊自動化合約流程。<br>• 整合 Google Cloud Gemini Enterprise for Legal，擴大雲端 AI 能力。<br>• 提供 Agent Studio，讓客戶自行建置、治理與部署客製化代理。<br>• IAM Agreement Manager 與 Docusign CLM 整合，提供 AI 驅動的單一儲存庫與搜尋抽取功能。"
+ }
+}
