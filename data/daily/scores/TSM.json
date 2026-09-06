@@ -2,67 +2,61 @@
  "symbol": "TSM",
  "name": "Taiwan Semiconductor Manufactur",
  "nameZh": null,
- "date": "2026-09-05",
+ "date": "2026-09-06",
  "tradeDate": "2026-09-04",
  "price": 428.91,
  "changePct": 2.85,
  "volRatio": 1.33,
- "score": 72,
+ "score": 62,
  "scores": {
   "sentiment": 70,
   "technical": 66,
   "fundamental": null,
-  "valuation": 54,
-  "news": 85
+  "valuation": 53,
+  "news": 55
  },
  "pe": {
-  "cur": 30.8,
+  "cur": 30.9,
   "lo": 24.7,
-  "hi": 36.7
+  "hi": 36.4
  },
- "alerts": [
-  {
-   "type": "news",
-   "level": "mid",
-   "text": "台積電蓋了三公頃的實驗室解決封裝瓶頸，而且買設備的胃口還翻倍。"
-  }
- ],
+ "alerts": [],
  "ai": {
-  "why": "台積電蓋了三公頃的實驗室解決封裝瓶頸，而且買設備的胃口還翻倍。",
-  "meaning": "這代表產能卡關的問題正在解決，我們有機會看到更多出貨。",
-  "fact": "台積電蓋了三公頃的實驗室解決封裝瓶頸，而且買設備的胃口還翻倍。",
-  "inference": "這代表產能卡關的問題正在解決，我們有機會看到更多出貨。",
-  "stance": "pos",
-  "newsScore": 85,
-  "importance": 4
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 55,
+  "importance": 2
  },
  "newsTop": [
   {
-   "title": "Dow Jones Futures: Nvidia, Micron, Sandisk Flash Buy Signals; Apple, Inflation Reports Ahead",
-   "publisher": "Investor's Business Daily",
-   "link": "https://finance.yahoo.com/m/d5001ca0-1c20-3379-83c3-ddca4526f9c2/dow-jones-futures%3A-nvidia%2C.html"
-  },
-  {
-   "title": "TSMC (TSM) Increases Despite Market Slip: Here's What You Need to Know",
-   "publisher": "Zacks",
-   "link": "https://finance.yahoo.com/markets/stocks/articles/tsmc-tsm-increases-despite-market-214503083.html"
-  },
-  {
-   "title": "Prediction: Taiwan Semiconductor Stock Will Surge by 22% Before 2026 Ends",
+   "title": "ASML vs. Taiwan Semiconductor: Which Semiconductor Monopoly Is the Safer Investment?",
    "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/bcaca36a-eca3-374a-87e3-edb0dee16a00/prediction%3A-taiwan.html"
+   "link": "https://finance.yahoo.com/m/52aa091d-d5be-333f-9494-3e95bfa98332/asml-vs.-taiwan.html"
+  },
+  {
+   "title": "Dow Jones Futures: U.S., Iran Exchange Attacks; Nvidia, Micron, Sandisk Flash Buy Signals",
+   "publisher": "Investor's Business Daily",
+   "link": "https://finance.yahoo.com/m/d5001ca0-1c20-3379-83c3-ddca4526f9c2/dow-jones-futures%3A-u.s.%2C-iran.html"
+  },
+  {
+   "title": "Cadence Design Systems (CDNS) Following PCIe 6.0 Progress Has Fair Value Back In Focus",
+   "publisher": "Simply Wall St.",
+   "link": "https://finance.yahoo.com/markets/stocks/articles/cadence-design-systems-cdns-following-090710711.html"
   }
  ],
  "prev": {
-  "date": "2026-09-01",
-  "score": 33,
+  "date": "2026-09-05",
+  "score": 72,
   "scores": {
-   "sentiment": 44,
-   "technical": 18,
+   "sentiment": 70,
+   "technical": 66,
    "fundamental": null,
-   "valuation": 49,
-   "news": null
+   "valuation": 54,
+   "news": 85
   }
  },
- "generatedAt": "2026-09-05T00:59:11.808Z"
+ "generatedAt": "2026-09-06T00:50:27.572Z"
 }

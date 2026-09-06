@@ -2,7 +2,7 @@
  "symbol": "NVO",
  "name": "Novo Nordisk A/S",
  "nameZh": null,
- "date": "2026-09-05",
+ "date": "2026-09-06",
  "tradeDate": "2026-09-04",
  "price": 46.6,
  "changePct": -1.92,
@@ -12,20 +12,20 @@
   "sentiment": 34,
   "technical": 42,
   "fundamental": null,
-  "valuation": 84,
+  "valuation": 85,
   "news": 40
  },
  "pe": {
-  "cur": 11.5,
-  "lo": 10.7,
+  "cur": 11.7,
+  "lo": 11.7,
   "hi": 49.4
  },
  "alerts": [],
  "ai": {
-  "why": "Wegovy進軍德國市場，且市場對公司獲利前景存有疑慮，導致股價下跌。",
-  "meaning": "減肥藥雖然擴大歐洲版圖，但市場開始質疑高成長能否持續，需要留意財報表現。",
-  "fact": "Wegovy進軍德國市場，且市場對公司獲利前景存有疑慮，導致股價下跌。",
-  "inference": "減肥藥雖然擴大歐洲版圖，但市場開始質疑高成長能否持續，需要留意財報表現。",
+  "why": "減肥藥Wegovy進軍德國，同時市場對公司財報前景存有疑慮。",
+  "meaning": "新市場擴張雖是好事，但投資人目前更在意財報能否兌現高成長。",
+  "fact": "減肥藥Wegovy進軍德國，同時市場對公司財報前景存有疑慮。",
+  "inference": "新市場擴張雖是好事，但投資人目前更在意財報能否兌現高成長。",
   "stance": "neg",
   "newsScore": 40,
   "importance": 3
@@ -48,15 +48,15 @@
   }
  ],
  "prev": {
-  "date": "2026-09-01",
-  "score": 38,
+  "date": "2026-09-05",
+  "score": 44,
   "scores": {
-   "sentiment": 42,
-   "technical": 18,
+   "sentiment": 34,
+   "technical": 42,
    "fundamental": null,
-   "valuation": 85,
-   "news": null
+   "valuation": 84,
+   "news": 40
   }
  },
- "generatedAt": "2026-09-05T00:59:11.809Z"
+ "generatedAt": "2026-09-06T00:50:27.573Z"
 }

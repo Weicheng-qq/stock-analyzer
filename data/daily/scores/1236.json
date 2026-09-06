@@ -2,14 +2,14 @@
  "symbol": "1236",
  "name": "HUNYA FOODS CO",
  "nameZh": "宏亞",
- "date": "2026-09-01",
- "tradeDate": "2026-09-01",
- "price": 26,
- "changePct": 1.17,
- "volRatio": 1.12,
- "score": 52,
+ "date": "2026-09-06",
+ "tradeDate": "2026-09-04",
+ "price": 26.15,
+ "changePct": 0.38,
+ "volRatio": 0.91,
+ "score": 51,
  "scores": {
-  "sentiment": 58,
+  "sentiment": 51,
   "technical": 82,
   "fundamental": 31,
   "valuation": 39,
@@ -23,6 +23,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-01T01:49:11.059Z"
+ "prev": {
+  "date": "2026-09-01",
+  "score": 52,
+  "scores": {
+   "sentiment": 58,
+   "technical": 82,
+   "fundamental": 31,
+   "valuation": 39,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-06T00:50:27.576Z"
 }

@@ -1,13 +1,15 @@
 {
  "symbol": "4745",
  "name": "COWEALTH MEDICAL HOLDING CO LTD",
- "date": "2026-08-30",
- "price": 11.9,
- "changePct": 0,
- "volRatio": 0.53,
- "score": 30,
+ "nameZh": "合富-KY",
+ "date": "2026-09-06",
+ "tradeDate": "2026-09-04",
+ "price": 11.85,
+ "changePct": 0.85,
+ "volRatio": 0.27,
+ "score": 31,
  "scores": {
-  "sentiment": 45,
+  "sentiment": 48,
   "technical": 18,
   "fundamental": null,
   "valuation": 27,
@@ -21,6 +23,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T04:21:09.823Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 30,
+  "scores": {
+   "sentiment": 45,
+   "technical": 18,
+   "fundamental": null,
+   "valuation": 27,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-06T00:50:27.575Z"
 }

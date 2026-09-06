@@ -2,15 +2,15 @@
  "symbol": "1304",
  "name": "USI CORPORATION",
  "nameZh": "台聚",
- "date": "2026-09-01",
- "tradeDate": "2026-09-01",
- "price": 12.8,
- "changePct": 1.19,
- "volRatio": 1,
- "score": 41,
+ "date": "2026-09-06",
+ "tradeDate": "2026-09-04",
+ "price": 12.35,
+ "changePct": -0.8,
+ "volRatio": 0.75,
+ "score": 31,
  "scores": {
-  "sentiment": 57,
-  "technical": 66,
+  "sentiment": 43,
+  "technical": 42,
   "fundamental": 18,
   "valuation": 25,
   "news": null
@@ -29,6 +29,16 @@
  ],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-01T01:49:11.059Z"
+ "prev": {
+  "date": "2026-09-01",
+  "score": 41,
+  "scores": {
+   "sentiment": 57,
+   "technical": 66,
+   "fundamental": 18,
+   "valuation": 25,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-06T00:50:27.575Z"
 }

@@ -1,0 +1,47 @@
+{
+ "symbol": "AIRTP",
+ "market": "us",
+ "name": "Air T, Inc.",
+ "quarter": "2027 Q1（2026-04-01～2026-06-30）",
+ "quarterTag": "2027Q1",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Air T, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2027,
+  "season": "Q1",
+  "form": "10-Q",
+  "營業收入": "1.15",
+  "營業毛利": null,
+  "營業利益": "-0.13",
+  "本期淨利": "-0.16",
+  "每股盈餘": -5.86,
+  "營運現金流": "-0.03",
+  "資本支出": "0.21",
+  "自由現金流": "-0.24"
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-14",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/353184/000035318426000079/pressreleaseairtq1fy27.htm"
+ },
+ "savedAt": "2026-09-06T01:05:38.240Z",
+ "result": {
+  "revenue": "本季營收為 1.15 億美元，較去年同期成長 63%。",
+  "eps": "每股虧損 5.86 美元。",
+  "margins": "毛利率未提供。營業利益率為 -11.3%，顯示營業虧損。淨利率為 -13.9%，說明整體虧損。",
+  "fcf": "-0.24 億美元",
+  "capex": "0.21 億美元",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "營收大幅提升 63%，但仍出現營業虧損與淨虧損。自由現金流為負且資本支出高於營運現金流，顯示資金壓力。各事業部表現分化，部分事業部調整後 EBITDA 為正。",
+  "highlights": "• 營收 1.15 億美元，較去年同期增長 63%。<br>• 收入中包含 0.559 億美元來自 2025 年 12 月完成的 Rex 收購。<br>• Overnight Air Cargo 及 Regional Airline 兩大事業部調整後 EBITDA 為正，顯示營運貢獻。",
+  "concerns": "• 營業虧損 0.13 億美元，營業利益率 -11.3%。<br>• 自由現金流 -0.24 億美元，資本支出高於營運現金流。<br>• 毛利率未提供，無法評估毛利貢獻。",
+  "risks": "• 高負的自由現金流與資本支出可能影響資金周轉。<br>• 燃油價格上漲及未對沖的匯率風險影響營運成本。",
+  "keyPoints": "• 營收 1.15 億美元，較去年同期增 63%。<br>• 營業虧損 0.13 億美元，營業利益率 -11.3%。<br>• 每股虧損 5.86 美元，且自由現金流 -0.24 億美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "• Regional Airline：營收 0.0559 億美元，為完整一季的 Rex 營運，無可比對的前期數字。<br>• Overnight Air Cargo：營收 0.0312 億美元，較前一年同期基本持平。<br>• Commercial Aircraft, Engines and Parts：營收 0.0208 億美元，較前一年同期減少 0.016 億美元。<br>• Ground Support Equipment：營收 0.0037 億美元，較前一年同期減少 0.0114 億美元。"
+ }
+}

@@ -2,37 +2,43 @@
  "symbol": "1225",
  "name": "FORMOSA OILSEED PROCESSING",
  "nameZh": "福懋油",
- "date": "2026-09-01",
- "tradeDate": "2026-09-01",
- "price": 25.65,
- "changePct": -0.19,
- "volRatio": 0.63,
- "score": 34,
+ "date": "2026-09-06",
+ "tradeDate": "2026-09-04",
+ "price": 25,
+ "changePct": 0.4,
+ "volRatio": 1.84,
+ "score": 37,
  "scores": {
-  "sentiment": 45,
+  "sentiment": 61,
   "technical": 42,
   "fundamental": 23,
   "valuation": 25,
   "news": null
  },
  "pe": {
-  "cur": 124.6,
-  "lo": 14.6,
-  "hi": 124.6
+  "cur": 120,
+  "lo": 21.4,
+  "hi": 120
  },
- "alerts": [],
+ "alerts": [
+  {
+   "type": "volume",
+   "level": "mid",
+   "text": "成交量放大至近月均量的 1.8 倍"
+  }
+ ],
  "ai": null,
  "newsTop": [],
  "prev": {
-  "date": "2026-08-31",
-  "score": 39,
+  "date": "2026-09-01",
+  "score": 34,
   "scores": {
-   "sentiment": 52,
+   "sentiment": 45,
    "technical": 42,
    "fundamental": 23,
    "valuation": 25,
-   "news": 50
+   "news": null
   }
  },
- "generatedAt": "2026-09-01T01:49:11.062Z"
+ "generatedAt": "2026-09-06T00:50:27.576Z"
 }

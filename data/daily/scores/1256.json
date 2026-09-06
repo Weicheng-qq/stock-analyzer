@@ -2,27 +2,37 @@
  "symbol": "1256",
  "name": "SUNJUICE HOLDINGS CO LIMITED",
  "nameZh": "鮮活果汁-KY",
- "date": "2026-09-01",
- "tradeDate": "2026-09-01",
- "price": 181.5,
+ "date": "2026-09-06",
+ "tradeDate": "2026-09-04",
+ "price": 173,
  "changePct": 0,
- "volRatio": 0.34,
- "score": 55,
+ "volRatio": 0.9,
+ "score": 50,
  "scores": {
-  "sentiment": 43,
-  "technical": 42,
+  "sentiment": 49,
+  "technical": 18,
   "fundamental": 64,
-  "valuation": 84,
+  "valuation": 85,
   "news": null
  },
  "pe": {
-  "cur": 13.4,
-  "lo": 13.2,
+  "cur": 12.7,
+  "lo": 12.7,
   "hi": 34.1
  },
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-01T01:49:11.063Z"
+ "prev": {
+  "date": "2026-09-01",
+  "score": 55,
+  "scores": {
+   "sentiment": 43,
+   "technical": 42,
+   "fundamental": 64,
+   "valuation": 84,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-06T00:50:27.578Z"
 }

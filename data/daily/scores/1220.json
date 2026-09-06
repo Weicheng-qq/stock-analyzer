@@ -2,27 +2,37 @@
  "symbol": "1220",
  "name": "TAI ROUN PRODUCTS CO",
  "nameZh": "台榮",
- "date": "2026-09-01",
- "tradeDate": "2026-09-01",
- "price": 10.75,
+ "date": "2026-09-06",
+ "tradeDate": "2026-09-04",
+ "price": 10.7,
  "changePct": 0,
- "volRatio": 0.1,
+ "volRatio": 0.41,
  "score": 26,
  "scores": {
-  "sentiment": 42,
+  "sentiment": 44,
   "technical": 18,
   "fundamental": 22,
   "valuation": 25,
   "news": null
  },
  "pe": {
-  "cur": 158.3,
+  "cur": 155.4,
   "lo": 12.9,
-  "hi": 158.3
+  "hi": 155.4
  },
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-01T01:49:11.063Z"
+ "prev": {
+  "date": "2026-09-01",
+  "score": 26,
+  "scores": {
+   "sentiment": 42,
+   "technical": 18,
+   "fundamental": 22,
+   "valuation": 25,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-06T00:50:27.578Z"
 }

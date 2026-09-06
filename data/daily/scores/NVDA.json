@@ -2,37 +2,48 @@
  "symbol": "NVDA",
  "name": "NVIDIA Corporation",
  "nameZh": null,
- "date": "2026-09-05",
+ "date": "2026-09-06",
  "tradeDate": "2026-09-04",
  "price": 230.36,
  "changePct": 0.84,
- "volRatio": 1.03,
- "score": 72,
+ "volRatio": 1.05,
+ "score": 83,
  "scores": {
   "sentiment": 55,
   "technical": 82,
-  "fundamental": null,
+  "fundamental": 100,
   "valuation": 85,
   "news": null
  },
  "pe": {
-  "cur": 28.4,
-  "lo": 28.4,
+  "cur": 28.9,
+  "lo": 28.9,
   "hi": 75.6
  },
- "alerts": [],
+ "alerts": [
+  {
+   "type": "earnings",
+   "level": "high",
+   "text": "最新財報摘要已更新（2027 Q2（2026-04-27～2026-07-26））"
+  },
+  {
+   "type": "guidance",
+   "level": "mid",
+   "text": "公司已公布官方財測／展望"
+  }
+ ],
  "ai": null,
  "newsTop": [],
  "prev": {
-  "date": "2026-09-01",
-  "score": 70,
+  "date": "2026-09-05",
+  "score": 72,
   "scores": {
-   "sentiment": 59,
+   "sentiment": 55,
    "technical": 82,
    "fundamental": null,
    "valuation": 85,
-   "news": 60
+   "news": null
   }
  },
- "generatedAt": "2026-09-05T00:59:11.810Z"
+ "generatedAt": "2026-09-06T00:50:27.575Z"
 }
