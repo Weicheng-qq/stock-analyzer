@@ -2,18 +2,18 @@
  "symbol": "2454",
  "name": "MEDIATEK INC",
  "nameZh": "聯發科",
- "date": "2026-09-06",
+ "date": "2026-09-07",
  "tradeDate": "2026-09-04",
  "price": 4415,
  "changePct": 1.73,
  "volRatio": 1.1,
- "score": 69,
+ "score": 73,
  "scores": {
   "sentiment": 61,
   "technical": 82,
   "fundamental": 76,
   "valuation": 25,
-  "news": 70
+  "news": 85
  },
  "pe": {
   "cur": 71.7,
@@ -29,16 +29,16 @@
   {
    "type": "news",
    "level": "mid",
-   "text": "Nvidia 投資 35 億美元認購聯發科 ECB"
+   "text": "輝達砸了35億美元認購聯發科的ECB，大咖加持讓股價表現強勢。"
   }
  ],
  "ai": {
-  "why": "Nvidia 投資 35 億美元認購聯發科 ECB",
-  "meaning": "顯示國際大廠看好聯發科未來，提升市場信心",
-  "fact": "Nvidia 投資 35 億美元認購聯發科 ECB",
-  "inference": "顯示國際大廠看好聯發科未來，提升市場信心",
+  "why": "輝達砸了35億美元認購聯發科的ECB，大咖加持讓股價表現強勢。",
+  "meaning": "這代表兩大巨頭關係更緊密，未來的AI晶片合作非常值得期待。",
+  "fact": "輝達砸了35億美元認購聯發科的ECB，大咖加持讓股價表現強勢。",
+  "inference": "這代表兩大巨頭關係更緊密，未來的AI晶片合作非常值得期待。",
   "stance": "pos",
-  "newsScore": 70,
+  "newsScore": 85,
   "importance": 4
  },
  "newsTop": [
@@ -59,15 +59,15 @@
   }
  ],
  "prev": {
-  "date": "2026-09-05",
-  "score": 60,
+  "date": "2026-09-06",
+  "score": 69,
   "scores": {
    "sentiment": 61,
    "technical": 82,
-   "fundamental": null,
+   "fundamental": 76,
    "valuation": 25,
-   "news": 50
+   "news": 70
   }
  },
- "generatedAt": "2026-09-06T00:50:27.573Z"
+ "generatedAt": "2026-09-07T00:54:03.315Z"
 }

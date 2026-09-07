@@ -2,7 +2,7 @@
  "symbol": "1323",
  "name": "YONYU PLASTICS",
  "nameZh": "永裕",
- "date": "2026-09-06",
+ "date": "2026-09-07",
  "tradeDate": "2026-09-04",
  "price": 21.25,
  "changePct": -0.47,
@@ -23,6 +23,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-06T00:50:27.576Z"
+ "prev": {
+  "date": "2026-09-06",
+  "score": 49,
+  "scores": {
+   "sentiment": 39,
+   "technical": 58,
+   "fundamental": 44,
+   "valuation": 65,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-07T00:54:03.318Z"
 }

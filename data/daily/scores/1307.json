@@ -2,7 +2,7 @@
  "symbol": "1307",
  "name": "SAN FANG CHEMICAL",
  "nameZh": "三芳",
- "date": "2026-09-06",
+ "date": "2026-09-07",
  "tradeDate": "2026-09-04",
  "price": 30.45,
  "changePct": 0.33,
@@ -23,6 +23,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-06T00:50:27.577Z"
+ "prev": {
+  "date": "2026-09-06",
+  "score": 48,
+  "scores": {
+   "sentiment": 52,
+   "technical": 18,
+   "fundamental": 58,
+   "valuation": 85,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-07T00:54:03.319Z"
 }

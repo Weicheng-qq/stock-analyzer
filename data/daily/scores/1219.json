@@ -2,18 +2,18 @@
  "symbol": "1219",
  "name": "FWUSOW INDUSTRY CO LTD",
  "nameZh": "福壽",
- "date": "2026-09-06",
+ "date": "2026-09-07",
  "tradeDate": "2026-09-04",
  "price": 11.6,
  "changePct": 0.87,
  "volRatio": 0.35,
- "score": 37,
+ "score": 40,
  "scores": {
   "sentiment": 49,
   "technical": 42,
   "fundamental": 15,
   "valuation": 75,
-  "news": null
+  "news": 50
  },
  "pe": {
   "cur": 24.2,
@@ -21,18 +21,32 @@
   "hi": 50.2
  },
  "alerts": [],
- "ai": null,
- "newsTop": [],
+ "ai": {
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 50,
+  "importance": 1
+ },
+ "newsTop": [
+  {
+   "title": "【公告】福壽(補充115年9月1日重訊說明)相關批次「福壽100%芝麻油」檢驗結果符合衛生法規標準",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%A6%8F%E5%A3%BD-%E8%A3%9C%E5%85%85115%E5%B9%B49%E6%9C%881%E6%97%A5%E9%87%8D%E8%A8%8A%E8%AA%AA%E6%98%8E-%E7%9B%B8%E9%97%9C%E6%89%B9%E6%AC%A1-%E7%A6%8F%E5%A3%BD100-095607859.html"
+  }
+ ],
  "prev": {
-  "date": "2026-09-01",
-  "score": 36,
+  "date": "2026-09-06",
+  "score": 37,
   "scores": {
-   "sentiment": 45,
+   "sentiment": 49,
    "technical": 42,
    "fundamental": 15,
    "valuation": 75,
    "news": null
   }
  },
- "generatedAt": "2026-09-06T00:50:27.575Z"
+ "generatedAt": "2026-09-07T00:54:03.317Z"
 }

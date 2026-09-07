@@ -2,7 +2,7 @@
  "symbol": "1313",
  "name": "UPC TECHNOLOGY CO",
  "nameZh": "聯成",
- "date": "2026-09-06",
+ "date": "2026-09-07",
  "tradeDate": "2026-09-04",
  "price": 11.9,
  "changePct": 0,
@@ -19,6 +19,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-06T00:50:27.578Z"
+ "prev": {
+  "date": "2026-09-06",
+  "score": 44,
+  "scores": {
+   "sentiment": 47,
+   "technical": 66,
+   "fundamental": 25,
+   "valuation": null,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-07T00:54:03.321Z"
 }

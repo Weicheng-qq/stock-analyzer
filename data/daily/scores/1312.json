@@ -2,7 +2,7 @@
  "symbol": "1312",
  "name": "GRAND PACIFIC PETROCHEMICAL",
  "nameZh": "國喬",
- "date": "2026-09-06",
+ "date": "2026-09-07",
  "tradeDate": "2026-09-04",
  "price": 14.6,
  "changePct": -2.01,
@@ -23,6 +23,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-06T00:50:27.573Z"
+ "prev": {
+  "date": "2026-09-06",
+  "score": 33,
+  "scores": {
+   "sentiment": 38,
+   "technical": 66,
+   "fundamental": 5,
+   "valuation": null,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-07T00:54:03.315Z"
 }

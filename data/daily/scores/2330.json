@@ -2,18 +2,18 @@
  "symbol": "2330",
  "name": "TAIWAN SEMICONDUCTOR MANUFACTUR",
  "nameZh": "台積電",
- "date": "2026-09-06",
+ "date": "2026-09-07",
  "tradeDate": "2026-09-04",
  "price": 2410,
  "changePct": 0.84,
  "volRatio": 0.79,
- "score": 76,
+ "score": 77,
  "scores": {
   "sentiment": 53,
   "technical": 82,
   "fundamental": 100,
   "valuation": 25,
-  "news": null
+  "news": 80
  },
  "pe": {
   "cur": 28.2,
@@ -25,20 +25,49 @@
    "type": "guidance",
    "level": "mid",
    "text": "公司已公布官方財測／展望"
+  },
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "美股台積電ADR大漲近百分之三，帶動今天台灣母股跟著同步走揚。"
   }
  ],
- "ai": null,
- "newsTop": [],
+ "ai": {
+  "why": "美股台積電ADR大漲近百分之三，帶動今天台灣母股跟著同步走揚。",
+  "meaning": "美股溢價效應對台股有直接拉抬作用，代表外資對台積電的信心依舊強勁。",
+  "fact": "美股台積電ADR大漲近百分之三，帶動今天台灣母股跟著同步走揚。",
+  "inference": "美股溢價效應對台股有直接拉抬作用，代表外資對台積電的信心依舊強勁。",
+  "stance": "pos",
+  "newsScore": 80,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "台積電報喜 為何大盤重挫？利多不敵高檔賣壓 AI股下一步怎麼走",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.news.yahoo.com/%E5%8F%B0%E7%A9%8D%E9%9B%BB%E5%A0%B1%E5%96%9C-%E7%82%BA%E4%BD%95%E5%A4%A7%E7%9B%A4%E9%87%8D%E6%8C%AB-%E5%88%A9%E5%A4%9A%E4%B8%8D%E6%95%B5%E9%AB%98%E6%AA%94%E8%B3%A3%E5%A3%93-ai%E8%82%A1%E4%B8%8B-%E6%AD%A5%E6%80%8E%E9%BA%BC%E8%B5%B0-230900468.html"
+  },
+  {
+   "title": "化解台積電3奈米廠出走危機　陳良基出書談4年入閣心路",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%8C%96%E8%A7%A3%E5%8F%B0%E7%A9%8D%E9%9B%BB3%E5%A5%88%E7%B1%B3%E5%BB%A0%E5%87%BA%E8%B5%B0%E5%8D%B1%E6%A9%9F-%E9%99%B3%E8%89%AF%E5%9F%BA%E5%87%BA%E6%9B%B8%E8%AB%874%E5%B9%B4%E5%85%A5%E9%96%A3%E5%BF%83%E8%B7%AF-112532680.html"
+  },
+  {
+   "title": "台積電8月營收揭曉 AI半導體鏈「體溫計」台灣AI供應鏈三大廠這周密集法說 蘋果9月10日秋季發表會 中油宣布油價繼續凍｜投資早知道",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/copy-%E5%85%AC%E8%82%A1%E9%8A%80%E8%A1%8C20%E5%B9%B4%E9%80%A3%E9%85%8D%E6%96%B0%E9%AB%98%EF%BC%81%E5%BD%B0%E9%8A%80%E5%8F%B0%E4%B8%AD%E9%8A%80%E5%8F%B0%E4%BC%81%E9%8A%80%E5%90%8C%E6%AD%A5%E4%B8%89%E9%80%A3%E9%99%A4%E6%81%AF-%E5%87%BA%E5%8F%A3%E9%9B%99%E5%85%AC%E5%B8%83-%E5%8F%B0%E7%81%A3%E6%99%AF%E6%B0%A3%E7%9C%9F%E5%AF%A6%E6%BA%AB%E5%BA%A6%E5%87%BA%E7%88%90-%E7%BE%8E%E8%82%A1%E8%B6%85%E7%B4%9A%E5%91%A8%E4%BE%86%E4%BA%86%E4%B8%AD%E6%B2%B9%E5%AE%A3%E5%B8%83%E6%B2%B9%E5%83%B9%E5%87%8D%E6%BC%B2%EF%BD%9C%E6%8A%95%E8%B3%87%E6%97%A9%E7%9F%A5%E9%81%93-042928708.html"
+  }
+ ],
  "prev": {
-  "date": "2026-09-05",
-  "score": 78,
+  "date": "2026-09-06",
+  "score": 76,
   "scores": {
    "sentiment": 53,
    "technical": 82,
    "fundamental": 100,
-   "valuation": 43,
+   "valuation": 25,
    "news": null
   }
  },
- "generatedAt": "2026-09-06T00:50:27.575Z"
+ "generatedAt": "2026-09-07T00:54:03.317Z"
 }

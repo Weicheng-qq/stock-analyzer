@@ -2,7 +2,7 @@
  "symbol": "NVO",
  "name": "Novo Nordisk A/S",
  "nameZh": null,
- "date": "2026-09-06",
+ "date": "2026-09-07",
  "tradeDate": "2026-09-04",
  "price": 46.6,
  "changePct": -1.92,
@@ -22,15 +22,20 @@
  },
  "alerts": [],
  "ai": {
-  "why": "減肥藥Wegovy進軍德國，同時市場對公司財報前景存有疑慮。",
-  "meaning": "新市場擴張雖是好事，但投資人目前更在意財報能否兌現高成長。",
-  "fact": "減肥藥Wegovy進軍德國，同時市場對公司財報前景存有疑慮。",
-  "inference": "新市場擴張雖是好事，但投資人目前更在意財報能否兌現高成長。",
+  "why": "減肥藥Wegovy進軍德國，加上市場對財報存疑，導致股價下跌。",
+  "meaning": "這代表新市場的進展可能不如預期順利，投資人對獲利前景轉趨保守。",
+  "fact": "減肥藥Wegovy進軍德國，加上市場對財報存疑，導致股價下跌。",
+  "inference": "這代表新市場的進展可能不如預期順利，投資人對獲利前景轉趨保守。",
   "stance": "neg",
   "newsScore": 40,
   "importance": 3
  },
  "newsTop": [
+  {
+   "title": "Plastic surgery is booming with boomers. Here’s how to cash in on the antiaging craze.",
+   "publisher": "MarketWatch",
+   "link": "https://finance.yahoo.com/m/701a2588-2068-38d6-92e9-f1caa90660b4/plastic-surgery-is-booming.html"
+  },
   {
    "title": "Sector Update: Healthcare Stocks Decline Late Afternoon",
    "publisher": "MT Newswires",
@@ -40,23 +45,18 @@
    "title": "Novo Nordisk (CPSE:NOVO B) Stock Looks Below Fair Value But Faces Earnings Doubts",
    "publisher": "Simply Wall St.",
    "link": "https://finance.yahoo.com/markets/stocks/articles/novo-nordisk-cpse-novo-b-190938443.html"
-  },
-  {
-   "title": "Sector Update: Healthcare Stocks Decline Friday Afternoon",
-   "publisher": "MT Newswires",
-   "link": "https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-decline-friday-174105757.html"
   }
  ],
  "prev": {
-  "date": "2026-09-05",
+  "date": "2026-09-06",
   "score": 44,
   "scores": {
    "sentiment": 34,
    "technical": 42,
    "fundamental": null,
-   "valuation": 84,
+   "valuation": 85,
    "news": 40
   }
  },
- "generatedAt": "2026-09-06T00:50:27.573Z"
+ "generatedAt": "2026-09-07T00:54:03.315Z"
 }

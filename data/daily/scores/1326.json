@@ -2,7 +2,7 @@
  "symbol": "1326",
  "name": "FORMOSA CHEMICAL & FIBRE CO",
  "nameZh": "台化",
- "date": "2026-09-06",
+ "date": "2026-09-07",
  "tradeDate": "2026-09-04",
  "price": 69.8,
  "changePct": 0.14,
@@ -23,6 +23,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-06T00:50:27.577Z"
+ "prev": {
+  "date": "2026-09-06",
+  "score": 50,
+  "scores": {
+   "sentiment": 52,
+   "technical": 82,
+   "fundamental": 32,
+   "valuation": 25,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-07T00:54:03.320Z"
 }
