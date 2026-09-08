@@ -2,53 +2,59 @@
  "symbol": "NVO",
  "name": "Novo Nordisk A/S",
  "nameZh": null,
- "date": "2026-09-07",
+ "date": "2026-09-08",
  "tradeDate": "2026-09-04",
  "price": 46.6,
  "changePct": -1.92,
  "volRatio": 0.57,
- "score": 44,
+ "score": 46,
  "scores": {
   "sentiment": 34,
   "technical": 42,
   "fundamental": null,
   "valuation": 85,
-  "news": 40
+  "news": 45
  },
  "pe": {
   "cur": 11.7,
   "lo": 11.7,
   "hi": 49.4
  },
- "alerts": [],
+ "alerts": [
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "雖然兒童肥胖試驗達標，但因取消另外兩項臨床試驗，導致股價下跌。"
+  }
+ ],
  "ai": {
-  "why": "減肥藥Wegovy進軍德國，加上市場對財報存疑，導致股價下跌。",
-  "meaning": "這代表新市場的進展可能不如預期順利，投資人對獲利前景轉趨保守。",
-  "fact": "減肥藥Wegovy進軍德國，加上市場對財報存疑，導致股價下跌。",
-  "inference": "這代表新市場的進展可能不如預期順利，投資人對獲利前景轉趨保守。",
+  "why": "雖然兒童肥胖試驗達標，但因取消另外兩項臨床試驗，導致股價下跌。",
+  "meaning": "這代表新藥研發有進有退，我們得重新評估未來的成長動能。",
+  "fact": "雖然兒童肥胖試驗達標，但因取消另外兩項臨床試驗，導致股價下跌。",
+  "inference": "這代表新藥研發有進有退，我們得重新評估未來的成長動能。",
   "stance": "neg",
-  "newsScore": 40,
-  "importance": 3
+  "newsScore": 45,
+  "importance": 4
  },
  "newsTop": [
   {
-   "title": "Plastic surgery is booming with boomers. Here’s how to cash in on the antiaging craze.",
-   "publisher": "MarketWatch",
-   "link": "https://finance.yahoo.com/m/701a2588-2068-38d6-92e9-f1caa90660b4/plastic-surgery-is-booming.html"
+   "title": "Wegovy’s Latest Trial Gives Novo Nordisk (NVO) Another Potential Growth Catalyst",
+   "publisher": "Insider Monkey",
+   "link": "https://finance.yahoo.com/healthcare/articles/wegovy-latest-trial-gives-novo-191655005.html"
   },
   {
-   "title": "Sector Update: Healthcare Stocks Decline Late Afternoon",
-   "publisher": "MT Newswires",
-   "link": "https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-decline-afternoon-194843740.html"
+   "title": "Novo is Down Nearly 2% as a 40.4% Childhood Win Meets Two Trial Cancellations",
+   "publisher": "GuruFocus.com",
+   "link": "https://finance.yahoo.com/healthcare/articles/novo-down-nearly-2-40-175040657.html"
   },
   {
-   "title": "Novo Nordisk (CPSE:NOVO B) Stock Looks Below Fair Value But Faces Earnings Doubts",
-   "publisher": "Simply Wall St.",
-   "link": "https://finance.yahoo.com/markets/stocks/articles/novo-nordisk-cpse-novo-b-190938443.html"
+   "title": "Lilly vs. J&J: Betting on Breakout Growth or Built-In Stability?",
+   "publisher": "Zacks",
+   "link": "https://finance.yahoo.com/healthcare/articles/lilly-vs-j-j-betting-140300650.html"
   }
  ],
  "prev": {
-  "date": "2026-09-06",
+  "date": "2026-09-07",
   "score": 44,
   "scores": {
    "sentiment": 34,
@@ -58,5 +64,5 @@
    "news": 40
   }
  },
- "generatedAt": "2026-09-07T00:54:03.315Z"
+ "generatedAt": "2026-09-08T01:12:17.688Z"
 }

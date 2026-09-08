@@ -2,61 +2,67 @@
  "symbol": "TSM",
  "name": "Taiwan Semiconductor Manufactur",
  "nameZh": null,
- "date": "2026-09-07",
+ "date": "2026-09-08",
  "tradeDate": "2026-09-04",
  "price": 428.91,
  "changePct": 2.85,
  "volRatio": 1.33,
- "score": 61,
+ "score": 72,
  "scores": {
   "sentiment": 70,
   "technical": 66,
   "fundamental": null,
   "valuation": 53,
-  "news": 50
+  "news": 85
  },
  "pe": {
   "cur": 30.9,
   "lo": 24.7,
   "hi": 36.4
  },
- "alerts": [],
+ "alerts": [
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "台積電因為先進晶片的需求非常旺盛，決定調高未來的業績展望。"
+  }
+ ],
  "ai": {
-  "why": "今日無明確公司消息",
-  "meaning": "",
-  "fact": "今日無明確公司消息",
-  "inference": "",
-  "stance": "neu",
-  "newsScore": 50,
-  "importance": 1
+  "why": "台積電因為先進晶片的需求非常旺盛，決定調高未來的業績展望。",
+  "meaning": "這代表AI和高階晶片的熱潮還在持續，公司的賺錢能力依然很強。",
+  "fact": "台積電因為先進晶片的需求非常旺盛，決定調高未來的業績展望。",
+  "inference": "這代表AI和高階晶片的熱潮還在持續，公司的賺錢能力依然很強。",
+  "stance": "pos",
+  "newsScore": 85,
+  "importance": 4
  },
  "newsTop": [
   {
-   "title": "Dow Jones Futures Fall With Iran, Apple, Inflation In Focus; Nvidia, Micron, Sandisk Flash Buy Signals",
-   "publisher": "Investor's Business Daily",
-   "link": "https://finance.yahoo.com/m/d5001ca0-1c20-3379-83c3-ddca4526f9c2/dow-jones-futures-fall-with.html"
+   "title": "TSMC Rises Nearly 3% as $265 Billion Becomes Taiwan's Diplomatic Currency",
+   "publisher": "GuruFocus.com",
+   "link": "https://finance.yahoo.com/markets/stocks/articles/tsmc-rises-nearly-3-265-213735953.html"
   },
   {
-   "title": "Prediction: Taiwan Semiconductor's Market Value Passes $3 Trillion Before 2029",
-   "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/b7c58bce-e73c-3915-8d98-5a80aa250bd0/prediction%3A-taiwan.html"
+   "title": "TSMC's $265 Billion U.S. Bet Is Becoming Part of Taiwan's Chip Diplomacy",
+   "publisher": "GuruFocus.com",
+   "link": "https://finance.yahoo.com/technology/articles/tsmcs-265-billion-u-bet-192538926.html"
   },
   {
-   "title": "NVIDIA (NVDA)’s $20 Billion Groq Bet Goes Live This Year With New AI Racks",
-   "publisher": "Insider Monkey",
-   "link": "https://finance.yahoo.com/technology/ai/articles/nvidia-nvda-20-billion-groq-190737433.html"
+   "title": "Arm Expands Into AI Accelerators With Samsung — But It’s Not the Data Center Goldmine Investors Hope For",
+   "publisher": "24/7 Wall St.",
+   "link": "https://finance.yahoo.com/m/5c3ea4dc-4180-3910-bb3f-3ae76930b414/arm-expands-into-ai.html"
   }
  ],
  "prev": {
-  "date": "2026-09-06",
-  "score": 62,
+  "date": "2026-09-07",
+  "score": 61,
   "scores": {
    "sentiment": 70,
    "technical": 66,
    "fundamental": null,
    "valuation": 53,
-   "news": 55
+   "news": 50
   }
  },
- "generatedAt": "2026-09-07T00:54:03.314Z"
+ "generatedAt": "2026-09-08T01:12:17.687Z"
 }

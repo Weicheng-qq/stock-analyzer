@@ -1,0 +1,48 @@
+{
+ "symbol": "4532",
+ "name": "RECHI PRECISION",
+ "nameZh": "瑞智",
+ "date": "2026-09-08",
+ "tradeDate": "2026-09-07",
+ "price": 23.5,
+ "changePct": -1.26,
+ "volRatio": 1.85,
+ "score": 49,
+ "scores": {
+  "sentiment": 51,
+  "technical": 18,
+  "fundamental": null,
+  "valuation": 71,
+  "news": 70
+ },
+ "pe": {
+  "cur": 12.7,
+  "lo": 11.7,
+  "hi": 16
+ },
+ "alerts": [
+  {
+   "type": "volume",
+   "level": "mid",
+   "text": "成交量放大至近月均量的 1.8 倍"
+  }
+ ],
+ "ai": {
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 70,
+  "importance": 3
+ },
+ "newsTop": [
+  {
+   "title": "【公告】瑞智 2026年8月合併營收14.96億元 年增21.41%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%91%9E%E6%99%BA-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B614-96%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E21-055235366.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-08T01:12:17.689Z"
+}

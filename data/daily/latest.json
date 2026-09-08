@@ -1,98 +1,22 @@
 {
- "date": "2026-09-07",
- "tradeDate": "2026-09-04",
+ "date": "2026-09-08",
+ "tradeDate": "2026-09-07",
  "alerts": [
   {
-   "symbol": "NVDA",
-   "name": "NVIDIA Corporation",
-   "nameZh": null,
-   "changePct": 0.84,
+   "symbol": "2454",
+   "name": "MEDIATEK INC",
+   "nameZh": "聯發科",
+   "changePct": 7.81,
    "items": [
     {
-     "type": "earnings",
+     "type": "price",
      "level": "high",
-     "text": "最新財報摘要已更新（2027 Q2（2026-04-27～2026-07-26））"
-    }
-   ]
-  },
-  {
-   "symbol": "1268",
-   "name": "HI-LAI FOODS CO LTD",
-   "nameZh": "漢來美食",
-   "changePct": 0.28,
-   "items": [
-    {
-     "type": "volume",
-     "level": "high",
-     "text": "成交量放大至近月均量的 3.0 倍"
+     "text": "股價大漲 7.81%"
     }
    ]
   }
  ],
  "events": [
-  {
-   "date": "2026-09-07",
-   "kind": "confirmed",
-   "category": "法說會",
-   "symbol": "1563",
-   "name": "巧新",
-   "title": "巧新 法人說明會",
-   "note": "本公司受邀參加麥格理證券舉辦之Macquarie Asia Technology Conference 2026"
-  },
-  {
-   "date": "2026-09-07",
-   "kind": "confirmed",
-   "category": "法說會",
-   "symbol": "2072",
-   "name": "世紀風電",
-   "title": "世紀風電 法人說明會",
-   "note": "本公司受邀參加永豐金證券主辦之SinoPac Taiwan Corporate Access Day，向投資人說明本公司"
-  },
-  {
-   "date": "2026-09-07",
-   "kind": "confirmed",
-   "category": "法說會",
-   "symbol": "7750",
-   "name": "新代",
-   "title": "新代 法人說明會",
-   "note": "本公司受邀參加 Macquarie Asia Technology Conference 2026，說明本公司2026年"
-  },
-  {
-   "date": "2026-09-07",
-   "kind": "confirmed",
-   "category": "法說會",
-   "symbol": "7786",
-   "name": "東方風能",
-   "title": "東方風能 法人說明會",
-   "note": "本公司受邀參加永豐金證券主辦之SinoPac Taiwan Corporate Access Day，向投資人說明本公司"
-  },
-  {
-   "date": "2026-09-07",
-   "kind": "confirmed",
-   "category": "法說會",
-   "symbol": "3529",
-   "name": "力旺",
-   "title": "力旺 法人說明會",
-   "note": "本公司受邀參加Macquarie 舉辦之Macquarie NEXT INNOVATIONS Tech Conferen"
-  },
-  {
-   "date": "2026-09-07",
-   "kind": "confirmed",
-   "category": "法說會",
-   "symbol": "4991",
-   "name": "環宇-KY",
-   "title": "環宇-KY 法人說明會",
-   "note": "本公司受邀參加麥格理證券舉辦之Macquarie Asia Technology Conference 2026: Ne"
-  },
-  {
-   "date": "2026-09-07",
-   "kind": "confirmed",
-   "category": "法說會",
-   "symbol": "5274",
-   "name": "信驊",
-   "title": "信驊 法人說明會",
-   "note": "受邀參加永豐金證券舉辦之2026倫敦Corporate Access Day，說明本公司營運概況。"
-  },
   {
    "date": "2026-09-08",
    "kind": "confirmed",
@@ -115,10 +39,28 @@
    "date": "2026-09-08",
    "kind": "confirmed",
    "category": "法說會",
+   "symbol": "4585",
+   "name": "達明",
+   "title": "達明 法人說明會",
+   "note": "本公司受邀參加由元大證券舉辦之線上法說會，說明本公司115年第2季之營運成果與展望。"
+  },
+  {
+   "date": "2026-09-08",
+   "kind": "confirmed",
+   "category": "法說會",
    "symbol": "7788",
    "name": "松川精密",
    "title": "松川精密 法人說明會",
    "note": "本公司受邀參加元大證券舉辦之法人說明會，報告最新營運成果及未來展望。"
+  },
+  {
+   "date": "2026-09-08",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "9910",
+   "name": "豐泰",
+   "title": "豐泰 法人說明會",
+   "note": "說明本公司之營運與財務概況"
   },
   {
    "date": "2026-09-08",
@@ -169,6 +111,24 @@
    "date": "2026-09-09",
    "kind": "confirmed",
    "category": "法說會",
+   "symbol": "2891",
+   "name": "中信金",
+   "title": "中信金 法人說明會",
+   "note": "本公司參加第一金證券舉辦之投資人說明會"
+  },
+  {
+   "date": "2026-09-09",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "4958",
+   "name": "臻鼎-KY",
+   "title": "臻鼎-KY 法人說明會",
+   "note": "本公司受邀參加元大證券舉辦之2026第三季投資論壇，說明PCB產業展望、公司營運績效相關資訊。"
+  },
+  {
+   "date": "2026-09-09",
+   "kind": "confirmed",
+   "category": "法說會",
    "symbol": "6526",
    "name": "達發",
    "title": "達發 法人說明會",
@@ -182,6 +142,33 @@
    "name": "來億-KY",
    "title": "來億-KY 法人說明會",
    "note": "本公司受邀參加元大證券辦理之2026年第三季投資論壇，會中說明本公司115年第二季業績狀況及營運展望。"
+  },
+  {
+   "date": "2026-09-09",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "6902",
+   "name": "GOGOLOOK",
+   "title": "GOGOLOOK 法人說明會",
+   "note": "本公司受邀參加宏遠證券舉辦之「2026年趨勢產業論壇」，說明本公司營運狀況。"
+  },
+  {
+   "date": "2026-09-09",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "4966",
+   "name": "譜瑞-KY",
+   "title": "譜瑞-KY 法人說明會",
+   "note": "公告本公司於民國115年09月09日受邀參加宏遠證券於宏遠證券七樓會議室舉辦之2026年\r\n趨勢產業論壇，會中就本公司已"
+  },
+  {
+   "date": "2026-09-09",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "8086",
+   "name": "宏捷科",
+   "title": "宏捷科 法人說明會",
+   "note": "本公司受邀參加2026年元大證券第三季投資論壇"
   },
   {
    "date": "2026-09-10",
@@ -231,6 +218,15 @@
    "date": "2026-09-10",
    "kind": "confirmed",
    "category": "法說會",
+   "symbol": "5306",
+   "name": "桂盟",
+   "title": "桂盟 法人說明會",
+   "note": "本公司受邀參加凱基證券於台北舉辦的&quot;2026年第三季投資論壇&quot;"
+  },
+  {
+   "date": "2026-09-10",
+   "kind": "confirmed",
+   "category": "法說會",
    "symbol": "6446",
    "name": "藥華藥",
    "title": "藥華藥 法人說明會",
@@ -258,6 +254,15 @@
    "date": "2026-09-14",
    "kind": "confirmed",
    "category": "法說會",
+   "symbol": "2330",
+   "name": "台積電",
+   "title": "台積電 法人說明會",
+   "note": "本公司受邀參加瑞銀證券所舉辦之『UBS Taiwan Summit 2026』，會中就本公司7/16法說會已公開之財務數"
+  },
+  {
+   "date": "2026-09-14",
+   "kind": "confirmed",
+   "category": "法說會",
    "symbol": "2449",
    "name": "京元電子",
    "title": "京元電子 法人說明會",
@@ -276,146 +281,200 @@
    "date": "2026-09-14",
    "kind": "confirmed",
    "category": "法說會",
+   "symbol": "3481",
+   "name": "群創",
+   "title": "群創 法人說明會",
+   "note": "公告公司受邀參加UBS證券所舉辦之「UBS Taiwan Summit 2026」，說明營運現況及前景。"
+  },
+  {
+   "date": "2026-09-14",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "6239",
+   "name": "力成",
+   "title": "力成 法人說明會",
+   "note": "本公司受邀參加瑞銀證券舉辦之「UBS Taiwan Summit 2026」。"
+  },
+  {
+   "date": "2026-09-14",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "8210",
+   "name": "勤誠",
+   "title": "勤誠 法人說明會",
+   "note": "本公司受邀參加瑞銀證券主辦之Taiwan Summit 2026"
+  },
+  {
+   "date": "2026-09-14",
+   "kind": "confirmed",
+   "category": "法說會",
    "symbol": "6510",
    "name": "精測",
    "title": "精測 法人說明會",
    "note": "本公司受邀參加瑞銀證券舉辦之「UBS Taiwan Summit 2026」，會中就本公司7/29法說會已公開之財務數字"
+  },
+  {
+   "date": "2026-09-15",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "2353",
+   "name": "宏碁",
+   "title": "宏碁 法人說明會",
+   "note": "本公司受邀參加瑞銀證券舉辦 Taiwan Summit 2026，將於上述時間地點，向法人投資者就已公開發佈之財務數字、"
+  },
+  {
+   "date": "2026-09-15",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "2360",
+   "name": "致茂",
+   "title": "致茂 法人說明會",
+   "note": "本公司受邀參加第一金證券於9/15舉辦之第一金證券論壇，向投資人說明本公司2026年第2季之營運概況。"
   }
  ],
- "generatedAt": "2026-09-07T00:54:24.953Z",
- "summary": "今日台股在權值股帶領下集體走揚。鴻海因營收創高且AI需求成長而大漲，聯發科獲大咖認購ECB表現強勢，台積電也受ADR大漲帶動走高，寶雅則因變更面額而上漲。",
+ "generatedAt": "2026-09-08T01:13:10.784Z",
+ "summary": "台股受惠於半導體與AI相關題材，聯發科與台積電領漲，晶技與力成營收亮眼。外資大舉買超助推，整體呈現上揚趨勢。",
  "themes": [
   {
-   "name": "AI與半導體",
-   "why": "鴻海AI需求強，台積電與聯發科受美股及大咖投資帶動。"
+   "name": "半導體/AI晶片",
+   "why": "AI與高階晶片需求提振半導體股，資金流入顯著。"
+  },
+  {
+   "name": "營收成長",
+   "why": "多家公司公布營收大幅提升，顯示需求持續回暖。"
   }
  ],
  "watchpoints": [
-  "鴻海第三季AI需求的後續實際成長表現。",
-  "聯發科在獲認購ECB後的資金效應。",
-  "台積電ADR與台灣母股的後續連動走勢。"
+  "持續關注AI晶片需求對半導體股的帶動效應。",
+  "留意外資持續買超是否能支撐台積電股價。",
+  "觀察晶技與力成營收成長能否延伸至全年。"
  ],
  "markets": {
   "tw": {
-   "summary": "今日台股在權值股帶領下集體走揚。鴻海因營收創高且AI需求成長而大漲，聯發科獲大咖認購ECB表現強勢，台積電也受ADR大漲帶動走高，寶雅則因變更面額而上漲。",
+   "summary": "台股受惠於半導體與AI相關題材，聯發科與台積電領漲，晶技與力成營收亮眼。外資大舉買超助推，整體呈現上揚趨勢。",
    "themes": [
     {
-     "name": "AI與半導體",
-     "why": "鴻海AI需求強，台積電與聯發科受美股及大咖投資帶動。"
+     "name": "半導體/AI晶片",
+     "why": "AI與高階晶片需求提振半導體股，資金流入顯著。"
+    },
+    {
+     "name": "營收成長",
+     "why": "多家公司公布營收大幅提升，顯示需求持續回暖。"
     }
    ],
    "watchpoints": [
-    "鴻海第三季AI需求的後續實際成長表現。",
-    "聯發科在獲認購ECB後的資金效應。",
-    "台積電ADR與台灣母股的後續連動走勢。"
+    "持續關注AI晶片需求對半導體股的帶動效應。",
+    "留意外資持續買超是否能支撐台積電股價。",
+    "觀察晶技與力成營收成長能否延伸至全年。"
    ]
   },
   "us": {
-   "summary": "今日美股表現分歧。NVIDIA Corporation砸重金投資帶動股價收紅；而Novo Nordisk A/S因市場對財報存疑，即使新藥進軍德國股價仍下跌。",
+   "summary": "美股受半導體需求提振，TSM上漲；Novo Nordisk因臨床試驗取消走低。投資人關注先進晶片需求與醫藥研發風險，市場呈現分化。",
    "themes": [],
    "watchpoints": [
-    "NVIDIA Corporation投資後的發展。",
-    "Novo Nordisk A/S的財報與銷售。"
+    "關注先進晶片需求能否持續推升TSM營收。",
+    "留意Novo Nordisk臨床試驗變動對股價的影響。",
+    "觀察外部宏觀因素對半導體與醫藥板塊的分化。"
    ]
   }
  },
  "musts": [
   {
-   "symbol": "2317",
-   "name": "HON HAI PRECISION INDUSTRY",
-   "nameZh": "鴻海",
-   "tradeDate": "2026-09-04",
-   "changePct": 3.43,
-   "price": 256,
-   "currency": "TWD",
-   "fact": "鴻海八月營收創下同期新高，年增超過五成，而且第三季的AI需求還在持續成長。",
-   "inference": "這代表公司的業績真的很旺，AI熱潮帶來的實質獲利有反映在營收數字上。",
-   "why": "鴻海八月營收創下同期新高，年增超過五成，而且第三季的AI需求還在持續成長。",
-   "meaning": "這代表公司的業績真的很旺，AI熱潮帶來的實質獲利有反映在營收數字上。",
-   "stance": "pos",
-   "newsScore": 85,
-   "importance": 4,
-   "score": 62,
-   "link": "https://tw.stock.yahoo.com/news/%E9%B4%BB%E6%B5%B78%E6%9C%88-%E5%89%8D8%E6%9C%88%E7%87%9F%E6%94%B6%E5%89%B5%E5%90%8C%E6%9C%9F%E6%9C%80%E9%AB%98-q3%E8%83%BD%E8%A6%8B%E5%BA%A6%E5%84%AA%E6%96%BC%E5%89%8D-%E5%80%8B%E6%9C%88%E9%A0%90%E6%9C%9F-232713520.html"
-  },
-  {
-   "symbol": "5904",
-   "name": "POYA INTERNATIONAL CO LTD",
-   "nameZh": "寶雅",
-   "tradeDate": "2026-09-04",
-   "changePct": 2.12,
-   "price": 72.1,
-   "currency": "TWD",
-   "fact": "寶雅公告要把股票面額從十元變更為一元。",
-   "inference": "這代表股票面額變小，未來投資人買進的門檻可能會降低。",
-   "why": "寶雅公告要把股票面額從十元變更為一元。",
-   "meaning": "這代表股票面額變小，未來投資人買進的門檻可能會降低。",
-   "stance": "pos",
-   "newsScore": 65,
-   "importance": 4,
-   "score": 63,
-   "link": "https://tw.stock.yahoo.com/news/%E5%AF%B6%E9%9B%85-%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E8%82%A1%E7%A5%A8%E9%9D%A2%E9%A1%8D%E8%AE%8A%E6%9B%B4%E7%94%B1-%E6%96%B0%E5%8F%B0%E5%B9%A310%E5%85%83-%E8%AE%8A%E6%9B%B4%E7%82%BA-%E6%96%B0%E5%8F%B0%E5%B9%A31%E5%85%83-230400372.html"
-  },
-  {
    "symbol": "2454",
    "name": "MEDIATEK INC",
    "nameZh": "聯發科",
-   "tradeDate": "2026-09-04",
-   "changePct": 1.73,
-   "price": 4415,
+   "tradeDate": "2026-09-07",
+   "changePct": 7.81,
+   "price": 4760,
    "currency": "TWD",
-   "fact": "輝達砸了35億美元認購聯發科的ECB，大咖加持讓股價表現強勢。",
-   "inference": "這代表兩大巨頭關係更緊密，未來的AI晶片合作非常值得期待。",
-   "why": "輝達砸了35億美元認購聯發科的ECB，大咖加持讓股價表現強勢。",
-   "meaning": "這代表兩大巨頭關係更緊密，未來的AI晶片合作非常值得期待。",
+   "fact": "因為NVIDIA和Google加持，讓聯發科的ASIC晶片展望變好，帶動股價跳漲。",
+   "inference": "這代表聯發科成功抱到科技巨頭大腿，未來的ASIC業務可能成為新的成長引擎。",
+   "why": "因為NVIDIA和Google加持，讓聯發科的ASIC晶片展望變好，帶動股價跳漲。",
+   "meaning": "這代表聯發科成功抱到科技巨頭大腿，未來的ASIC業務可能成為新的成長引擎。",
    "stance": "pos",
    "newsScore": 85,
    "importance": 4,
-   "score": 73,
-   "link": "https://tw.stock.yahoo.com/news/%E8%81%AF%E7%99%BC%E7%A7%91%E9%A6%96%E5%89%B5%E5%8C%85%E5%A0%B4%E5%85%AD%E7%A6%8F%E6%9D%91%E6%B0%B4%E9%99%B8%E9%9B%99%E6%A8%82%E5%9C%92-%E5%8F%83%E8%88%87%E5%93%A1%E5%B7%A5%E5%8F%8A%E7%9C%B7%E5%B1%AC%E8%BF%912-5%E8%90%AC%E5%90%8D-135645041.html"
+   "score": 77,
+   "link": "https://tw.stock.yahoo.com/news/%E5%8F%B0%E7%A9%8D%E9%9B%BB-%E8%81%AF%E7%99%BC%E7%A7%91%E9%A0%98%E6%BC%B2-%E5%8F%B0%E8%82%A1%E5%8B%81%E6%8F%9A775%E9%BB%9E%E6%94%B647326%E9%BB%9E-055127959.html"
+  },
+  {
+   "symbol": "TSM",
+   "name": "Taiwan Semiconductor Manufactur",
+   "nameZh": null,
+   "tradeDate": "2026-09-04",
+   "changePct": 2.85,
+   "price": 428.91,
+   "currency": "USD",
+   "fact": "台積電因為先進晶片的需求非常旺盛，決定調高未來的業績展望。",
+   "inference": "這代表AI和高階晶片的熱潮還在持續，公司的賺錢能力依然很強。",
+   "why": "台積電因為先進晶片的需求非常旺盛，決定調高未來的業績展望。",
+   "meaning": "這代表AI和高階晶片的熱潮還在持續，公司的賺錢能力依然很強。",
+   "stance": "pos",
+   "newsScore": 85,
+   "importance": 4,
+   "score": 72,
+   "link": "https://finance.yahoo.com/markets/stocks/articles/tsmc-rises-nearly-3-265-213735953.html"
   },
   {
    "symbol": "2330",
    "name": "TAIWAN SEMICONDUCTOR MANUFACTUR",
    "nameZh": "台積電",
-   "tradeDate": "2026-09-04",
-   "changePct": 0.84,
-   "price": 2410,
+   "tradeDate": "2026-09-07",
+   "changePct": 2.07,
+   "price": 2460,
    "currency": "TWD",
-   "fact": "美股台積電ADR大漲近百分之三，帶動今天台灣母股跟著同步走揚。",
-   "inference": "美股溢價效應對台股有直接拉抬作用，代表外資對台積電的信心依舊強勁。",
-   "why": "美股台積電ADR大漲近百分之三，帶動今天台灣母股跟著同步走揚。",
-   "meaning": "美股溢價效應對台股有直接拉抬作用，代表外資對台積電的信心依舊強勁。",
+   "fact": "外資大舉加碼近400億元、買超台積電逾1.6萬張，帶動股價上漲。",
+   "inference": "外資創紀錄大買並重金加碼，顯示大戶資金正強力回流台積電。",
+   "why": "外資大舉加碼近400億元、買超台積電逾1.6萬張，帶動股價上漲。",
+   "meaning": "外資創紀錄大買並重金加碼，顯示大戶資金正強力回流台積電。",
+   "stance": "pos",
+   "newsScore": 85,
+   "importance": 4,
+   "score": 81,
+   "link": "https://tw.stock.yahoo.com/news/%E9%80%991%E6%AA%94-%E7%8B%82%E6%BC%B21-2%E5%80%8D%E6%AF%94%E5%8F%B0%E7%A9%8D%E9%9B%BB%E6%9B%B4%E6%9C%83%E5%99%B4-%E5%B0%88%E5%AE%B6%E5%88%973%E6%9A%B4%E6%BC%B2%E9%97%9C%E9%8D%B5-141850505.html"
+  },
+  {
+   "symbol": "NVO",
+   "name": "Novo Nordisk A/S",
+   "nameZh": null,
+   "tradeDate": "2026-09-04",
+   "changePct": -1.92,
+   "price": 46.6,
+   "currency": "USD",
+   "fact": "雖然兒童肥胖試驗達標，但因取消另外兩項臨床試驗，導致股價下跌。",
+   "inference": "這代表新藥研發有進有退，我們得重新評估未來的成長動能。",
+   "why": "雖然兒童肥胖試驗達標，但因取消另外兩項臨床試驗，導致股價下跌。",
+   "meaning": "這代表新藥研發有進有退，我們得重新評估未來的成長動能。",
+   "stance": "neg",
+   "newsScore": 45,
+   "importance": 4,
+   "score": 46,
+   "link": "https://finance.yahoo.com/healthcare/articles/wegovy-latest-trial-gives-novo-191655005.html"
+  },
+  {
+   "symbol": "3042",
+   "name": "TXC CORPN",
+   "nameZh": "晶技",
+   "tradeDate": "2026-09-07",
+   "changePct": 1.73,
+   "price": 176.5,
+   "currency": "TWD",
+   "fact": "晶技公佈了最新的8月營收，比去年同期大幅成長了23.48%。",
+   "inference": "這代表公司目前的接單和出貨狀況很旺，基本面表現相當亮眼。",
+   "why": "晶技公佈了最新的8月營收，比去年同期大幅成長了23.48%。",
+   "meaning": "這代表公司目前的接單和出貨狀況很旺，基本面表現相當亮眼。",
    "stance": "pos",
    "newsScore": 80,
    "importance": 4,
-   "score": 77,
-   "link": "https://tw.news.yahoo.com/%E5%8F%B0%E7%A9%8D%E9%9B%BB%E5%A0%B1%E5%96%9C-%E7%82%BA%E4%BD%95%E5%A4%A7%E7%9B%A4%E9%87%8D%E6%8C%AB-%E5%88%A9%E5%A4%9A%E4%B8%8D%E6%95%B5%E9%AB%98%E6%AA%94%E8%B3%A3%E5%A3%93-ai%E8%82%A1%E4%B8%8B-%E6%AD%A5%E6%80%8E%E9%BA%BC%E8%B5%B0-230900468.html"
-  },
-  {
-   "symbol": "NVDA",
-   "name": "NVIDIA Corporation",
-   "nameZh": null,
-   "tradeDate": "2026-09-04",
-   "changePct": 0.84,
-   "price": 230.36,
-   "currency": "USD",
-   "fact": "輝達砸下129億美元重金進行投資，全力守護其AI帝國。",
-   "inference": "這代表輝達正動用巨資鞏固領先地位，防堵競爭對手超越。",
-   "why": "輝達砸下129億美元重金進行投資，全力守護其AI帝國。",
-   "meaning": "這代表輝達正動用巨資鞏固領先地位，防堵競爭對手超越。",
-   "stance": "pos",
-   "newsScore": 75,
-   "importance": 4,
-   "score": 81,
-   "link": "https://finance.yahoo.com/m/d5001ca0-1c20-3379-83c3-ddca4526f9c2/dow-jones-futures-fall-with.html"
+   "score": 53,
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%99%B6%E6%8A%80-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B614-15%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E23-064410847.html"
   }
  ],
  "poolSize": 60,
- "aiUsed": 9,
+ "aiUsed": 17,
  "aiSource": {
-  "gemini": 10,
-  "groq": 0,
+  "gemini": 16,
+  "groq": 2,
   "openrouter": 0,
   "failed": 0
  },

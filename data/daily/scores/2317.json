@@ -2,67 +2,37 @@
  "symbol": "2317",
  "name": "HON HAI PRECISION INDUSTRY",
  "nameZh": "鴻海",
- "date": "2026-09-07",
- "tradeDate": "2026-09-04",
+ "date": "2026-09-08",
+ "tradeDate": "2026-09-07",
  "price": 256,
- "changePct": 3.43,
- "volRatio": 1.28,
- "score": 62,
+ "changePct": 0,
+ "volRatio": 0.89,
+ "score": 50,
  "scores": {
-  "sentiment": 73,
+  "sentiment": 49,
   "technical": 82,
   "fundamental": 28,
   "valuation": 48,
-  "news": 85
+  "news": null
  },
  "pe": {
   "cur": 16.4,
   "lo": 10.2,
   "hi": 20.1
  },
- "alerts": [
-  {
-   "type": "news",
-   "level": "mid",
-   "text": "鴻海八月營收創下同期新高，年增超過五成，而且第三季的AI需求還在持續成長。"
-  }
- ],
- "ai": {
-  "why": "鴻海八月營收創下同期新高，年增超過五成，而且第三季的AI需求還在持續成長。",
-  "meaning": "這代表公司的業績真的很旺，AI熱潮帶來的實質獲利有反映在營收數字上。",
-  "fact": "鴻海八月營收創下同期新高，年增超過五成，而且第三季的AI需求還在持續成長。",
-  "inference": "這代表公司的業績真的很旺，AI熱潮帶來的實質獲利有反映在營收數字上。",
-  "stance": "pos",
-  "newsScore": 85,
-  "importance": 4
- },
- "newsTop": [
-  {
-   "title": "鴻海8月、前8月營收創同期最高，Q3能見度優於前一個月預期",
-   "publisher": "Yahoo 股市",
-   "link": "https://tw.stock.yahoo.com/news/%E9%B4%BB%E6%B5%B78%E6%9C%88-%E5%89%8D8%E6%9C%88%E7%87%9F%E6%94%B6%E5%89%B5%E5%90%8C%E6%9C%9F%E6%9C%80%E9%AB%98-q3%E8%83%BD%E8%A6%8B%E5%BA%A6%E5%84%AA%E6%96%BC%E5%89%8D-%E5%80%8B%E6%9C%88%E9%A0%90%E6%9C%9F-232713520.html"
-  },
-  {
-   "title": "鴻海8月營收9217.66億元創同期高 能見度優於上月AI需求續成長",
-   "publisher": "Yahoo 股市",
-   "link": "https://tw.stock.yahoo.com/news/%E9%B4%BB%E6%B5%B78%E6%9C%88%E7%87%9F%E6%94%B69217-66%E5%84%84%E5%85%83%E5%89%B5%E5%90%8C%E6%9C%9F%E9%AB%98-%E8%83%BD%E8%A6%8B%E5%BA%A6%E5%84%AA%E6%96%BC%E4%B8%8A%E6%9C%88ai%E9%9C%80%E6%B1%82%E7%BA%8C%E6%88%90%E9%95%B7-084621829.html"
-  },
-  {
-   "title": "鴻海8月營收創同期新高　第3季AI需求續成長",
-   "publisher": "Yahoo 股市",
-   "link": "https://tw.stock.yahoo.com/news/%E9%B4%BB%E6%B5%B78%E6%9C%88%E7%87%9F%E6%94%B6%E5%89%B5%E5%90%8C%E6%9C%9F%E6%96%B0%E9%AB%98-%E7%AC%AC3%E5%AD%A3ai%E9%9C%80%E6%B1%82%E7%BA%8C%E6%88%90%E9%95%B7-082800323.html"
-  }
- ],
+ "alerts": [],
+ "ai": null,
+ "newsTop": [],
  "prev": {
-  "date": "2026-09-06",
-  "score": 61,
+  "date": "2026-09-07",
+  "score": 62,
   "scores": {
    "sentiment": 73,
    "technical": 82,
    "fundamental": 28,
    "valuation": 48,
-   "news": 80
+   "news": 85
   }
  },
- "generatedAt": "2026-09-07T00:54:03.314Z"
+ "generatedAt": "2026-09-08T01:12:17.692Z"
 }

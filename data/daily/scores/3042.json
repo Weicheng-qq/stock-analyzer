@@ -1,0 +1,48 @@
+{
+ "symbol": "3042",
+ "name": "TXC CORPN",
+ "nameZh": "晶技",
+ "date": "2026-09-08",
+ "tradeDate": "2026-09-07",
+ "price": 176.5,
+ "changePct": 1.73,
+ "volRatio": 0.52,
+ "score": 53,
+ "scores": {
+  "sentiment": 56,
+  "technical": 18,
+  "fundamental": 65,
+  "valuation": 25,
+  "news": 80
+ },
+ "pe": {
+  "cur": 30.4,
+  "lo": 9.3,
+  "hi": 30.4
+ },
+ "alerts": [
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "晶技公佈了最新的8月營收，比去年同期大幅成長了23.48%。"
+  }
+ ],
+ "ai": {
+  "why": "晶技公佈了最新的8月營收，比去年同期大幅成長了23.48%。",
+  "meaning": "這代表公司目前的接單和出貨狀況很旺，基本面表現相當亮眼。",
+  "fact": "晶技公佈了最新的8月營收，比去年同期大幅成長了23.48%。",
+  "inference": "這代表公司目前的接單和出貨狀況很旺，基本面表現相當亮眼。",
+  "stance": "pos",
+  "newsScore": 80,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "【公告】晶技 2026年8月合併營收14.15億元 年增23.48%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%99%B6%E6%8A%80-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B614-15%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E23-064410847.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-08T01:12:17.688Z"
+}

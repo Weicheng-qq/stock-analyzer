@@ -2,18 +2,18 @@
  "symbol": "NVDA",
  "name": "NVIDIA Corporation",
  "nameZh": null,
- "date": "2026-09-07",
+ "date": "2026-09-08",
  "tradeDate": "2026-09-04",
  "price": 230.36,
  "changePct": 0.84,
  "volRatio": 1.05,
- "score": 81,
+ "score": 83,
  "scores": {
   "sentiment": 55,
   "technical": 82,
   "fundamental": 100,
   "valuation": 85,
-  "news": 75
+  "news": null
  },
  "pe": {
   "cur": 28.9,
@@ -22,57 +22,23 @@
  },
  "alerts": [
   {
-   "type": "earnings",
-   "level": "high",
-   "text": "最新財報摘要已更新（2027 Q2（2026-04-27～2026-07-26））"
-  },
-  {
    "type": "guidance",
    "level": "mid",
    "text": "公司已公布官方財測／展望"
-  },
-  {
-   "type": "news",
-   "level": "mid",
-   "text": "輝達砸下129億美元重金進行投資，全力守護其AI帝國。"
   }
  ],
- "ai": {
-  "why": "輝達砸下129億美元重金進行投資，全力守護其AI帝國。",
-  "meaning": "這代表輝達正動用巨資鞏固領先地位，防堵競爭對手超越。",
-  "fact": "輝達砸下129億美元重金進行投資，全力守護其AI帝國。",
-  "inference": "這代表輝達正動用巨資鞏固領先地位，防堵競爭對手超越。",
-  "stance": "pos",
-  "newsScore": 75,
-  "importance": 4
- },
- "newsTop": [
-  {
-   "title": "Dow Jones Futures Fall With Iran, Apple, Inflation In Focus; Nvidia, Micron, Sandisk Flash Buy Signals",
-   "publisher": "Investor's Business Daily",
-   "link": "https://finance.yahoo.com/m/d5001ca0-1c20-3379-83c3-ddca4526f9c2/dow-jones-futures-fall-with.html"
-  },
-  {
-   "title": "UiPath Just Sank 17%. Is the Stock a Buy on the Dip?",
-   "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/2cac8ae3-ba1d-3c12-8b6c-9efc13afadb2/uipath-just-sank-17%25.-is-the.html"
-  },
-  {
-   "title": "Nvidia makes staggering $12.9 billion bet to protect AI empire",
-   "publisher": "TheStreet",
-   "link": "https://finance.yahoo.com/m/78c43082-b09b-35c8-9067-63ed72f87634/nvidia-makes-staggering-%2412.9.html"
-  }
- ],
+ "ai": null,
+ "newsTop": [],
  "prev": {
-  "date": "2026-09-06",
-  "score": 83,
+  "date": "2026-09-07",
+  "score": 81,
   "scores": {
    "sentiment": 55,
    "technical": 82,
    "fundamental": 100,
    "valuation": 85,
-   "news": null
+   "news": 75
   }
  },
- "generatedAt": "2026-09-07T00:54:03.317Z"
+ "generatedAt": "2026-09-08T01:12:17.690Z"
 }
