@@ -2,77 +2,43 @@
  "symbol": "2454",
  "name": "MEDIATEK INC",
  "nameZh": "聯發科",
- "date": "2026-09-08",
- "tradeDate": "2026-09-07",
- "price": 4760,
- "changePct": 7.81,
- "volRatio": 1.82,
- "score": 77,
+ "date": "2026-09-09",
+ "tradeDate": "2026-09-08",
+ "price": 4710,
+ "changePct": -1.05,
+ "volRatio": 0.74,
+ "score": 64,
  "scores": {
-  "sentiment": 88,
+  "sentiment": 41,
   "technical": 82,
   "fundamental": 76,
   "valuation": 25,
-  "news": 85
+  "news": null
  },
  "pe": {
-  "cur": 71.7,
+  "cur": 78.6,
   "lo": 19.8,
-  "hi": 71.7
+  "hi": 78.6
  },
  "alerts": [
-  {
-   "type": "price",
-   "level": "high",
-   "text": "股價大漲 7.81%"
-  },
-  {
-   "type": "volume",
-   "level": "mid",
-   "text": "成交量放大至近月均量的 1.8 倍"
-  },
   {
    "type": "guidance",
    "level": "mid",
    "text": "公司已公布官方財測／展望"
-  },
-  {
-   "type": "news",
-   "level": "mid",
-   "text": "因為NVIDIA和Google加持，讓聯發科的ASIC晶片展望變好，帶動股價跳漲。"
   }
  ],
- "ai": {
-  "why": "因為NVIDIA和Google加持，讓聯發科的ASIC晶片展望變好，帶動股價跳漲。",
-  "meaning": "這代表聯發科成功抱到科技巨頭大腿，未來的ASIC業務可能成為新的成長引擎。",
-  "fact": "因為NVIDIA和Google加持，讓聯發科的ASIC晶片展望變好，帶動股價跳漲。",
-  "inference": "這代表聯發科成功抱到科技巨頭大腿，未來的ASIC業務可能成為新的成長引擎。",
-  "stance": "pos",
-  "newsScore": 85,
-  "importance": 4
- },
- "newsTop": [
-  {
-   "title": "台積電、聯發科領漲　台股勁揚775點收47326點",
-   "publisher": "Yahoo 股市",
-   "link": "https://tw.stock.yahoo.com/news/%E5%8F%B0%E7%A9%8D%E9%9B%BB-%E8%81%AF%E7%99%BC%E7%A7%91%E9%A0%98%E6%BC%B2-%E5%8F%B0%E8%82%A1%E5%8B%81%E6%8F%9A775%E9%BB%9E%E6%94%B647326%E9%BB%9E-055127959.html"
-  },
-  {
-   "title": "焦點股：NVIDIA、Google加持，聯發科ASIC展望升溫，股價跳漲續攻",
-   "publisher": "Yahoo 股市",
-   "link": "https://tw.stock.yahoo.com/news/%E7%84%A6%E9%BB%9E%E8%82%A1-nvidia-google%E5%8A%A0%E6%8C%81-%E8%81%AF%E7%99%BC%E7%A7%91asic%E5%B1%95%E6%9C%9B%E5%8D%87%E6%BA%AB-%E8%82%A1%E5%83%B9%E8%B7%B3%E6%BC%B2%E7%BA%8C%E6%94%BB-045928546.html"
-  }
- ],
+ "ai": null,
+ "newsTop": [],
  "prev": {
-  "date": "2026-09-07",
-  "score": 73,
+  "date": "2026-09-08",
+  "score": 77,
   "scores": {
-   "sentiment": 61,
+   "sentiment": 88,
    "technical": 82,
    "fundamental": 76,
    "valuation": 25,
    "news": 85
   }
  },
- "generatedAt": "2026-09-08T01:12:17.686Z"
+ "generatedAt": "2026-09-09T01:16:02.673Z"
 }

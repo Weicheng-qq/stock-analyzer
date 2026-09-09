@@ -1,0 +1,58 @@
+{
+ "symbol": "2327",
+ "name": "YAGEO CORP",
+ "nameZh": "國巨*",
+ "date": "2026-09-09",
+ "tradeDate": "2026-09-08",
+ "price": 567,
+ "changePct": -3.74,
+ "volRatio": 0.85,
+ "score": 53,
+ "scores": {
+  "sentiment": 26,
+  "technical": 18,
+  "fundamental": 83,
+  "valuation": 25,
+  "news": 80
+ },
+ "pe": {
+  "cur": 39.7,
+  "lo": 3.5,
+  "hi": 39.7
+ },
+ "alerts": [
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "今日無明確公司消息"
+  }
+ ],
+ "ai": {
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 80,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "AI需求續旺，不畏歐美假期影響，國巨*8月營收再創單月歷史新高",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/ai%E9%9C%80%E6%B1%82%E7%BA%8C%E6%97%BA-%E4%B8%8D%E7%95%8F%E6%AD%90%E7%BE%8E%E5%81%87%E6%9C%9F%E5%BD%B1%E9%9F%BF-%E5%9C%8B%E5%B7%A8-8%E6%9C%88%E7%87%9F%E6%94%B6%E5%86%8D%E5%89%B5%E5%96%AE%E6%9C%88%E6%AD%B7%E5%8F%B2%E6%96%B0%E9%AB%98-231215944.html"
+  },
+  {
+   "title": "【公告】國巨* 2026年8月合併營收163.32億元 年增51.8%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%9C%8B%E5%B7%A8-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B6163-32%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E51-075222745.html"
+  },
+  {
+   "title": "國巨*自結前8月合併營收1150.85億元，年增34.9%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%9C%8B%E5%B7%A8-%E8%87%AA%E7%B5%90%E5%89%8D8%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B61150-85%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E34-9-074400388.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-09T01:16:02.670Z"
+}

@@ -1,13 +1,15 @@
 {
  "symbol": "4806",
  "name": "KUEI TIEN CULTURAL AND CREATIVE",
- "date": "2026-08-30",
- "price": 9.18,
- "changePct": -0.33,
- "volRatio": 0.31,
- "score": 28,
+ "nameZh": "桂田文創",
+ "date": "2026-09-09",
+ "tradeDate": "2026-09-08",
+ "price": 8.88,
+ "changePct": 0.11,
+ "volRatio": 0.67,
+ "score": 31,
  "scores": {
-  "sentiment": 41,
+  "sentiment": 47,
   "technical": 18,
   "fundamental": null,
   "valuation": null,
@@ -17,6 +19,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-30T04:21:09.823Z"
+ "prev": {
+  "date": "2026-08-30",
+  "score": 28,
+  "scores": {
+   "sentiment": 41,
+   "technical": 18,
+   "fundamental": null,
+   "valuation": null,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-09T01:16:02.676Z"
 }

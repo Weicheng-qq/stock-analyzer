@@ -2,15 +2,15 @@
  "symbol": "1102",
  "name": "ASIA CEMENT CORP",
  "nameZh": "亞泥",
- "date": "2026-09-08",
- "tradeDate": "2026-09-07",
- "price": 35.05,
- "changePct": -0.14,
- "volRatio": 0.66,
- "score": 58,
+ "date": "2026-09-09",
+ "tradeDate": "2026-09-08",
+ "price": 35.2,
+ "changePct": 0.43,
+ "volRatio": 0.56,
+ "score": 63,
  "scores": {
-  "sentiment": 46,
-  "technical": 66,
+  "sentiment": 48,
+  "technical": 82,
   "fundamental": 52,
   "valuation": 85,
   "news": null
@@ -23,6 +23,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-08T01:12:17.692Z"
+ "prev": {
+  "date": "2026-09-08",
+  "score": 58,
+  "scores": {
+   "sentiment": 46,
+   "technical": 66,
+   "fundamental": 52,
+   "valuation": 85,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-09T01:16:02.674Z"
 }

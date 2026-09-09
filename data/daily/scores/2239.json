@@ -2,16 +2,16 @@
  "symbol": "2239",
  "name": "CAYMAN ENGLEY INDUSTRIAL CO. LT",
  "nameZh": "英利-KY",
- "date": "2026-08-31",
- "tradeDate": "2026-08-28",
- "price": 20.15,
- "changePct": -0.98,
- "volRatio": 0.43,
- "score": 48,
+ "date": "2026-09-09",
+ "tradeDate": "2026-09-08",
+ "price": 19.9,
+ "changePct": 0,
+ "volRatio": 0.54,
+ "score": 36,
  "scores": {
-  "sentiment": 38,
+  "sentiment": 45,
   "technical": 42,
-  "fundamental": null,
+  "fundamental": 12,
   "valuation": 85,
   "news": null
  },
@@ -23,6 +23,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-08-31T01:22:12.929Z"
+ "prev": {
+  "date": "2026-08-31",
+  "score": 48,
+  "scores": {
+   "sentiment": 38,
+   "technical": 42,
+   "fundamental": null,
+   "valuation": 85,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-09T01:16:02.677Z"
 }

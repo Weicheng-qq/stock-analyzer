@@ -1,0 +1,53 @@
+{
+ "symbol": "2801",
+ "name": "CHANG HWA COMMERCIAL BANK LTD",
+ "nameZh": "彰銀",
+ "date": "2026-09-09",
+ "tradeDate": "2026-09-08",
+ "price": 27.25,
+ "changePct": 2.83,
+ "volRatio": 1.71,
+ "score": 73,
+ "scores": {
+  "sentiment": 74,
+  "technical": 82,
+  "fundamental": null,
+  "valuation": 50,
+  "news": 70
+ },
+ "pe": {
+  "cur": 17.1,
+  "lo": 14.9,
+  "hi": 18.7
+ },
+ "alerts": [
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "公布2026年8月合併營收46.06億元，年增21.13%"
+  }
+ ],
+ "ai": {
+  "why": "公布2026年8月合併營收46.06億元，年增21.13%",
+  "meaning": "營收大幅成長顯示獲利前景提升",
+  "fact": "公布2026年8月合併營收46.06億元，年增21.13%",
+  "inference": "營收大幅成長顯示獲利前景提升",
+  "stance": "pos",
+  "newsScore": 70,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "【公告】彰銀115年8月份合併自結盈餘。",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%BD%B0%E9%8A%80115%E5%B9%B48%E6%9C%88%E4%BB%BD%E5%90%88%E4%BD%B5%E8%87%AA%E7%B5%90%E7%9B%88%E9%A4%98-100535926.html"
+  },
+  {
+   "title": "【公告】彰銀 2026年8月合併營收46.06億元 年增21.13%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%BD%B0%E9%8A%80-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B646-06%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E21-100318247.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-09T01:16:02.670Z"
+}

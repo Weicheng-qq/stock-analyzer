@@ -2,67 +2,61 @@
  "symbol": "TSM",
  "name": "Taiwan Semiconductor Manufactur",
  "nameZh": null,
- "date": "2026-09-08",
- "tradeDate": "2026-09-04",
- "price": 428.91,
- "changePct": 2.85,
- "volRatio": 1.33,
- "score": 72,
+ "date": "2026-09-09",
+ "tradeDate": "2026-09-08",
+ "price": 439,
+ "changePct": 2.35,
+ "volRatio": 1.4,
+ "score": 59,
  "scores": {
-  "sentiment": 70,
+  "sentiment": 68,
   "technical": 66,
   "fundamental": null,
-  "valuation": 53,
-  "news": 85
+  "valuation": 48,
+  "news": 50
  },
  "pe": {
-  "cur": 30.9,
+  "cur": 31.9,
   "lo": 24.7,
   "hi": 36.4
  },
- "alerts": [
-  {
-   "type": "news",
-   "level": "mid",
-   "text": "台積電因為先進晶片的需求非常旺盛，決定調高未來的業績展望。"
-  }
- ],
+ "alerts": [],
  "ai": {
-  "why": "台積電因為先進晶片的需求非常旺盛，決定調高未來的業績展望。",
-  "meaning": "這代表AI和高階晶片的熱潮還在持續，公司的賺錢能力依然很強。",
-  "fact": "台積電因為先進晶片的需求非常旺盛，決定調高未來的業績展望。",
-  "inference": "這代表AI和高階晶片的熱潮還在持續，公司的賺錢能力依然很強。",
-  "stance": "pos",
-  "newsScore": 85,
-  "importance": 4
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 50,
+  "importance": 1
  },
  "newsTop": [
   {
-   "title": "TSMC Rises Nearly 3% as $265 Billion Becomes Taiwan's Diplomatic Currency",
-   "publisher": "GuruFocus.com",
-   "link": "https://finance.yahoo.com/markets/stocks/articles/tsmc-rises-nearly-3-265-213735953.html"
+   "title": "Dow Jones Futures: Dow Skids But AMD, HPE Are New Buys; Apple iPhone Event Due",
+   "publisher": "Investor's Business Daily",
+   "link": "https://finance.yahoo.com/m/61edb329-2f31-3e10-8832-6860b7819ab2/dow-jones-futures%3A-dow-skids.html"
   },
   {
-   "title": "TSMC's $265 Billion U.S. Bet Is Becoming Part of Taiwan's Chip Diplomacy",
-   "publisher": "GuruFocus.com",
-   "link": "https://finance.yahoo.com/technology/articles/tsmcs-265-billion-u-bet-192538926.html"
+   "title": "AMKR Stock Gains After-Hours — Amkor Doubles Down On US Chip Manufacturing With $12B Arizona Campus Expansion",
+   "publisher": "Stocktwits",
+   "link": "https://finance.yahoo.com/m/38bea09b-d657-3815-b91a-fdd42daa7956/amkr-stock-gains-after-hours.html"
   },
   {
-   "title": "Arm Expands Into AI Accelerators With Samsung — But It’s Not the Data Center Goldmine Investors Hope For",
-   "publisher": "24/7 Wall St.",
-   "link": "https://finance.yahoo.com/m/5c3ea4dc-4180-3910-bb3f-3ae76930b414/arm-expands-into-ai.html"
+   "title": "AMD Guides to $70 Billion of 2027 Data Center Revenue",
+   "publisher": "GuruFocus.com",
+   "link": "https://finance.yahoo.com/technology/ai/articles/amd-guides-70-billion-2027-211135048.html"
   }
  ],
  "prev": {
-  "date": "2026-09-07",
-  "score": 61,
+  "date": "2026-09-08",
+  "score": 72,
   "scores": {
    "sentiment": 70,
    "technical": 66,
    "fundamental": null,
    "valuation": 53,
-   "news": 50
+   "news": 85
   }
  },
- "generatedAt": "2026-09-08T01:12:17.687Z"
+ "generatedAt": "2026-09-09T01:16:02.671Z"
 }

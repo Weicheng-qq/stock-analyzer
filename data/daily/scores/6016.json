@@ -1,0 +1,63 @@
+{
+ "symbol": "6016",
+ "name": "CONCORD SECURITIES CORP",
+ "nameZh": "康和證",
+ "date": "2026-09-09",
+ "tradeDate": "2026-09-08",
+ "price": 23.15,
+ "changePct": 4.75,
+ "volRatio": 2.55,
+ "score": 82,
+ "scores": {
+  "sentiment": 91,
+  "technical": 66,
+  "fundamental": null,
+  "valuation": 85,
+  "news": 90
+ },
+ "pe": {
+  "cur": 3.6,
+  "lo": 3.6,
+  "hi": 156.8
+ },
+ "alerts": [
+  {
+   "type": "price",
+   "level": "mid",
+   "text": "股價明顯上漲 4.75%"
+  },
+  {
+   "type": "volume",
+   "level": "high",
+   "text": "成交量放大至近月均量的 2.6 倍"
+  },
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "康和證公布八月合併營收達27.27億元，年增率高達215.39%。"
+  }
+ ],
+ "ai": {
+  "why": "康和證公布八月合併營收達27.27億元，年增率高達215.39%。",
+  "meaning": "營收翻倍代表公司業績大爆發，這對股價來說是個強力的好消息。",
+  "fact": "康和證公布八月合併營收達27.27億元，年增率高達215.39%。",
+  "inference": "營收翻倍代表公司業績大爆發，這對股價來說是個強力的好消息。",
+  "stance": "pos",
+  "newsScore": 90,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "【公告】康和證 2026年8月合併營收27.27億元 年增215.39%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%BA%B7%E5%92%8C%E8%AD%89-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B627-27%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E215-060215988.html"
+  },
+  {
+   "title": "【公告】康和證115年8月份合併自結損益",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%BA%B7%E5%92%8C%E8%AD%89115%E5%B9%B48%E6%9C%88%E4%BB%BD%E5%90%88%E4%BD%B5%E8%87%AA%E7%B5%90%E6%90%8D%E7%9B%8A-055343761.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-09T01:16:02.669Z"
+}

@@ -2,67 +2,61 @@
  "symbol": "NVO",
  "name": "Novo Nordisk A/S",
  "nameZh": null,
- "date": "2026-09-08",
- "tradeDate": "2026-09-04",
- "price": 46.6,
- "changePct": -1.92,
- "volRatio": 0.57,
- "score": 46,
+ "date": "2026-09-09",
+ "tradeDate": "2026-09-08",
+ "price": 45.16,
+ "changePct": -3.09,
+ "volRatio": 0.95,
+ "score": 42,
  "scores": {
-  "sentiment": 34,
-  "technical": 42,
+  "sentiment": 31,
+  "technical": 18,
   "fundamental": null,
-  "valuation": 85,
-  "news": 45
+  "valuation": 84,
+  "news": 60
  },
  "pe": {
-  "cur": 11.7,
-  "lo": 11.7,
+  "cur": 11.5,
+  "lo": 10.7,
   "hi": 49.4
  },
- "alerts": [
-  {
-   "type": "news",
-   "level": "mid",
-   "text": "雖然兒童肥胖試驗達標，但因取消另外兩項臨床試驗，導致股價下跌。"
-  }
- ],
+ "alerts": [],
  "ai": {
-  "why": "雖然兒童肥胖試驗達標，但因取消另外兩項臨床試驗，導致股價下跌。",
-  "meaning": "這代表新藥研發有進有退，我們得重新評估未來的成長動能。",
-  "fact": "雖然兒童肥胖試驗達標，但因取消另外兩項臨床試驗，導致股價下跌。",
-  "inference": "這代表新藥研發有進有退，我們得重新評估未來的成長動能。",
-  "stance": "neg",
-  "newsScore": 45,
-  "importance": 4
+  "why": "醫療板塊整體下跌，拖累Novo股價",
+  "meaning": "短期受產業情緒影響，基本面未見變化",
+  "fact": "醫療板塊整體下跌，拖累Novo股價",
+  "inference": "短期受產業情緒影響，基本面未見變化",
+  "stance": "neu",
+  "newsScore": 60,
+  "importance": 3
  },
  "newsTop": [
   {
-   "title": "Wegovy’s Latest Trial Gives Novo Nordisk (NVO) Another Potential Growth Catalyst",
-   "publisher": "Insider Monkey",
-   "link": "https://finance.yahoo.com/healthcare/articles/wegovy-latest-trial-gives-novo-191655005.html"
+   "title": "Sector Update: Healthcare Stocks Fall Late Afternoon",
+   "publisher": "MT Newswires",
+   "link": "https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-afternoon-194859259.html"
   },
   {
-   "title": "Novo is Down Nearly 2% as a 40.4% Childhood Win Meets Two Trial Cancellations",
-   "publisher": "GuruFocus.com",
-   "link": "https://finance.yahoo.com/healthcare/articles/novo-down-nearly-2-40-175040657.html"
+   "title": "Sector Update: Healthcare Stocks Fall Tuesday Afternoon",
+   "publisher": "MT Newswires",
+   "link": "https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-tuesday-173533094.html"
   },
   {
-   "title": "Lilly vs. J&J: Betting on Breakout Growth or Built-In Stability?",
-   "publisher": "Zacks",
-   "link": "https://finance.yahoo.com/healthcare/articles/lilly-vs-j-j-betting-140300650.html"
+   "title": "GLP1 Drugs Work for Kids, Says Novo Nordisk. They Could Be Another Huge Market.",
+   "publisher": "Barrons.com",
+   "link": "https://finance.yahoo.com/m/262c1c0d-c854-3648-bfd9-fdddc2accbd5/glp1-drugs-work-for-kids%2C.html"
   }
  ],
  "prev": {
-  "date": "2026-09-07",
-  "score": 44,
+  "date": "2026-09-08",
+  "score": 46,
   "scores": {
    "sentiment": 34,
    "technical": 42,
    "fundamental": null,
    "valuation": 85,
-   "news": 40
+   "news": 45
   }
  },
- "generatedAt": "2026-09-08T01:12:17.688Z"
+ "generatedAt": "2026-09-09T01:16:02.670Z"
 }

@@ -1,0 +1,53 @@
+{
+ "symbol": "2059",
+ "name": "KING SLIDE WORKS CO",
+ "nameZh": "川湖",
+ "date": "2026-09-09",
+ "tradeDate": "2026-09-08",
+ "price": 12520,
+ "changePct": -9.96,
+ "volRatio": 2.16,
+ "score": 62,
+ "scores": {
+  "sentiment": 32,
+  "technical": 58,
+  "fundamental": 100,
+  "valuation": 25,
+  "news": 50
+ },
+ "pe": {
+  "cur": 77.5,
+  "lo": 26.7,
+  "hi": 77.5
+ },
+ "alerts": [
+  {
+   "type": "price",
+   "level": "high",
+   "text": "股價大跌 -9.96%"
+  },
+  {
+   "type": "volume",
+   "level": "mid",
+   "text": "成交量放大至近月均量的 2.2 倍"
+  }
+ ],
+ "ai": {
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 50,
+  "importance": 1
+ },
+ "newsTop": [
+  {
+   "title": "【公告】川湖 2026年8月合併營收64.66億元 年增344.42%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%B7%9D%E6%B9%96-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B664-66%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E344-065220809.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-09T01:16:02.669Z"
+}

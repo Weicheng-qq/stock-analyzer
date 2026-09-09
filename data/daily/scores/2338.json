@@ -1,0 +1,48 @@
+{
+ "symbol": "2338",
+ "name": "TAIWAN MASK CORP",
+ "nameZh": "光罩",
+ "date": "2026-09-09",
+ "tradeDate": "2026-09-08",
+ "price": 37.75,
+ "changePct": -2.08,
+ "volRatio": 0.74,
+ "score": 29,
+ "scores": {
+  "sentiment": 35,
+  "technical": 18,
+  "fundamental": null,
+  "valuation": 25,
+  "news": 35
+ },
+ "pe": {
+  "cur": 29.9,
+  "lo": 20.2,
+  "hi": 29.9
+ },
+ "alerts": [
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "光罩 8月合併營收 4.94 億，較去年下降 8.95%"
+  }
+ ],
+ "ai": {
+  "why": "光罩 8月合併營收 4.94 億，較去年下降 8.95%",
+  "meaning": "營收下滑顯示業績壓力，投資人需留意獲利前景。",
+  "fact": "光罩 8月合併營收 4.94 億，較去年下降 8.95%",
+  "inference": "營收下滑顯示業績壓力，投資人需留意獲利前景。",
+  "stance": "neg",
+  "newsScore": 35,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "【公告】光罩 2026年8月合併營收4.94億元 年增-8.95%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%85%89%E7%BD%A9-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B64-94%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E-092350568.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-09T01:16:02.671Z"
+}
