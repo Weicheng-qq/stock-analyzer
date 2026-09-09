@@ -428,9 +428,21 @@ try {
   for (const it of (q.queue || []).filter(x => x.priority === 'HIGH')) pool.add(it.symbol);
 } catch (e) {}
 try {
-  for (const f of fs.readdirSync(path.join(ROOT, 'data', 'earnings')).filter(f => f.endsWith('.json'))) {
+  // ⚠️ 2026-09-09 修正：原本用 fs.readdirSync 的檔案順序決定誰進池，
+  //   313 檔法說會摘要 vs 60 個池位，順序在後面的股票（如群聯8299）會被長期排除、
+  //   分數永遠不更新（使用者回報：群聯卡在9/4沒動，其他也卡在9/8）。
+  //   改成依「上次產生分數的時間」由舊到新排序（從未產生過的視為最舊），
+  //   確保每天優先補最久沒更新的股票，長期下來所有股票都能輪到，而非永遠卡住少數幾檔。
+  const earningsCodes = fs.readdirSync(path.join(ROOT, 'data', 'earnings'))
+    .filter(f => f.endsWith('.json')).map(f => f.replace(/\.json$/, ''));
+  const staleness = earningsCodes.map(code => {
+    let generatedAt = 0;
+    try { generatedAt = new Date(JSON.parse(fs.readFileSync(path.join(SCORES, `${code}.json`), 'utf8')).generatedAt).getTime() || 0; } catch (e) {}
+    return { code, generatedAt };
+  }).sort((a, b) => a.generatedAt - b.generatedAt);
+  for (const { code } of staleness) {
     if (pool.size >= MAX_POOL) break;
-    pool.add(f.replace(/\.json$/, ''));
+    pool.add(code);
   }
 } catch (e) {}
 const codes = [...pool].slice(0, MAX_POOL);
