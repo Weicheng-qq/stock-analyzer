@@ -2,22 +2,22 @@
  "symbol": "NVDA",
  "name": "NVIDIA Corporation",
  "nameZh": null,
- "date": "2026-09-09",
- "tradeDate": "2026-09-08",
- "price": 225.73,
- "changePct": -2.01,
- "volRatio": 0.92,
- "score": 73,
+ "date": "2026-09-10",
+ "tradeDate": "2026-09-09",
+ "price": 223.67,
+ "changePct": -0.91,
+ "volRatio": 0.62,
+ "score": 80,
  "scores": {
-  "sentiment": 37,
+  "sentiment": 41,
   "technical": 82,
   "fundamental": 100,
   "valuation": 85,
-  "news": 50
+  "news": null
  },
  "pe": {
-  "cur": 29.1,
-  "lo": 29.1,
+  "cur": 28.5,
+  "lo": 28.5,
   "hi": 75.6
  },
  "alerts": [
@@ -27,42 +27,18 @@
    "text": "公司已公布官方財測／展望"
   }
  ],
- "ai": {
-  "why": "今日無明確公司消息",
-  "meaning": "",
-  "fact": "今日無明確公司消息",
-  "inference": "",
-  "stance": "neu",
-  "newsScore": 50,
-  "importance": 1
- },
- "newsTop": [
-  {
-   "title": "Dow Jones Futures: Dow Skids But AMD, HPE Are New Buys; Apple iPhone Event Due",
-   "publisher": "Investor's Business Daily",
-   "link": "https://finance.yahoo.com/m/61edb329-2f31-3e10-8832-6860b7819ab2/dow-jones-futures%3A-dow-skids.html"
-  },
-  {
-   "title": "Super Micro Computer Sees AI Demand Driving Growth, Diversification and Cash Flow",
-   "publisher": "MarketBeat",
-   "link": "https://finance.yahoo.com/m/4c607344-8f44-3f64-8f39-a59db36be423/super-micro-computer-sees-ai.html"
-  },
-  {
-   "title": "Meta Platforms Settles Major Lawsuit, Pays $18 Billion",
-   "publisher": "Motley Fool",
-   "link": "https://finance.yahoo.com/m/fdaa381b-1047-3af1-8ca3-052632a7d18c/meta-platforms-settles-major.html"
-  }
- ],
+ "ai": null,
+ "newsTop": [],
  "prev": {
-  "date": "2026-09-08",
-  "score": 83,
+  "date": "2026-09-09",
+  "score": 73,
   "scores": {
-   "sentiment": 55,
+   "sentiment": 37,
    "technical": 82,
    "fundamental": 100,
    "valuation": 85,
-   "news": null
+   "news": 50
   }
  },
- "generatedAt": "2026-09-09T01:16:02.671Z"
+ "generatedAt": "2026-09-10T01:02:09.089Z"
 }

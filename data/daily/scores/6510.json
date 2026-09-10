@@ -2,21 +2,21 @@
  "symbol": "6510",
  "name": "CHUNGHWA PRECISION TEST TECH CO",
  "nameZh": "精測",
- "date": "2026-09-06",
- "tradeDate": "2026-09-04",
- "price": 3350,
- "changePct": 0,
- "volRatio": 1.88,
- "score": 63,
+ "date": "2026-09-10",
+ "tradeDate": "2026-09-09",
+ "price": 3610,
+ "changePct": -0.28,
+ "volRatio": 2.2,
+ "score": 82,
  "scores": {
-  "sentiment": 59,
-  "technical": 66,
-  "fundamental": null,
-  "valuation": 65,
+  "sentiment": 60,
+  "technical": 82,
+  "fundamental": 100,
+  "valuation": 63,
   "news": null
  },
  "pe": {
-  "cur": 79,
+  "cur": 85.1,
   "lo": 17.8,
   "hi": 200
  },
@@ -24,21 +24,21 @@
   {
    "type": "volume",
    "level": "mid",
-   "text": "成交量放大至近月均量的 1.9 倍"
+   "text": "成交量放大至近月均量的 2.2 倍"
   }
  ],
  "ai": null,
  "newsTop": [],
  "prev": {
-  "date": "2026-08-30",
-  "score": 33,
+  "date": "2026-09-06",
+  "score": 63,
   "scores": {
-   "sentiment": 36,
-   "technical": 18,
+   "sentiment": 59,
+   "technical": 66,
    "fundamental": null,
-   "valuation": 70,
+   "valuation": 65,
    "news": null
   }
  },
- "generatedAt": "2026-09-06T00:50:27.578Z"
+ "generatedAt": "2026-09-10T01:02:09.090Z"
 }

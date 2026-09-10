@@ -2,61 +2,37 @@
  "symbol": "TSM",
  "name": "Taiwan Semiconductor Manufactur",
  "nameZh": null,
- "date": "2026-09-09",
- "tradeDate": "2026-09-08",
- "price": 439,
- "changePct": 2.35,
- "volRatio": 1.4,
- "score": 59,
+ "date": "2026-09-10",
+ "tradeDate": "2026-09-09",
+ "price": 435.36,
+ "changePct": -0.83,
+ "volRatio": 0.81,
+ "score": 54,
  "scores": {
-  "sentiment": 68,
+  "sentiment": 43,
   "technical": 66,
   "fundamental": null,
-  "valuation": 48,
-  "news": 50
+  "valuation": 45,
+  "news": null
  },
  "pe": {
-  "cur": 31.9,
+  "cur": 32.5,
   "lo": 24.7,
   "hi": 36.4
  },
  "alerts": [],
- "ai": {
-  "why": "今日無明確公司消息",
-  "meaning": "",
-  "fact": "今日無明確公司消息",
-  "inference": "",
-  "stance": "neu",
-  "newsScore": 50,
-  "importance": 1
- },
- "newsTop": [
-  {
-   "title": "Dow Jones Futures: Dow Skids But AMD, HPE Are New Buys; Apple iPhone Event Due",
-   "publisher": "Investor's Business Daily",
-   "link": "https://finance.yahoo.com/m/61edb329-2f31-3e10-8832-6860b7819ab2/dow-jones-futures%3A-dow-skids.html"
-  },
-  {
-   "title": "AMKR Stock Gains After-Hours — Amkor Doubles Down On US Chip Manufacturing With $12B Arizona Campus Expansion",
-   "publisher": "Stocktwits",
-   "link": "https://finance.yahoo.com/m/38bea09b-d657-3815-b91a-fdd42daa7956/amkr-stock-gains-after-hours.html"
-  },
-  {
-   "title": "AMD Guides to $70 Billion of 2027 Data Center Revenue",
-   "publisher": "GuruFocus.com",
-   "link": "https://finance.yahoo.com/technology/ai/articles/amd-guides-70-billion-2027-211135048.html"
-  }
- ],
+ "ai": null,
+ "newsTop": [],
  "prev": {
-  "date": "2026-09-08",
-  "score": 72,
+  "date": "2026-09-09",
+  "score": 59,
   "scores": {
-   "sentiment": 70,
+   "sentiment": 68,
    "technical": 66,
    "fundamental": null,
-   "valuation": 53,
-   "news": 85
+   "valuation": 48,
+   "news": 50
   }
  },
- "generatedAt": "2026-09-09T01:16:02.671Z"
+ "generatedAt": "2026-09-10T01:02:09.089Z"
 }

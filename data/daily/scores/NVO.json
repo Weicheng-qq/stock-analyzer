@@ -2,61 +2,61 @@
  "symbol": "NVO",
  "name": "Novo Nordisk A/S",
  "nameZh": null,
- "date": "2026-09-09",
- "tradeDate": "2026-09-08",
- "price": 45.16,
- "changePct": -3.09,
- "volRatio": 0.95,
- "score": 42,
+ "date": "2026-09-10",
+ "tradeDate": "2026-09-09",
+ "price": 44.56,
+ "changePct": -1.33,
+ "volRatio": 0.81,
+ "score": 40,
  "scores": {
-  "sentiment": 31,
+  "sentiment": 40,
   "technical": 18,
   "fundamental": null,
-  "valuation": 84,
-  "news": 60
+  "valuation": 85,
+  "news": 45
  },
  "pe": {
-  "cur": 11.5,
-  "lo": 10.7,
+  "cur": 11.1,
+  "lo": 11.1,
   "hi": 49.4
  },
  "alerts": [],
  "ai": {
-  "why": "醫療板塊整體下跌，拖累Novo股價",
-  "meaning": "短期受產業情緒影響，基本面未見變化",
-  "fact": "醫療板塊整體下跌，拖累Novo股價",
-  "inference": "短期受產業情緒影響，基本面未見變化",
-  "stance": "neu",
-  "newsScore": 60,
+  "why": "醫療板塊整體下跌，拖累 Novo Nordisk 股價",
+  "meaning": "顯示市場對藥價壓力及整體醫療股情緒較弱，投資人需留意利潤風險",
+  "fact": "醫療板塊整體下跌，拖累 Novo Nordisk 股價",
+  "inference": "顯示市場對藥價壓力及整體醫療股情緒較弱，投資人需留意利潤風險",
+  "stance": "neg",
+  "newsScore": 45,
   "importance": 3
  },
  "newsTop": [
   {
-   "title": "Sector Update: Healthcare Stocks Fall Late Afternoon",
+   "title": "Market Chatter: Trump Administration Pursuing More Drug Pricing Deals, Oz Says",
    "publisher": "MT Newswires",
-   "link": "https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-afternoon-194859259.html"
+   "link": "https://finance.yahoo.com/healthcare/articles/market-chatter-trump-administration-pursuing-232357421.html"
   },
   {
-   "title": "Sector Update: Healthcare Stocks Fall Tuesday Afternoon",
-   "publisher": "MT Newswires",
-   "link": "https://finance.yahoo.com/healthcare/articles/sector-healthcare-stocks-fall-tuesday-173533094.html"
+   "title": "Can Oral Wegovy Help Novo Nordisk Capture China’s $4.46 Billion GLP-1 Opportunity?",
+   "publisher": "Insider Monkey",
+   "link": "https://finance.yahoo.com/healthcare/articles/oral-wegovy-help-novo-nordisk-225911029.html"
   },
   {
-   "title": "GLP1 Drugs Work for Kids, Says Novo Nordisk. They Could Be Another Huge Market.",
-   "publisher": "Barrons.com",
-   "link": "https://finance.yahoo.com/m/262c1c0d-c854-3648-bfd9-fdddc2accbd5/glp1-drugs-work-for-kids%2C.html"
+   "title": "Pfizer Stock Rises Almost 9% in 3 Months: Time to Buy, Hold or Exit?",
+   "publisher": "Zacks",
+   "link": "https://finance.yahoo.com/markets/stocks/articles/pfizer-stock-rises-almost-9-121100844.html"
   }
  ],
  "prev": {
-  "date": "2026-09-08",
-  "score": 46,
+  "date": "2026-09-09",
+  "score": 42,
   "scores": {
-   "sentiment": 34,
-   "technical": 42,
+   "sentiment": 31,
+   "technical": 18,
    "fundamental": null,
-   "valuation": 85,
-   "news": 45
+   "valuation": 84,
+   "news": 60
   }
  },
- "generatedAt": "2026-09-09T01:16:02.670Z"
+ "generatedAt": "2026-09-10T01:02:09.088Z"
 }

@@ -2,14 +2,14 @@
  "symbol": "1337",
  "name": "ASIA PLASTIC RECYCLING HOLDING ",
  "nameZh": "再生-KY",
- "date": "2026-09-07",
- "tradeDate": "2026-09-04",
- "price": 4.57,
- "changePct": 1.11,
- "volRatio": 0.73,
- "score": 22,
+ "date": "2026-09-10",
+ "tradeDate": "2026-09-09",
+ "price": 4.51,
+ "changePct": 0,
+ "volRatio": 0.8,
+ "score": 20,
  "scores": {
-  "sentiment": 54,
+  "sentiment": 48,
   "technical": 18,
   "fundamental": 5,
   "valuation": null,
@@ -19,6 +19,16 @@
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-07T00:54:03.316Z"
+ "prev": {
+  "date": "2026-09-07",
+  "score": 22,
+  "scores": {
+   "sentiment": 54,
+   "technical": 18,
+   "fundamental": 5,
+   "valuation": null,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-10T01:02:09.091Z"
 }

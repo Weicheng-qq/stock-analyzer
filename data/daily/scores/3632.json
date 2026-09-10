@@ -1,0 +1,34 @@
+{
+ "symbol": "3632",
+ "name": "PAPAGO INC",
+ "nameZh": "研勤",
+ "date": "2026-09-10",
+ "tradeDate": "2026-09-09",
+ "price": 7.11,
+ "changePct": -1.11,
+ "volRatio": 2.45,
+ "score": 33,
+ "scores": {
+  "sentiment": 55,
+  "technical": 18,
+  "fundamental": null,
+  "valuation": 25,
+  "news": null
+ },
+ "pe": {
+  "cur": 141.8,
+  "lo": 7.1,
+  "hi": 141.8
+ },
+ "alerts": [
+  {
+   "type": "volume",
+   "level": "mid",
+   "text": "成交量放大至近月均量的 2.5 倍"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-09-10T01:02:09.088Z"
+}

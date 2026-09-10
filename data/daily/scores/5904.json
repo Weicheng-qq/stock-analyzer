@@ -2,37 +2,61 @@
  "symbol": "5904",
  "name": "POYA INTERNATIONAL CO LTD",
  "nameZh": "寶雅",
- "date": "2026-09-09",
- "tradeDate": "2026-09-08",
- "price": 71.7,
- "changePct": 0,
- "volRatio": 0.19,
- "score": 58,
+ "date": "2026-09-10",
+ "tradeDate": "2026-09-09",
+ "price": 72.9,
+ "changePct": 1.67,
+ "volRatio": 0.52,
+ "score": 59,
  "scores": {
-  "sentiment": 42,
+  "sentiment": 55,
   "technical": 58,
   "fundamental": 73,
-  "valuation": 37,
-  "news": null
+  "valuation": 33,
+  "news": 55
  },
  "pe": {
-  "cur": 21.2,
+  "cur": 21.5,
   "lo": 16.7,
   "hi": 22.3
  },
  "alerts": [],
- "ai": null,
- "newsTop": [],
+ "ai": {
+  "why": "公司公告將股票面額由10元降至1元",
+  "meaning": "面額下調提升流通性，對投資人較為正面",
+  "fact": "公司公告將股票面額由10元降至1元",
+  "inference": "面額下調提升流通性，對投資人較為正面",
+  "stance": "pos",
+  "newsScore": 55,
+  "importance": 3
+ },
+ "newsTop": [
+  {
+   "title": "寶雅* 公告本公司股票面額變更由「新台幣10元」變更為「新台幣1元」公告期間：115年7月2日至115年10月1日",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%AF%B6%E9%9B%85-%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E8%82%A1%E7%A5%A8%E9%9D%A2%E9%A1%8D%E8%AE%8A%E6%9B%B4%E7%94%B1-%E6%96%B0%E5%8F%B0%E5%B9%A310%E5%85%83-%E8%AE%8A%E6%9B%B4%E7%82%BA-%E6%96%B0%E5%8F%B0%E5%B9%A31%E5%85%83-230400512.html"
+  },
+  {
+   "title": "寶雅* 公告本公司股票面額變更由「新台幣10元」變更為「新台幣1元」公告期間：115年7月2日至115年10月1日",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%AF%B6%E9%9B%85-%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E8%82%A1%E7%A5%A8%E9%9D%A2%E9%A1%8D%E8%AE%8A%E6%9B%B4%E7%94%B1-%E6%96%B0%E5%8F%B0%E5%B9%A310%E5%85%83-%E8%AE%8A%E6%9B%B4%E7%82%BA-%E6%96%B0%E5%8F%B0%E5%B9%A31%E5%85%83-230300361.html"
+  },
+  {
+   "title": "寶雅* 公告本公司股票面額變更由「新台幣10元」變更為「新台幣1元」公告期間：115年7月2日至115年10月1日",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%AF%B6%E9%9B%85-%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E8%82%A1%E7%A5%A8%E9%9D%A2%E9%A1%8D%E8%AE%8A%E6%9B%B4%E7%94%B1-%E6%96%B0%E5%8F%B0%E5%B9%A310%E5%85%83-%E8%AE%8A%E6%9B%B4%E7%82%BA-%E6%96%B0%E5%8F%B0%E5%B9%A31%E5%85%83-230400225.html"
+  }
+ ],
  "prev": {
-  "date": "2026-09-08",
+  "date": "2026-09-09",
   "score": 58,
   "scores": {
-   "sentiment": 39,
+   "sentiment": 42,
    "technical": 58,
    "fundamental": 73,
-   "valuation": 41,
+   "valuation": 37,
    "news": null
   }
  },
- "generatedAt": "2026-09-09T01:16:02.677Z"
+ "generatedAt": "2026-09-10T01:02:09.087Z"
 }

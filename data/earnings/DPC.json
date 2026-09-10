@@ -1,0 +1,47 @@
+{
+ "symbol": "DPC",
+ "market": "us",
+ "name": "DPC Holdings PLC",
+ "quarter": "2026 Q2（2026-03-30～2026-06-28）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "DPC Holdings PLC",
+  "currency": "億美元",
+  "periodStart": "2026-03-30",
+  "periodEnd": "2026-06-28",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "2.69",
+  "營業毛利": "0.69",
+  "營業利益": null,
+  "本期淨利": "-1.31",
+  "每股盈餘": -1.14,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-11",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/2107018/000110465926093716/tm2622505d2_ex99-1.htm"
+ },
+ "savedAt": "2026-09-10T01:15:40.554Z",
+ "result": {
+  "revenue": "本季營收為 2.69 億美元，較去年同期成長 34%。",
+  "eps": "每股盈餘 (EPS) 為 -1.14 美元。",
+  "margins": "毛利率為 25.7%。營業利益率未提供，顯示為 0.0%。淨利率為 -48.7%，代表本季虧損。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 2026 全年營收在 1,000 至 1,040 百萬美元之間。",
+  "outlook": "營收持續高速成長，毛利率維持在 25.7%。然而淨利仍為虧損，顯示獲利仍有挑戰。",
+  "highlights": "• 營收 2.69 億美元，較去年同期增長 34%。<br>• 調整後 EBITDA 0.48 億美元，較去年同期增長 33%。<br>• 完成 IPO 與私募資金償還所有債務，資產負債表無槓桿。",
+  "concerns": "• 本季淨損擴大至 -1.31 億美元，淨利率 -48.7%。<br>• 營運現金流與資本支出未揭露，無法評估現金狀況。<br>• 營業利益率未提供，顯示營運獲利仍未顯現。",
+  "risks": "1. 高額淨虧損與負的淨利率可能限制未來資金需求。<br>2. 金屬成本通膨傳導影響毛利，若成本持續上升將進一步壓縮獲利。",
+  "keyPoints": "1. 營收 2.69 億美元，年增 34%。<br>2. 毛利 0.69 億美元，毛利率 25.7%。<br>3. 淨損 -1.31 億美元，EPS -1.14 美元。",
+  "guidanceOfficial": "Full Year 2026 Guidance (in $ millions, per share amounts in $) Guidance range Revenue (1) $1,000m - $1,040m Adjusted EBITDA (2) $182m - $187m (1) Including metal cost price inflation pass-through. (2) The Company has not reconciled its full-year 2026 guidance related to Adjusted EBITDA to its most directly comparable forward looking GAAP financial measure because such information is not available, and management cannot reliably predict all of the necessary components of such GAAP measure without unreasonable effort or expense.",
+  "segments": "• Engine Products - Europe：毛收入 123.3 百萬美元，較去年同期增長 48.7%。"
+ }
+}

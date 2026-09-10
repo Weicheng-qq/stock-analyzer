@@ -1,0 +1,58 @@
+{
+ "symbol": "2883",
+ "name": "KGI FINANCIAL HOLDING CO LTD",
+ "nameZh": "凱基金",
+ "date": "2026-09-10",
+ "tradeDate": "2026-09-09",
+ "price": 36.75,
+ "changePct": -1.47,
+ "volRatio": 1.1,
+ "score": 56,
+ "scores": {
+  "sentiment": 42,
+  "technical": 82,
+  "fundamental": null,
+  "valuation": 25,
+  "news": 52
+ },
+ "pe": {
+  "cur": 21.1,
+  "lo": 6.5,
+  "hi": 21.1
+ },
+ "alerts": [
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "公司公告完成資本減少並發行30億新台幣公司債"
+  }
+ ],
+ "ai": {
+  "why": "公司公告完成資本減少並發行30億新台幣公司債",
+  "meaning": "資本減少可能提升每股價值，發債增加負債，投資人應關注資本結構",
+  "fact": "公司公告完成資本減少並發行30億新台幣公司債",
+  "inference": "資本減少可能提升每股價值，發債增加負債，投資人應關注資本結構",
+  "stance": "neu",
+  "newsScore": 52,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "【公告】凱基金公告收回已發行限制員工權利新股減資案業經經濟部核准資本變更登記",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%87%B1%E5%9F%BA%E9%87%91%E5%85%AC%E5%91%8A%E6%94%B6%E5%9B%9E%E5%B7%B2%E7%99%BC%E8%A1%8C%E9%99%90%E5%88%B6%E5%93%A1%E5%B7%A5%E6%AC%8A%E5%88%A9%E6%96%B0%E8%82%A1%E6%B8%9B%E8%B3%87%E6%A1%88%E6%A5%AD%E7%B6%93%E7%B6%93%E6%BF%9F%E9%83%A8%E6%A0%B8%E5%87%86%E8%B3%87%E6%9C%AC%E8%AE%8A%E6%9B%B4%E7%99%BB%E8%A8%98-072545686.html"
+  },
+  {
+   "title": "【公告】凱基金代子公司凱基證券公告發行115年度第3次無擔保次順位普通公司債新臺幣參拾億元整(補充115/02/04及115/05/22公告)",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%87%B1%E5%9F%BA%E9%87%91%E4%BB%A3%E5%AD%90%E5%85%AC%E5%8F%B8%E5%87%B1%E5%9F%BA%E8%AD%89%E5%88%B8%E5%85%AC%E5%91%8A%E7%99%BC%E8%A1%8C115%E5%B9%B4%E5%BA%A6%E7%AC%AC3%E6%AC%A1%E7%84%A1%E6%93%94%E4%BF%9D%E6%AC%A1%E9%A0%86%E4%BD%8D%E6%99%AE%E9%80%9A%E5%85%AC%E5%8F%B8%E5%82%B5%E6%96%B0%E8%87%BA%E5%B9%A3%E5%8F%83%E6%8B%BE%E5%84%84%E5%85%83%E6%95%B4-%E8%A3%9C%E5%85%85115-02-04%E5%8F%8A115-092948653.html"
+  },
+  {
+   "title": "【公告】凱基金代子公司凱基銀行公告承銷取得凱基證券115年度第3次無擔保次順位普通公司債",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%87%B1%E5%9F%BA%E9%87%91%E4%BB%A3%E5%AD%90%E5%85%AC%E5%8F%B8%E5%87%B1%E5%9F%BA%E9%8A%80%E8%A1%8C%E5%85%AC%E5%91%8A%E6%89%BF%E9%8A%B7%E5%8F%96%E5%BE%97%E5%87%B1%E5%9F%BA%E8%AD%89%E5%88%B8115%E5%B9%B4%E5%BA%A6%E7%AC%AC3%E6%AC%A1%E7%84%A1%E6%93%94%E4%BF%9D%E6%AC%A1%E9%A0%86%E4%BD%8D%E6%99%AE%E9%80%9A%E5%85%AC%E5%8F%B8%E5%82%B5-092946302.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-10T01:02:09.088Z"
+}

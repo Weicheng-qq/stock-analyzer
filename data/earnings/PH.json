@@ -1,0 +1,47 @@
+{
+ "symbol": "PH",
+ "market": "us",
+ "name": "Parker-Hannifin Corp",
+ "quarter": "2026 Q3（2026-01-01～2026-03-31）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Parker-Hannifin Corp",
+  "currency": "億美元",
+  "periodStart": "2026-01-01",
+  "periodEnd": "2026-03-31",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "54.86",
+  "營業毛利": null,
+  "營業利益": "12.29",
+  "本期淨利": "9.04",
+  "每股盈餘": 7.06,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "",
+  "form": "公司官網文件",
+  "url": "https://d1io3yog0oux5.cloudfront.net/_dade3e655716c920cf762b65e8391287/parker/db/2265/22104/pdf/Parker+Hannifin+FY26+Q4+Earnings+Presentation.pdf"
+ },
+ "savedAt": "2026-09-10T01:06:57.152Z",
+ "result": {
+  "revenue": "本季營業收入為 54.86 億美元。",
+  "eps": "本季每股盈餘 (EPS) 為 7.06 美元。",
+  "margins": "營業利益率為 22.4%，顯示營運效率良好；淨利率為 16.5%，說明稅後盈餘占營收比例不錯；毛利率資料未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司指引 FY27 全年每股盈餘目標中點為 30.50 美元（按 GAAP），調整後為 34.75 美元。",
+  "outlook": "營業利益率 22.4% 與淨利率 16.5% 均維持在健康水平，顯示公司在本季仍具備良好的獲利能力。營收 54.86 億美元為基礎，若持續維持此規模，將支撐未來的現金流與資本回報。",
+  "highlights": "• 營收達 54.86 億美元。<br>• 營業利益率 22.4%，淨利率 16.5%。<br>• 每股盈餘 7.06 美元。",
+  "concerns": "• 毛利率資料未提供，限制對成本結構的評估。<br>• 營運現金流與資本支出未揭露，難以判斷自由現金流狀況。<br>• 未提供季度內部調整後的營業績效指標，可能影響比較分析。",
+  "risks": "• 淨負債對調整後 EBITDA 比率為 1.4 倍，若負債增加可能提升財務風險。<br>• 依賴未來併購整合（如 Filtration Group、CIRCOR Aerospace）可能帶來整合成本與不確定性。",
+  "keyPoints": "• 營業收入 54.86 億美元，為本季主要營收來源。<br>• 營業利益率 22.4%，顯示營運獲利能力穩健。<br>• 本季 EPS 為 7.06 美元，且公司指引 FY27 全年 EPS 中點 30.50 美元（調整後 34.75 美元），顯示未來盈餘成長預期。",
+  "guidanceOfficial": "FY27 全年每股盈餘目標中點：按 GAAP 計算 $30.50，調整後 $34.75。",
+  "segments": "• Diversified Industrial：57.55 億美元，季增 8.0% 有機增長。<br>• Aerospace Systems：19.00 億美元，季增 13.3% 有機增長。<br>• North America Businesses：22.21 億美元，季增 4.9% 有機增長。<br>• International Businesses：16.34 億美元，季增 6.5% 有機增長。"
+ }
+}
