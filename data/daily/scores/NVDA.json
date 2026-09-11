@@ -2,22 +2,22 @@
  "symbol": "NVDA",
  "name": "NVIDIA Corporation",
  "nameZh": null,
- "date": "2026-09-10",
- "tradeDate": "2026-09-09",
- "price": 223.67,
- "changePct": -0.91,
- "volRatio": 0.62,
- "score": 80,
+ "date": "2026-09-11",
+ "tradeDate": "2026-09-10",
+ "price": 218.36,
+ "changePct": -2.37,
+ "volRatio": 0.79,
+ "score": 68,
  "scores": {
-  "sentiment": 41,
-  "technical": 82,
+  "sentiment": 34,
+  "technical": 58,
   "fundamental": 100,
   "valuation": 85,
-  "news": null
+  "news": 55
  },
  "pe": {
-  "cur": 28.5,
-  "lo": 28.5,
+  "cur": 28.3,
+  "lo": 28.3,
   "hi": 75.6
  },
  "alerts": [
@@ -27,18 +27,42 @@
    "text": "公司已公布官方財測／展望"
   }
  ],
- "ai": null,
- "newsTop": [],
+ "ai": {
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 55,
+  "importance": 3
+ },
+ "newsTop": [
+  {
+   "title": "Why American Eagle Stock Dropped Today",
+   "publisher": "Motley Fool",
+   "link": "https://finance.yahoo.com/m/fc92bb47-c491-3da3-94cb-c45a7d1a97d0/why-american-eagle-stock.html"
+  },
+  {
+   "title": "Dow Jones Futures: S&P 500 Breaks Support As Oil Prices, Yields Surge; Oracle Jumps With CPI Inflation Due",
+   "publisher": "Investor's Business Daily",
+   "link": "https://finance.yahoo.com/m/c29e8241-4bb8-3a14-aa17-d5e2fa2c38f6/dow-jones-futures%3A-s%26p-500.html"
+  },
+  {
+   "title": "$1 Trillion in Market Cap Erased, but This AI Stock Could Soon Be the World's Most Valuable Company (According to Elon Musk)",
+   "publisher": "Motley Fool",
+   "link": "https://finance.yahoo.com/m/dc7b84cf-1131-3d30-810d-f353386b4481/%241-trillion-in-market-cap.html"
+  }
+ ],
  "prev": {
-  "date": "2026-09-09",
-  "score": 73,
+  "date": "2026-09-10",
+  "score": 80,
   "scores": {
-   "sentiment": 37,
+   "sentiment": 41,
    "technical": 82,
    "fundamental": 100,
    "valuation": 85,
-   "news": 50
+   "news": null
   }
  },
- "generatedAt": "2026-09-10T01:02:09.089Z"
+ "generatedAt": "2026-09-11T01:01:26.639Z"
 }

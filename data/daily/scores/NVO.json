@@ -2,61 +2,61 @@
  "symbol": "NVO",
  "name": "Novo Nordisk A/S",
  "nameZh": null,
- "date": "2026-09-10",
- "tradeDate": "2026-09-09",
- "price": 44.56,
- "changePct": -1.33,
- "volRatio": 0.81,
+ "date": "2026-09-11",
+ "tradeDate": "2026-09-10",
+ "price": 44.01,
+ "changePct": -1.23,
+ "volRatio": 0.61,
  "score": 40,
  "scores": {
-  "sentiment": 40,
+  "sentiment": 39,
   "technical": 18,
   "fundamental": null,
   "valuation": 85,
   "news": 45
  },
  "pe": {
-  "cur": 11.1,
-  "lo": 11.1,
+  "cur": 10.9,
+  "lo": 10.9,
   "hi": 49.4
  },
  "alerts": [],
  "ai": {
-  "why": "醫療板塊整體下跌，拖累 Novo Nordisk 股價",
-  "meaning": "顯示市場對藥價壓力及整體醫療股情緒較弱，投資人需留意利潤風險",
-  "fact": "醫療板塊整體下跌，拖累 Novo Nordisk 股價",
-  "inference": "顯示市場對藥價壓力及整體醫療股情緒較弱，投資人需留意利潤風險",
+  "why": "市場報導指出 Novo 股價跌幅大於大盤",
+  "meaning": "可能加劇短線賣壓",
+  "fact": "市場報導指出 Novo 股價跌幅大於大盤",
+  "inference": "可能加劇短線賣壓",
   "stance": "neg",
   "newsScore": 45,
   "importance": 3
  },
  "newsTop": [
   {
-   "title": "Market Chatter: Trump Administration Pursuing More Drug Pricing Deals, Oz Says",
-   "publisher": "MT Newswires",
-   "link": "https://finance.yahoo.com/healthcare/articles/market-chatter-trump-administration-pursuing-232357421.html"
-  },
-  {
-   "title": "Can Oral Wegovy Help Novo Nordisk Capture China’s $4.46 Billion GLP-1 Opportunity?",
-   "publisher": "Insider Monkey",
-   "link": "https://finance.yahoo.com/healthcare/articles/oral-wegovy-help-novo-nordisk-225911029.html"
-  },
-  {
-   "title": "Pfizer Stock Rises Almost 9% in 3 Months: Time to Buy, Hold or Exit?",
+   "title": "Novo Nordisk (NVO) Suffers a Larger Drop Than the General Market: Key Insights",
    "publisher": "Zacks",
-   "link": "https://finance.yahoo.com/markets/stocks/articles/pfizer-stock-rises-almost-9-121100844.html"
+   "link": "https://finance.yahoo.com/markets/stocks/articles/novo-nordisk-nvo-suffers-larger-214504885.html"
+  },
+  {
+   "title": "Novo Stays Flat as Wegovy Wins China's First GLP-1 MASH Label",
+   "publisher": "GuruFocus.com",
+   "link": "https://finance.yahoo.com/healthcare/articles/novo-stays-flat-wegovy-wins-181345665.html"
+  },
+  {
+   "title": "AbbVie vs. Novo Nordisk: Which Healthcare Stock Is a Better Buy in 2026?",
+   "publisher": "Motley Fool",
+   "link": "https://finance.yahoo.com/m/e900979b-3998-3338-b905-0c9756f38684/abbvie-vs.-novo-nordisk%3A.html"
   }
  ],
  "prev": {
-  "date": "2026-09-09",
-  "score": 42,
+  "date": "2026-09-10",
+  "score": 40,
   "scores": {
-   "sentiment": 31,
+   "sentiment": 40,
    "technical": 18,
    "fundamental": null,
-   "valuation": 84,
-   "news": 60
+   "valuation": 85,
+   "news": 45
   }
  },
- "generatedAt": "2026-09-10T01:02:09.088Z"
+ "generatedAt": "2026-09-11T01:01:26.640Z"
 }

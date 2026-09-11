@@ -1,0 +1,58 @@
+{
+ "symbol": "6409",
+ "name": "VOLTRONIC POWER TECHNOLOGY CORP",
+ "nameZh": "旭隼",
+ "date": "2026-09-11",
+ "tradeDate": "2026-09-10",
+ "price": 876,
+ "changePct": -5.4,
+ "volRatio": 1.2,
+ "score": 30,
+ "scores": {
+  "sentiment": 22,
+  "technical": 18,
+  "fundamental": null,
+  "valuation": 52,
+  "news": 40
+ },
+ "pe": {
+  "cur": 35.9,
+  "lo": 17.8,
+  "hi": 50.5
+ },
+ "alerts": [
+  {
+   "type": "price",
+   "level": "mid",
+   "text": "股價明顯下跌 -5.40%"
+  },
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "2026年8月合併營收預估下降3.16%"
+  }
+ ],
+ "ai": {
+  "why": "2026年8月合併營收預估下降3.16%",
+  "meaning": "營收成長放緩，可能影響獲利前景",
+  "fact": "2026年8月合併營收預估下降3.16%",
+  "inference": "營收成長放緩，可能影響獲利前景",
+  "stance": "neg",
+  "newsScore": 40,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "【公告】旭隼受邀參加瑞銀證券所舉辦之『UBS Taiwan Summit 2026』",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%97%AD%E9%9A%BC%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E7%91%9E%E9%8A%80%E8%AD%89%E5%88%B8%E6%89%80%E8%88%89%E8%BE%A6%E4%B9%8B-ubs-taiwan-summit-092655372.html"
+  },
+  {
+   "title": "【公告】旭隼 2026年8月合併營收17.79億元 年增-3.16%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%97%AD%E9%9A%BC-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B617-79%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E-105240105.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-11T01:01:26.639Z"
+}

@@ -1,0 +1,63 @@
+{
+ "symbol": "3443",
+ "name": "GLOBAL UNICHIP CORP.",
+ "nameZh": "創意",
+ "date": "2026-09-11",
+ "tradeDate": "2026-09-10",
+ "price": 6225,
+ "changePct": 5.06,
+ "volRatio": 0.84,
+ "score": 70,
+ "scores": {
+  "sentiment": 78,
+  "technical": 82,
+  "fundamental": 56,
+  "valuation": 25,
+  "news": 85
+ },
+ "pe": {
+  "cur": 152.3,
+  "lo": 39.1,
+  "hi": 152.3
+ },
+ "alerts": [
+  {
+   "type": "price",
+   "level": "mid",
+   "text": "股價明顯上漲 5.06%"
+  },
+  {
+   "type": "news",
+   "level": "high",
+   "text": "創意公告8月合併營收達58.4億元，年增率高達111.02%。"
+  }
+ ],
+ "ai": {
+  "why": "創意公告8月合併營收達58.4億元，年增率高達111.02%。",
+  "meaning": "營收翻倍成長顯示公司近期業務動能相當強勁。",
+  "fact": "創意公告8月合併營收達58.4億元，年增率高達111.02%。",
+  "inference": "營收翻倍成長顯示公司近期業務動能相當強勁。",
+  "stance": "pos",
+  "newsScore": 85,
+  "importance": 5
+ },
+ "newsTop": [
+  {
+   "title": "【公告】創意受邀參加UBS Taiwan Summit 2026",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%89%B5%E6%84%8F%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0ubs-taiwan-summit-2026-063814746.html"
+  },
+  {
+   "title": "【公告】創意受邀參加第一金證券法人論壇",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%89%B5%E6%84%8F%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E7%AC%AC-%E9%87%91%E8%AD%89%E5%88%B8%E6%B3%95%E4%BA%BA%E8%AB%96%E5%A3%87-063811561.html"
+  },
+  {
+   "title": "【公告】創意受邀參加2026 BofA Asia Pacific Conference",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%89%B5%E6%84%8F%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A02026-bofa-asia-pacific-063809879.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-11T01:01:26.639Z"
+}

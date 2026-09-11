@@ -1,0 +1,63 @@
+{
+ "symbol": "6620",
+ "name": "Handa Pharma",
+ "nameZh": "漢達",
+ "date": "2026-09-11",
+ "tradeDate": "2026-09-10",
+ "price": 126.5,
+ "changePct": -4.17,
+ "volRatio": 1.01,
+ "score": 44,
+ "scores": {
+  "sentiment": 25,
+  "technical": 82,
+  "fundamental": null,
+  "valuation": 25,
+  "news": 30
+ },
+ "pe": {
+  "cur": 42.9,
+  "lo": 19.1,
+  "hi": 42.9
+ },
+ "alerts": [
+  {
+   "type": "price",
+   "level": "mid",
+   "text": "股價明顯下跌 -4.17%"
+  },
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "最新公布的八月營收比去年同期慘跌將近八成。"
+  }
+ ],
+ "ai": {
+  "why": "最新公布的八月營收比去年同期慘跌將近八成。",
+  "meaning": "業績大幅縮水，投資人要提防未來獲利跟著下滑。",
+  "fact": "最新公布的八月營收比去年同期慘跌將近八成。",
+  "inference": "業績大幅縮水，投資人要提防未來獲利跟著下滑。",
+  "stance": "neg",
+  "newsScore": 30,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "【公告】漢達 2026年8月合併營收6669.5萬元 年增-79.92%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%BC%A2%E9%81%94-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B66669-5%E8%90%AC%E5%85%83-%E5%B9%B4%E5%A2%9E-092245581.html"
+  },
+  {
+   "title": "【公告】漢達(補充公告115/08/06重大訊息)公告新任商務長",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%BC%A2%E9%81%94-%E8%A3%9C%E5%85%85%E5%85%AC%E5%91%8A115-08-06%E9%87%8D%E5%A4%A7%E8%A8%8A%E6%81%AF-091718290.html"
+  },
+  {
+   "title": "【公告】漢達因近期股價價格異常，應櫃買中心要求公布相關資訊，俾便投資人暸解",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%BC%A2%E9%81%94%E5%9B%A0%E8%BF%91%E6%9C%9F%E8%82%A1%E5%83%B9%E5%83%B9%E6%A0%BC%E7%95%B0%E5%B8%B8-%E6%87%89%E6%AB%83%E8%B2%B7%E4%B8%AD%E5%BF%83%E8%A6%81%E6%B1%82%E5%85%AC%E5%B8%83%E7%9B%B8%E9%97%9C%E8%B3%87%E8%A8%8A-%E4%BF%BE%E4%BE%BF%E6%8A%95%E8%B3%87%E4%BA%BA%E6%9A%B8%E8%A7%A3-070655624.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-11T01:01:26.639Z"
+}

@@ -2,35 +2,29 @@
  "symbol": "1268",
  "name": "HI-LAI FOODS CO LTD",
  "nameZh": "漢來美食",
- "date": "2026-09-07",
- "tradeDate": "2026-09-04",
- "price": 182,
- "changePct": 0.28,
- "volRatio": 2.97,
- "score": 74,
+ "date": "2026-09-11",
+ "tradeDate": "2026-09-10",
+ "price": 172.5,
+ "changePct": 0.58,
+ "volRatio": 0.62,
+ "score": 57,
  "scores": {
-  "sentiment": 64,
-  "technical": 82,
+  "sentiment": 50,
+  "technical": 34,
   "fundamental": 70,
   "valuation": 85,
   "news": null
  },
  "pe": {
-  "cur": 13.8,
-  "lo": 13.8,
+  "cur": 13,
+  "lo": 13,
   "hi": 47.7
  },
- "alerts": [
-  {
-   "type": "volume",
-   "level": "high",
-   "text": "成交量放大至近月均量的 3.0 倍"
-  }
- ],
+ "alerts": [],
  "ai": null,
  "newsTop": [],
  "prev": {
-  "date": "2026-09-06",
+  "date": "2026-09-07",
   "score": 74,
   "scores": {
    "sentiment": 64,
@@ -40,5 +34,5 @@
    "news": null
   }
  },
- "generatedAt": "2026-09-07T00:54:03.320Z"
+ "generatedAt": "2026-09-11T01:01:26.640Z"
 }

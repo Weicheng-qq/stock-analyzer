@@ -1,0 +1,34 @@
+{
+ "symbol": "1453",
+ "name": "TA JIANG DEVELOPMENT CORP",
+ "nameZh": "大將",
+ "date": "2026-09-11",
+ "tradeDate": "2026-09-10",
+ "price": 11.1,
+ "changePct": 0,
+ "volRatio": 2.04,
+ "score": 58,
+ "scores": {
+  "sentiment": 60,
+  "technical": 82,
+  "fundamental": 33,
+  "valuation": 85,
+  "news": null
+ },
+ "pe": {
+  "cur": 16.5,
+  "lo": 16.5,
+  "hi": 40.7
+ },
+ "alerts": [
+  {
+   "type": "volume",
+   "level": "mid",
+   "text": "成交量放大至近月均量的 2.0 倍"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-09-11T01:01:26.641Z"
+}

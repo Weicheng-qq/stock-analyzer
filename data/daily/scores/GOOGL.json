@@ -2,51 +2,37 @@
  "symbol": "GOOGL",
  "name": "Alphabet Inc.",
  "nameZh": null,
- "date": "2026-09-10",
- "tradeDate": "2026-09-09",
- "price": 330.65,
- "changePct": -2.28,
- "volRatio": 1.45,
- "score": 42,
+ "date": "2026-09-11",
+ "tradeDate": "2026-09-10",
+ "price": 332.6,
+ "changePct": 0.59,
+ "volRatio": 1.01,
+ "score": 43,
  "scores": {
-  "sentiment": 41,
+  "sentiment": 54,
   "technical": 18,
   "fundamental": null,
   "valuation": 85,
-  "news": 50
+  "news": null
  },
  "pe": {
-  "cur": 17,
-  "lo": 17,
+  "cur": 16.6,
+  "lo": 16.6,
   "hi": 28.4
  },
  "alerts": [],
- "ai": {
-  "why": "今日無明確公司消息",
-  "meaning": "",
-  "fact": "今日無明確公司消息",
-  "inference": "",
-  "stance": "neu",
-  "newsScore": 50,
-  "importance": 1
- },
- "newsTop": [
-  {
-   "title": "Amazon Elects Cybersecurity Veteran Kevin Mandia to Board",
-   "publisher": "MT Newswires",
-   "link": "https://finance.yahoo.com/technology/articles/amazon-elects-cybersecurity-veteran-kevin-231256055.html"
-  }
- ],
+ "ai": null,
+ "newsTop": [],
  "prev": {
-  "date": "2026-09-09",
-  "score": 41,
+  "date": "2026-09-10",
+  "score": 42,
   "scores": {
-   "sentiment": 50,
+   "sentiment": 41,
    "technical": 18,
    "fundamental": null,
    "valuation": 85,
-   "news": null
+   "news": 50
   }
  },
- "generatedAt": "2026-09-10T01:02:09.086Z"
+ "generatedAt": "2026-09-11T01:01:26.640Z"
 }

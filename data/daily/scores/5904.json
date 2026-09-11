@@ -2,14 +2,14 @@
  "symbol": "5904",
  "name": "POYA INTERNATIONAL CO LTD",
  "nameZh": "寶雅",
- "date": "2026-09-10",
- "tradeDate": "2026-09-09",
- "price": 72.9,
- "changePct": 1.67,
- "volRatio": 0.52,
- "score": 59,
+ "date": "2026-09-11",
+ "tradeDate": "2026-09-10",
+ "price": 71.5,
+ "changePct": -1.92,
+ "volRatio": 0.37,
+ "score": 55,
  "scores": {
-  "sentiment": 55,
+  "sentiment": 32,
   "technical": 58,
   "fundamental": 73,
   "valuation": 33,
@@ -22,11 +22,11 @@
  },
  "alerts": [],
  "ai": {
-  "why": "公司公告將股票面額由10元降至1元",
-  "meaning": "面額下調提升流通性，對投資人較為正面",
-  "fact": "公司公告將股票面額由10元降至1元",
-  "inference": "面額下調提升流通性，對投資人較為正面",
-  "stance": "pos",
+  "why": "公司公告將股票面額由新台幣10元降至1元",
+  "meaning": "面額下調可能影響投資人持股成本與流通性",
+  "fact": "公司公告將股票面額由新台幣10元降至1元",
+  "inference": "面額下調可能影響投資人持股成本與流通性",
+  "stance": "neu",
   "newsScore": 55,
   "importance": 3
  },
@@ -34,29 +34,29 @@
   {
    "title": "寶雅* 公告本公司股票面額變更由「新台幣10元」變更為「新台幣1元」公告期間：115年7月2日至115年10月1日",
    "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%AF%B6%E9%9B%85-%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E8%82%A1%E7%A5%A8%E9%9D%A2%E9%A1%8D%E8%AE%8A%E6%9B%B4%E7%94%B1-%E6%96%B0%E5%8F%B0%E5%B9%A310%E5%85%83-%E8%AE%8A%E6%9B%B4%E7%82%BA-%E6%96%B0%E5%8F%B0%E5%B9%A31%E5%85%83-230400721.html"
+  },
+  {
+   "title": "【公告】寶雅* 2026年8月合併營收24.65億元 年增10.32%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%AF%B6%E9%9B%85-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B624-65%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E10-062314479.html"
+  },
+  {
+   "title": "寶雅* 公告本公司股票面額變更由「新台幣10元」變更為「新台幣1元」公告期間：115年7月2日至115年10月1日",
+   "publisher": "Yahoo 股市",
    "link": "https://tw.stock.yahoo.com/news/%E5%AF%B6%E9%9B%85-%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E8%82%A1%E7%A5%A8%E9%9D%A2%E9%A1%8D%E8%AE%8A%E6%9B%B4%E7%94%B1-%E6%96%B0%E5%8F%B0%E5%B9%A310%E5%85%83-%E8%AE%8A%E6%9B%B4%E7%82%BA-%E6%96%B0%E5%8F%B0%E5%B9%A31%E5%85%83-230400512.html"
-  },
-  {
-   "title": "寶雅* 公告本公司股票面額變更由「新台幣10元」變更為「新台幣1元」公告期間：115年7月2日至115年10月1日",
-   "publisher": "Yahoo 股市",
-   "link": "https://tw.stock.yahoo.com/news/%E5%AF%B6%E9%9B%85-%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E8%82%A1%E7%A5%A8%E9%9D%A2%E9%A1%8D%E8%AE%8A%E6%9B%B4%E7%94%B1-%E6%96%B0%E5%8F%B0%E5%B9%A310%E5%85%83-%E8%AE%8A%E6%9B%B4%E7%82%BA-%E6%96%B0%E5%8F%B0%E5%B9%A31%E5%85%83-230300361.html"
-  },
-  {
-   "title": "寶雅* 公告本公司股票面額變更由「新台幣10元」變更為「新台幣1元」公告期間：115年7月2日至115年10月1日",
-   "publisher": "Yahoo 股市",
-   "link": "https://tw.stock.yahoo.com/news/%E5%AF%B6%E9%9B%85-%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E8%82%A1%E7%A5%A8%E9%9D%A2%E9%A1%8D%E8%AE%8A%E6%9B%B4%E7%94%B1-%E6%96%B0%E5%8F%B0%E5%B9%A310%E5%85%83-%E8%AE%8A%E6%9B%B4%E7%82%BA-%E6%96%B0%E5%8F%B0%E5%B9%A31%E5%85%83-230400225.html"
   }
  ],
  "prev": {
-  "date": "2026-09-09",
-  "score": 58,
+  "date": "2026-09-10",
+  "score": 59,
   "scores": {
-   "sentiment": 42,
+   "sentiment": 55,
    "technical": 58,
    "fundamental": 73,
-   "valuation": 37,
-   "news": null
+   "valuation": 33,
+   "news": 55
   }
  },
- "generatedAt": "2026-09-10T01:02:09.087Z"
+ "generatedAt": "2026-09-11T01:01:26.640Z"
 }

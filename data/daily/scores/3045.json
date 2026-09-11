@@ -1,0 +1,34 @@
+{
+ "symbol": "3045",
+ "name": "TAIWAN MOBILE CO",
+ "nameZh": "台灣大",
+ "date": "2026-09-11",
+ "tradeDate": "2026-09-10",
+ "price": 120,
+ "changePct": 0.42,
+ "volRatio": 0.4,
+ "score": 62,
+ "scores": {
+  "sentiment": 47,
+  "technical": 82,
+  "fundamental": 51,
+  "valuation": 79,
+  "news": null
+ },
+ "pe": {
+  "cur": 22.8,
+  "lo": 22.6,
+  "hi": 25.2
+ },
+ "alerts": [
+  {
+   "type": "guidance",
+   "level": "mid",
+   "text": "公司已公布官方財測／展望"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-09-11T01:01:26.641Z"
+}

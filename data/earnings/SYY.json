@@ -1,0 +1,47 @@
+{
+ "symbol": "SYY",
+ "market": "us",
+ "name": "Sysco Corporation",
+ "quarter": "2026 Q3（2025-12-28～2026-03-28）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Sysco Corporation",
+  "currency": "億美元",
+  "periodStart": "2025-12-28",
+  "periodEnd": "2026-03-28",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "205.19",
+  "營業毛利": "38.12",
+  "營業利益": "6.19",
+  "本期淨利": "3.40",
+  "每股盈餘": 0.71,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "",
+  "form": "公司官網文件",
+  "url": "https://investors.sysco.com/~/media/Files/S/Sysco-IR/documents/quarterly-results/q4-fy26-at-a-glance.pdf"
+ },
+ "savedAt": "2026-09-11T01:06:15.611Z",
+ "result": {
+  "revenue": "營收 205.19 億美元。",
+  "eps": "每股盈餘 (EPS) 為 0.71 美元。",
+  "margins": "毛利率為 18.6%，營業利益率為 3.0%，淨利率為 1.7%。毛利率顯示成本控制尚可，營業與淨利率則偏低，顯示費用壓力較大。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "未提供",
+  "outlook": "本季營收達 205.19 億美元，毛利率 18.6% 與營業利益率 3.0% 表示公司仍以低利潤模式營運。淨利率 1.7% 與每股盈餘 0.71 美元顯示獲利空間有限。現金流面顯示營運現金流較去年增長 5.1%。",
+  "highlights": "• 營收達 205.19 億美元。<br>• EPS 為 0.71 美元。<br>• 營運現金流較去年增長 5.1%。",
+  "concerns": "• 營業利益率僅 3.0%，利潤空間有限。<br>• 淨利率僅 1.7%，顯示淨利貢獻低。",
+  "risks": "• 淨負債與調整後 EBITDA 比率 2.7 倍，顯示財務槓桿仍具風險。<br>• 低淨利率可能在成本上升時放大虧損風險。",
+  "keyPoints": "• 營收 205.19 億美元，顯示規模仍大。<br>• EPS 0.71 美元，反映每股獲利。<br>• 營業利益率 3.0% 與淨利率 1.7% 皆偏低，利潤壓力明顯。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "本次資料未揭露分部營收"
+ }
+}

@@ -2,27 +2,37 @@
  "symbol": "4906",
  "name": "GEMTEK TECHNOLOGY CO",
  "nameZh": "正文",
- "date": "2026-09-01",
- "tradeDate": "2026-09-01",
- "price": 36.3,
- "changePct": 0.28,
- "volRatio": 0.13,
- "score": 40,
+ "date": "2026-09-11",
+ "tradeDate": "2026-09-10",
+ "price": 36.35,
+ "changePct": -0.68,
+ "volRatio": 0.35,
+ "score": 38,
  "scores": {
-  "sentiment": 44,
+  "sentiment": 39,
   "technical": 42,
   "fundamental": null,
   "valuation": 25,
   "news": null
  },
  "pe": {
-  "cur": 259,
+  "cur": 254.9,
   "lo": 18.6,
-  "hi": 259
+  "hi": 254.9
  },
  "alerts": [],
  "ai": null,
  "newsTop": [],
- "prev": null,
- "generatedAt": "2026-09-01T01:49:11.062Z"
+ "prev": {
+  "date": "2026-09-01",
+  "score": 40,
+  "scores": {
+   "sentiment": 44,
+   "technical": 42,
+   "fundamental": null,
+   "valuation": 25,
+   "news": null
+  }
+ },
+ "generatedAt": "2026-09-11T01:01:26.640Z"
 }
