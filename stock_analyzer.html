@@ -46,8 +46,10 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 /* 封面狀態(標題列還沒加上 .compact)的 App 名稱放大 —— 使用者2026-09-12要求。
    ⚠️ 只放大封面，刻意不動 .header.compact .logo：進入主畫面後那顆使用者
    2026-08-16 與 08-23 連續兩次回報「太大」，已從30px→26px→23px，不可回頭放大。 */
-.header:not(.compact) .logo { font-size:30px; }
-.header:not(.compact) .logo svg { width:36px; height:36px; vertical-align:-9px; }
+.header:not(.compact) .logo { font-size:28px; letter-spacing:.3px; }
+.header:not(.compact) .logo svg { width:34px; height:34px; vertical-align:-8px; }
+/* 封面標題列壓低上下留白：省下的高度直接回饋給名言區。 */
+.header:not(.compact) { padding:11px 16px; }
 .search-wrap { flex:1; min-width:200px; max-width:460px; position:relative; }
 .search-wrap input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:9px 14px 9px 36px; color:var(--text); font-size:14px; outline:none; }
 .search-wrap input:focus { border-color:var(--blue); }
@@ -76,11 +78,17 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .btn-pri { background:var(--blue); color:#0d1117; border:none; border-radius:7px; padding:9px 16px; font-weight:600; cursor:pointer; font-size:13px; }
 
 .main { max-width:1180px; margin:0 auto; padding:28px 20px; }
-.welcome { text-align:center; padding:8px 0 22px; }
+/* 封面版面：以 390×844（實測用更嚴苛的 375×812）為基準重新配比。
+   四位大師的名言是封面主體，上方文案只負責定調，因此壓縮上下留白把高度讓出來。 */
+.welcome { text-align:center; padding:2px 0 14px; }
+/* 封面的市場切換鈕：只是入口、不是主角，縮短上下間距讓名言區往上提。 */
+.main > .market-tabs:not(.mkt-compact) { margin:10px 0 14px; }
 /* .welcome h1 已於 2026-09-12 隨封面大標題一併移除（標題列已有 App 名稱，不必重複）。
    ⚠️ 下方 .header .logo 的字級註解仍以「原本的 .welcome h1 = 30px/700」為對照基準，
    那是歷史說明，不要因為這裡的規則沒了就去改它。 */
-.welcome p { color:var(--text2); font-size:15px; }
+/* 副說明行（10年財務指標…）：白色主標語出現後它退居配角，縮到 12.5px 並收緊行距，
+   省下來的高度留給名言區。主標語有自己的 inline 樣式，不受這條影響。 */
+.welcome p { color:var(--text2); font-size:12.5px; line-height:1.5; }
 /* 法律免責聲明：不放在#welcome封面(離開封面後就消失)，改放在.main最下方、
    結果區塊之後，讓App所有畫面狀態(封面/搜尋結果/自選股/主題...)都固定看得到，
    為Google Play上架準備(使用者2026-08-16要求)。 */
@@ -354,6 +362,23 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .quote-wrap.tight .quote-text { font-size:14px; line-height:1.55; }
 .quote-wrap.tight .quote-en { font-size:11px; line-height:1.45; margin-top:5px; }
 .quote-wrap.tight .quote-by { margin-top:5px; font-size:12px; }
+/* 再密一級：四位大師固定全上（使用者2026-09-12明確要求「大師名言有四位才對」），
+   所以空間不夠時只能繼續壓密度，絕不砍掉任何一位。英文原句同樣一律保留。 */
+/* 矮螢幕（360×640 這類舊 Android）：四位大師仍要全上，所以再回收一次上方文案的高度。
+   實測 360×640 不加這段時最差會超出約 22px（要小滑一下），加了之後可完整落在一個畫面。 */
+@media (max-height:700px){
+  .header:not(.compact) { padding:8px 14px; }
+  .header:not(.compact) .logo { font-size:24px; }
+  .header:not(.compact) .logo svg { width:28px; height:28px; vertical-align:-7px; }
+  .welcome { padding:0 0 8px; }
+  .welcome p { font-size:11.5px; }
+  .main > .market-tabs:not(.mkt-compact) { margin:7px 0 9px; }
+}
+.quote-wrap.dense { gap:6px; }
+.quote-wrap.dense .quote-card { padding:7px 10px; border-radius:8px; }
+.quote-wrap.dense .quote-text { font-size:13px; line-height:1.5; }
+.quote-wrap.dense .quote-en { font-size:10.5px; line-height:1.4; margin-top:4px; }
+.quote-wrap.dense .quote-by { margin-top:4px; font-size:11.5px; }
 /* 主搜尋列(美股/台股按鈕下方)：預設台積電，點自選股/投資主題任一列會即時同步 */
 .search-bar { display:flex; align-items:center; gap:8px; margin:0 0 14px; padding:7px 8px 7px 12px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; }
 .search-bar .sb-ico { flex:none; font-size:15px; opacity:.85; }
@@ -564,7 +589,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   <div id="welcome" class="welcome">
     <!-- 主標語：2026-09-12 依使用者要求由藍色15px改為白色19px（刪掉大標題後，
          這行遞補成封面的視覺主角，用主文字色 var(--text) 才夠顯眼）。 -->
-    <p style="color:var(--text);font-weight:700;margin-top:6px;font-size:19px;line-height:1.5">以合理低估價格 買入擁有強大護城河的公司</p>
+    <p style="color:var(--text);font-weight:700;margin-top:0;font-size:17.5px;line-height:1.45;letter-spacing:.3px">以合理低估價格 買入擁有強大護城河的公司</p>
     <p>10年財務指標 · 營收成長 · 彼得林區分類 · 護城河 · 競爭對手 · 買入建議</p>
   </div>
 
@@ -5235,20 +5260,17 @@ function renderSplashQuotes(){
       +`<div class="quote-by">${g.icon} ${esc(g.name)}</div></div>`;
   }).join('');
   const fits=()=>box.getBoundingClientRect().bottom <= (window.innerHeight||document.documentElement.clientHeight) - 6;
-  // 大師由三位增為四位(新增菲利浦·費雪)後，四張卡片在 390×844 不一定塞得下。
-  //   取捨順序維持既有原則：先縮排、再挑短名言，真的還是放不下才「少一位大師」，
-  //   英文原句在任何情況下都不會被拿掉。要縮減時隨機抽，不固定犧牲同一位。
-  const shuffled=keys.slice().sort(()=>Math.random()-0.5);
-  const three=shuffled.slice(0,3), two=shuffled.slice(0,2);
+  // ⚠️⚠️ 四位大師固定全部顯示，任何情況都不減人（使用者2026-09-12明確要求：
+  //   「大師名言有四位才對」）。舊版在空間不足時會砍成三位或兩位，那是錯的。
+  //   空間不夠時唯一能動的是「密度」與「挑較短的名言」，英文原句同樣一律保留。
+  //   最後一個方案即使仍略超出也照用 —— 寧可讓使用者多滑一點點，也不要少一位大師。
+  const setMode=m=>{ box.classList.remove('tight','dense'); if(m) box.classList.add(m); };
   const plans=[
-    ()=>{ box.classList.remove('tight'); box.innerHTML=build(keys);      },   // 四位 + 正常間距
-    ()=>{ box.classList.add('tight');    box.innerHTML=build(keys);      },   // 四位 + 縮排版
-    ()=>{ box.classList.add('tight');    box.innerHTML=buildShort(keys); },   // 四位 + 縮排版 + 挑較短的名言
-    ()=>{ box.classList.remove('tight'); box.innerHTML=build(three);     },   // 三位 + 正常間距
-    ()=>{ box.classList.add('tight');    box.innerHTML=build(three);     },   // 三位 + 縮排版
-    ()=>{ box.classList.add('tight');    box.innerHTML=buildShort(three);},   // 三位 + 縮排版 + 挑較短的名言
-    ()=>{ box.classList.add('tight');    box.innerHTML=build(two);       },   // 兩位 + 縮排版
-    ()=>{ box.classList.add('tight');    box.innerHTML=buildShort(two);  }    // 兩位 + 縮排版 + 挑較短的名言
+    ()=>{ setMode('');      box.innerHTML=build(keys);      },   // 四位 + 正常間距
+    ()=>{ setMode('tight'); box.innerHTML=build(keys);      },   // 四位 + 縮排版
+    ()=>{ setMode('tight'); box.innerHTML=buildShort(keys); },   // 四位 + 縮排版 + 挑較短的名言
+    ()=>{ setMode('dense'); box.innerHTML=build(keys);      },   // 四位 + 高密度
+    ()=>{ setMode('dense'); box.innerHTML=buildShort(keys); }    // 四位 + 高密度 + 挑較短的名言（保底）
   ];
   for(let i=0;i<plans.length;i++){ plans[i](); if(fits()) return; }
 }
