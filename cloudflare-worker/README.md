@@ -25,8 +25,14 @@
    > **Compute** 底下。中間首頁那顆「Create app」也能到，但它會先問要不要從 Git
    > 匯入範本，多繞一圈 —— 走 Compute → Workers 最短。
 3. 取一個名字（例如 `stock-quote-proxy`）→ **Deploy**。
+   > ⚠️ 建立時那個 **「Protect with Cloudflare Access」開關要保持關閉**。
+   > 打開的話這個 Worker 會要求登入才能存取，網站就呼叫不到它了。
 4. 部署完成後點 **Edit code**，把編輯器裡的預設內容**全部刪掉**，
    貼上本資料夾的 [`quote-proxy.js`](./quote-proxy.js) 全文 → 右上角 **Deploy**。
+   > ⚠️ **Deploy 按鈕會是淡色、按不下去** —— 貼完程式碼後要先在編輯器裡按 **Ctrl+S 存檔**，
+   > Deploy 才會亮起來。（2026-09-12 實際踩到，卡在這裡好一陣子。）
+   > 另外右邊 Preview 這時還會顯示「Hello World!」，那是**已部署的舊版本**，不是你貼的新碼，
+   > 按下 Deploy 之後才會換掉，不用緊張。
 5. 複製它給你的網址，長得像 `https://stock-quote-proxy.你的帳號.workers.dev`。
 6. 先自己測一次它活著沒有：把下面這串貼到瀏覽器網址列（前半段換成你自己的網址），
    看到一堆 JSON、裡面有 `"n":"台積電"` 就成功：
