@@ -43,6 +43,11 @@ window.onerror = function(msg, src, line, col, err){
 body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; min-height:100vh; }
 .header { background:var(--bg2); border-bottom:1px solid var(--border); padding:14px 20px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:100; flex-wrap:wrap; }
 .logo { font-size:23px; font-weight:700; color:var(--blue); white-space:nowrap; }
+/* 封面狀態(標題列還沒加上 .compact)的 App 名稱放大 —— 使用者2026-09-12要求。
+   ⚠️ 只放大封面，刻意不動 .header.compact .logo：進入主畫面後那顆使用者
+   2026-08-16 與 08-23 連續兩次回報「太大」，已從30px→26px→23px，不可回頭放大。 */
+.header:not(.compact) .logo { font-size:30px; }
+.header:not(.compact) .logo svg { width:36px; height:36px; vertical-align:-9px; }
 .search-wrap { flex:1; min-width:200px; max-width:460px; position:relative; }
 .search-wrap input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:9px 14px 9px 36px; color:var(--text); font-size:14px; outline:none; }
 .search-wrap input:focus { border-color:var(--blue); }
@@ -557,7 +562,9 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
        標題列左上角已經有「美股/台股深度分析」，封面再寫一次是重複，占掉的版面
        留給名言區（renderSplashQuotes 會自動量測可用高度，因此四位大師更常能全上）。 -->
   <div id="welcome" class="welcome">
-    <p style="color:var(--blue);font-weight:700;margin-top:6px;font-size:15px">以合理低估價格 買入擁有強大護城河的公司</p>
+    <!-- 主標語：2026-09-12 依使用者要求由藍色15px改為白色19px（刪掉大標題後，
+         這行遞補成封面的視覺主角，用主文字色 var(--text) 才夠顯眼）。 -->
+    <p style="color:var(--text);font-weight:700;margin-top:6px;font-size:19px;line-height:1.5">以合理低估價格 買入擁有強大護城河的公司</p>
     <p>10年財務指標 · 營收成長 · 彼得林區分類 · 護城河 · 競爭對手 · 買入建議</p>
   </div>
 
