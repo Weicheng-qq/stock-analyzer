@@ -405,8 +405,22 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .master-short-wrap img, .master-short-wrap iframe { object-fit:cover; }
 .vid-fs-btn { position:absolute; right:8px; bottom:8px; width:34px; height:34px; border-radius:8px; border:none; background:rgba(0,0,0,.6); color:#fff; font-size:18px; line-height:1; cursor:pointer; z-index:2; }
 /* 自製繁中字幕層：疊在「影片容器」底部，所以永遠貼著影片下緣(不會像YouTube內建字幕在全螢幕時跑到手機畫面最下方) */
-.vid-cap { position:absolute; left:0; right:0; bottom:8px; z-index:3; text-align:center; padding:0 8px; pointer-events:none; }
-.vid-cap span { display:inline-block; background:rgba(0,0,0,.78); color:#fff; font-size:15px; font-weight:600; line-height:1.5; padding:3px 9px; border-radius:5px; max-width:96%; }
+/* ⚠️ min-height 固定兩行的高度：字幕從一行變兩行時，整塊字幕若跟著長高會上下跳動，
+   那是使用者回報的「每行字幕對齊有問題」。固定高度並讓內容靠下對齊即可消除位移。 */
+.vid-cap { position:absolute; left:0; right:0; bottom:8px; z-index:3; text-align:center; padding:0 8px; pointer-events:none;
+  min-height:2.9em; display:flex; align-items:flex-end; justify-content:center; }
+/* 影片字幕狀態徽章＋繁中導讀（投資大師學院） */
+.vid-sub { margin-top:7px; font-size:11.5px; line-height:1.6; padding:4px 9px; border-radius:6px; display:inline-block; }
+.vid-sub.vs-ok   { color:var(--green);  background:rgba(63,185,80,.12); }
+.vid-sub.vs-warn { color:var(--yellow); background:rgba(210,153,34,.12); }
+.vid-sub.vs-none { color:var(--text2);  background:var(--bg3); }
+.vid-note { margin-top:8px; background:rgba(88,166,255,.07); border:1px solid rgba(88,166,255,.22); border-radius:8px; padding:8px 11px; }
+.vid-note summary { cursor:pointer; color:var(--blue); font-size:13px; font-weight:700; user-select:none; }
+.vid-note p { margin:8px 0 0; font-size:13px; line-height:1.75; }
+.vid-note .vn-h { margin-top:9px; font-size:12px; color:var(--text2); font-weight:600; }
+.vid-note ul { margin:4px 0 0; padding-left:19px; }
+.vid-note li { font-size:12.5px; line-height:1.7; margin-bottom:3px; }
+.vid-cap span { display:inline-block; background:rgba(0,0,0,.8); color:#fff; font-size:15px; font-weight:600; line-height:1.5; padding:4px 10px; border-radius:5px; max-width:96%; text-align:center; text-wrap:balance; }
 .ir-video:fullscreen .vid-cap span { font-size:20px; }
 .ir-video:-webkit-full-screen .vid-cap span { font-size:20px; }
 @media(max-width:430px){ .vid-cap span { font-size:13.5px; } }
@@ -3829,6 +3843,17 @@ function initIrCaptions(){ forceZhCaptions('irVideoFrame'); }
 //   ③直播存檔沒有字幕軌。改成自己抓字幕資料、用自己的 DOM 疊在影片正下方，三點全部由我們掌控。
 // 字幕來源：/api/caption?v=影片ID → 由伺服器解析 YouTube 官方字幕軌並套用 tlang=zh-Hant(官方繁中翻譯)。
 // 取得失敗(例如該影片真的沒有任何字幕軌)就安靜退回 YouTube 內建字幕，不影響播放。
+// ⚠️⚠️⚠️ 這整條「自製字幕層」目前是【停用狀態】，不要誤以為它在運作。
+//   2026-09-12 實測 6 支影片，/api/caption 一律回 {ok:false, reason:"no captionTracks"}，
+//   fetchZhCues() 因此永遠回 null，startZhCaptionOverlay() 開頭就 return，字幕層不會出現。
+//   根因見 api/caption.js 開頭註解（2026-08-10 已記錄）：YouTube 對資料中心 IP
+//   回傳的 watch 頁不含 captionTracks，timedtext 端點回 429，Innertube 需要 PO Token。
+//   → 在「純前端＋免費雲函式」架構下無法自行取得 YouTube 字幕逐字稿。
+//   目前實際生效的是 _tryZhCaption()：只選【原生】中文字幕軌，沒有就不開字幕
+//   （自動翻譯分支已刻意移除）。因此「字幕跳太快」不是這一層造成的，也修不到——
+//   那是使用者自己在 YouTube 播放器裡開啟自動翻譯時，YouTube 自己的渲染器在跑。
+//   下面 mergeCues()／「顯示到下一句開始為止」等改善，只有在 YouTube 政策放寬、
+//   或改用自架代理讓 /api/caption 能取到資料之後才會生效。保留是為了那一天。
 const __capCache={};
 async function fetchZhCues(videoId){
   if(__capCache[videoId]!==undefined) return __capCache[videoId];
@@ -3843,6 +3868,33 @@ async function fetchZhCues(videoId){
     return cues;
   }catch(e){ __capCache[videoId]=null; return null; }
 }
+// ⚠️⚠️ 2026-09-12 使用者回報「YouTube 翻譯字幕跳太快、每行對齊也有問題」。
+//   逐項追下來，三個原因都在我們自己這一層，全部可修：
+//   ①【跳太快的根本原因】YouTube 自動翻譯的字幕軌把一句話切成 0.5~1 秒的碎片，
+//      一句還沒讀完就換下一句。→ mergeCues() 把過短的相鄰碎片合併成可讀的段落。
+//   ②【閃爍】原本的比對只在「t 落在某句的 t~t+d 之間」才顯示，落在句與句的空隙時
+//      idx=-1 直接把字幕清空 → 字幕一直閃。→ 改為「顯示到下一句開始為止」。
+//   ③【對齊跑掉】字幕框高度隨字數變化，一行變兩行時整塊會上下跳。
+//      → CSS 給固定最小高度並置中，不再位移。
+// 把過短的相鄰字幕合併成一段可讀的句子。
+//   門檻：每段至少 minSec 秒且至少 minChars 個字；但也設上限避免合併成一大片字牆。
+function mergeCues(cues, minSec, minChars, maxSec, maxChars){
+  const out=[];
+  for(const c of cues){
+    const last=out[out.length-1];
+    const tooShort = last && (last.d < minSec || last.x.length < minChars);
+    const roomLeft = last && ((c.t + c.d - last.t) <= maxSec) && ((last.x.length + c.x.length) <= maxChars);
+    // 只合併「幾乎連續」的碎片(空隙 < 1.2 秒)；真正的停頓要保留，否則會把不同段話黏在一起
+    const nearly  = last && ((c.t - (last.t + last.d)) < 1.2);
+    if(tooShort && roomLeft && nearly){
+      last.x = last.x + ' ' + c.x;
+      last.d = +((c.t + c.d) - last.t).toFixed(2);
+    } else {
+      out.push({t:c.t, d:c.d, x:c.x});
+    }
+  }
+  return out;
+}
 // 依播放時間即時顯示對應字幕(用 YT IFrame API 的 getCurrentTime 同步)
 function startZhCaptionOverlay(wrapEl, iframeId, videoId){
   fetchZhCues(videoId).then(cues=>{
@@ -3850,21 +3902,32 @@ function startZhCaptionOverlay(wrapEl, iframeId, videoId){
     // 我方字幕層可用 → 關掉 YouTube 內建字幕，避免同時出現兩層字幕
     const killYtCap=()=>{ try{ const p=__ytPlayers[iframeId]; p&&p.setOption&&p.setOption('captions','track',{}); }catch(e){} };
     [300,1200,3000,6000].forEach(d=>setTimeout(killYtCap,d));
+    // 合併過短碎片後才拿來顯示。原始 cues 不動(localStorage 快取的是原始資料)，
+    //   這樣日後想調整門檻，不必叫使用者清快取。
+    const view=mergeCues(cues, 1.6, 14, 7.0, 46);
     let capEl=wrapEl.querySelector('.vid-cap');
     if(!capEl){ capEl=document.createElement('div'); capEl.className='vid-cap'; wrapEl.appendChild(capEl); }
-    let last=-1;
+    let last=-2;
     const tick=()=>{
       if(!wrapEl.isConnected){ clearInterval(timer); return; }
       const p=__ytPlayers[iframeId];
       let t=null; try{ t=p&&p.getCurrentTime&&p.getCurrentTime(); }catch(e){}
       if(t==null) return;
-      // 二分搜尋目前時間落在哪一句
-      let lo=0,hi=cues.length-1,idx=-1;
-      while(lo<=hi){ const mid=(lo+hi)>>1; const c=cues[mid];
-        if(t<c.t) hi=mid-1; else if(t>c.t+c.d) lo=mid+1; else { idx=mid; break; } }
+      // 找出「最後一句已經開始」的字幕（二分搜尋）
+      let lo=0,hi=view.length-1,idx=-1;
+      while(lo<=hi){ const mid=(lo+hi)>>1;
+        if(view[mid].t<=t){ idx=mid; lo=mid+1; } else hi=mid-1; }
+      // ⚠️ 關鍵：這一句顯示到【下一句開始】為止，不要在句子結束的瞬間清空。
+      //   那個清空就是使用者說的「跳太快」——字幕閃一下就消失。
+      //   最後一句沒有下一句，就在結束後多留 2.5 秒再收掉。
+      if(idx>=0){
+        const c=view[idx], nx=view[idx+1];
+        const until = nx ? nx.t : (c.t + c.d + 2.5);
+        if(t > until) idx=-1;
+      }
       if(idx===last) return;
       last=idx;
-      capEl.innerHTML = idx<0 ? '' : `<span>${esc(cues[idx].x)}</span>`;
+      capEl.innerHTML = idx<0 ? '' : `<span>${esc(view[idx].x)}</span>`;
     };
     const timer=setInterval(tick,200);
     tick();
@@ -4502,13 +4565,56 @@ const MASTER_VIDEOS=[
 ];
 let __masterTab='long';
 const MASTER_TAB_LABEL={long:'🎬 長影片',short:'📱 短影音',audiobook:'🎧 有聲書'};
+// ⚠️⚠️ 2026-09-13 修正一段會騙人的說明文字。
+//   原文寫「英文影片會在開始播放後自動切換為繁體中文字幕（YouTube 即時翻譯）」，
+//   但 _tryZhCaption() 早已刻意移除自動翻譯分支（只認原生中文軌，沒有就不開字幕），
+//   而自製字幕層 /api/caption 也被 YouTube 封鎖（見該檔註解）。
+//   結果是：多數影片其實沒有中文字幕，畫面卻承諾會有 —— 使用者因此以為是 bug。
+//   現在改為據實說明，並在每支影片上直接標出它的字幕狀態。
 function investmentMastersHtml(){
   let h=`<div class="master-tabs">`+Object.keys(MASTER_TAB_LABEL).map(t=>
     `<button class="master-tab-btn${__masterTab===t?' active':''}" onclick="setMasterTab('${t}')">${MASTER_TAB_LABEL[t]}</button>`).join('')
-    +`</div><div class="note" style="margin:10px 0 0">💬 英文影片會在開始播放後自動切換為<b>繁體中文字幕</b>（YouTube 即時翻譯）。若沒出現，請點播放器右下角 <b>字幕</b> 圖示 →「自動翻譯」→ 選「中文（繁體）」。</div>`
+    +`</div><div class="note" style="margin:10px 0 0;line-height:1.75">💬 <b>字幕說明</b>：每支影片下方都標了它實際有什麼字幕。只有<b>原生中文字幕軌</b>的影片會自動開啟；其餘影片本站<b>不會</b>自動開字幕（自動翻譯的斷句過碎、時序由 YouTube 控制，反而更難讀）。你仍可自行點播放器的 <b>字幕</b> 圖示 →「自動翻譯」→「中文（繁體）」，但斷句品質我們無法調整。<br>📖 因此每支影片都附上<b>本站自己寫的繁體中文導讀</b>，不依賴 YouTube 字幕也能掌握內容。</div>`
     +`<div id="masterVidList">${masterVidListHtml()}</div>`;
   return h;
 }
+// ── 繁中導讀 ──────────────────────────────────────────────
+//   放在 data/masters/video-notes.json 延遲載入：沒點開投資大師學院就不下載。
+//   ⚠️ 內容只寫該場演講公開已知的主題與核心觀念，刻意不寫時間戳 ——
+//   沒有逐段看過影片就編時間是在騙人，寧可不寫。
+let __vidNotes=null, __vidNotesTried=false;
+async function ensureVidNotes(){
+  if(__vidNotes || __vidNotesTried) return __vidNotes;
+  __vidNotesTried=true;
+  try{
+    const r=await fetch('data/masters/video-notes.json',{cache:'no-cache'});
+    if(r.ok) __vidNotes=await r.json();
+  }catch(e){}
+  return __vidNotes;
+}
+// 字幕狀態一律從 MASTER_VIDEOS 的既有旗標推導，不在導讀 JSON 裡另存一份，避免兩處說法不一致。
+function vidSubBadge(v, tab){
+  if(tab==='audiobook') return {cls:'vs-ok', txt:'🎧 有聲書（中文朗讀，無需字幕）'};
+  if(v.noCap)  return {cls:'vs-ok', txt:'🔥 字幕已燒錄在畫面上（無法關閉）'};
+  if(v.zhHans) return {cls:'vs-warn', txt:'📝 原生簡體中文字幕（非自動翻譯；查無同場次繁體軌）'};
+  return {cls:'vs-none', txt:'🚫 無原生中文字幕軌 — 本站不自動開啟，請看下方繁中導讀'};
+}
+// 把導讀渲染進已存在的影片卡（清單先畫出來，導讀載入後補上，避免卡住畫面）
+async function renderVidNotes(){
+  const notes=await ensureVidNotes(); if(!notes) return;
+  document.querySelectorAll('#masterVidList [data-vid-note]').forEach(el=>{
+    const id=el.getAttribute('data-vid-note'); const n=notes[id];
+    if(!n || el.dataset.filled) return;
+    el.dataset.filled='1';
+    const pts=(n.points||[]).map(x=>'<li>'+esc(x)+'</li>').join('');
+    el.innerHTML='<details class="vid-note"><summary>📖 繁體中文導讀（本站自製）</summary>'
+      + '<p>'+esc(n.note||'')+'</p>'
+      + (pts?('<div class="vn-h">核心觀念</div><ul>'+pts+'</ul>'):'')
+      + '</details>';
+  });
+}
+// ⚠️ masterVidListHtml() 只負責同步畫出清單；導讀是非同步載入的，
+//   所以每次重繪後都要再叫一次 renderVidNotes() 把導讀補回去（切換分頁時也會走到）。
 function masterVidListHtml(){
   const orig=(location.protocol==='http:'||location.protocol==='https:')?'&origin='+encodeURIComponent(location.origin):'';
   const isShort=__masterTab==='short';
@@ -4529,12 +4635,18 @@ function masterVidListHtml(){
       //   已實測17支大師影片只有 zhHans 標記的3支有原生中文軌，其餘一律不強制開字幕，
       //   避免觸發自動翻譯；使用者仍可自行點播放器的字幕圖示手動開啟(不受此限制)。
       const src=`https://www.youtube-nocookie.com/embed/${v.id}?rel=0&enablejsapi=1&autoplay=1&cc_load_policy=${v.zhHans?1:0}${v.zhHans?'&cc_lang_pref=zh-Hans':''}&hl=zh-Hant${orig}`;
+      const badge=vidSubBadge(v, __masterTab);
       h+=`<div style="margin-bottom:28px"><div style="font-size:13px;color:var(--text2);margin-bottom:4px">${esc(v.title)}</div>`
         +`<div class="ir-video master-thumb${isShort?' master-short-wrap':''}" data-src="${esc(src)}"${v.noCap?' data-nocap="1"':''}${v.zhHans?' data-zhhans="1"':''} onclick="loadMasterVid(this)" style="cursor:pointer">`
         +`<img src="${thumb}" loading="lazy"${isShort?` onerror="this.onerror=null;this.src='${thumbFallback}'"`:''}><div class="ir-play-btn"><div></div></div>`
-        +`</div></div>`;
+        +`</div>`
+        +`<div class="vid-sub ${badge.cls}">${esc(badge.txt)}</div>`
+        +`<div data-vid-note="${esc(v.id)}"></div>`
+        +`</div>`;
     });
   });
+  // 清單剛畫完就去補導讀（fire-and-forget，不阻塞渲染）
+  setTimeout(()=>{ try{ renderVidNotes(); }catch(e){} }, 0);
   return h || '<div class="note">此分類目前無資料</div>';
 }
 function setMasterTab(tab){
