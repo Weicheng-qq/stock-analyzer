@@ -1720,7 +1720,14 @@ async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(sy
     //   z(成交)/pz(前次成交)/o(開盤)都是真實成交過的價格，跳動單位必然正確，已經足夠；
     //   全部缺漏才代表真的尚未有任何交易，此時顯示昨收並標記尚未成交，不可捏造中間價。
     if(price==null){ price=prev; src='昨收'; }
-    if(price!=null) out.set(sym, {price, prev, src, stale: src==='昨收'});
+    // ⚠️⚠️ 2026-09-12：把證交所自己的「交易日(d)」與「撮合時間(t)」一起帶出來。
+    //   原本畫面顯示的是「我們抓取的本機時間」，那會騙人 —— 週六下午打開 App，
+    //   實際價格是週五 13:30 收盤，畫面卻寫「最後更新 15:05」，看起來像剛更新的即時價。
+    //   這與使用者連續四次回報的「股價不動」是同一類問題：畫面謊稱資料很新。
+    //   ⚠️ 刻意用 d+t 兩個字串而不是 tlong：實測 tlong=1789108200000 換算為台北 14:30，
+    //   但同一筆的 t 是 13:30:00，相差一小時。d/t 是交易所明確給的字串，不必猜時區。
+    if(price!=null) out.set(sym, {price, prev, src, stale: src==='昨收',
+      exDate: (row.d||'')||null, exTime: (row.t||'')||null});
   });
   return out;
 }
@@ -1747,9 +1754,31 @@ function __quoteFresh(sym){
   const c=__quoteCache.get(sym);
   return (c && Date.now()-c.t < __QUOTE_TTL) ? c : null;
 }
-function __putQuote(sym, price, prev, src, stale){
+function __putQuote(sym, price, prev, src, stale, ex){
   if(price==null) return;
-  __quoteCache.set(sym, {t:Date.now(), price:+price, prev:(prev==null?null:+prev), src:src||'Yahoo', stale:!!stale});
+  // t = 我們抓取的時間（只用來判斷快取有沒有過期）；ex = 交易所自己的時間（給人看的）。
+  //   這兩個一定要分清楚，混用就會變成「用抓取時間冒充成交時間」。
+  __quoteCache.set(sym, {t:Date.now(), price:+price, prev:(prev==null?null:+prev),
+    src:src||'Yahoo', stale:!!stale, exDate:(ex&&ex.exDate)||null, exTime:(ex&&ex.exTime)||null});
+}
+// 今天的日期（一律以台北時間為準，不依賴使用者裝置的時區設定）
+function __twToday(){
+  try{ return new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Taipei'}).replace(/-/g,''); }
+  catch(e){ const d=new Date(); return ''+d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0'); }
+}
+// 把交易所時間戳轉成人看得懂、而且不會誤導的字串。
+//   當日 → 只顯示時間（那就是即時價）；非當日 → 明確標出「X/Y HH:MM 收盤」，
+//   使用者才不會把上一個交易日的收盤價當成今天的即時價。
+function quoteAsOfLabel(q){
+  if(!q) return '';
+  if(q.exDate && q.exTime){
+    const hm=String(q.exTime).slice(0,5);
+    if(q.exDate===__twToday()) return hm;
+    const s=String(q.exDate);
+    if(s.length!==8) return s+" "+hm;
+    return (+s.slice(4,6))+"/"+(+s.slice(6,8))+" "+hm+" 收盤";
+  }
+  return '';
 }
 async function __yahooQuotes(syms){
   await Promise.all(syms.map(async s=>{
@@ -1758,7 +1787,17 @@ async function __yahooQuotes(syms){
       //   原本部分面板用 5m&includePrePost=true，美股盤後會回盤後價 —— 這是不一致的來源之一。
       const ch=await fetchJsonTimeout('https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(s)+'?range=1d&interval=1d', 4000);
       const m=ch&&ch.chart&&ch.chart.result&&ch.chart.result[0]&&ch.chart.result[0].meta;
-      if(m) __putQuote(s, m.regularMarketPrice, (m.previousClose!=null?m.previousClose:m.chartPreviousClose), 'Yahoo');
+      // Yahoo 也有交易所時間戳：meta.regularMarketTime（epoch 秒）。同樣不要用本機時間冒充。
+      if(m){
+        let ex=null;
+        if(m.regularMarketTime){
+          const d=new Date(m.regularMarketTime*1000);
+          const pad=n=>String(n).padStart(2,'0');
+          ex={ exDate:''+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate()),
+               exTime:pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds()) };
+        }
+        __putQuote(s, m.regularMarketPrice, (m.previousClose!=null?m.previousClose:m.chartPreviousClose), 'Yahoo', false, ex);
+      }
     }catch(e){}
   }));
 }
@@ -1780,7 +1819,7 @@ async function quotesOf(symbols){
         if(tw.length) sub.push((async()=>{
           let m=new Map();
           try{ m=await fetchTwMisQuotes(tw); }catch(e){}
-          tw.forEach(s=>{ const q=m.get(s); if(q) __putQuote(s, q.price, q.prev, q.stale?'TWSE(今日尚未成交)':'TWSE', q.stale); });
+          tw.forEach(s=>{ const q=m.get(s); if(q) __putQuote(s, q.price, q.prev, q.stale?'TWSE(今日尚未成交)':'TWSE', q.stale, q); });
           const miss=tw.filter(s=>!m.has(s));
           if(miss.length) await __yahooQuotes(miss);   // 證交所查無的個別代碼才退回 Yahoo
         })());
@@ -1799,10 +1838,14 @@ async function quotesOf(symbols){
 async function quoteOf(sym){ const m=await quotesOf([sym]); return m.get(sym)||null; }
 // 報價來源的中文標示（顯示在個股頁標題列，讓使用者一眼知道看到的價格新不新鮮）
 function quoteSrcLabel(q){
-  if(!q) return 'Yahoo Finance（可能延遲）';
-  if(q.src==='TWSE') return '證交所即時（TWSE）';
-  if(q.src==='TWSE(今日尚未成交)') return '證交所（TWSE，今日尚未成交）';
-  return 'Yahoo Finance（可能延遲）';
+  const base = !q ? 'Yahoo Finance（可能延遲）'
+    : q.src==='TWSE' ? '證交所（TWSE）'
+    : q.src==='TWSE(今日尚未成交)' ? '證交所（TWSE，今日尚未成交）'
+    : 'Yahoo Finance（可能延遲）';
+  // ⚠️ 一併標出交易所給的成交時間 —— 個股頁原本只寫「證交所即時」，
+  //   但「即時」兩個字在收盤後/假日是騙人的，實際是上一個交易日的收盤價。
+  const a=quoteAsOfLabel(q);
+  return a ? (base+' · '+a) : base;
 }
 // 共用：把報價寫進自選股某一列的DOM(價格數字＋漲跌pill)，回傳是否有寫入新價格
 function applyWlPrice(symbol, price, prev, stale){
@@ -1847,16 +1890,37 @@ async function loadWatchlistPrices(list){
   if(twOk) parts.push('TWSE'+(twStale?('·'+twStale+'檔尚未成交'):''));
   if(usOk) parts.push('Yahoo');
   if(fail) parts.push(fail+'檔無資料');
-  updateWlTimestamp(parts.join('＋')||'無資料', fail<list.length);
+  // 時間一律取自「交易所回給我們的時間戳」，取清單中最新的一筆；
+  //   完全取不到才退回本機時間，並明確標示那是「本機」而非成交時間。
+  let asOf='';
+  for(const it of list){
+    const q=quotes.get(it.symbol); const lbl=quoteAsOfLabel(q);
+    if(lbl && (!asOf || (q.exDate+q.exTime) > asOf.key)){ asOf={text:lbl, key:q.exDate+q.exTime}; }
+  }
+  updateWlTimestamp(parts.join('＋')||'無資料', fail<list.length, asOf&&asOf.text);
 }
 // 「最後更新」時間戳：使用者連續三次回報開盤股價異常，但事後查不到當下的伺服器log
 //   (Vercel免費方案log只留很短時間，過了就查不到)，只能靠事後推測。加這個小字讓使用者
 //   下次遇到時能直接截圖回報「幾點更新的、資料源是TWSE還是Yahoo」，才有真正的證據
 //   可以診斷，而不是每次都要我事後憑空推測。
-function updateWlTimestamp(source, ok){
+// 「最後更新」時間戳：使用者連續三次回報開盤股價異常，但事後查不到當下的伺服器log
+//   (Vercel免費方案log只留很短時間)，只能靠事後推測。加這個小字讓使用者下次遇到時
+//   能直接截圖回報，才有真正的證據可以診斷。
+// ⚠️⚠️ 2026-09-12 重要修正：這裡原本顯示 new Date()（我們抓取資料的本機時間），
+//   那會讓畫面謊稱資料很新 —— 週六打開 App 看到「最後更新 15:05」，其實價格是
+//   週五 13:30 的收盤價。現在改為顯示【交易所自己回的成交時間】：
+//   當日成交只顯示時間；非當日則明確寫成「9/11 13:30 收盤」。
+//   取不到交易所時間才退回本機時間，且會標明「本機」避免再度誤導。
+function updateWlTimestamp(source, ok, exLabel){
   const el=document.getElementById('wlLastUpdate'); if(!el) return;
-  const t=new Date().toLocaleTimeString('zh-TW',{hour12:false});
-  el.textContent = ok ? ('最後更新 '+t+'（'+source+'）') : ('⚠️ '+t+' 更新失敗（'+source+'）');
+  if(!ok){
+    const now=new Date().toLocaleTimeString('zh-TW',{hour12:false});
+    el.textContent='⚠️ '+now+' 更新失敗（'+source+'）';
+    return;
+  }
+  if(exLabel){ el.textContent='成交時間 '+exLabel+'（'+source+'）'; return; }
+  const now=new Date().toLocaleTimeString('zh-TW',{hour12:false});
+  el.textContent='本機 '+now+' 已更新（'+source+'，交易所未提供成交時間）';
 }
 // 自選股：當日盤中走勢線(名稱右邊) + 盤前/盤後行情(股價下方小字)
 async function loadWatchlistSpark(list){
