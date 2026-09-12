@@ -2,72 +2,67 @@
  "symbol": "2454",
  "name": "MEDIATEK INC",
  "nameZh": "聯發科",
- "date": "2026-09-11",
- "tradeDate": "2026-09-10",
- "price": 4720,
- "changePct": 2.05,
- "volRatio": 0.79,
- "score": 69,
+ "date": "2026-09-12",
+ "tradeDate": "2026-09-11",
+ "price": 4585,
+ "changePct": -2.86,
+ "volRatio": 0.9,
+ "score": 62,
  "scores": {
-  "sentiment": 60,
+  "sentiment": 32,
   "technical": 82,
   "fundamental": 76,
   "valuation": 25,
-  "news": 70
+  "news": 60
  },
  "pe": {
-  "cur": 76.4,
+  "cur": 78,
   "lo": 19.8,
-  "hi": 76.4
+  "hi": 78
  },
  "alerts": [
   {
    "type": "guidance",
    "level": "mid",
    "text": "公司已公布官方財測／展望"
-  },
-  {
-   "type": "news",
-   "level": "mid",
-   "text": "公布8月營收642億元、年增44%創新高"
   }
  ],
  "ai": {
-  "why": "公布8月營收642億元、年增44%創新高",
-  "meaning": "顯示公司營運強勁，提升獲利前景",
-  "fact": "公布8月營收642億元、年增44%創新高",
-  "inference": "顯示公司營運強勁，提升獲利前景",
-  "stance": "pos",
-  "newsScore": 70,
-  "importance": 4
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 60,
+  "importance": 1
  },
  "newsTop": [
   {
-   "title": "聯發科8月營收642億元 年增44%飆新高",
+   "title": "聯發科 代子公司MediaTek Singapore Pte Ltd依公開發行公司資金貸與及背書保證處理準則第二十二條第一項第二款、第三款公告",
    "publisher": "Yahoo 股市",
-   "link": "https://tw.stock.yahoo.com/news/%E8%81%AF%E7%99%BC%E7%A7%918%E6%9C%88%E7%87%9F%E6%94%B6642%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E44-%E9%A3%86%E6%96%B0%E9%AB%98-101413593.html"
+   "link": "https://tw.stock.yahoo.com/news/%E8%81%AF%E7%99%BC%E7%A7%91-%E4%BB%A3%E5%AD%90%E5%85%AC%E5%8F%B8mediatek-singapore-pte-ltd%E4%BE%9D%E5%85%AC%E9%96%8B%E7%99%BC%E8%A1%8C%E5%85%AC%E5%8F%B8%E8%B3%87%E9%87%91%E8%B2%B8%E8%88%87%E5%8F%8A%E8%83%8C%E6%9B%B8%E4%BF%9D%E8%AD%89%E8%99%95%E7%90%86%E6%BA%96%E5%89%87%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%8C%E6%A2%9D%E7%AC%AC-100900881.html"
   },
   {
-   "title": "蔡力行剛喊完多多益善 聯發科8月營收爆發衝破641億",
+   "title": "AI財報榮景變現 台積電.聯發科豪發百億分紅",
    "publisher": "Yahoo 股市",
-   "link": "https://tw.stock.yahoo.com/news/%E8%94%A1%E5%8A%9B%E8%A1%8C%E5%89%9B%E5%96%8A%E5%AE%8C%E5%A4%9A%E5%A4%9A%E7%9B%8A%E5%96%84-%E8%81%AF%E7%99%BC%E7%A7%918%E6%9C%88%E7%87%9F%E6%94%B6%E7%88%86%E7%99%BC%E8%A1%9D%E7%A0%B4641%E5%84%84-092959195.html"
+   "link": "https://tw.stock.yahoo.com/news/ai%E8%B2%A1%E5%A0%B1%E6%A6%AE%E6%99%AF%E8%AE%8A%E7%8F%BE-%E5%8F%B0%E7%A9%8D%E9%9B%BB-%E8%81%AF%E7%99%BC%E7%A7%91%E8%B1%AA%E7%99%BC%E7%99%BE%E5%84%84%E5%88%86%E7%B4%85-092406589.html"
   },
   {
-   "title": "外資翻臉砍383億台股掉下4萬7 聯發科、被動元件兩路救火｜Yahoo財經掃描",
+   "title": "全球前十大IC設計！ 輝達奪冠佔6成 聯發科、瑞昱也上榜",
    "publisher": "Yahoo 股市",
-   "link": "https://tw.stock.yahoo.com/news/%E5%A4%96%E8%B3%87%E7%BF%BB%E8%87%89%E7%A0%8D383%E5%84%84%E5%8F%B0%E8%82%A1%E6%8E%89%E4%B8%8B4%E8%90%AC7-%E8%81%AF%E7%99%BC%E7%A7%91%E3%80%81%E8%A2%AB%E5%8B%95%E5%85%83%E4%BB%B6%E5%85%A9%E8%B7%AF%E6%95%91%E7%81%AB%EF%BD%9Cyahoo%E8%B2%A1%E7%B6%93%E6%8E%83%E6%8F%8F-092807923.html"
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%A8%E7%90%83%E5%89%8D%E5%8D%81%E5%A4%A7ic%E8%A8%AD%E8%A8%88-%E8%BC%9D%E9%81%94%E5%A5%AA%E5%86%A0%E4%BD%946%E6%88%90-%E8%81%AF%E7%99%BC%E7%A7%91-%E7%91%9E%E6%98%B1%E4%B9%9F%E4%B8%8A%E6%A6%9C-081700010.html"
   }
  ],
  "prev": {
-  "date": "2026-09-10",
-  "score": 63,
+  "date": "2026-09-11",
+  "score": 69,
   "scores": {
-   "sentiment": 35,
+   "sentiment": 60,
    "technical": 82,
    "fundamental": 76,
    "valuation": 25,
-   "news": null
+   "news": 70
   }
  },
- "generatedAt": "2026-09-11T01:01:26.640Z"
+ "generatedAt": "2026-09-12T01:05:53.602Z"
 }

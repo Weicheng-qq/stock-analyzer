@@ -1,0 +1,34 @@
+{
+ "symbol": "6721",
+ "name": "Sincere group",
+ "nameZh": "信實",
+ "date": "2026-09-12",
+ "tradeDate": "2026-09-11",
+ "price": 49.7,
+ "changePct": -1.39,
+ "volRatio": 3.5,
+ "score": 43,
+ "scores": {
+  "sentiment": 54,
+  "technical": 18,
+  "fundamental": null,
+  "valuation": 85,
+  "news": null
+ },
+ "pe": {
+  "cur": 10,
+  "lo": 10,
+  "hi": 15.7
+ },
+ "alerts": [
+  {
+   "type": "volume",
+   "level": "high",
+   "text": "成交量放大至近月均量的 3.5 倍"
+  }
+ ],
+ "ai": null,
+ "newsTop": [],
+ "prev": null,
+ "generatedAt": "2026-09-12T01:05:53.604Z"
+}

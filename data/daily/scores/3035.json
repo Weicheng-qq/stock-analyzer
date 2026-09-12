@@ -1,0 +1,53 @@
+{
+ "symbol": "3035",
+ "name": "FARADAY TECHNOLOGY",
+ "nameZh": "智原",
+ "date": "2026-09-12",
+ "tradeDate": "2026-09-11",
+ "price": 169.5,
+ "changePct": -5.31,
+ "volRatio": 1.41,
+ "score": 40,
+ "scores": {
+  "sentiment": 24,
+  "technical": 18,
+  "fundamental": 61,
+  "valuation": 25,
+  "news": 50
+ },
+ "pe": {
+  "cur": 70.8,
+  "lo": 19.9,
+  "hi": 70.8
+ },
+ "alerts": [
+  {
+   "type": "price",
+   "level": "mid",
+   "text": "股價明顯下跌 -5.31%"
+  }
+ ],
+ "ai": {
+  "why": "今日無明確公司消息",
+  "meaning": "",
+  "fact": "今日無明確公司消息",
+  "inference": "",
+  "stance": "neu",
+  "newsScore": 50,
+  "importance": 1
+ },
+ "newsTop": [
+  {
+   "title": "【公告】智原受邀參加UBS舉辦之「UBS Taiwan Summit 2026」",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%99%BA%E5%8E%9F%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0ubs%E8%88%89%E8%BE%A6%E4%B9%8B-ubs-taiwan-summit-081457613.html"
+  },
+  {
+   "title": "智原 本公司受邀參加UBS舉辦之「UBS Taiwan Summit 2026」",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E6%99%BA%E5%8E%9F-%E6%9C%AC%E5%85%AC%E5%8F%B8%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0ubs%E8%88%89%E8%BE%A6%E4%B9%8B-ubs-taiwan-summit-080900232.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-12T01:05:53.601Z"
+}

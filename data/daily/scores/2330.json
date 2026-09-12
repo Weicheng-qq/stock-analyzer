@@ -2,43 +2,72 @@
  "symbol": "2330",
  "name": "TAIWAN SEMICONDUCTOR MANUFACTUR",
  "nameZh": "台積電",
- "date": "2026-09-11",
- "tradeDate": "2026-09-10",
- "price": 2450,
- "changePct": -0.61,
- "volRatio": 1.03,
- "score": 75,
+ "date": "2026-09-12",
+ "tradeDate": "2026-09-11",
+ "price": 2410,
+ "changePct": -1.63,
+ "volRatio": 1.06,
+ "score": 62,
  "scores": {
-  "sentiment": 47,
-  "technical": 82,
+  "sentiment": 41,
+  "technical": 58,
   "fundamental": 100,
   "valuation": 25,
-  "news": null
+  "news": 45
  },
  "pe": {
-  "cur": 28.8,
+  "cur": 28.7,
   "lo": 19.9,
-  "hi": 28.8
+  "hi": 28.7
  },
  "alerts": [
   {
    "type": "guidance",
    "level": "mid",
    "text": "公司已公布官方財測／展望"
+  },
+  {
+   "type": "news",
+   "level": "mid",
+   "text": "外資賣超近200億元，拋售壓力加大"
   }
  ],
- "ai": null,
- "newsTop": [],
+ "ai": {
+  "why": "外資賣超近200億元，拋售壓力加大",
+  "meaning": "顯示資金外流，短期可能承壓",
+  "fact": "外資賣超近200億元，拋售壓力加大",
+  "inference": "顯示資金外流，短期可能承壓",
+  "stance": "neg",
+  "newsScore": 45,
+  "importance": 4
+ },
+ "newsTop": [
+  {
+   "title": "台積電大跌40元能撿嗎？陳重銘揭1心法：別盲追價",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%8F%B0%E7%A9%8D%E9%9B%BB%E5%A4%A7%E8%B7%8C40%E5%85%83%E8%83%BD%E6%92%BF%E5%97%8E-%E9%99%B3%E9%87%8D%E9%8A%98%E6%8F%AD1%E5%BF%83%E6%B3%95-%E5%88%A5%E7%9B%B2%E8%BF%BD%E5%83%B9-100243086.html"
+  },
+  {
+   "title": "AI財報榮景變現 台積電.聯發科豪發百億分紅",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/ai%E8%B2%A1%E5%A0%B1%E6%A6%AE%E6%99%AF%E8%AE%8A%E7%8F%BE-%E5%8F%B0%E7%A9%8D%E9%9B%BB-%E8%81%AF%E7%99%BC%E7%A7%91%E8%B1%AA%E7%99%BC%E7%99%BE%E5%84%84%E5%88%86%E7%B4%85-092406589.html"
+  },
+  {
+   "title": "【Follow法人】外資賣超892億元！重砍友達逾10萬張居冠 提款台積電近200億元",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E3%80%90follow%E6%B3%95%E4%BA%BA%E3%80%91%E5%A4%96%E8%B3%87%E8%B3%A3%E8%B6%85892%E5%84%84%E5%85%83%EF%BC%81%E9%87%8D%E7%A0%8D%E5%8F%8B%E9%81%94%E9%80%BE10%E8%90%AC%E5%BC%B5%E5%B1%85%E5%86%A0-%E6%8F%90%E6%AC%BE%E5%8F%B0%E7%A9%8D%E9%9B%BB%E8%BF%91200%E5%84%84%E5%85%83-070543334.html"
+  }
+ ],
  "prev": {
-  "date": "2026-09-10",
+  "date": "2026-09-11",
   "score": 75,
   "scores": {
-   "sentiment": 48,
+   "sentiment": 47,
    "technical": 82,
    "fundamental": 100,
    "valuation": 25,
    "news": null
   }
  },
- "generatedAt": "2026-09-11T01:01:26.640Z"
+ "generatedAt": "2026-09-12T01:05:53.604Z"
 }

@@ -2,61 +2,37 @@
  "symbol": "TSM",
  "name": "Taiwan Semiconductor Manufactur",
  "nameZh": null,
- "date": "2026-09-11",
- "tradeDate": "2026-09-10",
- "price": 428.03,
- "changePct": -1.68,
- "volRatio": 0.91,
- "score": 49,
+ "date": "2026-09-12",
+ "tradeDate": "2026-09-11",
+ "price": 433.24,
+ "changePct": 1.22,
+ "volRatio": 1.13,
+ "score": 61,
  "scores": {
-  "sentiment": 39,
+  "sentiment": 59,
   "technical": 66,
   "fundamental": null,
-  "valuation": 47,
-  "news": 40
+  "valuation": 50,
+  "news": null
  },
  "pe": {
-  "cur": 32.1,
+  "cur": 31.6,
   "lo": 24.7,
   "hi": 36.4
  },
  "alerts": [],
- "ai": {
-  "why": "今日無明確公司消息",
-  "meaning": "",
-  "fact": "今日無明確公司消息",
-  "inference": "",
-  "stance": "neu",
-  "newsScore": 40,
-  "importance": 2
- },
- "newsTop": [
-  {
-   "title": "Dow Jones Futures: S&P 500 Breaks Support As Oil Prices, Yields Surge; Oracle Jumps With CPI Inflation Due",
-   "publisher": "Investor's Business Daily",
-   "link": "https://finance.yahoo.com/m/c29e8241-4bb8-3a14-aa17-d5e2fa2c38f6/dow-jones-futures%3A-s%26p-500.html"
-  },
-  {
-   "title": "TSMC (TSM) Registers a Bigger Fall Than the Market: Important Facts to Note",
-   "publisher": "Zacks",
-   "link": "https://finance.yahoo.com/markets/stocks/articles/tsmc-tsm-registers-bigger-fall-214505555.html"
-  },
-  {
-   "title": "Positron AI’s $875M Bet: Commodity Memory Could Break NVIDIA’s Inference Lock",
-   "publisher": "Forkast News",
-   "link": "https://finance.yahoo.com/technology/ai/articles/positron-ai-875m-bet-commodity-212452199.html"
-  }
- ],
+ "ai": null,
+ "newsTop": [],
  "prev": {
-  "date": "2026-09-10",
-  "score": 54,
+  "date": "2026-09-11",
+  "score": 49,
   "scores": {
-   "sentiment": 43,
+   "sentiment": 39,
    "technical": 66,
    "fundamental": null,
-   "valuation": 45,
-   "news": null
+   "valuation": 47,
+   "news": 40
   }
  },
- "generatedAt": "2026-09-11T01:01:26.640Z"
+ "generatedAt": "2026-09-12T01:05:53.605Z"
 }

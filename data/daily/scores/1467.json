@@ -1,0 +1,48 @@
+{
+ "symbol": "1467",
+ "name": "TEX-RAY INDUSTRIAL CO LTD",
+ "nameZh": "南緯",
+ "date": "2026-09-12",
+ "tradeDate": "2026-09-11",
+ "price": 7.96,
+ "changePct": -3.28,
+ "volRatio": 1.89,
+ "score": 36,
+ "scores": {
+  "sentiment": 39,
+  "technical": 18,
+  "fundamental": 31,
+  "valuation": 85,
+  "news": 40
+ },
+ "pe": {
+  "cur": 31.7,
+  "lo": 31.7,
+  "hi": 38.7
+ },
+ "alerts": [
+  {
+   "type": "volume",
+   "level": "mid",
+   "text": "成交量放大至近月均量的 1.9 倍"
+  }
+ ],
+ "ai": {
+  "why": "南緯公布8月營收5.09億元，比去年同期衰退了8.04%。",
+  "meaning": "營收出現衰退，代表公司短期內的業績成長動能可能有些熄火。",
+  "fact": "南緯公布8月營收5.09億元，比去年同期衰退了8.04%。",
+  "inference": "營收出現衰退，代表公司短期內的業績成長動能可能有些熄火。",
+  "stance": "neg",
+  "newsScore": 40,
+  "importance": 3
+ },
+ "newsTop": [
+  {
+   "title": "【公告】南緯 2026年8月合併營收5.09億元 年增-8.04%",
+   "publisher": "Yahoo 股市",
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%8D%97%E7%B7%AF-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B65-09%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E-054209336.html"
+  }
+ ],
+ "prev": null,
+ "generatedAt": "2026-09-12T01:05:53.602Z"
+}

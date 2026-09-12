@@ -1,43 +1,74 @@
 {
- "date": "2026-09-11",
- "tradeDate": "2026-09-10",
+ "date": "2026-09-12",
+ "tradeDate": "2026-09-11",
  "alerts": [
   {
-   "symbol": "5386",
-   "name": "ALBATRON TECHNOLOGY CO LTD",
-   "nameZh": "青雲",
-   "changePct": 9.89,
+   "symbol": "6863",
+   "name": "ARIZON RFID TECH (CAYMAN) CO LT",
+   "nameZh": "永道-KY",
+   "changePct": -8.06,
    "items": [
     {
      "type": "price",
      "level": "high",
-     "text": "股價大漲 9.89%"
+     "text": "股價大跌 -8.06%"
     },
     {
-     "type": "news",
+     "type": "volume",
      "level": "high",
-     "text": "公司公告八月營收高達45.48億元，年增率暴增超過18倍。"
+     "text": "成交量放大至近月均量的 2.8 倍"
     }
    ]
   },
   {
-   "symbol": "3443",
-   "name": "GLOBAL UNICHIP CORP.",
-   "nameZh": "創意",
-   "changePct": 5.06,
+   "symbol": "1560",
+   "name": "KINIK CO",
+   "nameZh": "中砂",
+   "changePct": 7.78,
    "items": [
     {
-     "type": "news",
+     "type": "price",
      "level": "high",
-     "text": "創意公告8月合併營收達58.4億元，年增率高達111.02%。"
+     "text": "股價大漲 7.78%"
+    },
+    {
+     "type": "volume",
+     "level": "high",
+     "text": "成交量放大至近月均量的 3.3 倍"
     }
    ]
   },
   {
-   "symbol": "6021",
-   "name": "GOOD FINANCE SECURITIES CO LTD",
-   "nameZh": "美好證",
-   "changePct": 0.23,
+   "symbol": "6872",
+   "name": "NaviFUS",
+   "nameZh": "浩宇生醫",
+   "changePct": -7.1,
+   "items": [
+    {
+     "type": "price",
+     "level": "high",
+     "text": "股價大跌 -7.10%"
+    }
+   ]
+  },
+  {
+   "symbol": "6834",
+   "name": "EVER OHMS TECHNOLOGY CO LTD",
+   "nameZh": "天二科技",
+   "changePct": 2.37,
+   "items": [
+    {
+     "type": "volume",
+     "level": "high",
+     "text": "成交量放大至近月均量的 3.6 倍"
+    }
+   ]
+  },
+  {
+   "symbol": "6721",
+   "name": "Sincere group",
+   "nameZh": "信實",
+   "changePct": -1.39,
    "items": [
     {
      "type": "volume",
@@ -45,62 +76,30 @@
      "text": "成交量放大至近月均量的 3.5 倍"
     }
    ]
+  },
+  {
+   "symbol": "1456",
+   "name": "I-HWA INDUSTRIAL",
+   "nameZh": "怡華",
+   "changePct": 0.7,
+   "items": [
+    {
+     "type": "volume",
+     "level": "high",
+     "text": "成交量放大至近月均量的 2.9 倍"
+    }
+   ]
   }
  ],
  "events": [
   {
-   "date": "2026-09-11",
+   "date": "2026-09-14",
    "kind": "confirmed",
    "category": "法說會",
-   "symbol": "1303",
-   "name": "南亞",
-   "title": "南亞 法人說明會",
-   "note": "本公司受邀參加群益證券舉辦之法人說明會，說明本公司之營運概況"
-  },
-  {
-   "date": "2026-09-11",
-   "kind": "confirmed",
-   "category": "法說會",
-   "symbol": "1809",
-   "name": "中釉",
-   "title": "中釉 法人說明會",
-   "note": "本公司受邀參加福邦證券所舉辦之線上法人說明會，說明本公司公司簡介及營運報告。"
-  },
-  {
-   "date": "2026-09-11",
-   "kind": "confirmed",
-   "category": "法說會",
-   "symbol": "3047",
-   "name": "訊舟",
-   "title": "訊舟 法人說明會",
-   "note": "受邀參加永豐金證券舉辦之法人說明會，說明本公司之財務概況及營運狀況。"
-  },
-  {
-   "date": "2026-09-11",
-   "kind": "confirmed",
-   "category": "法說會",
-   "symbol": "6655",
-   "name": "科定",
-   "title": "科定 法人說明會",
-   "note": "本公司受邀參加中國信託證券舉辦之法人說明會，說\r\n明本公司近期營運概況。"
-  },
-  {
-   "date": "2026-09-11",
-   "kind": "confirmed",
-   "category": "法說會",
-   "symbol": "2640",
-   "name": "大車隊",
-   "title": "大車隊 法人說明會",
-   "note": "本公司受邀參加中國信託綜合證券股份有限公司舉辦之法人說明會，並將於會中說明本公司之營運概況、財務及業務成果等相關資訊。"
-  },
-  {
-   "date": "2026-09-11",
-   "kind": "confirmed",
-   "category": "法說會",
-   "symbol": "6721",
-   "name": "信實",
-   "title": "信實 法人說明會",
-   "note": "本公司謹訂2026年09月11日(五)舉辦法人說明會，期望藉此活動\r\n讓法人及投資者更加瞭解公司營運現況及未來展望。"
+   "symbol": "2324",
+   "name": "仁寶",
+   "title": "仁寶 法人說明會",
+   "note": "UBS證券舉辦之UBS Taiwan Summit 2026，說明本公司業務及現況"
   },
   {
    "date": "2026-09-14",
@@ -142,10 +141,10 @@
    "date": "2026-09-14",
    "kind": "confirmed",
    "category": "法說會",
-   "symbol": "6239",
-   "name": "力成",
-   "title": "力成 法人說明會",
-   "note": "本公司受邀參加瑞銀證券舉辦之「UBS Taiwan Summit 2026」。"
+   "symbol": "6770",
+   "name": "力積電",
+   "title": "力積電 法人說明會",
+   "note": "本公司受邀參加UBS舉辦之「UBS Taiwan Summit 2026」，就公司營運概況向投資機構做說明。"
   },
   {
    "date": "2026-09-14",
@@ -178,6 +177,15 @@
    "date": "2026-09-14",
    "kind": "confirmed",
    "category": "法說會",
+   "symbol": "3555",
+   "name": "博士旺",
+   "title": "博士旺 法人說明會",
+   "note": "受康和證券邀請參加法人說明會"
+  },
+  {
+   "date": "2026-09-14",
+   "kind": "confirmed",
+   "category": "法說會",
    "symbol": "4991",
    "name": "環宇-KY",
    "title": "環宇-KY 法人說明會",
@@ -205,6 +213,15 @@
    "date": "2026-09-15",
    "kind": "confirmed",
    "category": "法說會",
+   "symbol": "2385",
+   "name": "群光",
+   "title": "群光 法人說明會",
+   "note": "公告本公司參加群益證券舉辦之3Q26投資論壇，會中向投資人說明本公司業務概況及未來前景"
+  },
+  {
+   "date": "2026-09-15",
+   "kind": "confirmed",
+   "category": "法說會",
    "symbol": "3023",
    "name": "信邦",
    "title": "信邦 法人說明會",
@@ -214,10 +231,46 @@
    "date": "2026-09-15",
    "kind": "confirmed",
    "category": "法說會",
+   "symbol": "3596",
+   "name": "智易",
+   "title": "智易 法人說明會",
+   "note": "本公司受邀參加由第一金證券所舉辦之「2026第三季投資論壇」，說明本公司營運及財務概況。"
+  },
+  {
+   "date": "2026-09-15",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "6213",
+   "name": "聯茂",
+   "title": "聯茂 法人說明會",
+   "note": "本公司將於2026/09/15參加群益證券舉辦之&quot;2026第三季投資論壇&quot;，就本公司已公布之經營績效"
+  },
+  {
+   "date": "2026-09-15",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "6239",
+   "name": "力成",
+   "title": "力成 法人說明會",
+   "note": "本公司受邀參加第一金證券舉辦之法人說明會"
+  },
+  {
+   "date": "2026-09-15",
+   "kind": "confirmed",
+   "category": "法說會",
    "symbol": "8150",
    "name": "南茂",
    "title": "南茂 法人說明會",
    "note": "本公司應瑞銀證券之邀請，參加瑞銀證券Taiwan Summit 2026，就已公開發布之財務數字及經營績效等相關資訊進行"
+  },
+  {
+   "date": "2026-09-15",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "6143",
+   "name": "振曜",
+   "title": "振曜 法人說明會",
+   "note": "本公司受群益金鼎證券邀請，將於法人說明會中說明公司營運狀況"
   },
   {
    "date": "2026-09-16",
@@ -241,165 +294,146 @@
    "date": "2026-09-16",
    "kind": "confirmed",
    "category": "法說會",
+   "symbol": "2474",
+   "name": "可成",
+   "title": "可成 法人說明會",
+   "note": "本公司受邀參加兆豐證券舉辦之2026 Q3產業論壇"
+  },
+  {
+   "date": "2026-09-16",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "3035",
+   "name": "智原",
+   "title": "智原 法人說明會",
+   "note": "本公司受邀參加UBS舉辦之「UBS Taiwan Summit 2026」"
+  },
+  {
+   "date": "2026-09-16",
+   "kind": "confirmed",
+   "category": "法說會",
    "symbol": "6669",
    "name": "緯穎",
    "title": "緯穎 法人說明會",
    "note": "本公司受邀參加UBS Securities舉辦之UBS Taiwan Summit 2026"
-  }
- ],
- "generatedAt": "2026-09-11T01:02:29.406Z",
- "summary": "台股今日呈現兩極化，青雲、創意等營收大增，旭隼、漢達營收大跌，資本結構亦有調整。投資人關注季報與股本變動對未來走勢的影響。",
- "themes": [
-  {
-   "name": "營收成長",
-   "why": "青雲、創意、大聯大、聯發科等公司營收大幅提升。"
   },
   {
-   "name": "營收下滑",
-   "why": "旭隼、漢達、中釉等公司營收出現顯著下降。"
-  },
-  {
-   "name": "資本結構調整",
-   "why": "倉和、寶雅進行庫藏股註銷或面額下修，可能影響股本。"
+   "date": "2026-09-16",
+   "kind": "confirmed",
+   "category": "法說會",
+   "symbol": "6805",
+   "name": "富世達",
+   "title": "富世達 法人說明會",
+   "note": "本公司於115/09/16受邀參加永豐金證券 2026 Q3產業投資論壇，說明本公司之營運概況。"
   }
  ],
- "watchpoints": [
-  "青雲、創意等營收持續高速成長，留意季報走勢。",
-  "旭隼、漢達營收大幅下滑，關注是否調整營運。",
-  "倉和、寶雅資本變動，觀察股本稀釋與面額調整。"
- ],
+ "generatedAt": "2026-09-12T01:06:07.351Z",
+ "summary": null,
+ "themes": [],
+ "watchpoints": [],
  "markets": {
-  "tw": {
-   "summary": "台股今日呈現兩極化，青雲、創意等營收大增，旭隼、漢達營收大跌，資本結構亦有調整。投資人關注季報與股本變動對未來走勢的影響。",
-   "themes": [
-    {
-     "name": "營收成長",
-     "why": "青雲、創意、大聯大、聯發科等公司營收大幅提升。"
-    },
-    {
-     "name": "營收下滑",
-     "why": "旭隼、漢達、中釉等公司營收出現顯著下降。"
-    },
-    {
-     "name": "資本結構調整",
-     "why": "倉和、寶雅進行庫藏股註銷或面額下修，可能影響股本。"
-    }
-   ],
-   "watchpoints": [
-    "青雲、創意等營收持續高速成長，留意季報走勢。",
-    "旭隼、漢達營收大幅下滑，關注是否調整營運。",
-    "倉和、寶雅資本變動，觀察股本稀釋與面額調整。"
-   ]
-  },
-  "us": {
-   "summary": "今日美股整體走勢平穩，唯一顯著的是 Novo Nordisk 股價下跌 1.23%，跌幅超過大盤。市場分析指出，該公司近期業績預期不佳，導致拋售。",
-   "themes": [],
-   "watchpoints": [
-    "留意Novo Nordisk後續業績指引。",
-    "觀察大盤走勢是否持續支撐。",
-    "關注藥品市場需求變化對股價影響。"
-   ]
-  }
+  "tw": null,
+  "us": null
  },
  "musts": [
   {
-   "symbol": "5386",
-   "name": "ALBATRON TECHNOLOGY CO LTD",
-   "nameZh": "青雲",
-   "tradeDate": "2026-09-10",
-   "changePct": 9.89,
-   "price": 311,
+   "symbol": "6872",
+   "name": "NaviFUS",
+   "nameZh": "浩宇生醫",
+   "tradeDate": "2026-09-11",
+   "changePct": -7.1,
+   "price": 24.85,
    "currency": "TWD",
-   "fact": "公司公告八月營收高達45.48億元，年增率暴增超過18倍。",
-   "inference": "營收出現爆發性成長，代表公司業績可能正在迎來大轉機。",
-   "why": "公司公告八月營收高達45.48億元，年增率暴增超過18倍。",
-   "meaning": "營收出現爆發性成長，代表公司業績可能正在迎來大轉機。",
-   "stance": "pos",
-   "newsScore": 95,
-   "importance": 5,
-   "score": 84,
-   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E9%9D%92%E9%9B%B2-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B645-48%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E1846-073455164.html"
+   "fact": "公司公布8月營收只有85.2萬元、年減超過六成，而且最近還被列為注意股。",
+   "inference": "營收大幅縮水代表業績有狀況，被列注意股也意味著最近股價波動風險很高。",
+   "why": "公司公布8月營收只有85.2萬元、年減超過六成，而且最近還被列為注意股。",
+   "meaning": "營收大幅縮水代表業績有狀況，被列注意股也意味著最近股價波動風險很高。",
+   "stance": "neg",
+   "newsScore": 20,
+   "importance": 4,
+   "score": 45,
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%B5%A9%E5%AE%87%E7%94%9F%E9%86%AB-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B685-2%E8%90%AC%E5%85%83-%E5%B9%B4%E5%A2%9E-081456598.html"
   },
   {
-   "symbol": "3443",
-   "name": "GLOBAL UNICHIP CORP.",
-   "nameZh": "創意",
-   "tradeDate": "2026-09-10",
-   "changePct": 5.06,
-   "price": 6225,
+   "symbol": "6834",
+   "name": "EVER OHMS TECHNOLOGY CO LTD",
+   "nameZh": "天二科技",
+   "tradeDate": "2026-09-11",
+   "changePct": 2.37,
+   "price": 108,
    "currency": "TWD",
-   "fact": "創意公告8月合併營收達58.4億元，年增率高達111.02%。",
-   "inference": "營收翻倍成長顯示公司近期業務動能相當強勁。",
-   "why": "創意公告8月合併營收達58.4億元，年增率高達111.02%。",
-   "meaning": "營收翻倍成長顯示公司近期業務動能相當強勁。",
+   "fact": "公司公布八月營收達2.55億元，比去年同期大幅成長超過一倍。",
+   "inference": "營收翻倍代表公司業績成長強勁，基本面表現相當亮眼。",
+   "why": "公司公布八月營收達2.55億元，比去年同期大幅成長超過一倍。",
+   "meaning": "營收翻倍代表公司業績成長強勁，基本面表現相當亮眼。",
    "stance": "pos",
    "newsScore": 85,
-   "importance": 5,
-   "score": 70,
-   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%89%B5%E6%84%8F%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0ubs-taiwan-summit-2026-063814746.html"
-  },
-  {
-   "symbol": "6409",
-   "name": "VOLTRONIC POWER TECHNOLOGY CORP",
-   "nameZh": "旭隼",
-   "tradeDate": "2026-09-10",
-   "changePct": -5.4,
-   "price": 876,
-   "currency": "TWD",
-   "fact": "2026年8月合併營收預估下降3.16%",
-   "inference": "營收成長放緩，可能影響獲利前景",
-   "why": "2026年8月合併營收預估下降3.16%",
-   "meaning": "營收成長放緩，可能影響獲利前景",
-   "stance": "neg",
-   "newsScore": 40,
    "importance": 4,
-   "score": 30,
-   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%97%AD%E9%9A%BC%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E7%91%9E%E9%8A%80%E8%AD%89%E5%88%B8%E6%89%80%E8%88%89%E8%BE%A6%E4%B9%8B-ubs-taiwan-summit-092655372.html"
+   "score": 76,
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E4%BF%82%E5%9B%A0%E5%A4%A9%E4%BA%8C%E7%A7%91%E6%8A%80%E6%9C%89%E5%83%B9%E8%AD%89%E5%88%B8%E6%96%BC%E9%9B%86%E4%B8%AD%E4%BA%A4%E6%98%93%E5%B8%82%E5%A0%B4%E9%81%94%E5%85%AC%E5%B8%83%E6%B3%A8%E6%84%8F%E4%BA%A4%E6%98%93%E8%B3%87%E8%A8%8A%E6%A8%99%E6%BA%96-%E6%95%85%E5%85%AC%E5%B8%83%E7%9B%B8%E9%97%9C%E8%B2%A1%E5%8B%99%E6%A5%AD%E5%8B%99%E7%AD%89%E9%87%8D%E5%A4%A7%E8%A8%8A%E6%81%AF-%E4%BB%A5%E5%88%A9%E6%8A%95%E8%B3%87%E4%BA%BA%E5%8D%80%E5%88%A5%E7%9E%AD%E8%A7%A3-072646839.html"
   },
   {
-   "symbol": "6620",
-   "name": "Handa Pharma",
-   "nameZh": "漢達",
-   "tradeDate": "2026-09-10",
-   "changePct": -4.17,
-   "price": 126.5,
-   "currency": "TWD",
-   "fact": "最新公布的八月營收比去年同期慘跌將近八成。",
-   "inference": "業績大幅縮水，投資人要提防未來獲利跟著下滑。",
-   "why": "最新公布的八月營收比去年同期慘跌將近八成。",
-   "meaning": "業績大幅縮水，投資人要提防未來獲利跟著下滑。",
+   "symbol": "NVO",
+   "name": "Novo Nordisk A/S",
+   "nameZh": null,
+   "tradeDate": "2026-09-11",
+   "changePct": -2.14,
+   "price": 43.07,
+   "currency": "USD",
+   "fact": "Morgan Stanley 降級 Novo Nordisk 為 Sell，指 semaglutide 專利到期與 Lilly 競爭",
+   "inference": "投資人需留意分析師看空，短期股價可能受壓",
+   "why": "Morgan Stanley 降級 Novo Nordisk 為 Sell，指 semaglutide 專利到期與 Lilly 競爭",
+   "meaning": "投資人需留意分析師看空，短期股價可能受壓",
    "stance": "neg",
    "newsScore": 30,
    "importance": 4,
-   "score": 44,
-   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%BC%A2%E9%81%94-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B66669-5%E8%90%AC%E5%85%83-%E5%B9%B4%E5%A2%9E-092245581.html"
+   "score": 34,
+   "link": "https://finance.yahoo.com/healthcare/articles/morgan-stanley-downgrades-novo-nordisk-211044807.html"
   },
   {
-   "symbol": "1303",
-   "name": "NAN YA PLASTIC",
-   "nameZh": "南亞",
-   "tradeDate": "2026-09-10",
-   "changePct": 3.17,
-   "price": 244,
+   "symbol": "1468",
+   "name": "CHANG-HO FIBRE CORP",
+   "nameZh": "昶和",
+   "tradeDate": "2026-09-11",
+   "changePct": -1.87,
+   "price": 13.15,
    "currency": "TWD",
-   "fact": "公司看好第四季旺季且電子材料產能趨於滿載，並受惠蘋果新機與外資買超拉抬。",
-   "inference": "這代表電子材料產能與旺季動能同時轉強，第四季的業績表現有機會更亮眼。",
-   "why": "公司看好第四季旺季且電子材料產能趨於滿載，並受惠蘋果新機與外資買超拉抬。",
-   "meaning": "這代表電子材料產能與旺季動能同時轉強，第四季的業績表現有機會更亮眼。",
-   "stance": "pos",
-   "newsScore": 85,
+   "fact": "合併營收2257萬元，較去年同期下降52.63%",
+   "inference": "營收大幅下滑顯示營運壓力，投資人需留意獲利前景",
+   "why": "合併營收2257萬元，較去年同期下降52.63%",
+   "meaning": "營收大幅下滑顯示營運壓力，投資人需留意獲利前景",
+   "stance": "neg",
+   "newsScore": 30,
    "importance": 4,
-   "score": 71,
-   "link": "https://tw.stock.yahoo.com/news/%E5%A4%96%E8%B3%87%E8%BD%89%E8%B3%A3%E8%B6%85383%E5%84%84%E5%85%83%E7%8E%A9-%E9%85%8D%E5%B0%8D%E4%BA%A4%E6%98%93-%E8%B2%B7%E5%8F%8B%E9%81%94%E8%88%87%E5%8D%97%E4%BA%9E-%E7%A0%8D%E7%BE%A4%E5%89%B5%E5%8F%8A%E5%AF%8C%E5%96%AC-105853262.html"
+   "score": 52,
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%98%B6%E5%92%8C-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B62257%E8%90%AC%E5%85%83-%E5%B9%B4%E5%A2%9E-52-062301943.html"
+  },
+  {
+   "symbol": "2883",
+   "name": "KGI FINANCIAL HOLDING CO LTD",
+   "nameZh": "凱基金",
+   "tradeDate": "2026-09-11",
+   "changePct": 1.75,
+   "price": 37.85,
+   "currency": "TWD",
+   "fact": "公布8月合併盈餘與撤回減資案，顯示獲利與資本維持",
+   "inference": "投資人看到獲利表現與資本不減，可能提升信心",
+   "why": "公布8月合併盈餘與撤回減資案，顯示獲利與資本維持",
+   "meaning": "投資人看到獲利表現與資本不減，可能提升信心",
+   "stance": "pos",
+   "newsScore": 62,
+   "importance": 4,
+   "score": 64,
+   "link": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%87%B1%E5%9F%BA%E9%87%91%E6%9A%A8%E4%B8%BB%E8%A6%81%E5%AD%90%E5%85%AC%E5%8F%B8115%E5%B9%B48%E6%9C%88%E4%BB%BD%E8%87%AA%E7%B5%90%E5%90%88%E4%BD%B5%E7%9B%88%E9%A4%98-105942526.html"
   }
  ],
  "poolSize": 60,
- "aiUsed": 23,
+ "aiUsed": 25,
  "aiSource": {
-  "gemini": 6,
-  "groq": 18,
+  "gemini": 18,
+  "groq": 7,
   "openrouter": 0,
-  "failed": 0
+  "failed": 1
  },
  "note": "fact＝新聞標題明確講到的已確認事實；inference＝AI 推論，僅供參考，非確定性預測。"
 }
