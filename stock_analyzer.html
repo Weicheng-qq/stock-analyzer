@@ -354,7 +354,13 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .quote-card { background:var(--bg2); border:1px solid var(--border); border-left:3px solid var(--blue); border-radius:10px; padding:12px 14px; }
 .quote-text { font-size:15px; line-height:1.7; color:var(--text); font-weight:600; }
 .quote-en { font-size:12px; line-height:1.55; color:var(--text2); margin-top:7px; font-style:italic; }
-.quote-by { font-size:12.5px; color:var(--blue); margin-top:8px; font-weight:700; }
+/* 作者列：頭像＋姓名。用 flex 對齊，避免 22px 的圖把 12.5px 的文字基線頂歪。 */
+.quote-by { font-size:12.5px; color:var(--blue); margin-top:8px; font-weight:700; display:flex; align-items:center; gap:6px; }
+/* 封面名言的小頭像：與大師選股頁共用同一組圖檔（icons/master-*.jpg），只是尺寸不同。
+   ⚠️ 縮排/高密度模式要一起縮，否則四位大師在小螢幕會塞不下 —— 四位全上是鐵則。 */
+.quote-ava { width:22px; height:22px; flex:none; border-radius:50%; object-fit:cover; border:1px solid rgba(88,166,255,.4); background:var(--bg3); }
+.quote-wrap.tight .quote-ava { width:20px; height:20px; }
+.quote-wrap.dense .quote-ava { width:18px; height:18px; }
 /* 空間不足時的緊湊模式(由 renderSplashQuotes 量測後套用)。
    注意：只縮間距與字級，英文原句一律保留顯示，不可在此隱藏 .quote-en */
 .quote-wrap.tight { gap:7px; }
@@ -5017,10 +5023,14 @@ const MASTER_AVATAR={
   lynch:   __mpAvatar('lynch','彼得·林區'),
   fisher:  __mpAvatar('fisher','菲利浦·費雪')
 };
-function __mpAvatar(key, name){
-  // ⚠️ 不加 loading="lazy"：頭像一開卡片就在視窗內，lazy 不但省不到流量，還會讓它慢一拍才出現。
-  //   真正的「延遲」來自卡片本身 —— 沒切到這個選單就不會渲染，四個分頁也只有當下那位會載入。
-  return '<img class="mp-ava" src="icons/master-'+key+'.jpg" alt="'+esc(name)+'" width="46" height="46" decoding="async">';
+function __mpAvatar(key, name){ return masterAvatarImg(key, name, 'mp-ava', 46); }
+// 共用頭像產生器：大師選股卡片(46px)與封面名言(22px)共用同一組圖檔，
+//   只有 class 與尺寸不同 —— 圖檔共用代表第二處出現時直接吃瀏覽器快取，不會重抓。
+//   ⚠️ 不加 loading="lazy"：這兩處的頭像出現時都已經在視窗內，
+//   lazy 省不到流量，只會讓它慢一拍才出現。真正的延遲來自「沒開到那個畫面就不渲染」。
+function masterAvatarImg(key, name, cls, size){
+  return '<img class="'+cls+'" src="icons/master-'+key+'.jpg" alt="'+esc(name)+'"'
+    + ' width="'+size+'" height="'+size+'" decoding="async">';
 }
 const MASTER_PICK_TABS=[
   {k:'buffett', label:'🏛️ 巴菲特'},
@@ -5301,7 +5311,7 @@ function renderSplashQuotes(){
     const q=g.list[Math.floor(Math.random()*g.list.length)];   // 每次開App各自隨機挑一句
     return `<div class="quote-card"><div class="quote-text">「${esc(q.zh)}」</div>`
       +`<div class="quote-en">${esc(q.en)}</div>`
-      +`<div class="quote-by">${g.icon} ${esc(g.name)}</div></div>`;
+      +`<div class="quote-by">${masterAvatarImg(k, g.name, 'quote-ava', 22)}<span>${esc(g.name)}</span></div></div>`;
   }).join('');
   // 最後保底用：從較短的名言裡隨機挑(仍有隨機性，但不會爆版)
   const buildShort=ks=>ks.map(k=>{
@@ -5311,7 +5321,7 @@ function renderSplashQuotes(){
     const q=pool[Math.floor(Math.random()*pool.length)];
     return `<div class="quote-card"><div class="quote-text">「${esc(q.zh)}」</div>`
       +`<div class="quote-en">${esc(q.en)}</div>`
-      +`<div class="quote-by">${g.icon} ${esc(g.name)}</div></div>`;
+      +`<div class="quote-by">${masterAvatarImg(k, g.name, 'quote-ava', 22)}<span>${esc(g.name)}</span></div></div>`;
   }).join('');
   const fits=()=>box.getBoundingClientRect().bottom <= (window.innerHeight||document.documentElement.clientHeight) - 6;
   // ⚠️⚠️ 四位大師固定全部顯示，任何情況都不減人（使用者2026-09-12明確要求：
