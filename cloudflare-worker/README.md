@@ -20,18 +20,34 @@
 ## 部署步驟（約 5 分鐘，不需要信用卡）
 
 1. 到 <https://dash.cloudflare.com/sign-up> 註冊一個免費帳號（免費方案不需要信用卡）。
-2. 左側選 **Workers & Pages** → **Create** → **Create Worker**。
+2. 左側 **Build** 區塊 → 點 **Compute** → **Workers** → 右上角 **Create**。
+   > ⚠️ Cloudflare 在 2026 年改版過側邊欄。舊版是「Workers & Pages」，新版改到
+   > **Compute** 底下。中間首頁那顆「Create app」也能到，但它會先問要不要從 Git
+   > 匯入範本，多繞一圈 —— 走 Compute → Workers 最短。
 3. 取一個名字（例如 `stock-quote-proxy`）→ **Deploy**。
 4. 部署完成後點 **Edit code**，把編輯器裡的預設內容**全部刪掉**，
    貼上本資料夾的 [`quote-proxy.js`](./quote-proxy.js) 全文 → 右上角 **Deploy**。
 5. 複製它給你的網址，長得像 `https://stock-quote-proxy.你的帳號.workers.dev`。
-6. 回到 App → 右上角 **⚙️** → 展開「**進階：自建報價代理**」→ 貼上該網址 → **儲存金鑰**。
+6. 先自己測一次它活著沒有：把下面這串貼到瀏覽器網址列（前半段換成你自己的網址），
+   看到一堆 JSON、裡面有 `"n":"台積電"` 就成功：
+   `https://你的網址.workers.dev/?url=https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_2330.tw%26json=1`
+   若看到 `{"error":"host not allowed"}`，代表程式碼有貼對（白名單正在運作），只是網址打錯。
+7. 回到 App → 右上角 **⚙️** → 展開「**進階：自建報價代理**」→ 貼上該網址
+   （只要 `https://xxx.workers.dev` 這段，後面的 `/?url=...` **不要帶**）→ **儲存金鑰**。
 
 ## 怎麼確認有生效？
 
-進到任一台股個股頁，標題列會顯示 `證交所即時（TWSE）`。
-若你把 Worker 網址故意打錯，App 會**自動退回**本站預設代理，股價照常顯示 —— 這是刻意設計的，
-不會因為一個選填設定就讓使用者看不到股價。要還原成預設，把設定欄位清空再儲存即可。
+⚠️ **畫面上看不出來現在走的是 Worker 還是 Vercel** —— 兩者顯示完全一樣（標題列都是
+`證交所即時（TWSE）`）。要真的確認，去 Cloudflare 後台 → 你的 Worker → **Metrics**，
+看 Requests 數字有沒有在長；有在長就是接上了。
+
+自動退回機制（2026-09-12 於線上實測過）：
+- 故意填一個不存在的 Worker 網址 → 2330 仍正常顯示 2410（TWSE），耗時 1.6 秒
+  （它先試你的、失敗才換回 `/api/proxy`，所以會慢約 1.5 秒，但不會看不到股價）。
+- 清空欄位 → 立刻回到 `/api/proxy`。
+
+⚠️ 這是**每台裝置各自的設定**（存在瀏覽器 localStorage）：你在電腦設了，手機不會跟著變，
+其他使用者更不會。所以填這個欄位只有你自己會走 Worker。
 
 ## 注意事項
 
