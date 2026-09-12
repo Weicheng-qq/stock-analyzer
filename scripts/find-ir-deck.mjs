@@ -40,7 +40,20 @@ const IR_HINTS = [
   '投資人', '投資者', 'investor', '財務資訊', 'financial', '/ir', 'ir/'
 ];
 
+const NL = String.fromCharCode(10);
+const SPLIT_NL = new RegExp(String.fromCharCode(13) + '?' + String.fromCharCode(10));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// ⚠️⚠️ 2026-09-13 實測：跑到第 573 家時整個行程被 ECONNRESET 殺掉，前面的結果全丟。
+//   原因是某些站台的 HTTP/2 連線重置會以「事件」形式拋出（ClientHttp2Stream 的 error），
+//   不經過 fetch 的 promise，所以 try/catch 攔不到。
+//   這兩道攔截讓單一壞站只變成一筆失敗記錄，不會中斷整批 750 家的探勘。
+process.on('uncaughtException', e => {
+  console.error('  ⚠️ 已攔截未捕捉例外（不中斷）：' + (e && e.message || e));
+});
+process.on('unhandledRejection', e => {
+  console.error('  ⚠️ 已攔截未處理拒絕（不中斷）：' + (e && e.message || e));
+});
 
 async function get(url, asText = true) {
   const ac = new AbortController();
@@ -235,11 +248,31 @@ async function findForCode(code, profile) {
     profile = JSON.parse(pr.body);
   }
 
-  const out = [];
+  // ⚠️ 一定要邊跑邊寫（JSONL，一行一家）。原本只在全部跑完才 print JSON，
+  //   結果第 573 家崩潰時 573 家的成果全部消失，白跑一小時。
+  const oi = args.indexOf('--out');
+  const outPath = (oi > -1 && args[oi + 1]) ? args[oi + 1] : null;
+  const done = new Set();
+  if (outPath && fsm.existsSync(outPath)) {
+    // 支援續跑：已經有結果的代碼直接跳過
+    for (const line of fsm.readFileSync(outPath, 'utf8').split(SPLIT_NL)) {
+      if (!line.trim()) continue;
+      try { done.add(JSON.parse(line).code); } catch {}
+    }
+    if (done.size) console.error('（續跑：已完成 ' + done.size + ' 家，將跳過）');
+  }
   for (const c of codes) {
-    const r = await findForCode(c, profile);
-    out.push(r);
+    if (done.has(c)) continue;
+    let r;
+    try {
+      r = await findForCode(c, profile);
+    } catch (e) {
+      r = { code: c, name: null, site: null, irPages: [], deck: null, note: '探勘時發生例外：' + (e && e.message || e) };
+    }
+    const line = JSON.stringify(r);
+    if (outPath) fsm.appendFileSync(outPath, line + NL);
+    else console.log(line);
     console.error('· ' + c + ' ' + (r.name || '') + ' → ' + (r.deck ? ('找到簡報 ' + (r.deckDate || '') ) : r.note));
   }
-  console.log(JSON.stringify(out, null, 2));
+  console.error('=== 探勘結束 ===');
 })();
