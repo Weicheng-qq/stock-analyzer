@@ -72,7 +72,9 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 
 .main { max-width:1180px; margin:0 auto; padding:28px 20px; }
 .welcome { text-align:center; padding:8px 0 22px; }
-.welcome h1 { font-size:30px; font-weight:700; margin-bottom:10px; }
+/* .welcome h1 已於 2026-09-12 隨封面大標題一併移除（標題列已有 App 名稱，不必重複）。
+   ⚠️ 下方 .header .logo 的字級註解仍以「原本的 .welcome h1 = 30px/700」為對照基準，
+   那是歷史說明，不要因為這裡的規則沒了就去改它。 */
 .welcome p { color:var(--text2); font-size:15px; }
 /* 法律免責聲明：不放在#welcome封面(離開封面後就消失)，改放在.main最下方、
    結果區塊之後，讓App所有畫面狀態(封面/搜尋結果/自選股/主題...)都固定看得到，
@@ -551,8 +553,10 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 </div>
 
 <div class="main">
+  <!-- ⚠️ 2026-09-12 依使用者要求刪除封面大標題 <h1>美股/台股AI深度分析工具</h1>：
+       標題列左上角已經有「美股/台股深度分析」，封面再寫一次是重複，占掉的版面
+       留給名言區（renderSplashQuotes 會自動量測可用高度，因此四位大師更常能全上）。 -->
   <div id="welcome" class="welcome">
-    <h1>美股/台股AI深度分析工具</h1>
     <p style="color:var(--blue);font-weight:700;margin-top:6px;font-size:15px">以合理低估價格 買入擁有強大護城河的公司</p>
     <p>10年財務指標 · 營收成長 · 彼得林區分類 · 護城河 · 競爭對手 · 買入建議</p>
   </div>
