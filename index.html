@@ -533,8 +533,8 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     </details>
     <details class="adv-key">
       <summary style="cursor:pointer;color:var(--text2);font-size:13.5px;padding:6px 0;user-select:none">進階：自建報價代理（選填，使用者變多時才需要）</summary>
-      <p class="sub" style="margin-top:8px">即時報價是本 App 打最兇的請求。預設走本站的 <b>/api/proxy</b>（Vercel 免費額度每月 100 萬次，約可支撐 100 位使用者）。若使用者變多，可自行部署一個免費的 <b>Cloudflare Worker</b>（每天 10 萬次額度，約為 3 倍且允許商業用途），把網址貼在下方即可，其餘功能不受影響。</p>
-      <div class="steps">部署步驟見專案內 <b>cloudflare-worker/README.md</b>（全程免費、不需信用卡）。留空＝使用本站預設代理。</div>
+      <p class="sub" style="margin-top:8px">即時報價是本 App 打最兇的請求。目前<b>全站預設已走自建的 Cloudflare Worker</b>（每天 10 萬次額度、允許商業用途），失敗時自動退回本站的 <b>/api/proxy</b>。下面這欄是<b>覆寫</b>用的：留空＝使用全站預設；填入別的網址＝只有這台裝置改走你填的那個。</p>
+      <div class="steps">要自建一個的話，步驟見專案內 <b>cloudflare-worker/README.md</b>（全程免費、不需要信用卡）。</div>
       <label>報價代理網址（選填）</label>
       <input type="text" id="quoteProxy" placeholder="https://xxx.workers.dev" spellcheck="false">
       <p class="note">只存在你的瀏覽器。若填錯或該服務故障，會自動退回本站預設代理，不會看不到股價。</p>
@@ -659,10 +659,22 @@ const PROXY = (location.protocol==='file:' || ['localhost','127.0.0.1',''].index
 //   其餘請求（SEC/新聞/財報）流量小，維持走 /api/proxy 不動。
 //   ⚠️ 沒有設定時行為與原本完全一樣（走 /api/proxy），這是純粹的加值選項，不會影響任何人。
 //   部署方式見 cloudflare-worker/README.md。
+// 全站預設的報價代理：自建的 Cloudflare Worker。
+//   ⚠️ 為什麼要寫死成預設，而不是讓使用者在設定裡填？
+//   因為設定值存在 localStorage，只影響「填的那一台瀏覽器」。架 Worker 的目的是
+//   分散所有使用者的報價流量，所以必須是全站預設才有意義（2026-09-12 修正：
+//   原本只做成每台裝置各自設定，而且線上版的 ⚙️ 本來就被 hideSettingsForUsers() 藏起來，
+//   等於那個欄位根本沒人打得開，完全達不到目的）。
+//   Worker 只代轉證交所與 Yahoo 報價（白名單與 api/proxy.js 一致），不含任何金鑰，
+//   公開在前端沒有安全疑慮。掛掉時 fetchJsonTimeout 會自動退回 /api/proxy。
+const DEFAULT_QUOTE_PROXY='https://stock-quote-proxy.aa910517.workers.dev';
 function getQuoteProxy(){ try{ return (localStorage.getItem('quote_proxy')||'').trim(); }catch(e){ return ''; } }
 function setQuoteProxy(v){ try{ if(v) localStorage.setItem('quote_proxy', v); else localStorage.removeItem('quote_proxy'); }catch(e){} }
 function quoteProxyBase(){
-  const w=getQuoteProxy();
+  // 本機開發時不繞遠路，直接走本機 proxy.ps1，否則改一行程式還要等 Cloudflare。
+  const isLocalEnv=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1);
+  if(isLocalEnv) return PROXY;
+  const w=getQuoteProxy()||DEFAULT_QUOTE_PROXY;   // 使用者自填的優先，沒填就用預設 Worker
   if(!w) return PROXY;
   return w.replace(/\/+$/,'')+'/?url=';   // 去掉結尾多餘的斜線，使用者貼網址時常會多帶一個
 }
@@ -707,7 +719,12 @@ function getGmKey(){ return safeGet(); }
 (function hideSettingsForUsers(){
   try{
     var isLocalEnv=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1);
-    if(!isLocalEnv){ var b=document.getElementById('settingsBtn'); if(b) b.style.display='none';
+    // 站長自己要進設定時，在網址後面加 ?settings=1 即可叫出齒輪鈕（一般使用者不會知道也不需要）。
+    //   ⚠️ 2026-09-12 踩到：報價代理欄位被加進這個視窗，但線上版齒輪是藏起來的，
+    //   等於那個欄位根本打不開。留這個後門才不會再發生「設定存在卻無法存取」。
+    var wantSettings=false;
+    try{ wantSettings=new URLSearchParams(location.search).get('settings')==='1'; }catch(e){}
+    if(!isLocalEnv && !wantSettings){ var b=document.getElementById('settingsBtn'); if(b) b.style.display='none';
       // 標記給 CSS 用：沒有齒輪鈕時，市場鈕才需要自己補右邊距(否則會貼齊畫面右緣)
       try{ document.body.classList.add('no-settings-btn'); }catch(e){} }
   }catch(e){}
