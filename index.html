@@ -370,9 +370,11 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   .header:not(.compact) { padding:8px 14px; }
   .header:not(.compact) .logo { font-size:24px; }
   .header:not(.compact) .logo svg { width:28px; height:28px; vertical-align:-7px; }
-  .welcome { padding:0 0 8px; }
-  .welcome p { font-size:11.5px; }
-  .main > .market-tabs:not(.mkt-compact) { margin:7px 0 9px; }
+  .welcome { padding:0 0 6px; }
+  /* 副說明行改列出全部功能選單後變成三行，矮螢幕要再收一級才塞得下四位大師。 */
+  .welcome p { font-size:11px; line-height:1.45; }
+  .main > .market-tabs:not(.mkt-compact) { margin:6px 0 8px; }
+  .main { padding:14px 14px; }
 }
 .quote-wrap.dense { gap:6px; }
 .quote-wrap.dense .quote-card { padding:7px 10px; border-radius:8px; }
@@ -590,7 +592,10 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <!-- 主標語：2026-09-12 依使用者要求由藍色15px改為白色19px（刪掉大標題後，
          這行遞補成封面的視覺主角，用主文字色 var(--text) 才夠顯眼）。 -->
     <p style="color:var(--text);font-weight:700;margin-top:0;font-size:17.5px;line-height:1.45;letter-spacing:.3px">以合理低估價格 買入擁有強大護城河的公司</p>
-    <p>10年財務指標 · 營收成長 · 彼得林區分類 · 護城河 · 競爭對手 · 買入建議</p>
+    <!-- 副說明行：2026-09-12 依使用者要求改為列出 App 實際的功能選單，
+         讓還沒點進去的人一眼看得到這個 App 到底有什麼。
+         ⚠️ 這一行要與 #grpMenu 的選單項目對得起來，日後增刪選單記得一起改。 -->
+    <p>大師選股邏輯推薦 · 大師學院 · 投資主題 · 財務指標 · 法說會未來前景 · AI技術分析 · 護城河 · 彼得林區分類 · 股價估值評估 · AI投資總結</p>
   </div>
 
   <div class="market-tabs" id="marketTabs">
