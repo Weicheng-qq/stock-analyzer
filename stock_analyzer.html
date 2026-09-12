@@ -409,6 +409,14 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
    那是使用者回報的「每行字幕對齊有問題」。固定高度並讓內容靠下對齊即可消除位移。 */
 .vid-cap { position:absolute; left:0; right:0; bottom:8px; z-index:3; text-align:center; padding:0 8px; pointer-events:none;
   min-height:2.9em; display:flex; align-items:flex-end; justify-content:center; }
+/* 費雪專屬文字區塊（他沒有影像紀錄，改以文字呈現） */
+.fisher-why { font-size:12.5px; line-height:1.8; color:var(--text2); background:rgba(210,153,34,.09); border-left:3px solid var(--yellow); border-radius:6px; padding:9px 11px; margin-bottom:10px; }
+.fisher-why b { color:var(--text); }
+.fx-ol { margin:8px 0 0; padding-left:22px; }
+.fx-ol li { font-size:12.5px; line-height:1.75; margin-bottom:5px; }
+.fx-note { margin-top:9px; font-size:11.5px; line-height:1.7; color:var(--text2); }
+.fx-row { margin-top:9px; font-size:12.5px; line-height:1.75; }
+.fx-row b { display:block; color:var(--blue); font-size:13px; margin-bottom:2px; }
 /* 影片字幕狀態徽章＋繁中導讀（投資大師學院） */
 .vid-sub { margin-top:7px; font-size:11.5px; line-height:1.6; padding:4px 9px; border-radius:6px; display:inline-block; }
 .vid-sub.vs-ok   { color:var(--green);  background:rgba(63,185,80,.12); }
@@ -4560,7 +4568,26 @@ const MASTER_VIDEOS=[
     audiobook:[
       {id:'j0DbCfHNO_A',title:'【有聲書】《窮查理寶典》完整版（上）— 蒙格畢生思維智慧精華集'},
       {id:'FGrCITMM_gE',title:'【有聲書】《窮查理寶典》完整版（下）'}
-    ]
+    ]},
+  // ── 菲利浦·費雪 ────────────────────────────────────────────
+  // ⚠️⚠️ 費雪（1907-2004）生前極度低調、幾乎不受訪，實質上沒有留下可用的影像紀錄。
+  //   2026-09-13 逐支查驗過 YouTube 上掛他名字的影片，全部不合格：
+  //     e3NoE9XvVTQ「Rare Interview with Philip Fisher」→ 俄語旁白書評，靜態合成人像，
+  //        第三格畫面直接是巴菲特配俄文標題，不是費雪本人。
+  //     BHvib1ttlBo「The COMPLETE history」→ 黑白靜態照片＋文字卡旁白，連書名都打錯成
+  //        Extraordinary Profits（正確為 Uncommon Profits）。
+  //     nc35Hnmc66Q「Phil Fischer Interview」→ 拼法不同，是完全另一個人。
+  //     另有大量影片其實是他兒子 Ken Fisher（Fisher Investments 創辦人），外型相近極易誤收。
+  //   依本站「只收本人真實畫面、非文字卡/主持人畫面」鐵則，一支都不收。
+  //   改為：①收一支【巴菲特談費雪】的真實檔案畫面（已驗證 1998 年股東會實拍）
+  //         ②用 data/masters/fisher-text.json 的文字區塊補齊他的思想（十五要點＋1987 Forbes 訪談）
+  //   aboutOnly:true → 畫面上會明確標示「這不是費雪本人」，避免使用者誤認。
+  //   subEn:true → 字幕是英文燒錄在畫面上（YAPSS 頻道），不是中文，徽章要據實顯示。
+  {person:'菲利浦·費雪 Philip Fisher',icon:'🔬',fisherText:true,
+    long:[
+      {id:'DZjScOFmnKw',noCap:true,subEn:true,aboutOnly:true,title:'巴菲特談費雪的「閒聊法」— 1998 年波克夏股東會真實畫面（⚠️ 說話者是巴菲特，非費雪本人）'}
+    ],
+    short:[],audiobook:[]
   }
 ];
 let __masterTab='long';
@@ -4595,9 +4622,38 @@ async function ensureVidNotes(){
 // 字幕狀態一律從 MASTER_VIDEOS 的既有旗標推導，不在導讀 JSON 裡另存一份，避免兩處說法不一致。
 function vidSubBadge(v, tab){
   if(tab==='audiobook') return {cls:'vs-ok', txt:'🎧 有聲書（中文朗讀，無需字幕）'};
+  // subEn：字幕燒在畫面上但是【英文】，不能跟中文燒錄字幕混為一談，否則又是畫面說謊。
+  if(v.subEn)  return {cls:'vs-warn', txt:'🔥 字幕已燒錄在畫面上（英文）— 中文內容請看下方導讀'};
   if(v.noCap)  return {cls:'vs-ok', txt:'🔥 字幕已燒錄在畫面上（無法關閉）'};
   if(v.zhHans) return {cls:'vs-warn', txt:'📝 原生簡體中文字幕（非自動翻譯；查無同場次繁體軌）'};
   return {cls:'vs-none', txt:'🚫 無原生中文字幕軌 — 本站不自動開啟，請看下方繁中導讀'};
+}
+// ── 費雪的純文字區塊 ─────────────────────────────────────
+//   費雪沒有影像紀錄，這一格不硬湊影片，改用文字補齊（十五要點＋1987 Forbes 訪談）。
+//   與導讀同樣延遲載入：沒點開投資大師學院就不下載。
+let __fisherText=null, __fisherTried=false;
+async function ensureFisherText(){
+  if(__fisherText || __fisherTried) return __fisherText;
+  __fisherTried=true;
+  try{ const r=await fetch('data/masters/fisher-text.json',{cache:'no-cache'}); if(r.ok) __fisherText=await r.json(); }catch(e){}
+  return __fisherText;
+}
+async function renderFisherText(){
+  const host=document.querySelector('#masterVidList [data-fisher-text]');
+  if(!host || host.dataset.filled) return;
+  const d=await ensureFisherText(); if(!d || !host.isConnected) return;
+  host.dataset.filled='1';
+  const li=(d.fifteen||[]).map(x=>'<li>'+esc(x)+'</li>').join('');
+  const fb=(d.forbes||[]).map(x=>'<div class="fx-row"><b>'+esc(x.h||'')+'</b>'+esc(x.t||'')+'</div>').join('');
+  const bk=(d.books||[]).map(x=>'<li>'+esc(x)+'</li>').join('');
+  host.innerHTML='<div class="fisher-why">'+(d.why||'')+'</div>'
+    + '<details class="vid-note" open><summary>📋 '+esc(d.fifteenTitle||'')+'</summary>'
+    +   '<p>'+esc(d.fifteenIntro||'')+'</p><ol class="fx-ol">'+li+'</ol>'
+    +   '<div class="fx-note">'+esc(d.fifteenNote||'')+'</div></details>'
+    + '<details class="vid-note"><summary>📰 '+esc(d.forbesTitle||'')+'</summary>'
+    +   '<p>'+esc(d.forbesIntro||'')+'</p>'+fb+'</details>'
+    + '<details class="vid-note"><summary>📚 '+esc(d.booksTitle||'')+'</summary>'
+    +   '<ul>'+bk+'</ul><div class="fx-note">'+esc(d.booksNote||'')+'</div></details>';
 }
 // 把導讀渲染進已存在的影片卡（清單先畫出來，導讀載入後補上，避免卡住畫面）
 async function renderVidNotes(){
@@ -4621,8 +4677,11 @@ function masterVidListHtml(){
   let h='';
   MASTER_VIDEOS.forEach(g=>{
     const vids=g[__masterTab]||[];
-    if(!vids.length) return;
+    // ⚠️ 費雪在短影音/有聲書分頁沒有影片，但他的文字區塊在三個分頁都該看得到 ——
+    //   否則使用者切到短影音就會覺得「四位大師怎麼變三位」。
+    if(!vids.length && !g.fisherText) return;
     h+=`<div style="margin:18px 0 10px;font-size:15px;font-weight:700">${g.icon} ${g.person}</div>`;
+    if(g.fisherText) h+=`<div data-fisher-text></div>`;
     vids.forEach(v=>{
       // 短影音是9:16直式容器，用mqdefault(320x180,16:9)以object-fit:cover填滿時要放大2倍多導致模糊，
       //   改用maxresdefault(1280x720)為主、不存在時(舊/低畫質影片常見)用onerror退回hqdefault(480x360)。
@@ -4646,7 +4705,7 @@ function masterVidListHtml(){
     });
   });
   // 清單剛畫完就去補導讀（fire-and-forget，不阻塞渲染）
-  setTimeout(()=>{ try{ renderVidNotes(); }catch(e){} }, 0);
+  setTimeout(()=>{ try{ renderVidNotes(); renderFisherText(); }catch(e){} }, 0);
   return h || '<div class="note">此分類目前無資料</div>';
 }
 function setMasterTab(tab){
