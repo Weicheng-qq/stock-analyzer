@@ -34,14 +34,6 @@ on:
         description: '本次最多用無頭瀏覽器抓幾家官網逐字稿'
         required: false
         default: '12'
-      daily_pool:
-        description: '每日市場：股票池上限'
-        required: false
-        default: '60'
-      daily_ai:
-        description: '每日市場：最多幾次 AI 新聞判讀'
-        required: false
-        default: '25'
 
 # 只授予寫入 repo 內容的最小權限
 permissions:
@@ -83,25 +75,6 @@ jobs:
         env:
           LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '3' }}
         run: node scripts/detect-events.mjs
-
-      # 【新增】每日市場資料（今日必看／我的股票今日變化／AI每日評分）
-      #   ⚠️ 刻意排在「法說會分析」之前：兩者共用同一份 Gemini 每日免費額度，
-      #   實測把法說會分析放前面時，額度會先被用光，導致每日市場的 AI 部分一次都跑不到
-      #   （2026-08-30 首次執行：評分與重大異動正常，但今日必看 0 則、市場總結未產生）。
-      #   每日市場是使用者每天打開 App 會看到的東西，應優先；法說會分析是背景補建，
-      #   晚一點或明天再補都不影響體驗。
-      #   獨立腳本，失敗也不該讓整個排程失敗，故加 continue-on-error
-      - name: 產生每日市場資料
-        continue-on-error: true
-        env:
-          GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
-          # 備援金鑰：Gemini 免費額度用完時自動改用，與網站 /api/ai 相同策略。
-          #   沒設也能跑，只是少了備援（首次執行就是因為只有 Gemini 而卡住）。
-          GROQ_KEY: ${{ secrets.GROQ_KEY }}
-          OPENROUTER_KEY: ${{ secrets.OPENROUTER_KEY }}
-          DAILY_POOL: ${{ github.event.inputs.daily_pool || '60' }}
-          DAILY_AI: ${{ github.event.inputs.daily_ai || '25' }}
-        run: node scripts/daily-market.mjs
 
       - name: AI 分析（僅處理有新事件者，額度用完自動停止）
         env:
