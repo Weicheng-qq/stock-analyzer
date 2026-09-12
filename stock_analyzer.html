@@ -468,7 +468,9 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
    選擇器一律以 #masterPickCard 開頭，確保不影響其他頁面。手機優先：390px 可直接掃讀。 */
 #masterPickCard .mp-who { display:flex; gap:11px; align-items:center; padding:10px 12px; margin:2px 0 14px; background:rgba(88,166,255,.08); border-left:3px solid var(--blue); border-radius:6px; }
 #masterPickCard .mp-ico { font-size:26px; line-height:1; }
-#masterPickCard .mp-ava { width:46px; height:46px; flex:none; border-radius:50%; display:block; }
+/* 大師人像：圓形裁切。object-fit:cover 確保非正方形來源也不會被拉扁，
+   加一圈細邊框讓插畫的淺色背景不會跟卡片底色糊在一起。 */
+#masterPickCard .mp-ava { width:46px; height:46px; flex:none; border-radius:50%; display:block; object-fit:cover; border:1.5px solid rgba(88,166,255,.45); background:var(--bg3); }
 #masterPickCard .mp-who b { font-size:15px; }
 #masterPickCard .mp-sub { font-size:12px; color:var(--text2); margin-top:3px; line-height:1.5; }
 #masterPickCard .mp-sec-t { font-weight:700; font-size:15px; margin:18px 0 8px; }
@@ -5000,59 +5002,25 @@ function initMarketUI(){
 //   資料延遲載入：切到哪一位才抓哪一位的 JSON，沒點開的不下載。
 // ════════════════════════════════════════════════════════════════
 // ════════════════════════════════════════════════════════════════
-// 【大師人像】四張自繪的 SVG 頭像，用在「大師選股邏輯推薦」的名字前面。
-//   ⚠️ 為什麼不用真實照片：巴菲特/蒙格/林區/費雪的新聞照片都有版權，
-//   直接抓來用是侵權；外連圖床也不穩（logo.clearbit.com 停止服務就是前車之鑑）。
-//   所以改為自繪向量人像：零外部請求、離線可顯示、無版權疑慮、放大不失真。
-//   刻意做成「可辨識的特徵化人像」而非寫實肖像 —— 各自用髮型、眼鏡、西裝配色區分。
+// 【大師人像】用在「大師選股邏輯推薦」的名字前面。
+//   圖檔來源：使用者自備的插畫風四格圖 icons/大師頭像.jpg，
+//   2026-09-12 用 ffmpeg 裁出四張人臉、縮成 256×256 存為 icons/master-*.jpg
+//   （原圖 865KB，直接用會拖慢手機載入；裁切後四張合計約 64KB）。
+//   ⚠️ 之前這裡是自繪的 SVG 人像，使用者回報「很醜」，已整組替換。
+//   ⚠️ 仍然不要改用真人新聞照片：那些有版權。目前用的是插畫，沒有這個問題。
+//   ⚠️ 圖片只在使用者切到「大師選股邏輯推薦」時才會被渲染 → 沒點開就不下載，
+//      再加 loading="lazy"，對沒用到這個功能的使用者幾乎零成本。
 // ════════════════════════════════════════════════════════════════
 const MASTER_AVATAR={
-  buffett: __mpAvatar({
-    bg:'#10243d', suit:'#2f4f7a', tie:'#c0392b',
-    hair:'<path d="M19 24c0-9 6-13 13-13s13 4 13 13c0-4-4-6-13-6-6 0-11 1-13 6z" fill="#e8eef4"/>'
-        +'<path d="M18 24c-1-4 0-8 2-10 1 5 1 8 0 11zM46 24c1-4 0-8-2-10-1 5-1 8 0 11z" fill="#e8eef4"/>',
-    glass:'#1b1b1b', glassW:1.9, lens:5.2
-  }),
-  munger: __mpAvatar({
-    bg:'#2a1f3d', suit:'#4a4f5a', tie:'#3a6ea5',
-    // 蒙格的招牌是特別厚的大鏡框
-    hair:'<path d="M18 25c0-10 6-14 14-14s14 4 14 14c-2-6-7-8-14-8s-12 2-14 8z" fill="#f1f4f7"/>',
-    glass:'#111', glassW:2.6, lens:6.1
-  }),
-  lynch: __mpAvatar({
-    bg:'#0f2f22', suit:'#22405e', tie:'#2f9e5e',
-    // 林區的髮量較厚、往旁邊梳
-    hair:'<path d="M18 26c-1-11 6-16 14-16s15 5 14 16c-1-7-3-11-8-12-4 3-13 2-16 5-2 2-3 4-4 7z" fill="#dfe6ec"/>',
-    glass:'#2b2b2b', glassW:1.5, lens:5
-  }),
-  fisher: __mpAvatar({
-    bg:'#3a2c18', suit:'#6b5a42', tie:'#2c3e50',
-    // 費雪年代較早：髮量稀疏、圓框老式眼鏡
-    hair:'<path d="M20 23c1-8 6-12 12-12s11 4 12 12c-2-3-6-5-12-5s-10 2-12 5z" fill="#cfd6dd" opacity=".85"/>'
-        +'<path d="M19 27c-1-4-1-7 0-9 1 4 1 7 0 9zM45 27c1-4 1-7 0-9-1 4-1 7 0 9z" fill="#cfd6dd" opacity=".85"/>',
-    glass:'#3a2f22', glassW:1.7, lens:5.4
-  })
+  buffett: __mpAvatar('buffett','華倫·巴菲特'),
+  munger:  __mpAvatar('munger','查理·蒙格'),
+  lynch:   __mpAvatar('lynch','彼得·林區'),
+  fisher:  __mpAvatar('fisher','菲利浦·費雪')
 };
-// 共用的人像骨架：只有髮型、眼鏡粗細/鏡片大小、西裝與領帶配色不同，
-//   其餘（臉、脖子、肩線、襯衫領）共用，確保四張視覺份量一致、不會有人特別突兀。
-function __mpAvatar(o){
-  return '<svg class="mp-ava" viewBox="0 0 64 64" aria-hidden="true">'
-    + '<circle cx="32" cy="32" r="32" fill="'+o.bg+'"/>'
-    + '<path d="M8 64c0-12 11-19 24-19s24 7 24 19z" fill="'+o.suit+'"/>'
-    + '<path d="M25 46l7 10 7-10-7-4z" fill="#eef3f7"/>'
-    + '<path d="M32 54l3.2 10h-6.4z" fill="'+o.tie+'"/>'
-    + '<rect x="27" y="36" width="10" height="11" rx="4.5" fill="#d7a77f"/>'
-    + '<ellipse cx="32" cy="27" rx="13" ry="15" fill="#eac6a2"/>'
-    + '<ellipse cx="19" cy="29" rx="2.2" ry="3" fill="#e0b791"/>'
-    + '<ellipse cx="45" cy="29" rx="2.2" ry="3" fill="#e0b791"/>'
-    + o.hair
-    + '<g fill="none" stroke="'+o.glass+'" stroke-width="'+o.glassW+'">'
-    +   '<circle cx="26" cy="27" r="'+o.lens+'"/><circle cx="38" cy="27" r="'+o.lens+'"/>'
-    +   '<path d="M'+(26+o.lens)+' 27h'+(12-o.lens*2).toFixed(1)+'"/>'
-    + '</g>'
-    + '<circle cx="26" cy="27" r="1.5" fill="#3b3b3b"/><circle cx="38" cy="27" r="1.5" fill="#3b3b3b"/>'
-    + '<path d="M28.5 35.5q3.5 2.2 7 0" stroke="#a9714b" stroke-width="1.5" fill="none" stroke-linecap="round"/>'
-    + '</svg>';
+function __mpAvatar(key, name){
+  // ⚠️ 不加 loading="lazy"：頭像一開卡片就在視窗內，lazy 不但省不到流量，還會讓它慢一拍才出現。
+  //   真正的「延遲」來自卡片本身 —— 沒切到這個選單就不會渲染，四個分頁也只有當下那位會載入。
+  return '<img class="mp-ava" src="icons/master-'+key+'.jpg" alt="'+esc(name)+'" width="46" height="46" decoding="async">';
 }
 const MASTER_PICK_TABS=[
   {k:'buffett', label:'🏛️ 巴菲特'},
