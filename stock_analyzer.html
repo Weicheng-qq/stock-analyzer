@@ -572,8 +572,8 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
   <div class="grp-menu" id="grpMenu" style="display:none">
     <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
-    <button class="grp-btn" data-g="14" onclick="pickGroup(14)">投資大師學院</button>
     <button class="grp-btn" data-g="18" onclick="pickGroup(18)">大師選股邏輯推薦</button>
+    <button class="grp-btn" data-g="14" onclick="pickGroup(14)">投資大師學院</button>
     <button class="grp-btn" data-g="15" onclick="pickGroup(15)">投資主題</button>
     <button class="grp-btn" data-g="2" onclick="pickGroup(2)">大盤指數與財務指標</button>
     <button class="grp-btn" data-g="6" onclick="pickGroup(6)">財經新聞</button>
@@ -4970,7 +4970,8 @@ async function loadMasterPick(key){
   }
 }
 function __mpPickHtml(pk, mkt){
-  // 市場不符時不讓它看起來可以點：點了會強制切換市場並重載，體驗很差(今日市場舊功能踩過同一個坑)。
+  // ⚠️ 2026-09-12 起本頁只會渲染「目前市場」的推薦（見 renderMasterPickBody），
+  //   所以這裡一定是可點的。保留這個判斷只是防呆，避免日後有人又把兩個市場一起丟進來。
   const clickable = (mkt==='tw') === (getMarket()==='tw');
   const sym=esc(pk.symbol||'');
   const onclick = clickable ? ' onclick="rowAnalyze(this,\''+sym+'\')"' : '';
@@ -4995,11 +4996,15 @@ function __mpMarketHtml(title, block, mkt){
 function renderMasterPickBody(d){
   const box=document.getElementById('mpBody'); if(!box||!d) return;
   const pr=(d.principles||[]).map(x=>'<div class="mp-pr"><b>'+esc(x.h||'')+'</b>'+esc(x.t||'')+'</div>').join('');
+  // ⚠️ 使用者要求(2026-09-12)：只顯示目前市場的推薦 —— 看美股就只列美股、看台股就只列台股。
+  //   理由是原本兩個市場一起列，有一半是點不了的(市場不符)，等於逼使用者滑過一堆
+  //   自己現在用不到的內容。市場切換時 setMarket() 會整頁 reload，所以不必另外監聽。
+  const tw=getMarket()==='tw';
   box.innerHTML='<div class="mp-who"><span class="mp-ico">'+esc(d.icon||'')+'</span><div><b>'+esc(d.name||'')+'</b>'
       + '<div class="mp-sub">'+esc(d.subtitle||'')+'</div></div></div>'
     + '<div class="mp-sec-t">📜 選股邏輯原則</div>'+pr
-    + __mpMarketHtml('🇹🇼 台股推薦（依上述邏輯）', d.tw, 'tw')
-    + __mpMarketHtml('🇺🇸 美股推薦（依上述邏輯）', d.us, 'us')
+    + (tw ? __mpMarketHtml('🇹🇼 台股推薦（依上述邏輯）', d.tw, 'tw')
+          : __mpMarketHtml('🇺🇸 美股推薦（依上述邏輯）', d.us, 'us'))
     + '<div class="note" style="margin-top:14px;padding-top:10px;border-top:1px solid var(--border);line-height:1.7">'
     + '⚠️ 本頁是「依這些大師公開發表過的選股原則所做的整理與對照」，<b>不是這些大師本人的推薦或持股</b>，'
     + '也不構成投資建議。所有財務數字均取自官方申報資料並標示來源與期間，'
