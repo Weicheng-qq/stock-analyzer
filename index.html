@@ -414,6 +414,52 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .err-box { background:rgba(248,81,73,.1); border:1px solid rgba(248,81,73,.3); border-radius:9px; padding:18px; color:var(--red); font-size:13px; line-height:1.7; }
 .note { font-size:11px; color:var(--text2); margin-top:6px; line-height:1.5; }
 .retry-btn { background:var(--blue); color:#0d1117; border:none; border-radius:7px; padding:8px 16px; font-weight:600; cursor:pointer; font-size:13px; margin-top:12px; }
+/* ── 護城河評估明細（版主選股準則第一項的展開內容）────────────────
+   手機優先：390px 寬度下每一列 3 行（名稱+分數 / 進度條 / 判讀標準），可快速掃描。 */
+.moat-box { background:rgba(88,166,255,.07); border:1px solid rgba(88,166,255,.25); border-radius:9px; padding:12px 13px; margin:8px 0 14px; }
+.moat-head { display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+.moat-head b { font-size:15.5px; }
+.moat-head b.g { color:var(--green); } .moat-head b.y { color:var(--yellow); } .moat-head b.r { color:var(--red); }
+.moat-pct { font-size:13px; color:var(--text2); white-space:nowrap; }
+.moat-row { margin-bottom:11px; }
+.moat-top { display:flex; justify-content:space-between; align-items:baseline; gap:8px; font-size:13px; }
+.moat-nm { font-weight:600; }
+.moat-sc { white-space:nowrap; font-size:12.5px; color:var(--text2); }
+.moat-sc.g { color:var(--green); } .moat-sc.y { color:var(--yellow); } .moat-sc.r { color:var(--red); }
+.moat-bar { height:5px; background:var(--bg3); border-radius:3px; overflow:hidden; margin:5px 0 4px; }
+.moat-fill { height:100%; border-radius:3px; background:var(--text2); }
+.moat-fill.g { background:var(--green); } .moat-fill.y { background:var(--yellow); } .moat-fill.r { background:var(--red); }
+.moat-tip { font-size:11.5px; color:var(--text2); line-height:1.5; }
+/* ── 大師選股邏輯推薦（#masterPickCard）────────────────────────
+   選擇器一律以 #masterPickCard 開頭，確保不影響其他頁面。手機優先：390px 可直接掃讀。 */
+#masterPickCard .mp-who { display:flex; gap:11px; align-items:center; padding:10px 12px; margin:2px 0 14px; background:rgba(88,166,255,.08); border-left:3px solid var(--blue); border-radius:6px; }
+#masterPickCard .mp-ico { font-size:26px; line-height:1; }
+#masterPickCard .mp-who b { font-size:15px; }
+#masterPickCard .mp-sub { font-size:12px; color:var(--text2); margin-top:3px; line-height:1.5; }
+#masterPickCard .mp-sec-t { font-weight:700; font-size:15px; margin:18px 0 8px; }
+#masterPickCard .mp-pr { font-size:13px; line-height:1.75; padding:8px 0; border-bottom:1px solid var(--line); }
+#masterPickCard .mp-pr b { display:block; color:var(--blue); font-size:13.5px; margin-bottom:3px; }
+#masterPickCard .mp-mkt { font-weight:700; font-size:15px; margin:22px 0 4px; }
+#masterPickCard .mp-note { font-size:12px; color:var(--yellow); line-height:1.65; background:rgba(210,153,34,.1); border-radius:6px; padding:8px 10px; margin-bottom:10px; }
+#masterPickCard .mp-pick { border:1px solid var(--border); border-radius:9px; padding:11px 12px; margin-bottom:11px; }
+#masterPickCard .mp-tap { cursor:pointer; }
+#masterPickCard .mp-tap:active { background:rgba(255,255,255,.04); }
+#masterPickCard .mp-p-head { display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:7px; }
+#masterPickCard .mp-p-nm { font-size:15px; font-weight:700; }
+#masterPickCard .mp-p-cd { color:var(--text2); font-size:12px; font-weight:400; margin-left:6px; }
+#masterPickCard .mp-p-tag { flex:none; font-size:11.5px; color:var(--blue); background:rgba(88,166,255,.13); border-radius:10px; padding:2px 8px; }
+#masterPickCard .mp-sec { font-size:13px; line-height:1.7; margin-bottom:6px; }
+#masterPickCard .mp-sec b { display:block; font-size:12px; color:var(--text2); font-weight:600; margin-bottom:1px; }
+#masterPickCard .mp-facts { font-size:12.5px; line-height:1.65; margin-bottom:6px; }
+#masterPickCard .mp-facts b { display:block; font-size:12px; color:var(--text2); font-weight:600; margin-bottom:2px; }
+#masterPickCard .mp-facts ul { margin:0; padding-left:18px; }
+#masterPickCard .mp-facts li { margin-bottom:2px; }
+#masterPickCard .mp-risk { font-size:12.5px; line-height:1.7; color:var(--text2); background:rgba(248,81,73,.07); border-radius:6px; padding:7px 9px; margin-top:7px; }
+#masterPickCard .mp-risk b { display:block; font-size:12px; color:var(--red); font-weight:600; margin-bottom:1px; }
+#masterPickCard .mp-go { margin-top:8px; font-size:12.5px; color:var(--blue); }
+#masterPickCard .mp-go.off { color:var(--text2); }
+/* 投資主題：巴菲特持倉的申報佔比小標（只有該主題會出現） */
+.wl-name .th-wt { margin-left:7px; font-size:11px; color:var(--blue); background:rgba(88,166,255,.13); border-radius:9px; padding:1px 7px; white-space:nowrap; }
 </style>
 </head>
 <body>
@@ -485,6 +531,14 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
       <input type="text" id="gmKey" placeholder="貼上你的 AIza... / gsk_... / sk-or-... 金鑰">
       <p class="note">金鑰只存在你瀏覽器(localStorage)，不會外傳到我方。使用免費模型，日常分析免費。</p>
     </details>
+    <details class="adv-key">
+      <summary style="cursor:pointer;color:var(--text2);font-size:13.5px;padding:6px 0;user-select:none">進階：自建報價代理（選填，使用者變多時才需要）</summary>
+      <p class="sub" style="margin-top:8px">即時報價是本 App 打最兇的請求。預設走本站的 <b>/api/proxy</b>（Vercel 免費額度每月 100 萬次，約可支撐 100 位使用者）。若使用者變多，可自行部署一個免費的 <b>Cloudflare Worker</b>（每天 10 萬次額度，約為 3 倍且允許商業用途），把網址貼在下方即可，其餘功能不受影響。</p>
+      <div class="steps">部署步驟見專案內 <b>cloudflare-worker/README.md</b>（全程免費、不需信用卡）。留空＝使用本站預設代理。</div>
+      <label>報價代理網址（選填）</label>
+      <input type="text" id="quoteProxy" placeholder="https://xxx.workers.dev" spellcheck="false">
+      <p class="note">只存在你的瀏覽器。若填錯或該服務故障，會自動退回本站預設代理，不會看不到股價。</p>
+    </details>
     <p class="note" style="margin-top:14px;padding-top:10px;border-top:1px solid var(--border)">
       版本：<b id="appVer">—</b>　<a href="javascript:void(0)" onclick="forceUpdate()" style="color:var(--blue)">強制更新到最新版</a><br>
       <span style="opacity:.75">若畫面內容過舊(例如仍顯示「待推出」)，點上方連結即可清除快取重載。</span>
@@ -518,9 +572,10 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
   <div class="grp-menu" id="grpMenu" style="display:none">
     <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
+    <button class="grp-btn" data-g="14" onclick="pickGroup(14)">投資大師學院</button>
+    <button class="grp-btn" data-g="18" onclick="pickGroup(18)">大師選股邏輯推薦</button>
     <button class="grp-btn" data-g="15" onclick="pickGroup(15)">投資主題</button>
-    <button class="grp-btn" data-g="16" onclick="pickGroup(16)">ETF投資</button>
-    <button class="grp-btn" data-g="2" onclick="pickGroup(2)">指數與財務指標</button>
+    <button class="grp-btn" data-g="2" onclick="pickGroup(2)">大盤指數與財務指標</button>
     <button class="grp-btn" data-g="6" onclick="pickGroup(6)">財經新聞</button>
     <button class="grp-btn tw-only" data-g="12" onclick="pickGroup(12)">每月營收</button>
     <button class="grp-btn tw-only" data-g="13" onclick="pickGroup(13)">三大法人</button>
@@ -531,7 +586,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <button class="grp-btn" data-g="9" onclick="pickGroup(9)">產品與服務</button>
     <button class="grp-btn" data-g="11" onclick="pickGroup(11)">版主選股準則</button>
     <button class="grp-btn" data-g="8" onclick="pickGroup(8)">AI投資總結</button>
-    <button class="grp-btn" data-g="14" onclick="pickGroup(14)">投資大師學院</button>
+    <button class="grp-btn" data-g="16" onclick="pickGroup(16)">ETF投資</button>
   </div>
   <div class="index-title" id="indexTitle" style="display:none">📊 四大指數</div>
   <div id="indexBar" class="index-bar" style="display:none"></div>
@@ -548,6 +603,15 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <input type="text" id="watchlistInput" style="display:none">
     <div id="wlLastUpdate" style="font-size:11px;color:var(--text2);text-align:right;margin:-4px 0 6px"></div>
     <div id="watchlistTable"><div class="note">尚未加入任何自選股，按上方「加入」新增</div></div>
+  </div>
+
+  <!-- 【大師選股邏輯推薦】四位大師各自的選股原則 + 依該原則挑出的台股/美股各三家。
+       資料放在 data/masters/{key}.json 延遲載入，不內嵌在 HTML —— 與 IR 全文同樣的理由：
+       手機使用者每次開 App 不該下載自己還沒點開的內容。 -->
+  <div class="card" id="masterPickCard" style="margin-bottom:20px;display:none">
+    <div class="ct">🎯 大師選股邏輯推薦</div>
+    <div id="mpTabs" class="wl-theme-chips"></div>
+    <div id="mpBody"><div class="note">載入中…</div></div>
   </div>
 
   <div class="card" id="themeCard" style="margin-bottom:20px;display:none">
@@ -587,6 +651,21 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 const PROXY = (location.protocol==='file:' || ['localhost','127.0.0.1',''].indexOf(location.hostname)>-1)
   ? 'http://localhost:8765/?url='
   : '/api/proxy?url=';
+// ── 報價專用代理（選填）─────────────────────────────────────────
+//   即時報價是整個 App 打最兇的請求（盤中每 5 秒一輪），而 Vercel Hobby 免費額度只有
+//   每月 100 萬次 Function 呼叫，且「僅限非商業個人用途」、超過不能加購只能等 30 天。
+//   Cloudflare Workers 免費額度是每天 10 萬次（約每月 300 萬次）且允許商業用途，
+//   所以把「報價」這條路單獨切出來，讓使用者自己部署一個 Worker 後在 ⚙️ 設定貼上網址，
+//   其餘請求（SEC/新聞/財報）流量小，維持走 /api/proxy 不動。
+//   ⚠️ 沒有設定時行為與原本完全一樣（走 /api/proxy），這是純粹的加值選項，不會影響任何人。
+//   部署方式見 cloudflare-worker/README.md。
+function getQuoteProxy(){ try{ return (localStorage.getItem('quote_proxy')||'').trim(); }catch(e){ return ''; } }
+function setQuoteProxy(v){ try{ if(v) localStorage.setItem('quote_proxy', v); else localStorage.removeItem('quote_proxy'); }catch(e){} }
+function quoteProxyBase(){
+  const w=getQuoteProxy();
+  if(!w) return PROXY;
+  return w.replace(/\/+$/,'')+'/?url=';   // 去掉結尾多餘的斜線，使用者貼網址時常會多帶一個
+}
 // 多個免費模型，依序嘗試直到有一個成功（免費模型偶爾忙碌/故障）
 let SEARCH_GEN = 0;   // 搜尋序號（防止舊搜尋的非同步結果覆蓋新搜尋）
 // 順序：內容品質優先（有推理能力的大模型排前面，20秒內可接受），純指令型快模型當備援（雖快但內容較簡略）
@@ -633,9 +712,17 @@ function getGmKey(){ return safeGet(); }
       try{ document.body.classList.add('no-settings-btn'); }catch(e){} }
   }catch(e){}
 })();
-function openSettings(){ try{ document.getElementById('gmKey').value=getGmKey(); }catch(e){} document.getElementById('settingsModal').classList.add('open'); }
+function openSettings(){ try{ document.getElementById('gmKey').value=getGmKey(); }catch(e){} try{ document.getElementById('quoteProxy').value=getQuoteProxy(); }catch(e){} document.getElementById('settingsModal').classList.add('open'); }
 function closeSettings(){ document.getElementById('settingsModal').classList.remove('open'); }
-function saveSettings(){ safeSet(document.getElementById('gmKey').value.trim()); closeSettings(); alert('✅ 已儲存'); }
+function saveSettings(){
+  safeSet(document.getElementById('gmKey').value.trim());
+  try{
+    const q=document.getElementById('quoteProxy').value.trim();
+    if(q && !/^https:\/\/\S+$/i.test(q)){ alert('⚠️ 報價代理網址必須是 https:// 開頭的完整網址，未儲存該欄位'); }
+    else setQuoteProxy(q);
+  }catch(e){}
+  closeSettings(); alert('✅ 已儲存');
+}
 document.getElementById('settingsModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeSettings(); });
 
 
@@ -1269,6 +1356,12 @@ const THEME_STOCKS={
 //   收錄的是該次申報中「新建或加碼」的美股上市公司：半導體(NVDA/AVGO/TXN/SNPS/CDNS/INTC)＋
 //   企業軟體與科技(AAPL/ORCL/NOW/ADBE/DELL)。同期申報顯示減持 AMZN/META/MSFT/VOO，故不列入。
 //   ⚠️ 這是公開申報資料的整理，非投資建議；申報僅揭露金額區間、不揭露精確股數，且由信託操作。
+// 巴菲特持倉的申報市值佔比（波克夏海瑟威 SEC 13F-HR，2026Q1，2026/05/15 申報）。
+//   使用者要求：這個主題要「依持倉比例排序」。改成資料化而不是只寫在註解裡，
+//   renderThemeList() 會據此自動排序並把佔比顯示在每一列 —— 順序由程式保證，
+//   日後只要更新這張表，畫面排序就跟著對，不必再人工維護清單順序。
+//   ⚠️ 更新新一季 13F 時，THEME_STOCKS['巴菲特持倉'] 與這張表要一起改。
+const BUFFETT_WEIGHT={AAPL:22.0, AXP:17.4, KO:11.6, BAC:9.5, CVX:6.6, OXY:6.55, GOOGL:5.93, CB:4.24, MCO:4.09, KHC:2.78};
 let __themeKey=null;
 function renderThemeChips(){
   const el=document.getElementById('themeChips'); if(!el) return;
@@ -1288,13 +1381,16 @@ function renderThemeList(){
     let symbol,name;
     if(mkt==='tw'){ symbol=code+'.'+twMkt(code); name=(typeof TW_NAMES!=='undefined'&&TW_NAMES[code])||TW_ALL[code]||code; }
     else { symbol=code; name=TICKER_ZH[code]||code; }
-    return {symbol,name};
+    return {symbol, name, code, wt:(__themeKey==='巴菲特持倉'?BUFFETT_WEIGHT[code]:null)};
   });
+  // 巴菲特持倉：依 13F 申報市值佔比由大到小排序（使用者要求）。
+  //   查無佔比的排最後，不是丟掉 —— 清單若有新增而佔比表還沒更新，至少還看得到那一檔。
+  if(__themeKey==='巴菲特持倉') rows.sort((a,b)=>(b.wt==null?-1:b.wt)-(a.wt==null?-1:a.wt));
   listEl.innerHTML = rows.map(r=>`
     <div class="wl-item" data-sym="${esc(r.symbol)}">
     <div class="wl-row" onclick="rowAnalyze(this,'${esc(r.symbol)}')">
       ${coLogoImg(r.symbol.replace(/\..*/,''), r.symbol.replace(/\..*/,''), mkt==='tw', 'wl-logo')}
-      <div class="wl-name" title="${esc(r.name)}">${esc(r.name)}<span class="sym">${esc(r.symbol.replace(/\.(TW|TWO)$/i,''))}</span></div>
+      <div class="wl-name" title="${esc(r.name)}">${esc(r.name)}<span class="sym">${esc(r.symbol.replace(/\.(TW|TWO)$/i,''))}</span>${r.wt!=null?`<span class="th-wt">持倉 ${r.wt.toFixed(2)}%</span>`:''}</div>
       <svg class="wl-spark" id="ths_${esc(r.symbol)}" viewBox="0 0 72 26" preserveAspectRatio="none" aria-hidden="true"></svg>
       <div class="wl-pc">
         <div class="wl-price" id="thp_${esc(r.symbol)}">…</div>
@@ -1302,24 +1398,42 @@ function renderThemeList(){
       </div>
       <button class="wl-heart${have.has(r.symbol)?' added':''}" onclick="event.stopPropagation();addThemeStockToWatchlist('${esc(r.symbol)}','${esc(r.name).replace(/'/g,"\\'")}',this)" ${have.has(r.symbol)?'disabled title="已在自選股清單"':'title="加入自選股"'}>${have.has(r.symbol)?'❤️':'🤍'}</button>
     </div></div>`).join('') || '<div class="note">此主題目前無資料</div>';
-  window.__themeRows=rows;   // 供30秒自動更新股價時重用(不重新渲染整份清單，避免閃爍)
+  if(__themeKey==='巴菲特持倉'){
+    listEl.insertAdjacentHTML('beforeend', '<div class="note" style="margin-top:8px;line-height:1.7">依波克夏海瑟威向美國證管會（SEC）申報之 13F-HR 持股市值佔比由高至低排序（2026 年第 1 季，2026/05/15 申報）。佔比為該季申報之市值權重，非即時持股，波克夏於季後的買賣不會反映在此。</div>');
+  }
+  window.__themeRows=rows;   // 供自動更新股價時重用(不重新渲染整份清單，避免閃爍)
   loadThemePrices(rows);
+  loadThemeSpark(rows);   // 走勢線只在重新渲染清單時抓一次：它是當日整段走勢，不需要每 5 秒更新
 }
-// 投資主題：股價 + 漲跌幅(pill) + 當日走勢線(spark)，一次抓5分K涵蓋三者，作法與自選股loadWatchlistSpark一致
+// 投資主題：股價與漲跌幅一律走全站統一報價層，確保與自選股／個股頁顯示同一個數字。
+//   ⚠️ 原本這裡自己抓 5分K(includePrePost=true) 同時取價格與走勢線，
+//   但 5分K 的 meta 在美股盤後回的是盤後價，與自選股用的正常盤價不同 —— 這正是
+//   使用者回報「同一支股票在不同頁面價格不一樣」的主因之一。現在拆成兩支：
+//   價格走 quotesOf()(每輪更新)、走勢線走 loadThemeSpark()(只在渲染時抓一次)。
 async function loadThemePrices(rows){
+  const quotes=await quotesOf(rows.map(r=>r.symbol));
+  const tw=getMarket()==='tw';
+  rows.forEach(r=>{
+    const pEl=document.getElementById('thp_'+r.symbol), cEl=document.getElementById('thc_'+r.symbol);
+    const q=quotes.get(r.symbol);
+    const price=q?q.price:null, prev=q?q.prev:null;
+    if(pEl) pEl.textContent = price!=null?(tw?'$':'$')+(+price).toFixed(2):'—';
+    if(cEl){
+      if(q && q.stale) cEl.innerHTML='<span style="color:var(--text2);font-size:11.5px">尚未成交</span>';
+      else if(price!=null && prev){
+        const pct=(price-prev)/prev*100;
+        cEl.innerHTML = '<span class="pill '+(pct>=0?'up':'down')+'">'+(pct>=0?'▲':'▼')+Math.abs(pct).toFixed(2)+'%</span>';
+      } else cEl.textContent='—';
+    }
+  });
+}
+// 投資主題的當日走勢線：與價格分開，只在清單重新渲染時抓一次。
+async function loadThemeSpark(rows){
   await Promise.all(rows.map(async r=>{
-    const pEl=document.getElementById('thp_'+r.symbol), cEl=document.getElementById('thc_'+r.symbol), sEl=document.getElementById('ths_'+r.symbol);
+    const sEl=document.getElementById('ths_'+r.symbol);
     try{
       const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${r.symbol}?range=1d&interval=5m&includePrePost=true`);
       const res=ch?.chart?.result?.[0]; const meta=res?.meta;
-      const price=meta?.regularMarketPrice, prev=meta?.previousClose??meta?.chartPreviousClose;
-      if(pEl) pEl.textContent = price!=null?'$'+(+price).toFixed(2):'—';
-      if(cEl){
-        if(price!=null && prev){
-          const pct=(price-prev)/prev*100;
-          cEl.innerHTML = `<span class="pill ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span>`;
-        } else cEl.textContent='—';
-      }
       if(sEl && res){
         const ts=res.timestamp||[], cl=res.indicators?.quote?.[0]?.close||[];
         const per=meta?.currentTradingPeriod?.regular, regStart=per?.start, regEnd=per?.end;
@@ -1331,7 +1445,7 @@ async function loadThemePrices(rows){
           sEl.innerHTML=`<polyline points="${d}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>`;
         }
       }
-    }catch(e){ if(pEl) pEl.textContent='—'; if(cEl) cEl.textContent='—'; }
+    }catch(e){}   // 走勢線抓不到就留白，不影響價格顯示（價格由 quotesOf 負責）
   }));
 }
 function addThemeStockToWatchlist(symbol,name,btn){
@@ -1468,12 +1582,22 @@ function twMisExch(symbol){ // '2330.TW'→'tse_2330.tw'；'5483.TWO'→'otc_548
 async function fetchJsonTimeout(url, ms){
   const ac=new AbortController(); const t=setTimeout(()=>ac.abort(), ms);
   try{
-    const r=await fetch(PROXY+encodeURIComponent(url), {signal: ac.signal, cache: 'no-store'});
-    if(!r.ok) throw new Error('UPSTREAM_'+r.status);
-    const data=await r.json();
-    if(data && data.error) throw new Error('UPSTREAM');
-    return data;
+    return await __quoteFetch(quoteProxyBase(), url, ac.signal);
+  }catch(e){
+    // 使用者設了 Cloudflare Worker 但它掛了/設錯：自動退回 Vercel 的 /api/proxy，
+    //   使用者不會因為一個選填設定就整個看不到股價。原本就走 PROXY 的情況不重試。
+    if(quoteProxyBase()!==PROXY && e && e.name!=='AbortError'){
+      try{ return await __quoteFetch(PROXY, url, ac.signal); }catch(e2){ throw e2; }
+    }
+    throw e;
   } finally { clearTimeout(t); }
+}
+async function __quoteFetch(base, url, signal){
+  const r=await fetch(base+encodeURIComponent(url), {signal, cache: 'no-store'});
+  if(!r.ok) throw new Error('UPSTREAM_'+r.status);
+  const data=await r.json();
+  if(data && data.error) throw new Error('UPSTREAM');
+  return data;
 }
 async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(symbol → {price, prev})
   const exList=symbols.map(twMisExch).filter(Boolean);
@@ -1517,6 +1641,86 @@ async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(sy
   });
   return out;
 }
+// ════════════════════════════════════════════════════════════════
+// 【全站統一報價層】所有要顯示「公司股價」的地方一律走這裡。
+//   使用者要求(2026-09-12)：同一家公司的股價，在自選股／投資主題／ETF／
+//   大盤指數與財務指標／個股頁等所有地方都必須一致。
+//   之前不一致的三個根因：
+//     ① 來源不同：自選股走證交所 TWSE(近即時)，其他地方走 Yahoo(對台股常延遲十幾分鐘)。
+//     ② 參數不同：有些地方用 interval=1d(正常盤)，有些用 interval=5m&includePrePost=true
+//        (含盤前盤後)。美股在盤後時這兩者本來就會回不同的價格，於是同一支股票
+//        在自選股與投資主題顯示兩個數字。
+//     ③ 時間點不同：各面板各自發請求，回來的時間差幾秒，畫面上就是兩個數字。
+//   解法：由這一層統一決定來源(台股→證交所、美股→Yahoo 正常盤)，並共用一份短期快取；
+//   同一個更新週期內不論幾個面板來問，拿到的都是同一筆數字。
+//   ⚠️ 附帶效果：面板愈多反而請求愈少(以前是每個面板各打一次)，與成本優化同向。
+//   ⚠️ 盤前/盤後行情不走這裡，仍由 loadWatchlistSpark() 另外單獨顯示，
+//      避免把盤後價混進「目前股價」而造成與別的面板不一致。
+// ════════════════════════════════════════════════════════════════
+const __QUOTE_TTL = 4500;            // 略短於輪詢間隔 5000ms：每一輪都會真的更新，但同一輪內各面板共用
+const __quoteCache = new Map();      // symbol → {t, price, prev, src, stale}
+const __quoteWait  = new Map();      // symbol → Promise，避免同一輪多個面板同時各發一次請求
+function __quoteFresh(sym){
+  const c=__quoteCache.get(sym);
+  return (c && Date.now()-c.t < __QUOTE_TTL) ? c : null;
+}
+function __putQuote(sym, price, prev, src, stale){
+  if(price==null) return;
+  __quoteCache.set(sym, {t:Date.now(), price:+price, prev:(prev==null?null:+prev), src:src||'Yahoo', stale:!!stale});
+}
+async function __yahooQuotes(syms){
+  await Promise.all(syms.map(async s=>{
+    try{
+      // ⚠️ 一律用 range=1d&interval=1d 的 meta.regularMarketPrice，也就是「正常盤」價格。
+      //   原本部分面板用 5m&includePrePost=true，美股盤後會回盤後價 —— 這是不一致的來源之一。
+      const ch=await fetchJsonTimeout('https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(s)+'?range=1d&interval=1d', 4000);
+      const m=ch&&ch.chart&&ch.chart.result&&ch.chart.result[0]&&ch.chart.result[0].meta;
+      if(m) __putQuote(s, m.regularMarketPrice, (m.previousClose!=null?m.previousClose:m.chartPreviousClose), 'Yahoo');
+    }catch(e){}
+  }));
+}
+async function quotesOf(symbols){
+  const list=[...new Set((symbols||[]).filter(Boolean))];
+  const out=new Map();
+  const need=[];
+  list.forEach(s=>{ const c=__quoteFresh(s); if(c) out.set(s,c); else need.push(s); });
+  if(need.length){
+    // 已經有同一批在路上就跟著等，不重複發請求
+    const pending=need.filter(s=>__quoteWait.has(s));
+    const fresh=need.filter(s=>!__quoteWait.has(s));
+    const jobs=pending.map(s=>__quoteWait.get(s));
+    if(fresh.length){
+      const tw=fresh.filter(s=>/\.TWO?$/i.test(s));
+      const us=fresh.filter(s=>!/\.TWO?$/i.test(s));
+      const run=(async()=>{
+        const sub=[];
+        if(tw.length) sub.push((async()=>{
+          let m=new Map();
+          try{ m=await fetchTwMisQuotes(tw); }catch(e){}
+          tw.forEach(s=>{ const q=m.get(s); if(q) __putQuote(s, q.price, q.prev, q.stale?'TWSE(今日尚未成交)':'TWSE', q.stale); });
+          const miss=tw.filter(s=>!m.has(s));
+          if(miss.length) await __yahooQuotes(miss);   // 證交所查無的個別代碼才退回 Yahoo
+        })());
+        if(us.length) sub.push(__yahooQuotes(us));
+        await Promise.all(sub);
+      })();
+      fresh.forEach(s=>__quoteWait.set(s, run));
+      run.finally(()=>{ fresh.forEach(s=>{ if(__quoteWait.get(s)===run) __quoteWait.delete(s); }); });
+      jobs.push(run);
+    }
+    await Promise.all(jobs.map(j=>Promise.resolve(j).catch(()=>{})));
+    need.forEach(s=>{ const c=__quoteCache.get(s); if(c) out.set(s,c); });
+  }
+  return out;
+}
+async function quoteOf(sym){ const m=await quotesOf([sym]); return m.get(sym)||null; }
+// 報價來源的中文標示（顯示在個股頁標題列，讓使用者一眼知道看到的價格新不新鮮）
+function quoteSrcLabel(q){
+  if(!q) return 'Yahoo Finance（可能延遲）';
+  if(q.src==='TWSE') return '證交所即時（TWSE）';
+  if(q.src==='TWSE(今日尚未成交)') return '證交所（TWSE，今日尚未成交）';
+  return 'Yahoo Finance（可能延遲）';
+}
 // 共用：把報價寫進自選股某一列的DOM(價格數字＋漲跌pill)，回傳是否有寫入新價格
 function applyWlPrice(symbol, price, prev, stale){
   const pEl=document.getElementById('wlp_'+symbol), cEl=document.getElementById('wlc_'+symbol);
@@ -1541,61 +1745,35 @@ function applyWlPrice(symbol, price, prev, stale){
     } else if(cEl.textContent!=='—') cEl.textContent='—';
   }
 }
-async function loadWatchlistPricesYahoo(items, gen){   // 美股走原本Yahoo流程；台股在TWSE失敗時也退回這裡
-  await Promise.all(items.map(async it=>{
-    try{
-      const ch=await fetchJsonTimeout(`https://query1.finance.yahoo.com/v8/finance/chart/${it.symbol}?range=1d&interval=1d`, 4000);   // 同樣加逾時，避免單一慢請求卡住整輪輪詢
-      if(gen!==__wlPriceGen) return;            // 已有更新的一輪發出，這份是舊資料，丟棄
-      const meta=ch?.chart?.result?.[0]?.meta;
-      const price=meta?.regularMarketPrice, prev=meta?.previousClose??meta?.chartPreviousClose;
-      applyWlPrice(it.symbol, price, prev);
-    }catch(e){
-      if(gen!==__wlPriceGen) return;            // 舊世代的失敗也不該把新價格擦掉
-      applyWlPrice(it.symbol, null, null);
-    }
-  }));
+// 自選股報價：改走全站統一報價層 quotesOf()（2026-09-12）。
+//   ⚠️ 自選股不再自己決定資料來源，否則它跟投資主題／ETF／個股頁就會各自為政，
+//   出現同一支股票好幾個價格（使用者回報）。舊的 loadWatchlistPricesYahoo /
+//   台股專用分支已一併刪除 —— 留著等於保留第二套報價邏輯，正是不一致的根源。
+async function loadWatchlistPrices(list){
+  const gen=++__wlPriceGen;
+  const quotes=await quotesOf(list.map(it=>it.symbol));
+  if(gen!==__wlPriceGen) return;            // 已有更新的一輪發出，這份是舊資料，丟棄
+  let twOk=0, twStale=0, usOk=0, fail=0;
+  list.forEach(it=>{
+    const q=quotes.get(it.symbol);
+    if(!q){ applyWlPrice(it.symbol, null, null); fail++; return; }
+    applyWlPrice(it.symbol, q.price, q.prev, q.stale);
+    if(/^TWSE/.test(q.src)){ twOk++; if(q.stale) twStale++; } else usOk++;
+  });
+  const parts=[];
+  if(twOk) parts.push('TWSE'+(twStale?('·'+twStale+'檔尚未成交'):''));
+  if(usOk) parts.push('Yahoo');
+  if(fail) parts.push(fail+'檔無資料');
+  updateWlTimestamp(parts.join('＋')||'無資料', fail<list.length);
 }
 // 「最後更新」時間戳：使用者連續三次回報開盤股價異常，但事後查不到當下的伺服器log
 //   (Vercel免費方案log只留很短時間，過了就查不到)，只能靠事後推測。加這個小字讓使用者
-//   下次遇到時能直接截圖回報「幾點更新的、資料源是TWSE還是Yahoo備援」，才有真正的證據
+//   下次遇到時能直接截圖回報「幾點更新的、資料源是TWSE還是Yahoo」，才有真正的證據
 //   可以診斷，而不是每次都要我事後憑空推測。
 function updateWlTimestamp(source, ok){
   const el=document.getElementById('wlLastUpdate'); if(!el) return;
   const t=new Date().toLocaleTimeString('zh-TW',{hour12:false});
-  el.textContent = ok ? `最後更新 ${t}（${source}）` : `⚠️ ${t} 更新失敗（${source}）`;
-}
-async function loadWatchlistPrices(list){
-  const gen=++__wlPriceGen;
-  const twItems=list.filter(it=>/\.TWO?$/i.test(it.symbol));
-  const usItems=list.filter(it=>!/\.TWO?$/i.test(it.symbol));
-  const jobs=[loadWatchlistPricesYahoo(usItems, gen)];
-  if(twItems.length){
-    jobs.push((async()=>{
-      try{
-        const quotes=await fetchTwMisQuotes(twItems.map(it=>it.symbol));
-        if(gen!==__wlPriceGen) return;
-        const missing=twItems.filter(it=>!quotes.has(it.symbol));
-        twItems.forEach(it=>{
-          const q=quotes.get(it.symbol);
-          if(q) applyWlPrice(it.symbol, q.price, q.prev, q.stale);
-        });
-        if(missing.length){
-          await loadWatchlistPricesYahoo(missing, gen);   // TWSE查無資料的個別代碼才退回Yahoo
-          if(gen===__wlPriceGen) updateWlTimestamp(`TWSE+Yahoo備援${missing.length}檔`, true);
-        } else if(gen===__wlPriceGen){
-          // ⚠️ 把「價格是從哪個欄位來的」一併顯示。前三次事後查不到原因，就是因為
-          //   只知道資料源是 TWSE，卻不知道拿到的是成交價還是昨收。有非成交來源就標出來。
-          const odd=[...quotes.values()].map(q=>q&&q.src).filter(x=>x&&x!=='成交');
-          updateWlTimestamp(odd.length?('TWSE·'+[...new Set(odd)].join('/')):'TWSE', true);
-        }
-      }catch(e){
-        if(gen!==__wlPriceGen) return;
-        await loadWatchlistPricesYahoo(twItems, gen);   // TWSE整批失敗(如逾時)→全部退回Yahoo，確保仍有資料
-        if(gen===__wlPriceGen) updateWlTimestamp('Yahoo備援(TWSE整批失敗:'+(e&&e.message||e)+')', true);
-      }
-    })());
-  }
-  await Promise.all(jobs);
+  el.textContent = ok ? ('最後更新 '+t+'（'+source+'）') : ('⚠️ '+t+' 更新失敗（'+source+'）');
 }
 // 自選股：當日盤中走勢線(名稱右邊) + 盤前/盤後行情(股價下方小字)
 async function loadWatchlistSpark(list){
@@ -1761,6 +1939,95 @@ async function mergeAll(cik,tags,instant){
 
 // ── Main ──
 // ── 台股個股分析(Phase 2 批次1)：Yahoo(.TW/.TWO)供應 技術分析/新聞/AI/估值；財務指標(MOPS)為批次2 ──
+// ════════════════════════════════════════════════════════════════
+// 【護城河評估】把「護城河」從一句形容詞變成可以互相比較的分數。
+//   使用者要求：版主選股準則第一項要能「看出各公司的好與壞」。
+//   設計原則：
+//     ① 只用「已經算好的多年財務數據」，不額外發請求、不呼叫 AI——
+//        所以它免費、可離線計算、而且每次結果一致（AI 每次講的話都不一樣，無法互相比較）。
+//     ② 五個面向刻意各自衡量護城河的不同證據，不重複計分：
+//        定價能力(毛利率) / 獲利留存(淨利率) / 資本報酬(ROE) /
+//        有沒有被侵蝕(毛利率趨勢) / 生意有沒有在長大(營收趨勢)。
+//     ③ 其中「毛利率趨勢」是最關鍵、也是一般網站最少做的一項——
+//        真護城河的特徵不是「現在毛利率高」，而是「高毛利率擋得住競爭者年復一年的侵蝕」。
+//        一家毛利率從 55% 一路掉到 35% 的公司，就算現在還有 35%，護城河其實正在消失。
+//     ④ 資料不足的面向不給 0 分，而是「不計入分母」，最後換算成百分制——
+//        否則 ETF 或剛上市的公司會被誤判成「沒有護城河」，那是「不適用」而不是「不合格」。
+// ════════════════════════════════════════════════════════════════
+function moatAssessment(rows, lastRoe){
+  const last = (rows && rows.length) ? rows[rows.length-1] : {};
+  const parts=[];
+  const add=(name,score,max,val,tip)=>parts.push({name,score,max,val,tip});
+
+  // ① 定價能力：毛利率。能長期賣貴又不流失客戶，是護城河最直接的痕跡。
+  const gm=last.gm;
+  add('定價能力（毛利率）', gm==null?null:(gm>=60?25:gm>=40?20:gm>=25?13:gm>=15?7:2), 25,
+      gm==null?'無資料':gm.toFixed(1)+'%', '≥60% 極強｜≥40% 強｜≥25% 普通｜<15% 幾乎沒有定價權');
+
+  // ② 獲利留存：稅後淨利率。毛利高但費用也高，代表護城河守不住利潤。
+  const nm=last.nm;
+  add('獲利留存（稅後淨利率）', nm==null?null:(nm>=25?20:nm>=15?16:nm>=8?10:nm>=3?5:nm>0?2:0), 20,
+      nm==null?'無資料':nm.toFixed(1)+'%', '≥25% 極強｜≥15% 強｜≥8% 普通｜虧損 0 分');
+
+  // ③ 資本報酬：ROE。股東每投入一元，一年能賺回多少。
+  add('資本報酬（ROE）', lastRoe==null?null:(lastRoe>=25?20:lastRoe>=20?17:lastRoe>=15?13:lastRoe>=10?8:lastRoe>0?3:0), 20,
+      lastRoe==null?'無資料':lastRoe.toFixed(1)+'%', '≥25% 極強｜≥20% 強｜≥15% 良好｜<10% 偏弱');
+
+  // ④ 護城河有沒有被侵蝕：比較「前半期」與「後半期」的平均毛利率。
+  //    用平均而不是頭尾兩年，是為了避免單一年度的異常（一次性認列、疫情、缺料）主導結論。
+  const gms=(rows||[]).map(r=>r.gm).filter(v=>v!=null);
+  let s4=null, gmTxt='年數不足';
+  if(gms.length>=4){
+    const half=Math.floor(gms.length/2);
+    const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
+    const diff=avg(gms.slice(-half))-avg(gms.slice(0,half));
+    s4 = diff>=3?20 : diff>=0?16 : diff>=-3?11 : diff>=-8?5 : 0;
+    gmTxt=(diff>=0?'+':'')+diff.toFixed(1)+' 個百分點';
+  }
+  add('護城河是否被侵蝕（毛利率趨勢）', s4, 20, gmTxt, '後半期平均毛利率減前半期；+3 以上代表護城河還在變寬，-8 以下代表正被競爭者侵蝕');
+
+  // ⑤ 生意有沒有在長大：長期營收趨勢。護城河再寬，市場萎縮也守不住。
+  const growths=(rows||[]).map(r=>r.gr).filter(g=>g!=null);
+  const decline=growths.filter(g=>g<0).length;
+  const up=!!(rows&&rows.length>=2&&rows[rows.length-1].rev!=null&&rows[0].rev!=null&&rows[rows.length-1].rev>rows[0].rev);
+  let s5=null, revTxt='無資料';
+  if(growths.length){
+    s5 = (up&&decline<=1)?15 : (up&&decline<=3)?11 : up?7 : (decline<=3)?4 : 0;
+    revTxt=(up?'整體向上':'整體未成長')+'，下滑 '+decline+' 年';
+  }
+  add('生意有沒有在長大（營收趨勢）', s5, 15, revTxt, '長期營收整體向上且下滑年數少者得分高');
+
+  const have=parts.filter(x=>x.score!=null);
+  // 五個面向至少要有三個算得出來，結論才有意義；否則一律回報「不適用」。
+  if(have.length<3) return { ok:false, parts };
+  const got=have.reduce((s,x)=>s+x.score,0);
+  const max=have.reduce((s,x)=>s+x.max,0);
+  const pct=Math.round(got/max*100);
+  const g = pct>=78 ? {grade:'A',label:'寬護城河',cls:'g'}
+          : pct>=60 ? {grade:'B',label:'中等護城河',cls:'g'}
+          : pct>=40 ? {grade:'C',label:'護城河狹窄',cls:'y'}
+          :           {grade:'D',label:'幾乎沒有護城河',cls:'r'};
+  return { ok:true, pct, parts, covered:have.length, grade:g.grade, label:g.label, cls:g.cls };
+}
+// 護城河評估明細：把五個面向、各自得分與判讀標準攤開來，
+//   讓使用者看得到「這個等級是怎麼算出來的」，而不是只看到一個黑箱分數。
+function moatDetailHtml(m){
+  if(!m || !m.ok) return '<div class="note" style="margin:2px 0 12px">此標的可用的財務面向不足三項（例如 ETF 是一籃子股票，沒有自己的毛利率／ROE），護城河評估不適用——這不等於「沒有護城河」。</div>';
+  const rows=m.parts.map(function(x){
+    const w = x.score==null ? 0 : Math.round(x.score/x.max*100);
+    const cls = x.score==null ? '' : (w>=75?'g':w>=50?'y':'r');
+    return '<div class="moat-row">'
+      + '<div class="moat-top"><span class="moat-nm">'+esc(x.name)+'</span>'
+      + '<span class="moat-sc '+cls+'">'+(x.score==null?'➖ 無資料':esc(x.val)+'　'+x.score+'/'+x.max)+'</span></div>'
+      + '<div class="moat-bar"><div class="moat-fill '+cls+'" style="width:'+Math.max(x.score==null?0:2,w)+'%"></div></div>'
+      + '<div class="moat-tip">'+esc(x.tip)+'</div></div>';
+  }).join('');
+  return '<div class="moat-box">'
+    + '<div class="moat-head"><b class="'+m.cls+'">'+esc(m.grade)+' 級 · '+esc(m.label)+'</b>'
+    + '<span class="moat-pct">'+m.pct+' 分 / 100</span></div>'
+    + rows
+    + '<div class="note" style="margin-top:8px">僅採計 '+m.covered+' / 5 個有資料的面向後換算為百分制。A≥78｜B≥60｜C≥40｜D&lt;40。此為依公開財務數據的機械式評分，不構成投資建議。</div></div>';
+}
 function twResultsHtml(o){
   const upcol=o.chg!=null?(o.chg>=0?'var(--red)':'var(--green)'):'var(--text2)';  // 台股紅漲綠跌
   const chgTxt=o.chg!=null?`${o.chg>=0?'▲':'▼'} ${Math.abs(o.chg).toFixed(2)} (${o.pct>=0?'+':''}${o.pct.toFixed(2)}%)`:'';
@@ -1837,7 +2104,11 @@ function renderTwPeChecklist(finRows, pe, pe5, pePos, price){
   //   常把近兩年才轉強的公司排除掉。變數名沿用 last3g 會誤導，一併改名為 lastG。
   const lastG=growths.slice(-2);
   const fastGrower=lastG.length===2&&lastG.every(g=>g>20);
+  // 🏰 護城河評估：使用者要求放在版主選股準則的「第一項」，因為版主原則本身就是
+  //   「以合理低估價格，買入擁有強大護城河公司」——護城河是前提，估值是第二步。
+  const moat=moatAssessment(baseRows, lastRoe);
   const checklist=[
+    {label:'🏰 護城河評估（綜合五項財務證據）', pass:moat.ok?(moat.pct>=60):null, cls:moat.ok?moat.cls:'', val:moat.ok?(moat.grade+' 級 · '+moat.label+' · '+moat.pct+'分'):'資料不足，不適用'},
     {label:'稅後淨利率 > 30%', pass:last.nm!=null?last.nm>30:null, val:last.nm!=null?last.nm.toFixed(1)+'%':'無資料'},
     {label:'毛利率 > 40%', pass:last.gm!=null?last.gm>40:null, val:last.gm!=null?last.gm.toFixed(1)+'%':'無資料'},
     {label:'ROE > 20%', pass:lastRoe!=null?lastRoe>20:null, val:lastRoe!=null?lastRoe.toFixed(1)+'%':'無資料'},
@@ -1861,7 +2132,7 @@ function renderTwPeChecklist(finRows, pe, pe5, pePos, price){
   else if(checklist.every(c=>c.pass===null)){ mvClass='s-hold'; mvText='這個標的沒有可用的個別公司財務指標（例如 ETF 是一籃子股票，沒有自己的毛利率／ROE），<b>版主選股準則不適用</b>——這不等於「不合格」，請改用成分股、費用率與追蹤指數來評估。'; }
   else { mvClass='s-sell'; mvText='僅通過 <b>'+passCount+'/'+chkTotal+'</b> 項選股準則，基本面尚未完全符合版主「強護城河」核心標準（'+posText+'）。<b>暫不符合版主選股條件</b>，宜再觀察或尋找更優質標的。'; }
   const itemsEl=document.getElementById('tw_chk_items');
-  if(itemsEl) itemsEl.innerHTML=chkHtml;
+  if(itemsEl) itemsEl.innerHTML=chkHtml+moatDetailHtml(moat);
   const noteEl=document.getElementById('tw_chk_note');
   if(noteEl) noteEl.innerHTML='<div class="note" style="margin:6px 0 12px">前 '+chkTotal+' 項為實際數據自動檢核；最後一項「成長動能」依公司官方指引/資本支出判斷。✅=符合 ❌=未達標 ➖=無資料。</div>';
   const verdictEl=document.getElementById('tw_chk_verdict');
@@ -2121,10 +2392,9 @@ async function doSearchTW(symbol){
     //   確保頁面永遠開得出來，不會因為報價來源失敗就整頁打不開。
     let price=meta.regularMarketPrice, prev=meta.previousClose??meta.chartPreviousClose, priceSrc='Yahoo Finance（可能延遲）';
     try{
-      const mis=await fetchTwMisQuotes([symbol]); const q=mis.get(symbol);
+      const q=await quoteOf(symbol);
       if(gen!==SEARCH_GEN) return;
-      if(q && q.price!=null && !q.stale){ price=q.price; if(q.prev!=null) prev=q.prev; priceSrc='證交所即時（TWSE）'; }
-      else if(q && q.stale){ price=q.price; if(q.prev!=null) prev=q.prev; priceSrc='證交所（TWSE，今日尚未成交）'; }
+      if(q && q.price!=null){ price=q.price; if(q.prev!=null) prev=q.prev; priceSrc=quoteSrcLabel(q); }
     }catch(e){ if(gen!==SEARCH_GEN) return; }
     const chg=(price!=null&&prev!=null)?price-prev:null, pct=(chg!=null&&prev)?chg/prev*100:null;
     logOk('p','台股資料載入完成'); logPanel(false);
@@ -2291,7 +2561,7 @@ async function doSearch(){
 
     logAdd('price','載入即時股價...');
     let priceInfo=null;
-    try{ const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${quoteSym}?range=1d&interval=1d`); const meta=ch?.chart?.result?.[0]?.meta; if(meta) priceInfo={price:meta.regularMarketPrice,prev:(meta.previousClose??meta.chartPreviousClose)}; logOk('price','股價載入完成'); }
+    try{ const q=await quoteOf(quoteSym); if(q) priceInfo={price:q.price, prev:q.prev}; logOk('price','股價載入完成'); }   // 走統一報價層，與自選股/主題/ETF 同一個數字
     catch(e){ logErr('price','股價載入失敗（不影響財務數據）'); }
 
     logAdd('render','繪製財務圖表...');
@@ -2388,7 +2658,11 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   const fastGrower=lastG.length===2 && lastG.every(g=>g>20);
   // 彼得林區六大分類：不再用程式寫死的數字門檻公式判定，改交給AI依彼得林區原著（One Up on Wall Street）
   // 的分類邏輯，直接分析完整的多年財務數據自行判斷並說明理由（見下方 callGemini 的 prompt）。
+  // 🏰 護城河評估：與台股共用同一支 moatAssessment()，兩市場評分標準必須一致，
+  //   否則同一家雙掛牌公司(如 2330 與 TSM)會出現兩個不同的護城河等級。
+  const moat=moatAssessment(rows, lastRoe);
   const checklist=[
+    {label:'🏰 護城河評估（綜合五項財務證據）', pass:moat.ok?(moat.pct>=60):null, cls:moat.ok?moat.cls:'', val:moat.ok?`${moat.grade} 級 · ${moat.label} · ${moat.pct}分`:'資料不足，不適用'},
     {label:'稅後淨利率 > 30%', pass:last.nm!=null?last.nm>30:null, val:last.nm!=null?last.nm.toFixed(1)+'%':'無資料'},
     {label:'毛利率 > 40%', pass:last.gm!=null?last.gm>40:null, val:last.gm!=null?last.gm.toFixed(1)+'%':'無資料'},
     {label:'ROE > 20%', pass:lastRoe!=null?lastRoe>20:null, val:lastRoe!=null?lastRoe.toFixed(1)+'%':'無資料'},
@@ -2513,6 +2787,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
 <div class="card verdict" style="margin-top:16px">
   <div class="ct">🏅 版主選股準則(以合理低估價格,買入擁有強大護城河公司)</div>
   ${chkHtml}
+  ${moatDetailHtml(moat)}
   <div id="chk_outlook"><div class="vr"><span class="vl">➖ 法說會成長動能（CEO 對未來展望）</span><span class="vn">分析中...</span></div></div>
   <div class="note" style="margin:6px 0 12px">前 ${checklist.length} 項為實際數據自動檢核；最後一項「成長動能」依公司官方指引/資本支出判斷。✅=符合 ❌=未達標 ➖=無資料。</div>
   <div class="mv-conclusion ${mvClass}"><span class="mv-tag">🧭 版主選股邏輯結論</span>${mvText}<div class="note" style="margin-top:8px">依版主原則「以合理低估價格，買入擁有強大護城河公司」自動歸納，僅供參考、不構成投資建議。</div></div>
@@ -3523,7 +3798,12 @@ const __etfCache={};
 async function etfMetrics(code){
   const sym=etfSym(code);
   const c=__etfCache[sym];
-  if(c && Date.now()-c.t<180000) return c.v;   // 3分鐘快取：切換分頁不重打，但仍會跟著盤中更新
+  // ⚠️ 快取的是「年化報酬/殖利率」這類慢速歷史指標(3分鐘)；價格另外由 quoteOf() 取，
+  //   否則 ETF 分頁的價格會比自選股慢最多 3 分鐘，又變成兩個數字。
+  if(c && Date.now()-c.t<180000){
+    try{ const q=await quoteOf(sym); if(q && q.price!=null){ c.v.price=q.price; c.v.pct=(q.prev?((q.price-q.prev)/q.prev*100):c.v.pct); } }catch(e){}
+    return c.v;
+  }
   const out={code, sym, price:null, pct:null, cagr:null, yield:null, years:null, err:false};
   try{
     const d=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=10y&interval=1mo&events=div`);
@@ -3541,14 +3821,14 @@ async function etfMetrics(code){
     for(const k in divs){ const v=divs[k]; if(v && now-v.date<=366*86400){ sum+=v.amount; any=true; } }
     if(out.price) out.yield=any?sum/out.price*100:0;
   }catch(e){ out.err=true; }
-  // 漲跌幅要用當日資料才準(10年月線的 chartPreviousClose 是十年前的值，不能拿來算今天漲跌)
+  // 當日價格與漲跌幅改走全站統一報價層：台股 ETF(如 0050.TW)因此也會拿到證交所的即時價，
+  //   與自選股頁顯示同一個數字；以前這裡走 Yahoo，同一檔 0050 在兩個頁面會差十幾分鐘。
+  //   (10年月線的 chartPreviousClose 是十年前的值，不能拿來算今天漲跌，所以一定要另外取當日價。)
   try{
-    const d2=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=1d&interval=1d`);
-    const m2=d2?.chart?.result?.[0]?.meta;
-    if(m2){
-      if(m2.regularMarketPrice!=null) out.price=m2.regularMarketPrice;
-      const prev=m2.previousClose??m2.chartPreviousClose;
-      if(out.price!=null && prev) out.pct=(out.price-prev)/prev*100;
+    const q=await quoteOf(sym);
+    if(q && q.price!=null){
+      out.price=q.price;
+      if(q.prev) out.pct=(q.price-q.prev)/q.prev*100;
     }
   }catch(e){}
   __etfCache[sym]={t:Date.now(), v:out};
@@ -4615,8 +4895,9 @@ async function loadIndexBar(){
       return;
     }
     try{
-      const ch=await fetchJson(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(x.s)}?range=1d&interval=1d`);
-      const m=ch?.chart?.result?.[0]?.meta; const p=m?.regularMarketPrice, prev=m?.previousClose??m?.chartPreviousClose;
+      // 指數也走統一報價層：雖然指數本來就只有 Yahoo 一個來源，但共用快取可避免
+      //   指數列與其他面板在同一輪各發一次請求(成本)，逾時策略也一致。
+      const q=await quoteOf(x.s); const p=q?q.price:null, prev=q?q.prev:null;
       if(p!=null&&prev){ const pct=(p-prev)/prev*100; const pts=p-prev; cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-line"><span class="ix-val">${p.toLocaleString('en-US',{maximumFractionDigits:2})}</span><span class="ix-chg ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pts).toLocaleString('en-US',{maximumFractionDigits:2})} (${Math.abs(pct).toFixed(2)}%)</span></span>`; }
       else cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-val">—</span>`;
     }catch(e){ cell.innerHTML=`<span class="ix-name">${x.n}</span><span class="ix-val">—</span>`; }
@@ -4630,6 +4911,82 @@ function initMarketUI(){
   const it=document.getElementById('indexTitle'); if(it) it.textContent = m==='tw' ? '📊 加權指數' : '📊 四大指數';
   const si=document.getElementById('searchInput'); if(si) si.placeholder = m==='tw' ? '台股代碼或名稱，例如 2330 / 台積電 / 聯發科' : '代碼或公司名，例如 AAPL / 台積電 / Apple';
   document.querySelectorAll('#grpMenu .tw-only').forEach(b=>b.style.display=m==='tw'?'':'none');
+}
+// ════════════════════════════════════════════════════════════════
+// 【大師選股邏輯推薦】
+//   結構：先講清楚該位大師的選股邏輯原則，再依該邏輯分別推薦台股 3 家、美股 3 家，
+//   每一家都寫出「為什麼符合這位大師的邏輯」「買入邏輯」「風險/觀察點」。
+//   ⚠️ 內容鐵則（與全站一致）：
+//     ① 所有財務數字都來自官方來源（台股＝證交所/櫃買中心 OpenAPI 官方季報；
+//        美股＝各公司官網 IR 與 SEC 申報），不臆測、不推估。
+//     ② 每一家都必須同時寫出風險，不做只講好話的推薦。
+//     ③ 這是「依大師公開的選股原則所做的整理」，不是那些大師本人的推薦，
+//        也不構成投資建議 —— 卡片底部固定顯示這段聲明。
+//   資料延遲載入：切到哪一位才抓哪一位的 JSON，沒點開的不下載。
+// ════════════════════════════════════════════════════════════════
+const MASTER_PICK_TABS=[
+  {k:'buffett', label:'🏛️ 巴菲特'},
+  {k:'lynch',   label:'📈 彼得林區'},
+  {k:'munger',  label:'🧠 查理蒙格'},
+  {k:'fisher',  label:'🔬 菲利浦費雪'}
+];
+let __mpKey='buffett';
+const __mpCache={};
+function setMasterPick(k){ __mpKey=k; renderMasterPickTabs(); }
+function renderMasterPickTabs(){
+  const el=document.getElementById('mpTabs'); if(!el) return;
+  el.innerHTML=MASTER_PICK_TABS.map(t=>'<div class="chip'+(__mpKey===t.k?' active':'')+'" onclick="setMasterPick(\''+t.k+'\')">'+t.label+'</div>').join('');
+  loadMasterPick(__mpKey);
+}
+async function loadMasterPick(key){
+  const box=document.getElementById('mpBody'); if(!box) return;
+  if(__mpCache[key]){ renderMasterPickBody(__mpCache[key]); return; }
+  box.innerHTML='<div class="note">載入中…</div>';
+  try{
+    const r=await fetch('data/masters/'+key+'.json', {cache:'no-cache'});
+    if(!r.ok) throw new Error('HTTP_'+r.status);
+    const d=await r.json();
+    __mpCache[key]=d;
+    if(__mpKey===key) renderMasterPickBody(d);
+  }catch(e){
+    box.innerHTML='<div class="err-box">載入失敗，請稍後再試。（'+esc(String(e&&e.message||e))+'）</div>';
+  }
+}
+function __mpPickHtml(pk, mkt){
+  // 市場不符時不讓它看起來可以點：點了會強制切換市場並重載，體驗很差(今日市場舊功能踩過同一個坑)。
+  const clickable = (mkt==='tw') === (getMarket()==='tw');
+  const sym=esc(pk.symbol||'');
+  const onclick = clickable ? ' onclick="rowAnalyze(this,\''+sym+'\')"' : '';
+  return '<div class="mp-pick'+(clickable?' mp-tap':'')+'"'+onclick+'>'
+    + '<div class="mp-p-head"><span class="mp-p-nm">'+esc(pk.name||'')+'<span class="mp-p-cd">'+esc(pk.code||'')+'</span></span>'
+    + '<span class="mp-p-tag">'+esc(pk.tag||'')+'</span></div>'
+    + '<div class="mp-sec"><b>符合邏輯</b>'+esc(pk.fit||'')+'</div>'
+    + (Array.isArray(pk.facts)&&pk.facts.length
+        ? '<div class="mp-facts"><b>官方數字</b><ul>'+pk.facts.map(f=>'<li>'+esc(f)+'</li>').join('')+'</ul></div>' : '')
+    + '<div class="mp-sec"><b>買入邏輯</b>'+esc(pk.buy||'')+'</div>'
+    + (pk.risk?'<div class="mp-risk"><b>風險／觀察點</b>'+esc(pk.risk)+'</div>':'')
+    + (clickable?'<div class="mp-go">點此看這家公司的完整分析 →</div>':'<div class="mp-go off">切換到「'+(mkt==='tw'?'台股':'美股')+'」後可點此分析</div>')
+    + '</div>';
+}
+function __mpMarketHtml(title, block, mkt){
+  if(!block || !Array.isArray(block.picks) || !block.picks.length) return '';
+  return '<div class="mp-mkt">'+esc(title)+'</div>'
+    + '<div class="note" style="margin:-2px 0 8px">財務數字為 '+esc(block.asOf||'')+'，來源：'+esc(block.sourceName||'官方財報')+'</div>'
+    + (block.note?'<div class="mp-note">'+esc(block.note)+'</div>':'')
+    + block.picks.map(pk=>__mpPickHtml(pk, mkt)).join('');
+}
+function renderMasterPickBody(d){
+  const box=document.getElementById('mpBody'); if(!box||!d) return;
+  const pr=(d.principles||[]).map(x=>'<div class="mp-pr"><b>'+esc(x.h||'')+'</b>'+esc(x.t||'')+'</div>').join('');
+  box.innerHTML='<div class="mp-who"><span class="mp-ico">'+esc(d.icon||'')+'</span><div><b>'+esc(d.name||'')+'</b>'
+      + '<div class="mp-sub">'+esc(d.subtitle||'')+'</div></div></div>'
+    + '<div class="mp-sec-t">📜 選股邏輯原則</div>'+pr
+    + __mpMarketHtml('🇹🇼 台股推薦（依上述邏輯）', d.tw, 'tw')
+    + __mpMarketHtml('🇺🇸 美股推薦（依上述邏輯）', d.us, 'us')
+    + '<div class="note" style="margin-top:14px;padding-top:10px;border-top:1px solid var(--border);line-height:1.7">'
+    + '⚠️ 本頁是「依這些大師公開發表過的選股原則所做的整理與對照」，<b>不是這些大師本人的推薦或持股</b>，'
+    + '也不構成投資建議。所有財務數字均取自官方申報資料並標示來源與期間，'
+    + '但選股邏輯的套用必然包含判斷成分，請自行查證後再做決定。</div>';
 }
 // ── 8 大主題選單：把各架構主旨分組，點選單只看該群組 ──
 let __grp=1, __jumpAfterSearch=false;
@@ -4662,6 +5019,7 @@ function showGroup(n){
   const showWl    = (n===10);
   const showTheme = (n===15);
   const showEtf   = (n===16);
+  const showMp    = (n===18);   // 【新增】大師選股邏輯推薦
   // welcome(封面介紹)：每次開App固定停留在畫面上，直到revealMenu()結束2秒封面倒數才隱藏——
   //   不論是否已選過市場、不論第幾次開App都一樣，這是使用者明確要求(不是只有第一次使用者才看得到)。
   const e_wel=document.getElementById('welcome');       if(e_wel) e_wel.style.display=(showWl && !__splashDone)?'':'none';
@@ -4671,8 +5029,10 @@ function showGroup(n){
   const e_wl =document.getElementById('watchlistCard'); if(e_wl ) e_wl .style.display=showWl   ?'':'none';
   const e_th =document.getElementById('themeCard');     if(e_th ) e_th .style.display=showTheme?'':'none';
   const e_etf=document.getElementById('etfCard');      if(e_etf) e_etf.style.display=showEtf  ?'':'none';
+  const e_mp =document.getElementById('masterPickCard'); if(e_mp) e_mp.style.display=showMp  ?'':'none';
   if(showTheme) renderThemeChips();   // 進入「投資主題」頁時(重新)渲染，反映當下市場/自選股狀態
   if(showEtf) renderEtfTabs();        // 同理:ETF頁進入時才渲染，市場切換後數字/清單才會跟著換
+  if(showMp) renderMasterPickTabs();  // 大師選股：進入時才載入該位大師的 JSON，沒點開就不下載
   syncLogPanel();   // 載入進度歸屬大盤指數選單，切換選單時同步顯示/隱藏
   const res=document.getElementById('results'); let anyCard=false;
   if(res){
@@ -4876,7 +5236,15 @@ function isMarketOpenNow(){
 let __lastPriceTick=0, __priceBusy=false;
 function refreshLivePrices(){
   if(document.hidden) return;
-  const gap=isMarketOpenNow()?1000:60000;      // 盤中每秒、收盤60秒(使用者要求盤中即時跳動)
+  // ⚠️⚠️ 2026-09-12 由「盤中每秒」改為「盤中每5秒」(使用者同意，理由是成本)：
+  //   ① 證交所 MIS 本身約每 5 秒才更新一次快照，每秒輪詢有 4 次拿到的是同一份資料，
+  //      畫面上看不出任何差別，純粹是浪費。
+  //   ② 每一次輪詢都會經過 /api/proxy（TWSE 不給 CORS，瀏覽器不能直連），
+  //      等於一次 Vercel Function 呼叫。Hobby 免費額度是每月 100 萬次，
+  //      每秒輪詢時單一使用者整個盤都開著就會吃掉約 65 萬次，約 20 個使用者就爆掉。
+  //      改成 5 秒直接降為 1/5。
+  //   ⚠️ 這個數字必須與 api/proxy.js 的 s-maxage 一起看：兩邊都是 5 秒才對得起來。
+  const gap=isMarketOpenNow()?5000:60000;      // 盤中每5秒、收盤60秒
   const now=Date.now();
   if(now-__lastPriceTick<gap) return;
   if(__priceBusy) return;   // 上一輪還沒回來就不再發新請求，避免網路慢時請求疊在一起
@@ -4916,21 +5284,10 @@ async function updateDetailPrice(){
   const sym=window.__ccbSym; if(!sym) return;
   const isTw=/\.TW[O]?$/i.test(sym);
   try{
-    let price=null, prev=null;
-    if(isTw){
-      // 台股改走TWSE官方即時報價(見loadWatchlistPrices的說明)，比Yahoo新鮮很多；查無資料才退回Yahoo
-      const quotes=await fetchTwMisQuotes([sym]);
-      const q=quotes.get(sym);
-      // ⚠️ q.stale＝今天完全沒有成交資料、價格其實是昨收。這種情況寧可退回 Yahoo，
-      //   也不要把昨收當成個股頁上的「目前股價」。
-      if(q && !q.stale){ price=q.price; prev=q.prev; }
-    }
-    if(price==null){
-      const ch=await fetchJsonTimeout(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=1d&interval=1d`, 4000);
-      const meta=ch?.chart?.result?.[0]?.meta; if(!meta) return;
-      price=meta.regularMarketPrice; prev=meta.previousClose??meta.chartPreviousClose;
-    }
-    if(price==null) return;
+    // ⚠️ 改走全站統一報價層：個股頁看到的價格必須與自選股／投資主題／ETF 完全一致。
+    const q=await quoteOf(sym);
+    if(!q || q.price==null) return;
+    const price=q.price, prev=q.prev;
     const before=parseFloat((el.textContent||'').replace(/[^0-9.]/g,''));
     setLiveText(el, (isTw?'NT$':'$')+(+price).toFixed(2),
                 (!isNaN(before) && price!==before) ? price>before : null);
@@ -4945,11 +5302,11 @@ async function updateDetailPrice(){
 }
 window.addEventListener('load', function(){
   initMarketUI(); renderWatchlist(); loadIndexBar(); setInterval(loadIndexBar, 60000);
-  // 🔄 股價自動更新：開盤中每 1 秒更新一次(使用者2026-08-14要求「只要價格有變化就每秒即時跳動」)，
+  // 🔄 股價自動更新：開盤中每 5 秒更新一次(原為每秒，2026-09-12 因成本改為 5 秒，見 refreshLivePrices)，
   //   收盤/假日則降到每 60 秒(價格不會變，沒必要一直打 Yahoo)。分頁在背景時完全不更新。
   //   ⚠️ 前端輪詢頻率必須與 api/proxy.js 的 s-maxage 一起改，只改這裡沒用——
   //      邊緣快取會擋住請求，前端拿到的仍是同一份舊資料(2026-08-14 實際踩過這個坑)。
-  setInterval(refreshLivePrices, 1000);
+  setInterval(refreshLivePrices, 1000);   // 每秒只是「檢查該不該更新」的輕量 tick，真正發請求的節流在 refreshLivePrices 的 gap
   // 從背景切回前景(手機常見)立刻補抓一次，不用等下一個週期
   document.addEventListener('visibilitychange', function(){ if(!document.hidden){ __lastPriceTick=0; refreshLivePrices(); } });
   renderSplashQuotes();   // 封面名言(每次開App隨機)

@@ -28,15 +28,24 @@ export default async function handler(req, res) {
     });
     const body = await r.text();
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    // 即時報價完全不快取(no-store)：使用者連續三次回報開盤股價「不動、且顯示昨收」，
-    //   即使已改用TWSE官方即時來源+4秒逾時仍未解決，故不再信任任何形式的邊緣/共享快取，
-    //   改為徹底停用快取，讓每一次前端輪詢都真正打到TWSE/Yahoo原始伺服器，排除快取層
-    //   本身是問題根源的可能性(即使s-maxage=1理論上只擋1秒，仍無法排除CDN在高流量下
-    //   實際行為與HTTP語意不完全一致的風險)。個人專案流量低，不快取的額外負擔可忽略。
+    // ⚠️⚠️ 2026-09-12：即時報價由 no-store 改回「邊緣快取 5 秒」。
+    //   當初改成 no-store，是因為使用者連續四次回報開盤股價「不動、且顯示昨收」，
+    //   在還沒找到真因時把快取當成嫌疑犯先排除掉。但 2026-08-31 已經確認真因是
+    //   前端程式的 bug —— TWSE 的 z(最新成交價) 回 "-" 時，程式直接拿 y(昨收) 冒充現價
+    //   (見 stock_analyzer.html 的 fetchTwMisQuotes 註解)。快取並不是兇手，那個 bug 已修好。
+    //   改回快取的理由是成本：TWSE 不給 CORS，前端每一次報價輪詢都必須經過這支函式，
+    //   等於一次 Vercel Function 呼叫，而 Hobby 免費額度只有每月 100 萬次、超過不能加購
+    //   只能等 30 天(屆時全部使用者的股價會一起掛掉)。s-maxage=5 讓所有使用者共用同一份
+    //   5 秒快取 —— 1000 個人看台積電，打到 TWSE 的次數與 1 個人幾乎一樣，與人數脫鉤。
+    //   同時也避免大量請求從 Vercel 的 IP 打到證交所而被對方封鎖。
+    //   ⚠️ 這個 5 秒必須與前端 refreshLivePrices() 的 gap(5000) 一致，只改單邊沒有意義：
+    //      前端若比快取快，多打的那幾次只會拿到同一份快取；前端若比快取慢，快取就白設。
+    //   ⚠️ 刻意不加 stale-while-revalidate：報價寧可稍慢一拍去抓新的，也不要回舊值，
+    //      否則就會重演「看起來很新、其實是舊價」那個讓使用者困擾四次的症狀。
     //   其餘(SEC/新聞/財務數據等不需要秒級更新的資料)維持原本5分鐘快取，降低重複請求。
     const isLiveQuote = /\/v8\/finance\/chart\//.test(target) || /mis\.twse\.com\.tw\/stock\/api\//.test(target);
     res.setHeader('Cache-Control', isLiveQuote
-      ? 'no-store'
+      ? 'public, max-age=0, s-maxage=5'
       : 's-maxage=300, stale-while-revalidate=600');
     res.status(r.ok ? 200 : r.status).send(body);
   } catch (e) {
