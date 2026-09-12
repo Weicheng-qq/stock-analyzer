@@ -497,6 +497,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 #masterPickCard .mp-facts li { margin-bottom:2px; }
 #masterPickCard .mp-risk { font-size:12.5px; line-height:1.7; color:var(--text2); background:rgba(248,81,73,.07); border-radius:6px; padding:7px 9px; margin-top:7px; }
 #masterPickCard .mp-risk b { display:block; font-size:12px; color:var(--red); font-weight:600; margin-bottom:1px; }
+#masterPickCard .mp-pnote { margin-top:7px; font-size:11.5px; line-height:1.6; color:var(--text2); }
 #masterPickCard .mp-go { margin-top:8px; font-size:12.5px; color:var(--blue); }
 #masterPickCard .mp-go.off { color:var(--text2); }
 /* 投資主題：巴菲特持倉的申報佔比小標（只有該主題會出現） */
@@ -989,7 +990,9 @@ const FOREIGN_YAHOO_FALLBACK={'SKHY':{yahooSym:'000660.KS', curr:'KRW'}};
 const TICKER_ZH={};
 for(const k in ALIASES){ if(/[一-鿿]/.test(k)){ const t=ALIASES[k]; if(!TICKER_ZH[t]||k.length>TICKER_ZH[t].length) TICKER_ZH[t]=k; } }
 // 指定顯示名稱覆蓋（避免自動挑到過長/不慣用的別名）
-Object.assign(TICKER_ZH, {'NVDA':'輝達','SKHY':'海力士','GOOGL':'谷歌','GOOG':'谷歌','AXP':'美國運通','BAC':'美國銀行','CVX':'雪佛龍','OXY':'西方石油','KHC':'卡夫亨氏','MCO':'穆迪','DAL':'達美航空'});
+Object.assign(TICKER_ZH, {'NVDA':'輝達','SKHY':'海力士','GOOGL':'谷歌','GOOG':'谷歌','AXP':'美國運通','BAC':'美國銀行','CVX':'雪佛龍','OXY':'西方石油','KHC':'卡夫亨氏','MCO':'穆迪','DAL':'達美航空','CB':'安達保險'});
+// ⚠️ CB(Chubb) 原本缺中文名，導致巴菲特持倉清單顯示成「CBCB」(名稱退回代碼＋代碼重複)。
+//   台灣子公司登記名為「安達產物保險」，故中文名採「安達保險」。
 // 美股常見ETF：SEC company_tickers.json 只收錄「有申報10-K/10-Q的公司」，不含ETF(基金非公司)，
 //   findCompany() 查不到；ETF也沒有SEC財報可跑深度分析，故只用於加入自選股(僅需代碼+名稱+Yahoo報價)。
 const US_ETF={
@@ -1408,13 +1411,20 @@ const THEME_STOCKS={
   'AI PC題材':{tw:['2382','2324','3231','2356','4938','3260','4967','2451','2330'],us:['AMD','INTC','QCOM','NVDA','DELL','HPQ']},
   '高股息族群':{tw:['2412','2886','2892','5880','2891','1216','2884'],us:['KO','PG','JNJ','VZ','T','XOM','CVX','PEP']},
   '減肥藥題材':{tw:[],us:['LLY','NVO','VKTX','AMGN','PFE']},
-  '巴菲特持倉':{tw:[],us:['AAPL','AXP','KO','BAC','CVX','OXY','GOOGL','CB','MCO','KHC']},
+  '巴菲特持倉':{tw:[],us:['AAPL','AXP','GOOGL','KO','BAC','CVX','OXY','CB','MCO','KHC']},
   '川普持股':{tw:[],us:['NVDA','AVGO','AAPL','ORCL','TXN','SNPS','CDNS','NOW','ADBE','DELL','INTC']},
   '國防軍工題材':{tw:['2634','8033','6753'],us:['LMT','NOC','RTX','GD','LHX']}
 };
-// 巴菲特持倉來源：波克夏海瑟威官方SEC 13F-HR季度申報(最新為2026Q1，2026/05/15申報，Q2尚未公布)，每次接手更新前應重新查證是否有更新一季申報。
-// Top10依申報市值佔比排序：AAPL 22.0%/AXP 17.4%/KO 11.6%/BAC 9.5%/CVX 6.6%/OXY 6.55%/GOOGL 5.93%/CB(Chubb) 4.24%/MCO(Moody's) 4.09%/KHC 2.78%。
-// 2026-08-09更新：原清單第10名DAL(達美航空,新建小部位約26億美元)已跌出Top10，實際第8名為CB(Chubb)，OXY與GOOGL名次對調，KHC移至第10名；DAL仍可能是波克夏持股但非Top10，故從本主題移除(IR資料仍保留，不影響其他主題引用)。
+// 巴菲特持倉來源：波克夏海瑟威官方SEC 13F-HR季度申報。
+//   ⚠️ 目前採用 2026Q2（2026/08/14 申報）。每次接手都要重新查證有沒有更新一季 ——
+//   2026-09-12 就是因為這裡還停在 Q1、註解甚至寫著「Q2尚未公布」，導致 Alphabet 的排名是錯的。
+// 2026-09-12 更新為 2026Q2：波克夏單季加碼 Alphabet 83%，季末持有約 1.06 億股、市值約 378 億美元，
+//   其中約 100 億美元來自 6 月直接向 Alphabet 認購的私募新股。
+//   ⚠️⚠️ 關鍵細節：13F 把 Alphabet 拆成兩個科目申報 —— GOOGL(A股) 281.6 億美元 9.41%、
+//   GOOG(C股) 96.1 億美元 3.21%。只看 GOOGL 那一列會以為它是第 4 名，但那是同一家公司，
+//   合計 377.7 億美元 12.62%，超越可口可樂的 10.86%，實際是【第 3 大持股】。
+//   本站採合併計算（與各大財經媒體「Alphabet 躍居第三大持股」的口徑一致）。
+// Top10 依申報市值佔比（2026Q2，總組合約 2,992.5 億美元、27 檔）：
 // 資料中心電力題材＝伺服器代工廠(廣達/緯穎/智邦)+海外資料中心電力/機房基礎設施(Vertiv/Eaton/Digital Realty/Equinix)。
 // 2026-08-09：依使用者要求刪除「AI電力題材」(台股重電四雄士電/中興電/華城/亞力)，並把「國防軍工題材」移到最後一個。
 // 川普持股來源：美國政府倫理辦公室(OGE)公開的財產申報/交易揭露，2026/05/15 揭露之 2026 Q1 交易。
@@ -1426,7 +1436,7 @@ const THEME_STOCKS={
 //   renderThemeList() 會據此自動排序並把佔比顯示在每一列 —— 順序由程式保證，
 //   日後只要更新這張表，畫面排序就跟著對，不必再人工維護清單順序。
 //   ⚠️ 更新新一季 13F 時，THEME_STOCKS['巴菲特持倉'] 與這張表要一起改。
-const BUFFETT_WEIGHT={AAPL:22.0, AXP:17.4, KO:11.6, BAC:9.5, CVX:6.6, OXY:6.55, GOOGL:5.93, CB:4.24, MCO:4.09, KHC:2.78};
+const BUFFETT_WEIGHT={AAPL:22.04, AXP:17.14, GOOGL:12.62, KO:10.86, BAC:9.20, CVX:4.67, OXY:4.30, CB:3.90, MCO:3.73, KHC:2.57};
 let __themeKey=null;
 function renderThemeChips(){
   const el=document.getElementById('themeChips'); if(!el) return;
@@ -1464,7 +1474,7 @@ function renderThemeList(){
       <button class="wl-heart${have.has(r.symbol)?' added':''}" onclick="event.stopPropagation();addThemeStockToWatchlist('${esc(r.symbol)}','${esc(r.name).replace(/'/g,"\\'")}',this)" ${have.has(r.symbol)?'disabled title="已在自選股清單"':'title="加入自選股"'}>${have.has(r.symbol)?'❤️':'🤍'}</button>
     </div></div>`).join('') || '<div class="note">此主題目前無資料</div>';
   if(__themeKey==='巴菲特持倉'){
-    listEl.insertAdjacentHTML('beforeend', '<div class="note" style="margin-top:8px;line-height:1.7">依波克夏海瑟威向美國證管會（SEC）申報之 13F-HR 持股市值佔比由高至低排序（2026 年第 1 季，2026/05/15 申報）。佔比為該季申報之市值權重，非即時持股，波克夏於季後的買賣不會反映在此。</div>');
+    listEl.insertAdjacentHTML('beforeend', '<div class="note" style="margin-top:8px;line-height:1.7">依波克夏海瑟威向美國證管會（SEC）申報之 13F-HR 持股市值佔比由高至低排序（<b>2026 年第 2 季，2026/08/14 申報</b>）。⚠️ Alphabet 在 13F 中分為 GOOGL（A股 9.41%）與 GOOG（C股 3.21%）兩個科目申報，本站合併計為 12.62%，故排名第三；只看單一科目的網站會顯示第四。佔比為該季申報之市值權重，非即時持股，波克夏於季後的買賣不會反映在此。</div>');
   }
   window.__themeRows=rows;   // 供自動更新股價時重用(不重新渲染整份清單，避免閃爍)
   loadThemePrices(rows);
@@ -5092,6 +5102,7 @@ function __mpPickHtml(pk, mkt){
         ? '<div class="mp-facts"><b>官方數字</b><ul>'+pk.facts.map(f=>'<li>'+esc(f)+'</li>').join('')+'</ul></div>' : '')
     + '<div class="mp-sec"><b>買入邏輯</b>'+esc(pk.buy||'')+'</div>'
     + (pk.risk?'<div class="mp-risk"><b>風險／觀察點</b>'+esc(pk.risk)+'</div>':'')
+    + (pk.note?'<div class="mp-pnote">'+esc(pk.note)+'</div>':'')   // 單一公司層級的補充說明（例如同一家公司為何出現在兩位大師分頁）
     + (clickable?'<div class="mp-go">點此看這家公司的完整分析 →</div>':'<div class="mp-go off">切換到「'+(mkt==='tw'?'台股':'美股')+'」後可點此分析</div>')
     + '</div>';
 }
