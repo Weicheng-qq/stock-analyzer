@@ -112,21 +112,35 @@ async function findForCode(code, profile) {
   const res = { code, name: p ? p.CompanyName : null, site: null, irPages: [], deck: null, deckDate: null, note: '' };
   if (!p) { res.note = '櫃買公司基本資料查無此代碼'; return res; }
 
-  let site = (p.WebAddress || '').trim();
-  if (!site) { res.note = '官方名冊未登記公司網址'; return res; }
-  if (!/^https?:\/\//i.test(site)) site = 'https://' + site.replace(/^\/+/, '');
-  res.site = site;
+  let raw = (p.WebAddress || '').trim();
+  if (!raw) { res.note = '官方名冊未登記公司網址'; return res; }
 
-  // ① 首頁
-  const home = await pdfsIn(site);
-  await sleep(GAP_MS);
-  if (!home.ok) {
-    // http 再試一次（有些老網站沒有 https）
-    const alt = site.replace(/^https:/, 'http:');
-    const h2 = await pdfsIn(alt);
+  // ⚠️⚠️ 官方名冊登記的網址不一定still有效，2026-09-13 實測到三種情況：
+  //   ① 登記 http:// 但實際只有 https（6129 普誠：http 不通、https 回 302）
+  //   ② 登記少了 .tw（6125 廣運登記 kenmec.com，實際多為 kenmec.com.tw）
+  //   ③ 真的連不上（curl 同樣失敗，確認非本機問題）
+  //   所以逐一嘗試常見變體，全部失敗才判定無法存取，避免產生大量假的「官網無法存取」。
+  const host = raw.replace(/^https?:\/\//i, '').replace(/\/+$/, '');
+  const bare = host.replace(/^www\./i, '');
+  const variants = [...new Set([
+    'https://' + host,
+    'http://' + host,
+    'https://www.' + bare,
+    'https://' + bare,
+    /\.tw$/i.test(bare) ? null : 'https://www.' + bare + '.tw',
+    /\.tw$/i.test(bare) ? null : 'https://' + bare + '.tw'
+  ].filter(Boolean))];
+
+  let home = null;
+  for (const v of variants) {
+    const r = await pdfsIn(v);
     await sleep(GAP_MS);
-    if (!h2.ok) { res.note = '官網無法存取（' + (home.status || home.err) + '）'; return res; }
-    Object.assign(home, h2);
+    if (r.ok) { home = r; res.site = r.finalUrl || v; res.siteTried = v; break; }
+  }
+  if (!home) {
+    res.site = raw;
+    res.note = '官網無法存取（已試 ' + variants.length + ' 種網址變體皆失敗；已用 curl 交叉確認非本機問題）';
+    return res;
   }
 
   // ② 候選 IR 連結（取分數最高的前 4 個，去重同網址）
@@ -187,6 +201,7 @@ async function findForCode(code, profile) {
   pool.sort((a, b) => (b.key || '').localeCompare(a.key || ''));
   res.deck = pool[0].href;
   res.deckDate = pool[0].key || null;
+  res.talkEvidence = [...seenTalk].slice(0, 12);
   res.note = '共找到 ' + pool.length + ' 份 PDF，已取日期最新者';
   return res;
 }
