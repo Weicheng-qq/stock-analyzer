@@ -1,0 +1,47 @@
+{
+ "symbol": "BALY",
+ "market": "us",
+ "name": "Bally’s Corporation",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Bally’s Corporation",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "7.92",
+  "營業毛利": null,
+  "營業利益": "-0.34",
+  "本期淨利": "-1.46",
+  "每股盈餘": -2.41,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-14",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1747079/000174707926000082/ex991q22026earningsrelease.htm"
+ },
+ "savedAt": "2026-09-16T01:29:21.905Z",
+ "result": {
+  "revenue": "本季合併營收為 7.92 億美元，較去年同期增長 20.5%。",
+  "eps": "本季每股盈餘為 -2.41 美元。",
+  "margins": "毛利率未提供；營業利益率為 -4.3%，顯示營業虧損 0.34 億美元；淨利率為 -18.4%，顯示本季淨虧損 1.46 億美元。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "營收呈現兩位數成長，但營業與淨利皆為負，顯示獲利仍有壓力。公司正積極為 Bronx 整合賭場項目籌措資金，未來資本需求可能持續增加。因缺乏營運現金流與資本支出資料，無法評估自由現金流狀況。",
+  "highlights": "• 營收 7.92 億美元，較去年同期增長 20.5%。<br>• Bally’s Intralot B2C 營收 2.435 億美元，年增 22.3%。<br>• North America Interactive 營收 0.661 億美元，年增 16.9%。",
+  "concerns": "• 營業虧損 0.34 億美元，營業利益率 -4.3%。<br>• 本季淨虧損 1.46 億美元，淨利率 -18.4%。<br>• 英國遊戲稅從 21% 提升至 40%，對 B2C 部門 EBITDAR 產生約 3900 萬美元負面影響。",
+  "risks": "• 大規模 Bronx 整合賭場項目（預估 40 億美元）可能帶來高額資本需求與融資風險。<br>• 主要營收仍依賴英國市場，稅率變動可能持續侵蝕獲利。",
+  "keyPoints": "• 營收 7.92 億美元，較去年同期增長 20.5%。<br>• 營業虧損 0.34 億美元（營業利益率 -4.3%）。<br>• 淨虧損 1.46 億美元（淨利率 -18.4%），每股盈餘 -2.41 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "• Casinos & Resorts：401.0 百萬美元。<br>• Bally’s Intralot B2C：243.5 百萬美元。<br>• North America Interactive：66.1 百萬美元。<br>• Corporate & Other：2.2 百萬美元。"
+ }
+}
