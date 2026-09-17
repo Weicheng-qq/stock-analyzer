@@ -1,0 +1,47 @@
+{
+ "symbol": "IRDM",
+ "market": "us",
+ "name": "Iridium Communications Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Iridium Communications Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "2.25",
+  "營業毛利": null,
+  "營業利益": "0.34",
+  "本期淨利": "0.10",
+  "每股盈餘": 0.09,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-22",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1418819/000141881926000046/pressreleaseq22026.htm"
+ },
+ "savedAt": "2026-09-17T01:21:38.595Z",
+ "result": {
+  "revenue": "本季營業收入為 2.25 億美元，較去年同期增長 4%。",
+  "eps": "每股盈餘（EPS）為 0.09 美元，較去年同期的 0.20 美元有所下降。",
+  "margins": "本季營業毛利未提供（毛利率標示為 0.0%）；營業利益率為 15.1%（營業利益 0.34 億美元），淨利率為 4.4%（本期淨利 0.10 億美元）。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "因 Rocket Lab 的收購交易，公司未提供未來財務指引。",
+  "outlook": "公司將被 Rocket Lab 收購，預計於 2027 年年中完成。營運上，訂戶數持續增長，且剛完成對 Aireon LLC 的收購，預期將為未來帶來年化收入增長，但短期內不提供財務預測。",
+  "highlights": "• 總訂戶數達到 2,627,000 戶，年增 6%，主要由商業 IoT 增長帶動。<br>• 商業服務營收達 1.34 億美元，年增 4%，佔總營收 59%。<br>• 完成對 Aireon LLC 的收購，預計年化將增加至少 1.00 億美元服務營收及 0.30 億美元 OEBITDA。",
+  "concerns": "• 本期淨利由去年同期的 0.22 億美元下降至 0.10 億美元，主要受到交易成本增加影響。<br>• 本季 OEBITDA 為 1.19 億美元，較去年同期略微下降，主因年度激勵補償改為全現金支付導致應計費用增加 0.039 億美元。",
+  "risks": "• 債務水準較高，期末總定期貸款債務達 18 億美元，淨債務達 16 億美元，淨槓桿率為 TTM OEBITDA 的 3.3 倍。<br>• 因收購 Aireon 提領了 1.00 億美元循環信用額度，並承接了其 1.55 億美元的現有信用額度，可能增加財務利息負擔。",
+  "keyPoints": "1. Rocket Lab 預計於 2027 年年中完成對 Iridium 的收購，期間公司將不召開法說會亦不提供財測。<br>2. 本季淨利降至 0.10 億美元（EPS 0.09 美元），獲利能力因交易成本等因素短期承壓。<br>3. 收購 Aireon LLC 總價達 3.67 億美元，需注意後續整合效益及新增債務對財務結構的影響。",
+  "guidanceOfficial": "公司未於本次資料提供財測。官方新聞稿指出：『In light of the pending transaction, the Company does not intend to hold conference calls to discuss its quarterly financial results or to update or provide financial guidance.』（鑑於未決交易，公司不打算舉行電話會議來討論其季度財務業績，也不打算更新或提供財務指引。）",
+  "segments": "• 商業服務（Commercial service）：1.34 億美元，年增 4%<br>• 商業 IoT 數據（Commercial IoT data）：營收增長 0.023 億美元，年增 5%<br>• 託管載荷與其他數據服務（Hosted payload and other data service）：營收增長 0.020 億美元，年增 14%"
+ }
+}

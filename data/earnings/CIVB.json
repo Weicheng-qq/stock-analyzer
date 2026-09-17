@@ -1,0 +1,47 @@
+{
+ "symbol": "CIVB",
+ "market": "us",
+ "name": "Civista Bancshares, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Civista Bancshares, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.06",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.14",
+  "每股盈餘": 0.69,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-23",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/944745/000119312526313253/civb-ex99_1.htm"
+ },
+ "savedAt": "2026-09-17T01:31:26.239Z",
+ "result": {
+  "revenue": "營收為 0.06 億美元。",
+  "eps": "每股盈餘（EPS）為 0.69 美元。",
+  "margins": "毛利率未提供，營業利益率未提供，淨利率為 233.3%，顯示本季淨利相對營收極高。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未提供下一季或全年的財務展望。",
+  "outlook": "本季營收規模仍相當有限，但淨利率極高，顯示利息收入與成本管理成效顯著。效率比率從去年同期的 64.5% 降至 58.2%，顯示營運效率提升。資產規模維持在 43 億美元左右，資產規模未見顯著變化。",
+  "highlights": "• Net income 於本季達 14.3 百萬美元，較去年同期增長 30%。<br>• Net interest margin 擴張 25 個基點至 3.89%。<br>• 效率比率改善至 58.2%，較去年同期的 64.5% 大幅下降。",
+  "concerns": "• 本季淨利較上季下降 4.5%，顯示季節性波動仍在。<br>• 由於合併與增發股票，稀釋每股盈餘至 0.69 美元，較去年同期的 0.71 美元略有下降。<br>• Brokered deposits 連續兩季下降，累計減少 52.0 百萬美元，需關注資金來源結構變化。",
+  "risks": "• 營收規模僅 0.06 億美元，若利息收入或資金成本波動，淨利率可能大幅波動。<br>• 高比例的 brokered deposits 下降可能影響短期資金流動性與成本結構。",
+  "keyPoints": "• 本季淨利 14.3 百萬美元，較去年同期增長 30%。<br>• Net interest margin 3.89%，較去年同期提升 25 個基點。<br>• 效率比率降至 58.2%，顯示營運成本控制成效。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "• 總貸款金額增加 25.2 百萬美元，增幅 0.8%。<br>• 房地產建設貸款增加 11.2 百萬美元。<br>• 住宅房地產貸款增加 14.5 百萬美元。<br>• Brokered deposits 下降 25.0 百萬美元本季，年累計下降 52.0 百萬美元。"
+ }
+}

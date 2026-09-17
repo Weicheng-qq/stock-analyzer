@@ -1,0 +1,47 @@
+{
+ "symbol": "AXP",
+ "market": "us",
+ "name": "AMERICAN EXPRESS CO",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "AMERICAN EXPRESS CO",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "112.12",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "31.10",
+  "每股盈餘": 4.53,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "",
+  "form": "公司官網文件",
+  "url": "https://s26.q4cdn.com/747928648/files/doc_earnings/2026/q2/presentation/Q2-2026-Earnings-Presentation.pdf"
+ },
+ "savedAt": "2026-09-17T01:18:30.455Z",
+ "result": {
+  "revenue": "本季官方營業收入為 112.12 億美元。",
+  "eps": "每股盈餘（EPS）為 4.53 美元，較去年同期成長 11%。",
+  "margins": "本期淨利率為 27.7%。營業毛利率與營業利益率官方未提供（標示為 0.0%）。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "官方調升 2026 全年營收成長展望至 10%，並維持全年 EPS 展望於 17.30 至 17.90 美元。",
+  "outlook": "公司調升全年營收成長目標，並維持 EPS 預期，顯示對未來業務擴展的信心。然而，實際達成仍受總體經濟環境等外部因素影響。",
+  "highlights": "• 本季營業收入為 112.12 億美元，每股盈餘（EPS）達 4.53 美元，年增 11%。<br>• 美國消費者服務簽帳額年增 11%，其中年輕族群（Gen-Z）成長最為強勁，年增達 40%。<br>• 宣布擬收購歐洲餐廳預訂平台 TheFork，並與 ALL Accor 建立新的全球合作夥伴關係。",
+  "concerns": "• 商業服務簽帳額（Commercial Services Billed Business）成長放緩，年增僅 5%（匯率調整後為 4%）。<br>• 本季信用損失撥備（Total Provision）達 12.75 億美元，其中沖銷金額（Write-offs）達 12.75 億美元。<br>• 30天以上延滯率（30+ Days Past Due）維持在 1.3%，淨沖銷率（Net Write-off Rate）為 2.0%，高於去年同期的 1.9%。",
+  "risks": "• 信用風險：淨沖銷率（2.0%）高於去年同期（1.9%），若總體經濟惡化，可能面臨更高的信用損失壓力。<br>• 匯率風險：國際卡片服務簽帳額受匯率波動影響顯著，前六大國際貨幣對美元走勢將直接影響簽帳額表現。",
+  "keyPoints": "1. 2026 全年營收成長展望調升至 10%，EPS 展望維持在 17.30 至 17.90 美元。<br>2. 本季淨利達 31.10 億美元，淨利率達 27.7%，獲利能力依舊穩健。<br>3. 信用指標方面，30天以上延滯率為 1.3%，淨沖銷率為 2.0%，需持續關注資產品質的後續變化。",
+  "guidanceOfficial": "公司更新 2026 全年展望：將全年營收成長率目標從原先的 9% - 10% 調升至 10%；並維持全年每股盈餘（EPS）展望於 17.30 - 17.90 美元區間。",
+  "segments": "• 折扣收入（Discount Revenue）：93.61 億美元，年增 9%<br>• 淨卡費（Net Card Fees）：28.62 億美元，年增 15%<br>• 服務費與其他收入（Service Fees and Other Revenue）：19.63 億美元，年增 7%<br>• 淨利息收入（Net Interest Income）：46.49 億美元，年增 11%"
+ }
+}
