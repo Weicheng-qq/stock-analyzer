@@ -5441,10 +5441,91 @@ async function loadTechnical(symbol, gen){
 }
 
 // AI 欄位可能回傳字串或陣列，統一轉成 HTML（陣列以 <br> 分行）
+// ════════════════════════════════════════════════════════════════════════
+// 【AI 輸出消毒】白名單清洗後才准當 HTML 插進畫面。
+// ════════════════════════════════════════════════════════════════════════
+// ⚠️⚠️ 2026-09-18 上架前檢查發現：norm() 只把換行換成 <br>，其餘原封不動塞進 innerHTML。
+//   但它的輸入【全部來自 AI 模型的回應】（公司介紹、護城河、估值、林區分類、風險…）。
+//   模型只要回一段 <img src=x onerror=...> 或 <script>，就會在 App 裡執行 ——
+//   而 localStorage 裡放著使用者自己的 AI 金鑰，被讀走就是真的損失。
+//   模型不是攻擊者，但它會照著讀到的網頁內容講話；新聞標題、維基條目、公司官網
+//   都可能夾帶這種字串，等於間接注入（prompt injection → XSS）。
+//
+//   不能直接全部跳脫：prompt 本來就要求模型用 <br> 換行、<strong> 標重點，
+//   全跳脫會讓畫面出現一堆生的標籤文字。
+//   所以做法是【先全部跳脫，再把白名單標籤放回來】——
+//   預設拒絕、例外放行，與報價防呆同一個 fail-closed 思路。
+//   白名單只有純排版標籤，沒有 <a>（擋 javascript: 連結）、沒有 <img>（擋 onerror）、
+//   而且標籤屬性一律丟掉，所以 on* 事件處理器不可能活下來。
+const __AI_TAG_OK={br:1,strong:1,b:1,i:1,em:1,u:1,small:1,p:1,ul:1,ol:1,li:1};
+function sanitizeAiHtml(s){
+  const escaped=esc(String(s==null?'':s));   // 先全部變成純文字，之後只放行白名單
+  // ⚠️ 屬性部分要允許 &quot;（跳脫後的引號），只是不能再包含另一組角括號。
+  //   原本寫成 [^&]*?，碰到 <strong onclick="x"> 這種帶引號屬性就比對不到，
+  //   結果整個標籤被當成純文字印出來 —— 安全上沒破，但畫面會冒出生標籤。
+  return escaped.replace(new RegExp(String.fromCharCode(38)+"lt;"+"(/?)([a-zA-Z][a-zA-Z0-9]*)((?:(?!"+String.fromCharCode(38)+"lt;"+"|"+String.fromCharCode(38)+"gt;"+")[\\s\\S])*?)"+String.fromCharCode(38)+"gt;", "g"), function(m, slash, tag, attrs){
+    const t=String(tag).toLowerCase();
+    if(!__AI_TAG_OK[t]) return m;            // 不在白名單 → 維持跳脫，顯示成文字
+    return '<'+(slash||'')+t+'>';            // 在白名單 → 放行，但屬性【一律丟棄】
+  });
+}
 function norm(v){
   if(v==null) return '—';
-  if(Array.isArray(v)) return v.map(x=>String(x)).join('<br>');
-  return String(v).replace(/\n/g,'<br>');
+  if(Array.isArray(v)) return v.map(x=>sanitizeAiHtml(x)).join('<br>');
+  return sanitizeAiHtml(v).replace(/\n/g,'<br>');
+}
+// 自我測試：確認注入字串進不來、排版標籤出得去。
+function __xssSelfTest(){
+  // ⚠️ 判斷「有沒有被注入」必須看【DOM 裡真的長出什麼】，不能用字串比對清洗結果。
+  //   第一版的測試是拿正規表示式去搜尋清洗後的字串裡有沒有 'onerror='，
+  //   但清洗成功時輸出正是 '&lt;img src=x onerror=alert(1)&gt;' —— 純文字、不會執行，
+  //   卻照樣被搜到而誤判 FAIL。測試測錯東西，比沒有測試更危險：
+  //   它會在真的破掉時給你綠燈，或在沒破時逼你去改對的程式。
+  //   所以這裡實際 innerHTML 進一個離線節點，再問瀏覽器長出了哪些元素與屬性。
+  const probe=document.createElement('div');
+  const DANGER='script,img,svg,iframe,a,object,embed,link,style,form,input,video,audio,base';
+  const cases=[
+    // ⚠️ 標籤名刻意拆開串接：inline script 區塊裡出現完整的結束標籤字樣，
+    //   HTML 解析器會當場把腳本收掉，後面幾百行全變純文字。這個坑踩過一次就夠了。
+    ['script 標籤',        '<'+'script>alert(1)<'+'/script>'],
+    ['img onerror',        '<img src=x onerror=alert(1)>'],
+    ['svg onload',         '<svg onload=alert(1)>'],
+    ['a javascript:',      '<a href="javascript:alert(1)">x</a>'],
+    ['strong 帶 onclick',  '<strong onclick="alert(1)">粗</strong>'],
+    ['iframe',             '<iframe src="//evil"></iframe>'],
+    ['巢狀繞過嘗試',       '<scr<'+'script>ipt>alert(1)</scr<'+'/script>ipt>'],
+    ['大小寫混用',         '<ImG SrC=x OnErRoR=alert(1)>']
+  ];
+  const out=cases.map(([name,input])=>{
+    probe.innerHTML=norm(input);
+    const el=probe.querySelector(DANGER);
+    let evt='';
+    probe.querySelectorAll('*').forEach(function(n){
+      for(let i=0;i<n.attributes.length;i++){
+        const a=n.attributes[i].name.toLowerCase();
+        if(a.indexOf('on')===0 || a==='href' || a==='src') evt=n.tagName.toLowerCase()+'['+a+']';
+      }
+    });
+    const bad = el ? ('長出 <'+el.tagName.toLowerCase()+'>') : (evt ? ('殘留屬性 '+evt) : '');
+    return {測項:name, DOM結果:(bad||'只有純文字'), 顯示為:probe.textContent.slice(0,40), 結果:(bad?'FAIL':'PASS')};
+  });
+  // 白名單排版標籤必須留得住，否則畫面會冒出生標籤
+  [['<br> 換行','a<br>b','BR'],
+   ['<strong> 粗體','<strong>重點</strong>','STRONG'],
+   ['<strong> 帶屬性也要留住','<strong style="color:red">重點</strong>','STRONG']
+  ].forEach(function(c){
+    probe.innerHTML=norm(c[1]);
+    const has=!!probe.querySelector(c[2]);
+    // 留住標籤，但屬性必須被丟掉
+    const el=probe.querySelector(c[2]);
+    const clean=!el || el.attributes.length===0;
+    out.push({測項:c[0], DOM結果:(has?'保留 <'+c[2].toLowerCase()+'>':'標籤被吃掉')+(clean?'、無屬性':'、❌仍帶屬性'),
+              顯示為:probe.textContent.slice(0,40), 結果:((has&&clean)?'PASS':'FAIL')});
+  });
+  const fail=out.filter(x=>x.結果==='FAIL');
+  console.table(out);
+  console.log(fail.length? ('❌ 有 '+fail.length+' 項消毒失效'): '✅ AI 輸出消毒全數通過（'+out.length+' 項）');
+  return {total:out.length, failed:fail.length, cases:out};
 }
 function cc(v,good,mid){ if(v==null) return ''; return v>=good?'g':v>=mid?'y':'r'; }
 function fmtB(v){ if(!v&&v!==0) return '0'; const a=Math.abs(v); if(a>=1e12) return (v/1e12).toFixed(2)+'T'; if(a>=1e9) return (v/1e9).toFixed(2)+'B'; if(a>=1e6) return (v/1e6).toFixed(1)+'M'; return v.toString(); }
