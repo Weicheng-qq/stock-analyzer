@@ -1831,6 +1831,57 @@ function __priceGateSelfTest(){
   console.log(fail.length? ('❌ 有 '+fail.length+' 項防呆失效'): '✅ 報價防呆全數通過（'+out.length+' 項）');
   return {total:out.length, failed:fail.length, cases:out};
 }
+
+// ════════════════════════════════════════════════════════════════════════
+// 【時區自我測試】確認報價時間永遠以交易所當地時區表示與比較。
+// ════════════════════════════════════════════════════════════════════════
+//   這一組測試的存在理由：2026-09-18 發現美股成交時間是用裝置時區取的，
+//   而新鮮度比較卻寫死台北 —— 人在台灣剛好對，離開台灣就安靜地全錯。
+//   「剛好對」最危險，因為測不出來。所以這裡不看裝置時區，
+//   直接檢查同一個時間點在不同交易所應該被標成幾點。
+function __tzSelfTest(){
+  const out=[];
+  const add=(name,want,got)=>out.push({測項:name, 預期:want, 實際:got, 結果:(String(want)===String(got)?'PASS':'FAIL')});
+
+  // 2026-09-18 13:44:43 UTC ＝ 美東 09:44:43（EDT, UTC-4）＝ 台北 21:44:43（UTC+8）
+  const t=new Date(Date.UTC(2026,8,18,13,44,43));
+  const us=__tzStamp(t,'America/New_York');
+  const tw=__tzStamp(t,'Asia/Taipei');
+  add('同一時點→美東時間', '09:44:43', us.exTime);
+  add('同一時點→台北時間', '21:44:43', tw.exTime);
+  add('同一時點→美東日期', '20260918', us.exDate);
+  add('同一時點→台北日期', '20260918', tw.exDate);
+
+  // 跨日：美東 2026-09-18 16:00 收盤 ＝ 台北 2026-09-19 04:00。
+  //   舊寫法會拿台北的「今天」去比美股日期，於是好好的收盤價被判成前一交易日。
+  const close=new Date(Date.UTC(2026,8,18,20,0,0));
+  add('美股收盤→美東日期', '20260918', __tzStamp(close,'America/New_York').exDate);
+  add('美股收盤→台北日期', '20260919', __tzStamp(close,'Asia/Taipei').exDate);
+
+  // 代碼 → 交易所時區
+  add('2330.TW 屬台北',  'Asia/Taipei',      __exTzOfSymbol('2330.TW'));
+  add('8299.TWO 屬台北', 'Asia/Taipei',      __exTzOfSymbol('8299.TWO'));
+  add('2330 屬台北',     'Asia/Taipei',      __exTzOfSymbol('2330'));
+  add('AAPL 屬美東',     'America/New_York', __exTzOfSymbol('AAPL'));
+  add('BRK-B 屬美東',    'America/New_York', __exTzOfSymbol('BRK-B'));
+
+  // 新鮮度：必須用報價自己的時區比較。
+  //   造一筆「此刻剛成交」的美股報價，落後應為 0；同樣做法的台股也是 0。
+  const nowUs=__tzStamp(new Date(),'America/New_York');
+  const nowTw=__tzStamp(new Date(),'Asia/Taipei');
+  add('美股即時報價落後0分', 0, __exLagMinutes(nowUs));
+  add('台股即時報價落後0分', 0, __exLagMinutes(nowTw));
+  add('非今日資料視為嚴重落後', 9999, __exLagMinutes({exDate:'20200101',exTime:'10:00:00',exTz:'America/New_York'}));
+
+  // 標籤：美股一定要標「美東」，否則台灣使用者晚上看到 09:44 會以為是早上的舊資料。
+  add('美股標籤標示美東', true, /美東/.test(quoteAsOfLabel(nowUs)));
+  add('台股標籤不標美東', false, /美東/.test(quoteAsOfLabel(nowTw)));
+
+  const fail=out.filter(x=>x.結果==='FAIL');
+  console.table(out);
+  console.log(fail.length? ('❌ 有 '+fail.length+' 項時區處理失效'): '✅ 時區處理全數通過（'+out.length+' 項）');
+  return {total:out.length, failed:fail.length, cases:out};
+}
 async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(symbol → {price, prev})
   const exList=symbols.map(twMisExch).filter(Boolean);
   const out=new Map();
@@ -1864,13 +1915,13 @@ async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(sy
       // 違反交易所規則的數字一律不放行。寧可畫面顯示「—」，也不顯示一個看起來正常的錯價。
       console.warn('[報價防呆] '+sym+' 被拒絕：'+v.reasons.join('；')+'（原始值 '+v.rawPrice+'）');
       out.set(sym, {price:null, prev:v.prev, src:'資料異常', verdict:'reject',
-                    reasons:v.reasons, exDate:v.exDate, exTime:v.exTime, stale:true});
+                    reasons:v.reasons, exDate:v.exDate, exTime:v.exTime, exTz:'Asia/Taipei', stale:true});
       return;
     }
     out.set(sym, {price:v.price, prev:v.prev,
       src:(v.verdict==='live'?'成交':v.verdict==='open'?'開盤':v.verdict==='session'?'前一交易日':'昨收'),
       verdict:v.verdict, field:v.field, stale:(v.verdict!=='live'),
-      exDate:v.exDate, exTime:v.exTime});
+      exDate:v.exDate, exTime:v.exTime, exTz:'Asia/Taipei'});
   });
   return out;
 }
@@ -1906,26 +1957,69 @@ function __putQuote(sym, price, prev, src, stale, ex){
   //   這兩個一定要分清楚，混用就會變成「用抓取時間冒充成交時間」。
   __quoteCache.set(sym, {t:Date.now(), price:(price==null?null:+price), prev:(prev==null?null:+prev),
     src:src||'Yahoo', stale:!!stale, exDate:(ex&&ex.exDate)||null, exTime:(ex&&ex.exTime)||null,
+    // exTz 沒帶就依代碼推定：少一個欄位就退回裝置時區的舊 bug，寧可在這裡補好。
+    exTz:(ex&&ex.exTz)||__exTzOfSymbol(sym),
     // ⚠️ verdict/reasons 一定要跟著價格一起進快取。少帶這兩個欄位，
     //   顯示層就退化回「只看得到一個數字」，fail-closed 也就名存實亡。
     verdict:(ex&&ex.verdict)||'live', reasons:(ex&&ex.reasons)||[], field:(ex&&ex.field)||null});
 }
 // 今天的日期（一律以台北時間為準，不依賴使用者裝置的時區設定）
-function __twToday(){
-  try{ return new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Taipei'}).replace(/-/g,''); }
-  catch(e){ const d=new Date(); return ''+d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0'); }
+// ════════════════════════════════════════════════════════════════════════
+// 【交易所時區】每一筆報價都要記住它是「哪個交易所、當地幾點」成交的。
+// ════════════════════════════════════════════════════════════════════════
+// ⚠️⚠️ 2026-09-18 發現的問題：美股報價的成交時間原本是用 d.getHours() 取的，
+//   那是【使用者裝置的時區】，而新鮮度判斷 __exLagMinutes() 卻寫死拿 Asia/Taipei 比較。
+//   使用者人在台灣時兩邊剛好都是台北時間，所以看起來是對的 —— 但那是巧合，不是正確。
+//   一旦裝置不在台北就會壞掉，而且是【安靜地壞掉】：
+//     · 人在美西：美股 09:42 ET 存成 06:42(PDT)，與台北 21:42 相減 = 落後 900 分鐘
+//       → 完全正常的即時價會被標成紅字「⚠️ 資料可能未更新」。
+//     · 人在日本：相減會是負數 → lag>3 永遠不成立
+//       → 新鮮度偵測形同關閉，真的凍結了也不會示警。
+//     · 跨日：美股 16:00 ET 收盤在台北已是隔天凌晨，裝置日期與 __twToday() 不同一天
+//       → 好好的收盤價被判成「前一交易日」。
+//   上架 Google Play 之後使用者不會全在台灣，這個 bug 一定會被踩到。
+//   正解：報價屬於哪個交易所，時間就一律用【那個交易所的當地時區】表示與比較，
+//   完全不碰使用者裝置的時區。
+function __exTzOfSymbol(sym){
+  const s=String(sym||'');
+  // 台股代碼：2330.TW / 8299.TWO / 純數字代碼；其餘一律視為美股。
+  return (/\.TWO?$/i.test(s) || /^\d{4,6}$/.test(s)) ? 'Asia/Taipei' : 'America/New_York';
 }
+// 把某個時間點換算成「指定時區」的日期(YYYYMMDD)與時間(HH:MM:SS)。
+function __tzStamp(date, tz){
+  try{
+    const ymd=date.toLocaleDateString('en-CA',{timeZone:tz}).replace(/-/g,'');
+    const hms=date.toLocaleTimeString('en-GB',{timeZone:tz,hour12:false});
+    return {exDate:ymd, exTime:hms, exTz:tz};
+  }catch(e){
+    const pad=n=>String(n).padStart(2,'0');
+    return {exDate:''+date.getFullYear()+pad(date.getMonth()+1)+pad(date.getDate()),
+            exTime:pad(date.getHours())+':'+pad(date.getMinutes())+':'+pad(date.getSeconds()), exTz:tz};
+  }
+}
+// 「今天」是哪一天，以指定時區為準。
+function __todayIn(tz){
+  try{ return new Date().toLocaleDateString('en-CA',{timeZone:tz}).replace(/-/g,''); }
+  catch(e){ const d=new Date(); const pad=n=>String(n).padStart(2,'0');
+            return ''+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate()); }
+}
+// 台股專用捷徑（validateTwQuote 只處理證交所資料，永遠是台北時間）。
+function __twToday(){ return __todayIn('Asia/Taipei'); }
 // 把交易所時間戳轉成人看得懂、而且不會誤導的字串。
 //   當日 → 只顯示時間（那就是即時價）；非當日 → 明確標出「X/Y HH:MM 收盤」，
 //   使用者才不會把上一個交易日的收盤價當成今天的即時價。
 function quoteAsOfLabel(q){
   if(!q) return '';
   if(q.exDate && q.exTime){
+    const tz=q.exTz||'Asia/Taipei';
     const hm=String(q.exTime).slice(0,5);
-    if(q.exDate===__twToday()) return hm;
+    // ⚠️ 美股時間一定要標「美東」。台灣使用者在晚上 9:42 看到「09:42」會以為是早上的舊資料；
+    //   標出來才知道那是美東剛剛的成交時間。台股不標，免得畫面變囉嗦。
+    const zone=(tz==='America/New_York')?' 美東':'';
+    if(q.exDate===__todayIn(tz)) return hm+zone;
     const s=String(q.exDate);
-    if(s.length!==8) return s+" "+hm;
-    return (+s.slice(4,6))+"/"+(+s.slice(6,8))+" "+hm+" 收盤";
+    if(s.length!==8) return s+" "+hm+zone;
+    return (+s.slice(4,6))+"/"+(+s.slice(6,8))+" "+hm+zone+" 收盤";
   }
   return '';
 }
@@ -1940,10 +2034,9 @@ async function __yahooQuotes(syms){
       if(m){
         let ex=null;
         if(m.regularMarketTime){
-          const d=new Date(m.regularMarketTime*1000);
-          const pad=n=>String(n).padStart(2,'0');
-          ex={ exDate:''+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate()),
-               exTime:pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds()) };
+          // ⚠️ 一律換算成該標的所屬交易所的當地時區（美股→美東、台股→台北）。
+          //   原本用 d.getHours() 取裝置時區，使用者一離開台灣時間就全錯（見 __exTzOfSymbol 上方說明）。
+          ex=__tzStamp(new Date(m.regularMarketTime*1000), __exTzOfSymbol(s));
         }
         __putQuote(s, m.regularMarketPrice, (m.previousClose!=null?m.previousClose:m.chartPreviousClose), 'Yahoo', false, ex);
       }
@@ -2114,12 +2207,16 @@ function __exLagMinutes(ex){
   if(!ex || !ex.exDate || !ex.exTime) return null;
   const d=String(ex.exDate), t=String(ex.exTime);
   if(d.length!==8) return null;
-  if(d!==__twToday()) return 9999;          // 不是今天的資料，直接視為嚴重落後
+  // ⚠️ 成交時間與「現在」必須用【同一個時區】比較。
+  //   原本成交時間是裝置時區、比較基準卻寫死台北，人在台灣才剛好對，
+  //   離開台灣就會算出 900 分鐘或負數（詳見 __exTzOfSymbol 上方說明）。
+  const tz=ex.exTz||'Asia/Taipei';
+  if(d!==__todayIn(tz)) return 9999;         // 不是今天的資料，直接視為嚴重落後
   const parts=t.split(':');
   if(parts.length<2) return null;
   const exMin=(+parts[0])*60+(+parts[1]);
   let nowStr='';
-  try{ nowStr=new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Taipei',hour12:false}); }
+  try{ nowStr=new Date().toLocaleTimeString('en-GB',{timeZone:tz,hour12:false}); }
   catch(e){ const n=new Date(); nowStr=n.getHours()+':'+n.getMinutes(); }
   const np=nowStr.split(':');
   const nowMin=(+np[0])*60+(+np[1]);
