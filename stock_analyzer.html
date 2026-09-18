@@ -1732,6 +1732,9 @@ async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(sy
     const prev=n(row.y);
     let price=n(row.z), src='成交';
     if(price==null){ price=n(row.pz); src='前次成交'; }
+    // ⚠️ 盤中若連 z(成交) 與 pz(前次成交) 都拿不到，只剩 o(開盤價) 可用，
+    //   那個價格【不是現價】。2026-09-15 的凍結事件就是畫面長時間顯示開盤價，
+    //   所以這裡標記 suspect，讓畫面能據實提示，不再讓它安靜地冒充現價。
     if(price==null){ price=n(row.o); src='開盤'; }
     // ⚠️⚠️ 2026-09-05 移除「委買賣中價」備援（使用者回報：台積電正確跳動應為5元，
     //   App卻錯誤跳動2.5元，其他千元股也有問題）。
@@ -1848,9 +1851,13 @@ async function quotesOf(symbols){
         if(us.length) sub.push(__yahooQuotes(us));
         await Promise.all(sub);
       })();
-      fresh.forEach(s=>__quoteWait.set(s, run));
-      run.finally(()=>{ fresh.forEach(s=>{ if(__quoteWait.get(s)===run) __quoteWait.delete(s); }); });
-      jobs.push(run);
+      // ⚠️ run 內部雖然每一段都有 try/catch，但分頁被凍住時 fetch 可能永遠不 settle。
+      //   若把這種永不落地的 promise 放進 __quoteWait，之後【每一次】quotesOf 都會
+      //   await 這個死掉的 promise → 報價永久停擺。因此用 race 強制 8 秒內落地。
+      const guarded = Promise.race([ run, new Promise(r=>setTimeout(r, 8000)) ]);
+      fresh.forEach(s=>__quoteWait.set(s, guarded));
+      guarded.finally(()=>{ fresh.forEach(s=>{ if(__quoteWait.get(s)===guarded) __quoteWait.delete(s); }); });
+      jobs.push(guarded);
     }
     await Promise.all(jobs.map(j=>Promise.resolve(j).catch(()=>{})));
     need.forEach(s=>{ const c=__quoteCache.get(s); if(c) out.set(s,c); });
@@ -1917,9 +1924,9 @@ async function loadWatchlistPrices(list){
   let asOf='';
   for(const it of list){
     const q=quotes.get(it.symbol); const lbl=quoteAsOfLabel(q);
-    if(lbl && (!asOf || (q.exDate+q.exTime) > asOf.key)){ asOf={text:lbl, key:q.exDate+q.exTime}; }
+    if(lbl && (!asOf || (q.exDate+q.exTime) > asOf.key)){ asOf={text:lbl, key:q.exDate+q.exTime, ex:q}; }
   }
-  updateWlTimestamp(parts.join('＋')||'無資料', fail<list.length, asOf&&asOf.text);
+  updateWlTimestamp(parts.join('＋')||'無資料', fail<list.length, asOf&&asOf.text, asOf&&asOf.ex);
 }
 // 「最後更新」時間戳：使用者連續三次回報開盤股價異常，但事後查不到當下的伺服器log
 //   (Vercel免費方案log只留很短時間，過了就查不到)，只能靠事後推測。加這個小字讓使用者
@@ -1933,14 +1940,42 @@ async function loadWatchlistPrices(list){
 //   週五 13:30 的收盤價。現在改為顯示【交易所自己回的成交時間】：
 //   當日成交只顯示時間；非當日則明確寫成「9/11 13:30 收盤」。
 //   取不到交易所時間才退回本機時間，且會標明「本機」避免再度誤導。
-function updateWlTimestamp(source, ok, exLabel){
+// 交易所成交時間距離現在幾分鐘？拿不到就回 null（不猜）。
+//   exStamp 形如 {exDate:'20260915', exTime:'10:17:05'}，一律以台北時間比較。
+function __exLagMinutes(ex){
+  if(!ex || !ex.exDate || !ex.exTime) return null;
+  const d=String(ex.exDate), t=String(ex.exTime);
+  if(d.length!==8) return null;
+  if(d!==__twToday()) return 9999;          // 不是今天的資料，直接視為嚴重落後
+  const parts=t.split(':');
+  if(parts.length<2) return null;
+  const exMin=(+parts[0])*60+(+parts[1]);
+  let nowStr='';
+  try{ nowStr=new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Taipei',hour12:false}); }
+  catch(e){ const n=new Date(); nowStr=n.getHours()+':'+n.getMinutes(); }
+  const np=nowStr.split(':');
+  const nowMin=(+np[0])*60+(+np[1]);
+  return nowMin-exMin;
+}
+function updateWlTimestamp(source, ok, exLabel, exStamp){
   const el=document.getElementById('wlLastUpdate'); if(!el) return;
   if(!ok){
     const now=new Date().toLocaleTimeString('zh-TW',{hour12:false});
     el.textContent='⚠️ '+now+' 更新失敗（'+source+'）';
     return;
   }
-  if(exLabel){ el.textContent='成交時間 '+exLabel+'（'+source+'）'; return; }
+  if(exLabel){
+    // ⚠️ 盤中若交易所給的成交時間距離現在已超過 3 分鐘，代表資料沒在更新
+    //   （可能是網路、代理或前端門閂出問題）。與其安靜顯示一個看起來正常的價格，
+    //   不如直接告訴使用者「這個價格可能不是最新的」——這正是 2026-09-15 凍結事件
+    //   最該被早點發現的訊號。
+    const lag=__exLagMinutes(exStamp);
+    if(lag!=null && lag>3 && isMarketOpenNow()){
+      el.innerHTML='<span style="color:var(--red)">⚠️ 資料可能未更新：成交時間 '+esc(exLabel)+'，已落後約 '+lag+' 分鐘</span>（'+esc(source)+'）';
+      return;
+    }
+    el.textContent='成交時間 '+exLabel+'（'+source+'）'; return;
+  }
   const now=new Date().toLocaleTimeString('zh-TW',{hour12:false});
   el.textContent='本機 '+now+' 已更新（'+source+'，交易所未提供成交時間）';
 }
@@ -4524,7 +4559,11 @@ const MASTER_VIDEOS=[
       {id:'2kqr19XZ7ak',zhHans:true,title:'2025 波克夏股東大會 完整場次（1/3）— 真人實拍，上傳者自製中文字幕（非自動翻譯）'},
       {id:'p-UAcrwjEIk',zhHans:true,title:'2025 波克夏股東大會 完整場次（2/3）— 真人實拍，上傳者自製中文字幕（非自動翻譯）'},
       {id:'-CHgwXRsymg',zhHans:true,title:'2025 波克夏股東大會 完整場次（3/3）— 真人實拍，上傳者自製中文字幕（非自動翻譯）'},
-      {id:'2hdDE7XYr30',title:'CNBC 專訪巴菲特、蒙格與比爾蓋茲 — 三大巨頭同台對談'}
+      {id:'2hdDE7XYr30',title:'CNBC 專訪巴菲特、蒙格與比爾蓋茲 — 三大巨頭同台對談'},
+      // ⚠️ 2026-09-18 由費雪區塊移來：這支的說話者本來就是巴菲特（1998 年股東會實拍），
+      //   放在費雪名下會讓費雪出現在「長影片」分頁，而使用者要求費雪只出現在有聲書。
+      //   內容談的是費雪的閒聊法，放在巴菲特這裡並不突兀。subEn=字幕為英文燒錄。
+      {id:'DZjScOFmnKw',noCap:true,subEn:true,title:'巴菲特談費雪的「閒聊法」— 1998 年波克夏股東會真實畫面'}
     ],
     short:[
       // ⚠️ 已移除 lWu2fw6APM4「20孔打卡投資哲學」：使用者回報與下方 BAMiemNe2fk「棒球理論」是同一支影片(重複)。
@@ -4583,11 +4622,14 @@ const MASTER_VIDEOS=[
   //         ②用 data/masters/fisher-text.json 的文字區塊補齊他的思想（十五要點＋1987 Forbes 訪談）
   //   aboutOnly:true → 畫面上會明確標示「這不是費雪本人」，避免使用者誤認。
   //   subEn:true → 字幕是英文燒錄在畫面上（YAPSS 頻道），不是中文，徽章要據實顯示。
+  // ⚠️ 2026-09-18 使用者要求：費雪【只出現在有聲書分頁】，長影片與短影音都不要出現。
+  //   因此這裡三個分頁都留空，改由 masterVidListHtml() 只在 audiobook 分頁渲染其文字區塊。
+  //   ⚠️ 費雪本人沒有影像紀錄（見 data/masters/fisher-text.json 的查證說明），
+  //   而《非常潛力股》也查不到可用的中文有聲書 —— 2026-09-18 查到的候選 sBiCTmFBAdY
+  //   其四張縮圖皆為 1097 bytes 的 YouTube 灰色佔位圖，代表影片不存在或已下架，故不收。
+  //   不為了把版面填滿而放一個沒驗證過的影片 ID。
   {person:'菲利浦·費雪 Philip Fisher',icon:'🔬',fisherText:true,
-    long:[
-      {id:'DZjScOFmnKw',noCap:true,subEn:true,aboutOnly:true,title:'巴菲特談費雪的「閒聊法」— 1998 年波克夏股東會真實畫面（⚠️ 說話者是巴菲特，非費雪本人）'}
-    ],
-    short:[],audiobook:[]
+    long:[],short:[],audiobook:[]
   }
 ];
 let __masterTab='long';
@@ -4677,11 +4719,12 @@ function masterVidListHtml(){
   let h='';
   MASTER_VIDEOS.forEach(g=>{
     const vids=g[__masterTab]||[];
-    // ⚠️ 費雪在短影音/有聲書分頁沒有影片，但他的文字區塊在三個分頁都該看得到 ——
-    //   否則使用者切到短影音就會覺得「四位大師怎麼變三位」。
-    if(!vids.length && !g.fisherText) return;
+    // ⚠️ 2026-09-18 依使用者要求改為：費雪的區塊【只在有聲書分頁】出現，
+    //   長影片與短影音分頁完全不顯示他（原本三個分頁都顯示）。
+    const showFisher = g.fisherText && __masterTab==='audiobook';
+    if(!vids.length && !showFisher) return;
     h+=`<div style="margin:18px 0 10px;font-size:15px;font-weight:700">${g.icon} ${g.person}</div>`;
-    if(g.fisherText) h+=`<div data-fisher-text></div>`;
+    if(showFisher) h+=`<div data-fisher-text></div>`;
     vids.forEach(v=>{
       // 短影音是9:16直式容器，用mqdefault(320x180,16:9)以object-fit:cover填滿時要放大2倍多導致模糊，
       //   改用maxresdefault(1280x720)為主、不存在時(舊/低畫質影片常見)用onerror退回hqdefault(480x360)。
@@ -5588,6 +5631,7 @@ function isMarketOpenNow(){
   }catch(e){ return true; }   // 判斷失敗就當作開盤，寧可多更新也不要漏更新
 }
 let __lastPriceTick=0, __priceBusy=false;
+let __busySince=0;   // __priceBusy 是何時被設為 true 的（看門狗用）
 function refreshLivePrices(){
   if(document.hidden) return;
   // ⚠️⚠️ 2026-09-12 由「盤中每秒」改為「盤中每5秒」(使用者同意，理由是成本)：
@@ -5601,8 +5645,22 @@ function refreshLivePrices(){
   const gap=isMarketOpenNow()?5000:60000;      // 盤中每5秒、收盤60秒
   const now=Date.now();
   if(now-__lastPriceTick<gap) return;
-  if(__priceBusy) return;   // 上一輪還沒回來就不再發新請求，避免網路慢時請求疊在一起
-  __lastPriceTick=now; __priceBusy=true;
+  // ⚠️⚠️⚠️ 2026-09-15 使用者回報：10:17 時台達電/緯穎/群聯/聯發科四檔同時顯示【當天開盤價】
+  //   （台達電1590=開盤、昨收是1620，四檔全部精準等於開盤價）——也就是畫面從 09:00 之後
+  //   就再也沒更新過，整整凍結 77 分鐘。
+  //   根因：手機把分頁切到背景時，飛在路上的 fetch 與它的 AbortController 逾時計時器
+  //   都會被作業系統凍住，永遠不 resolve → __priceBusy 永遠停在 true →
+  //   之後每一輪輪詢在這一行就被擋掉，畫面永遠停在最後一次成功的價格。
+  //   這與 2026-08 那幾次「開盤股價不動」是同一個症狀、但不同的根因
+  //   （那幾次是資料源與 z="-" 的問題，這次是前端門閂卡死）。
+  //   ⚠️ 只加逾時給 fetch 是不夠的：分頁被凍住時連 setTimeout 都不會跑。
+  //   因此必須在這裡用「時間」判斷，而不是依賴任何計時器。
+  if(__priceBusy){
+    if(now-__busySince < 15000) return;        // 15 秒內視為正常的同時請求保護
+    __priceBusy=false;                          // 超過 15 秒一定有東西卡死了，強制放行
+    try{ __quoteWait.clear(); }catch(e){}       // 連帶清掉可能已死的 in-flight 記錄（見 quotesOf）
+  }
+  __lastPriceTick=now; __priceBusy=true; __busySince=now;
   try{
     const jobs=[];
     const l=getWatchlist();
@@ -5662,7 +5720,14 @@ window.addEventListener('load', function(){
   //      邊緣快取會擋住請求，前端拿到的仍是同一份舊資料(2026-08-14 實際踩過這個坑)。
   setInterval(refreshLivePrices, 1000);   // 每秒只是「檢查該不該更新」的輕量 tick，真正發請求的節流在 refreshLivePrices 的 gap
   // 從背景切回前景(手機常見)立刻補抓一次，不用等下一個週期
-  document.addEventListener('visibilitychange', function(){ if(!document.hidden){ __lastPriceTick=0; refreshLivePrices(); } });
+  //   ⚠️ 從背景切回前景時，先把門閂與 in-flight 記錄整個重置再重抓 ——
+  //   被系統凍住的那一輪請求永遠不會回來了，等它只會讓畫面一直停在舊價格。
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden) return;
+    __priceBusy=false; __busySince=0;
+    try{ __quoteWait.clear(); }catch(e){}
+    __lastPriceTick=0; refreshLivePrices();
+  });
   renderSplashQuotes();   // 封面名言(每次開App隨機)
   // 只有「使用者剛點過美股/台股按鈕造成的reload」才跳過封面，其餘情況(含全新開App)一律停留在封面等待點擊。
   let skipSplash=false; try{ skipSplash=sessionStorage.getItem('skipSplashOnce')==='1'; sessionStorage.removeItem('skipSplashOnce'); }catch(e){}
