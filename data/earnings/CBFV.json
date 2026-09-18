@@ -1,0 +1,47 @@
+{
+ "symbol": "CBFV",
+ "market": "us",
+ "name": "CB FINANCIAL SERVICES, INC.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "CB FINANCIAL SERVICES, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.21",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.04",
+  "每股盈餘": 0.8,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-27",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1605301/000160530126000028/a20260630ex9912ndqtrearnin.htm"
+ },
+ "savedAt": "2026-09-18T01:22:51.069Z",
+ "result": {
+  "revenue": "本季營業收入為 0.21 億美元。",
+  "eps": "每股盈餘 (EPS) 為 0.8 美元。",
+  "margins": "毛利率與營業利益率未提供。淨利率為 19.0%，顯示本季淨利佔營收的比例相對不錯。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "營收規模仍相當有限，但淨利率達 19% 顯示獲利效率不錯。缺乏營運現金流與資本支出資訊，使現金流狀況不明。未提供未來營收或獲利的具體指引。",
+  "highlights": "• 本季營收 0.21 億美元<br>• 淨利 0.04 億美元，淨利率 19.0%<br>• 每股盈餘 (EPS) 0.8 美元，並發放每股 0.28 美元股息",
+  "concerns": "• 營收規模較小，僅 0.21 億美元<br>• 財報未提供營運現金流與資本支出資料<br>• 非利息費用總額 10.39 億美元，遠高於營收",
+  "risks": "• 高額非利息費用可能侵蝕獲利空間<br>• 現金流資訊缺失增加財務透明度風險",
+  "keyPoints": "• 營收僅 0.21 億美元<br>• 淨利 0.04 億美元，淨利率 19.0%<br>• EPS 0.8 美元，並發放每股 0.28 美元股息",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "本次資料未揭露分部營收"
+ }
+}
