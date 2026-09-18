@@ -171,6 +171,10 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .wl-pc { flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:3px; }
 .wl-price { text-align:right; font-weight:700; font-size:16.5px; }
 .wl-chg { text-align:right; }
+.qbadge { display:inline-block; font-size:11.5px; font-weight:700; padding:2px 8px; border-radius:6px; white-space:nowrap; }
+.qbadge.qb-dim  { color:var(--text2); background:var(--bg3); font-weight:400; }
+.qbadge.qb-warn { color:var(--yellow); background:rgba(210,153,34,.14); }
+.qbadge.qb-bad  { color:var(--red); background:rgba(248,81,73,.15); }
 .wl-chg .pill { display:inline-block; padding:3px 9px; border-radius:6px; font-weight:700; font-size:15px; color:#fff; font-family:-apple-system,'Segoe UI','PingFang TC','Microsoft JhengHei',Roboto,sans-serif; font-variant-numeric:tabular-nums; letter-spacing:.2px; }
 .wl-chg .pill.up { background:var(--green); }  /* 漲=綠底 */
 .wl-chg .pill.down { background:var(--red); }  /* 跌=紅底 */
@@ -1521,14 +1525,19 @@ async function loadThemePrices(rows){
   rows.forEach(r=>{
     const pEl=document.getElementById('thp_'+r.symbol), cEl=document.getElementById('thc_'+r.symbol);
     const q=quotes.get(r.symbol);
-    const price=q?q.price:null, prev=q?q.prev:null;
-    if(pEl) pEl.textContent = price!=null?(tw?'$':'$')+(+price).toFixed(2):'—';
+    // reject 的價格一律不顯示數字（q.price 在閘門就已被清成 null，這裡再擋一次）
+    const price=(q && q.verdict!=='reject')?q.price:null, prev=q?q.prev:null;
+    if(pEl) pEl.textContent = price!=null?'$'+(+price).toFixed(2):'—';
     if(cEl){
-      if(q && q.stale) cEl.innerHTML='<span style="color:var(--text2);font-size:11.5px">尚未成交</span>';
+      // ⚠️ 與自選股共用 quoteBadge()：投資主題原本只認得 stale，
+      //   被防呆擋下的資料（verdict==='reject'）會被誤標成「尚未成交」—— 那是另一件事。
+      //   各面板各寫一套判讀，正是同一支股票在不同頁面顯示不同狀態的根源。
+      const badge=quoteBadge(q);
+      if(badge) cEl.innerHTML='<span class="qbadge '+badge.cls+'" title="'+esc(badge.note)+'">'+esc(badge.txt)+'</span>';
       else if(price!=null && prev){
         const pct=(price-prev)/prev*100;
         cEl.innerHTML = '<span class="pill '+(pct>=0?'up':'down')+'">'+(pct>=0?'▲':'▼')+Math.abs(pct).toFixed(2)+'%</span>';
-      } else cEl.textContent='—';
+      } else cEl.innerHTML='<span class="qbadge qb-dim">—</span>';
     }
   });
 }
@@ -1704,6 +1713,120 @@ async function __quoteFetch(base, url, signal){
   if(data && data.error) throw new Error('UPSTREAM');
   return data;
 }
+// ════════════════════════════════════════════════════════════════════════════
+// 【報價驗證閘門】fail-closed：證明不了是即時真實成交價，就不准當現價顯示。
+// ════════════════════════════════════════════════════════════════════════════
+// 為什麼要有這一層？
+//   台股報價已經錯過七次（2026-08-26 / 08-27 / 08-28 / 08-31 / 09-05 / 09-12 / 09-15）。
+//   每次的機制都不同（來源錯、無逾時、快取、z="-"拿昨收頂替、委買賣中價違反跳動單位、
+//   顯示本機時間、門閂卡死導致凍結 77 分鐘），但【傷害完全一樣】：
+//   畫面顯示了一個不是現價的數字，而且沒告訴使用者。
+//   逐個修機制永遠修不完——產生錯誤數字的方式有無限多種。
+//   所以改變信任模型：顯示層不再預設相信拿到的數字（fail-open），
+//   改為【必須通過驗證才准當現價顯示】（fail-closed），過不了就顯示「—」與原因。
+//
+// 關鍵發現：證交所 MIS 在同一個回應裡就附了全套驗證素材，我們先前完全沒用：
+//   u=漲停價 w=跌停價 → 超出範圍的價格在交易所規則下【不可能存在】
+//   h=當日最高 l=當日最低 → 今天成交過的價格必然落在這個區間內
+//   v=累計成交量 → v=0 代表今天根本沒有成交，任何「現價」都是假的
+//   d=交易日 t=撮合時間 → 判斷新鮮度，且不必猜時區
+// 再加上台股【跳動單位】這條數學規則，完全不需要任何網路請求就能擋掉不可能的價格。
+
+// 台股跳動單位（證交所規則）。ETF 與一般股票不同，需分開。
+//   ⚠️ 2026-09-05 的 bug（千元股出現 2402.5）就是違反這條——
+//   1000 元以上的股票每檔是 5 元，2402.5 在交易所規則下是不可能存在的價格。
+function twTickSize(price, isEtf){
+  if(isEtf) return price < 50 ? 0.01 : 0.05;
+  if(price < 10)   return 0.01;
+  if(price < 50)   return 0.05;
+  if(price < 100)  return 0.1;
+  if(price < 500)  return 0.5;
+  if(price < 1000) return 1;
+  return 5;
+}
+function twTickOk(price, isEtf){
+  if(price==null || !(price>0)) return false;
+  const t=twTickSize(price, isEtf);
+  const units=price/t;
+  return Math.abs(units-Math.round(units)) < 1e-6;
+}
+
+// 驗證一筆證交所 MIS 資料。
+//   回傳 verdict：
+//     'live'      = 今天成交過的真實價格，可以當現價顯示
+//     'open'      = 只剩開盤價可用，必須標示為開盤價，不可當現價
+//     'prevclose' = 今天尚未成交，只有昨收
+//     'reject'    = 違反交易所規則或自相矛盾，【不可顯示這個數字】
+function validateTwQuote(row, sym){
+  const n=v=>{ const x=parseFloat(v); return Number.isFinite(x)?x:null; };
+  const code=String(sym||'').replace(/\..*/,'');
+  const isEtf=/^00/.test(code);
+  const prev=n(row.y), hi=n(row.h), lo=n(row.l), up=n(row.u), dn=n(row.w), vol=n(row.v);
+  const exDate=(row.d||'')||null, exTime=(row.t||'')||null;
+  const reasons=[];
+
+  // 取價順序：最新成交 → 前次成交 → 開盤 → 昨收。
+  //   ⚠️ 刻意【不】使用委買賣中價：那不是成交過的價格，且會違反跳動單位（2026-09-05 教訓）。
+  let price=n(row.z), field='z';
+  if(price==null){ price=n(row.pz); field='pz'; }
+  if(price==null){ price=n(row.o);  field='o';  }
+  if(price==null){ price=prev;      field='y';  }
+  if(price==null) return {price:null, prev, verdict:'reject', field:null, reasons:['證交所未提供任何價格欄位'], exDate, exTime};
+
+  // ── 不變量檢查：任一條不過就 reject，不顯示這個數字 ──
+  if(!(price>0)) reasons.push('價格非正數');
+  if(up!=null && price>up+1e-9) reasons.push('超過漲停價 '+up);
+  if(dn!=null && price<dn-1e-9) reasons.push('低於跌停價 '+dn);
+  if(!twTickOk(price,isEtf)) reasons.push('不符台股跳動單位（'+price+' 非 '+twTickSize(price,isEtf)+' 的倍數）');
+  // 今天成交過的價格必然落在當日最高/最低之間；昨收不適用這條。
+  if(field!=='y' && hi!=null && lo!=null && (price>hi+1e-9 || price<lo-1e-9)){
+    reasons.push('不在當日最高('+hi+')最低('+lo+')區間內');
+  }
+  if(reasons.length) return {price:null, rawPrice:price, prev, verdict:'reject', field, reasons, exDate, exTime};
+
+  // ── 通過不變量後，判定這個價格「是什麼」 ──
+  //   ⚠️ 通過檢查不等於就是現價：開盤價與昨收也都是合法價格，但不是現價。
+  let verdict;
+  if(field==='y' || vol===0) verdict='prevclose';
+  else if(field==='o')       verdict='open';
+  else                       verdict='live';
+
+  // 資料不是今天的 → 不論欄位為何，都不可當現價
+  if(exDate && exDate!==__twToday() && verdict==='live') verdict='session';
+
+  return {price, prev, verdict, field, reasons:[], exDate, exTime, hi, lo, up, dn, vol,
+          stale: verdict==='prevclose'};
+}
+
+// 自我測試：把歷史上真的發生過的錯誤價格餵進去，確認閘門擋得住。
+//   在瀏覽器主控台執行 __priceGateSelfTest() 即可。任何一項 FAIL 代表防呆破了。
+function __priceGateSelfTest(){
+  const today=__twToday();
+  const base={d:today,t:'10:17:00',y:'2425',h:'2460',l:'2435',u:'2665',w:'2185',v:'35250'};
+  const cases=[
+    ['正常千元股成交價',      {...base, z:'2460'}, 'live'],
+    ['2026-09-05 委買賣中價', {...base, z:'2402.5'}, 'reject'],   // 千元股每檔5元，2402.5不可能
+    ['超過漲停',              {...base, z:'2700'},  'reject'],
+    ['低於跌停',              {...base, z:'2100'},  'reject'],
+    ['不在當日高低區間',      {...base, z:'2500'},  'reject'],     // 2500>h(2460)
+    ['2026-09-15 只剩開盤價', {...base, z:'-',pz:'-',o:'2440'}, 'open'],
+    ['今日尚未成交(量為0)',   {...base, z:'-',pz:'-',o:'-',v:'0'}, 'prevclose'],
+    ['非今日的資料',          {...base, d:'20200101', z:'2460'}, 'session']
+  ];
+  const out=cases.map(([name,row,want])=>{
+    const r=validateTwQuote(row,'2330.TW');
+    return {測項:name, 預期:want, 實際:r.verdict, 結果:(r.verdict===want?'PASS':'FAIL'), 原因:r.reasons.join('；')};
+  });
+  // 跳動單位另外單測（含 ETF 規則）
+  const ticks=[[2402.5,false,false],[2405,false,true],[100.5,false,true],[100.3,false,false],
+               [55.03,true,false],[55.05,true,true],[9.99,false,true]];
+  ticks.forEach(([v,etf,want])=>out.push({測項:'跳動單位 '+v+(etf?'(ETF)':''), 預期:want, 實際:twTickOk(v,etf),
+    結果:(twTickOk(v,etf)===want?'PASS':'FAIL'), 原因:''}));
+  const fail=out.filter(x=>x.結果==='FAIL');
+  console.table(out);
+  console.log(fail.length? ('❌ 有 '+fail.length+' 項防呆失效'): '✅ 報價防呆全數通過（'+out.length+' 項）');
+  return {total:out.length, failed:fail.length, cases:out};
+}
 async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(symbol → {price, prev})
   const exList=symbols.map(twMisExch).filter(Boolean);
   const out=new Map();
@@ -1728,31 +1851,22 @@ async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(sy
     //   都在處理「拿不到資料」，但真正的問題是「拿不到最新成交時，程式主動顯示了昨收」。
     //   正確順序：最新成交 → 前次成交(pz) → 委買賣一檔中價 → 今日開盤(o)；
     //   全部都沒有，才是真的尚未開始交易，這時必須明講「尚未成交」，不可冒充現價。
-    const n=v=>{ const x=parseFloat(v); return Number.isFinite(x)?x:null; };
-    const prev=n(row.y);
-    let price=n(row.z), src='成交';
-    if(price==null){ price=n(row.pz); src='前次成交'; }
-    // ⚠️ 盤中若連 z(成交) 與 pz(前次成交) 都拿不到，只剩 o(開盤價) 可用，
-    //   那個價格【不是現價】。2026-09-15 的凍結事件就是畫面長時間顯示開盤價，
-    //   所以這裡標記 suspect，讓畫面能據實提示，不再讓它安靜地冒充現價。
-    if(price==null){ price=n(row.o); src='開盤'; }
-    // ⚠️⚠️ 2026-09-05 移除「委買賣中價」備援（使用者回報：台積電正確跳動應為5元，
-    //   App卻錯誤跳動2.5元，其他千元股也有問題）。
-    //   根因：台股1000元以上股票跳動單位是5元(如委買2400/委賣2405是正常的一檔價差)，
-    //   (委買+委賣)/2 = 2402.5 是交易所規則下不可能存在的價格——這個造假的中間值
-    //   才會讓畫面顯示「2400→2402.5→2405」這種違反跳動單位的假漲跌。
-    //   低價股跳動單位0.01~0.05元看不出來，千元股一眼就穿。
-    //   z(成交)/pz(前次成交)/o(開盤)都是真實成交過的價格，跳動單位必然正確，已經足夠；
-    //   全部缺漏才代表真的尚未有任何交易，此時顯示昨收並標記尚未成交，不可捏造中間價。
-    if(price==null){ price=prev; src='昨收'; }
-    // ⚠️⚠️ 2026-09-12：把證交所自己的「交易日(d)」與「撮合時間(t)」一起帶出來。
-    //   原本畫面顯示的是「我們抓取的本機時間」，那會騙人 —— 週六下午打開 App，
-    //   實際價格是週五 13:30 收盤，畫面卻寫「最後更新 15:05」，看起來像剛更新的即時價。
-    //   這與使用者連續四次回報的「股價不動」是同一類問題：畫面謊稱資料很新。
-    //   ⚠️ 刻意用 d+t 兩個字串而不是 tlong：實測 tlong=1789108200000 換算為台北 14:30，
-    //   但同一筆的 t 是 13:30:00，相差一小時。d/t 是交易所明確給的字串，不必猜時區。
-    if(price!=null) out.set(sym, {price, prev, src, stale: src==='昨收',
-      exDate: (row.d||'')||null, exTime: (row.t||'')||null});
+    // ⚠️⚠️ 2026-09-18 起一律走 validateTwQuote() 驗證閘門，不再自行判讀欄位。
+    //   取價順序與不變量檢查全部集中在那一支，避免日後有人在這裡又加一條
+    //   「找不到就退而求其次」的分支，重演 2026-08-31 拿昨收冒充現價、
+    //   或 2026-09-05 用委買賣中價造出不存在價格的錯誤。
+    const v=validateTwQuote(row, sym);
+    if(v.verdict==='reject'){
+      // 違反交易所規則的數字一律不放行。寧可畫面顯示「—」，也不顯示一個看起來正常的錯價。
+      console.warn('[報價防呆] '+sym+' 被拒絕：'+v.reasons.join('；')+'（原始值 '+v.rawPrice+'）');
+      out.set(sym, {price:null, prev:v.prev, src:'資料異常', verdict:'reject',
+                    reasons:v.reasons, exDate:v.exDate, exTime:v.exTime, stale:true});
+      return;
+    }
+    out.set(sym, {price:v.price, prev:v.prev,
+      src:(v.verdict==='live'?'成交':v.verdict==='open'?'開盤':v.verdict==='session'?'前一交易日':'昨收'),
+      verdict:v.verdict, field:v.field, stale:(v.verdict!=='live'),
+      exDate:v.exDate, exTime:v.exTime});
   });
   return out;
 }
@@ -1780,11 +1894,17 @@ function __quoteFresh(sym){
   return (c && Date.now()-c.t < __QUOTE_TTL) ? c : null;
 }
 function __putQuote(sym, price, prev, src, stale, ex){
-  if(price==null) return;
+  // ⚠️ verdict==='reject' 時 price 是 null，但這一筆【必須】寫進快取並送到畫面，
+  //   畫面才知道要改顯示「⚠️ 資料異常」。若在這裡直接 return，畫面會繼續沿用
+  //   上一次的舊價格 —— 那就是「安靜地顯示錯價」，正是要根除的行為。
+  if(price==null && !(ex && ex.verdict==='reject')) return;
   // t = 我們抓取的時間（只用來判斷快取有沒有過期）；ex = 交易所自己的時間（給人看的）。
   //   這兩個一定要分清楚，混用就會變成「用抓取時間冒充成交時間」。
-  __quoteCache.set(sym, {t:Date.now(), price:+price, prev:(prev==null?null:+prev),
-    src:src||'Yahoo', stale:!!stale, exDate:(ex&&ex.exDate)||null, exTime:(ex&&ex.exTime)||null});
+  __quoteCache.set(sym, {t:Date.now(), price:(price==null?null:+price), prev:(prev==null?null:+prev),
+    src:src||'Yahoo', stale:!!stale, exDate:(ex&&ex.exDate)||null, exTime:(ex&&ex.exTime)||null,
+    // ⚠️ verdict/reasons 一定要跟著價格一起進快取。少帶這兩個欄位，
+    //   顯示層就退化回「只看得到一個數字」，fail-closed 也就名存實亡。
+    verdict:(ex&&ex.verdict)||'live', reasons:(ex&&ex.reasons)||[], field:(ex&&ex.field)||null});
 }
 // 今天的日期（一律以台北時間為準，不依賴使用者裝置的時區設定）
 function __twToday(){
@@ -1844,7 +1964,10 @@ async function quotesOf(symbols){
         if(tw.length) sub.push((async()=>{
           let m=new Map();
           try{ m=await fetchTwMisQuotes(tw); }catch(e){}
-          tw.forEach(s=>{ const q=m.get(s); if(q) __putQuote(s, q.price, q.prev, q.stale?'TWSE(今日尚未成交)':'TWSE', q.stale, q); });
+          tw.forEach(s=>{ const q=m.get(s); if(!q) return;
+            const srcLabel = q.verdict==='reject' ? 'TWSE(資料異常)'
+              : q.verdict==='live' ? 'TWSE' : 'TWSE('+(q.src||'非現價')+')';
+            __putQuote(s, q.price, q.prev, srcLabel, q.stale, q); });
           const miss=tw.filter(s=>!m.has(s));
           if(miss.length) await __yahooQuotes(miss);   // 證交所查無的個別代碼才退回 Yahoo
         })());
@@ -1867,37 +1990,71 @@ async function quotesOf(symbols){
 async function quoteOf(sym){ const m=await quotesOf([sym]); return m.get(sym)||null; }
 // 報價來源的中文標示（顯示在個股頁標題列，讓使用者一眼知道看到的價格新不新鮮）
 function quoteSrcLabel(q){
+  // ⚠️ 2026-09-18：改為以 verdict 判斷，不再比對 src 字串。
+  //   舊寫法用 q.src==='TWSE' 逐字比對，只要來源標籤多一種寫法（例如「TWSE(開盤)」）
+  //   就會掉進最後的 else，把證交所的資料標成「Yahoo Finance」—— 標錯來源比沒標更糟。
+  const isTwse = q && /^TWSE/.test(q.src||'');
+  const v = q ? (q.verdict||'live') : null;
   const base = !q ? 'Yahoo Finance（可能延遲）'
-    : q.src==='TWSE' ? '證交所（TWSE）'
-    : q.src==='TWSE(今日尚未成交)' ? '證交所（TWSE，今日尚未成交）'
-    : 'Yahoo Finance（可能延遲）';
+    : !isTwse ? 'Yahoo Finance（可能延遲）'
+    : v==='reject'    ? '證交所（TWSE）· ⚠️ 資料未通過驗證'
+    : v==='open'      ? '證交所（TWSE，開盤價，非現價）'
+    : v==='prevclose' ? '證交所（TWSE，今日尚未成交）'
+    : v==='session'   ? '證交所（TWSE，前一交易日）'
+    : '證交所（TWSE）';
   // ⚠️ 一併標出交易所給的成交時間 —— 個股頁原本只寫「證交所即時」，
   //   但「即時」兩個字在收盤後/假日是騙人的，實際是上一個交易日的收盤價。
   const a=quoteAsOfLabel(q);
   return a ? (base+' · '+a) : base;
 }
 // 共用：把報價寫進自選股某一列的DOM(價格數字＋漲跌pill)，回傳是否有寫入新價格
-function applyWlPrice(symbol, price, prev, stale){
+// ⚠️⚠️ 2026-09-18：顯示層改為 fail-closed。
+//   applyWlPrice【只接受經過驗證的 quote 物件】，不再接受裸數字。
+//   理由：過去七次報價事故的共同點都是「某處把一個未經驗證的數字丟給畫面」。
+//   只要顯示函式還肯收裸數字，未來任何一條新分支都可能再犯同樣的錯；
+//   改成只收物件之後，要顯示價格就一定得帶著 verdict 來，繞不過閘門。
+//
+// quoteBadge：把 verdict 翻成使用者看得懂、且不會誤導的標示。
+//   回傳 null 代表「這是今天成交過的真實價格」，可以正常畫漲跌幅。
+function quoteBadge(q){
+  if(!q) return {txt:'—', cls:'qb-dim', note:'無資料'};
+  const v=q.verdict||'live';
+  if(v==='reject')    return {txt:'⚠️ 資料異常', cls:'qb-bad',  note:'未通過報價驗證：'+((q.reasons||[]).join('；')||'原因不明')};
+  if(v==='prevclose') return {txt:'尚未成交',    cls:'qb-dim',  note:'今日尚無成交，數字為昨日收盤價'};
+  if(v==='open')      return {txt:'開盤價',      cls:'qb-warn', note:'目前只取得到開盤價，這不是現價'};
+  if(v==='session')   return {txt:'前一交易日',  cls:'qb-dim',  note:'資料日期不是今天'};
+  // Yahoo（美股）沒有 verdict，但仍可能標記 stale；一樣不可畫成漲跌幅。
+  if(q.stale)         return {txt:'尚未成交',    cls:'qb-dim',  note:'今日尚無成交，數字為昨日收盤價'};
+  return null;
+}
+function applyWlPrice(symbol, q){
   const pEl=document.getElementById('wlp_'+symbol), cEl=document.getElementById('wlc_'+symbol);
+  // ⚠️ reject 的價格一律不顯示數字。寧可顯示「—」，也不顯示一個看起來很正常的錯價 ——
+  //   使用者看不出 2402.5 是錯的，但看得出「—」要重新整理。
+  const price=(q && q.verdict!=='reject' && q.price!=null) ? +q.price : null;
+  const prev=q? q.prev : null;
   if(pEl){
-    const txt = price!=null?'$'+(+price).toFixed(2):'—';
+    const txt = price!=null?'$'+price.toFixed(2):'—';
     const before=parseFloat((pEl.textContent||'').replace(/[^0-9.]/g,''));
     const dir = (price!=null && !isNaN(before) && price!==before) ? price>before : null;
     setLiveText(pEl, txt, dir);
     if(dir!=null) flashRow(pEl.closest('.wl-row'), dir);   // 價格真的變了才整列亮一下
   }
   if(cEl){
-    if(stale){
-      // ⚠️ 這個價格其實是昨收（今天完全沒有成交資料），不可以顯示成「▲0.00%」——
-      //   那會讓使用者以為今天開盤了而且平盤。要明講今天還沒有成交。
-      const html='<span style="color:var(--text2);font-size:11.5px">尚未成交</span>';
-      if(cEl.innerHTML!==html) cEl.innerHTML=html;
+    const badge=quoteBadge(q);
+    let html;
+    if(badge){
+      // 非現價一律用文字講清楚它「是什麼」，絕不畫成漲跌幅 pill ——
+      //   pill 會被讀成「今天的即時漲跌」（2026-08-31 拿昨收卻標 ▲0.00% 的教訓）。
+      html='<span class="qbadge '+badge.cls+'" title="'+esc(badge.note)+'">'+esc(badge.txt)+'</span>';
     } else if(price!=null && prev){
       const pct=(price-prev)/prev*100;
-      // 台股慣例：漲=紅底、跌=綠底、白字
-      const html=`<span class="pill ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span>`;
-      if(cEl.innerHTML!==html) cEl.innerHTML=html;
-    } else if(cEl.textContent!=='—') cEl.textContent='—';
+      // 台股慣例：漲=紅底、跌=綠底、白字（由 .mkt-tw 翻轉）
+      html='<span class="pill '+(pct>=0?'up':'down')+'">'+(pct>=0?'▲':'▼')+Math.abs(pct).toFixed(2)+'%</span>';
+    } else {
+      html='<span class="qbadge qb-dim">—</span>';
+    }
+    if(cEl.innerHTML!==html) cEl.innerHTML=html;
   }
 }
 // 自選股報價：改走全站統一報價層 quotesOf()（2026-09-12）。
@@ -1908,17 +2065,24 @@ async function loadWatchlistPrices(list){
   const gen=++__wlPriceGen;
   const quotes=await quotesOf(list.map(it=>it.symbol));
   if(gen!==__wlPriceGen) return;            // 已有更新的一輪發出，這份是舊資料，丟棄
-  let twOk=0, twStale=0, usOk=0, fail=0;
+  let twOk=0, twStale=0, usOk=0, fail=0, bad=0;
   list.forEach(it=>{
     const q=quotes.get(it.symbol);
-    if(!q){ applyWlPrice(it.symbol, null, null); fail++; return; }
-    applyWlPrice(it.symbol, q.price, q.prev, q.stale);
+    if(!q){ applyWlPrice(it.symbol, null); fail++; return; }
+    applyWlPrice(it.symbol, q);
+    // 被防呆擋下的不算成功，而且要單獨計數 —— 否則畫面上只會少一個數字，
+    //   我們永遠不知道防呆今天到底擋了幾筆。
+    if(q.verdict==='reject'){ bad++; return; }
     if(/^TWSE/.test(q.src)){ twOk++; if(q.stale) twStale++; } else usOk++;
   });
   const parts=[];
-  if(twOk) parts.push('TWSE'+(twStale?('·'+twStale+'檔尚未成交'):''));
+  // ⚠️ 這裡統計的是「非現價」的檔數，不是「尚未成交」——
+  //   開盤價、昨收、前一交易日都算非現價，但只有昨收才是真的尚未成交。
+  //   統計文字寫錯，使用者就會以為開過盤的股票沒開盤。
+  if(twOk) parts.push('TWSE'+(twStale?('·'+twStale+'檔非現價'):''));
   if(usOk) parts.push('Yahoo');
   if(fail) parts.push(fail+'檔無資料');
+  if(bad)  parts.push('⚠️'+bad+'檔資料異常已擋下');
   // 時間一律取自「交易所回給我們的時間戳」，取清單中最新的一筆；
   //   完全取不到才退回本機時間，並明確標示那是「本機」而非成交時間。
   let asOf='';
@@ -2765,7 +2929,7 @@ async function doSearch(){
 
     logAdd('price','載入即時股價...');
     let priceInfo=null;
-    try{ const q=await quoteOf(quoteSym); if(q) priceInfo={price:q.price, prev:q.prev}; logOk('price','股價載入完成'); }   // 走統一報價層，與自選股/主題/ETF 同一個數字
+    try{ const q=await quoteOf(quoteSym); if(q && q.price!=null) priceInfo={price:q.price, prev:q.prev}; logOk('price','股價載入完成'); }   // 走統一報價層，與自選股/主題/ETF 同一個數字
     catch(e){ logErr('price','股價載入失敗（不影響財務數據）'); }
 
     logAdd('render','繪製財務圖表...');
