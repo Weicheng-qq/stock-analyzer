@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>隱私權政策 — 美股/台股深度分析</title>
+<!--
+  ⚠️ 這一頁是 Google Play 上架的【硬性必要條件】：
+     所有 App 都必須提供可公開存取的隱私權政策網址，就算完全不收集資料也一樣，
+     而且 Play Console 的「資料安全」表單內容必須與這一頁一致，否則會被退件。
+  ⚠️ 內容必須與程式實際行為相符。這一頁的每一句都對照過原始碼：
+     · localStorage 實際用到的 key（market / marketPicked / gm_key / quote_proxy / layoutMode / 各式快取）
+     · 對外連線（api/proxy.js、api/ai.js、api/ai-cache.js）
+     · 全站沒有任何分析或廣告 SDK（已用關鍵字掃描確認）
+     日後若加入廣告或分析，這一頁與資料安全表單【都必須同步更新】，否則屬於不實申報。
+-->
+<style>
+:root{
+  --bg:#0d1117; --bg2:#161b22; --bg3:#21262d; --border:#30363d;
+  --text:#e6edf3; --text2:#8b949e; --blue:#58a6ff; --yellow:#d29922;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,'Segoe UI','PingFang TC','Microsoft JhengHei',Roboto,sans-serif;
+  line-height:1.85;font-size:15px;}
+.wrap{max-width:760px;margin:0 auto;padding:22px 18px 70px;}
+h1{font-size:22px;margin:6px 0 4px;color:var(--blue);}
+h2{font-size:17px;margin:30px 0 8px;padding-top:16px;border-top:1px solid var(--border);}
+h3{font-size:15px;margin:18px 0 6px;color:var(--blue);}
+.updated{color:var(--text2);font-size:13px;margin-bottom:8px;}
+.lead{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--blue);
+  border-radius:8px;padding:13px 15px;margin:16px 0;}
+.key{background:rgba(88,166,255,.08);border:1px solid rgba(88,166,255,.25);
+  border-radius:8px;padding:13px 15px;margin:14px 0;font-weight:600;}
+.warn{background:rgba(210,153,34,.10);border-left:3px solid var(--yellow);
+  border-radius:6px;padding:11px 14px;margin:14px 0;font-size:14px;}
+ul{padding-left:22px;margin:8px 0;}
+li{margin:6px 0;}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px;display:block;overflow-x:auto;}
+th,td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top;}
+th{background:var(--bg3);white-space:nowrap;}
+a{color:var(--blue);}
+code{background:var(--bg3);padding:1px 6px;border-radius:4px;font-size:13px;}
+.en{color:var(--text2);font-size:13.5px;}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--border);
+  color:var(--text2);font-size:12.5px;text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>隱私權政策</h1>
+<div class="updated">美股/台股深度分析（以下稱「本 App」）　最後更新：2026 年 9 月 18 日</div>
+
+<div class="key">
+簡短版：本 App <u>不需要註冊、沒有帳號、不收集任何個人資料、不放廣告、不做使用者追蹤</u>。
+你的自選股與設定只存在你自己的手機裡，我們看不到，也沒有伺服器在保存它們。
+</div>
+
+<h2>1. 我們不收集哪些資料</h2>
+<p>為避免任何模糊空間，先明確列出本 App <b>完全不會</b>取得的項目：</p>
+<ul>
+  <li>姓名、電子郵件、電話、生日、身分證字號等任何可識別個人的資訊</li>
+  <li>帳號與密碼（本 App 沒有登入機制）</li>
+  <li>位置資訊、通訊錄、通話紀錄、簡訊、相機、麥克風、相簿</li>
+  <li>裝置的廣告識別碼（Advertising ID）</li>
+  <li>你的券商帳戶、實際持股、下單紀錄或任何金融帳戶資訊
+      —— 本 App <b>無法</b>連線到任何券商，也不具備下單功能</li>
+</ul>
+<p>本 App 未安裝任何分析（Analytics）、廣告或使用者行為追蹤的第三方 SDK。</p>
+
+<h2>2. 只存在你手機裡的資料</h2>
+<p>以下資料使用瀏覽器的本機儲存（<code>localStorage</code>）保存在<b>你的裝置上</b>。
+它們<b>不會</b>上傳到我們的伺服器，我們也沒有任何方式讀取：</p>
+<table>
+  <tr><th>項目</th><th>用途</th></tr>
+  <tr><td>市場偏好（美股／台股）</td><td>記住你上次看的市場，下次開啟直接顯示</td></tr>
+  <tr><td>自選股清單、自選 ETF 清單</td><td>顯示你關注的股票</td></tr>
+  <tr><td>版面模式</td><td>記住你的顯示偏好</td></tr>
+  <tr><td>你自行填入的 AI 金鑰（選填）</td><td>直接由你的裝置呼叫該 AI 服務時使用</td></tr>
+  <tr><td>你自行填入的報價代理網址（選填）</td><td>讓你可以改用自己的報價中轉服務</td></tr>
+  <tr><td>分析結果快取</td><td>避免重複請求、加快開啟速度</td></tr>
+</table>
+<div class="warn">
+<b>如何刪除：</b>解除安裝本 App，或在系統設定中清除本 App 的資料，上述內容就會全部消失。
+因為資料只在你的裝置上，我們這邊沒有任何備份可以刪除，你也不需要向我們申請刪除。
+</div>
+
+<h2>3. 會離開你裝置的連線</h2>
+<p>本 App 需要連網才能取得股價與財報。這些請求<b>只包含股票代碼等查詢參數，不含任何可識別你身分的資訊</b>：</p>
+<table>
+  <tr><th>對象</th><th>送出的內容</th><th>目的</th></tr>
+  <tr><td>臺灣證券交易所（TWSE）</td><td>股票代碼</td><td>取得台股即時報價</td></tr>
+  <tr><td>Yahoo Finance</td><td>股票代碼</td><td>取得美股報價與歷史股價</td></tr>
+  <tr><td>美國證券交易委員會（SEC EDGAR）</td><td>公司代碼</td><td>取得官方年報財務數據</td></tr>
+  <tr><td>公開資訊觀測站等公開資料來源</td><td>公司代碼</td><td>取得台股財務與法說會資料</td></tr>
+  <tr><td>AI 服務供應商<br>（Google Gemini／Groq／OpenRouter）</td><td>股票代碼與上述<b>公開</b>財務數據</td><td>產生質化分析文字</td></tr>
+</table>
+<p class="en">為了技術上的必要（資料來源不允許瀏覽器直接連線），部分請求會先經過我們的中轉伺服器再轉發。
+該伺服器<b>不儲存、不記錄</b>請求內容，也不會建立任何使用者檔案。</p>
+<div class="warn">
+關於 AI 分析：送出的內容是<b>股票代碼與公開的財務數字</b>，不含你的個人資料。
+若你在設定中填入自己的 AI 金鑰，請求會<b>直接</b>從你的裝置送到該供應商，不經過我們。
+這些供應商如何處理請求，適用他們各自的隱私權政策。
+</div>
+
+<h2>4. 伺服器日誌</h2>
+<p>本 App 託管於 Vercel。與所有網站相同，主機服務商基於資安與運作需要，
+會自動保留標準的伺服器存取日誌（例如 IP 位址、時間、請求路徑）。
+這些日誌由 Vercel 依其政策保存與處理，<b>我們不會</b>用它來分析個別使用者、
+不會與其他資料勾稽、也不會用於廣告。相關說明請見
+<a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">Vercel 隱私權政策</a>。</p>
+
+<h2>5. 我們不會分享或販售資料</h2>
+<p>我們沒有你的個人資料可以分享或販售。本 App 不會將任何資料提供給資料仲介、廣告聯播網或行銷業者。</p>
+
+<h2>6. 兒童</h2>
+<p>本 App 是投資研究工具，不以 13 歲以下兒童為對象，也不會刻意向兒童收集任何資料。</p>
+
+<h2>7. 第三方內容</h2>
+<p>本 App 內含指向公司官方網站、投資人關係頁面與 YouTube 影片的連結。
+點選後你將離開本 App，這些網站的隱私權作法由其各自負責。
+影片一律以 <code>youtube-nocookie.com</code> 的無 Cookie 模式嵌入，以降低追蹤。</p>
+
+<h2>8. 資料安全</h2>
+<p>本 App 全程使用 HTTPS 加密傳輸。由於我們不保存任何使用者資料，
+即使我們的伺服器遭入侵，也沒有使用者個資可供外洩。
+你自行填入的 AI 金鑰僅存在你的裝置，請勿在公用裝置上填入。</p>
+
+<h2>9. 重要聲明：本 App 不是投資顧問</h2>
+<div class="warn">
+本 App 提供之資訊僅供研究與教育參考，<b>不構成投資、財務或買賣建議</b>，
+也不是證券投資顧問服務。所有數據來自公開來源，可能延遲、中斷或有誤，
+本 App <b>不保證其即時性與正確性</b>；實際成交價格請以你的券商報價為準。
+投資具有風險，使用者應自行判斷並承擔投資結果。
+</div>
+
+<h2>10. 政策變更</h2>
+<p>若本政策有實質變更，我們會更新本頁頂端的「最後更新」日期。
+若未來新增廣告、分析或任何會收集資料的功能，我們會在變更生效<b>前</b>更新本頁，
+並同步更新 Google Play 的「資料安全」資訊。</p>
+
+<h2>11. 聯絡方式</h2>
+<p>對本政策有任何疑問，請來信：<a href="mailto:aa910517@gmail.com">aa910517@gmail.com</a></p>
+
+<h2>Privacy Policy (English Summary)</h2>
+<p class="en">
+<b>This app collects no personal data.</b> There is no account, no login, and no
+advertising or analytics SDK of any kind. Your market preference, watchlist, layout
+settings, and any AI API key you choose to enter are stored only in your device's
+local storage and are never transmitted to us. Network requests contain only stock
+symbols and are sent to public market-data sources (Taiwan Stock Exchange, Yahoo
+Finance, SEC EDGAR) and, for qualitative analysis, to AI providers (Google Gemini,
+Groq, OpenRouter) together with publicly available financial figures — never with
+personal information. Some requests are relayed through our proxy server purely for
+technical reasons; that server stores and logs nothing. Standard hosting access logs
+are retained by our host, Vercel, under its own policy. We do not sell or share data.
+To delete everything, simply uninstall the app or clear its data. This app is a
+research and education tool; it is <b>not</b> investment advice and not a licensed
+investment advisory service. Contact: aa910517@gmail.com
+</p>
+
+<footer>美股/台股深度分析　·　隱私權政策　·　最後更新 2026-09-18</footer>
+
+</div>
+</body>
+</html>
