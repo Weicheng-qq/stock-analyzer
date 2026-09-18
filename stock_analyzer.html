@@ -726,7 +726,11 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 
   <div id="results" class="results"></div>
   <div id="grpEmpty" class="grp-empty" style="display:none">請先回到「自選股」，點任一個股的「AI」按鈕完成分析，即可在此看到該主題內容。</div>
-  <div class="app-disclaimer">本App提供之資訊僅供研究與教育參考，不構成投資、財務或買賣建議。投資具有風險，使用者應自行判斷並承擔投資結果。</div>
+  <!-- ⚠️ 2026-09-18 補強：原本只免責「投資建議」，沒有免責「數據本身」。
+       報價出過七次錯，而錯價造成的損失才是最可能被主張的損害，所以必須明講：
+       ①資料來源 ②可能延遲或中斷 ③不保證正確 ④下單前請以券商為準。 -->
+  <div class="app-disclaimer">本App提供之資訊僅供研究與教育參考，不構成投資、財務或買賣建議。投資具有風險，使用者應自行判斷並承擔投資結果。<br>
+  股價資料來自臺灣證券交易所公開資訊與 Yahoo Finance，財務資料來自美國 SEC EDGAR 與公開資訊觀測站。資料可能延遲、中斷或有誤，本App不保證其即時性與正確性；<b>實際成交價格請以您的券商報價為準</b>，切勿僅憑本App數字進行交易決策。</div>
 </div>
 
 <script>
