@@ -45,7 +45,7 @@ export default async function handler(req, res) {
     //   其餘(SEC/新聞/財務數據等不需要秒級更新的資料)維持原本5分鐘快取，降低重複請求。
     const isLiveQuote = /\/v8\/finance\/chart\//.test(target) || /mis\.twse\.com\.tw\/stock\/api\//.test(target);
     res.setHeader('Cache-Control', isLiveQuote
-      ? 'public, max-age=0, s-maxage=5'
+      ? 'public, max-age=0, s-maxage=1'   // 2026-09-19 前端改每秒輪詢，跟著改 1 秒
       : 's-maxage=300, stale-while-revalidate=600');
     res.status(r.ok ? 200 : r.status).send(body);
   } catch (e) {

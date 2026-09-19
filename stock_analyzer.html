@@ -763,6 +763,13 @@ function quoteProxyBase(){
   // 本機開發時不繞遠路，直接走本機 proxy.ps1，否則改一行程式還要等 Cloudflare。
   const isLocalEnv=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1);
   if(isLocalEnv) return PROXY;
+  // ⚠️ 2026-09-19：網站本體已搬到 Cloudflare Pages。在 pages.dev 上直接走同源的 /api/proxy：
+  //   ① 它跟著 git push 自動部署，快取秒數永遠與前端一致；獨立的報價 Worker 要手動貼程式碼
+  //      才會更新，改成每秒輪詢時若 Worker 仍是 5 秒快取，每秒抓回來的都是同一份舊資料。
+  //   ② 同源請求沒有 CORS 預檢，每秒輪詢時少一半往返。
+  //   兩者用的是同一個 Cloudflare 帳號的免費額度，改走這條路不會多花額度。
+  //   使用者在 ⚙️ 自填了代理網址時仍以自填的為準。
+  if(!getQuoteProxy() && /\.pages\.dev$/i.test(location.hostname)) return PROXY;
   const w=getQuoteProxy()||DEFAULT_QUOTE_PROXY;   // 使用者自填的優先，沒填就用預設 Worker
   if(!w) return PROXY;
   return w.replace(/\/+$/,'')+'/?url=';   // 去掉結尾多餘的斜線，使用者貼網址時常會多帶一個
@@ -1943,7 +1950,9 @@ async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(sy
 //   ⚠️ 盤前/盤後行情不走這裡，仍由 loadWatchlistSpark() 另外單獨顯示，
 //      避免把盤後價混進「目前股價」而造成與別的面板不一致。
 // ════════════════════════════════════════════════════════════════
-const __QUOTE_TTL = 4500;            // 略短於輪詢間隔 5000ms：每一輪都會真的更新，但同一輪內各面板共用
+// ⚠️ 必須小於「兩輪之間的最短間隔」(1000-200=800ms)，否則某一檔若上一輪回來得晚，
+//   下一輪會被判定為還新鮮而跳過，變成那一檔隔秒才更新。同一輪內各面板仍共用同一次請求。
+const __QUOTE_TTL = 700;
 const __quoteCache = new Map();      // symbol → {t, price, prev, src, stale}
 const __quoteWait  = new Map();      // symbol → Promise，避免同一輪多個面板同時各發一次請求
 function __quoteFresh(sym){
@@ -2241,7 +2250,9 @@ function updateWlTimestamp(source, ok, exLabel, exStamp){
       el.innerHTML='<span style="color:var(--red)">⚠️ 資料可能未更新：成交時間 '+esc(exLabel)+'，已落後約 '+lag+' 分鐘</span>（'+esc(source)+'）';
       return;
     }
-    el.textContent='成交時間 '+exLabel+'（'+source+'）'; return;
+    // 閒置省電時要講清楚，否則使用者會以為股價又卡住了。
+    const idleNote=(isMarketOpenNow() && __priceIdle()) ? ' · 閒置中每5秒更新，點一下恢復每秒' : '';
+    el.textContent='成交時間 '+exLabel+'（'+source+'）'+idleNote; return;
   }
   const now=new Date().toLocaleTimeString('zh-TW',{hour12:false});
   el.textContent='本機 '+now+' 已更新（'+source+'，交易所未提供成交時間）';
@@ -5980,6 +5991,23 @@ function isMarketOpenNow(){
 }
 let __lastPriceTick=0, __priceBusy=false;
 let __busySince=0;   // __priceBusy 是何時被設為 true 的（看門狗用）
+// ── 閒置省電：2 分鐘沒碰螢幕就降到每 5 秒，一碰就立刻恢復每秒 ──
+//   為什麼需要：Cloudflare 免費額度是全帳號每天 10 萬次請求，報價代理、AI、財報共用。
+//   美股每秒輪詢時，自選 4 檔＋正在看的個股＝每秒 5 個請求，一個人把 App 開著放整個交易時段
+//   （6.5 小時）就是約 11.7 萬次，單獨一人就會用完額度 —— 用完不會收費，但當天剩下的時間
+//   股價、AI、財報會全部停擺。真正盯著看的時間通常不長，閒置時放慢才撐得住。
+//   ⚠️ 放慢時一定要在畫面上講清楚（見 updateWlTimestamp），否則使用者會以為「股價又不動了」，
+//   那正是過去被回報過好幾次、最傷信任的症狀。
+const __PRICE_IDLE_MS=120000;
+let __lastInteract=Date.now();
+function __priceIdle(){ return Date.now()-__lastInteract > __PRICE_IDLE_MS; }
+['pointerdown','touchstart','keydown','wheel','scroll'].forEach(function(ev){
+  window.addEventListener(ev, function(){
+    const wasIdle=__priceIdle();
+    __lastInteract=Date.now();
+    if(wasIdle) __lastPriceTick=0;             // 從閒置醒來：下一個 tick 立刻重抓，不必等滿 5 秒
+  }, {passive:true, capture:true});
+});
 function refreshLivePrices(){
   if(document.hidden) return;
   // ⚠️⚠️ 2026-09-12 由「盤中每秒」改為「盤中每5秒」(使用者同意，理由是成本)：
@@ -5990,9 +6018,19 @@ function refreshLivePrices(){
   //      每秒輪詢時單一使用者整個盤都開著就會吃掉約 65 萬次，約 20 個使用者就爆掉。
   //      改成 5 秒直接降為 1/5。
   //   ⚠️ 這個數字必須與 api/proxy.js 的 s-maxage 一起看：兩邊都是 5 秒才對得起來。
-  const gap=isMarketOpenNow()?5000:60000;      // 盤中每5秒、收盤60秒
+  // ⚠️⚠️ 2026-09-19 使用者要求改回「台股、美股都每秒跳動」（上面 09-12 那段是當時的決策紀錄）。
+  //   台股：證交所 MIS 仍約每 5 秒才出一筆快照，每秒輪詢不會讓台股變成每秒變動，
+  //         但交易所一更新，1 秒內就會反映到畫面（原本最慢要等 5 秒）。
+  //   美股：Yahoo 的成交價是連續更新的，每秒輪詢可以真的看到每秒變動。
+  //   額度保護見上方 __priceIdle()；另外只抓「畫面上看得到」的股價（見下方 jobs）。
+  //   ⚠️ 這個 1 秒必須與 functions/api/proxy.js、api/proxy.js、cloudflare-worker 的報價快取秒數一致。
+  const open=isMarketOpenNow();
+  const gap=!open ? 60000 : (__priceIdle() ? 5000 : 1000);   // 盤中每秒（閒置每5秒）、收盤60秒
   const now=Date.now();
-  if(now-__lastPriceTick<gap) return;
+  // ⚠️ 要留 200ms 容差：setInterval(…,1000) 不是精準的 1000ms，常常提早幾毫秒觸發。
+  //   沒有容差時「999 < 1000」就會跳過那一輪、等到下一秒才抓，實測 10 秒內跳掉 2～3 秒，
+  //   畫面變成忽快忽慢。容差對 5 秒、60 秒兩種間隔同樣無害。
+  if(now-__lastPriceTick<gap-200) return;
   // ⚠️⚠️⚠️ 2026-09-15 使用者回報：10:17 時台達電/緯穎/群聯/聯發科四檔同時顯示【當天開盤價】
   //   （台達電1590=開盤、昨收是1620，四檔全部精準等於開盤價）——也就是畫面從 09:00 之後
   //   就再也沒更新過，整整凍結 77 分鐘。
@@ -6011,10 +6049,19 @@ function refreshLivePrices(){
   __lastPriceTick=now; __priceBusy=true; __busySince=now;
   try{
     const jobs=[];
+    // ⚠️ 只更新【畫面上看得到】的股價。切到別的分頁時，自選股那幾列還在 DOM 裡但被隱藏，
+    //   每秒照抓等於白白燒掉免費額度。offsetParent===null 代表元素本身或祖先是 display:none。
+    //   切回來時下一個 tick（最多 1 秒）就會補上，不會停在舊價格。
+    const shown=function(id){ const e=document.getElementById(id); return !!(e && e.offsetParent!==null); };
     const l=getWatchlist();
-    if(l&&l.length) jobs.push(loadWatchlistPrices(l));
-    if(typeof loadThemePrices==='function' && window.__themeRows && window.__themeRows.length) jobs.push(loadThemePrices(window.__themeRows));
-    jobs.push(updateDetailPrice());             // 目前正在看的那家公司股價也要跟著跳
+    const lv=(l||[]).filter(function(it){ return shown('wlp_'+it.symbol); });
+    if(lv.length) jobs.push(loadWatchlistPrices(lv));
+    if(typeof loadThemePrices==='function' && window.__themeRows && window.__themeRows.length){
+      const tv=window.__themeRows.filter(function(r){ return shown('thp_'+r.symbol); });
+      if(tv.length) jobs.push(loadThemePrices(tv));
+    }
+    const dEl=document.querySelector('.co-head .price-val');
+    if(dEl && dEl.offsetParent!==null) jobs.push(updateDetailPrice());   // 目前正在看的那家公司股價也要跟著跳
     Promise.all(jobs.map(p=>Promise.resolve(p).catch(()=>{}))).then(()=>{ __priceBusy=false; });
   }catch(e){ __priceBusy=false; }
 }

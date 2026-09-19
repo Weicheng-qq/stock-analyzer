@@ -42,7 +42,7 @@ export default {
     }
 
     try {
-      // cf.cacheTtl：讓 Cloudflare 自己在邊緣快取 5 秒。
+      // cf.cacheTtl：讓 Cloudflare 自己在邊緣快取 1 秒（2026-09-19 前 5 秒，前端改每秒輪詢後跟著改）。
       //   多個使用者同時看同一支股票時，只有第一個會真的打到證交所，
       //   其餘直接吃邊緣快取 —— 打到對方伺服器的次數與使用者人數脫鉤。
       const upstream = await fetch(target, {
@@ -50,7 +50,7 @@ export default {
           'User-Agent': 'StockAnalyzer/1.0 (personal project)',
           'Accept': 'application/json, text/html, */*',
         },
-        cf: { cacheTtl: 5, cacheEverything: true },
+        cf: { cacheTtl: 1, cacheEverything: true },   // 2026-09-19 前端改每秒輪詢
       });
       const body = await upstream.text();
       return new Response(body, {
@@ -60,7 +60,7 @@ export default {
           'Content-Type': 'application/json; charset=utf-8',
           // 與 api/proxy.js 完全相同的快取策略：
           //   刻意不加 stale-while-revalidate，報價寧可慢一拍抓新的，也不要回舊值。
-          'Cache-Control': 'public, max-age=0, s-maxage=5',
+          'Cache-Control': 'public, max-age=0, s-maxage=1',
         },
       });
     } catch (e) {

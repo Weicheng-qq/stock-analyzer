@@ -35,6 +35,9 @@ export async function onRequest(context) {
   if (!target) return json({ error: 'missing url' }, 400);
   if (!ALLOW.test(target)) return json({ error: 'host not allowed' }, 403);
 
+  // 報價與其他資料的快取秒數不同，要在發請求前就決定好。
+  const isLiveQuote = /\/v8\/finance\/chart\//.test(target) || /mis\.twse\.com\.tw\/stock\/api\//.test(target);
+
   try {
     const r = await fetch(target, {
       headers: {
@@ -42,8 +45,10 @@ export async function onRequest(context) {
         'User-Agent': 'StockAnalyzer/1.0 (personal project; contact@example.com)',
         'Accept': 'application/json, text/html, */*'
       },
-      // Cloudflare 自己的邊緣快取。與下面的 s-maxage 一致，兩者是不同層，都要設。
-      cf: { cacheTtl: 5, cacheEverything: true }
+      // Cloudflare 自己的邊緣快取（真正讓多個使用者共用同一份上游回應的是這一層）。
+      // ⚠️ 2026-09-19 改為：報價 1 秒（前端改每秒輪詢）、其他資料 300 秒。
+      //   原本一律 5 秒，連 SEC 財報這種一天才變一次的資料也每 5 秒就回源一次。
+      cf: { cacheTtl: isLiveQuote ? 1 : 300, cacheEverything: true }
     });
     const body = await r.text();
 
@@ -52,15 +57,13 @@ export async function onRequest(context) {
     //   前端比快取快，多打的那幾次只會拿到同一份快取；前端比快取慢，快取就白設。
     //   ⚠️ 刻意不對報價加 stale-while-revalidate：寧可稍慢一拍去抓新的，也不要回舊值，
     //      否則會重演「看起來很新、其實是舊價」那個讓使用者困擾很多次的症狀。
-    const isLiveQuote = /\/v8\/finance\/chart\//.test(target) || /mis\.twse\.com\.tw\/stock\/api\//.test(target);
-
     return new Response(body, {
       status: r.ok ? 200 : r.status,
       headers: {
         ...CORS,
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': isLiveQuote
-          ? 'public, max-age=0, s-maxage=5'
+          ? 'public, max-age=0, s-maxage=1'
           : 's-maxage=300, stale-while-revalidate=600'
       }
     });
