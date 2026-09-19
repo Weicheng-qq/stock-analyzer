@@ -2887,6 +2887,7 @@ async function doSearchTW(symbol){
     //   實測台股台積電頁曾顯示 TSM 的本益比 31.9、技術面 18，與同一頁「本益比 28.2、
     //   股價強勢站穩所有均線」正好相反。
     window.__mktCode=code;
+    recordDemand(code);   // 匿名記錄：今天有人查看這檔台股（排程優先更新）
     await ensureIR(window.__symbolForLinks);   // IR全文改為延遲載入,渲染前必須先備妥這一家的資料
     await loadAutoEarnings(window.__symbolForLinks);   // 每日排程自動產生的最新財報摘要(官方數字)
     window.__coNameForLinks=name;
@@ -2983,6 +2984,7 @@ async function doSearch(){
     const quoteSym=(fbFin?fbFin.yahooSym:symbol).replace(/\./g,'-');   // 所有Yahoo Finance查詢一律用這個(非SEC股票代碼)；Yahoo對A/B股用連字號(如BRK-B)而非點(BRK.B)，故轉換
     window.__coNameForLinks=co.title;   // 供法說會口頭Q&A直達連結使用
     window.__symbolForLinks=US_TW_EQUIV[symbol]||symbol;   // 雙掛牌ADR(如UMC聯電→2303):共用台股端已建的官方事實內容;其餘維持美股代碼
+    recordDemand(symbol);   // 匿名記錄：今天有人查看這檔美股（排程優先更新）
     await ensureIR(window.__symbolForLinks);   // IR全文改為延遲載入,渲染前必須先備妥這一家的資料
     await loadAutoEarnings(window.__symbolForLinks);   // 每日排程自動產生的最新財報摘要(官方數字)
     updateCurrentCompanyBar(co.title, symbol);
@@ -3442,6 +3444,57 @@ async function ensureIR(sym){
 // 檔名用「代碼」而非季度：公司的會計季別與人工 IR 記錄的季度常不一致
 //   （例如 NVDA 的 SEC 會計期間是 FY2027Q2，人工記錄寫「2026 第二季」），
 //   用季度當檔名會對不上而永遠找不到檔案。季度資訊寫在檔案內容裡。
+// ⚠️ 2026-09-19：人工版 vs 自動版的季度比較改用這一套（與 scripts/analyze-earnings.mjs 完全相同）。
+//   原本用 __periodEnd() 比日期，但它讀不懂「FY2027 Q1」「2027 財年第二季」這種會計年度寫法，
+//   一律當成年底 → 人工版看起來永遠比較新 → 自動版明明新一季也被排在後面。
+// 人工建置的季度標籤 → 可比較的季度。寫法很多種，都要讀得懂：
+//   「2026 第二季（2026/07/16）」「2026 上半年」「2026 第一季（無公開法說會…）」→ 日曆季
+//   「FY2027 Q1（…Q2將於2026/08/27公布）」「2027 財年第二季」→ 公司自己的會計年度
+//   「2026（法說會＋月營收）」這種看不出季度的 → null，一律當作「不知道」，不跳過
+function parseManualQuarter(label) {
+  const s = String(label || '');
+  const qn = x => ({ '一': 1, '二': 2, '三': 3, '四': 4 }[x] || +x);
+  let m = s.match(/FY\s*(\d{4})\s*Q\s*([1-4])/i) || s.match(/(\d{4})\s*財年\s*第?\s*([一二三四1-4])\s*季/);
+  if (m) return { kind: 'fiscal', y: +m[1], q: qn(m[2]) };
+  m = s.match(/(\d{4})\s*年?\s*(?:第\s*([一二三四1-4])\s*季|Q\s*([1-4]))/);
+  if (m) return { kind: 'cal', y: +m[1], q: qn(m[2] || m[3]) };
+  m = s.match(/(\d{4})\s*年?\s*(上半年|下半年|全年|年度)/);
+  if (m) return { kind: 'cal', y: +m[1], q: m[2] === '上半年' ? 2 : 4 };
+  return null;
+}
+// 自動版相對於人工版：'newer'（自動較新）｜'same'（同一季）｜'older'（人工較新）｜'unknown'（無法判斷）
+//   台股：兩邊都是日曆季，直接比。
+//   美股：自動版是 SEC 的會計年度季別。人工版寫會計年度就直接比；寫日曆季就改比「期間結束日」，
+//   容許 45 天誤差（同一季的會計期間結束日與日曆季底本來就會差幾週，例如 NVDA 7/26 vs 6/30）。
+function compareManualAuto(manualLabel, auto) {
+  const m = parseManualQuarter(manualLabel);
+  if (!m || !auto) return 'unknown';
+  const tag = String(auto.quarterTag || '');
+  const t = tag.match(/^(\d{4})Q?([1-4])$/) || tag.match(/^(\d{4})(FY)$/);
+  if (!t) return 'unknown';
+  const ay = +t[1], aq = t[2] === 'FY' ? 4 : +t[2];
+  const cmp = (a, b) => a > b ? 'newer' : a < b ? 'older' : 'same';
+  const isTw = auto.market === 'tw';
+  if (isTw || m.kind === 'fiscal') return cmp(ay * 10 + aq, m.y * 10 + m.q);
+  const endStr = auto.official && auto.official.periodEnd;
+  if (!endStr) return 'unknown';
+  const aEnd = new Date(endStr), mEnd = new Date(m.y, m.q * 3, 0);
+  const days = (aEnd - mEnd) / 86400000;
+  return days > 45 ? 'newer' : days < -45 ? 'older' : 'same';
+}
+// 匿名記錄「今天有人查看了這檔股票」，讓每日排程優先更新大家實際在看的公司
+//   （使用者 2026-09-19 要求：使用者點過的公司排在五階段名單前面）。
+//   只送股票代碼，不含任何可識別使用者的資訊；同一天同一檔只送一次（sessionStorage 去重），
+//   以節省 Cloudflare KV 每天 1,000 次的免費寫入額度。失敗一律安靜略過，不影響任何功能。
+function recordDemand(sym){
+  try{
+    const s=String(sym||'').trim().toUpperCase(); if(!s) return;
+    const k='dm_'+new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Taipei'})+'_'+s;
+    if(sessionStorage.getItem(k)) return;
+    sessionStorage.setItem(k,'1');
+    fetch('/api/demand',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({symbol:s}),keepalive:true}).catch(function(){});
+  }catch(e){}
+}
 // ⚠️ 2026-09-19 修正：雙掛牌公司要兩個代碼都找。
 //   台股頁為了共用官網 IR 內容，會把台積電換成美股代碼 TSM 去找；但每日排程是依上市市場存檔，
 //   台積電的自動摘要存成 2330.json，從來沒有 TSM.json。結果台積電這份直接來自官方逐字稿、
@@ -3846,13 +3899,21 @@ function renderAI(ai){
   const autoEarn=window.__autoEarnings;
   // 自動摘要比人工版新「超過 45 天」才視為真的跨了一季（同一季內兩者日期本就會差幾天，
   //   例如 NVDA 人工記法說會日 7/16、官方期間結束 7/26，那不算更新一季）
-  let __autoNewer=false;
+  //   比較結果：newer → 自動版排前面；same → 人工版為主、自動版接在後面補充；
+  //   older → 自動版比人工版還舊，【不顯示】—— 把過時一季的內容接在最新人工版後面只會誤導。
+  //   unknown（人工版標籤看不出季度）→ 維持原本的日期比較。
+  let __autoNewer=false, __autoOlder=false;
   if(autoEarn&&manualCall){
-    const a=__periodEnd(autoEarn.official&&autoEarn.official.periodEnd)||__periodEnd(autoEarn.quarter);
-    const m=__periodEnd(manualCall.quarter);
-    __autoNewer = !!(a&&m&&(a-m)/86400000>45);
+    const rel=compareManualAuto(manualCall.quarter, autoEarn);
+    if(rel==='newer') __autoNewer=true;
+    else if(rel==='older') __autoOlder=true;
+    else if(rel==='unknown'){
+      const a=__periodEnd(autoEarn.official&&autoEarn.official.periodEnd)||__periodEnd(autoEarn.quarter);
+      const m=__periodEnd(manualCall.quarter);
+      __autoNewer = !!(a&&m&&(a-m)/86400000>45);
+    }
   }
-  const autoBlock=autoEarn?earningsBlock(autoEarn,__autoNewer):'';
+  const autoBlock=(autoEarn&&!__autoOlder)?earningsBlock(autoEarn,__autoNewer):'';
   if(manualCall&&__autoNewer){
     // 自動摘要較新 → 放前面；人工內容降為補充，但保留（那裡有自動化做不到的人工判讀）
     setAI('ai_guidance',`<div class="ai">${videoBlock}${autoBlock}

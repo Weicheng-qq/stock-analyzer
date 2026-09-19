@@ -71,6 +71,12 @@ jobs:
           #   直接 npx playwright 會臨時抓最新版，可能裝到不相容的 chromium。
           ./node_modules/.bin/playwright install --with-deps chromium --only-shell
 
+      # 使用者指定的名額分配順序要用到「每家公司屬於哪個階段」。
+      #   上市／上櫃名單每天從官方 API 重抓，新上市櫃的公司會自動歸入第三／第五階段；
+      #   API 連不上時沿用上一次的名單，所以這一步失敗也不會讓排程中斷。
+      - name: 更新五階段公司名單
+        run: node scripts/build-stages.mjs || echo "⚠️ 五階段名單更新失敗，沿用舊名單"
+
       - name: 偵測新事件（SEC + TWSE + TPEx）
         env:
           LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '3' }}

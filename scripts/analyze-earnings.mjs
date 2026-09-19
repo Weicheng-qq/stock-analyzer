@@ -3,7 +3,8 @@
 // 【設計原則】
 // 1. Gemini 只負責「分析已經取得的官方數字」，絕不讓它去搜尋公司（那是 detect-events 的工作）。
 // 2. 同一家公司、同一季只分析一次：輸出檔已存在且季度相同就跳過。
-// 3. 依優先序 HIGH → MEDIUM → LOW，額度用完就停，HIGH 永遠先做。
+// 3. 名額分配：使用者點過的 → 五階段 1→5 → 其他（2026-09-19 使用者指定，見主流程排序處）；
+//    同一層內再依熱門股 → 有官網 IR 頁 → 事件優先度 HIGH → MEDIUM → LOW。額度用完就停。
 // 4. 【零費用鐵則】三層免費備援 Gemini→Groq→OpenRouter（見 lib/ai-call.mjs，與網站 /api/ai 一致）。
 //    三家都只用免費層，超額一律是「拒絕請求」而非計費，三家都用完就停止。
 //    ⚠️ Gemini 一旦啟用帳單，免費層會整個消失、從第一個 token 就計費。
@@ -41,6 +42,69 @@ const DRY_RUN = process.env.DRY_RUN === '1';
 if (!process.env.GEMINI_KEY && !process.env.GROQ_KEY && !process.env.OPENROUTER_KEY && !process.env.AI_PROXY_URL && !DRY_RUN) {
   console.error('❌ 未設定任何 AI 金鑰(GEMINI_KEY/GROQ_KEY/OPENROUTER_KEY)，中止（不會嘗試任何付費方案）'); process.exit(1);
 }
+
+// ════════════════════════════════════════════════════════════════════════
+// ⚠️⚠️ 2026-09-19【人工建置優先】使用者的規則：
+//   「如果已經有最新一季法說則不用去跑，且人工建置優先，沒有再跑自動建置」。
+//   原本只檢查「自動版是否已是同一季」，完全沒看人工版，實測試跑挑中的第一階段公司裡，
+//   光寶科、台光電、研華、TJX 人工版都已是最新一季，卻仍要重做一次 —— 白白浪費每日 40 家名額。
+//   現在：人工版（stock_analyzer.html 的 IR_INDEX）已涵蓋這一季（或更新）→ 跳過、不佔名額。
+//   人工版看不出季度的（例如「2026（法說會＋月營收）」）視為不知道，照常自動分析，寧可多做不漏做。
+//   ⚠️ 前端 stock_analyzer.html 有一模一樣的 parseManualQuarter / compareManualAuto，兩邊要一起改。
+// ════════════════════════════════════════════════════════════════════════
+// 人工建置的季度標籤 → 可比較的季度。寫法很多種，都要讀得懂：
+//   「2026 第二季（2026/07/16）」「2026 上半年」「2026 第一季（無公開法說會…）」→ 日曆季
+//   「FY2027 Q1（…Q2將於2026/08/27公布）」「2027 財年第二季」→ 公司自己的會計年度
+//   「2026（法說會＋月營收）」這種看不出季度的 → null，一律當作「不知道」，不跳過
+function parseManualQuarter(label) {
+  const s = String(label || '');
+  const qn = x => ({ '一': 1, '二': 2, '三': 3, '四': 4 }[x] || +x);
+  let m = s.match(/FY\s*(\d{4})\s*Q\s*([1-4])/i) || s.match(/(\d{4})\s*財年\s*第?\s*([一二三四1-4])\s*季/);
+  if (m) return { kind: 'fiscal', y: +m[1], q: qn(m[2]) };
+  m = s.match(/(\d{4})\s*年?\s*(?:第\s*([一二三四1-4])\s*季|Q\s*([1-4]))/);
+  if (m) return { kind: 'cal', y: +m[1], q: qn(m[2] || m[3]) };
+  m = s.match(/(\d{4})\s*年?\s*(上半年|下半年|全年|年度)/);
+  if (m) return { kind: 'cal', y: +m[1], q: m[2] === '上半年' ? 2 : 4 };
+  return null;
+}
+// 自動版相對於人工版：'newer'（自動較新）｜'same'（同一季）｜'older'（人工較新）｜'unknown'（無法判斷）
+//   台股：兩邊都是日曆季，直接比。
+//   美股：自動版是 SEC 的會計年度季別。人工版寫會計年度就直接比；寫日曆季就改比「期間結束日」，
+//   容許 45 天誤差（同一季的會計期間結束日與日曆季底本來就會差幾週，例如 NVDA 7/26 vs 6/30）。
+function compareManualAuto(manualLabel, auto) {
+  const m = parseManualQuarter(manualLabel);
+  if (!m || !auto) return 'unknown';
+  const tag = String(auto.quarterTag || '');
+  const t = tag.match(/^(\d{4})Q?([1-4])$/) || tag.match(/^(\d{4})(FY)$/);
+  if (!t) return 'unknown';
+  const ay = +t[1], aq = t[2] === 'FY' ? 4 : +t[2];
+  const cmp = (a, b) => a > b ? 'newer' : a < b ? 'older' : 'same';
+  const isTw = auto.market === 'tw';
+  if (isTw || m.kind === 'fiscal') return cmp(ay * 10 + aq, m.y * 10 + m.q);
+  const endStr = auto.official && auto.official.periodEnd;
+  if (!endStr) return 'unknown';
+  const aEnd = new Date(endStr), mEnd = new Date(m.y, m.q * 3, 0);
+  const days = (aEnd - mEnd) / 86400000;
+  return days > 45 ? 'newer' : days < -45 ? 'older' : 'same';
+}
+function loadManualIndex() {
+  try {
+    const html = fs.readFileSync(path.join(ROOT, 'stock_analyzer.html'), 'utf8');
+    const i = html.indexOf('const IR_INDEX');
+    const line = html.slice(i, html.indexOf('\n', i));
+    return new Function('return ' + line.slice(line.indexOf('{'), line.lastIndexOf('}') + 1))();
+  } catch (e) { console.log('  ⚠️ 讀不到人工建置索引 IR_INDEX（' + e.message + '），本次不做人工優先判斷'); return {}; }
+}
+// 美股 ADR → 台股代碼（聯電 UMC→2303、日月光 ASX→3711、中華電 CHT→2412）：
+//   這幾家的人工內容建在台股代碼底下，美股代碼查 IR_INDEX 會找不到。
+const US_TW_EQUIV = (() => {
+  try {
+    const html = fs.readFileSync(path.join(ROOT, 'stock_analyzer.html'), 'utf8');
+    const i = html.indexOf('const US_TW_EQUIV');
+    const st = html.indexOf('{', i), en = html.indexOf('}', st);
+    return new Function('return ' + html.slice(st, en + 1))();
+  } catch (e) { return {}; }
+})();
 
 // 公司官網 IR 頁網址：使用者人工整理的 1,270 筆，正是「抓官網逐字稿」路徑的入口。
 //   人工建置的成果在這裡繼續發揮價值——不是白做的。
@@ -382,14 +446,58 @@ const hotIdx = x => {
 // 排序三層：①使用者最在意的熱門股 ②拿得到官網逐字稿 ③原本的事件優先序。
 //   ⚠️ 只用「有沒有 IR 頁」排不夠：684 家都有 IR 頁，同層之間仍照代碼順序，
 //   實測台積電還是排第 260 位，每輪 40 家仍然輪不到（改版前是第 315 位）。
-const byRank = m => queue.filter(x => (m === 'tw' ? x.market === 'tw' : x.market !== 'tw'))
-  .sort((a, b) => (hotIdx(a) - hotIdx(b)) || (hasIr(a) - hasIr(b)) || (rank[a.priority] - rank[b.priority]));
-const twQ = byRank('tw'), usQ = byRank('us');
-const sorted = [];
-for (let i = 0; i < Math.max(twQ.length, usQ.length); i++) {
-  if (i < twQ.length) sorted.push(twQ[i]);
-  if (i < usQ.length) sorted.push(usQ[i]);
+// ════════════════════════════════════════════════════════════════════════
+// ⚠️⚠️ 2026-09-19 使用者指定的名額分配順序（最外層排序鍵）：
+//   ① 使用者主動點過的公司（最近 3 天，來自網站 /api/demand 的匿名統計）
+//   ② 第一階段 → ③ 第二階段 → ④ 第三階段 → ⑤ 第四階段 → ⑥ 第五階段 → ⑦ 其他
+//   使用者原話：「如果每天的使用者去點的不到 40 間，則依照我的五階段公司去更新」。
+//   已經是最新一季的公司會在下面的迴圈被跳過、不佔 40 家名額，所以前面的階段更新完，
+//   名額自然流到後面的階段。同一層內仍沿用原本的三層排序（熱門股 → 有官網 IR 頁 → 事件優先度），
+//   並讓台股、美股交錯，兩邊每天都有進度。
+//   實測改版前：THFF、UPXI 這類不在任何階段的美國小型股每天都在吃名額，現在排到最後。
+// ════════════════════════════════════════════════════════════════════════
+const normSym = s => String(s || '').trim().toUpperCase().replace(/\./g, '-');
+const stageOf = (() => {
+  const m = new Map();
+  try {
+    const st = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'stages', 'stages.json'), 'utf8')).stages;
+    for (const [k, arr] of Object.entries(st)) for (const s of arr) m.set(normSym(s), Number(k));
+    console.log('  已載入五階段名單 ' + m.size + ' 家');
+  } catch (e) { console.log('  ⚠️ 讀不到 data/stages/stages.json，本次不分階段（' + e.message + '）'); }
+  return x => m.get(normSym(x.symbol)) || 6;
+})();
+const demand = await (async () => {
+  try {
+    const r = await fetch((process.env.SITE_URL || 'https://weicheng-stock.pages.dev') + '/api/demand?days=3',
+      { signal: AbortSignal.timeout(15000) });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || ('HTTP ' + r.status));
+    console.log('  使用者最近 3 天查看過 ' + j.symbols.length + ' 家（排最前面）');
+    return new Set(j.symbols.map(normSym));
+  } catch (e) { console.log('  ⚠️ 取不到使用者查看紀錄，本次只依五階段排序（' + e.message + '）'); return new Set(); }
+})();
+// 使用者點過、但佇列裡沒有的公司（沒有偵測到新事件）也補進來：
+//   下面的迴圈會檢查「官方資料是否比現有摘要新」，沒有新資料就會自動跳過、不佔名額。
+for (const s of demand) {
+  if (!queue.some(x => normSym(x.symbol) === s)) {
+    queue.push({ market: /^\d{4,6}[A-Z]?$/.test(s) ? 'tw' : 'us', symbol: s, name: s, reasons: ['使用者查看'], priority: 'LOW' });
+  }
 }
+const tierOf = x => demand.has(normSym(x.symbol)) ? 0 : stageOf(x);
+const within = (a, b) => (hotIdx(a) - hotIdx(b)) || (hasIr(a) - hasIr(b)) || (rank[a.priority] - rank[b.priority]);
+const sorted = [];
+for (let t = 0; t <= 6; t++) {
+  const inTier = queue.filter(x => tierOf(x) === t);
+  const twQ = inTier.filter(x => x.market === 'tw').sort(within);
+  const usQ = inTier.filter(x => x.market !== 'tw').sort(within);
+  for (let i = 0; i < Math.max(twQ.length, usQ.length); i++) {
+    if (i < twQ.length) sorted.push(twQ[i]);
+    if (i < usQ.length) sorted.push(usQ[i]);
+  }
+}
+const tierCount = [0, 1, 2, 3, 4, 5, 6].map(t => queue.filter(x => tierOf(x) === t).length);
+console.log('  名額分配順序：使用者點過 ' + tierCount[0] + ' → 第1階段 ' + tierCount[1] + ' → 第2階段 ' + tierCount[2] +
+  ' → 第3階段 ' + tierCount[3] + ' → 第4階段 ' + tierCount[4] + ' → 第5階段 ' + tierCount[5] + ' → 其他 ' + tierCount[6]);
 const irCount = queue.filter(x => !hasIr(x)).length, hotCount = queue.filter(x => hotIdx(x) < 99999).length;
 console.log(`▶ 佇列 ${sorted.length} 家（熱門股 ${hotCount} 家、有官網 IR 頁 ${irCount} 家，已依序排到最前面），本次上限 ${MAX_ANALYSES} 家`);
 
@@ -398,7 +506,9 @@ const tk2cik = new Map();
 for (const v of Object.values(tickMap || {})) tk2cik.set(v.ticker, v.cik_str);
 console.log(`  已載入美股代碼→CIK 對照 ${tk2cik.size} 家`);
 
-let done = 0, skipped = 0, failed = 0, stoppedByQuota = false, usedTranscript = 0;
+let done = 0, skipped = 0, failed = 0, stoppedByQuota = false, usedTranscript = 0, manualCovered = 0;
+const MANUAL_INDEX = loadManualIndex();
+console.log('  已載入人工建置季度索引 ' + Object.keys(MANUAL_INDEX).length + ' 家（人工版已是最新一季者不自動做）');
 const stat = { tw: 0, us: 0 };
 
 for (const item of sorted) {
@@ -426,6 +536,15 @@ for (const item of sorted) {
       const prev = JSON.parse(fs.readFileSync(out, 'utf8'));
       if (prev.quarterTag === qTag) { skipped++; continue; }   // ★ 已是同一季，跳過
     } catch (e) {}
+  }
+  // ★ 人工建置優先：人工版已是這一季（或更新）就不自動做。雙掛牌（2330↔TSM、2303↔UMC…）兩邊都查。
+  {
+    const alias = [item.symbol, TW_US_EQUIV[item.symbol], US_TW_EQUIV[item.symbol],
+      ...Object.keys(TW_US_EQUIV).filter(k => TW_US_EQUIV[k] === item.symbol),
+      ...Object.keys(US_TW_EQUIV).filter(k => US_TW_EQUIV[k] === item.symbol)].filter(Boolean);
+    const mLabel = alias.map(s => MANUAL_INDEX[s]).find(Boolean);
+    const rel = mLabel ? compareManualAuto(mLabel, { market: f.market, quarterTag: qTag, official: { periodEnd: f.periodEnd } }) : 'unknown';
+    if (rel === 'same' || rel === 'older') { skipped++; manualCovered++; continue; }
   }
 
   // 美股額外抓公司自己發布的財報新聞稿：官方展望與分部營收都寫在裡面，
@@ -494,4 +613,5 @@ for (const item of sorted) {
 await closeBrowser();
 console.log(`   AI 來源：Gemini ${aiStats.gemini}／Groq ${aiStats.groq}／OpenRouter ${aiStats.openrouter}`);
 console.log(`✅ 完成：新分析 ${done} 家（台股 ${stat.tw}、美股 ${stat.us}）、略過 ${skipped} 家、失敗 ${failed} 家${stoppedByQuota ? '（因免費額度用盡提前結束）' : ''}`);
+console.log('   其中「人工版已是最新一季」而略過：' + manualCovered + ' 家（人工建置優先）');
 console.log(`   其中 ${usedTranscript} 家使用了公司官網逐字稿／文件（品質最高的來源）`);

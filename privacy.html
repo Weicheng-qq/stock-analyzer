@@ -50,7 +50,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--border);
 <div class="wrap">
 
 <h1>隱私權政策</h1>
-<div class="updated">美股/台股深度分析（以下稱「本 App」）　最後更新：2026 年 9 月 18 日</div>
+<div class="updated">美股/台股深度分析（以下稱「本 App」）　最後更新：2026 年 9 月 19 日</div>
 
 <div class="key">
 簡短版：本 App <u>不需要註冊、沒有帳號、不收集任何個人資料、不放廣告、不做使用者追蹤</u>。
@@ -95,7 +95,13 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--border);
   <tr><td>美國證券交易委員會（SEC EDGAR）</td><td>公司代碼</td><td>取得官方年報財務數據</td></tr>
   <tr><td>公開資訊觀測站等公開資料來源</td><td>公司代碼</td><td>取得台股財務與法說會資料</td></tr>
   <tr><td>AI 服務供應商<br>（Google Gemini／Groq／OpenRouter）</td><td>股票代碼與上述<b>公開</b>財務數據</td><td>產生質化分析文字</td></tr>
+  <tr><td>本 App 的伺服器（匿名統計）</td><td><b>只有股票代碼</b></td><td>記錄「今天有人查看了哪些股票」，讓每日自動更新優先處理大家關心的公司</td></tr>
 </table>
+<div class="warn">
+關於匿名統計：只記錄<b>日期與股票代碼</b>（例如「9/19 有人看了 2330」），
+<b>不記錄</b>是誰看的、IP 位址、裝置、次數或任何可以追溯到你的資訊，<b>7 天後自動刪除</b>。
+這份統計無法、也不會被用來辨識或追蹤任何使用者。
+</div>
 <p class="en">為了技術上的必要（資料來源不允許瀏覽器直接連線），部分請求會先經過我們的中轉伺服器再轉發。
 該伺服器<b>不儲存、不記錄</b>請求內容，也不會建立任何使用者檔案。</p>
 <div class="warn">
@@ -149,7 +155,9 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--border);
 advertising or analytics SDK of any kind. Your market preference, watchlist, layout
 settings, and any AI API key you choose to enter are stored only in your device's
 local storage and are never transmitted to us. Network requests contain only stock
-symbols and are sent to public market-data sources (Taiwan Stock Exchange, Yahoo
+symbols and are sent to public market-data sources (plus an anonymous record of which stock
+symbols were viewed today — no user identifiers of any kind, deleted after 7 days — used only to
+prioritise daily updates) (Taiwan Stock Exchange, Yahoo
 Finance, SEC EDGAR) and, for qualitative analysis, to AI providers (Google Gemini,
 Groq, OpenRouter) together with publicly available financial figures — never with
 personal information. Some requests are relayed through our proxy server purely for
@@ -160,7 +168,7 @@ research and education tool; it is <b>not</b> investment advice and not a licens
 investment advisory service. Contact: aa910517@gmail.com
 </p>
 
-<footer>美股/台股深度分析　·　隱私權政策　·　最後更新 2026-09-18</footer>
+<footer>美股/台股深度分析　·　隱私權政策　·　最後更新 2026-09-19</footer>
 
 </div>
 </body>

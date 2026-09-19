@@ -137,7 +137,15 @@ await check('每日法說會分析有新資料', async () => {
   return '最近一次 ' + Math.floor(days) + ' 天前';
 }, { fix: '到 GitHub repo → Actions → 每日法說會更新，看最近幾次的執行紀錄。常見原因是 GitHub 上的 GEMINI_KEY secret 失效' });
 
-// ⑨ 舊網址轉址（只提醒，不算失敗）
+// ⑨ 使用者查看紀錄（只提醒，不算失敗）：沒有它，每日排程仍會照五階段順序運作
+await check('使用者查看紀錄（匿名統計）', async () => {
+  const r = await fetchT(SITE + '/api/demand?days=3');
+  const j = await r.json().catch(() => ({}));
+  must(r.ok && j.ok, j.error || ('HTTP ' + r.status));
+  return '最近 3 天有人查看 ' + j.count + ' 家';
+}, { level: 'warn', fix: 'Cloudflare 的 KV 綁定（變數名 DEMAND）沒設或失效。沒設也能運作，只是每日更新不會優先處理大家點過的公司。設定方式見《永久運作手冊》〈四-6〉' });
+
+// ⑩ 舊網址轉址（只提醒，不算失敗）
 await check('舊網址轉址（Vercel）', async () => {
   const r = await fetchT(LEGACY + '/', { redirect: 'manual' });
   const loc = r.headers.get('location') || '';
