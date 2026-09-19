@@ -3442,15 +3442,28 @@ async function ensureIR(sym){
 // 檔名用「代碼」而非季度：公司的會計季別與人工 IR 記錄的季度常不一致
 //   （例如 NVDA 的 SEC 會計期間是 FY2027Q2，人工記錄寫「2026 第二季」），
 //   用季度當檔名會對不上而永遠找不到檔案。季度資訊寫在檔案內容裡。
+// ⚠️ 2026-09-19 修正：雙掛牌公司要兩個代碼都找。
+//   台股頁為了共用官網 IR 內容，會把台積電換成美股代碼 TSM 去找；但每日排程是依上市市場存檔，
+//   台積電的自動摘要存成 2330.json，從來沒有 TSM.json。結果台積電這份直接來自官方逐字稿、
+//   品質最好的自動摘要，在台股頁和美股頁都從來沒有顯示過（聯電/日月光/中華電同樣）。
+function __earnAliases(sym){
+  const s=String(sym), out=[s];
+  for(const tw in TW_US_EQUIV){ if(TW_US_EQUIV[tw]===s) out.push(tw); }   // TSM → 2330
+  if(US_TW_EQUIV[s]) out.push(US_TW_EQUIV[s]);                            // UMC → 2303
+  const us=twToUs(s); if(us) out.push(us);                                  // 2330 → TSM
+  return [...new Set(out)];
+}
 async function loadAutoEarnings(sym){
   window.__autoEarnings=null;
   if(!sym) return null;
-  try{
-    const r=await fetch(`/data/earnings/${encodeURIComponent(sym)}.json`);
-    if(!r.ok) return null;
-    const j=await r.json();
-    if(j&&j.result&&j.official){ window.__autoEarnings=j; return j; }
-  }catch(e){}
+  for(const s of __earnAliases(sym)){
+    try{
+      const r=await fetch(`/data/earnings/${encodeURIComponent(s)}.json`);
+      if(!r.ok) continue;
+      const j=await r.json();
+      if(j&&j.result&&j.official){ window.__autoEarnings=j; return j; }
+    }catch(e){}
+  }
   return null;
 }
 function earningsBlock(j, isNewer){
