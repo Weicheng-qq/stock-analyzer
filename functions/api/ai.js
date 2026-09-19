@@ -80,9 +80,11 @@ export function rankGemini(ids, preferred) {
   //   現在 Google 出新版 flash 時，App 會自動升級過去，不必改程式。
   const lite = id => /-lite/.test(id);
   const pref = preferred.filter(p => has.has(p));
+  // ⚠️ 各類別分別限量，不能整串截斷：原本 slice(0,5) 讓很舊的 2.5-flash 擠掉了一直可靠的
+  //   3.1-flash-lite。每個模型的免費額度是分開算的，名單裡要留住「確定能用」的輕量版當最後防線。
   const list = [...new Set([
-    ...pref.filter(id => !lite(id)), ...stable.filter(id => !lite(id)),
-    ...pref.filter(lite), ...stable.filter(lite), ...preview])].slice(0, 5);
+    ...pref.filter(id => !lite(id)), ...stable.filter(id => !lite(id)).slice(0, 3),
+    ...pref.filter(lite), ...stable.filter(lite).slice(0, 2), ...preview.slice(0, 1)])];
   return list.length ? list : preferred.slice();
 }
 
