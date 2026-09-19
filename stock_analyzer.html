@@ -511,8 +511,14 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 #masterPickCard .mp-mkt { font-weight:700; font-size:15px; margin:22px 0 4px; }
 #masterPickCard .mp-note { font-size:12px; color:var(--yellow); line-height:1.65; background:rgba(210,153,34,.1); border-radius:6px; padding:8px 10px; margin-bottom:10px; }
 #masterPickCard .mp-pick { border:1px solid var(--border); border-radius:9px; padding:11px 12px; margin-bottom:11px; }
-#masterPickCard .mp-tap { cursor:pointer; }
-#masterPickCard .mp-tap:active { background:rgba(255,255,255,.04); }
+/* ⚠️ 2026-09-19 使用者回報：推薦公司卡片「每次滑過、點過就亮一下，看內容很不舒服」。
+   原因：整張卡片都可點（onclick），手機瀏覽器對可點元素預設會畫點擊高亮（tap highlight），
+   再加上 :active 時整張卡背景變亮。卡片很大、幾乎佔滿螢幕，手指往下滑時一定會碰到它，
+   於是每滑一次就整張閃一次。
+   修正：整張卡關掉點擊高亮與按下變色；只在最下方「點此看完整分析 →」那一行被按到時給一點回饋，
+   這樣滑動閱讀時完全不會閃，真的要點時仍然知道有按到。卡片整張仍可點。 */
+#masterPickCard .mp-tap { cursor:pointer; -webkit-tap-highlight-color:transparent; }
+#masterPickCard .mp-tap .mp-go:active { opacity:.6; }
 /* 公司列：LOGO 在左，右側「名稱一行、標籤一行」直排。
    ⚠️ 名稱與標籤不可同一行搶寬度 —— 像「可口可樂 Coca-Cola」這種長名會被擠成三行(實測)。 */
 #masterPickCard .mp-p-head { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
