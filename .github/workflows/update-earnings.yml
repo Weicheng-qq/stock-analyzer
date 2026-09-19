@@ -8,7 +8,7 @@
 #   1. detect-events：從 SEC 每日索引 + TWSE/TPEx 官方 OpenAPI 找出「今天真的有新事件」的公司
 #      （一天只要幾個請求，而不是逐家掃描 5,000~6,000 家）
 #   2. analyze-earnings：只分析佇列裡的公司，同一家同一季只分析一次，額度用完就停
-#   3. 把結果 commit 回 repo → Vercel 自動部署 → 所有使用者共用同一份分析
+#   3. 把結果 commit 回 repo → Cloudflare Pages 自動部署 → 所有使用者共用同一份分析
 #
 # 【費用保證】只使用 Gemini 免費層。免費層超額的行為是「拒絕請求」而非「開始計費」，
 #   只要那個 Google Cloud 專案不啟用帳單，就不可能產生任何費用。

@@ -7,7 +7,7 @@
 - 彼得林區分類、護城河、競爭對手、買入建議（免費 AI）
 
 ## 線上版
-部署於 Vercel，資料透過 `api/proxy.js` 代理 SEC EDGAR 與 Yahoo Finance。
+部署於 Cloudflare Pages（https://weicheng-stock.pages.dev），資料透過 `functions/api/proxy.js` 代理 SEC EDGAR、Yahoo Finance 與證交所。舊網址 weicheng-stock.vercel.app 僅做永久轉址（見 CLOUDFLARE-PAGES部署.md）。
 AI 分析需在網頁右上角 ⚙️ 填入免費的 OpenRouter 金鑰。
 
 ## 本機執行

@@ -16,7 +16,19 @@
 | `functions/api/caption.js` | `api/caption.js` | 字幕（目前停用，保持對等） |
 | `_headers` | `vercel.json` 的 headers | HTML 不快取、資料檔快取 |
 
-`api/` 與 `vercel.json` **先不要刪**：搬家期間 Vercel 要繼續正常服務，兩邊並行。
+> ✅ **2026-09-19 已完成搬遷**：正式網址 https://weicheng-stock.pages.dev 。
+> Vercel 已停用：`api/` 已刪除，`vercel.json` 改成「全部路徑永久轉址（308）到 pages.dev」。
+
+## Vercel 為什麼是「轉址」而不是「刪除專案」
+
+刪除 Vercel 專案後，`weicheng-stock.vercel.app` 這個名稱會被釋出，**任何人都能註冊走**。
+之前分享出去的舊連結、手機上用舊網址安裝的 App，就會連到陌生人的網站（可被拿來釣魚）。
+保留專案、只做轉址，網址名稱就一直在自己手上，Vercel 也不再執行任何程式、不再消耗任何額度。
+
+⚠️ `vercel.json` 現在只有一條轉址規則。**不要再把 `api/` 或其他設定加回去**，
+所有 API 一律改 `functions/api/`（Cloudflare Pages Functions）。
+
+⚠️ 兩個網址的瀏覽器儲存空間是分開的：在舊網址加過的自選股，不會自動出現在新網址。
 
 ---
 
@@ -71,7 +83,7 @@ https://weicheng-stock.pages.dev
 **把這個網址貼給 Claude**，會用跟 Vercel 版相同的整套測試驗證一遍
 （報價防呆 15 項、時區 16 項、XSS 11 項、完整分析 golden path、各種失敗情境）。
 
-之後每次 `git push`，Cloudflare 與 Vercel **兩邊都會自動部署**，不用手動同步。
+之後每次 `git push`，Cloudflare 會自動部署，不用手動操作。
 
 ## 步驟 5（驗證通過後）：決定正式網址
 
