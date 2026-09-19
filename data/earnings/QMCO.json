@@ -1,0 +1,47 @@
+{
+ "symbol": "QMCO",
+ "market": "us",
+ "name": "QUANTUM CORP /DE/",
+ "quarter": "2027 Q1（2026-04-01～2026-06-30）",
+ "quarterTag": "2027Q1",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "QUANTUM CORP /DE/",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2027,
+  "season": "Q1",
+  "form": "10-Q",
+  "營業收入": "0.81",
+  "營業毛利": "0.32",
+  "營業利益": "0.05",
+  "本期淨利": "-1.55",
+  "每股盈餘": -7.06,
+  "營運現金流": "0.01",
+  "資本支出": "0.00",
+  "自由現金流": "0.01"
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-10",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/709283/000162828026055272/fy27q1exhibit991.htm"
+ },
+ "savedAt": "2026-09-19T01:11:42.529Z",
+ "result": {
+  "revenue": "本季營收為 0.81 億美元，略高於指引上限 0.77 億美元。",
+  "eps": "每股盈餘為 -7.06 美元，顯示本季虧損。",
+  "margins": "毛利率為 39.5%，營業利益率為 6.2%，但淨利率為 -191.4%，顯示因一次性重組費用導致巨額淨虧損。",
+  "fcf": "自由現金流為 0.01 億美元。",
+  "capex": "資本支出為 0.00 億美元。",
+  "guidance": "公司預期下一季營收約 0.82 億美元，淨利每股 0.12 美元左右。",
+  "outlook": "營收已超出指引且毛利率表現良好，顯示需求持續。公司已完成債務清償，現金儲備提升，財務狀況較前期改善。但淨虧損仍大，需關注未來營運現金流能否持續正向。",
+  "highlights": "• 營收 0.81 億美元，超出指引上限<br>• 毛利率 39.5%，營業利益率 6.2%，表現優於預期<br>• 完成債務清償，現金等價物增至 0.546 億美元",
+  "concerns": "• 本季淨虧損 1.55 億美元，EPS 為 -7.06 美元<br>• 自由現金流僅 0.01 億美元，現金流緊張<br>• 供應限制仍可能影響未來營收滿足能力",
+  "risks": "• 高額一次性重組費用導致淨虧損，若未持續改善將影響獲利<br>• 供應鏈限制可能抑制營收成長",
+  "keyPoints": "• 營收 0.81 億美元，略高於指引<br>• 毛利率 39.5%，營業利益率 6.2%，顯示營運效率提升<br>• 淨虧損 1.55 億美元，EPS -7.06 美元，顯示仍在虧損狀態<br>• 已清償全部債務，現金等價物 0.546 億美元",
+  "guidanceOfficial": "Fiscal second quarter 2027 guidance is as follows: • Revenue of $82.0 million, plus or minus $2 million • Non-GAAP adjusted operating expenses of $27 million, plus or minus $1 million • Non-GAAP adjusted basic net income per share of $0.12, plus or minus $0.10 • Non-GAAP adjusted EBITDA of $6 million, plus or minus $1 million This assumes an effective annual tax rate of 3%; non-GAAP adjusted net loss per share assumes an average basic share count of approximately 39.4 million in the fiscal second quarter of 2027 .",
+  "segments": "本次資料未揭露分部營收"
+ }
+}

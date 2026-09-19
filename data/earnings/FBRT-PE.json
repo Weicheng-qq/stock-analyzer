@@ -1,0 +1,47 @@
+{
+ "symbol": "FBRT-PE",
+ "market": "us",
+ "name": "FRANKLIN BSP REALTY TRUST, INC.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "FRANKLIN BSP REALTY TRUST, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.65",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.16",
+  "每股盈餘": 0.12,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1562528/000156252826000025/fbrtq22026earningsrelease.htm"
+ },
+ "savedAt": "2026-09-19T01:10:20.837Z",
+ "result": {
+  "revenue": "本季營業收入為 0.65 億美元。",
+  "eps": "每股盈餘 (EPS) 為 0.12 美元。",
+  "margins": "毛利率與營業利益率均未提供，顯示為 0.0%。淨利率為 24.6%，顯示公司在本季能將營收的約四分之一轉化為淨利。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "營收規模較小但淨利率高，顯示營運效率良好。公司宣佈每股 0.20 美元現金股息，顯示現金流支撐股東回報。",
+  "highlights": "• 營業收入 0.65 億美元<br>• 本季淨利 0.16 億美元，淨利率 24.6%<br>• 每股盈餘 0.12 美元，並宣佈每股現金股息 0.20 美元",
+  "concerns": "• 期末有 12 筆貸款列入觀察名單，其中 7 筆評等為四級，5 筆為五級<br>• 本季認列信用損失準備金 720 萬美元，顯示潛在資產減損風險",
+  "risks": "• 信用損失準備金增加，可能侵蝕未來盈餘<br>• 觀察名單中高風險貸款比例偏高，若未能回收將影響資本充足度",
+  "keyPoints": "• 營業收入僅 0.65 億美元，規模較小<br>• 淨利 0.16 億美元，淨利率高達 24.6%<br>• 每股盈餘 0.12 美元，並發放每股 0.20 美元現金股息",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Agency Business segment: 服務投資組合規模增至 59.8 億美元<br>• Agency Business segment: 新承諾貸款 398.8 百萬美元<br>• Conduit: 本季發起固定利率管道貸款 78.3 百萬美元，出售管道貸款 249.5 百萬美元，獲利 6.0 百萬美元"
+ }
+}
