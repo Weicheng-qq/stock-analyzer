@@ -13,3 +13,7 @@ scratchpad/
 UsersAMBERL~1*
 node_modules/
 package-lock.json
+
+# Cloudflare Pages 本機測試用的假環境變數，絕不可進版控
+.dev.vars
+.wrangler/

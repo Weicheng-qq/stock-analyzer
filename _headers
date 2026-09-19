@@ -1,0 +1,36 @@
+# Cloudflare Pages 靜態檔標頭設定 —— 對應 vercel.json 的 "headers" 區塊。
+#
+# ⚠️ 語法與 vercel.json 完全不同，別照抄：
+#     · 路徑寫在行首（不縮排），標頭寫在下一行且【必須縮排】
+#     · 支援 :placeholder 與 * 萬用字元，但【不支援正規表示式】
+#       所以 vercel.json 的 "/data/(.*)" 在這裡要寫成 /data/*
+#
+# ⚠️ 為什麼首頁與 index.html 要 no-cache：
+#     這是 PWA / TWA 的更新命脈。HTML 一旦被 CDN 或瀏覽器快取住，
+#     使用者就會卡在舊版程式，而我們又沒有 Service Worker 可以推更新
+#     （Service Worker 曾造成無限重整，已永久移除，別再加回來）。
+#     HTML 永遠重新驗證、靜態資料才快取，是這個架構唯一能可靠推版本的方式。
+
+/
+  Cache-Control: public, max-age=0, must-revalidate, no-cache
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate, no-cache
+
+/stock_analyzer.html
+  Cache-Control: public, max-age=0, must-revalidate, no-cache
+
+/privacy.html
+  Cache-Control: public, max-age=0, must-revalidate, no-cache
+
+# sw.js 目前是 kill-switch（只負責清除自己並 unregister）。
+# 必須維持不快取，否則已安裝舊 SW 的裝置可能一直拿到舊版而清不掉。
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate, no-cache
+
+/manifest.json
+  Cache-Control: public, max-age=0, must-revalidate
+
+# 法說會、AI 快取等資料檔：可以放心快取，內容只會新增不會改寫。
+/data/*
+  Cache-Control: public, max-age=600, s-maxage=3600, stale-while-revalidate=86400
