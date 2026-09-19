@@ -1,0 +1,58 @@
+# 每日健康檢查
+#
+# 【為什麼需要】
+#   App 依賴證交所、Yahoo、SEC、Gemini、GitHub 權杖等外部服務，任何一個改版或到期，
+#   網站就會安靜地壞掉，而且不會有人發現。這個排程每個平日早上檢查一次，
+#   只要有一項失敗，GitHub 就會自動寄 email 給 repo 擁有者（不需要任何額外設定）。
+#   收到信後打開 Actions 頁面，最上方會有中文的檢查結果與處理方式；
+#   詳細步驟見 repo 根目錄的《永久運作手冊.md》。
+#
+# 【零費用】public repo 使用 GitHub Actions 免費且不計分鐘數；每天只用 1 次 Gemini 免費層。
+
+name: 每日健康檢查
+
+on:
+  schedule:
+    # 台灣時間平日早上 9:30（UTC 01:30）—— 台股已開盤，報價檢查拿到的是盤中真實資料。
+    #   刻意與「每日法說會更新」（UTC 23:00）錯開，避免兩個排程同時搶 Gemini 額度。
+    - cron: '30 1 * * 1-5'
+  workflow_dispatch:        # 允許手動觸發：Actions → 每日健康檢查 → Run workflow
+
+permissions:
+  contents: write           # 只有「防止排程被停用」那一步需要寫入
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+
+      - name: 健康檢查
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/health-check.mjs
+
+      # ⚠️ GitHub 規定：public repo 連續 60 天沒有任何 commit，所有排程會被自動停用，
+      #   而且不會主動通知 —— 等於 App 的自動更新與健康檢查會同時悄悄停止。
+      #   平常「每日法說會更新」天天都會 commit，不會觸發這條；這裡是最後一道保險：
+      #   超過 45 天沒有任何 commit，就提交一個心跳檔讓排程保持運作。
+      - name: 防止排程被 GitHub 自動停用
+        if: always()
+        run: |
+          last=$(git log -1 --format=%ct)
+          days=$(( ($(date +%s) - last) / 86400 ))
+          echo "距離上一次 commit：${days} 天"
+          if [ "$days" -ge 45 ]; then
+            date -u +%Y-%m-%dT%H:%M:%SZ > data/heartbeat.txt
+            git config user.name  'github-actions[bot]'
+            git config user.email 'github-actions[bot]@users.noreply.github.com'
+            git add data/heartbeat.txt
+            git commit -m "保持排程運作：已 ${days} 天沒有 commit，自動提交心跳（避免 GitHub 60 天停用排程）"
+            git pull --rebase --autostash origin main
+            git push
+          fi

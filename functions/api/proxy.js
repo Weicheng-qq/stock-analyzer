@@ -52,8 +52,8 @@ export async function onRequest(context) {
     });
     const body = await r.text();
 
-    // ⚠️ 即時報價走 5 秒邊緣快取，其餘走 5 分鐘。這個 5 秒必須與前端
-    //   refreshLivePrices() 的 gap(5000) 一致，只改單邊沒有意義：
+    // ⚠️ 即時報價走 1 秒邊緣快取，其餘走 5 分鐘。這個 1 秒必須與前端
+    //   refreshLivePrices() 的 gap(1000) 一致，只改單邊沒有意義：
     //   前端比快取快，多打的那幾次只會拿到同一份快取；前端比快取慢，快取就白設。
     //   ⚠️ 刻意不對報價加 stale-while-revalidate：寧可稍慢一拍去抓新的，也不要回舊值，
     //      否則會重演「看起來很新、其實是舊價」那個讓使用者困擾很多次的症狀。

@@ -12,8 +12,13 @@
 //   CPU 用量極低，因此免費方案的 10ms CPU 限制不會卡到。
 //   真正的風險是上游模型自己慢，所以每一段都保留原本的 30 秒 AbortController。
 //
-// ⚠️ Gemini 模型名稱會隨世代更新而下架（2.5 系列已對新帳號下架）。
-//   若整批失效，去 ai.google.dev/gemini-api/docs/models 查目前有效的模型名再改這裡。
+// ⚠️⚠️ 2026-09-19【模型自動探索】—— 為了讓 App 在沒人維護的情況下長期運作。
+//   原本模型名稱寫死在程式裡。Google 會定期下架舊模型（Gemini 2.5 系列就已對新帳號下架過），
+//   一旦寫死的名稱全部被下架，AI 分析就會整個失效，而且沒有人會來改程式。
+//   現在的做法：候選清單＝「偏好清單中目前仍存在的」＋「向供應商即時查到的可用模型（新版優先）」。
+//   查詢結果快取 6 小時；查詢失敗就退回偏好清單，行為與改版前完全相同，不會更糟。
+//   查模型清單不消耗任何生成額度。
+//   ⚠️ scripts/lib/ai-call.mjs（每日排程）有同一套邏輯，兩邊要一起改。
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -51,10 +56,92 @@ async function askOpenAiCompatible(url, key, payload) {
   }
 }
 
+// ════════════════════════ 模型自動探索 ════════════════════════
+// 偏好順序：人工挑過、品質驗證過的。仍然存在就優先用，被下架了就自動跳過。
+const PREFERRED = {
+  gemini: ['gemini-3.5-flash', 'gemini-3.1-flash-lite'],
+  groq: ['openai/gpt-oss-120b', 'llama-3.3-70b-versatile',
+         'moonshotai/kimi-k2-instruct', 'llama-3.1-8b-instant']
+};
+const MODEL_CACHE_MS = 6 * 3600 * 1000;
+const modelCache = {};   // provider → { t, list, discovered, total }
+
+// Gemini：只收正式版的 flash / flash-lite（便宜、快、免費額度大），版本號新的排前面。
+//   正式版全沒有時才用 preview 版。刻意排除 -exp、-image、-tts、-live 這類特殊用途模型。
+export function rankGemini(ids, preferred) {
+  const has = new Set(ids);
+  const ver = id => { const m = id.match(/^gemini-(\d+(?:\.\d+)?)/); return m ? parseFloat(m[1]) : 0; };
+  const order = (a, b) => ver(b) - ver(a) || (/lite/.test(a) ? 1 : 0) - (/lite/.test(b) ? 1 : 0);
+  const stable = ids.filter(id => /^gemini-\d+(\.\d+)?-flash(-lite)?$/.test(id)).sort(order);
+  const preview = ids.filter(id => /^gemini-\d+(\.\d+)?-flash(-lite)?-preview[\w-]*$/.test(id)).sort(order);
+  const list = [...new Set([...preferred.filter(p => has.has(p)), ...stable, ...preview])].slice(0, 5);
+  return list.length ? list : preferred.slice();
+}
+
+// Groq：偏好清單中還在的優先；另外補最多 3 個其他聊天模型當後備（排除語音、審查、嵌入等非聊天模型）。
+export function rankGroq(ids, preferred) {
+  const has = new Set(ids);
+  const extra = ids.filter(id => !preferred.includes(id) &&
+    !/whisper|guard|tts|playai|embed|distil|compound|allam|prompt/i.test(id));
+  const list = [...preferred.filter(p => has.has(p)), ...extra.slice(0, 3)];
+  return list.length ? list : preferred.slice();
+}
+
+async function modelsFor(provider, key) {
+  const c = modelCache[provider];
+  if (c && Date.now() - c.t < MODEL_CACHE_MS) return c.list;
+  let ids = null;
+  try {
+    if (provider === 'gemini') {
+      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=1000',
+        { headers: { 'x-goog-api-key': key }, signal: AbortSignal.timeout(8000) });
+      if (r.ok) {
+        const j = await r.json();
+        ids = (j.models || [])
+          .filter(m => (m.supportedGenerationMethods || []).includes('generateContent'))
+          .map(m => String(m.name).replace(/^models\//, ''));
+      }
+    } else if (provider === 'groq') {
+      const r = await fetch('https://api.groq.com/openai/v1/models',
+        { headers: { 'Authorization': 'Bearer ' + key }, signal: AbortSignal.timeout(8000) });
+      if (r.ok) {
+        const j = await r.json();
+        ids = (j.data || []).filter(m => m.active !== false).map(m => m.id);
+      }
+    }
+  } catch (e) { /* 查不到就退回偏好清單 */ }
+  const list = ids
+    ? (provider === 'gemini' ? rankGemini(ids, PREFERRED.gemini) : rankGroq(ids, PREFERRED.groq))
+    : PREFERRED[provider].slice();
+  // 查詢失敗時只快取 1 分鐘，下一次請求很快會再試，不會卡在舊清單 6 小時。
+  modelCache[provider] = {
+    t: ids ? Date.now() : Date.now() - MODEL_CACHE_MS + 60000,
+    list, discovered: !!ids, total: ids ? ids.length : 0
+  };
+  return list;
+}
+
+// 健康檢查：GET /api/ai?health=1
+//   給每日排程的健康檢查用。只查模型清單，不呼叫任何模型，所以不消耗生成額度；
+//   也不回傳任何金鑰內容，只回「有沒有設定」與「目前會用哪些模型」。
+async function health(env) {
+  const out = { ok: false, checkedAt: new Date().toISOString(), providers: {} };
+  for (const [name, key] of [['gemini', env.GEMINI_KEY], ['groq', env.GROQ_KEY]]) {
+    if (!key) { out.providers[name] = { configured: false }; continue; }
+    const list = await modelsFor(name, key);
+    const c = modelCache[name] || {};
+    out.providers[name] = { configured: true, discovered: !!c.discovered, available: c.total, candidates: list };
+  }
+  out.providers.openrouter = { configured: !!env.OPENROUTER_KEY };
+  out.ok = Object.values(out.providers).some(p => p.configured);
+  return new Response(JSON.stringify(out), { headers: { ...JSON_HEAD, 'Cache-Control': 'no-store' } });
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
 
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
+  if (request.method === 'GET' && new URL(request.url).searchParams.get('health') === '1') return health(env);
   if (request.method !== 'POST') return err({ error: 'POST only' }, 405);
 
   let body;
@@ -68,7 +155,7 @@ export async function onRequest(context) {
 
   // 0) 最優先 Gemini（Google 免費層，品質最好）。用 OpenAI 相容端點，回應格式與 OpenAI 相同。
   if (geminiKey) {
-    for (const model of ['gemini-3.5-flash', 'gemini-3.1-flash-lite']) {
+    for (const model of await modelsFor('gemini', geminiKey)) {
       try {
         const r = await askOpenAiCompatible(
           'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
@@ -81,9 +168,7 @@ export async function onRequest(context) {
 
   // 1) 次選 Groq（快、額度大）。gpt-oss-120b 有推理能力、內容品質較好排第一。
   if (groqKey) {
-    const groqModels = ['openai/gpt-oss-120b', 'llama-3.3-70b-versatile',
-                        'moonshotai/kimi-k2-instruct', 'llama-3.1-8b-instant'];
-    for (const model of groqModels) {
+    for (const model of await modelsFor('groq', groqKey)) {
       try {
         const payload = { model, messages: body.messages, temperature };
         // 完整分析 prompt 很大（15 個欄位＋官方年報原文，約 5000+ tokens）。

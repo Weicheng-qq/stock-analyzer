@@ -95,7 +95,9 @@ jobs:
           if git diff --staged --quiet; then
             echo "今日無新資料，不產生 commit"
           else
-            n=$(git diff --staged --name-only | grep -c '^data/ai/' || true)
+            # ⚠️ 2026-09-19 修正：分析結果實際寫在 data/earnings/，原本只數 data/ai/，
+            #   導致每天都顯示「新增 0 家」，看起來像排程壞掉，其實每天都有分析約 40 家。
+            n=$(git diff --staged --name-only | grep -cE "^data/(ai|earnings)/" || true)
             git commit -m "自動更新：新增 ${n} 家公司的法說會 AI 分析
 
           由 GitHub Actions 每日排程產生，資料來源為 SEC EDGAR 與
