@@ -30,8 +30,10 @@ const err = (obj, status) =>
   new Response(JSON.stringify(obj), { status, headers: JSON_HEAD });
 
 // 上游回來的內容原樣轉發（前端要的是 OpenAI 相容格式，不要在這裡重新包裝）
-const passthrough = (text, status) =>
-  new Response(text, { status: status || 200, headers: JSON_HEAD });
+const passthrough = (text, status, attempts) =>
+  new Response(text, { status: status || 200, headers: { ...JSON_HEAD,
+    'Access-Control-Expose-Headers': 'X-AI-Attempts',
+    ...(attempts ? { 'X-AI-Attempts': encodeURIComponent(attempts.join(' > ')) } : {}) } });
 
 // 判斷上游是不是真的給了可用的回答。只看 HTTP 200 不夠 ——
 // 有些供應商會用 200 回一個含 error 欄位的 body，那種要當失敗、往下一層試。
@@ -39,9 +41,9 @@ function looksUsable(ok, text) {
   return ok && text.indexOf('"choices"') > -1 && text.indexOf('"content"') > -1;
 }
 
-async function askOpenAiCompatible(url, key, payload) {
+async function askOpenAiCompatible(url, key, payload, timeoutMs = 30000) {
   const ctl = new AbortController();
-  const to = setTimeout(() => ctl.abort(), 30000);
+  const to = setTimeout(() => ctl.abort(), timeoutMs);
   try {
     const r = await fetch(url, {
       method: 'POST',
@@ -67,6 +69,13 @@ const MODEL_CACHE_MS = 6 * 3600 * 1000;
 // 額度用完（429）的模型先跳過 10 分鐘。每個模型的免費額度分開算，一個用完就換下一個；
 //   但如果不記住，每一次請求都會先去撞那個已經用完的模型，白白多等一輪。
 const COOLDOWN_MS = 10 * 60 * 1000;
+// 逾時（太慢）的模型冷卻 30 分鐘：2026-09-19 實測「最強的先用」上線後，長提示在 3.8／3.7
+//   上常常跑超過 30 秒，一次請求要 44～66 秒才回來，超過前端 45 秒上限而被中止重送，
+//   整頁卡在「AI 分析中」。慢的模型通常會持續慢一段時間，冷卻久一點才不會每次都卡在它身上。
+const SLOW_COOLDOWN_MS = 30 * 60 * 1000;
+// 整個請求的時間預算：前端每次最多等 45 秒，伺服器必須在這之前回應（不管成功或失敗），
+//   否則前端會中止並重送，同一個請求等於白做。
+const TOTAL_BUDGET_MS = 40 * 1000;
 const cooldown = {};   // model → 冷卻到何時
 const coolingDown = m => (cooldown[m] || 0) > Date.now();
 const modelCache = {};   // provider → { t, list, discovered, total }
@@ -165,6 +174,9 @@ export async function onRequest(context) {
   if (!body || !body.messages) return err({ error: 'bad body' }, 400);
 
   const temperature = body.temperature != null ? body.temperature : 0.4;
+  const deadline = Date.now() + TOTAL_BUDGET_MS;
+  // 每個模型的嘗試結果（模型名、結果、耗時），放在回應標頭 X-AI-Attempts，方便日後診斷。不含金鑰。
+  const attempts = [];
   const geminiKey = env.GEMINI_KEY;
   const groqKey = env.GROQ_KEY;
   const orKey = env.OPENROUTER_KEY;
@@ -172,14 +184,24 @@ export async function onRequest(context) {
   // 0) 最優先 Gemini（Google 免費層，品質最好）。用 OpenAI 相容端點，回應格式與 OpenAI 相同。
   if (geminiKey) {
     for (const model of await modelsFor('gemini', geminiKey)) {
-      if (coolingDown(model)) continue;
+      if (coolingDown(model)) { attempts.push(model + ':冷卻中'); continue; }
+      const left = deadline - Date.now();
+      if (left < 5000) { attempts.push('時間預算用完'); break; }
+      const t0 = Date.now();
       try {
         const r = await askOpenAiCompatible(
           'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
-          geminiKey, { model, messages: body.messages, temperature });
-        if (r.status === 429) { cooldown[model] = Date.now() + COOLDOWN_MS; continue; }
-        if (looksUsable(r.ok, r.text)) return passthrough(r.text);
-      } catch (e) { /* 這個模型不通就換下一個 */ }
+          geminiKey, { model, messages: body.messages, temperature }, Math.min(30000, left - 1000));
+        const ms = Date.now() - t0;
+        if (r.status === 429) { cooldown[model] = Date.now() + COOLDOWN_MS; attempts.push(model + ':429額度(' + ms + 'ms)'); continue; }
+        if (looksUsable(r.ok, r.text)) { attempts.push(model + ':成功(' + ms + 'ms)'); return passthrough(r.text, 200, attempts); }
+        attempts.push(model + ':HTTP' + r.status + '(' + ms + 'ms)');
+      } catch (e) {
+        const ms = Date.now() - t0;
+        // AbortError = 超過逾時 → 這個模型對這種長度的提示太慢，冷卻久一點
+        if (e && e.name === 'AbortError') { cooldown[model] = Date.now() + SLOW_COOLDOWN_MS; attempts.push(model + ':逾時(' + ms + 'ms)'); }
+        else attempts.push(model + ':錯誤(' + ms + 'ms)');
+      }
     }
     // Gemini 全失敗（如當日額度用完）→ 往下用 Groq
   }
@@ -207,7 +229,8 @@ export async function onRequest(context) {
     return err({
       error: (geminiKey || groqKey)
         ? '上層 AI 暫時失敗且未設 OPENROUTER_KEY 備援'
-        : '伺服器尚未設定 GEMINI_KEY / GROQ_KEY / OPENROUTER_KEY'
+        : '伺服器尚未設定 GEMINI_KEY / GROQ_KEY / OPENROUTER_KEY',
+      attempts
     }, 500);
   }
   try {
