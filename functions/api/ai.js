@@ -64,27 +64,32 @@ const PREFERRED = {
          'moonshotai/kimi-k2-instruct', 'llama-3.1-8b-instant']
 };
 const MODEL_CACHE_MS = 6 * 3600 * 1000;
+// 額度用完（429）的模型先跳過 10 分鐘。每個模型的免費額度分開算，一個用完就換下一個；
+//   但如果不記住，每一次請求都會先去撞那個已經用完的模型，白白多等一輪。
+const COOLDOWN_MS = 10 * 60 * 1000;
+const cooldown = {};   // model → 冷卻到何時
+const coolingDown = m => (cooldown[m] || 0) > Date.now();
 const modelCache = {};   // provider → { t, list, discovered, total }
 
-// Gemini：只收正式版的 flash / flash-lite（便宜、快、免費額度大），版本號新的排前面。
-//   正式版全沒有時才用 preview 版。刻意排除 -exp、-image、-tts、-live 這類特殊用途模型。
+// Gemini 排序（2026-09-19 使用者指定）：【最強的先用，再依序往下降】。
+//   完整版 flash 由新到舊（版本號越新越強；Google 官方頁面也是由新到舊排列），
+//   接著輕量版 flash-lite 由新到舊，最後才是 preview 版。
+//   刻意不放 Pro：免費方案只剩舊世代的 2.5 Pro（3.x Pro 免費方案不提供），
+//   而且 Pro 會先思考再回答，App 的分析提示很長，常超過 30 秒逾時，每次都白等 30 秒才換下一個。
+//   各類別分別限量（完整版 4、輕量版 2、preview 1），避免舊世代模型擠進名單。
+//   人工驗證過能用的偏好模型若沒排進來，放在最後當保險。
 export function rankGemini(ids, preferred) {
   const has = new Set(ids);
   const ver = id => { const m = id.match(/^gemini-(\d+(?:\.\d+)?)/); return m ? parseFloat(m[1]) : 0; };
-  const order = (a, b) => ver(b) - ver(a) || (/lite/.test(a) ? 1 : 0) - (/lite/.test(b) ? 1 : 0);
-  const stable = ids.filter(id => /^gemini-\d+(\.\d+)?-flash(-lite)?$/.test(id)).sort(order);
-  const preview = ids.filter(id => /^gemini-\d+(\.\d+)?-flash(-lite)?-preview[\w-]*$/.test(id)).sort(order);
-  // 排序原則：完整版 flash 一律排在輕量版 flash-lite 前面；同一類裡，人工挑過的偏好模型優先，
-  //   其次是查到的最新版。原本「偏好清單全部優先」會讓 3.1-flash-lite（輕量版）搶在 3.8-flash 前面，
-  //   只要輕量版能用，更新、更強的完整版就永遠輪不到 —— 2026-09-19 實測正是如此。
-  //   現在 Google 出新版 flash 時，App 會自動升級過去，不必改程式。
   const lite = id => /-lite/.test(id);
-  const pref = preferred.filter(p => has.has(p));
-  // ⚠️ 各類別分別限量，不能整串截斷：原本 slice(0,5) 讓很舊的 2.5-flash 擠掉了一直可靠的
-  //   3.1-flash-lite。每個模型的免費額度是分開算的，名單裡要留住「確定能用」的輕量版當最後防線。
-  const list = [...new Set([
-    ...pref.filter(id => !lite(id)), ...stable.filter(id => !lite(id)).slice(0, 3),
-    ...pref.filter(lite), ...stable.filter(lite).slice(0, 2), ...preview.slice(0, 1)])];
+  const newestFirst = (a, b) => ver(b) - ver(a) || (lite(a) ? 1 : 0) - (lite(b) ? 1 : 0);
+  const stable = ids.filter(id => /^gemini-\d+(\.\d+)?-flash(-lite)?$/.test(id));
+  const full = stable.filter(id => !lite(id)).sort(newestFirst).slice(0, 4);
+  const lites = stable.filter(lite).sort(newestFirst).slice(0, 2);
+  const preview = ids.filter(id => /^gemini-\d+(\.\d+)?-flash(-lite)?-preview[\w-]*$/.test(id)).sort(newestFirst).slice(0, 1);
+  const safety = preferred.filter(p => has.has(p));
+  // 保險模型也要照強弱歸位：完整版的放在完整版後面、輕量版的放在輕量版後面，維持「由強到弱」。
+  const list = [...new Set([...full, ...safety.filter(id => !lite(id)), ...lites, ...safety.filter(lite), ...preview])];
   return list.length ? list : preferred.slice();
 }
 
@@ -140,7 +145,8 @@ async function health(env) {
     if (!key) { out.providers[name] = { configured: false }; continue; }
     const list = await modelsFor(name, key);
     const c = modelCache[name] || {};
-    out.providers[name] = { configured: true, discovered: !!c.discovered, available: c.total, candidates: list };
+    out.providers[name] = { configured: true, discovered: !!c.discovered, available: c.total, candidates: list,
+      coolingDown: list.filter(coolingDown) };
   }
   out.providers.openrouter = { configured: !!env.OPENROUTER_KEY };
   out.ok = Object.values(out.providers).some(p => p.configured);
@@ -166,10 +172,12 @@ export async function onRequest(context) {
   // 0) 最優先 Gemini（Google 免費層，品質最好）。用 OpenAI 相容端點，回應格式與 OpenAI 相同。
   if (geminiKey) {
     for (const model of await modelsFor('gemini', geminiKey)) {
+      if (coolingDown(model)) continue;
       try {
         const r = await askOpenAiCompatible(
           'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
           geminiKey, { model, messages: body.messages, temperature });
+        if (r.status === 429) { cooldown[model] = Date.now() + COOLDOWN_MS; continue; }
         if (looksUsable(r.ok, r.text)) return passthrough(r.text);
       } catch (e) { /* 這個模型不通就換下一個 */ }
     }
@@ -179,6 +187,7 @@ export async function onRequest(context) {
   // 1) 次選 Groq（快、額度大）。gpt-oss-120b 有推理能力、內容品質較好排第一。
   if (groqKey) {
     for (const model of await modelsFor('groq', groqKey)) {
+      if (coolingDown(model)) continue;
       try {
         const payload = { model, messages: body.messages, temperature };
         // 完整分析 prompt 很大（15 個欄位＋官方年報原文，約 5000+ tokens）。
@@ -186,6 +195,7 @@ export async function onRequest(context) {
         if (model.indexOf('gpt-oss') > -1) payload.reasoning_effort = 'medium';
         const r = await askOpenAiCompatible(
           'https://api.groq.com/openai/v1/chat/completions', groqKey, payload);
+        if (r.status === 429) { cooldown[model] = Date.now() + COOLDOWN_MS; continue; }
         if (looksUsable(r.ok, r.text)) return passthrough(r.text);
       } catch (e) { /* 換下一個模型 */ }
     }

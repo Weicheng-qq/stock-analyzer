@@ -26,23 +26,25 @@ const PREFERRED = {
   openrouter: ['meta-llama/llama-3.3-70b-instruct:free']
 };
 
+// Gemini 排序（2026-09-19 使用者指定）：【最強的先用，再依序往下降】。
+//   完整版 flash 由新到舊（版本號越新越強；Google 官方頁面也是由新到舊排列），
+//   接著輕量版 flash-lite 由新到舊，最後才是 preview 版。
+//   刻意不放 Pro：免費方案只剩舊世代的 2.5 Pro（3.x Pro 免費方案不提供），
+//   而且 Pro 會先思考再回答，App 的分析提示很長，常超過 30 秒逾時，每次都白等 30 秒才換下一個。
+//   各類別分別限量（完整版 4、輕量版 2、preview 1），避免舊世代模型擠進名單。
+//   人工驗證過能用的偏好模型若沒排進來，放在最後當保險。
 export function rankGemini(ids, preferred) {
   const has = new Set(ids);
   const ver = id => { const m = id.match(/^gemini-(\d+(?:\.\d+)?)/); return m ? parseFloat(m[1]) : 0; };
-  const order = (a, b) => ver(b) - ver(a) || (/lite/.test(a) ? 1 : 0) - (/lite/.test(b) ? 1 : 0);
-  const stable = ids.filter(id => /^gemini-\d+(\.\d+)?-flash(-lite)?$/.test(id)).sort(order);
-  const preview = ids.filter(id => /^gemini-\d+(\.\d+)?-flash(-lite)?-preview[\w-]*$/.test(id)).sort(order);
-  // 排序原則：完整版 flash 一律排在輕量版 flash-lite 前面；同一類裡，人工挑過的偏好模型優先，
-  //   其次是查到的最新版。原本「偏好清單全部優先」會讓 3.1-flash-lite（輕量版）搶在 3.8-flash 前面，
-  //   只要輕量版能用，更新、更強的完整版就永遠輪不到 —— 2026-09-19 實測正是如此。
-  //   現在 Google 出新版 flash 時，App 會自動升級過去，不必改程式。
   const lite = id => /-lite/.test(id);
-  const pref = preferred.filter(p => has.has(p));
-  // ⚠️ 各類別分別限量，不能整串截斷：原本 slice(0,5) 讓很舊的 2.5-flash 擠掉了一直可靠的
-  //   3.1-flash-lite。每個模型的免費額度是分開算的，名單裡要留住「確定能用」的輕量版當最後防線。
-  const list = [...new Set([
-    ...pref.filter(id => !lite(id)), ...stable.filter(id => !lite(id)).slice(0, 3),
-    ...pref.filter(lite), ...stable.filter(lite).slice(0, 2), ...preview.slice(0, 1)])];
+  const newestFirst = (a, b) => ver(b) - ver(a) || (lite(a) ? 1 : 0) - (lite(b) ? 1 : 0);
+  const stable = ids.filter(id => /^gemini-\d+(\.\d+)?-flash(-lite)?$/.test(id));
+  const full = stable.filter(id => !lite(id)).sort(newestFirst).slice(0, 4);
+  const lites = stable.filter(lite).sort(newestFirst).slice(0, 2);
+  const preview = ids.filter(id => /^gemini-\d+(\.\d+)?-flash(-lite)?-preview[\w-]*$/.test(id)).sort(newestFirst).slice(0, 1);
+  const safety = preferred.filter(p => has.has(p));
+  // 保險模型也要照強弱歸位：完整版的放在完整版後面、輕量版的放在輕量版後面，維持「由強到弱」。
+  const list = [...new Set([...full, ...safety.filter(id => !lite(id)), ...lites, ...safety.filter(lite), ...preview])];
   return list.length ? list : preferred.slice();
 }
 export function rankGroq(ids, preferred) {
@@ -92,8 +94,16 @@ async function modelsFor(provider, key) {
 // 各層的用量統計，供腳本結束時回報「實際用了哪一層」
 export const aiStats = { gemini: 0, groq: 0, openrouter: 0, failed: 0, exhausted: false };
 
+// 本次排程中額度已用完（429）的模型。
+// ⚠️ 2026-09-19 修正：原本任何一個模型回 429 就「放棄整個 Gemini」直接跳去 Groq。
+//   但免費額度是【每個模型分開算】的 —— 3.8-flash 用完了，3.7、3.6、3.5 還各有一份，
+//   原本的寫法等於把它們的額度全部浪費掉。現在是記住用完的那一個、換同一家的下一個模型，
+//   整家都用完才換下一家。
+const exhausted = new Set();
+
 async function tryEndpoint(url, key, models, prompt, extra = {}) {
   for (const model of models) {
+    if (exhausted.has(model)) continue;
     try {
       const ctl = new AbortController();
       const to = setTimeout(() => ctl.abort(), 45000);
@@ -106,7 +116,7 @@ async function tryEndpoint(url, key, models, prompt, extra = {}) {
           typeof extra === 'function' ? extra(model) : extra))
       });
       clearTimeout(to);
-      if (r.status === 429) return { rateLimited: true };   // 這一層額度用完 → 換下一層
+      if (r.status === 429) { exhausted.add(model); continue; }   // 這個模型額度用完 → 換同一家的下一個模型
       if (!r.ok) continue;                                   // 這個模型不行 → 換下一個模型
       const j = await r.json();
       const txt = j?.choices?.[0]?.message?.content || '';
@@ -114,6 +124,8 @@ async function tryEndpoint(url, key, models, prompt, extra = {}) {
       if (m) { try { return { result: JSON.parse(m[0]) }; } catch (e) {} }
     } catch (e) { /* 逾時或網路問題 → 換下一個模型 */ }
   }
+  // 整家的候選模型都用完了才算「這一層額度用盡」
+  if (models.length && models.every(m => exhausted.has(m))) return { rateLimited: true };
   return { failed: true };
 }
 
