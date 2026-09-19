@@ -195,6 +195,8 @@ export async function onRequest(context) {
         const ms = Date.now() - t0;
         if (r.status === 429) { cooldown[model] = Date.now() + COOLDOWN_MS; attempts.push(model + ':429額度(' + ms + 'ms)'); continue; }
         if (looksUsable(r.ok, r.text)) { attempts.push(model + ':成功(' + ms + 'ms)'); return passthrough(r.text, 200, attempts); }
+        // 5xx（多半是 503 模型過載，新模型剛推出時很常見）：實測要等十幾秒才報錯，冷卻 2 分鐘避免每次都卡一次
+        if (r.status >= 500) cooldown[model] = Date.now() + 2 * 60 * 1000;
         attempts.push(model + ':HTTP' + r.status + '(' + ms + 'ms)');
       } catch (e) {
         const ms = Date.now() - t0;
