@@ -32,7 +32,15 @@ export function rankGemini(ids, preferred) {
   const order = (a, b) => ver(b) - ver(a) || (/lite/.test(a) ? 1 : 0) - (/lite/.test(b) ? 1 : 0);
   const stable = ids.filter(id => /^gemini-\d+(\.\d+)?-flash(-lite)?$/.test(id)).sort(order);
   const preview = ids.filter(id => /^gemini-\d+(\.\d+)?-flash(-lite)?-preview[\w-]*$/.test(id)).sort(order);
-  const list = [...new Set([...preferred.filter(p => has.has(p)), ...stable, ...preview])].slice(0, 5);
+  // 排序原則：完整版 flash 一律排在輕量版 flash-lite 前面；同一類裡，人工挑過的偏好模型優先，
+  //   其次是查到的最新版。原本「偏好清單全部優先」會讓 3.1-flash-lite（輕量版）搶在 3.8-flash 前面，
+  //   只要輕量版能用，更新、更強的完整版就永遠輪不到 —— 2026-09-19 實測正是如此。
+  //   現在 Google 出新版 flash 時，App 會自動升級過去，不必改程式。
+  const lite = id => /-lite/.test(id);
+  const pref = preferred.filter(p => has.has(p));
+  const list = [...new Set([
+    ...pref.filter(id => !lite(id)), ...stable.filter(id => !lite(id)),
+    ...pref.filter(lite), ...stable.filter(lite), ...preview])].slice(0, 5);
   return list.length ? list : preferred.slice();
 }
 export function rankGroq(ids, preferred) {
