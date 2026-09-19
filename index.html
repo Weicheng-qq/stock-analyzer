@@ -3454,50 +3454,58 @@ async function loadAutoEarnings(sym){
   return null;
 }
 function earningsBlock(j, isNewer){
+  // ⚠️⚠️ 2026-09-19 改版：排版改成跟人工建置的台積電 2026Q2 法說會一樣的「段落式」
+  //   （📈 未來成長展望 → 🏗️ 資本支出 → 🔬 技術進展 → 🧩 營收結構），使用者要求。
+  //   原本是一長串「營收表現／每股盈餘／獲利率…」欄位，資訊都在但讀起來像表單，
+  //   而人工版是「先講公司要往哪裡走，再講錢花在哪、技術走到哪」，這才是讀法說會的順序。
+  //   欄位本身與資料來源完全沒變，只改呈現順序與分組。
+  //
+  // ⚠️ 所有 AI 產生的欄位一律經過 sanitizeAiHtml()（白名單消毒）才放進畫面。
+  //   原本直接塞進 HTML：這些內容是每日排程讓 AI 讀官方文件後寫的，
+  //   文件裡若夾帶 <img onerror=…> 之類的字串，就會在 App 裡執行（同 norm() 的 XSS 問題）。
   const o=j.official||{}, r=j.result||{};
   const unit=o.currency||'';
+  const safe=v=>sanitizeAiHtml(v==null?'':String(v).trim());
+  const notGiven=v=>!v||!String(v).trim()||/^(未提供|未於本次新聞稿提供|未揭露)[。.]?$/.test(String(v).trim());
   const row=(label,val)=>val==null?'':`<span style="display:inline-block;margin-right:14px"><span style="color:var(--text2)">${label}</span> <b>${esc(String(val))}</b></span>`;
-  const item=(label,val)=>{
-    const t=(val==null?'':String(val)).trim();
-    if(!t||t==='未提供') return '';   // 官方沒提供的欄位不佔版面
-    return `<div style="margin-bottom:7px"><b style="color:var(--blue)">${label}</b><br>${t}</div>`;
+  // 一個段落 = 標題 + 若干條重點。已經是「• …<br>• …」條列的欄位原樣保留，
+  //   一段文字的欄位補上「• 」，讓整段看起來跟人工版一樣是條列。
+  const bullets=v=>{ const t=safe(v); return /^\s*•/.test(t) ? t : '• '+t; };
+  const section=(title,color,parts)=>{
+    const ok=parts.filter(v=>!notGiven(v));
+    if(!ok.length) return '';
+    return `<div style="margin-bottom:10px"><b style="color:var(--${color})">${title}</b><br>${ok.map(bullets).join('<br>')}</div>`;
   };
-  // 官方展望與分部營收來自公司自己發布的財報新聞稿原文（美股 8-K/6-K 的 EX-99.1），
-  //   不是 AI 推算，價值最高故獨立醒目呈現、排在最前面。
-  const notGiven=v=>!v||!String(v).trim()||/未提供|未於本次新聞稿提供|未揭露/.test(String(v));
-  // 來源標示要跟實際文件一致：台股是法說會簡報、美股是財報新聞稿
+  // 來源標示要跟實際文件一致：台股多為法說會簡報、美股多為財報新聞稿
   const srcName=(j.pressRelease&&j.pressRelease.form)?(j.pressRelease.form+'原文'):'財報新聞稿原文';
-  const guide=notGiven(r.guidanceOfficial)?'':
-    `<div style="margin-bottom:10px;padding:9px 10px;background:rgba(88,166,255,.09);border-left:3px solid var(--blue);border-radius:5px">
-       <b style="color:var(--blue)">📢 公司官方展望（${srcName}）</b><br>${r.guidanceOfficial}</div>`;
-  const seg=notGiven(r.segments)?'':
-    `<div style="margin-bottom:10px"><b style="color:var(--blue)">🧩 分部／產品別營收</b><br>${r.segments}</div>`;
-  // 管理層原話只有「來源是完整法說會逐字稿」時才有，是品質最高的內容，排最前面
+
+  // 管理層原話只有「來源是完整法說會逐字稿」時才有，品質最高，維持醒目的綠框排最前面
   const mgmt=notGiven(r.mgmtRemarks)?'':
     `<div style="margin-bottom:10px;padding:9px 10px;background:rgba(63,185,80,.10);border-left:3px solid var(--green);border-radius:5px">
-       <b style="color:var(--green)">🎙️ 管理層法說會發言重點（逐字稿原文）</b><br>${r.mgmtRemarks}</div>`;
-  const capexP=notGiven(r.capexPlan)?'':
-    `<div style="margin-bottom:10px"><b style="color:var(--blue)">🏗️ 資本支出／產能計畫</b><br>${r.capexPlan}</div>`;
-  // ⚠️ 技術路線圖：實測比對人工建置的台積電版本後補上的欄位。人工版最有價值的一段
-  //   （A14 規格、N2 量產時程、各地擴廠）自動版原本完全沒有，因為提示詞沒有這個欄位——
-  //   AI 只會填被要求填的欄位，材料在節錄裡也沒用。
-  const techR=notGiven(r.techRoadmap)?'':
-    `<div style="margin-bottom:10px"><b style="color:var(--orange)">🔬 技術／產品路線圖</b><br>${r.techRoadmap}</div>`;
+       <b style="color:var(--green)">🎙️ 管理層法說會發言重點（逐字稿原文）</b><br>${safe(r.mgmtRemarks)}</div>`;
+  // 公司自己講的展望是官方原文，不是 AI 推算，放在成長展望段落的第一條；
+  //   沒有官方原文時才用 AI 整理的財測。
+  const outlook=section('📈 未來成長展望','blue',[
+    notGiven(r.guidanceOfficial) ? r.guidance : r.guidanceOfficial,
+    r.outlook, r.keyPoints ]);
+  const capex=section('🏗️ 資本支出與產能','orange',[ r.capexPlan, r.capex ]);
+  const tech=section('🔬 技術進展與產品佈局','blue',[ r.techRoadmap ]);
+  const segs=section('🧩 營收結構（依產品／部門）','blue',[ r.segments ]);
+  const results=section('📊 本季營運成績','blue',[ r.revenue, r.eps, r.margins, r.fcf ]);
+  const good=section('✅ 本季亮點','green',[ r.highlights ]);
+  const watch=section('⚠️ 須留意之處','orange',[ r.concerns, r.risks ]);
+
   return `<div style="${isNewer?'':'margin-top:14px;padding-top:12px;border-top:1px solid var(--line)'}">
     <div style="color:var(--green);font-size:12px;margin-bottom:8px">
-      📊 最新財報自動摘要（${esc(j.quarter||'')}）${isNewer?'<b>· 比下方人工整理的內容更新一季</b>':''} — 數字來自${esc(j.source||'官方申報')}
+      📊 ${esc(j.quarter||'')} ${j.pressRelease?'法說會／財報重點':'財報重點'}${isNewer?'<b>· 比下方人工整理的內容更新一季</b>':''} — 依${j.pressRelease?('公司'+esc(srcName)):'官方申報數字'}自動整理
     </div>
     <div style="font-size:13px;margin-bottom:10px;line-height:1.9">
       ${row('營收',o.營業收入&&o.營業收入+unit)}${row('營業利益',o.營業利益&&o.營業利益+unit)}${row('淨利',o.本期淨利&&o.本期淨利+unit)}${row('EPS',o.每股盈餘)}
     </div>
-    ${mgmt}${guide}${capexP}${techR}${seg}
-    ${item('營收表現',r.revenue)}${item('每股盈餘',r.eps)}${item('獲利率',r.margins)}
-    ${item('自由現金流',r.fcf)}${item('資本支出',r.capex)}${guide?'':item('官方財測',r.guidance)}
-    ${item('營運狀況',r.outlook)}${item('本季亮點',r.highlights)}${item('須留意之處',r.concerns)}
-    ${item('財務風險',r.risks)}${item('投資人最該注意的事',r.keyPoints)}
+    ${mgmt}${outlook}${capex}${tech}${segs}${results}${good}${watch}
     <div style="color:var(--text2);font-size:11px;margin-top:8px">
-      本摘要由 AI 依上述官方數字${j.pressRelease?("與公司"+srcName):""}整理，
-      未提供之項目一律標示「未提供」，不做臆測或預測。
+      本摘要由 AI 依${esc(j.source||'官方申報')}的數字${j.pressRelease?("與公司"+esc(srcName)):""}整理，
+      官方未提供的項目不顯示，不做臆測或預測。
       ${j.pressRelease?`<a href="${esc(j.pressRelease.url)}" target="_blank" rel="noopener" style="color:var(--blue)">查看官方原文 ↗</a>`:''}
     </div>
   </div>`;
