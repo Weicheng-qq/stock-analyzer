@@ -31,6 +31,47 @@ window.onerror = function(msg, src, line, col, err){
   b.textContent = '⚠️ 網頁程式錯誤（請把這行告訴客服）：\n' + msg + '  [行 ' + line + ']';
   return false;
 };
+
+// ⚠️⚠️ 2026-09-20 使用者回報：手機上按「台股／美股」跳出
+//   「Uncaught ReferenceError: setMarket is not defined [行 651]」。
+//   原因：整份 HTML 約 200KB，市場按鈕在第 650 行就已經畫出來可以按，
+//   但定義 setMarket 的主程式在第 744 行之後，網路慢時還沒下載完 ——
+//   按鈕看得到、按得下去，函式卻還不存在。
+//   修法：setMarket 只做「記住選擇 → 重新整理」，沒有任何相依，直接在這個最上面的
+//   區塊就定義好，按鈕一出現就能用。（主程式裡的同名定義已改為沿用這一份。）
+window.setMarket = function(m){
+  try{
+    localStorage.setItem('market', m);
+    localStorage.setItem('marketPicked', '1');
+    sessionStorage.setItem('skipSplashOnce', '1');
+  }catch(e){}
+  location.reload();
+};
+
+// 其餘按鈕（搜尋、選單、設定…）都在主程式裡，主程式沒載完前按下去一樣會丟 ReferenceError。
+//   與其讓使用者看到紅色錯誤條，不如告訴他「還在載入」。主程式跑完會把 __appReady 設成 true，
+//   之後這個守衛就完全不作用。
+window.__appReady = false;
+document.addEventListener('click', function(ev){
+  if(window.__appReady) return;
+  var t = ev.target;
+  var el = (t && t.closest) ? t.closest('[onclick]') : null;
+  if(!el) return;
+  var code = el.getAttribute('onclick') || '';
+  if(code.indexOf('setMarket(') > -1) return;         // 這個已經可以用了
+  try{ if(typeof window[code.replace(/\(.*$/, '').trim()] === 'function') return; }catch(e){}
+  ev.preventDefault(); ev.stopPropagation();
+  var d = document.getElementById('loadingToast') || (function(){
+    var x = document.createElement('div'); x.id = 'loadingToast';
+    x.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9999;'
+      + 'background:rgba(0,0,0,.85);color:#fff;padding:10px 16px;border-radius:20px;font:13px sans-serif';
+    document.body.appendChild(x); return x;
+  })();
+  d.textContent = '⏳ 還在載入，請稍候…';
+  d.style.display = 'block';
+  clearTimeout(window.__loadingToastT);
+  window.__loadingToastT = setTimeout(function(){ d.style.display = 'none'; }, 1600);
+}, true);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -1101,7 +1142,8 @@ async function loadTickerMap(){
 // 「AI分析」按鈕直接觸發完整搜尋，帶出這個網站的所有區塊(財務/彼得林區分類/新聞/目標價/投資總結...)
 // 市場模式：美股(us) / 台股(tw)。台股用 Yahoo「代碼.TW」，一套程式共用。
 function getMarket(){ try{ return localStorage.getItem('market')||'us'; }catch(e){ return 'us'; } }
-function setMarket(m){ try{ localStorage.setItem('market', m); localStorage.setItem('marketPicked','1'); sessionStorage.setItem('skipSplashOnce','1'); }catch(e){} location.reload(); }
+// setMarket 已在檔案最上方的 script 區塊定義（市場按鈕比主程式早出現，見該處說明）。
+//   這裡不重複定義，避免兩份邏輯日後改到不一致。
 // 目前查看中公司名稱：顯示在美股/台股按鈕與選單之間，讓使用者切換選單分頁時仍能看到自己正在看哪一家公司。
 //   名稱一律以 TICKER_ZH / TW_NAMES 這兩本「權威中文名字典」為準，與自選股用的是同一份資料，
 //   避免同一家公司(如台積電)在自選股顯示中文、在這裡卻顯示SEC英文名而不一致(使用者回報)。
@@ -6251,6 +6293,11 @@ async function forceUpdate(){
 window.addEventListener('load', function(){
   const el=document.getElementById('appVer'); if(el) el.textContent=appVersionText();
 });
+
+// ⚠️ 主程式已全部定義完成 —— 解除檔案最上方那道「還在載入，請稍候」的點擊守衛。
+//   必須放在整個 script 區塊的【最後一行】：放中間的話，後面若有語法錯誤或例外，
+//   守衛會被誤解除，使用者按按鈕又會看到 ReferenceError 紅字。
+window.__appReady = true;
 </script>
 </body>
 </html>
