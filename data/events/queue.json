@@ -1,11 +1,11 @@
 {
- "generatedAt": "2026-09-26T01:23:36.540Z",
+ "generatedAt": "2026-09-27T01:16:35.528Z",
  "lookbackDays": 3,
  "counts": {
-  "high": 8,
-  "medium": 247,
-  "low": 1926,
-  "total": 2181
+  "high": 1,
+  "medium": 210,
+  "low": 1933,
+  "total": 2144
  },
  "queue": [
   {
@@ -15,293 +15,340 @@
    "reasons": [
     "上櫃重大訊息：法說會/財報"
    ],
-   "eventDate": "1150924",
-   "priority": "HIGH"
-  },
-  {
-   "market": "tw",
-   "symbol": "5530",
-   "name": "龍巖",
-   "reasons": [
-    "上櫃重大訊息：法說會/財報"
-   ],
-   "eventDate": "1150924",
-   "priority": "HIGH"
-  },
-  {
-   "market": "tw",
-   "symbol": "4127",
-   "name": "天良",
-   "reasons": [
-    "上櫃重大訊息：法說會/財報"
-   ],
-   "eventDate": "1150924",
-   "priority": "HIGH"
-  },
-  {
-   "market": "tw",
-   "symbol": "6613",
-   "name": "朋億*",
-   "reasons": [
-    "上櫃重大訊息：法說會/財報"
-   ],
-   "eventDate": "1150924",
-   "priority": "HIGH"
-  },
-  {
-   "market": "tw",
-   "symbol": "5009",
-   "name": "榮剛",
-   "reasons": [
-    "上櫃重大訊息：法說會/財報"
-   ],
-   "eventDate": "1150924",
-   "priority": "HIGH"
-  },
-  {
-   "market": "tw",
-   "symbol": "8147",
-   "name": "正淩",
-   "reasons": [
-    "上櫃重大訊息：法說會/財報"
-   ],
-   "eventDate": "1150924",
-   "priority": "HIGH"
-  },
-  {
-   "market": "tw",
-   "symbol": "3520",
-   "name": "華盈",
-   "reasons": [
-    "上櫃重大訊息：法說會/財報"
-   ],
-   "eventDate": "1150924",
-   "priority": "HIGH"
-  },
-  {
-   "market": "tw",
-   "symbol": "3629",
-   "name": "地心引力",
-   "reasons": [
-    "上櫃重大訊息：法說會/財報"
-   ],
-   "eventDate": "1150924",
+   "eventDate": "1150925",
    "priority": "HIGH"
   },
   {
    "market": "us",
-   "symbol": "ATCHW",
+   "symbol": "ASTC",
    "forms": [
     "10-K",
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CPB",
+   "symbol": "BWET",
    "forms": [
     "10-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "KTCC",
+   "symbol": "CSUI",
    "forms": [
     "10-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "LGCY",
+   "symbol": "CBRL",
    "forms": [
     "10-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "RAVE",
+   "symbol": "DCI",
+   "forms": [
+    "10-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "FGPR",
    "forms": [
     "10-K",
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "RZLT",
-   "forms": [
-    "10-K",
-    "8-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "SFIX",
+   "symbol": "GFLT",
    "forms": [
     "10-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "TRT",
+   "symbol": "HFBL",
+   "forms": [
+    "10-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "INBP",
    "forms": [
     "10-K",
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "BB",
+   "symbol": "IXHL",
    "forms": [
-    "10-Q",
+    "10-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "MARPS",
+   "forms": [
+    "10-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "NIOBW",
+   "forms": [
+    "10-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "PPCB",
+   "forms": [
+    "10-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "QNME",
+   "forms": [
+    "10-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "SRBK",
+   "forms": [
+    "10-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "HYSR",
+   "forms": [
+    "10-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "TBNRL",
+   "forms": [
+    "10-K",
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "FUL",
+   "symbol": "WBQNL",
    "forms": [
-    "10-Q",
-    "8-K"
+    "10-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "PAYX",
+   "symbol": "DAICW",
    "forms": [
     "10-Q"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "SHPH",
+   "symbol": "SCHL",
    "forms": [
     "10-Q"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "IMRN",
-   "forms": [
-    "20-F",
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "MANU",
+   "symbol": "CRMLW",
    "forms": [
     "20-F"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "AIFU",
+   "symbol": "MASK",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "ACB",
+   "symbol": "AKAN",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "AFYA",
+   "symbol": "PRNAF",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "AEHL",
+   "symbol": "ADAG",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "JJETF",
+   "symbol": "ADXN",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "BCLYF",
+   "symbol": "ALP",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "BGM",
+   "symbol": "AU",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "ARBEW",
+   "forms": [
+    "6-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "ARCXF",
+   "forms": [
+    "6-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "BGIN",
+   "forms": [
+    "6-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "BAK",
+   "forms": [
+    "6-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "BUUU",
+   "forms": [
+    "6-K"
+   ],
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -311,27 +358,7 @@
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "BCDRF",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "BZUN",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -341,37 +368,7 @@
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "BLRX",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "BGLWW",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "SLMT",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -381,197 +378,77 @@
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CMCL",
+   "symbol": "CDLR",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CLBT",
+   "symbol": "OLOXF",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "HKPD",
+   "symbol": "ENLV",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "RAASY",
+   "symbol": "FMCQF",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CLGN",
+   "symbol": "HTOO",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CNL",
+   "symbol": "GDHG",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CURR",
+   "symbol": "GOW",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "DGNX",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "DCX",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "EC",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "ERO",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "FBGL",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "FSM",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "FFMGF",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "FRSPF",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "GNMSF",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "GFL",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "GLNG",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "GLAXF",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -581,17 +458,7 @@
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "HMDCF",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -601,17 +468,17 @@
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "HLNCF",
+   "symbol": "HBNB",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -621,7 +488,7 @@
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -631,67 +498,37 @@
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "INDO",
+   "symbol": "IBG",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "IFBD",
+   "symbol": "FMFC",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "ZJYL",
+   "symbol": "KNDI",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "KGCRF",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "LRE",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "DETX",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -701,27 +538,17 @@
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "UZX",
+   "symbol": "LBGJ",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "LGHL",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -731,67 +558,27 @@
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "LU",
+   "symbol": "LUXE",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "MEOBF",
+   "symbol": "MNDR",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "MZHOF",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "MICC",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "MSGY",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "MWC",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -801,247 +588,107 @@
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "NEWP",
+   "symbol": "RBSPF",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "NNBXF",
+   "symbol": "NRSNW",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "NETTF",
+   "symbol": "PHTCF",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "OTLY",
+   "symbol": "PHAR",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "OGC",
+   "symbol": "QZMRF",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "POM",
+   "symbol": "RETO",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "PUKPF",
+   "symbol": "LAES",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "PSQLW",
+   "symbol": "SVM",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "PERFF",
+   "symbol": "SKK",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CPOP",
+   "symbol": "STFS",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "PMEC",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "QTEX",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "QNTM",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "SQNS",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "SGBAF",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "SMWB",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "SLBT",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "SOS",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "MSLE",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "SPRC",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "TSMWF",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "TANH",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "TJGC",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "TRMD",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -1051,27 +698,7 @@
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "TDTH",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "TRBG",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -1081,127 +708,67 @@
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "UXIN",
+   "symbol": "WSKEF",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "VALE",
+   "symbol": "YFOR",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "EVTWF",
+   "symbol": "YAAS",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "WALDW",
+   "symbol": "NWCLW",
    "forms": [
     "6-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "WRDIF",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "WSE",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "YMT",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "ZENA",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "ZTEKF",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "ZHIHF",
-   "forms": [
-    "6-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "AIR",
+   "symbol": "ACNB",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "ACAD",
+   "symbol": "AETN",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -1211,117 +778,67 @@
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "ARE",
+   "symbol": "AB",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "AMC",
+   "symbol": "ASH",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "AIG",
+   "symbol": "ACHC",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CRMT",
+   "symbol": "ASLE",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "FJDIR",
+   "symbol": "AQST",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "AUUD",
+   "symbol": "APAM",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "CAR",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "APVO",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "ACHR",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "ARR-PC",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "AITX",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -1331,217 +848,197 @@
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CLYD",
+   "symbol": "BCBP",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "BBGI",
+   "symbol": "BTGO",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "BNED",
+   "symbol": "BKV",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "BAFN",
+   "symbol": "BXCAP",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "BEEM",
+   "symbol": "BXBL",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "BNTC",
+   "symbol": "TCPC",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "XAIR",
+   "symbol": "BACCU",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "BGDE",
+   "symbol": "CCCC",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "BKHAR",
+   "symbol": "CDTTW",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "BRVO",
+   "symbol": "CLSKW",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "BTLN",
+   "symbol": "CME",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CRL",
+   "symbol": "CELZ",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "C-PR",
+   "symbol": "CLDWW",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CLVT",
+   "symbol": "VTAK",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CLOV",
+   "symbol": "COR",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CVLT",
+   "symbol": "CIFR",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "COST",
+   "symbol": "CRCL",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CFFN",
+   "symbol": "CODX",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CDIX",
+   "symbol": "CXW",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "CD",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "COLAR",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -1551,67 +1048,107 @@
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CRCW",
+   "symbol": "DKS",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CGEM",
+   "symbol": "DLTR",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "DRI",
+   "symbol": "DYAI",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "DEVSF",
+   "symbol": "DYNR",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "APPS",
+   "symbol": "DX-PC",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "DCBG",
+   "symbol": "DKNG",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "DFLIW",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "DROR",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "DUKU",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "DT",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -1621,77 +1158,77 @@
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "EOG",
+   "symbol": "ESS",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "EFC-PC",
+   "symbol": "LOCO",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "ELMT",
+   "symbol": "ENVA",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "EDVA",
+   "symbol": "EQH-PC",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "FFAI",
+   "symbol": "XOM",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "FBK",
+   "symbol": "FDS",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "FITB-PK",
+   "symbol": "FGNXP",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -1701,207 +1238,177 @@
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "FUNC",
+   "symbol": "FOXF",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "GUTS",
+   "symbol": "FTHM",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "FSCO",
+   "symbol": "FSTJ",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "FNLC",
+   "symbol": "FSEA",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "FWDI",
+   "symbol": "FUSEW",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "GPI",
+   "symbol": "FMACR",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "GAME",
+   "symbol": "GNK",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "GCTK",
+   "symbol": "GIPR",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "GLNDW",
+   "symbol": "GTBP",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "HCWB",
+   "symbol": "GLXZ",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "HBANP",
+   "symbol": "GSTX",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "HYAC-UN",
+   "symbol": "HIG-PG",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "COAG",
+   "symbol": "HCTI",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "ICFI",
+   "symbol": "HTCR",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "IDT",
+   "symbol": "IEHC",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "IRT",
+   "symbol": "IIPR-PA",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "IBTA",
+   "symbol": "JOUT",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "INFQ-WT",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "INNV",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "IRDM",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -1911,157 +1418,207 @@
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "JAGU",
+   "symbol": "JBI",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "KTB",
+   "symbol": "KEY-PL",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "KYTX",
+   "symbol": "KLXER",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "LARK",
+   "symbol": "LAD",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "LEA",
+   "symbol": "LTC",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "LGNYZ",
+   "symbol": "LYV",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "LTRN",
+   "symbol": "LUMN",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "LINE",
+   "symbol": "MARA",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "LOVIU",
+   "symbol": "MBWM",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "MKTW",
+   "symbol": "MEI",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "MAR",
+   "symbol": "MOS",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "MBNKO",
+   "symbol": "CART",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "MET-PF",
+   "symbol": "MRVL",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "MGLD",
+   "symbol": "MH",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "MBC",
+   "symbol": "MBRX",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "MNST",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "MORN",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "JSM",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "BBBYW",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "NKTR",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -2071,207 +1628,217 @@
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "NXGLW",
+   "symbol": "NMPAR",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "NUAIW",
+   "symbol": "KITTW",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "NWTG",
+   "symbol": "NCPLW",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "NTRP",
+   "symbol": "NXTC",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "NTNX",
+   "symbol": "NXDR",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "JQC",
+   "symbol": "OGS",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "OPI",
+   "symbol": "OTEX",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "STKS",
+   "symbol": "OPTT",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "PKBK",
+   "symbol": "MYPS",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "PNBK",
+   "symbol": "POOL",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "PCB",
+   "symbol": "PSKY",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "PGIM",
+   "symbol": "PNAQ-RI",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "PRCT",
+   "symbol": "QIND",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "PPLI",
+   "symbol": "QUCY",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "RLBY",
+   "symbol": "RIOT",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "ROK",
+   "symbol": "RKTO",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "SAJ",
+   "symbol": "RWAYI",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "SCHL",
+   "symbol": "SNWV",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "SBUX",
+   "symbol": "SBAC",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "SFB",
+   "symbol": "SIEB",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "SOBR",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -2281,197 +1848,237 @@
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "SSGC",
+   "symbol": "SDOT",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "WTTR",
+   "symbol": "SDCH",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "SNTI",
+   "symbol": "SLXNW",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "SHAZW",
+   "symbol": "SBXD-WT",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "SKYQ",
+   "symbol": "SLND-WT",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "SKYAW",
+   "symbol": "SKFG",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "SWRD",
+   "symbol": "SFIX",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "TALO",
+   "symbol": "STOK",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "SNX",
+   "symbol": "STRD",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "TFSL",
+   "symbol": "TDGMW",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "TTMI",
+   "symbol": "TWI",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "CORN",
+   "symbol": "TDOC",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "TRUG",
+   "symbol": "HLSQ",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "HURA",
+   "symbol": "TPL",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "USAC",
+   "symbol": "UNL",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "UYSCU",
+   "symbol": "USL",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "VENU",
+   "symbol": "BNO",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "VRT",
+   "symbol": "CPER",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "VWAVW",
+   "symbol": "UGA",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "UNG",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "USO",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "VNRX",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
+   "reason": "SEC 新申報",
+   "priority": "MEDIUM"
+  },
+  {
+   "market": "us",
+   "symbol": "VRME",
+   "forms": [
+    "8-K"
+   ],
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -2481,87 +2088,37 @@
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "VST",
+   "symbol": "VYLR",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "WNC",
+   "symbol": "WOR",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
   {
    "market": "us",
-   "symbol": "WFC-PA",
+   "symbol": "WMG",
    "forms": [
     "8-K"
    ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "WEYS",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "WY",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "WS",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "ZS",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
-   "reason": "SEC 新申報",
-   "priority": "MEDIUM"
-  },
-  {
-   "market": "us",
-   "symbol": "ATYR",
-   "forms": [
-    "8-K"
-   ],
-   "eventDate": "20260924",
+   "eventDate": "20260925",
    "reason": "SEC 新申報",
    "priority": "MEDIUM"
   },
@@ -8615,6 +8172,14 @@
   },
   {
    "market": "tw",
+   "symbol": "3520",
+   "name": "華盈",
+   "reason": "站上尚無此公司資料",
+   "officialQuarter": "2026 第2季",
+   "priority": "LOW"
+  },
+  {
+   "market": "tw",
    "symbol": "3521",
    "name": "台鋼建設",
    "reason": "站上尚無此公司資料",
@@ -9041,6 +8606,14 @@
    "market": "tw",
    "symbol": "3628",
    "name": "盈正",
+   "reason": "站上尚無此公司資料",
+   "officialQuarter": "2026 第2季",
+   "priority": "LOW"
+  },
+  {
+   "market": "tw",
+   "symbol": "3629",
+   "name": "地心引力",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第2季",
    "priority": "LOW"
@@ -9513,6 +9086,14 @@
    "market": "tw",
    "symbol": "4126",
    "name": "太醫",
+   "reason": "站上尚無此公司資料",
+   "officialQuarter": "2026 第2季",
+   "priority": "LOW"
+  },
+  {
+   "market": "tw",
+   "symbol": "4127",
+   "name": "天良",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第2季",
    "priority": "LOW"
@@ -11095,6 +10676,14 @@
   },
   {
    "market": "tw",
+   "symbol": "5009",
+   "name": "榮剛",
+   "reason": "站上尚無此公司資料",
+   "officialQuarter": "2026 第2季",
+   "priority": "LOW"
+  },
+  {
+   "market": "tw",
    "symbol": "5011",
    "name": "久陽",
    "reason": "站上尚無此公司資料",
@@ -12009,6 +11598,14 @@
    "market": "tw",
    "symbol": "5529",
    "name": "鉅陞",
+   "reason": "站上尚無此公司資料",
+   "officialQuarter": "2026 第2季",
+   "priority": "LOW"
+  },
+  {
+   "market": "tw",
+   "symbol": "5530",
+   "name": "龍巖",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第2季",
    "priority": "LOW"
@@ -14241,6 +13838,14 @@
    "market": "tw",
    "symbol": "6612",
    "name": "奈米醫材",
+   "reason": "站上尚無此公司資料",
+   "officialQuarter": "2026 第2季",
+   "priority": "LOW"
+  },
+  {
+   "market": "tw",
+   "symbol": "6613",
+   "name": "朋億*",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第2季",
    "priority": "LOW"
@@ -16785,6 +16390,14 @@
    "market": "tw",
    "symbol": "8131",
    "name": "福懋科",
+   "reason": "站上尚無此公司資料",
+   "officialQuarter": "2026 第2季",
+   "priority": "LOW"
+  },
+  {
+   "market": "tw",
+   "symbol": "8147",
+   "name": "正淩",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第2季",
    "priority": "LOW"
