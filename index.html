@@ -581,6 +581,58 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 #masterPickCard .mp-pnote { margin-top:7px; font-size:11.5px; line-height:1.6; color:var(--text2); }
 #masterPickCard .mp-go { margin-top:8px; font-size:12.5px; color:var(--blue); }
 #masterPickCard .mp-go.off { color:var(--text2); }
+/* ── 個股庫存報酬（#holdingCard）────────────────────────────────
+   手機優先：390px 下一張庫存卡要能一眼看完「成本 / 損益 / 報酬率」。
+   ⚠️ 顏色沿用全站慣例：.up/.down 預設綠漲紅跌，台股模式由 body.mkt-tw 翻轉成紅漲綠跌。 */
+#holdingCard .hd-form { background:var(--bg3); border:1px solid var(--border); border-radius:9px; padding:12px; margin-bottom:14px; }
+#holdingCard .hd-f-row { display:flex; align-items:center; gap:8px; margin-bottom:9px; }
+#holdingCard .hd-f-row > label { flex:0 0 72px; font-size:13px; color:var(--text2); }
+#holdingCard .hd-form input, #holdingCard .hd-form select { flex:1; min-width:0; background:var(--bg2); border:1px solid var(--border); color:var(--text); border-radius:6px; padding:9px 10px; font-size:15px; }
+#holdingCard .hd-f-row input[type=number] { flex:1.2; }
+#holdingCard .hd-f-row select { flex:1.4; }
+#holdingCard .hd-f-btns { display:flex; gap:8px; margin-top:12px; }
+#holdingCard .hd-f-btns button { flex:1; border-radius:6px; padding:10px; font-size:15px; font-weight:700; cursor:pointer; border:1px solid var(--border); }
+#holdingCard .hd-ok { background:var(--blue); color:#fff; border-color:var(--blue); }
+#holdingCard .hd-cancel { background:var(--bg2); color:var(--text2); }
+#holdingCard .hd-err { color:var(--red); font-size:12.5px; line-height:1.6; margin-top:8px; }
+/* 總計：放在最上面，因為「整體賺多少」是使用者打開這頁的第一個問題 */
+#holdingCard .hd-total { border:1px solid var(--border); border-radius:9px; padding:12px; margin-bottom:14px; background:rgba(88,166,255,.07); }
+#holdingCard .hd-t-big { font-size:26px; font-weight:800; line-height:1.25; }
+#holdingCard .hd-t-sub { font-size:13px; color:var(--text2); margin-top:4px; }
+#holdingCard .hd-t-grid { display:flex; gap:10px; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); }
+#holdingCard .hd-t-cell { flex:1; min-width:0; }
+#holdingCard .hd-t-cell b { display:block; font-size:11.5px; color:var(--text2); font-weight:600; margin-bottom:2px; }
+#holdingCard .hd-t-cell span { font-size:14.5px; font-weight:700; }
+#holdingCard .hd-warn { font-size:12px; color:var(--yellow); line-height:1.6; background:rgba(210,153,34,.1); border-radius:6px; padding:7px 9px; margin-top:10px; }
+/* 一支股票一張卡，裡面可以有很多筆買進紀錄 */
+#holdingCard .hd-co { border:1px solid var(--border); border-radius:9px; padding:11px 12px; margin-bottom:11px; }
+#holdingCard .hd-co-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+#holdingCard .hd-co-head .wl-logo { flex:none; width:36px; height:36px; }
+#holdingCard .hd-co-meta { flex:1; min-width:0; }
+#holdingCard .hd-co-nm { font-size:15px; font-weight:700; line-height:1.35; }
+#holdingCard .hd-co-nm .sym { color:var(--text2); font-size:12px; font-weight:400; margin-left:6px; }
+#holdingCard .hd-co-px { text-align:right; flex:none; }
+#holdingCard .hd-co-px .hd-px { font-size:16px; font-weight:700; }
+#holdingCard .hd-co-px .qbadge { margin-top:3px; }
+#holdingCard .hd-lot { border-top:1px solid var(--line); padding:9px 0 7px; }
+#holdingCard .hd-lot:first-of-type { border-top:0; }
+#holdingCard .hd-l-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+#holdingCard .hd-l-buy { font-size:13px; line-height:1.6; }
+#holdingCard .hd-l-cost { font-size:12px; color:var(--text2); margin-top:1px; }
+#holdingCard .hd-l-pl { text-align:right; flex:none; }
+#holdingCard .hd-l-amt { font-size:15.5px; font-weight:700; }
+#holdingCard .hd-l-ret { font-size:12.5px; font-weight:700; margin-top:1px; }
+#holdingCard .hd-l-acts { margin-top:6px; display:flex; gap:8px; }
+#holdingCard .hd-l-acts button { background:var(--bg2); border:1px solid var(--border); color:var(--text2); border-radius:6px; padding:4px 10px; font-size:12px; cursor:pointer; }
+#holdingCard .hd-sum { border-top:1px dashed var(--line); margin-top:8px; padding-top:8px; display:flex; justify-content:space-between; align-items:center; font-size:13px; }
+#holdingCard .hd-sum b { font-size:14.5px; }
+/* 漲跌顏色：美股綠漲紅跌，台股紅漲綠跌。全站其他地方是靠 .mkt-tw 翻轉 .pill / .wl-ext，
+   這張卡的損益數字是純文字，所以要自己寫一組，否則台股模式下會變成「賺錢顯示綠色」。 */
+#holdingCard .up { color:var(--green); }
+#holdingCard .down { color:var(--red); }
+.mkt-tw #holdingCard .up { color:var(--red); }
+.mkt-tw #holdingCard .down { color:var(--green); }
+#holdingCard .hd-note { font-size:11.5px; color:var(--text2); line-height:1.65; margin-top:12px; padding-top:10px; border-top:1px solid var(--border); }
 /* 投資主題：巴菲特持倉的申報佔比小標（只有該主題會出現） */
 .wl-name .th-wt { margin-left:7px; font-size:11px; color:var(--blue); background:rgba(88,166,255,.13); border-radius:9px; padding:1px 7px; white-space:nowrap; }
 </style>
@@ -702,6 +754,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   </div>
   <div class="grp-menu" id="grpMenu" style="display:none">
     <button class="grp-btn" data-g="10" onclick="pickGroup(10)">自選股</button>
+    <button class="grp-btn" data-g="19" onclick="pickGroup(19)">庫存報酬</button>
     <button class="grp-btn" data-g="18" onclick="pickGroup(18)">大師選股邏輯推薦</button>
     <button class="grp-btn" data-g="14" onclick="pickGroup(14)">投資大師學院</button>
     <button class="grp-btn" data-g="15" onclick="pickGroup(15)">投資主題</button>
@@ -733,6 +786,28 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <input type="text" id="watchlistInput" style="display:none">
     <div id="wlLastUpdate" style="font-size:11px;color:var(--text2);text-align:right;margin:-4px 0 6px"></div>
     <div id="watchlistTable"><div class="note">尚未加入任何自選股，按上方「加入」新增</div></div>
+  </div>
+
+  <!-- 【個股庫存報酬】使用者自己輸入買進均價與數量，對照即時股價算出每一筆與整體的損益。
+       ⚠️ 資料只存在使用者自己的手機（localStorage），不會上傳 —— 持股是敏感資訊，
+       而且本 App 沒有任何帳號系統，上傳也無處可存。台股與美股各存一份（幣別不同不可混加總）。 -->
+  <div class="card" id="holdingCard" style="margin-bottom:20px;display:none">
+    <div class="ct" style="display:flex;justify-content:space-between;align-items:center">💰 個股庫存報酬
+      <button class="search-btn" onclick="openHoldingForm()">+ 新增一筆</button>
+    </div>
+    <div id="hdForm" class="hd-form" style="display:none">
+      <div class="hd-f-row"><label>股票</label><input type="text" id="hdSym" autocomplete="off" placeholder="代碼或公司名"></div>
+      <div class="hd-f-row"><label>買入均價</label><input type="number" id="hdPrice" inputmode="decimal" step="any" min="0" placeholder="例：950.5"></div>
+      <div class="hd-f-row"><label>數量</label><input type="number" id="hdQty" inputmode="decimal" step="any" min="0" placeholder="例：2"><select id="hdUnit"></select></div>
+      <div class="hd-f-row"><label>買入日期</label><input type="date" id="hdDate"></div>
+      <div id="hdErr" class="hd-err" style="display:none"></div>
+      <div class="hd-f-btns">
+        <button class="hd-ok" id="hdOkBtn" onclick="submitHolding()">確定新增</button>
+        <button class="hd-cancel" onclick="closeHoldingForm()">取消</button>
+      </div>
+    </div>
+    <div id="hdTotal"></div>
+    <div id="hdList"></div>
   </div>
 
   <!-- 【大師選股邏輯推薦】四位大師各自的選股原則 + 依該原則挑出的台股/美股各三家。
@@ -5899,6 +5974,225 @@ function cardGroup(c){
 }
 // 使用者「手動點選單」專用入口：取消搜尋完成後強制跳「關鍵財務指標」的行為。
 //   否則邊載入邊點法說會，載完會被 applyGroupAfterRender 跳回群組2(使用者回報)。
+// ══ 個股庫存報酬 ════════════════════════════════════════════════
+//   使用者輸入「買進均價 + 數量」，對照即時股價算出每一筆買進的損益金額、當次報酬率，
+//   以及全部加總的損益與整體報酬率。
+//   ⚠️⚠️ 顯示層與自選股同樣是 fail-closed：股價沒通過報價驗證（verdict==='reject'）
+//   或根本抓不到時，該檔一律顯示「—」且【不列入任何加總】，並在總計下方明說排除了幾筆。
+//   理由與 applyWlPrice 相同 —— 報酬率是使用者拿來做決定的數字，寧可不給，不可給錯。
+//   ⚠️ 台股與美股分開存，因為幣別不同，加總在一起沒有意義。
+function hdKey(){ return getMarket()==='tw' ? 'holdings_tw' : 'holdings_us'; }
+function getHoldings(){ try{ const raw=localStorage.getItem(hdKey()); return raw? (JSON.parse(raw)||[]) : []; }catch(e){ return []; } }
+function saveHoldings(l){ try{ localStorage.setItem(hdKey(), JSON.stringify(l)); }catch(e){ alert('儲存失敗（手機儲存空間可能已滿）'); } }
+// 台股以「張」為單位，1 張＝1000 股；美股沒有張的概念，一律以股計。
+function hdShares(it){ return it.unit==='lot' ? (+it.qty)*1000 : (+it.qty); }
+function hdQtyText(it){ return it.unit==='lot' ? ((+it.qty)+' 張（'+hdShares(it).toLocaleString('zh-TW')+' 股）') : ((+it.qty).toLocaleString('zh-TW')+' 股'); }
+function hdCurrency(){ return getMarket()==='tw' ? 'NT$' : 'US$'; }
+// 金額：台股以元為單位，小數沒有意義；美股保留 2 位。
+function hdMoney(v){
+  const d = getMarket()==='tw' ? 0 : 2;
+  return hdCurrency()+(+v).toLocaleString('en-US',{minimumFractionDigits:d, maximumFractionDigits:d});
+}
+function hdSigned(v){ return (v>=0?'+':'-')+hdMoney(Math.abs(v)); }
+function hdPct(v){ return (v>=0?'+':'-')+Math.abs(v).toFixed(2)+'%'; }
+function hdDir(v){ return v>=0 ? 'up' : 'down'; }
+
+let __hdEditId=null;
+function openHoldingForm(it){
+  const f=document.getElementById('hdForm'); if(!f) return;
+  const tw=getMarket()==='tw';
+  const sel=document.getElementById('hdUnit');
+  // 美股沒有「張」，只給「股」；台股兩種都給，預設張（台灣散戶習慣以張計）。
+  sel.innerHTML = tw
+    ? '<option value="lot">張（=1000股）</option><option value="share">股（零股）</option>'
+    : '<option value="share">股</option>';
+  __hdEditId = it ? it.id : null;
+  document.getElementById('hdSym').value   = it ? (it.name||'')+'（'+hdPlainSym(it.symbol)+'）' : '';
+  document.getElementById('hdPrice').value = it ? it.price : '';
+  document.getElementById('hdQty').value   = it ? it.qty : '';
+  document.getElementById('hdDate').value  = it ? (it.date||'') : '';
+  sel.value = it ? it.unit : (tw?'lot':'share');
+  document.getElementById('hdOkBtn').textContent = it ? '儲存修改' : '確定新增';
+  const err=document.getElementById('hdErr'); err.style.display='none'; err.textContent='';
+  f.style.display='';
+  f.scrollIntoView({block:'nearest'});
+  if(!it) setTimeout(()=>{ document.getElementById('hdSym').focus(); }, 50);
+}
+function closeHoldingForm(){ __hdEditId=null; const f=document.getElementById('hdForm'); if(f) f.style.display='none'; }
+function hdPlainSym(s){ return String(s||'').replace(/\.(TW|TWO)$/i,''); }
+function hdFormErr(msg){ const e=document.getElementById('hdErr'); if(e){ e.textContent=msg; e.style.display=''; } }
+// 把使用者輸入的「代碼或公司名」轉成本 App 的正式代號，沿用自選股那一套解析器，
+//   不另寫一份，否則兩處對同一個輸入會給出不同代號。
+async function hdResolve(raw){
+  const s=String(raw||'').trim().replace(/（.*?）|\(.*?\)/g,'').trim() || String(raw||'').trim();
+  if(!s) return null;
+  if(getMarket()==='tw'){
+    const r=await resolveTwInput(s);
+    return r ? {symbol:r.sym, name:r.name} : null;
+  }
+  try{ await loadTickerMap(); }catch(e){}
+  // ⚠️ findCompany 在對照表沒載成功時會丟例外（實測：手機網路不穩或 SEC 暫時不通時），
+  //   不能讓它把整個新增流程炸掉，所以每一段都各自包起來。
+  try{
+    const found=(typeof findCompany==='function') ? findCompany(s) : null;
+    if(found) return {symbol:found.symbol, name:(TICKER_ZH[found.symbol]||found.co.title)};
+  }catch(e){}
+  try{
+    const etf=(typeof findUsEtf==='function') ? findUsEtf(s) : null;
+    if(etf) return {symbol:etf.symbol, name:etf.name};
+  }catch(e){}
+  // 備援：對照表載不到、或這個代號不在 SEC 清單裡（部分 ETF 就是如此）時，
+  //   直接用報價層驗證——抓得到價格就代表這個代號真的存在，比查表更可靠。
+  const up=s.toUpperCase();
+  if(/^[A-Z][A-Z.-]{0,5}$/.test(up)){
+    try{
+      const m=await quotesOf([up]);
+      const q=m.get(up);
+      if(q && q.price!=null) return {symbol:up, name:(TICKER_ZH[up]||up)};
+    }catch(e){}
+  }
+  return null;
+}
+async function submitHolding(){
+  const raw=(document.getElementById('hdSym').value||'').trim();
+  const price=parseFloat(document.getElementById('hdPrice').value);
+  const qty=parseFloat(document.getElementById('hdQty').value);
+  const unit=document.getElementById('hdUnit').value;
+  const date=(document.getElementById('hdDate').value||'').trim();
+  if(!raw){ hdFormErr('請先輸入股票代碼或公司名'); return; }
+  if(!(price>0)){ hdFormErr('買入均價要大於 0'); return; }
+  if(!(qty>0)){ hdFormErr('數量要大於 0'); return; }
+  const btn=document.getElementById('hdOkBtn'); const old=btn.textContent; btn.textContent='查詢中…'; btn.disabled=true;
+  let r=null; try{ r=await hdResolve(raw); }catch(e){}
+  btn.textContent=old; btn.disabled=false;
+  if(!r){ hdFormErr(getMarket()==='tw' ? ('查不到台股「'+raw+'」，請輸入代碼（如 2330）或公司名（如 台積電）') : ('查不到美股「'+raw+'」，請輸入代碼（如 AAPL）或公司名')); return; }
+  const list=getHoldings();
+  if(__hdEditId){
+    const cur=list.find(x=>x.id===__hdEditId);
+    if(cur){ cur.symbol=r.symbol; cur.name=r.name; cur.price=price; cur.qty=qty; cur.unit=unit; cur.date=date; }
+  }else{
+    list.push({ id:'h'+Date.now()+Math.random().toString(36).slice(2,7), symbol:r.symbol, name:r.name, price, qty, unit, date });
+  }
+  saveHoldings(list);
+  closeHoldingForm();
+  renderHoldings();
+}
+function editHolding(id){ const it=getHoldings().find(x=>x.id===id); if(it) openHoldingForm(it); }
+function removeHolding(id){
+  const it=getHoldings().find(x=>x.id===id); if(!it) return;
+  if(!confirm('確定刪除「'+it.name+'」這一筆買進紀錄嗎？')) return;
+  saveHoldings(getHoldings().filter(x=>x.id!==id));
+  renderHoldings();
+}
+function renderHoldings(){
+  const box=document.getElementById('hdList'), tot=document.getElementById('hdTotal');
+  if(!box||!tot) return;
+  const list=getHoldings();
+  if(!list.length){
+    tot.innerHTML='';
+    box.innerHTML='<div class="note">尚未新增任何庫存。按右上角「+ 新增一筆」，輸入股票、買入均價與張數（或股數），就會自動對照即時股價算出每一筆的損益與報酬率。</div>';
+    return;
+  }
+  // 同一支股票的多筆買進要放在一起（使用者要看的是「這檔我總共賺多少」），
+  //   但各筆仍分開列出損益與當次報酬率。排序沿用新增順序，不自作主張重排。
+  const groups=[]; const at=new Map();
+  list.forEach(it=>{
+    if(!at.has(it.symbol)){ at.set(it.symbol, groups.length); groups.push({symbol:it.symbol, name:it.name, lots:[]}); }
+    groups[at.get(it.symbol)].lots.push(it);
+  });
+  box.innerHTML = groups.map(g=>{
+    const code=hdPlainSym(g.symbol);
+    const logo=(typeof coLogoImg==='function') ? coLogoImg(code, code, /\.TWO?$/i.test(g.symbol), 'wl-logo') : '';
+    const lots=g.lots.map(it=>
+      '<div class="hd-lot">'
+      + '<div class="hd-l-top">'
+      +   '<div style="min-width:0">'
+      +     '<div class="hd-l-buy">'+(it.date?('<span style="color:var(--text2)">'+esc(it.date)+'</span>　'):'')+'均價 '+(+it.price).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' × '+esc(hdQtyText(it))+'</div>'
+      +     '<div class="hd-l-cost">成本 '+hdMoney((+it.price)*hdShares(it))+'</div>'
+      +   '</div>'
+      +   '<div class="hd-l-pl"><div class="hd-l-amt" id="hdpl_'+it.id+'">—</div><div class="hd-l-ret" id="hdrt_'+it.id+'">—</div></div>'
+      + '</div>'
+      + '<div class="hd-l-acts"><button onclick="editHolding(\''+it.id+'\')">✏️ 修改</button><button onclick="removeHolding(\''+it.id+'\')">✕ 刪除</button></div>'
+      + '</div>').join('');
+    // 同一檔有兩筆以上才顯示小計，只有一筆時小計等於那一筆，重複顯示只是雜訊
+    const sum = g.lots.length>1
+      ? '<div class="hd-sum"><span>這檔小計（'+g.lots.length+' 筆）</span><b id="hdsum_'+code+'">—</b></div>' : '';
+    return '<div class="hd-co">'
+      + '<div class="hd-co-head">'+logo
+      +   '<div class="hd-co-meta"><div class="hd-co-nm">'+esc(g.name||code)+'<span class="sym">'+esc(code)+'</span></div></div>'
+      +   '<div class="hd-co-px"><div class="hd-px" id="hdp_'+g.symbol+'">…</div><div id="hdb_'+g.symbol+'"></div></div>'
+      + '</div>'
+      + lots + sum + '</div>';
+  }).join('')
+  + '<div class="hd-note">⚠️ 損益與報酬率只用「股價差」計算，<b>未扣除手續費、證交稅，也未計入股利</b>，實際入袋金額會略低。'
+  + '庫存資料只存在你自己的手機裡，不會上傳，換手機或清除瀏覽器資料就會消失。</div>';
+  loadHoldingPrices(groups.map(g=>g.symbol));
+}
+// 報價「世代」：與自選股同樣的做法，慢的那一輪回來時不可以覆蓋新的結果
+let __hdPriceGen=0;
+async function loadHoldingPrices(symbols){
+  const gen=++__hdPriceGen;
+  const quotes=await quotesOf(symbols||[]);
+  if(gen!==__hdPriceGen) return;
+  applyHoldings(quotes);
+}
+function applyHoldings(quotes){
+  const list=getHoldings(); if(!list.length) return;
+  let totCost=0, totVal=0, skipped=0;
+  const bySym=new Map();
+  list.forEach(it=>{
+    const q=quotes.get(it.symbol);
+    // ⚠️ 這一行就是防呆的本體：verdict 為 reject、或根本沒有價格時，price 一律是 null，
+    //   後面所有計算與加總都會跳過它。絕不拿一個沒通過驗證的數字去算報酬率。
+    const price=(q && q.verdict!=='reject' && q.price!=null) ? +q.price : null;
+    const cost=(+it.price)*hdShares(it);
+    const plEl=document.getElementById('hdpl_'+it.id), rtEl=document.getElementById('hdrt_'+it.id);
+    if(price==null){
+      skipped++;
+      if(plEl){ plEl.textContent='—'; plEl.className='hd-l-amt'; }
+      if(rtEl){ rtEl.textContent='股價未通過驗證'; rtEl.className='hd-l-ret'; rtEl.style.color='var(--text2)'; }
+      return;
+    }
+    const pl=(price-(+it.price))*hdShares(it);
+    const ret=((price-(+it.price))/(+it.price))*100;
+    totCost+=cost; totVal+=price*hdShares(it);
+    const s=bySym.get(it.symbol)||{pl:0,cost:0}; s.pl+=pl; s.cost+=cost; bySym.set(it.symbol,s);
+    if(plEl){ plEl.textContent=hdSigned(pl); plEl.className='hd-l-amt '+hdDir(pl); }
+    if(rtEl){ rtEl.textContent=hdPct(ret); rtEl.className='hd-l-ret '+hdDir(pl); rtEl.style.color=''; }
+  });
+  // 各檔現價 + 報價標示（沿用自選股的 quoteBadge，說法全站一致）
+  [...new Set(list.map(it=>it.symbol))].forEach(sym=>{
+    const q=quotes.get(sym);
+    const price=(q && q.verdict!=='reject' && q.price!=null) ? +q.price : null;
+    const pEl=document.getElementById('hdp_'+sym), bEl=document.getElementById('hdb_'+sym);
+    if(pEl) setLiveText(pEl, price!=null ? ('$'+price.toFixed(2)) : '—', null);
+    if(bEl){
+      const badge=quoteBadge(q);
+      const html = badge ? ('<span class="qbadge '+badge.cls+'" title="'+esc(badge.note)+'">'+esc(badge.txt)+'</span>') : '';
+      if(bEl.innerHTML!==html) bEl.innerHTML=html;
+    }
+    const sEl=document.getElementById('hdsum_'+hdPlainSym(sym));
+    const s=bySym.get(sym);
+    if(sEl){
+      if(!s){ sEl.textContent='—'; sEl.className=''; }
+      else { sEl.textContent=hdSigned(s.pl)+'（'+hdPct(s.pl/s.cost*100)+'）'; sEl.className=hdDir(s.pl); }
+    }
+  });
+  const tot=document.getElementById('hdTotal'); if(!tot) return;
+  const pl=totVal-totCost;
+  const ret=totCost>0 ? pl/totCost*100 : 0;
+  tot.innerHTML = totCost>0
+    ? ('<div class="hd-total">'
+      + '<div class="hd-t-big '+hdDir(pl)+'">'+hdSigned(pl)+'</div>'
+      + '<div class="hd-t-sub">整體報酬率 <b class="'+hdDir(pl)+'">'+hdPct(ret)+'</b></div>'
+      + '<div class="hd-t-grid">'
+      +   '<div class="hd-t-cell"><b>總成本</b><span>'+hdMoney(totCost)+'</span></div>'
+      +   '<div class="hd-t-cell"><b>目前市值</b><span>'+hdMoney(totVal)+'</span></div>'
+      + '</div>'
+      + (skipped ? ('<div class="hd-warn">⚠️ 有 '+skipped+' 筆的股價沒有通過驗證（或暫時抓不到），<b>已排除在上面的加總之外</b>，所以總計只包含其餘各筆。寧可先不算，也不拿不可信的價格算出錯的報酬率。</div>') : '')
+      + '</div>')
+    : ('<div class="hd-total"><div class="hd-t-sub">目前抓不到可信的股價，暫時無法計算報酬率。'+(skipped?('（共 '+skipped+' 筆）'):'')+'</div></div>');
+}
 function pickGroup(n){ __jumpAfterSearch=false; showGroup(n); }
 function showGroup(n){
   __grp=n; document.body.classList.add('grp-mode');
@@ -5909,6 +6203,7 @@ function showGroup(n){
   const showTheme = (n===15);
   const showEtf   = (n===16);
   const showMp    = (n===18);   // 【新增】大師選股邏輯推薦
+  const showHd    = (n===19);   // 【新增】個股庫存報酬
   // welcome(封面介紹)：每次開App固定停留在畫面上，直到revealMenu()結束2秒封面倒數才隱藏——
   //   不論是否已選過市場、不論第幾次開App都一樣，這是使用者明確要求(不是只有第一次使用者才看得到)。
   const e_wel=document.getElementById('welcome');       if(e_wel) e_wel.style.display=(showWl && !__splashDone)?'':'none';
@@ -5919,15 +6214,17 @@ function showGroup(n){
   const e_th =document.getElementById('themeCard');     if(e_th ) e_th .style.display=showTheme?'':'none';
   const e_etf=document.getElementById('etfCard');      if(e_etf) e_etf.style.display=showEtf  ?'':'none';
   const e_mp =document.getElementById('masterPickCard'); if(e_mp) e_mp.style.display=showMp  ?'':'none';
+  const e_hd =document.getElementById('holdingCard');    if(e_hd) e_hd.style.display=showHd  ?'':'none';
   if(showTheme) renderThemeChips();   // 進入「投資主題」頁時(重新)渲染，反映當下市場/自選股狀態
   if(showEtf) renderEtfTabs();        // 同理:ETF頁進入時才渲染，市場切換後數字/清單才會跟著換
   if(showMp) renderMasterPickTabs();  // 大師選股：進入時才載入該位大師的 JSON，沒點開就不下載
+  if(showHd){ closeHoldingForm(); renderHoldings(); }   // 庫存報酬：進入時重畫並抓一次現價
   syncLogPanel();   // 載入進度歸屬大盤指數選單，切換選單時同步顯示/隱藏
   const res=document.getElementById('results'); let anyCard=false;
   if(res){
     // 護城河選單(群組3)：護城河分析移最前、產品與服務移最後
     if(n===3){ const mo=document.getElementById('ai_moat')?.closest('.card'); if(mo) res.insertBefore(mo, res.firstChild); }
-    const showRes=(n!==10 && n!==15 && n!==16);   // 大盤指數已併入 n=2，自選股/投資主題/ETF投資頁不顯示分析結果
+    const showRes=(n!==10 && n!==15 && n!==16 && n!==19);   // 大盤指數已併入 n=2，自選股/庫存報酬/投資主題/ETF投資頁不顯示分析結果
     res.style.display=showRes?'block':'none';   // .results 類別預設 display:none，需明確設 block 才顯示
     [...res.querySelectorAll('.card, .co-head')].forEach(c=>{ const show=cardGroup(c)===n; c.style.display=show?'':'none'; if(show) anyCard=true; });
     res.querySelectorAll('.g2').forEach(g=>{ const vis=[...g.children].some(c=>c.style.display!=='none'); g.style.display=vis?'block':'none'; });
@@ -5935,7 +6232,7 @@ function showGroup(n){
   }
   const emp=document.getElementById('grpEmpty');
   if(emp){
-    const showEmp=(n>=2 && n!==10 && n!==15 && n!==16 && !anyCard);
+    const showEmp=(n>=2 && n!==10 && n!==15 && n!==16 && n!==19 && !anyCard);
     emp.style.display=showEmp?'block':'none';
     if(showEmp){
       // 無資料時不再顯示「建置中」(台股深度分析早已完成),改為自動載入自選股第一檔
@@ -6186,6 +6483,11 @@ function refreshLivePrices(){
     const l=getWatchlist();
     const lv=(l||[]).filter(function(it){ return shown('wlp_'+it.symbol); });
     if(lv.length) jobs.push(loadWatchlistPrices(lv));
+    // 庫存報酬頁也要跟著每秒跳動，否則使用者會看到報酬率停在剛打開的那一秒
+    if(typeof getHoldings==='function'){
+      const hs=[...new Set(getHoldings().map(function(it){ return it.symbol; }))].filter(function(s){ return shown('hdp_'+s); });
+      if(hs.length) jobs.push(loadHoldingPrices(hs));
+    }
     if(typeof loadThemePrices==='function' && window.__themeRows && window.__themeRows.length){
       const tv=window.__themeRows.filter(function(r){ return shown('thp_'+r.symbol); });
       if(tv.length) jobs.push(loadThemePrices(tv));
