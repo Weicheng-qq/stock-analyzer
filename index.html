@@ -581,6 +581,23 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 #masterPickCard .mp-pnote { margin-top:7px; font-size:11.5px; line-height:1.6; color:var(--text2); }
 #masterPickCard .mp-go { margin-top:8px; font-size:12.5px; color:var(--blue); }
 #masterPickCard .mp-go.off { color:var(--text2); }
+/* ── 版主選股準則：依同一套準則即時檢核候選股，挑出最接近的三檔（#ownerPicks）──── */
+#ownerPicks { margin-top:16px; padding-top:12px; border-top:1px solid var(--border); }
+#ownerPicks .op-t { font-size:14.5px; font-weight:700; margin-bottom:4px; }
+#ownerPicks .op-sub { font-size:11.5px; color:var(--text2); line-height:1.65; margin-bottom:10px; }
+#ownerPicks .op-item { border:1px solid var(--border); border-radius:8px; padding:10px 11px; margin-bottom:9px; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+#ownerPicks .op-item:active { opacity:.6; }
+#ownerPicks .op-head { display:flex; align-items:center; gap:9px; margin-bottom:7px; }
+#ownerPicks .op-rank { flex:none; width:22px; height:22px; border-radius:50%; background:var(--blue); color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+#ownerPicks .op-nm { flex:1; min-width:0; font-size:14px; font-weight:700; }
+#ownerPicks .op-nm .op-cd { color:var(--text2); font-size:11.5px; font-weight:400; margin-left:5px; }
+#ownerPicks .op-score { flex:none; font-size:12px; font-weight:700; color:var(--blue); }
+#ownerPicks .op-chips { display:flex; flex-wrap:wrap; gap:5px; }
+#ownerPicks .op-chip { font-size:11px; line-height:1.5; border-radius:5px; padding:3px 6px; background:var(--bg3); color:var(--text2); white-space:nowrap; }
+#ownerPicks .op-chip.ok { background:rgba(63,185,80,.14); color:var(--green); }
+#ownerPicks .op-chip.no { background:rgba(248,81,73,.12); color:var(--red); }
+#ownerPicks .op-go { font-size:12px; color:var(--blue); margin-top:7px; }
+#ownerPicks .op-note { font-size:11px; color:var(--text2); line-height:1.65; margin-top:8px; }
 /* ── 個股庫存報酬（#holdingCard）────────────────────────────────
    ⚠️ 2026-10-03 使用者回報「呈現太複雜，希望跟券商對帳單一樣」：
    原本一檔一張大卡片（含公司頭像、每列兩顆按鈕、整段說明），在手機上一頁看不到幾筆。
@@ -2672,6 +2689,7 @@ function twResultsHtml(o){
   <div id="chk_outlook"><div class="vr"><span class="vl">➖ 法說會成長動能（CEO 對未來展望）</span><span class="vn">分析中...</span></div></div>
   <div id="tw_chk_note"><div class="note" style="margin:6px 0 12px">載入選股準則中...</div></div>
   <div id="tw_chk_verdict"></div>
+  <div id="ownerPicks"></div>
 </div>
 <div class="card verdict"><div class="ct">🎯 AI投資總結</div>
   <div id="ai_independent_box">
@@ -3396,6 +3414,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
   <div id="chk_outlook"><div class="vr"><span class="vl">➖ 法說會成長動能（CEO 對未來展望）</span><span class="vn">分析中...</span></div></div>
   <div class="note" style="margin:6px 0 12px">前 ${checklist.length} 項為實際數據自動檢核；最後一項「成長動能」依公司官方指引/資本支出判斷。✅=符合 ❌=未達標 ➖=無資料。</div>
   <div class="mv-conclusion ${mvClass}"><span class="mv-tag">🧭 版主選股邏輯結論</span>${mvText}<div class="note" style="margin-top:8px">依版主原則「以合理低估價格，買入擁有強大護城河公司」自動歸納，僅供參考、不構成投資建議。</div></div>
+  <div id="ownerPicks"></div>
 </div>
 
 <div class="card verdict" style="margin-top:16px">
@@ -5972,6 +5991,113 @@ function cardGroup(c){
 }
 // 使用者「手動點選單」專用入口：取消搜尋完成後強制跳「關鍵財務指標」的行為。
 //   否則邊載入邊點法說會，載完會被 applyGroupAfterRender 跳回群組2(使用者回報)。
+// ══ 版主選股準則：依同一套準則推薦三檔 ══════════════════════════════
+//   ⚠️ 刻意【不寫死推薦名單】：名單會過期，而且「本益比 < 13」這種條件每天都在變，
+//   寫死就等於拿舊數字對使用者說「現在很便宜」。這裡的做法是——
+//   拿上面那張檢核表【同一套門檻】，對候選池裡的每一檔即時跑一次，再依通過項數排序。
+//   所以推薦理由永遠和準則一致，也永遠是當下的數字。
+//   候選池是人工挑的優質大型股，不是全市場掃描（全市場掃描要抓上千家十年財報，
+//   免費額度撐不住），畫面上必須講清楚這一點，不能讓使用者以為是全市場最佳。
+const OWNER_POOL={
+  tw:['2330.TW','2454.TW','3034.TW','2379.TW','8464.TW','2395.TW','3008.TW','2412.TW','2912.TW','2383.TW','1216.TW','2345.TW'],
+  us:['AAPL','MSFT','GOOGL','META','NVDA','V','MA','COST','TXN','ISRG','LRCX','ADBE']
+};
+// 把 Yahoo 的年度財報整理成 moatAssessment()／檢核表要的格式，並跑一次完全相同的門檻。
+//   ⚠️ 這裡的每一個數字門檻都必須和上方檢核表一字不差，否則「推薦」會和「準則」脫鉤。
+function __opEval(yf){
+  const years=Object.keys(yf.arY||{}).map(Number).filter(y=>!isNaN(y)).sort();
+  if(years.length<2) return null;
+  const rows=years.map((yr,i)=>{
+    const rev=yf.arY[yr], gp=yf.agY[yr], ni=yf.anY[yr], eq=yf.aeqY[yr];
+    const gm=(rev&&gp!=null)?gp/rev*100:null;
+    const nm=(rev&&ni!=null)?ni/rev*100:null;
+    const roe=(eq&&ni!=null&&eq!==0)?ni/eq*100:null;
+    const prev=i>0?yf.arY[years[i-1]]:null;
+    const gr=(prev&&rev!=null)?(rev-prev)/Math.abs(prev)*100:null;
+    return {yr,rev,gm,nm,roe,gr};
+  });
+  const last=rows[rows.length-1]||{};
+  const lastRoe=[...rows].reverse().find(r=>r.roe!=null)?.roe??null;
+  const growths=rows.map(r=>r.gr).filter(g=>g!=null);
+  const declineYears=growths.filter(g=>g<0).length;
+  const overallUp=rows.length>=2 && rows[rows.length-1].rev!=null && rows[0].rev!=null && rows[rows.length-1].rev>rows[0].rev;
+  const lastG=growths.slice(-2);
+  const moat=moatAssessment(rows, lastRoe);
+  const tk=Object.keys(yf.tpe||{}).sort(), qk=Object.keys(yf.qpe||{}).sort();
+  const pe = tk.length?yf.tpe[tk[tk.length-1]]:(qk.length?yf.qpe[qk[qk.length-1]]:null);
+  const chk=[
+    {k:'護城河', pass:moat.ok?(moat.pct>=60):null, val:moat.ok?(moat.grade+'級 '+moat.pct+'分'):'無資料'},
+    {k:'淨利率>30%', pass:last.nm!=null?last.nm>30:null, val:last.nm!=null?last.nm.toFixed(1)+'%':'無資料'},
+    {k:'毛利率>40%', pass:last.gm!=null?last.gm>40:null, val:last.gm!=null?last.gm.toFixed(1)+'%':'無資料'},
+    {k:'ROE>20%', pass:lastRoe!=null?lastRoe>20:null, val:lastRoe!=null?lastRoe.toFixed(1)+'%':'無資料'},
+    {k:'營收長期向上', pass:growths.length?(declineYears<=2&&overallUp):null, val:'下滑'+declineYears+'年'},
+    {k:'近2年成長>20%', pass:lastG.length===2?lastG.every(g=>g>20):null, val:lastG.length?lastG.map(g=>g.toFixed(0)+'%').join('/'):'無資料'},
+    {k:'本益比<13', pass:pe!=null?pe<13:null, val:pe!=null?pe.toFixed(1)+'x':'無資料'}
+  ];
+  return { chk, pass:chk.filter(c=>c.pass===true).length, total:chk.length, moatPct:moat.ok?moat.pct:0, pe };
+}
+let __opCache={}, __opBusy=false;
+async function renderOwnerPicks(){
+  const box=document.getElementById('ownerPicks'); if(!box) return;
+  const mkt=getMarket();
+  if(__opCache[mkt]){ box.innerHTML=__opCache[mkt]; return; }
+  if(__opBusy) return;
+  __opBusy=true;
+  const pool=(OWNER_POOL[mkt]||[]).slice();
+  box.innerHTML='<div class="op-t">🏅 依版主準則推薦三檔</div><div class="note">正在對 '+pool.length+' 檔候選股即時檢核中…（第一次約需十幾秒）</div>';
+  const got=[];
+  try{
+    // 一次 4 檔併發：全部同時發會被 Yahoo 擋，一檔一檔跑又太慢。
+    for(let i=0;i<pool.length;i+=4){
+      const part=await Promise.all(pool.slice(i,i+4).map(async sym=>{
+        try{
+          const yf=await loadYahooFin(sym);
+          const r=__opEval(yf);
+          return r ? Object.assign({symbol:sym}, r) : null;
+        }catch(e){ return null; }   // 單一檔抓不到就跳過，不能讓整個推薦開天窗
+      }));
+      part.forEach(x=>{ if(x) got.push(x); });
+    }
+  }catch(e){}
+  __opBusy=false;
+  if(!got.length){
+    box.innerHTML='<div class="op-t">🏅 依版主準則推薦三檔</div><div class="note">目前抓不到候選股的財報資料，稍後再試。</div>';
+    return;
+  }
+  // 排序：通過項數 → 護城河分數 → 本益比低者優先
+  got.sort((a,b)=> (b.pass-a.pass) || (b.moatPct-a.moatPct) || ((a.pe==null?9e9:a.pe)-(b.pe==null?9e9:b.pe)) );
+  const top=got.slice(0,3);
+  const nameOf=s=>{
+    const code=s.replace(/\.(TW|TWO)$/i,'');
+    if(mkt==='tw') return (typeof TW_NAMES!=='undefined'&&TW_NAMES[code])||(typeof TW_ALL!=='undefined'&&TW_ALL[code])||code;
+    return (typeof TICKER_ZH!=='undefined'&&TICKER_ZH[s])||s;
+  };
+  // 時間一律用交易所當地時區標示（__tzStamp 回傳的是物件，不是字串）
+  const st=__tzStamp(new Date(), mkt==='tw'?'Asia/Taipei':'America/New_York');
+  const stamp=st.exDate.slice(4,6)+'/'+st.exDate.slice(6,8)+' '+st.exTime.slice(0,5)+(mkt==='tw'?'':' 美東');
+  const html='<div class="op-t">🏅 依版主準則推薦三檔</div>'
+    + '<div class="op-sub">用上面<b>同一套門檻</b>，對 '+got.length+' 檔候選股即時檢核後，依「通過項數 → 護城河分數 → 本益比」排出前三名。'
+    + '數字是現在抓到的，不是事先寫死的名單。</div>'
+    + top.map((x,i)=>{
+        const code=x.symbol.replace(/\.(TW|TWO)$/i,'');
+        // 查不到中文名時 nameOf() 會回代號本身，若還接上代號會變成「LRCXLRCX」
+        const nm=nameOf(x.symbol);
+        return '<div class="op-item" onclick="rowAnalyze(this,\''+esc(x.symbol)+'\')">'
+          + '<div class="op-head"><span class="op-rank">'+(i+1)+'</span>'
+          +   '<span class="op-nm">'+esc(nm)+(nm!==code?'<span class="op-cd">'+esc(code)+'</span>':'')+'</span>'
+          +   '<span class="op-score">通過 '+x.pass+'/'+x.total+'</span></div>'
+          + '<div class="op-chips">'+x.chk.map(c=>
+              '<span class="op-chip '+(c.pass===true?'ok':c.pass===false?'no':'')+'">'
+              + (c.pass===true?'✅':c.pass===false?'❌':'➖')+' '+esc(c.k)+' '+esc(c.val)+'</span>').join('')+'</div>'
+          + '<div class="op-go">點此看這家公司的完整分析 →</div>'
+          + '</div>';
+      }).join('')
+    + '<div class="op-note">⚠️ 候選池是人工挑選的優質大型股（'+got.length+' 檔），<b>不是全市場掃描</b>，排名只代表「這幾檔裡面最接近版主準則」，'
+    + '不代表全市場最佳。此處只檢核前 7 項；第 8 項「本益比位於近 5 年區間偏低半部」需要另外抓 5 年股價，請點進個股查看。'
+    + '本區為依公開財報自動歸納，<b>僅供參考，不構成投資建議</b>。檢核時間：'+esc(stamp)+'</div>';
+  __opCache[mkt]=html;
+  box.innerHTML=html;
+}
 // ══ 個股庫存報酬 ════════════════════════════════════════════════
 //   使用者輸入「買進均價 + 數量」，對照即時股價算出每一筆買進的損益金額、當次報酬率，
 //   以及全部加總的損益與整體報酬率。
@@ -6227,6 +6353,9 @@ function showGroup(n){
   if(showEtf) renderEtfTabs();        // 同理:ETF頁進入時才渲染，市場切換後數字/清單才會跟著換
   if(showMp) renderMasterPickTabs();  // 大師選股：進入時才載入該位大師的 JSON，沒點開就不下載
   if(showHd){ closeHoldingForm(); renderHoldings(); }   // 庫存報酬：進入時重畫並抓一次現價
+  // 版主選股準則：進入這個選單才去檢核候選股。一次要抓十幾家的十年財報，
+  //   每次分析公司都跑等於白燒 Cloudflare 免費額度，而且使用者多半根本沒點開。
+  if(n===11 && typeof renderOwnerPicks==='function') renderOwnerPicks();
   syncLogPanel();   // 載入進度歸屬大盤指數選單，切換選單時同步顯示/隱藏
   const res=document.getElementById('results'); let anyCard=false;
   if(res){
