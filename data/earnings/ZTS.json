@@ -1,0 +1,51 @@
+{
+ "symbol": "ZTS",
+ "market": "us",
+ "name": "Zoetis Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Zoetis Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "24.68",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "6.91",
+  "每股盈餘": 1.65,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "",
+  "form": "法說會逐字稿",
+  "url": "https://s203.q4cdn.com/620628704/files/doc_financials/2026/q2/Q2-2026-Zoetis-Earnings-Call.pdf"
+ },
+ "savedAt": "2026-10-09T02:58:03.406Z",
+ "result": {
+  "revenue": "本季營業收入為 24.68 億美元。",
+  "eps": "本季每股盈餘（EPS）為 1.65 美元。",
+  "margins": "官方資料中營業毛利與營業利益均標示未提供（毛利率 0.0%、營業利益率 0.0%）；本期淨利率為 28.0%，反映當期獲利維持一定水準。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司下修全年展望，預期全年有機營運營收成長率為 -3% 至 -1%，調整後淨利有機營運成長率為 -9% 至 -5%。",
+  "outlook": "本季營業收入達到 24.68 億美元，淨利為 6.91 億美元。在缺乏毛利、營業利益及現金流等官方明細數據下，整體獲利表現由淨利率 28.0% 體現，但管理層指出伴侶動物市場持續面臨壓力。",
+  "highlights": "• 本季營業收入達 24.68 億美元<br>• 本期淨利達 6.91 億美元，淨利率為 28.0%<br>• 每股盈餘（EPS）為 1.65 美元",
+  "concerns": "• 官方申報表單中未提供營業毛利、營業利益及相關利潤率數據<br>• 營運現金流、資本支出與自由現金流等指標未提供，無法評估現金生成能力<br>• 管理層透露伴侶動物業務成長放緩與整體業績未達內部預期",
+  "risks": "缺少營業毛利與營業利益數據，難以自官方報表直接分析核心本業成本及費用結構<br>未提供營運現金流與資本支出數據，無法評估營運對外部融資或資金流動性的依賴程度",
+  "keyPoints": "本季營業收入為 24.68 億美元，淨利為 6.91 億美元<br>每股盈餘（EPS）為 1.65 美元，淨利率為 28.0%<br>官方資料中毛利率、營業利益率與自由現金流等皆未提供",
+  "guidanceOfficial": "公司更新全年展望：目前預期全年有機營運營收成長率（organic operational revenue growth）將下降 3% 至 1%（decline 3% to 1%），且調整後淨利有機營運成長率（organic operational growth in adjusted net income）預期將下降 9% 至 5%（decline 9% to 5%）。",
+  "segments": "• 國際市場（International）：營收成長 6%（受新興市場廣泛成長支撐）<br>• 美國市場（US）：營收下降 7%<br>• 經濟動物業務（Livestock）：營收成長 11%（主要由牛與家禽業務帶動，美國市場貢獻尤佳）<br>• 伴侶動物業務（Companion animal）：營收下降 6%",
+  "__unitRule": "遵循單位換算原則，數字與單位忠實保留。",
+  "mgmtRemarks": "• 執行長 Kristin Peck 表示：第二季度業績未達預期，在有機營運基礎上，營收與調整後淨利分別下降 1% 與 2%。<br>• 執行長指出伴侶動物市場壓力加劇：獸醫診所就診量持續下滑，美國犬類定期就診量下降逾 2%，寵物主人消費更趨謹慎，且新進入者採取高額折扣、回扣與綑綁銷售等激烈促銷手段競爭現有病患。<br>• 執行長說明因伴侶動物業務（特別是皮膚病學及美國寄生蟲藥物）壓力超出原先預期，公司更新全年財測，預期全年有機營運營收成長率將下滑 3% 至 1%，調整後淨利有機營運成長率將下滑 9% 至 5%。<br>• 執行長宣布人事調整：6 月拔擢 Abhay Nayak 為美國商業營運執行副總裁兼總裁；並宣布 Jay Saccaro 加入 Zoetis 擔任執行副總裁、財務長兼營運長（CFO & COO），負責財務、全球製造與供應鏈職能。",
+  "capexPlan": "未提供",
+  "techRoadmap": "• 長效型 Cytopoint（long-acting Cytopoint）：預計稍後取得美國核准（anticipated US approval later this year）。<br>• 犬關節炎疼痛藥物 Lenivia（長效型）：已獲得早期市場核准，近期包括英國與瑞士。<br>• 診斷平台 Vetscan OmniMax：為全新多模態化學平台（multimodal chemistry platform）及潛在重磅產品，預計年底前完成商業驗證（commercial validation still expected by year-end）。"
+ }
+}

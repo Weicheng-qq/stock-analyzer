@@ -1,0 +1,47 @@
+{
+ "symbol": "BETRW",
+ "market": "us",
+ "name": "Better Home & Finance Holding Company",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Better Home & Finance Holding Company",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.01",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "-0.31",
+  "每股盈餘": -1.64,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-06",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1835856/000162828026054301/betr_earningsxreleasexq2x2.htm"
+ },
+ "savedAt": "2026-10-09T03:09:41.433Z",
+ "result": {
+  "revenue": "本季官方營業收入為 0.01 億美元。另根據新聞稿，總淨營收（Total Net Revenues）年增 28% 至 5,470.2 萬美元（即 54,702 千美元）。",
+  "eps": "每股盈餘（EPS）為 -1.64 美元，呈現虧損狀態。",
+  "margins": "官方毛利率與營業利益率皆標示為未提供（0.0%）；本期淨利率為 -3100.0%，主因為本期淨虧損達 0.31 億美元，反映公司仍處於嚴重虧損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "官方預期 2026 年第三季總淨營收介於 4,900 萬至 5,200 萬美元之間，且調整後 EBITDA 持續虧損。",
+  "outlook": "公司正專注於擴大企業與批發合作夥伴、深化自動化以提升營運效率，並積極推廣其 HELOC（房屋淨值信用貸款）產品。儘管面臨高利率的挑戰，管理層預期多元化的產品組合能協助公司適應當前環境。",
+  "highlights": "• 本季貸款量（Loan Volume）年增 38% 至 16.7 億美元，超出先前預測中值。<br>• 平台貸款量（Platform Loan Volume）達 9.12 億美元，占總貸款量的 55%。<br>• 總淨營收（Total Net Revenues）年增 28% 至 5,470.2 萬美元。",
+  "concerns": "• 本季淨虧損為 0.31 億美元（新聞稿指出為 3,059.3 萬美元），持續處於虧損狀態。<br>• 調整後 EBITDA 仍虧損 1,400 萬美元。<br>• 總營運費用高達 8,610.4 萬美元，顯示成本控制仍具挑戰。",
+  "risks": "• 營運支出高昂，本季總支出達 8,610.4 萬美元，遠高於總淨營收 5,470.2 萬美元，面臨沉重的成本壓力。<br>• 宏觀高利率環境持續，導致整體抵押貸款申請量下降超過 15%，對公司核心業務的復甦構成外部環境風險。",
+  "keyPoints": "• 本季淨虧損達 0.31 億美元，每股盈餘（EPS）為 -1.64 美元，顯示公司持續面臨顯著虧損。<br>• 創辦人 Vishal Garg 卸任執行長，由董事會成員 Daniel Lewis 接任臨時執行長。<br>• 公司調高了 2026 年底的年化成本削減目標，從原先的 2,500 萬美元提高至超過 4,500 萬美元。",
+  "guidanceOfficial": "公司提供 2026 年第三季財務預測：貸款量（Loan Volume）預計為 13.75 億至 15.25 億美元；總淨營收（Total Net Revenues）預計為 49.0 百萬至 52.0 百萬美元（即 4,900 萬至 5,200 萬美元）；調整後 EBITDA（Adjusted EBITDA）預計為負 18.0 百萬至負 15.0 百萬美元（即虧損 1,800 萬至 1,500 萬美元）。",
+  "segments": "• 貸款淨利益（Gain on loans, net）：5,148.8 萬美元，高於去年同期的 3,677.2 萬美元<br>• 其他收入（Other revenue）：109.4 萬美元，低於去年同期的 309.0 萬美元<br>• 淨利息收入（Net interest income）：212.0 萬美元，低於去年同期的 282.3 萬美元"
+ }
+}
