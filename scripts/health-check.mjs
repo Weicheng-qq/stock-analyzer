@@ -59,8 +59,30 @@ await check('台股報價（證交所）', async () => {
   const row = ((await r.json()).msgArray || [])[0];
   must(row && row.c === '2330', '證交所沒有回傳台積電資料（API 可能改版）');
   must(parseFloat(row.y) > 0, '昨收價不是正數：' + row.y);
-  return '台積電 昨收 ' + parseFloat(row.y) + '，交易日 ' + row.d;
-}, { fix: '證交所 MIS API 可能改版或封鎖了 Cloudflare 的 IP。App 會顯示「—」而不是錯價，不會誤導使用者' });
+  // ⚠️ 2026-10-10 補上：原本只檢查「有沒有昨收」，盤中價格停住不動完全測不出來
+  //   （使用者回報開盤後股價停在開盤價時，這一項照樣每天綠燈）。
+  //   現在盤中（台北 09:05～13:20）而且資料日期是今天時，額外要求：
+  //   ① 取得到「最後成交價」：z，或 z 為「-」時證交所附的 trade.z（與 App 的取價規則相同）
+  //   ② 快照時間 t 距離現在不超過 3 分鐘（證交所約每 5 秒一筆快照）
+  //   假日／颱風假證交所回的是上一個交易日，資料日期不是今天，就不檢查盤中這兩項。
+  const tp = new Date().toLocaleString('en-CA', { timeZone: 'Asia/Taipei', hour12: false });
+  const today = tp.slice(0, 10).replace(/-/g, '');
+  const [hh, mm] = tp.slice(12, 17).split(':').map(Number);
+  const nowMin = hh * 60 + mm;
+  const num = v => { const x = parseFloat(v); return Number.isFinite(x) ? x : null; };
+  const z = num(row.z), tz = row.trade ? num(row.trade.z) : null;
+  const raw = 'z=' + row.z + ' trade.z=' + (row.trade ? row.trade.z : '無') + ' trade.t=' + (row.trade ? row.trade.t : '無')
+    + ' pz=' + row.pz + ' ts=' + row.ts + ' o=' + row.o + ' v=' + row.v + ' t=' + row.t;
+  console.log('   證交所原始欄位：' + raw);   // 留下證據：日後有人回報股價不對時，Actions 紀錄裡就有當時的原始資料
+  if (row.d === today && nowMin >= 9 * 60 + 5 && nowMin <= 13 * 60 + 20) {
+    must(z != null || tz != null, '盤中取不到最後成交價（' + raw + '）');
+    const [th, tm] = String(row.t || '').split(':').map(Number);
+    const lag = nowMin - (th * 60 + tm);
+    must(Number.isFinite(lag) && lag <= 3, '盤中快照時間 ' + row.t + ' 已落後 ' + lag + ' 分鐘（' + raw + '）');
+    return '台積電 盤中最後成交 ' + (z != null ? z : tz) + '（' + (z != null ? 'z' : 'trade.z') + '），快照 ' + row.t + '，落後 ' + lag + ' 分鐘';
+  }
+  return '台積電 昨收 ' + parseFloat(row.y) + '，交易日 ' + row.d + '（非盤中，未檢查即時性）';
+}, { fix: '證交所 MIS API 可能改版或封鎖了 Cloudflare 的 IP。App 會顯示「—」或「⚠️ 未更新」而不是錯價，不會誤導使用者；若是「盤中快照落後」，請先到 https://mis.twse.com.tw 確認證交所自己的網頁有沒有在更新' });
 
 // ③ 美股報價（Yahoo）
 await check('美股報價（Yahoo）', async () => {
