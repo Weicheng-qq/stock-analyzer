@@ -19,7 +19,9 @@
 // ════════════════════════════════════════════════════════════════════════════
 
 // 只允許這些來源。⚠️ 要與 api/proxy.js 的白名單一起維護，改一邊會造成兩邊行為不一致。
-const ALLOW = /^https:\/\/(mis\.twse\.com\.tw|query[12]\.finance\.yahoo\.com)\//;
+// 2026-10-10 加入 tw.stock.yahoo.com（台股第二個即時來源）。這支 Worker 是選填備援，
+//   改完要到 Cloudflare 手動貼上新程式碼才會生效；沒更新也沒關係，前端遇到 403 會自動改走 /api/proxy。
+const ALLOW = /^https:\/\/(mis\.twse\.com\.tw|query[12]\.finance\.yahoo\.com|tw\.stock\.yahoo\.com)\//;
 
 export default {
   async fetch(request) {

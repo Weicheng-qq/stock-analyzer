@@ -84,6 +84,37 @@ await check('台股報價（證交所）', async () => {
   return '台積電 昨收 ' + parseFloat(row.y) + '，交易日 ' + row.d + '（非盤中，未檢查即時性）';
 }, { fix: '證交所 MIS API 可能改版或封鎖了 Cloudflare 的 IP。App 會顯示「—」或「⚠️ 未更新」而不是錯價，不會誤導使用者；若是「盤中快照落後」，請先到 https://mis.twse.com.tw 確認證交所自己的網頁有沒有在更新' });
 
+// ②-2 台股第二個即時來源（Yahoo股市台灣版）—— 證交所 MIS 的對照與備援
+//   壞掉時 App 仍以證交所為主，不會顯示錯價，所以只發「警告」不算失敗；但少了備援要讓你知道。
+await check('台股報價（Yahoo股市，第二來源）', async () => {
+  const r = await fetchT(proxied('https://tw.stock.yahoo.com/_td-stock/api/resource/StockServices.stockList;symbols=2330.TW'));
+  must(r.ok, 'HTTP ' + r.status);
+  const cc = r.headers.get('cache-control') || '';
+  must(/s-maxage=1\b/.test(cc), '代理把這個報價快取太久（' + cc + '），會拿到舊價格；檢查 functions/api/proxy.js 的 isLiveQuote');
+  const arr = await r.json();
+  const x = Array.isArray(arr) ? arr[0] : null;
+  must(x && String(x.systexId || x.symbol || '').startsWith('2330'), 'Yahoo股市沒有回傳台積電（接口可能改版）');
+  const price = parseFloat(x.price && x.price.raw !== undefined ? x.price.raw : x.price);
+  must(price > 0, '價格不是正數：' + JSON.stringify(x.price));
+  must(x.exchangeDataDelayedBy === 0 || x.exchangeDataDelayedBy === '0',
+    '宣告延遲 ' + x.exchangeDataDelayedBy + ' 分鐘（App 會自動改標「延遲報價」，不會當即時價）');
+  const tp = new Date().toLocaleString('en-CA', { timeZone: 'Asia/Taipei', hour12: false });
+  const today = tp.slice(0, 10).replace(/-/g, '');
+  const [hh, mm] = tp.slice(12, 17).split(':').map(Number);
+  const nowMin = hh * 60 + mm;
+  const t = new Date(x.regularMarketTime);
+  const tTp = t.toLocaleString('en-CA', { timeZone: 'Asia/Taipei', hour12: false });
+  const tDay = tTp.slice(0, 10).replace(/-/g, '');
+  console.log('   Yahoo股市原始欄位：price=' + price + ' regularMarketTime=' + x.regularMarketTime + ' 延遲=' + x.exchangeDataDelayedBy + ' marketStatus=' + x.marketStatus);
+  if (tDay === today && nowMin >= 9 * 60 + 5 && nowMin <= 13 * 60 + 20) {
+    const [th, tm] = tTp.slice(12, 17).split(':').map(Number);
+    const lag = nowMin - (th * 60 + tm);
+    must(lag <= 3, '盤中成交時間 ' + tTp.slice(12, 17) + ' 已落後 ' + lag + ' 分鐘');
+    return '台積電 ' + price + '，盤中成交 ' + tTp.slice(12, 17) + '，落後 ' + lag + ' 分鐘';
+  }
+  return '台積電 ' + price + '（非盤中，未檢查即時性）';
+}, { level: 'warn', fix: 'App 仍以證交所為主來源，不受影響，只是少了備援。若持續一週以上，需要找人更新 fetchTwYahooQuotes()' });
+
 // ③ 美股報價（Yahoo）
 await check('美股報價（Yahoo）', async () => {
   const r = await fetchT(proxied('https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1d&interval=1d'));

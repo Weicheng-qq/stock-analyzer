@@ -2006,6 +2006,27 @@ function __priceGateSelfTest(){
   // 今天量為 0 時，價格必須是昨收 y，不可是 trade.z（那是上一個交易日最後一筆）
   const pc=validateTwQuote({...base, z:'-', v:'0', trade:{t:'13:30:00',z:'2430'}}, '2330.TW');
   out.push({測項:'量為0時取昨收', 預期:2425, 實際:pc.price, 結果:(pc.price===2425?'PASS':'FAIL'), 原因:''});
+  // 2026-10-10 雙來源：選來源的規則
+  const T=__twToday();
+  const L=(t,p,src)=>({price:p, prev:2425, verdict:'live', exDate:T, exTime:t, src});
+  const pk=(name,a,b,want)=>{ const r=pickTwQuote(a,b); const got=r?(r.src+' '+r.price):'null';
+    out.push({測項:'選來源：'+name, 預期:want, 實際:got, 結果:(got===want?'PASS':'FAIL'), 原因:''}); };
+  pk('證交所停在09:00、Yahoo有09:35', L('09:00:05',2440,'TWSE'), L('09:35:02',2460,'Yahoo股市'), 'Yahoo股市 2460');
+  pk('成交時間相同用證交所', L('10:00:00',2450,'TWSE'), L('10:00:00',2450,'Yahoo股市'), 'TWSE 2450');
+  pk('收盤後價格相同、Yahoo時間14:30仍用證交所', L('13:30:00',2550,'TWSE'), L('14:30:00',2550,'Yahoo股市'), 'TWSE 2550');
+  pk('證交所較新用證交所', L('10:00:05',2455,'TWSE'), L('10:00:00',2450,'Yahoo股市'), 'TWSE 2455');
+  pk('證交所驗證失敗改用Yahoo', {price:null,verdict:'reject',src:'TWSE(資料異常)'}, L('10:00:00',2450,'Yahoo股市'), 'Yahoo股市 2450');
+  pk('證交所只剩開盤價、Yahoo有成交', {...L('10:00:05',2440,'TWSE(開盤)'),verdict:'open'}, L('09:58:00',2450,'Yahoo股市'), 'Yahoo股市 2450');
+  pk('Yahoo宣告延遲、證交所即時', L('10:00:00',2450,'TWSE'), {...L('10:05:00',2460,'Yahoo股市(延遲)'),verdict:'delayed'}, 'TWSE 2450');
+  pk('兩邊都失敗保留證交所的異常標示', {price:null,verdict:'reject',src:'TWSE(資料異常)'}, null, 'TWSE(資料異常) null');
+  // Yahoo股市欄位換成證交所格式後，必須通過同一支閘門
+  const yr=validateTwQuote(__ytwRow({price:{raw:'2460'},regularMarketPreviousClose:{raw:'2425'},regularMarketOpen:{raw:'2440'},
+    regularMarketDayHigh:{raw:'2460'},regularMarketDayLow:{raw:'2435'},limitUpPrice:{raw:'2665'},limitDownPrice:{raw:'2185'},
+    volume:'35250000',regularMarketTime:new Date().toISOString()}),'2330.TW');
+  out.push({測項:'Yahoo股市欄位轉換後判定', 預期:'live 2460', 實際:yr.verdict+' '+yr.price, 結果:(yr.verdict==='live'&&yr.price===2460?'PASS':'FAIL'), 原因:yr.reasons.join('；')});
+  const yb=validateTwQuote(__ytwRow({price:{raw:'2402.5'},regularMarketPreviousClose:{raw:'2425'},regularMarketDayHigh:{raw:'2460'},
+    regularMarketDayLow:{raw:'2400'},limitUpPrice:{raw:'2665'},limitDownPrice:{raw:'2185'},volume:'100',regularMarketTime:new Date().toISOString()}),'2330.TW');
+  out.push({測項:'Yahoo股市不合跳動單位擋下', 預期:'reject', 實際:yb.verdict, 結果:(yb.verdict==='reject'?'PASS':'FAIL'), 原因:''});
   // 跳動單位另外單測（含 ETF 規則）
   const ticks=[[2402.5,false,false],[2405,false,true],[100.5,false,true],[100.3,false,false],
                [55.03,true,false],[55.05,true,true],[9.99,false,true]];
@@ -2119,6 +2140,94 @@ async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(sy
       exDate:v.exDate, exTime:v.exTime, snapTime:v.snapTime, exTz:'Asia/Taipei'});
   });
   return out;
+}
+// ════════════════════════════════════════════════════════════════
+// 【台股第二個即時來源】Yahoo股市（台灣版，tw.stock.yahoo.com）
+// ════════════════════════════════════════════════════════════════
+// ⚠️ 2026-10-10 使用者要求「不要一直修 bug，想辦法找免費又即時的方式」。
+//   單靠證交所 MIS 的問題是：它沒有公開文件，只要某個欄位的意思我們理解錯，
+//   畫面就會安靜地停住（2026-10-10 的 pz 事件就是這樣），而且沒有第二個來源可以對照。
+//   解法：同時用兩個【彼此獨立】的免費即時來源，畫面顯示「成交時間比較新」的那一個。
+//   任何一邊卡住、讀錯或掛掉，另一邊的新成交會自動接手。
+//
+//   為什麼選 Yahoo股市（台灣版）：
+//     · 它和國際版 Yahoo Finance 是不同系統。國際版的台股官方標明延遲 20 分鐘
+//       （help.yahoo.com/kb/SLN2310），台灣版的回應則自己宣告 exchangeDataDelayedBy=0，
+//       頁面標示資料來源為精誠資訊（證交所授權資訊廠商）。
+//     · 管道與證交所 MIS 完全不同（證交所 → 精誠 → Yahoo），兩邊同時壞掉的機率很低。
+//     · 2026-10-10 實測：2330／7825／0050 與證交所、櫃買中心 10/8 官方收盤逐檔一致；
+//       一次查 30 檔沒問題。
+//   ⚠️ 它也是非公開接口，所以【一樣要通過 validateTwQuote 驗證閘門】：
+//     把它的欄位換成證交所格式後交給同一支閘門，漲跌停、當日高低、跳動單位、
+//     是否今天成交，全部用同一套規則檢查。
+//   ⚠️ exchangeDataDelayedBy 不是 0（或欄位不見了）就不能當即時價，一律判「延遲報價」。
+//   成本控制：證交所每秒問一次；這個來源只當對照與備援，每 4 秒才問一次
+//   （證交所自己也約 5 秒才出一張快照，更頻繁沒有意義，只會多耗 Cloudflare 免費額度）。
+const __YTW_INTERVAL = 4000;
+const __ytwCache = new Map();   // symbol → {t, q}
+function __ytwRow(x){
+  const n=v=>{ if(v==null) return null; const r=(typeof v==='object' && v.raw!==undefined)?v.raw:v; const f=parseFloat(r); return Number.isFinite(f)?f:null; };
+  const s=(v)=>{ const x=n(v); return x==null?'-':String(x); };
+  let d=null, t=null;
+  if(x.regularMarketTime){ const st=__tzStamp(new Date(x.regularMarketTime),'Asia/Taipei'); d=st.exDate; t=st.exTime; }
+  // 換成證交所 MIS 的欄位格式，交給同一支 validateTwQuote 驗證
+  return { z:s(x.price), y:s(x.regularMarketPreviousClose), o:s(x.regularMarketOpen),
+           h:s(x.regularMarketDayHigh), l:s(x.regularMarketDayLow),
+           u:s(x.limitUpPrice), w:s(x.limitDownPrice), v:s(x.volume), d, t };
+}
+async function fetchTwYahooQuotes(symbols){
+  const out=new Map();
+  const now=Date.now();
+  const need=symbols.filter(s=>{ const c=__ytwCache.get(s); if(c && now-c.t<__YTW_INTERVAL){ out.set(s,c.q); return false; } return true; });
+  if(!need.length) return out;
+  const url='https://tw.stock.yahoo.com/_td-stock/api/resource/StockServices.stockList;symbols='+need.join('%2C');
+  const arr=await fetchJsonTimeout(url, 4000);
+  if(!Array.isArray(arr)) return out;
+  // 以代碼對應（不是以完整代號），市場別後綴錯了也對得上
+  const byCode=new Map(arr.filter(x=>x && (x.systexId||x.symbol)).map(x=>[String(x.systexId||String(x.symbol).replace(/\..*/,'')), x]));
+  need.forEach(sym=>{
+    const code=sym.replace(/\..*/,''); const x=byCode.get(code); if(!x) return;
+    const v=validateTwQuote(__ytwRow(x), sym);
+    let q;
+    if(v.verdict==='reject'){
+      console.warn('[報價防呆] Yahoo股市 '+sym+' 被拒絕：'+v.reasons.join('；'));
+      q={price:null, prev:v.prev, src:'Yahoo股市(資料異常)', verdict:'reject', reasons:v.reasons,
+         exDate:v.exDate, exTime:v.exTime, snapTime:v.snapTime, exTz:'Asia/Taipei', stale:true};
+    } else {
+      // 沒有明確宣告「延遲 0 分鐘」就不准當即時價（欄位消失也一樣，寧可保守）
+      const delayed = !(x.exchangeDataDelayedBy===0 || x.exchangeDataDelayedBy==='0');
+      const verdict = (v.verdict==='live' && delayed) ? 'delayed' : v.verdict;
+      q={price:v.price, prev:v.prev, verdict, field:'yahoo-tw', stale:(verdict!=='live'),
+         src:'Yahoo股市'+(verdict==='live'?'':'('+(verdict==='delayed'?'延遲':verdict==='open'?'開盤':verdict==='session'?'前一交易日':'昨收')+')'),
+         exDate:v.exDate, exTime:v.exTime, snapTime:v.snapTime, exTz:'Asia/Taipei'};
+    }
+    __ytwCache.set(sym, {t:now, q});
+    out.set(sym, q);
+  });
+  return out;
+}
+// 兩個來源都有資料時選哪一個：
+//   ① 能顯示的（非 reject）優先
+//   ② 交易日較新的優先（今天 > 前一交易日）
+//   ③ 「是什麼價」：即時成交 > 延遲 > 開盤價 > 昨收
+//   ④ 價格相同就用證交所（官方來源）。⚠️ 不能只比時間：收盤後 Yahoo股市的時間是 14:30
+//      （盤後定價交易結束），比證交所的 13:30 晚，但價格一樣，畫面寫「14:30 收盤」只會讓人困惑。
+//   ⑤ 價格不同時，成交時間較新的優先 —— 這一條就是防「停在開盤價」：
+//      一邊停在 09:00 的 2550，另一邊有 09:35 的 2565，就用後者
+const __TW_RANK={live:4, delayed:3, open:2, session:1, prevclose:1, reject:0};
+function pickTwQuote(mis, ytw){
+  const ok=q=>q && q.verdict!=='reject' && q.price!=null;
+  if(!ok(mis) && !ok(ytw)) return mis||ytw||null;   // 都不能用：保留 reject，畫面才會顯示「資料異常」
+  if(!ok(mis)) return ytw;
+  if(!ok(ytw)) return mis;
+  const dm=mis.exDate||'', dy=ytw.exDate||'';
+  if(dm!==dy) return dm>dy ? mis : ytw;
+  const rm=__TW_RANK[mis.verdict]||0, ry=__TW_RANK[ytw.verdict]||0;
+  if(rm!==ry) return rm>ry ? mis : ytw;
+  if(mis.price===ytw.price) return mis;
+  const tm=mis.exTime||'', ty=ytw.exTime||'';
+  if(ty>tm) return ytw;
+  return mis;
 }
 // ════════════════════════════════════════════════════════════════
 // 【全站統一報價層】所有要顯示「公司股價」的地方一律走這裡。
@@ -2266,13 +2375,19 @@ async function quotesOf(symbols){
       const run=(async()=>{
         const sub=[];
         if(tw.length) sub.push((async()=>{
-          let m=new Map();
-          try{ m=await fetchTwMisQuotes(tw); }catch(e){}
-          tw.forEach(s=>{ const q=m.get(s); if(!q) return;
-            const srcLabel = q.verdict==='reject' ? 'TWSE(資料異常)'
-              : q.verdict==='live' ? 'TWSE' : 'TWSE('+(q.src||'非現價')+')';
-            __putQuote(s, q.price, q.prev, srcLabel, q.stale, q); });
-          const miss=tw.filter(s=>!m.has(s));
+          // 兩個彼此獨立的即時來源同時抓（見 fetchTwYahooQuotes 上方說明），任一邊失敗都不影響另一邊
+          const [m, y]=await Promise.all([
+            fetchTwMisQuotes(tw).catch(()=>new Map()),
+            fetchTwYahooQuotes(tw).catch(()=>new Map())
+          ]);
+          tw.forEach(s=>{
+            const mq=m.get(s);
+            const mis = mq ? Object.assign({}, mq, {src: mq.verdict==='reject' ? 'TWSE(資料異常)'
+              : mq.verdict==='live' ? 'TWSE' : 'TWSE('+(mq.src||'非現價')+')'}) : null;
+            const q=pickTwQuote(mis, y.get(s));
+            if(!q) return;
+            __putQuote(s, q.price, q.prev, q.src, q.stale, q); });
+          const miss=tw.filter(s=>!m.has(s) && !y.has(s));
           if(miss.length) await __yahooQuotes(miss, {delayed:true});   // 證交所查無的個別代碼才退回 Yahoo，且一律標「延遲報價」
         })());
         if(us.length) sub.push(__yahooQuotes(us));
@@ -2307,8 +2422,15 @@ function quoteSrcLabel(q){
   //   舊寫法用 q.src==='TWSE' 逐字比對，只要來源標籤多一種寫法（例如「TWSE(開盤)」）
   //   就會掉進最後的 else，把證交所的資料標成「Yahoo Finance」—— 標錯來源比沒標更糟。
   const isTwse = q && /^TWSE/.test(q.src||'');
+  const isYtw  = q && /^Yahoo股市/.test(q.src||'');
   const v = q ? (q.verdict||'live') : null;
   const base = !q ? 'Yahoo Finance（可能延遲）'
+    : isYtw ? (v==='reject' ? 'Yahoo股市 · ⚠️ 資料未通過驗證'
+             : v==='delayed' ? 'Yahoo股市（延遲報價，非即時）'
+             : v==='open' ? 'Yahoo股市（開盤價，非現價）'
+             : v==='prevclose' ? 'Yahoo股市（今日尚未成交）'
+             : v==='session' ? 'Yahoo股市（前一交易日）'
+             : 'Yahoo股市（精誠資訊，即時）')
     : !isTwse ? 'Yahoo Finance（可能延遲）'
     : v==='reject'    ? '證交所（TWSE）· ⚠️ 資料未通過驗證'
     : v==='open'      ? '證交所（TWSE，開盤價，非現價）'
@@ -2386,7 +2508,7 @@ async function loadWatchlistPrices(list){
   const gen=++__wlPriceGen;
   const quotes=await quotesOf(list.map(it=>it.symbol));
   if(gen!==__wlPriceGen) return;            // 已有更新的一輪發出，這份是舊資料，丟棄
-  let twOk=0, twStale=0, usOk=0, fail=0, bad=0, nu=0;
+  let twOk=0, ytwOk=0, twStale=0, usOk=0, fail=0, bad=0, nu=0;
   list.forEach(it=>{
     const q=quotes.get(it.symbol);
     if(!q){ applyWlPrice(it.symbol, null); fail++; return; }
@@ -2395,13 +2517,16 @@ async function loadWatchlistPrices(list){
     //   我們永遠不知道防呆今天到底擋了幾筆。
     if(q.verdict==='reject'){ bad++; return; }
     if(q.notUpdated) nu++;   // 這一輪抓不到、沿用上一次的價格（每一列已標「⚠️ 未更新」，頂端也要講）
-    if(/^TWSE/.test(q.src)){ twOk++; if(q.stale) twStale++; } else usOk++;
+    if(/^TWSE/.test(q.src)){ twOk++; if(q.stale) twStale++; }
+    else if(/^Yahoo股市/.test(q.src)){ ytwOk++; if(q.stale) twStale++; }
+    else usOk++;
   });
   const parts=[];
   // ⚠️ 這裡統計的是「非現價」的檔數，不是「尚未成交」——
   //   開盤價、昨收、前一交易日都算非現價，但只有昨收才是真的尚未成交。
   //   統計文字寫錯，使用者就會以為開過盤的股票沒開盤。
-  if(twOk) parts.push('TWSE'+(twStale?('·'+twStale+'檔非現價'):''));
+  const twSrc=[]; if(twOk) twSrc.push('TWSE'); if(ytwOk) twSrc.push('Yahoo股市');
+  if(twSrc.length) parts.push(twSrc.join('/')+(twStale?('·'+twStale+'檔非現價'):''));
   if(usOk) parts.push('Yahoo');
   if(fail) parts.push(fail+'檔無資料');
   if(bad)  parts.push('⚠️'+bad+'檔資料異常已擋下');

@@ -36,7 +36,10 @@ export async function onRequest(context) {
   if (!ALLOW.test(target)) return json({ error: 'host not allowed' }, 403);
 
   // 報價與其他資料的快取秒數不同，要在發請求前就決定好。
-  const isLiveQuote = /\/v8\/finance\/chart\//.test(target) || /mis\.twse\.com\.tw\/stock\/api\//.test(target);
+  // ⚠️ 2026-10-10 加入 Yahoo股市（台灣版）報價：台股第二個即時來源。
+  //   沒加的話會被當成一般資料快取 5 分鐘（實測回應標頭 s-maxage=300），等於拿 5 分鐘前的價格。
+  const isLiveQuote = /\/v8\/finance\/chart\//.test(target) || /mis\.twse\.com\.tw\/stock\/api\//.test(target)
+    || /tw\.stock\.yahoo\.com\/_td-stock\/api\/resource\/StockServices\.stockList/.test(target);
 
   try {
     const r = await fetch(target, {
