@@ -2783,7 +2783,7 @@ async function loadWatchlistPrices(list){
   if(dl){
     const codes=Object.keys(tally).sort().map(c=>c+(tally[c]>1?('×'+tally[c]):'')).join(' ');
     let hms=''; try{ hms=new Date().toLocaleTimeString('en-GB',{hour12:false}); }catch(e){}
-    const txt='診斷碼 '+(codes||'OK')+(twN?(' · 證'+mOk+'/'+twN+' Y'+yOk+'/'+twN):'')+' · 版'+__dxVersion()+' · '+hms;
+    const txt='診斷碼 '+(codes||'OK')+(twN?(' · 即時成交 證交所'+mOk+'/'+twN+' Yahoo'+yOk+'/'+twN):'')+' · 版'+__dxVersion()+' · '+hms;
     if(dl.textContent!==txt) dl.textContent=txt;
     dl.style.color = codes ? 'var(--yellow)' : '';
   }
