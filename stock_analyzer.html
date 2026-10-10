@@ -2495,7 +2495,15 @@ async function __checkNewVersion(why, force){
   try{
     const fp=await __fetchFp();
     if(!__buildFp){ __buildFp=fp; return; }               // 第一次：當作目前這一版的基準
-    if(fp!==__buildFp){ __newVerFp=fp; if(why==='回到前景' || __priceIdle()) __maybeReloadForNewVersion(why); }
+    if(fp!==__buildFp){
+      // 再確認一次：隔 3 秒重抓，兩次都是同一個新指紋才算數。
+      //   萬一有中間層在 HTML 裡塞了每次都不同的內容，指紋會一直變，
+      //   沒有這道確認的話每次回到前景都會被誤判成有新版而重載。
+      await new Promise(r=>setTimeout(r, 3000));
+      const fp2=await __fetchFp();
+      if(fp2!==fp) return;
+      __newVerFp=fp; if(why==='回到前景' || __priceIdle()) __maybeReloadForNewVersion(why);
+    }
   }catch(e){}
 }
 window.addEventListener('load', function(){
