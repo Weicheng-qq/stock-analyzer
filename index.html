@@ -583,6 +583,15 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 #masterPickCard .mp-risk b { display:block; font-size:12px; color:var(--red); font-weight:600; margin-bottom:1px; }
 #masterPickCard .mp-pnote { margin-top:7px; font-size:11.5px; line-height:1.6; color:var(--text2); }
 #masterPickCard .mp-go { margin-top:8px; font-size:12.5px; color:var(--blue); }
+/* 自動評分版（2026-10-10）：每一檔顯示總分與逐項得分，讓使用者看得到「為什麼是這三間」 */
+#masterPickCard .mp-score { flex:none; text-align:right; font-size:11px; color:var(--text2); line-height:1.2; }
+#masterPickCard .mp-score b { display:block; font-size:19px; color:var(--blue); font-weight:800; }
+#masterPickCard .mp-parts { display:flex; flex-wrap:wrap; gap:5px; margin:2px 0 9px; }
+#masterPickCard .mp-part { font-size:11px; line-height:1.45; border-radius:5px; padding:3px 6px; background:var(--bg3); color:var(--text2); }
+#masterPickCard .mp-part b { color:var(--text); font-weight:700; }
+#masterPickCard .mp-part.neg { background:rgba(248,81,73,.12); color:var(--red); }
+#masterPickCard .mp-part.neg b { color:var(--red); }
+#masterPickCard .mp-meta { font-size:11.5px; color:var(--text2); line-height:1.65; margin:-2px 0 10px; }
 #masterPickCard .mp-go.off { color:var(--text2); }
 /* ── 版主選股準則：依同一套準則即時檢核候選股，挑出最接近的三檔（#ownerPicks）──── */
 #ownerPicks { margin-top:16px; padding-top:12px; border-top:1px solid var(--border); }
@@ -829,7 +838,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     <div id="hdList"></div>
   </div>
 
-  <!-- 【大師選股邏輯推薦】四位大師各自的選股原則 + 依該原則挑出的台股/美股各三家。
+  <!-- 【大師選股邏輯推薦】四位大師各自的選股原則 + 依該原則評分後的台股/美股各三家（每週由 scripts/update-master-picks.mjs 重算）。
        資料放在 data/masters/{key}.json 延遲載入，不內嵌在 HTML —— 與 IR 全文同樣的理由：
        手機使用者每次開 App 不該下載自己還沒點開的內容。 -->
   <div class="card" id="masterPickCard" style="margin-bottom:20px;display:none">
@@ -1185,7 +1194,8 @@ Object.assign(TICKER_ZH, {'NVDA':'輝達','SKHY':'海力士','GOOGL':'谷歌','G
 // 2026-10-10：CPO 題材與大師選股用到、但還沒有中文名的代碼（原本會顯示成「MRVLMRVL」）。
 //   只補「還沒有名字」的，已經有的不覆蓋。台灣沒有通行譯名的公司，以中文譯名後附原文。
 { const more={'MRVL':'邁威爾科技','COHR':'相干公司（Coherent）','LITE':'魯門特姆（Lumentum）','FN':'法布里奈特（Fabrinet）','AAOI':'應用光電',
-    'CIEN':'訊遠通信（Ciena）','LRCX':'科林研發','SNPS':'新思科技','ADP':'自動資料處理（ADP）','WM':'廢棄物管理公司','PHM':'普爾特房屋','BRK-B':'波克夏海瑟威'};
+    'CIEN':'訊遠通信（Ciena）','LRCX':'科林研發','SNPS':'新思科技','ADP':'自動資料處理（ADP）','WM':'廢棄物管理公司','PHM':'普爾特房屋','BRK-B':'波克夏海瑟威',
+    'ADBE':'奧多比（Adobe）','DECK':'德克斯戶外（Deckers）','PYPL':'貝寶（PayPal）','GDDY':'GoDaddy 網域服務','HOOD':'羅賓漢（Robinhood）','ZTS':'碩騰（Zoetis）','NVO':'諾和諾德'};
   for(const k in more){ if(!TICKER_ZH[k]) TICKER_ZH[k]=more[k]; } }
 // ⚠️ CB(Chubb) 原本缺中文名，導致巴菲特持倉清單顯示成「CBCB」(名稱退回代碼＋代碼重複)。
 //   台灣子公司登記名為「安達產物保險」，故中文名採「安達保險」。
@@ -6394,26 +6404,58 @@ function __mpPickHtml(pk, mkt){
   // 公司 LOGO 沿用全站共用的 coLogoImg()：它內建 FMP → Parqet → Google favicon →
   //   官網 favicon 的取圖備援鏈，抓不到時退回公司名首字，與自選股/投資主題完全一致。
   const logo=(typeof coLogoImg==='function') ? coLogoImg(pk.code||'', pk.code||'', mkt==='tw', 'wl-logo') : '';
+  // 美股名稱：排程存的是英文全名，App 自己有中文名就用中文（專有名詞一律中譯）
+  const nm=(mkt!=='tw' && typeof TICKER_ZH!=='undefined' && TICKER_ZH[pk.code]) ? TICKER_ZH[pk.code] : (pk.name||'');
+  // 逐項評分：每一項「得分／配分」與依據的數字。扣分項（配分 0、得分為負）用紅色標出。
+  const parts=(Array.isArray(pk.parts)&&pk.parts.length)
+    ? '<div class="mp-parts">'+pk.parts.map(q=> q.max>0
+        ? '<span class="mp-part">'+esc(q.k)+' <b>'+esc(String(q.got))+'</b>/'+esc(String(q.max))+'（'+esc(q.val)+'）</span>'
+        : '<span class="mp-part neg">'+esc(q.k)+' <b>'+esc(String(q.got))+'</b>（'+esc(q.val)+'）</span>').join('')+'</div>' : '';
   return '<div class="mp-pick'+(clickable?' mp-tap':'')+'"'+onclick+'>'
     + '<div class="mp-p-head">'+logo
     + '<div class="mp-p-meta">'
-    +   '<div class="mp-p-nm">'+esc(pk.name||'')+'<span class="mp-p-cd">'+esc(pk.code||'')+'</span></div>'
+    +   '<div class="mp-p-nm"><span class="mp-p-name" data-code="'+esc(pk.code||'')+'">'+esc(nm)+'</span><span class="mp-p-cd">'+esc(pk.code||'')+'</span></div>'
     +   (pk.tag?'<div><span class="mp-p-tag">'+esc(pk.tag)+'</span></div>':'')
-    + '</div></div>'
+    + '</div>'
+    + (pk.score!=null?'<div class="mp-score">符合度<b>'+esc(String(pk.score))+'</b>滿分 100</div>':'')
+    + '</div>'
+    + parts
     + '<div class="mp-sec"><b>符合邏輯</b>'+esc(pk.fit||'')+'</div>'
     + (Array.isArray(pk.facts)&&pk.facts.length
-        ? '<div class="mp-facts"><b>官方數字</b><ul>'+pk.facts.map(f=>'<li>'+esc(f)+'</li>').join('')+'</ul></div>' : '')
-    + '<div class="mp-sec"><b>買入邏輯</b>'+esc(pk.buy||'')+'</div>'
+        ? '<div class="mp-facts"><b>'+(pk.auto?'財報數字':'官方數字')+'</b><ul>'+pk.facts.map(f=>'<li>'+esc(f)+'</li>').join('')+'</ul></div>' : '')
+    + (pk.buy?'<div class="mp-sec"><b>買入邏輯</b>'+esc(pk.buy)+'</div>':'')
     + (pk.risk?'<div class="mp-risk"><b>風險／觀察點</b>'+esc(pk.risk)+'</div>':'')
     + (pk.note?'<div class="mp-pnote">'+esc(pk.note)+'</div>':'')   // 單一公司層級的補充說明（例如同一家公司為何出現在兩位大師分頁）
     + (clickable?'<div class="mp-go">點此看這家公司的完整分析 →</div>':'<div class="mp-go off">切換到「'+(mkt==='tw'?'台股':'美股')+'」後可點此分析</div>')
     + '</div>';
+}
+// 大師選股的名單每週由排程自動重算，入選的美股公司可能是任何一家，排程存的是英文全名。
+//   使用者規定「專有名詞也要中譯」，所以畫面出來後把沒有中文字的公司名送去翻譯（與自選股同一支
+//   translateCompanyName），翻好就換上並存在這台裝置，下次不必再翻。翻不出來就維持英文，不亂猜。
+function __mpTranslateNames(){
+  let memo={}; try{ memo=JSON.parse(localStorage.getItem('mp_zh_names')||'{}')||{}; }catch(e){}
+  document.querySelectorAll('#masterPickCard .mp-p-name').forEach(el=>{
+    const code=el.dataset.code||'', cur=el.textContent||'';
+    if(!code || /[一-鿿]/.test(cur)) return;
+    if(memo[code]){ el.textContent=memo[code]; return; }
+    if(el.dataset.tr) return; el.dataset.tr='1';
+    translateCompanyName(cur).then(zh=>{
+      if(!zh) return;
+      memo[code]=zh; try{ localStorage.setItem('mp_zh_names', JSON.stringify(memo)); }catch(e){}
+      document.querySelectorAll('#masterPickCard .mp-p-name[data-code="'+code+'"]').forEach(x=>{ x.textContent=zh; });
+    });
+  });
 }
 function __mpMarketHtml(title, block, mkt){
   if(!block || !Array.isArray(block.picks) || !block.picks.length) return '';
   return '<div class="mp-mkt">'+esc(title)+'</div>'
     + '<div class="note" style="margin:-2px 0 8px">財務數字為 '+esc(block.asOf||'')+'，來源：'+esc(block.sourceName||'官方財報')+'</div>'
     + (block.note?'<div class="mp-note">'+esc(block.note)+'</div>':'')
+    + (block.auto ? '<div class="mp-meta">'
+        + '最後重算：'+esc(block.updatedAt||'')+(block.lastChange?'　｜　上次變動：'+esc(block.lastChange):'')
+        + (Array.isArray(block.runnerUp)&&block.runnerUp.length
+            ? '<br>候補（第 4～6 名）：'+block.runnerUp.map(r=>esc(((mkt!=='tw'&&typeof TICKER_ZH!=='undefined'&&TICKER_ZH[r.code])||r.name||r.code)+' '+r.score)).join('、') : '')
+        + '</div>' : '')
     + block.picks.map(pk=>__mpPickHtml(pk, mkt)).join('');
 }
 function renderMasterPickBody(d){
@@ -6431,9 +6473,11 @@ function renderMasterPickBody(d){
     + (tw ? __mpMarketHtml('🇹🇼 台股推薦（依上述邏輯）', d.tw, 'tw')
           : __mpMarketHtml('🇺🇸 美股推薦（依上述邏輯）', d.us, 'us'))
     + '<div class="note" style="margin-top:14px;padding-top:10px;border-top:1px solid var(--border);line-height:1.7">'
-    + '⚠️ 本頁是「依這些大師公開發表過的選股原則所做的整理與對照」，<b>不是這些大師本人的推薦或持股</b>，'
-    + '也不構成投資建議。所有財務數字均取自官方申報資料並標示來源與期間，'
-    + '但選股邏輯的套用必然包含判斷成分，請自行查證後再做決定。</div>';
+    + '⚠️ 本頁是「依這些大師公開發表過的選股原則，訂成評分公式後算出來的量化對照」，<b>不是這些大師本人的推薦或持股</b>，'
+    + '也不構成投資建議。評分只用得到的財務數字（近 4 個年度的財報與目前本益比），'
+    + '<b>看不到產業變化、管理層品質與一次性事件</b>；銀行、保險等金融業因為財報結構不同，這套公式無法評估。'
+    + '每一檔的逐項得分與依據的數字都列在上面，請自行查證後再做決定。</div>';
+  __mpTranslateNames();
 }
 // ── 8 大主題選單：把各架構主旨分組，點選單只看該群組 ──
 let __grp=1, __jumpAfterSearch=false;
