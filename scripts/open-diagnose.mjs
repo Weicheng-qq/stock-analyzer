@@ -73,7 +73,9 @@ let now = tp();
 if (!TEST) {
   if (now.min > 13 * 60 + 20) { out.status = 'skip'; out.title = '台股開盤診斷：已過盤中時段，未執行'; out.report = '啟動時間 ' + now.hms + '（台北），已超過 13:20。'; finish(); process.exit(0); }
   const startMin = 8 * 60 + 58;
-  if (now.min < startMin) { const w = Math.min((startMin - now.min) * 60000, 45 * 60000); console.log('等待到 08:58（' + Math.round(w / 60000) + ' 分鐘）…'); await sleep(w); }
+  // 排程刻意提早到 08:10 啟動（GitHub 排程常延遲 5～30 分鐘），這裡再等到 08:58 才開始取樣，
+  //   確保「開盤後 10 分鐘」（09:00～09:10）一定完整觀察到 —— 使用者回報的問題就發生在這一段。
+  if (now.min < startMin) { const w = Math.min((startMin * 60 - now.sec) * 1000, 70 * 60000); console.log('等待到 08:58（' + Math.round(w / 60000) + ' 分鐘）…'); await sleep(w); }
 }
 now = tp();
 const today = now.ymd;
@@ -196,14 +198,23 @@ const med = a => { if (!a.length) return null; const b = [...a].sort((x, y) => x
 const mx = a => a.length ? Math.max(...a) : null;
 if (mx(stat.snapLag) != null && med(stat.snapLag) > 60) problems.push('**證交所快照時間的中位數落後 ' + med(stat.snapLag) + ' 秒**（資料來源本身沒有在更新）');
 
+// 開盤後 10 分鐘（09:00:00～09:10:00）有沒有完整觀察到。每 5 秒一次，完整應約 120 次。
+const O1 = 9 * 3600, O2 = 9 * 3600 + 600;
+const openSamples = samples.filter(s => s.sec >= O1 && s.sec <= O2);
+const covered = openSamples.length >= 100;
+const firstS = samples[0] ? samples[0].hms : '—';
 const bad = problems.length > 0;
-out.status = bad ? 'bad' : 'ok';
-out.title = (TEST ? '【測試】' : '') + (bad ? '❌ ' : '✅ ') + '台股開盤診斷 ' + dateTxt + (bad ? '：發現 ' + problems.length + ' 個問題' : '：畫面股價正常');
+// 沒有完整涵蓋開盤後 10 分鐘 → 就算沒抓到問題也不能說「正常」，要明講這次沒看到最關鍵的時段
+out.status = bad ? 'bad' : (TEST || covered ? 'ok' : 'incomplete');
+out.title = (TEST ? '【測試】' : '') + (bad ? '❌ ' : out.status === 'incomplete' ? '⚠️ ' : '✅ ') + '台股開盤診斷 ' + dateTxt
+  + (bad ? '：發現 ' + problems.length + ' 個問題' : out.status === 'incomplete' ? '：沒有完整觀察到開盤後 10 分鐘' : '：畫面股價正常');
 
 L.push('取樣時間（台北）：**' + (samples[0] || {}).hms + ' ～ ' + (samples[samples.length - 1] || {}).hms + '**，共 ' + samples.length + ' 次（每 5 秒），網站：' + SITE);
 if (TEST) L.push('', '> ⚠️ 這是**測試執行**（只取樣 60 秒、不限盤中），用來確認診斷流程與通知信能正常運作。非盤中時「盤中取樣」會是 0，屬正常。');
+if (!TEST) L.push('', '**開盤後 10 分鐘（09:00～09:10）觀察到 ' + openSamples.length + ' 次' + (covered ? '（完整）' : '（⚠️ 不完整，完整應約 120 次；本次從 ' + firstS + ' 才開始取樣，多半是 GitHub 排程延遲）') + '**');
 L.push('', '## 結論', '');
 if (bad) { L.push('發現以下問題：', ''); problems.forEach(x => L.push('- ' + x)); }
+else if (out.status === 'incomplete') L.push('取樣到的時段內沒有發現問題，但**這次沒有完整觀察到開盤後 10 分鐘**，不能據此判定正常。可到 Actions 頁面手動再跑一次，或等下一個交易日。');
 else L.push('用真的瀏覽器開正式站，自選股 ' + SYMS.length + ' 檔在取樣期間**沒有停在開盤價**，畫面價格與資料來源相符。');
 if (notes.length) { L.push('', '其他觀察：', ''); notes.forEach(x => L.push('- ' + x)); }
 L.push('', '## 每一檔：畫面實際顯示 vs 資料來源', '',
@@ -221,11 +232,15 @@ L.push('', '## 原始欄位統計（驗證我們對欄位的理解）', '',
 if (stat.preOpen.length) L.push('', '開盤前試撮期間（`ts=1`）的原始欄位：', '', '```', ...stat.preOpen, '```');
 // 台積電逐筆取樣（最多 80 筆），出問題時可以直接對照
 const c0 = '2330';
-L.push('', '<details><summary>台積電逐筆取樣（時間｜畫面｜標示｜證交所原始欄位｜Yahoo股市）</summary>', '', '```');
-samples.slice(0, 80).forEach(s => { const d = s.dom[c0] || {}, m = s.mis && s.mis[c0], y = s.ytw && s.ytw[c0];
+// 完整列出 09:10 以前的每一筆（開盤前 2 分鐘＋開盤後 10 分鐘，約 144 筆）；測試模式列全部
+const detail = TEST ? samples : samples.filter(s => s.sec <= O2 + 5);
+L.push('', '<details><summary>台積電逐筆取樣：開盤前後到 09:10（時間｜畫面｜標示｜證交所原始欄位｜Yahoo股市）</summary>', '', '```');
+detail.slice(0, 160).forEach(s => { const d = s.dom[c0] || {}, m = s.mis && s.mis[c0], y = s.ytw && s.ytw[c0];
   L.push(s.hms + ' | 畫面 ' + (d.p ?? '—') + ' | ' + (d.b || '') + ' | ' + (m ? 'z=' + m.z + ' tz=' + m.tz + ' tt=' + m.tt + ' pz=' + m.pz + ' ts=' + m.ts + ' o=' + m.o + ' v=' + m.v + ' t=' + m.t : '✗' + s.eM) + ' | ' + (y ? y.p + '@' + y.rt + ' 延遲' + y.delay : '✗' + s.eY)); });
 L.push('```', '', '</details>');
-L.push('', '<details><summary>App 自己記的診斷紀錄（最後 80 行）</summary>', '', '```', ...String(appDump).split('\n').slice(0, 11), '…', ...String(appDump).split('\n').slice(11).slice(-80), '```', '', '</details>');
+L.push('', '<details><summary>App 自己記的診斷紀錄（最後 40 行）</summary>', '', '```', ...String(appDump).split('\n').slice(0, 11), '…', ...String(appDump).split('\n').slice(11).slice(-40), '```', '', '</details>');
 L.push('', '最後一次頂端時間列：`' + ((samples[samples.length - 1] || {}).head || '') + '`');
 out.report = L.join('\n');
+// GitHub Issue 內文上限 65,536 字元，超過會整個開不成 —— 保險起見截斷
+if (out.report.length > 60000) out.report = out.report.slice(0, 60000) + '\n\n…（內容過長已截斷，完整報告見 Actions 執行紀錄）';
 finish();
