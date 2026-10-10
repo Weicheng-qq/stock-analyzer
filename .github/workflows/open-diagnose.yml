@@ -1,0 +1,90 @@
+# 台股開盤診斷
+#
+# 【為什麼需要】
+#   台股報價出錯過很多次，每次都只能事後推測原因。這個排程每個交易日開盤前後，
+#   用「真的瀏覽器」打開正式站，盯著自選股畫面實際顯示的價格，同時直接問兩個資料來源
+#   （證交所、Yahoo股市）當對照。畫面停在開盤價、與來源不符、沒顯示價格，都會被抓出來。
+#   《每日健康檢查》只看「資料來源有沒有回應」；這一個看的是「使用者實際看到什麼」。
+#
+# 【結果怎麼通知】開成一則 GitHub Issue（內容就是整份中文診斷報告），GitHub 會寄 email 給 repo 擁有者。
+#   · 發現問題：每次都開
+#   · 正常：只在第一次開一則（確認修正有效），之後正常的日子不再打擾，報告仍可在 Actions 頁面看
+#   · 休市：不開
+#
+# 【零費用】public repo 的 GitHub Actions 免費；不使用任何 AI 額度。
+
+name: 台股開盤診斷
+
+on:
+  schedule:
+    # 台灣時間平日 08:45（UTC 00:45）啟動，腳本自己等到 08:58 才開始取樣，取到 09:25。
+    #   提早啟動是因為 GitHub 的排程常常延遲 5～20 分鐘，太晚啟動會錯過開盤那一刻。
+    - cron: '45 0 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      test:
+        description: '測試模式（只取樣 60 秒，不限盤中，一定會開一則測試 Issue）'
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/open-diagnose.yml'
+      - 'scripts/open-diagnose.mjs'
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: open-diagnose
+  cancel-in-progress: false
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    env:
+      # 改到這兩個檔案（push）或手動勾選測試時，走測試模式
+      DIAG_TEST: ${{ (github.event_name == 'push' || inputs.test == true) && '1' || '' }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+
+      - name: 安裝無頭瀏覽器
+        working-directory: scripts
+        run: |
+          npm install --no-audit --no-fund --silent
+          ./node_modules/.bin/playwright install --with-deps chromium --only-shell
+
+      - name: 開盤診斷
+        id: diag
+        run: node scripts/open-diagnose.mjs
+
+      - name: 把報告開成 Issue（GitHub 會寄 email 通知）
+        if: steps.diag.outputs.status != 'skip'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STATUS: ${{ steps.diag.outputs.status }}
+          OWNER: ${{ github.repository_owner }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="$(cat diag-title.txt)"
+          if [ "$STATUS" = "ok" ] && [ -z "$DIAG_TEST" ]; then
+            n=$(gh issue list --state all --limit 200 --json title --jq '[.[] | select(.title | startswith("✅ 台股開盤診斷"))] | length')
+            if [ "$n" -gt 0 ]; then
+              echo "今天正常，而且之前已經寄過一次「正常」的確認信，不再開 Issue（報告在本頁上方）。"
+              exit 0
+            fi
+          fi
+          {
+            echo "@${OWNER} 這是自動產生的台股開盤診斷報告。"
+            echo
+            echo "完整執行紀錄：${RUN_URL}"
+            echo
+            cat diag-report.md
+          } > body.md
+          gh issue create --title "$title" --body-file body.md

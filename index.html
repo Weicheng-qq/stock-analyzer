@@ -796,7 +796,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
       </span>
     </div>
     <input type="text" id="watchlistInput" style="display:none">
-    <div id="wlLastUpdate" style="font-size:11px;color:var(--text2);text-align:right;margin:-4px 0 6px"></div>
+    <div id="wlLastUpdate" onclick="openQuoteDiag()" title="點這裡看報價診斷紀錄" style="font-size:11px;color:var(--text2);text-align:right;margin:-4px 0 6px;cursor:pointer"></div>
     <div id="watchlistTable"><div class="note">尚未加入任何自選股，按上方「加入」新增</div></div>
   </div>
 
@@ -2130,16 +2130,21 @@ async function fetchTwMisQuotes(symbols){ // symbols: ['2330.TW',...] → Map(sy
     if(v.verdict==='reject'){
       // 違反交易所規則的數字一律不放行。寧可畫面顯示「—」，也不顯示一個看起來正常的錯價。
       console.warn('[報價防呆] '+sym+' 被拒絕：'+v.reasons.join('；')+'（原始值 '+v.rawPrice+'）');
-      out.set(sym, {price:null, prev:v.prev, src:'資料異常', verdict:'reject',
+      out.set(sym, {price:null, prev:v.prev, src:'資料異常', verdict:'reject', raw:__misRaw(row),
                     reasons:v.reasons, exDate:v.exDate, exTime:v.exTime, snapTime:v.snapTime, exTz:'Asia/Taipei', stale:true});
       return;
     }
     out.set(sym, {price:v.price, prev:v.prev,
       src:(v.verdict==='live'?'成交':v.verdict==='open'?'開盤':v.verdict==='session'?'前一交易日':'昨收'),
       verdict:v.verdict, field:v.field, stale:(v.verdict!=='live'),
-      exDate:v.exDate, exTime:v.exTime, snapTime:v.snapTime, exTz:'Asia/Taipei'});
+      exDate:v.exDate, exTime:v.exTime, snapTime:v.snapTime, exTz:'Asia/Taipei', raw:__misRaw(row)});
   });
   return out;
+}
+// 診斷紀錄用：證交所這一筆的原始欄位（原封不動，不做任何判讀）
+function __misRaw(row){
+  return 'z='+row.z+' tz='+(row.trade?row.trade.z:'無')+' tt='+(row.trade?row.trade.t:'無')+' pz='+row.pz
+       +' ts='+row.ts+' o='+row.o+' v='+row.v+' t='+row.t+' d='+row.d;
 }
 // ════════════════════════════════════════════════════════════════
 // 【台股第二個即時來源】Yahoo股市（台灣版，tw.stock.yahoo.com）
@@ -2191,7 +2196,7 @@ async function fetchTwYahooQuotes(symbols){
     let q;
     if(v.verdict==='reject'){
       console.warn('[報價防呆] Yahoo股市 '+sym+' 被拒絕：'+v.reasons.join('；'));
-      q={price:null, prev:v.prev, src:'Yahoo股市(資料異常)', verdict:'reject', reasons:v.reasons,
+      q={price:null, prev:v.prev, src:'Yahoo股市(資料異常)', verdict:'reject', reasons:v.reasons, raw:__ytwRaw(x),
          exDate:v.exDate, exTime:v.exTime, snapTime:v.snapTime, exTz:'Asia/Taipei', stale:true};
     } else {
       // 沒有明確宣告「延遲 0 分鐘」就不准當即時價（欄位消失也一樣，寧可保守）
@@ -2199,12 +2204,16 @@ async function fetchTwYahooQuotes(symbols){
       const verdict = (v.verdict==='live' && delayed) ? 'delayed' : v.verdict;
       q={price:v.price, prev:v.prev, verdict, field:'yahoo-tw', stale:(verdict!=='live'),
          src:'Yahoo股市'+(verdict==='live'?'':'('+(verdict==='delayed'?'延遲':verdict==='open'?'開盤':verdict==='session'?'前一交易日':'昨收')+')'),
-         exDate:v.exDate, exTime:v.exTime, snapTime:v.snapTime, exTz:'Asia/Taipei'};
+         exDate:v.exDate, exTime:v.exTime, snapTime:v.snapTime, exTz:'Asia/Taipei', raw:__ytwRaw(x)};
     }
     __ytwCache.set(sym, {t:now, q});
     out.set(sym, q);
   });
   return out;
+}
+function __ytwRaw(x){
+  const r=v=>(v && typeof v==='object' && v.raw!==undefined)?v.raw:v;
+  return 'p='+r(x.price)+' rt='+x.regularMarketTime+' delay='+x.exchangeDataDelayedBy+' ms='+x.marketStatus;
 }
 // 兩個來源都有資料時選哪一個：
 //   ① 能顯示的（非 reject）優先
@@ -2355,6 +2364,92 @@ async function __yahooQuotes(syms, opt){
     }catch(e){}
   }));
 }
+// ════════════════════════════════════════════════════════════════
+// 【報價診斷紀錄】使用者 2026-10-10 要求：「如果還是錯，你自己預埋抓 log 診斷原因」。
+// ════════════════════════════════════════════════════════════════
+//   過去每次出錯都只能事後推測，因為當下兩個來源到底回了什麼、程式選了哪一個，沒有留下任何紀錄。
+//   這裡把每一輪台股報價的「兩個來源的原始欄位 → 各自的判定 → 最後畫面用哪一個」記成一行，
+//   保留最近 400 筆（存在使用者自己的手機，不上傳）。
+//   內容相同就不重複記（每 30 秒至少留一筆心跳），所以 400 筆可以涵蓋相當長的時間。
+//   看紀錄：點自選股上方「成交時間…」那一行。只含報價與瀏覽器型號，不含任何個人資料。
+const __DIAG_MAX=400;
+let __diag=[]; try{ __diag=JSON.parse(localStorage.getItem('quote_diag')||'[]')||[]; }catch(e){ __diag=[]; }
+const __diagLast={}; let __diagDirty=0;
+function __diagSave(){ try{ localStorage.setItem('quote_diag', JSON.stringify(__diag)); }catch(e){} }
+function __diagPush(line){
+  let hms=''; try{ hms=new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Taipei',hour12:false}); }catch(e){}
+  __diag.push(hms+' '+line);
+  if(__diag.length>__DIAG_MAX) __diag.splice(0, __diag.length-__DIAG_MAX);
+  if(++__diagDirty>=10){ __diagDirty=0; __diagSave(); }
+}
+function __diagQuote(sym, mis, ytw, pick, errM, errY){
+  const one=(q,err)=> q ? (q.verdict+(q.field?('/'+q.field):'')+' '+q.price+'@'+(q.exTime||'?')+' ['+(q.raw||'')+']') : ('✗'+(err||'無資料'));
+  const body=sym.replace(/\..*/,'')+' 證交所:'+one(mis,errM)+' | Yahoo股市:'+one(ytw,errY)
+           +' | 顯示:'+(pick ? (pick.src+' '+pick.price+' '+pick.verdict) : '無');
+  // 去重時不看「快照時間 t=」：證交所每 5 秒換一次快照時間，但價格沒變就不必再記一行
+  const key=body.replace(/ t=[0-9:]+/g,'').replace(/rt=[^ ]+/g,'');
+  const last=__diagLast[sym], now=Date.now();
+  if(last && last.key===key && now-last.t<30000) return;
+  __diagLast[sym]={key, t:now};
+  __diagPush(body);
+}
+function __quoteDiagDump(){
+  let now=''; try{ now=new Date().toLocaleString('zh-TW',{timeZone:'Asia/Taipei',hour12:false}); }catch(e){}
+  const head=[
+    '=== 股票App報價診斷紀錄 ===',
+    '產生時間(台北): '+now,
+    'App版本(檔案時間): '+(typeof appVersionText==='function'?appVersionText():'?'),
+    '網址: '+location.origin+location.pathname,
+    '市場: '+(typeof getMarket==='function'?getMarket():'?')+'　盤中判定: '+(typeof isMarketOpenNow==='function'?isMarketOpenNow():'?')
+      +'　畫面在前景: '+(!document.hidden)+'　有網路: '+navigator.onLine,
+    '報價代理: '+(typeof quoteProxyBase==='function'?quoteProxyBase():'?'),
+    '自選股: '+(typeof getWatchlist==='function'?getWatchlist().map(x=>x.symbol).join(','):'?'),
+    '頂端時間列: '+((document.getElementById('wlLastUpdate')||{}).textContent||''),
+    '瀏覽器: '+navigator.userAgent,
+    '--- 最近 '+__diag.length+' 筆（舊→新）---'
+  ];
+  return head.concat(__diag).join('\n');
+}
+function openQuoteDiag(){
+  __diagSave();
+  let box=document.getElementById('quoteDiagModal');
+  if(!box){
+    box=document.createElement('div'); box.id='quoteDiagModal'; box.className='modal-overlay';
+    box.innerHTML='<div class="modal" style="max-height:88vh;display:flex;flex-direction:column">'
+      + '<h2>🩺 報價診斷紀錄</h2>'
+      + '<div class="sub">股價看起來不對時，按「複製」把這份紀錄貼給開發者。只包含報價資料與瀏覽器型號，不含任何個人資料，也不會自動上傳。</div>'
+      + '<textarea id="quoteDiagText" readonly style="flex:1;min-height:200px;width:100%;background:var(--bg3);color:var(--text);border:1px solid var(--border);border-radius:6px;font:11px/1.5 monospace;padding:8px;white-space:pre;overflow:auto"></textarea>'
+      + '<div id="quoteDiagMsg" class="sub" style="min-height:18px;margin:6px 0 0"></div>'
+      + '<div class="modal-btns"><button class="btn-sec" onclick="document.getElementById(\'quoteDiagModal\').classList.remove(\'open\')">關閉</button>'
+      + '<button class="btn-sec" onclick="shareQuoteDiag()">分享／寄出</button>'
+      + '<button class="btn-pri" onclick="copyQuoteDiag()">複製</button></div></div>';
+    box.addEventListener('click', e=>{ if(e.target===box) box.classList.remove('open'); });
+    document.body.appendChild(box);
+  }
+  document.getElementById('quoteDiagText').value=__quoteDiagDump();
+  document.getElementById('quoteDiagMsg').textContent='';
+  box.classList.add('open');
+}
+async function copyQuoteDiag(){
+  const ta=document.getElementById('quoteDiagText'), msg=document.getElementById('quoteDiagMsg');
+  let ok=false;
+  try{ await navigator.clipboard.writeText(ta.value); ok=true; }catch(e){}
+  if(!ok){ try{ ta.focus(); ta.select(); ok=document.execCommand('copy'); }catch(e){} }
+  if(msg) msg.textContent = ok ? '✅ 已複製，可以直接貼上' : '⚠️ 複製失敗，請長按上面的文字手動全選複製';
+}
+async function shareQuoteDiag(){
+  const ta=document.getElementById('quoteDiagText'), msg=document.getElementById('quoteDiagMsg');
+  try{
+    if(navigator.share){ await navigator.share({title:'股票App報價診斷紀錄', text:ta.value}); return; }
+  }catch(e){ if(e && e.name==='AbortError') return; }
+  await copyQuoteDiag();
+  if(msg) msg.textContent+='（這台裝置不支援分享，已改為複製）';
+}
+// 重要事件也記一筆：切到背景／回到前景、離線／恢復連線
+document.addEventListener('visibilitychange', function(){ __diagPush('【事件】'+(document.hidden?'切到背景（暫停更新）':'回到前景')); if(document.hidden) __diagSave(); });
+window.addEventListener('pagehide', __diagSave);
+window.addEventListener('offline', function(){ __diagPush('【事件】網路中斷'); });
+window.addEventListener('online',  function(){ __diagPush('【事件】網路恢復'); });
 // 超過這麼久沒有成功更新，就標「未更新」。15 秒＝證交所約 3 個快照週期；
 //   設太短的話，單一次網路抖動就會讓整排標示閃爍。
 const __QUOTE_STALE_MS = 15000;
@@ -2376,15 +2471,17 @@ async function quotesOf(symbols){
         const sub=[];
         if(tw.length) sub.push((async()=>{
           // 兩個彼此獨立的即時來源同時抓（見 fetchTwYahooQuotes 上方說明），任一邊失敗都不影響另一邊
+          let errM='', errY='';
           const [m, y]=await Promise.all([
-            fetchTwMisQuotes(tw).catch(()=>new Map()),
-            fetchTwYahooQuotes(tw).catch(()=>new Map())
+            fetchTwMisQuotes(tw).catch(e=>{ errM=String((e&&e.name==='AbortError')?'逾時':(e&&e.message)||e); return new Map(); }),
+            fetchTwYahooQuotes(tw).catch(e=>{ errY=String((e&&e.name==='AbortError')?'逾時':(e&&e.message)||e); return new Map(); })
           ]);
           tw.forEach(s=>{
             const mq=m.get(s);
             const mis = mq ? Object.assign({}, mq, {src: mq.verdict==='reject' ? 'TWSE(資料異常)'
               : mq.verdict==='live' ? 'TWSE' : 'TWSE('+(mq.src||'非現價')+')'}) : null;
             const q=pickTwQuote(mis, y.get(s));
+            __diagQuote(s, mis, y.get(s), q, errM, errY);
             if(!q) return;
             __putQuote(s, q.price, q.prev, q.src, q.stale, q); });
           const miss=tw.filter(s=>!m.has(s) && !y.has(s));
@@ -6814,6 +6911,7 @@ function refreshLivePrices(){
   if(__priceBusy){
     if(now-__busySince < 15000) return;        // 15 秒內視為正常的同時請求保護
     __priceBusy=false;                          // 超過 15 秒一定有東西卡死了，強制放行
+    if(typeof __diagPush==='function') __diagPush('【事件】輪詢卡住超過 15 秒，已強制放行');
     try{ __quoteWait.clear(); }catch(e){}       // 連帶清掉可能已死的 in-flight 記錄（見 quotesOf）
   }
   __lastPriceTick=now; __priceBusy=true; __busySince=now;
