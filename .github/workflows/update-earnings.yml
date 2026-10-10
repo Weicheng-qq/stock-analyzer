@@ -47,7 +47,12 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    # ⚠️ 2026-10-10：原本 50 分鐘。AI 分析那一步常跑到 49 分鐘，一超時整個工作被 GitHub 強制取消，
+    #   後面的「提交結果」被跳過 —— 最近 6 天有 5 天如此，當天分析好的內容全部沒存下來。
+    #   現在三道保護：① 腳本自己看時間，34 分鐘就優雅收工（TIME_BUDGET_MIN）
+    #                 ② AI 那一步另設 42 分鐘上限，超過只讓那一步失敗，不會取消整個工作
+    #                 ③「提交結果」改成不論前面成功、失敗、逾時都會執行（if: always()）
+    timeout-minutes: 60
     steps:
       # v4 會觸發「Node.js 20 is deprecated」警告（GitHub 已強制改用 Node 24 執行），改用 v5
       - uses: actions/checkout@v5
@@ -83,7 +88,10 @@ jobs:
         run: node scripts/detect-events.mjs
 
       - name: AI 分析（僅處理有新事件者，額度用完自動停止）
+        timeout-minutes: 42
         env:
+          # 腳本執行超過這個分鐘數就做完手上這一家後收工，讓下面的提交步驟一定有時間跑
+          TIME_BUDGET_MIN: '34'
           GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
           GROQ_KEY: ${{ secrets.GROQ_KEY }}
           OPENROUTER_KEY: ${{ secrets.OPENROUTER_KEY }}
@@ -94,6 +102,8 @@ jobs:
         run: node scripts/analyze-earnings.mjs
 
       - name: 提交結果
+        # 不論上一步成功、失敗或逾時都要提交：分析結果是一家一家寫進硬碟的，做了多少就存多少
+        if: always()
         run: |
           git config user.name  'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'

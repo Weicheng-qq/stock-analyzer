@@ -29,11 +29,40 @@ const PDFTOTEXT = process.env.PDFTOTEXT_BIN || 'pdftotext';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
 
 // 文件優先序：逐字稿 > 法說會簡報 > 財報新聞稿。逐字稿含管理層問答，資訊量最高。
+// ⚠️ 2026-10-10 加入 commentary（管理報告／財務長說明）：
+//   逐字稿通常在法說會後幾天到幾週才上傳（實測台積電 7/16 開會、逐字稿檔案在 2026-08 資料夾），
+//   法說會當天官網只有「管理報告、財報新聞稿、簡報」。管理報告是文字最完整的一份
+//   （各製程／平台營收占比、毛利率變動原因、資本支出、下一季財測），排在簡報前面。
 const DOC_RANK = [
   { re: /transcript|逐字稿/i, kind: 'transcript', rank: 0 },
-  { re: /presentation|slides|簡報|earnings.?deck/i, kind: 'presentation', rank: 1 },
-  { re: /earnings.?release|press.?release|新聞稿|results/i, kind: 'release', rank: 2 }
+  { re: /management.?report|cfo.?commentary|prepared.?remarks|shareholder.?letter|管理階層|營運報告/i, kind: 'commentary', rank: 1 },
+  { re: /presentation|slides|簡報|earnings.?deck/i, kind: 'presentation', rank: 2 },
+  { re: /earnings.?release|press.?release|新聞稿|results/i, kind: 'release', rank: 3 }
 ];
+
+// 從檔名／連結文字／頁面標題判斷這份文件是「哪一年第幾季」。
+//   例：「2Q26 ManagementReport」「TSMC 2026 Q3 Quarterly Results」「Transcript of Second Quarter 2027」
+//       「Q2FY27-CFO-Commentary」「2026年第三季」「115年第3季」（民國）
+//   ⚠️ 季別是公司自己的寫法（美股多為會計年度），只能拿來跟「同一家公司」先前的季別比較。
+//   判斷不出來就回 null —— 寧可當作不知道，也不要猜。
+export function quarterOfText(s) {
+  let t = String(s || '');
+  try { t = decodeURIComponent(t); } catch (e) {}
+  t = t.replace(/[_\-+/.()]/g, ' ');
+  const nowY = new Date().getFullYear();
+  const yr = y => { y = +y; if (y < 100) y += 2000; else if (y >= 100 && y < 200) y += 1911; return y; };
+  const ok = (y, q) => (q >= 1 && q <= 4 && y >= nowY - 3 && y <= nowY + 2) ? { y, q, key: y * 4 + q } : null;
+  const word = { first: 1, second: 2, third: 3, fourth: 4 };
+  const zh = { '一': 1, '二': 2, '三': 3, '四': 4 };
+  let m;
+  if ((m = t.match(/(?<![0-9A-Za-z])([1-4])Q\s?'?(\d{4}|\d{2})(?![0-9])/i))) { const r = ok(yr(m[2]), +m[1]); if (r) return r; }                       // 2Q26、3Q2026
+  if ((m = t.match(/(?<![A-Za-z])F([1-4])Q\s?(\d{4}|\d{2})(?![0-9])/i))) { const r = ok(yr(m[2]), +m[1]); if (r) return r; }                             // F2Q27
+  if ((m = t.match(/(?<![A-Za-z0-9])Q([1-4])\s*(?:FY|F)?\s*'?(\d{4}|\d{2})(?![0-9])/i))) { const r = ok(yr(m[2]), +m[1]); if (r) return r; }             // Q3 2026、Q2FY27、Q2 27
+  if ((m = t.match(/(?<![0-9])(?:FY\s*)?(20\d{2})\s*Q\s?([1-4])(?![0-9])/i))) { const r = ok(+m[1], +m[2]); if (r) return r; }                           // 2026 Q3、FY2027 Q2
+  if ((m = t.match(/(first|second|third|fourth)\s+quarter(?:\s+of)?(?:\s+fiscal(?:\s+year)?)?\s+(20\d{2})/i))) { const r = ok(+m[2], word[m[1].toLowerCase()]); if (r) return r; }
+  if ((m = t.match(/(20\d{2}|1\d{2})\s*年\s*第\s*([一二三四1-4])\s*季/))) { const r = ok(yr(m[1]), zh[m[2]] || +m[2]); if (r) return r; }
+  return null;
+}
 
 let _browser = null, _ctx = null, _pwFailed = false;
 
@@ -119,27 +148,48 @@ export async function fetchIrDocument(symbol, irUrl) {
     const links = await page.evaluate(() =>
       [...document.querySelectorAll('a[href]')].map(a => ({ text: (a.textContent || '').trim().slice(0, 120), href: a.href })));
 
-    // 只要 PDF；依「逐字稿 > 簡報 > 新聞稿」排序，同類取頁面上較前者（通常是最新一季）
-    const cands = [];
+    // 只要 PDF，並標出每一份是哪一季
+    const seen = new Set();
+    let cands = [];
     for (const l of links) {
-      if (!/\.pdf(\?|$)/i.test(l.href)) continue;
+      if (!/\.pdf(\?|$)/i.test(l.href) || seen.has(l.href)) continue;
+      seen.add(l.href);
       const blob = `${l.href} ${l.text}`;
       const hit = DOC_RANK.find(d => d.re.test(blob));
-      if (hit) cands.push({ ...l, kind: hit.kind, rank: hit.rank });
+      if (hit) cands.push({ ...l, kind: hit.kind, rank: hit.rank, q: quarterOfText(blob) });
     }
     if (!cands.length) return null;
+
+    // ⚠️⚠️ 2026-10-10 修正：原本只依「逐字稿 > 簡報 > 新聞稿」排序，完全不看季別。
+    //   法說會當天官網只有新一季的簡報／管理報告，逐字稿還是上一季的 ——
+    //   舊寫法會優先抓「逐字稿」，拿到的其實是【上一季】的內容，卻被當成最新一季來分析。
+    //   現在：先找出頁面上「最新的那一季」，只在那一季的文件裡依種類挑。
+    //   檔名沒寫季別時，退回用頁面標題的季別（台積電的頁面標題就是「TSMC 2026 Q3 Quarterly Results」）。
+    let docQ = null;
+    const withQ = cands.filter(c => c.q);
+    if (withQ.length) {
+      const mk = Math.max(...withQ.map(c => c.q.key));
+      cands = withQ.filter(c => c.q.key === mk);
+      docQ = cands[0].q;
+    } else {
+      docQ = quarterOfText(await page.title().catch(() => ''));
+    }
     cands.sort((a, b) => a.rank - b.rank);
 
-    // 依序嘗試前 3 個，取第一個能成功轉出文字的
-    for (const c of cands.slice(0, 3)) {
+    // 同一季最多取 3 份（逐字稿／管理報告／簡報／新聞稿各有各的資訊），第一份是品質最高的
+    const docs = [];
+    for (const c of cands.slice(0, 5)) {
+      if (docs.length >= 3) break;
       try {
         const buf = await downloadDoc(ctx, page, c.href, irUrl);
         if (!buf) continue;
         const txt = await pdfToText(buf);
-        if (txt) return { kind: c.kind, url: c.href, title: c.text, text: txt, source: irUrl };
+        if (txt) docs.push({ kind: c.kind, url: c.href, title: c.text, text: txt });
       } catch (e) { /* 換下一個候選 */ }
     }
-    return null;
+    if (!docs.length) return null;
+    const top = docs[0];
+    return { kind: top.kind, url: top.url, title: top.title, text: top.text, source: irUrl, quarter: docQ, docs };
   } catch (e) {
     return null;
   } finally {
@@ -163,6 +213,15 @@ const FOCUS_IR = [
   /nanometer|nanosheet|node|tape[- ]?out|risk production|volume production|process technology/gi,
   /奈米|製程|量產|試產|技術藍圖|先進封裝/g
 ];
+// 多份文件一起節錄：第一份（品質最高）給最多篇幅，其餘各保留一段，並標明每一段出自哪一份文件。
+//   不能把幾份文件接起來再一次節錄 —— 逐字稿動輒 6 萬字，會把後面幾份整個擠掉。
+export function focusExcerptDocs(docs, total = 14000) {
+  if (!docs || !docs.length) return '';
+  if (docs.length === 1) return focusExcerptIr(docs[0].text, total);
+  const NAME = { transcript: '法說會逐字稿', commentary: '管理報告／財務長說明', presentation: '法說會簡報', release: '財報新聞稿' };
+  const budget = docs.length === 2 ? [Math.round(total * 0.7), Math.round(total * 0.3)] : [Math.round(total * 0.6), Math.round(total * 0.22), Math.round(total * 0.18)];
+  return docs.map((d, i) => '【文件 ' + (i + 1) + '：' + (NAME[d.kind] || '公司官網文件') + '】\n' + focusExcerptIr(d.text, budget[i])).join('\n\n');
+}
 export function focusExcerptIr(text, maxLen = 14000) {
   const spans = [];
   for (const re of FOCUS_IR) {
