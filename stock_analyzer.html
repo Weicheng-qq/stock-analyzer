@@ -539,6 +539,9 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .moat-tip { font-size:11.5px; color:var(--text2); line-height:1.5; }
 /* ── 大師選股邏輯推薦（#masterPickCard）────────────────────────
    選擇器一律以 #masterPickCard 開頭，確保不影響其他頁面。手機優先：390px 可直接掃讀。 */
+/* 自選股每一列的診斷碼：只有異常時才出現（見 __dxFor），平常不佔版面 */
+.wl-dx { font-size:9.5px; line-height:1.35; color:var(--yellow); margin-top:2px; text-align:right; white-space:nowrap; }
+.wl-dx:empty { display:none; }
 #masterPickCard .mp-who { display:flex; gap:11px; align-items:center; padding:10px 12px; margin:2px 0 14px; background:rgba(88,166,255,.08); border-left:3px solid var(--blue); border-radius:6px; }
 #masterPickCard .mp-ico { font-size:26px; line-height:1; }
 /* 大師人像：圓形裁切。object-fit:cover 確保非正方形來源也不會被拉扁，
@@ -797,6 +800,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
     </div>
     <input type="text" id="watchlistInput" style="display:none">
     <div id="wlLastUpdate" onclick="openQuoteDiag()" title="點這裡看報價診斷紀錄" style="font-size:11px;color:var(--text2);text-align:right;margin:-4px 0 6px;cursor:pointer"></div>
+    <div id="wlDiagLine" onclick="openQuoteDiag()" title="點這裡看完整診斷紀錄" style="font-size:10px;color:var(--text2);text-align:right;margin:-3px 0 6px;cursor:pointer;opacity:.85"></div>
     <div id="watchlistTable"><div class="note">尚未加入任何自選股，按上方「加入」新增</div></div>
   </div>
 
@@ -905,8 +909,11 @@ function quoteProxyBase(){
   //      才會更新，改成每秒輪詢時若 Worker 仍是 5 秒快取，每秒抓回來的都是同一份舊資料。
   //   ② 同源請求沒有 CORS 預檢，每秒輪詢時少一半往返。
   //   兩者用的是同一個 Cloudflare 帳號的免費額度，改走這條路不會多花額度。
-  //   使用者在 ⚙️ 自填了代理網址時仍以自填的為準。
-  if(!getQuoteProxy() && /\.pages\.dev$/i.test(location.hostname)) return PROXY;
+  // ⚠️ 2026-10-10：改為【一律】走同源，不再理會 localStorage 裡舊的自填代理網址。
+  //   原本「自填的優先」，但線上版的 ⚙️ 早就被藏起來，那個值只可能是以前測試留下的舊 Worker 網址；
+  //   舊 Worker 要手動貼程式碼才會更新，白名單裡也沒有 Yahoo股市（台股第二來源）。
+  //   同一支 App 在不同手機走不同代理，正是「我這邊正常、你那邊不正常」最難查的來源，直接拿掉這個變數。
+  if(/\.pages\.dev$/i.test(location.hostname)) return PROXY;
   const w=getQuoteProxy()||DEFAULT_QUOTE_PROXY;   // 使用者自填的優先，沒填就用預設 Worker
   if(!w) return PROXY;
   return w.replace(/\/+$/,'')+'/?url=';   // 去掉結尾多餘的斜線，使用者貼網址時常會多帶一個
@@ -1799,6 +1806,7 @@ function renderWatchlist(){
       <div class="wl-pc">
         <div class="wl-price" id="wlp_${esc(it.symbol)}">…</div>
         <div class="wl-chg" id="wlc_${esc(it.symbol)}">…</div>
+        <div class="wl-dx" id="wld_${esc(it.symbol)}"></div>
       </div>
       ${__wlEdit?`<button class="wl-del" onclick="event.stopPropagation();removeFromWatchlist('${esc(it.symbol)}')" title="刪除">✕</button>`:''}
     </div>
@@ -2393,12 +2401,121 @@ function __diagQuote(sym, mis, ytw, pick, errM, errY){
   __diagLast[sym]={key, t:now};
   __diagPush(body);
 }
+// ── 畫面上的「診斷碼」────────────────────────────────────────────
+//   使用者 2026-10-10 要求：「看你要顯示錯誤 error code 在畫面上，截圖給你後你自己判斷」。
+//   所以把每一檔這一輪的狀態濃縮成一小段代碼，直接顯示在畫面上，一張截圖就能判斷出了什麼事。
+//
+//   【來源狀態】M＝證交所、Y＝Yahoo股市，後面一個字母：
+//     k 即時成交　t 即時成交（z 為「-」，改用 trade.z）　d 延遲　o 只有開盤價
+//     p 今日尚未成交　s 前一交易日　r 未通過驗證　x 抓取失敗
+//     例：Mt2565@09:04 ＝ 證交所用 trade.z 取得 2565，成交時間 09:04；Mx(T) ＝ 證交所逾時
+//     失敗原因：T 逾時　502 等數字＝代理回傳的錯誤碼　J 回應不是 JSON　N 網路不通　? 其他
+//   【錯誤碼】
+//     E01 兩個來源這一輪都抓不到　　E02 證交所抓不到（已改用 Yahoo股市）
+//     E03 Yahoo股市抓不到（證交所正常，僅少了備援）
+//     E04 有來源的數字未通過驗證（違反漲跌停／當日高低／跳動單位）
+//     E05 超過 15 秒沒有成功更新，畫面是上一次的價格
+//     E06 兩個來源都是即時成交，但價格不同
+//     E07 盤中資料時間落後超過 3 分鐘
+//     E08 拿不到成交價，畫面是開盤價　E10 畫面是延遲報價
+//     E09 輪詢曾卡住超過 15 秒被強制放行（記在紀錄裡，不顯示在列上）
+const __dxLast=new Map();   // symbol → {t, codes:[], text}
+function __dxErr(e){
+  e=String(e||''); if(!e) return '';
+  if(/逾時/.test(e)) return 'T';
+  const m=e.match(/UPSTREAM_(\d+)/); if(m) return m[1];
+  if(/JSON|token|PARSE/i.test(e)) return 'J';
+  if(/Failed to fetch|NetworkError|Load failed|PROXY_DOWN/i.test(e)) return 'N';
+  return '?';
+}
+function __dxState(q, err, P){
+  if(!q){ const r=__dxErr(err); return P+'x'+(r?('('+r+')'):''); }
+  const v=q.verdict;
+  const c = v==='live' ? (q.field==='trade'?'t':'k') : v==='delayed'?'d' : v==='open'?'o'
+          : v==='prevclose'?'p' : v==='session'?'s' : v==='reject'?'r' : '?';
+  return P+c+(q.price!=null ? (q.price+'@'+String(q.exTime||'').slice(0,5)) : '');
+}
+function __dxSet(sym, mis, ytw, pick, errM, errY){
+  const codes=[];
+  const rj=q=>q && q.verdict==='reject';
+  if(!mis && !ytw){ const r=__dxErr(errM)||__dxErr(errY); codes.push('E01'+(r?('('+r+')'):'')); }
+  else if(!mis){ const r=__dxErr(errM); codes.push('E02'+(r?('('+r+')'):'')); }
+  else if(!ytw){ const r=__dxErr(errY); codes.push('E03'+(r?('('+r+')'):'')); }
+  if(rj(mis)||rj(ytw)) codes.push('E04');
+  if(mis && ytw && mis.verdict==='live' && ytw.verdict==='live' && mis.exDate===ytw.exDate && mis.price!==ytw.price) codes.push('E06');
+  if(pick && pick.verdict==='open') codes.push('E08');
+  if(pick && pick.verdict==='delayed') codes.push('E10');
+  const text=__dxState(mis,errM,'M')+' '+__dxState(ytw,errY,'Y')+(pick?('→'+(/^Yahoo/.test(pick.src||'')?'Y':'M')):'→無');
+  __dxLast.set(sym, {t:Date.now(), codes, text});
+}
+// 顯示時再補上兩個「要看當下時間才知道」的錯誤碼
+function __dxFor(sym, q){
+  const d=__dxLast.get(sym);
+  const codes=d ? d.codes.slice() : [];
+  if(q && q.notUpdated) codes.push('E05');
+  if(q && q.verdict!=='reject' && typeof isMarketOpenNow==='function' && isMarketOpenNow()){
+    const lag=__exLagMinutes(q.snapTime ? Object.assign({}, q, {exTime:q.snapTime}) : q);
+    if(lag!=null && lag>3 && lag<9999) codes.push('E07');
+  }
+  return {codes, text:d?d.text:''};
+}
+// ── 版本指紋＋自動更新 ──────────────────────────────────────────
+// ⚠️⚠️ 2026-10-10 發現的兩個問題：
+//   ① Cloudflare Pages 不回 Last-Modified／ETag，所以 document.lastModified 只是「頁面載入的時間」，
+//      畫面上顯示的「版本」根本看不出是不是舊版。
+//   ② 手機把 App 留在背景好幾天不關，回來時跑的是【記憶體裡的舊程式】——
+//      伺服器上修了什麼都不會生效，使用者看到的永遠是舊行為（「改了很多次還是錯」的可能原因之一）。
+//   解法：把伺服器上的 HTML 全文算成一個指紋。載入時算一次當基準；
+//   回到前景、以及每 30 分鐘再算一次，指紋變了＝有新版，就自動重新載入。
+//   · 指紋直接顯示在診斷碼那一行，截圖就能核對是哪一版
+//   · 靜態檔案請求不算 Cloudflare Functions 額度；每日排程只改 data/ 不改 HTML，不會觸發重載
+//   · 5 分鐘內最多自動重載一次，絕不會無限重載（2026-08 Service Worker 無限重載的教訓）
+//   · 使用者正在操作時不打斷：只在「剛回到前景」或「已閒置 2 分鐘」時重載
+let __buildFp='', __newVerFp='', __lastVerCheck=0;
+const __buildLoadedAt=Date.now();
+function __fnv(s){ let x=0x811c9dc5; for(let i=0;i<s.length;i++){ x^=s.charCodeAt(i); x=Math.imul(x,0x01000193); } return (x>>>0).toString(16).padStart(8,'0'); }
+async function __fetchFp(){
+  const r=await fetch(location.pathname+'?_vc='+Date.now(), {cache:'no-store'});
+  if(!r.ok) throw new Error('HTTP_'+r.status);
+  return __fnv(await r.text());
+}
+function __maybeReloadForNewVersion(why){
+  if(!__newVerFp || __newVerFp===__buildFp) return;
+  let last=0; try{ last=+(sessionStorage.getItem('autoReloadAt')||0); }catch(e){}
+  if(Date.now()-last < 5*60*1000) return;                    // 防無限重載
+  if(document.querySelector('.modal-overlay.open')) return;  // 使用者正在填東西，不打斷
+  try{ sessionStorage.setItem('autoReloadAt', String(Date.now())); sessionStorage.setItem('skipSplashOnce','1'); }catch(e){}
+  __diagPush('【事件】有新版 '+__buildFp.slice(0,6)+'→'+__newVerFp.slice(0,6)+'，自動重新載入（'+why+'）'); __diagSave();
+  location.reload();
+}
+async function __checkNewVersion(why, force){
+  const now=Date.now();
+  if(!force && now-__lastVerCheck < 10*60*1000){ if(why==='回到前景') __maybeReloadForNewVersion(why); return; }
+  __lastVerCheck=now;
+  try{
+    const fp=await __fetchFp();
+    if(!__buildFp){ __buildFp=fp; return; }               // 第一次：當作目前這一版的基準
+    if(fp!==__buildFp){ __newVerFp=fp; if(why==='回到前景' || __priceIdle()) __maybeReloadForNewVersion(why); }
+  }catch(e){}
+}
+window.addEventListener('load', function(){
+  if(location.protocol==='file:') return;
+  __checkNewVersion('載入', true);
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) __checkNewVersion('回到前景'); });
+  window.addEventListener('pageshow', function(ev){ if(ev.persisted) __checkNewVersion('回到前景'); });
+  setInterval(function(){ if(document.hidden) return; __checkNewVersion('定時'); if(__priceIdle()) __maybeReloadForNewVersion('閒置'); }, 60000);
+});
+// 顯示在畫面上的版本：指紋前 6 碼＋這個頁面是幾點載入的（載入很久＝可能跑的是舊程式）
+function __dxVersion(){
+  let at=''; try{ const d=new Date(__buildLoadedAt), p=n=>String(n).padStart(2,'0'); at=p(d.getMonth()+1)+'/'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes()); }catch(e){}
+  return (__buildFp?__buildFp.slice(0,6):'…')+(__newVerFp&&__newVerFp!==__buildFp?'(有新版)':'')+' 載入'+at;
+}
 function __quoteDiagDump(){
   let now=''; try{ now=new Date().toLocaleString('zh-TW',{timeZone:'Asia/Taipei',hour12:false}); }catch(e){}
   const head=[
     '=== 股票App報價診斷紀錄 ===',
     '產生時間(台北): '+now,
-    'App版本(檔案時間): '+(typeof appVersionText==='function'?appVersionText():'?'),
+    'App版本指紋: '+(__buildFp||'尚未取得')+(__newVerFp&&__newVerFp!==__buildFp?('（伺服器已有新版 '+__newVerFp+'）'):'')+'　頁面載入時間: '+new Date(__buildLoadedAt).toLocaleString('zh-TW',{hour12:false}),
     '網址: '+location.origin+location.pathname,
     '市場: '+(typeof getMarket==='function'?getMarket():'?')+'　盤中判定: '+(typeof isMarketOpenNow==='function'?isMarketOpenNow():'?')
       +'　畫面在前景: '+(!document.hidden)+'　有網路: '+navigator.onLine,
@@ -2406,6 +2523,9 @@ function __quoteDiagDump(){
     '自選股: '+(typeof getWatchlist==='function'?getWatchlist().map(x=>x.symbol).join(','):'?'),
     '頂端時間列: '+((document.getElementById('wlLastUpdate')||{}).textContent||''),
     '瀏覽器: '+navigator.userAgent,
+    '診斷碼說明: M=證交所 Y=Yahoo股市; k即時 t即時(用trade.z) d延遲 o僅開盤價 p今日未成交 s前一交易日 r未通過驗證 x抓取失敗(T逾時/數字=錯誤碼/J非JSON/N網路)',
+    '錯誤碼: E01兩來源都失敗 E02證交所失敗 E03Yahoo股市失敗 E04未通過驗證 E05超過15秒未更新 E06兩來源價格不同 E07資料落後>3分 E08僅開盤價 E09輪詢曾卡住 E10延遲報價',
+    '目前各檔: '+(typeof getWatchlist==='function'?getWatchlist().map(x=>{ const d=__dxLast.get(x.symbol); return x.symbol.replace(/\..*/,'')+'['+(d?((d.codes.join(',')||'OK')+' '+d.text):'無紀錄')+']'; }).join(' '):''),
     '--- 最近 '+__diag.length+' 筆（舊→新）---'
   ];
   return head.concat(__diag).join('\n');
@@ -2482,6 +2602,7 @@ async function quotesOf(symbols){
               : mq.verdict==='live' ? 'TWSE' : 'TWSE('+(mq.src||'非現價')+')'}) : null;
             const q=pickTwQuote(mis, y.get(s));
             __diagQuote(s, mis, y.get(s), q, errM, errY);
+            __dxSet(s, mis, y.get(s), q, errM, errY);
             if(!q) return;
             __putQuote(s, q.price, q.prev, q.src, q.stale, q); });
           const miss=tw.filter(s=>!m.has(s) && !y.has(s));
@@ -2636,6 +2757,28 @@ async function loadWatchlistPrices(list){
     if(lbl && (!asOf || (q.exDate+q.exTime) > asOf.key)){ asOf={text:lbl, key:q.exDate+q.exTime, ex:q}; }
   }
   updateWlTimestamp(parts.join('＋')||'無資料', fail<list.length, asOf&&asOf.text, asOf&&asOf.ex);
+  // ── 診斷碼（2026-10-10 使用者要求：錯誤碼顯示在畫面上，截圖就能判斷）──
+  //   每一列：只有異常時才顯示「錯誤碼＋兩個來源的狀態」；
+  //   頂端：一律顯示一行（正常時是 OK），含 App 版本與這一輪的本機時間，截圖才看得出是哪一版、幾點的畫面。
+  const tally={}; let mOk=0, yOk=0, twN=0;
+  list.forEach(it=>{
+    const q=quotes.get(it.symbol);
+    const isTw=/\.TWO?$/i.test(it.symbol);
+    const dx=__dxFor(it.symbol, q);
+    if(!isTw && !q) dx.codes.push('E01');             // 美股只有一個來源，抓不到就是 E01
+    if(isTw){ twN++; if(/M[kt]/.test(dx.text)) mOk++; if(/Yk/.test(dx.text)) yOk++; }
+    dx.codes.forEach(c=>{ tally[c]=(tally[c]||0)+1; });
+    const el=document.getElementById('wld_'+it.symbol);
+    if(el){ const t=dx.codes.length ? (dx.codes.join(' ')+(dx.text?(' '+dx.text):'')) : ''; if(el.textContent!==t) el.textContent=t; }
+  });
+  const dl=document.getElementById('wlDiagLine');
+  if(dl){
+    const codes=Object.keys(tally).sort().map(c=>c+(tally[c]>1?('×'+tally[c]):'')).join(' ');
+    let hms=''; try{ hms=new Date().toLocaleTimeString('en-GB',{hour12:false}); }catch(e){}
+    const txt='診斷碼 '+(codes||'OK')+(twN?(' · 證'+mOk+'/'+twN+' Y'+yOk+'/'+twN):'')+' · 版'+__dxVersion()+' · '+hms;
+    if(dl.textContent!==txt) dl.textContent=txt;
+    dl.style.color = codes ? 'var(--yellow)' : '';
+  }
 }
 // 「最後更新」時間戳：使用者連續三次回報開盤股價異常，但事後查不到當下的伺服器log
 //   (Vercel免費方案log只留很短時間，過了就查不到)，只能靠事後推測。加這個小字讓使用者
@@ -6911,7 +7054,7 @@ function refreshLivePrices(){
   if(__priceBusy){
     if(now-__busySince < 15000) return;        // 15 秒內視為正常的同時請求保護
     __priceBusy=false;                          // 超過 15 秒一定有東西卡死了，強制放行
-    if(typeof __diagPush==='function') __diagPush('【事件】輪詢卡住超過 15 秒，已強制放行');
+    if(typeof __diagPush==='function') __diagPush('【事件】E09 輪詢卡住超過 15 秒，已強制放行');
     try{ __quoteWait.clear(); }catch(e){}       // 連帶清掉可能已死的 in-flight 記錄（見 quotesOf）
   }
   __lastPriceTick=now; __priceBusy=true; __busySince=now;
@@ -6990,7 +7133,7 @@ async function updateDetailPrice(){
       if(box.innerHTML!==html) box.innerHTML=html;
     }
     const srcEl=document.getElementById('coPriceSrc');
-    if(srcEl) setLiveText(srcEl, quoteSrcLabel(q));
+    if(srcEl){ const dx=__dxFor(sym, q); setLiveText(srcEl, quoteSrcLabel(q)+(dx.codes.length?(' · 診斷碼 '+dx.codes.join(' ')+' '+dx.text):'')); }
   }catch(e){}
 }
 window.addEventListener('load', function(){

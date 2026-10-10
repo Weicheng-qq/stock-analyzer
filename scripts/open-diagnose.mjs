@@ -59,6 +59,13 @@ async function truthYtw() {
   return m;
 }
 
+// 程式指紋：與 App 內的 __fnv() 完全相同的算法。
+//   手機畫面「診斷碼」那一行會顯示「版xxxxxx」，和這裡印出來的前 6 碼相同＝手機跑的是同一版；
+//   不同＝手機還在跑舊程式（修正根本沒生效），這是判讀使用者回報時最先要確認的事。
+function fnv(s) { let x = 0x811c9dc5; for (let i = 0; i < s.length; i++) { x ^= s.charCodeAt(i); x = Math.imul(x, 0x01000193); } return (x >>> 0).toString(16).padStart(8, '0'); }
+let siteFp = '（取得失敗）';
+try { const r = await fetch(SITE + '/?_vc=' + Date.now(), { signal: AbortSignal.timeout(20000) }); if (r.ok) siteFp = fnv(await r.text()); } catch (e) {}
+
 const out = { status: 'ok', title: '', report: '' };
 function finish() {
   fs.writeFileSync('diag-report.md', out.report || '（無內容）');
@@ -116,14 +123,14 @@ while (loadOk) {
   const s = { hms: t.hms, sec: t.sec, dom: {}, head: '', mis: null, ytw: null, eM: '', eY: '' };
   const [dom, mis, ytw] = await Promise.all([
     page.evaluate(syms => ({
-      rows: syms.map(x => ({ s: x, p: (document.getElementById('wlp_' + x) || {}).textContent || '', b: ((document.getElementById('wlc_' + x) || {}).textContent || '').trim() })),
-      head: (document.getElementById('wlLastUpdate') || {}).textContent || '', hidden: document.hidden
+      rows: syms.map(x => ({ s: x, p: (document.getElementById('wlp_' + x) || {}).textContent || '', b: ((document.getElementById('wlc_' + x) || {}).textContent || '').trim(), x: (document.getElementById('wld_' + x) || {}).textContent || '' })),
+      head: (document.getElementById('wlLastUpdate') || {}).textContent || '', diag: (document.getElementById('wlDiagLine') || {}).textContent || '', hidden: document.hidden
     }), SYMS).catch(e => ({ rows: [], head: '讀取畫面失敗：' + e.message })),
     truthMis().catch(e => { s.eM = String(e.message || e); return null; }),
     truthYtw().catch(e => { s.eY = String(e.message || e); return null; })
   ]);
-  for (const r of dom.rows || []) s.dom[r.s.replace(/\..*/, '')] = { p: num(String(r.p).replace(/[^0-9.]/g, '')), b: r.b };
-  s.head = dom.head; s.mis = mis; s.ytw = ytw;
+  for (const r of dom.rows || []) s.dom[r.s.replace(/\..*/, '')] = { p: num(String(r.p).replace(/[^0-9.]/g, '')), b: r.b, x: r.x };
+  s.head = dom.head; s.diag = dom.diag || ''; s.mis = mis; s.ytw = ytw;
   if (mis && Object.values(mis).some(r => r.d === today)) sawToday = true;
   samples.push(s);
   await sleep(Math.max(500, STEP_MS - (tp().sec - t.sec) * 1000));
@@ -190,6 +197,10 @@ for (const sym of SYMS) {
   if (badB) notes.push(NAMES[c] + '（' + c + '）出現過標示：' + badB);
   rowsMd.push('| ' + NAMES[c] + ' ' + c + ' | ' + live + ' | ' + (firstShown ?? '—') + ' → ' + (lastShown ?? '—') + ' | ' + shownSet.size + ' | ' + (misS ? misS + ' 秒' : '0') + ' | ' + (openS ? openS + ' 秒' : '0') + ' | ' + (blank || 0) + ' | ' + (badB || '無') + ' |');
 }
+const codeSeen = {};
+for (const s of samples) for (const c of Object.keys(s.dom)) for (const m of String(s.dom[c].x || '').match(/E\d\d(\([^)]*\))?/g) || []) { const k = c + ' ' + m; codeSeen[k] = (codeSeen[k] || 0) + 1; }
+const codeTxt = Object.entries(codeSeen).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([k, n]) => k + '×' + n).join('、');
+if (codeTxt) notes.push('畫面上出現過的診斷碼（股票 代碼×取樣次數）：' + codeTxt);
 const eM = samples.filter(s => s.eM).length, eY = samples.filter(s => s.eY).length;
 if (samples.length && eM / samples.length > 0.2) problems.push('**直接問證交所失敗 ' + eM + '/' + samples.length + ' 次**（例：' + (samples.find(s => s.eM) || {}).eM + '）');
 if (samples.length && eY / samples.length > 0.2) notes.push('直接問 Yahoo股市失敗 ' + eY + '/' + samples.length + ' 次（例：' + (samples.find(s => s.eY) || {}).eY + '）');
@@ -210,6 +221,7 @@ out.title = (TEST ? '【測試】' : '') + (bad ? '❌ ' : out.status === 'incom
   + (bad ? '：發現 ' + problems.length + ' 個問題' : out.status === 'incomplete' ? '：沒有完整觀察到開盤後 10 分鐘' : '：畫面股價正常');
 
 L.push('取樣時間（台北）：**' + (samples[0] || {}).hms + ' ～ ' + (samples[samples.length - 1] || {}).hms + '**，共 ' + samples.length + ' 次（每 5 秒），網站：' + SITE);
+L.push('', '正式站程式指紋：`' + siteFp + '`（手機畫面「診斷碼」那一行的「版' + siteFp.slice(0, 6) + '」應與前 6 碼相同；不同代表手機還在跑舊程式）');
 if (TEST) L.push('', '> ⚠️ 這是**測試執行**（只取樣 60 秒、不限盤中），用來確認診斷流程與通知信能正常運作。非盤中時「盤中取樣」會是 0，屬正常。');
 if (!TEST) L.push('', '**開盤後 10 分鐘（09:00～09:10）觀察到 ' + openSamples.length + ' 次' + (covered ? '（完整）' : '（⚠️ 不完整，完整應約 120 次；本次從 ' + firstS + ' 才開始取樣，多半是 GitHub 排程延遲）') + '**');
 L.push('', '## 結論', '');
@@ -236,10 +248,13 @@ const c0 = '2330';
 const detail = TEST ? samples : samples.filter(s => s.sec <= O2 + 5);
 L.push('', '<details><summary>台積電逐筆取樣：開盤前後到 09:10（時間｜畫面｜標示｜證交所原始欄位｜Yahoo股市）</summary>', '', '```');
 detail.slice(0, 160).forEach(s => { const d = s.dom[c0] || {}, m = s.mis && s.mis[c0], y = s.ytw && s.ytw[c0];
-  L.push(s.hms + ' | 畫面 ' + (d.p ?? '—') + ' | ' + (d.b || '') + ' | ' + (m ? 'z=' + m.z + ' tz=' + m.tz + ' tt=' + m.tt + ' pz=' + m.pz + ' ts=' + m.ts + ' o=' + m.o + ' v=' + m.v + ' t=' + m.t : '✗' + s.eM) + ' | ' + (y ? y.p + '@' + y.rt + ' 延遲' + y.delay : '✗' + s.eY)); });
+  L.push(s.hms + ' | 畫面 ' + (d.p ?? '—') + ' | ' + (d.b || '') + ' | 碼 ' + (d.x || 'OK') + ' | ' + (m ? 'z=' + m.z + ' tz=' + m.tz + ' tt=' + m.tt + ' pz=' + m.pz + ' ts=' + m.ts + ' o=' + m.o + ' v=' + m.v + ' t=' + m.t : '✗' + s.eM) + ' | ' + (y ? y.p + '@' + y.rt + ' 延遲' + y.delay : '✗' + s.eY)); });
 L.push('```', '', '</details>');
 L.push('', '<details><summary>App 自己記的診斷紀錄（最後 40 行）</summary>', '', '```', ...String(appDump).split('\n').slice(0, 11), '…', ...String(appDump).split('\n').slice(11).slice(-40), '```', '', '</details>');
-L.push('', '最後一次頂端時間列：`' + ((samples[samples.length - 1] || {}).head || '') + '`');
+L.push('', '最後一次頂端時間列：`' + ((samples[samples.length - 1] || {}).head || '') + '`',
+  '最後一次診斷碼列：`' + ((samples[samples.length - 1] || {}).diag || '') + '`',
+  '', '診斷碼說明：M＝證交所、Y＝Yahoo股市；k 即時、t 即時（用 trade.z）、d 延遲、o 僅開盤價、p 今日未成交、s 前一交易日、r 未通過驗證、x 抓取失敗（T 逾時／數字＝錯誤碼／J 非 JSON／N 網路）。',
+  'E01 兩來源都失敗、E02 證交所失敗、E03 Yahoo股市失敗、E04 未通過驗證、E05 超過 15 秒未更新、E06 兩來源價格不同、E07 資料落後超過 3 分鐘、E08 僅開盤價、E09 輪詢曾卡住、E10 延遲報價。');
 out.report = L.join('\n');
 // GitHub Issue 內文上限 65,536 字元，超過會整個開不成 —— 保險起見截斷
 if (out.report.length > 60000) out.report = out.report.slice(0, 60000) + '\n\n…（內容過長已截斷，完整報告見 Actions 執行紀錄）';
