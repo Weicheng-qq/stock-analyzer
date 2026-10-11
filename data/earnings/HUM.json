@@ -1,0 +1,48 @@
+{
+ "symbol": "HUM",
+ "market": "us",
+ "name": "HUMANA INC",
+ "quarter": "2026 Q1（2026-01-01～2026-03-31）",
+ "quarterTag": "2026Q1",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "HUMANA INC",
+  "currency": "億美元",
+  "periodStart": "2026-01-01",
+  "periodEnd": "2026-03-31",
+  "year": 2026,
+  "season": "Q1",
+  "form": "10-Q",
+  "營業收入": "396.48",
+  "營業毛利": null,
+  "營業利益": "17.54",
+  "本期淨利": "11.86",
+  "每股盈餘": 9.83,
+  "營運現金流": "12.54",
+  "資本支出": "1.21",
+  "自由現金流": "11.33"
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/49071/000004907126000045/hum-2026q2xex99x2detailedx.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-11T01:49:58.912Z",
+ "result": {
+  "revenue": "2026 年 Q1 營業收入為 396.48 億美元。",
+  "eps": "2026 年 Q1 每股盈餘（EPS）為 9.83 美元。",
+  "margins": "營業毛利官方未提供（毛利率 0.0%）。營業利益率為 4.4%（營業利益 17.54 億美元），淨利率為 3.0%（本期淨利 11.86 億美元），展現健康保險業務之經營獲利水準。",
+  "fcf": "自由現金流為 11.33 億美元（營運現金流 12.54 億美元扣除資本支出 1.21 億美元）。",
+  "capex": "資本支出為 1.21 億美元。",
+  "guidance": "官方調降 2026 全年 GAAP EPS 展望至「至少 6.52 美元」，但重申調整後 EPS 展望為「至少 9.00 美元」。",
+  "outlook": "公司預期 2026 全年個人 Medicare Advantage (MA) 會員人數成長率約為 25%。此外，預估全年保險部門 Benefit Ratio 為 92.75%（正負 25 個基點）。",
+  "highlights": "• 2026 年 Q1 營業收入達 396.48 億美元，本期淨利達 11.86 億美元。<br>• 2026 年 Q1 營運現金流 12.54 億美元，自由現金流達 11.33 億美元。<br>• CenterWell Senior Primary Care 年初至今患者新增 130,900 名，成長率達 27%。",
+  "concerns": "• 官方將 2026 全年 GAAP EPS 財測由原先「至少 8.36 美元」下修至「至少 6.52 美元」。<br>• 2026 獎勵年（BY 2026）星級評等（Star Ratings）逆風對全年調整後盈餘造成年減壓力。<br>• 保險部門 Benefit Ratio 受星級評等逆風及新會員成本影響，2Q26 達 91.2%（高於 2Q25 的 89.9%）。",
+  "risks": "• 保險部門醫療給付比率（Benefit Ratio）居高不下，2Q26 達 91.2%，全年預期達 92.75%（正負 25 個基點），可能持續壓迫利潤率。<br>• 截至 2Q26 債務對總資本比率（Debt-to-total capitalization）上升至 42.7%（高於 2Q25 的 40.7%），資本結構負債比重提升。",
+  "keyPoints": "• 全年 GAAP EPS 財測由「至少 8.36 美元」下修至「至少 6.52 美元」，調整後 EPS 財測重申為「至少 9.00 美元」。<br>• 2026 年 Q1 營收 396.48 億美元，每股盈餘 9.83 美元，自由現金流 11.33 億美元。<br>• 2026 全年個人 Medicare Advantage (MA) 會員人數預期成長約 25%。",
+  "guidanceOfficial": "Humana 修改 2026 財年 GAAP EPS 指引為「至少 6.52 美元」（原為「至少 8.36 美元」），同時重申其調整後 EPS 指引為「至少 9.00 美元」。重申 2026 財年保險部門 Benefit Ratio 指引為 92.75%（正負 25 個基點）。重申 2026 財年個人 Medicare Advantage (MA) 會員成長率比 2025 年「約成長 25%」。",
+  "segments": "• 保險部門（Insurance Segment）2Q26 營收：391.40 億美元（2Q25 為 310.94 億美元）<br>• CenterWell 部門 2Q26 營收：67.90 億美元（2Q25 為 55.37 億美元）<br>• 個人 Medicare Advantage (MA) 2Q26 外部客戶保費收入：288.75 億美元<br>• 團體 Medicare Advantage (Group MA) 2Q26 外部客戶保費收入：28.51 億美元<br>• Medicare 獨立 PDP (stand-alone PDP) 2Q26 外部客戶保費收入：29.95 億美元"
+ }
+}
