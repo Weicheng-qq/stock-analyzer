@@ -1,0 +1,48 @@
+{
+ "symbol": "DHR",
+ "market": "us",
+ "name": "DANAHER CORPORATION",
+ "quarter": "2026 Q2（2026-03-28～2026-06-26）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "DANAHER CORPORATION",
+  "currency": "億美元",
+  "periodStart": "2026-03-28",
+  "periodEnd": "2026-06-26",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "62.65",
+  "營業毛利": "36.11",
+  "營業利益": "11.27",
+  "本期淨利": "8.70",
+  "每股盈餘": 1.23,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "",
+  "form": "法說會官方文件（管理報告／簡報／新聞稿）",
+  "url": "https://investors.danaher.com/image/Q2+2026+Danaher+Earnings+Presentation.pdf"
+ },
+ "docKind": "presentation",
+ "savedAt": "2026-10-15T01:31:36.148Z",
+ "result": {
+  "revenue": "依據官方 SEC 申報資料，DANAHER CORPORATION 2026 會計年度第二季營業收入為 62.65 億美元。<br>整體營收表現反映了持續經營業務的規模。",
+  "eps": "本季每股盈餘（EPS）為 1.23 美元。<br>此為根據官方 XBRL 申報之實際數字。",
+  "margins": "本季營業毛利為 36.11 億美元，毛利率達 57.6%；營業利益為 11.27 億美元，營業利益率為 18.0%。<br>本期淨利為 8.70 億美元，淨利率為 13.9%，顯示公司具備一定的獲利水準與成本控管能力。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司針對第三季及全年之核心銷售成長等項目提供了非 GAAP 展望與預測。<br>詳細內容請參閱官方文件節錄。",
+  "outlook": "本季營業收入為 62.65 億美元，營業毛利為 36.11 億美元，營業利益為 11.27 億美元。<br>本期淨利為 8.70 億美元，每股盈餘為 1.23 美元，整體營運維持獲利狀態。",
+  "highlights": "• 第二季營業收入為 62.65 億美元，營業毛利達 36.11 億美元。<br>• 本季營業利益為 11.27 億美元，營業利益率為 18.0%。<br>• 本期淨利為 8.70 億美元，淨利率為 13.9%，每股盈餘為 1.23 美元。",
+  "concerns": "• 財報中未提供營運現金流與資本支出等現金流相關數字，無法完整評估自由現金流狀況。<br>• 官方前瞻性聲明中提及多項外部風險因素，包含關稅、債務義務及收購相關之或有負債等。",
+  "risks": "• 公司在前瞻性聲明中提到債務義務（包含為融資收購 Masimo Corporation 而產生的債務）對營運和流動性的潛在影響。<br>• 面臨關稅及相關措施、全球經濟不穩定、匯率波動及法規遵循等多重外部風險。",
+  "keyPoints": "• 第二季營業收入為 62.65 億美元，毛利率為 57.6%，營業利益率為 18.0%。<br>• 本期淨利為 8.70 億美元，淨利率為 13.9%，每股盈餘（EPS）為 1.23 美元。<br>• 營運現金流與資本支出數據於本次官方申報中未提供。",
+  "guidanceOfficial": "Non-GAAP Forward-Looking Information % Change Three-Month Period Ending September 25, 2026 vs. Comparable 2025 Period: Core sales growth (non-GAAP) - Biotechnology: ~(1.0)%; Life Sciences: ~$(500); Diagnostics: ~+0.5%; Total Company: ~$(1,900); Impact of respiratory testing: ~$(90); Core sales growth excluding respiratory testing (non-GAAP): ~$(115).",
+  "segments": "• Biotechnology: Revenue and Adjusted Operating Profit Margin mentioned in presentation.<br>• Life Sciences: Revenue +5.5%, Core +5.5%, Adjusted Operating Profit Margin +170 BPS.<br>• Diagnostics: Revenue +7.0%, Core +2.0%, Acquisitions +4.0%, FX +1.0%, Adjusted Operating Profit Margin -160 BPS."
+ }
+}
