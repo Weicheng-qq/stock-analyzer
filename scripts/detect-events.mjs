@@ -32,7 +32,7 @@ const US_FORMS = new Set(['8-K', '10-Q', '10-K', '6-K', '20-F', '40-F']);
 async function getText(url, ua, tries = 3) {
   for (let i = 0; i < tries; i++) {
     try {
-      const r = await fetch(url, { headers: { 'User-Agent': ua, 'Accept': '*/*' } });
+      const r = await fetch(url, { headers: { 'User-Agent': ua, 'Accept': '*/*' }, signal: AbortSignal.timeout(60000) });
       if (r.ok) return await r.text();
       // 429/5xx 才重試，4xx 直接放棄（重試也不會變好，還浪費對方資源）
       if (r.status < 500 && r.status !== 429) return null;
@@ -129,10 +129,11 @@ async function detectTW() {
   }
 
   // 季度損益表：官方一次給出全部公司的最新季別，用它判斷「這家公司已經有新一季財報了」
-  const fins = [
-    { url: 'https://openapi.twse.com.tw/v1/opendata/t187ap06_L_ci', code: '公司代號', name: '公司名稱', y: '年度', s: '季別', mkt: '上市' },
-    { url: 'https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap06_O_ci', code: 'SecuritiesCompanyCode', name: 'CompanyName', y: 'Year', s: 'Season', mkt: '上櫃' }
-  ];
+  // ⚠️ 2026-10-18：補上金控／銀行／保險／證券期貨／異業端點（原本只有一般業，金融股永遠偵測不到新財報）
+  const fins = ['ci', 'fh', 'basi', 'ins', 'bd', 'mim'].flatMap(ind => [
+    { url: `https://openapi.twse.com.tw/v1/opendata/t187ap06_L_${ind}`, code: '公司代號', name: '公司名稱', y: '年度', s: '季別', mkt: '上市' + (ind === 'ci' ? '' : '（' + ind + '）') },
+    { url: `https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap06_O_${ind}`, code: 'SecuritiesCompanyCode', name: 'CompanyName', y: 'Year', s: 'Season', mkt: '上櫃' + (ind === 'ci' ? '' : '（' + ind + '）') }
+  ]);
   const latestFin = {};
   for (const f of fins) {
     const j = await getJson(f.url, UA_TW);

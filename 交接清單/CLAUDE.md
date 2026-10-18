@@ -34,6 +34,19 @@
 - **產品與服務**：同一份官網法說資料的 `segments`（分部／產品營收）＋`techRoadmap`，比人工版新一季以上就排最前面、人工版降為前一季對照（renderAI 的 autoProd）。
 - **影片**：新排程 `find-call-videos.yml`（每 3 小時）＋`scripts/find-call-videos.mjs` → `data/videos/latest.json`；前端 `__irVideoFor()` 與人工 `IR_CALL_VIDEO` 比場次，較新者勝出。只收投資看非凡頻道（由已知影片反查頻道 ID）【完整公開】＋「法說」。⚠️ 雲端環境測不到 YouTube，第一次實際執行結果要看 Actions 紀錄。
 
+### 0.2.3 2026-10-18 停用 Claude 前的全面稽核（使用者：「即將取消 Claude 訂閱，希望 App 能自己維護」）
+**① 付費風險**
+- 🔴 已修：`functions/api/ai.js` 的 OpenRouter 備援原本把前端 body 原樣轉送 → 任何人可指定付費模型，帳戶有餘額就會扣款。改為伺服器端強制 `:free` 模型、只轉 model/messages/temperature/reasoning。
+- ✅ Gemini 自動探索只挑 flash／flash-lite（免費層）；Groq 免費方案無卡不收費；排程腳本 OpenRouter 只用 `:free`；GitHub Actions（public repo）、Cloudflare Pages／KV 免費方案、Vercel Hobby（只轉址）都不收費。
+- ⚠️ 唯一可能收費的操作：在 Gemini 金鑰所屬的 Google Cloud 專案「啟用帳單」。永遠不要啟用。
+**② 股價錯誤**：報價層已有防呆閘門（自我測試 32/32）、雙來源、fail-closed（異常顯示「—」）、非即時一律標示；庫存報酬排除未驗證價格並標「參考損益」。美股一律 range=1d。本次未改。
+**③ 法說沒更新**
+- 🔴 已修：10/14 AI 步驟卡在無逾時的網站請求，跑滿 42 分鐘被強制終止。加看門狗（預算 +5 分鐘強制收工、狀態照寫）＋所有外部請求加逾時。
+- 🔴 已修：台股只讀一般業損益表（`_ci`），金控／銀行／保險／證券／異業永遠不會自動更新（第一階段 2888、2834、2809、5876 停在舊季）。補上 10 個端點，欄位用名稱比對（`twFinKeys`），紀錄會印出實際對應欄位。
+- 已修：「其他」層排除權證／單位／認購權／破產／特別股（AENTW、CYCUW、CMLSQ、T-PC 曾吃掉名額）；每日上限 40→60（仍受時間預算與免費額度限制）。
+- 實測新鮮度：五階段 2,564 家中低於 2026 Q2 的約 38 家（多為上述金融股）。
+- Claude 帳戶有一個每週一的雲端排程「股票網站法說會自動更新檢查」，取消訂閱後會停；它改的是舊的 HTML 內嵌結構，已被 GitHub 每日排程取代。
+
 ### 0.3 待辦
 - [ ] 確認 2026-10-19（週一）起開盤診斷有在 08:58 前啟動、完整觀察開盤後 10 分鐘（看 Issue 標題是 ✅ 或 ❌，而非 ⚠️）。若仍趕不上，改用 Cloudflare Worker Cron（免費、準時）去觸發 workflow_dispatch（需使用者在 Cloudflare 設一個 GitHub 權杖，見 6.27）。
 - [ ] 健康檢查（原訂 09:30）同樣被 GitHub 延遲到下午才跑，目前影響不大，暫不處理。

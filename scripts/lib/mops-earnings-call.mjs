@@ -36,7 +36,7 @@ async function postForm(url, body) {
       const r = await fetch(url, {
         method: 'POST',
         headers: { 'User-Agent': UA, 'Content-Type': 'application/x-www-form-urlencoded' },
-        body
+        body, signal: AbortSignal.timeout(30000)
       });
       if (r.ok) return await r.text();
     } catch (e) {}
@@ -112,7 +112,7 @@ export async function fetchCallPdfText(pdfName) {
   let tmpPdf = '', tmpTxt = '';
   try {
     const r = await fetch(`${BASE}/nas/STR/${pdfName}`, {
-      headers: { 'User-Agent': UA, 'Referer': `${BASE}/mops/web/t100sb02_1` }
+      headers: { 'User-Agent': UA, 'Referer': `${BASE}/mops/web/t100sb02_1` }, signal: AbortSignal.timeout(60000)
     });
     if (!r.ok) return null;
     const buf = Buffer.from(await r.arrayBuffer());

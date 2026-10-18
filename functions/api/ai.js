@@ -66,6 +66,8 @@ const PREFERRED = {
          'moonshotai/kimi-k2-instruct', 'llama-3.1-8b-instant']
 };
 const MODEL_CACHE_MS = 6 * 3600 * 1000;
+// OpenRouter 備援只准用免費模型（見下方 onRequest 最後一段）；前端指定的不是 :free 就換成這個
+const OR_DEFAULT_FREE = 'meta-llama/llama-3.3-70b-instruct:free';
 // 額度用完（429）的模型先跳過 10 分鐘。每個模型的免費額度分開算，一個用完就換下一個；
 //   但如果不記住，每一次請求都會先去撞那個已經用完的模型，白白多等一輪。
 const COOLDOWN_MS = 10 * 60 * 1000;
@@ -239,7 +241,18 @@ export async function onRequest(context) {
     const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + orKey },
-      body: JSON.stringify(body)
+      // ⚠️⚠️ 2026-10-18 零費用稽核：原本把前端送來的 body「原樣」轉給 OpenRouter。
+      //   這支 /api/ai 是公開網址，任何人都能指定付費模型（例如 openai/gpt-5）；
+      //   只要 OpenRouter 帳戶裡有一點餘額，就會被扣款。現在伺服器端強制：
+      //   ① 只接受 :free 結尾的免費模型，其他一律換成預設免費模型
+      //   ② 只轉送 model／messages／temperature／reasoning 四個欄位
+      //      （OpenRouter 的 models 備援清單、provider 路由等欄位都可能繞到付費模型，一律不轉）
+      body: JSON.stringify({
+        model: /^[\w.\/-]+:free$/.test(String(body.model || '')) ? body.model : OR_DEFAULT_FREE,
+        messages: body.messages,
+        temperature,
+        ...(body.reasoning && typeof body.reasoning === 'object' ? { reasoning: { effort: String(body.reasoning.effort || 'low') } } : {})
+      })
     });
     return passthrough(await r.text(), r.status);
   } catch (e) {
