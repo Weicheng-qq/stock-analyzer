@@ -1,0 +1,59 @@
+# 法說會影片自動尋找
+#
+# 【為什麼需要】法說會影片原本靠人工每季換新，常常落後（2026-10-18 台積電文字已是 Q3、影片還是 Q2）。
+#   使用者要求：「即使關機也去執行……包含影片（如果有）」。
+#   這個排程在 GitHub 的雲端執行，使用者電腦關機也照跑。
+#
+# 【做什麼】scripts/find-call-videos.mjs：從「投資看非凡」頻道找新上架的【完整公開】法說會影片，
+#   寫進 data/videos/latest.json；App 會自動改播較新的那一支（與人工常數比場次，較新者勝出）。
+#
+# 【零費用】public repo 的 GitHub Actions 免費；只讀 YouTube 公開頁面與 RSS，不用 API 金鑰、不用 AI 額度。
+
+name: 法說會影片自動尋找
+
+on:
+  schedule:
+    # 每 3 小時一次（GitHub 排程常延遲數小時，多排幾次確保當天上架的影片當天就收到）
+    - cron: '41 */3 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/find-call-videos.yml'
+      - 'scripts/find-call-videos.mjs'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: find-call-videos
+  cancel-in-progress: false
+
+jobs:
+  find:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+
+      - name: 尋找新的法說會影片
+        run: node scripts/find-call-videos.mjs
+
+      - name: 提交結果
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add data/videos/
+          if git diff --staged --quiet; then
+            echo "沒有新的法說會影片"
+          else
+            git commit -m "自動更新：法說會影片（投資看非凡【完整公開】）
+
+          由 GitHub Actions 排程產生，來源為 YouTube 公開頁面，不使用 API 金鑰。"
+            git pull --rebase --autostash origin main
+            git push
+          fi

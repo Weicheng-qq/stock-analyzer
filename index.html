@@ -4495,8 +4495,28 @@ function renderAI(ai){
   if(ai.company_intro && String(ai.company_intro).trim()) renderCompanyIntro(ai.company_intro);
   // 產品/營收結構：若有最新一季法說會官方數據(目前TSM)優先用它(比年報新)；否則走AI依年報整理
   const manualProd=IR_PRODUCTS_SUMMARY[window.__symbolForLinks];
-  if(manualProd){
+  // ⚠️ 2026-10-18 使用者要求「產品與服務」也要用公司官網最新資料自動更新：
+  //   每日排程從公司官網法說會文件整理的「分部／產品別營收」與「技術／產品路線圖」
+  //   （data/earnings/{代碼}.json 的 segments、techRoadmap），比人工版新一季以上就放最前面，
+  //   人工版保留在下方當前一季對照（與法說會展望同一套新舊判斷）；人工版還沒建的公司直接顯示這份。
+  const __ae=window.__autoEarnings, __ar=(__ae&&__ae.result)||{};
+  const __has=v=>v && !/^(未提供|本次資料未揭露|本次未提及)/.test(String(v).replace(/<[^>]+>/g,'').trim());
+  let autoProd='';
+  if(__ae && (__has(__ar.segments)||__has(__ar.techRoadmap))){
+    let newer=!manualProd;
+    if(manualProd){ const rel=compareManualAuto(manualProd.quarter, __ae); newer=(rel==='newer'); }
+    if(newer) autoProd=`<div style="color:var(--green);font-size:12px;margin-bottom:6px">✅ 最新一季（${esc(__ae.quarter||'')}）— 取自公司官網法說會資料${__ae.pressRelease&&__ae.pressRelease.url?`　<a href="${esc(__ae.pressRelease.url)}" target="_blank" style="color:var(--blue)">原始文件 ↗</a>`:''}</div>`
+      +(__has(__ar.segments)?`<div style="font-weight:600;margin:4px 0 2px">📦 產品／部門營收結構</div>${norm(__ar.segments)}`:'')
+      +(__has(__ar.techRoadmap)?`<div style="font-weight:600;margin:10px 0 2px">🛠️ 技術／產品路線圖</div>${norm(__ar.techRoadmap)}`:'');
+  }
+  if(manualProd && autoProd){
+    setAI('ai_products',`<div class="ai">${autoProd}
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">
+        <div style="color:var(--text2);font-size:12px;margin-bottom:8px">📝 人工整理的前一季內容（${esc(manualProd.quarter||'')}）— 可對照參考</div>${manualProd.html}</div></div>`);
+  } else if(manualProd){
     setAI('ai_products',`<div class="ai">${manualProd.html}</div>`);
+  } else if(autoProd){
+    setAI('ai_products',`<div class="ai">${autoProd}</div>`);
   } else {
     setAI('ai_products',`<div class="ai">${norm(ai.products)}`
       +(window.__productsData?`<div class="note" style="color:var(--green)">✅ 依公司官方年報（${esc(window.__productsData.date)}）${window.__wikiData?'＋維基百科最新資料':''}整理${window.__wikiData?`　<a href="${esc(window.__wikiData.url)}" target="_blank" style="color:var(--blue)">維基 ↗</a>`:''}</div>`
@@ -5802,8 +5822,25 @@ function toggleVidFullscreen(btn){
   if(!fsEl){ try{ screen.orientation&&screen.orientation.unlock&&screen.orientation.unlock(); }catch(_){} }
 }));
 // 產生「法說會影片」區塊(置於法說主旨最上方)：有內嵌影片→可播放/暫停/拖曳時間軸；否則給官方重播按鈕
+// 【自動找到的法說會影片】data/videos/latest.json 由排程 scripts/find-call-videos.mjs 每 3 小時更新
+//   （只收「投資看非凡」頻道的【完整公開】法說會）。開 App 時就先載入，到使用者點開法說會時早已就緒。
+//   與上方人工常數 IR_CALL_VIDEO 比「場次」新舊，較新的勝出；同一支影片時沿用人工標籤。
+let __irVideoAuto=null;
+try{ fetch('data/videos/latest.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(j=>{ if(j&&typeof j==='object') __irVideoAuto=j; }).catch(()=>{}); }catch(e){}
+function __vq(q){ const m=String(q||'').match(/(20\d\d)\s*第([一二三四])季/); return m ? (+m[1])*10+({'一':1,'二':2,'三':3,'四':4}[m[2]]) : null; }
+function __irVideoFor(sym){
+  const raw=IR_CALL_VIDEO[sym];
+  const man=(raw&&typeof raw==='object') ? raw : (raw ? {id:raw, q:''} : null);
+  const code=/^\d/.test(sym||'') ? sym : (Object.keys(TW_US_EQUIV).find(k=>TW_US_EQUIV[k]===sym) || US_TW_EQUIV[sym] || '');
+  const au=(__irVideoAuto&&code) ? __irVideoAuto[code] : null;
+  if(!au || !/^[\w-]{11}$/.test(au.id||'')) return man;
+  if(!man || man.id===au.id) return man || au;
+  const a=__vq(au.q), m=__vq(man.q);
+  if(a && m) return a>m ? au : man;
+  return (Date.now()-new Date(au.published))/864e5<120 ? au : man;   // 標籤看不出季度：自動版 120 天內上架才採用
+}
 function irVideoBlock(sym, coName){
-  const raw = IR_CALL_VIDEO[sym];
+  const raw = __irVideoFor(sym);
   const v  = (raw && typeof raw==='object') ? raw.id : raw;   // 相容舊格式(純字串)
   const vq = (raw && typeof raw==='object') ? raw.q  : '';
   const irPage = IR_QUARTERLY_PAGE[sym];

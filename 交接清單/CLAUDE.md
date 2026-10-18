@@ -28,10 +28,16 @@
 - **評分公式已抽成共用模組 `scripts/lib/master-score.mjs`**：`update-master-picks.mjs` 改為 import 它，App 用 `import('./scripts/lib/master-score.mjs')` 動態載入。改公式＝兩邊同時改。抽出時已驗證四位大師的輸出與舊版逐字相同。`_headers` 指定該檔 Content-Type。
 - AI 評論：`callAIWithPrompt` 走免費 AI；`__mpKeepGrounded()` 會刪掉含「資料中沒有的數字」的整句（實測「目標價 3000 元」被刪）；同日同大師同檔快取在 localStorage（`mpAsk_…`）。
 
+### 0.2.2 2026-10-18 「關機也自動做法說會人工建置」（使用者要求：官方網頁來源、含影片與產品與服務）
+- 全部跑在 **GitHub Actions**（雲端、免費、電腦關機照跑）。沒有用 Claude 排程雲端 session：雲端 session 的網路連不到公司官網／YouTube／SEC／Yahoo，做不了。
+- **法說會展望**：原本的「每日法說會更新」已依「使用者點過 → 第一～五階段」順序從公司官網抓（不變）。
+- **產品與服務**：同一份官網法說資料的 `segments`（分部／產品營收）＋`techRoadmap`，比人工版新一季以上就排最前面、人工版降為前一季對照（renderAI 的 autoProd）。
+- **影片**：新排程 `find-call-videos.yml`（每 3 小時）＋`scripts/find-call-videos.mjs` → `data/videos/latest.json`；前端 `__irVideoFor()` 與人工 `IR_CALL_VIDEO` 比場次，較新者勝出。只收投資看非凡頻道（由已知影片反查頻道 ID）【完整公開】＋「法說」。⚠️ 雲端環境測不到 YouTube，第一次實際執行結果要看 Actions 紀錄。
+
 ### 0.3 待辦
 - [ ] 確認 2026-10-19（週一）起開盤診斷有在 08:58 前啟動、完整觀察開盤後 10 分鐘（看 Issue 標題是 ✅ 或 ❌，而非 ⚠️）。若仍趕不上，改用 Cloudflare Worker Cron（免費、準時）去觸發 workflow_dispatch（需使用者在 Cloudflare 設一個 GitHub 權杖，見 6.27）。
 - [ ] 健康檢查（原訂 09:30）同樣被 GitHub 延遲到下午才跑，目前影響不大，暫不處理。
-- [ ] **法說會影片 `IR_CALL_VIDEO` 不會自動更新**（文字摘要會）。每季法說後要人工換成「投資看非凡【完整公開】」最新一季影片 ID。2026-10-18 台積電已換成 Q3（`GhbjSJ9Szcs`，使用者回報「影片還是舊的」才發現）；鴻海已換成 Q2（`taibJLhKXmY`）；聯發科/聯電/日月光/國巨 2026-10-18 搜尋不到 Q2【完整公開】影片（只有第三方評論/AI 摘要，依規不收），仍是 Q1，Q3 法說會（10 月底～11 月）後再找。⚠️ 雲端環境連不到 youtube.com，只能靠 WebSearch 結果取 ID。
+- [x] ~~法說會影片不會自動更新~~ → 2026-10-18 已改為排程自動尋找（見 0.2.2）。原紀錄：每季法說後要人工換成「投資看非凡【完整公開】」最新一季影片 ID。2026-10-18 台積電已換成 Q3（`GhbjSJ9Szcs`，使用者回報「影片還是舊的」才發現）；鴻海已換成 Q2（`taibJLhKXmY`）；聯發科/聯電/日月光/國巨 2026-10-18 搜尋不到 Q2【完整公開】影片（只有第三方評論/AI 摘要，依規不收），仍是 Q1，Q3 法說會（10 月底～11 月）後再找。⚠️ 雲端環境連不到 youtube.com，只能靠 WebSearch 結果取 ID。
 - [x] 台積電 2026 Q3 法說會：「法說會優先通道」已自動從官網產生 Q3 內容（`data/earnings/2330.json`，quarterTag 2026Q3）。
 
 ---
