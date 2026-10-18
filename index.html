@@ -550,6 +550,12 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 #masterPickCard .mp-who b { font-size:15px; }
 #masterPickCard .mp-sub { font-size:12px; color:var(--text2); margin-top:3px; line-height:1.5; }
 #masterPickCard .mp-sec-t { font-weight:700; font-size:15px; margin:18px 0 8px; }
+/* 「用大師觀點看任一檔股票」：輸入列＋結果（結果沿用推薦卡片 .mp-pick 的樣式） */
+#masterPickCard .mp-ask { display:flex; gap:8px; margin:4px 0 8px; }
+#masterPickCard .mp-ask input { flex:1; min-width:0; background:var(--bg3); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:9px 10px; font-size:15px; }
+#masterPickCard .mp-ai { font-size:13.5px; line-height:1.75; background:rgba(88,166,255,.07); border-radius:6px; padding:8px 10px; margin-top:7px; }
+#masterPickCard .mp-ai b { display:block; font-size:12px; color:var(--blue); font-weight:600; margin-bottom:2px; }
+#masterPickCard .mp-cmp { font-size:12.5px; color:var(--text2); margin:6px 0 2px; line-height:1.6; }
 #masterPickCard .mp-pr { font-size:13px; line-height:1.75; padding:8px 0; border-bottom:1px solid var(--line); }
 #masterPickCard .mp-pr b { display:block; color:var(--blue); font-size:13.5px; margin-bottom:3px; }
 #masterPickCard .mp-mkt { font-weight:700; font-size:15px; margin:22px 0 4px; }
@@ -6532,12 +6538,109 @@ function renderMasterPickBody(d){
     + '<div class="mp-sec-t">📜 選股邏輯原則</div>'+pr
     + (tw ? __mpMarketHtml('🇹🇼 台股推薦（依上述邏輯）', d.tw, 'tw')
           : __mpMarketHtml('🇺🇸 美股推薦（依上述邏輯）', d.us, 'us'))
+    + __mpAskHtml(d)
     + '<div class="note" style="margin-top:14px;padding-top:10px;border-top:1px solid var(--border);line-height:1.7">'
     + '⚠️ 本頁是「依這些大師公開發表過的選股原則，訂成評分公式後算出來的量化對照」，<b>不是這些大師本人的推薦或持股</b>，'
     + '也不構成投資建議。評分只用得到的財務數字（近 4 個年度的財報與目前本益比），'
     + '<b>看不到產業變化、管理層品質與一次性事件</b>；銀行、保險等金融業因為財報結構不同，這套公式無法評估。'
     + '每一檔的逐項得分與依據的數字都列在上面，請自行查證後再做決定。</div>';
   __mpTranslateNames();
+}
+// ════════════════════════════════════════════════════════════════
+// 【用大師觀點看任一檔股票】（2026-10-18 使用者要求：「大師選股邏輯推薦最下面加入使用者可輸入
+//   任一股票名稱或代碼，以大師觀點評論該支股票」）
+//   ① 分數：與每週推薦名單「同一份」評分公式（scripts/lib/master-score.mjs，排程與 App 共用），
+//      所以使用者輸入的股票可以直接和上面推薦的 3 檔比分數，標準完全一致。
+//   ② 評論：AI 只拿到上面那些財報數字與該位大師的原則來寫；評論裡出現的任何數字
+//      若不在給它的資料裡，那一句整句刪掉（以事實為依據，不讓 AI 自己生數字）。
+//   ③ 不做股價預測、不給目標價、不叫人買賣 —— 只說「以這位大師的標準，這家公司哪裡符合、哪裡不符合」。
+// ════════════════════════════════════════════════════════════════
+let __mpScoreMod=null;
+function __mpShortName(d){ const n=String(d&&d.name||''); return n.split(/\s+/)[0].replace(/[A-Za-z]/g,'')||'大師'; }
+function __mpAskHtml(d){
+  const nm=__mpShortName(d), tw=getMarket()==='tw';
+  return '<div class="mp-sec-t">🔍 用'+esc(nm)+'的觀點看任一檔股票</div>'
+    + '<div class="note" style="margin:-4px 0 6px">輸入台股或美股的名稱／代碼，用與上方推薦同一套評分公式打分數，再由 AI 依這些數字以'+esc(nm)+'的觀點評論。</div>'
+    + '<div class="mp-ask"><input id="mpAskInput" enterkeyhint="search" placeholder="'+(tw?'例：台積電、2330、AAPL':'例：AAPL、NVDA、台積電')+'" onkeydown="if(event.key===\'Enter\'){this.blur();mpAskRun();}">'
+    + '<button class="search-btn" onclick="mpAskRun()">評論</button></div>'
+    + '<div id="mpAskOut"></div>';
+}
+// 輸入 → {symbol(給 Yahoo 用), code(顯示用), name, mkt}。目前在台股就先當台股找，找不到再當美股（反之亦然）。
+async function __mpResolve(raw){
+  const s=String(raw||'').trim(); if(!s) return null;
+  const asTw=async()=>{ const r=await resolveTwInput(s); return r ? {symbol:r.sym, code:r.sym.replace(/\..*/,''), name:r.name, mkt:'tw'} : null; };
+  const asUs=async()=>{ try{ await loadTickerMap(); const f=findCompany(s); if(!f) return null;
+      const sym=String(f.symbol).toUpperCase(); return {symbol:sym, code:sym, name:(typeof TICKER_ZH!=='undefined'&&TICKER_ZH[sym])||f.co?.title||sym, mkt:'us'}; }catch(e){ return null; } };
+  const twFirst = getMarket()==='tw' || /^\d{4,6}/.test(s);
+  return twFirst ? ((await asTw()) || (await asUs())) : ((await asUs()) || (await asTw()));
+}
+// AI 評論裡的數字必須都出現在給它的資料中，否則該句刪除
+function __mpKeepGrounded(text, src){
+  const allowed=new Set((String(src).match(/\d+(?:\.\d+)?/g)||[]).map(x=>String(parseFloat(x))));
+  const parts=String(text||'').split(/(?<=[。！？；])/);
+  let dropped=0;
+  const kept=parts.filter(seg=>{ const nums=(seg.match(/\d+(?:\.\d+)?/g)||[]).map(x=>String(parseFloat(x)));
+    const ok=nums.every(n=>allowed.has(n)); if(!ok) dropped++; return ok; });
+  return {text:kept.join('').trim(), dropped};
+}
+async function mpAskRun(){
+  const inp=document.getElementById('mpAskInput'), out=document.getElementById('mpAskOut');
+  if(!inp||!out) return;
+  const key=__mpKey, d=__mpCache[key], raw=inp.value.trim();
+  if(!raw||!d) return;
+  const nm=__mpShortName(d);
+  out.innerHTML='<div class="note">查詢「'+esc(raw)+'」的財報並評分中…</div>';
+  try{
+    const co=await __mpResolve(raw);
+    if(!co){ out.innerHTML='<div class="err-box">查不到「'+esc(raw)+'」，請輸入台股代碼（如 2330）、公司名（如 台積電）或美股代碼（如 AAPL）。</div>'; return; }
+    if(!__mpScoreMod) __mpScoreMod=await import('./scripts/lib/master-score.mjs');
+    const M=__mpScoreMod;
+    const now=Math.floor(Date.now()/1000), p1=now-86400*365*6;
+    const j=await fetchJson(`https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/${co.symbol}?symbol=${co.symbol}&type=${M.TYPES}&period1=${p1}&period2=${now}`);
+    if(__mpKey!==key) return;   // 等待期間切換了大師分頁
+    const m=M.metrics(M.parseFin(j));
+    if(!m){ out.innerHTML='<div class="err-box">'+esc(co.name)+'（'+esc(co.code)+'）的年度財報不足 3 年或太舊，這套評分公式無法評估。</div>'; return; }
+    const parts=M.SCORERS[key](m), score=M.total(parts);
+    const facts=M.facts(m,key), buy=M.BUY[key](m), risk=M.risk(m,key);
+    const pk={auto:true, code:co.code, symbol:co.symbol, name:co.name, tag:M.TAG[key](m), score, parts, facts, buy, risk, fit:''};
+    // 與本頁推薦名單比較（同一個市場、同一套公式）
+    const blk=d[co.mkt]; const picks=(blk&&Array.isArray(blk.picks))?blk.picks:[];
+    const inList=picks.find(x=>String(x.code)===String(co.code));
+    const third=picks.length?picks[picks.length-1]:null;
+    const cmp = inList ? '這檔就在'+nm+'本週的推薦名單裡。'
+      : third&&third.score!=null ? '對照：'+nm+'本週'+(co.mkt==='tw'?'台股':'美股')+'推薦的第 '+picks.length+' 名是 '
+          +((co.mkt!=='tw'&&typeof TICKER_ZH!=='undefined'&&TICKER_ZH[third.code])||third.name||third.code)+' '+third.score+' 分，'
+          +'這檔'+(score>=third.score?'分數更高，但推薦名單只從你的第一、二階段公司中挑選。':'低了 '+(Math.round((third.score-score)*10)/10)+' 分。')
+      : '';
+    const finWarn=(m.eqRatio!=null&&m.eqRatio<15)?'<div class="mp-cmp">⚠️ 股東權益只占總資產 '+M.f1(m.eqRatio)+'%，若是銀行、保險等金融業，這套公式無法正確評估。</div>':'';
+    const sameMkt=(co.mkt==='tw')===(getMarket()==='tw');
+    out.innerHTML=(cmp?'<div class="mp-cmp">'+esc(cmp)+'</div>':'')+finWarn
+      + __mpPickHtml(pk, co.mkt).replace('<div class="mp-sec"><b>符合邏輯</b></div>','<div class="mp-ai" id="mpAskAi"><b>🤖 AI 以'+esc(nm)+'的觀點評論</b><span class="muted">撰寫中…</span></div>')
+      + (sameMkt?'':'<div class="note" style="margin-top:6px">這是'+(co.mkt==='tw'?'台股':'美股')+'，要看完整分析請先切換市場。</div>');
+    // AI 評論：同一天、同一位大師、同一檔只問一次
+    const ck='mpAsk_'+key+'_'+co.code+'_'+new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Taipei'});
+    let txt=''; try{ txt=localStorage.getItem(ck)||''; }catch(e){}
+    const src=facts.join('\n')+'\n'+parts.map(q=>q.k+'：'+q.val+'（得 '+q.got+(q.max>0?'／'+q.max:'')+' 分）').join('\n')+'\n總分 '+score+'／100';
+    if(!txt){
+      const prompt='你現在以「'+d.name+'」的投資哲學評論一家公司。這位大師的選股原則：\n'
+        +(d.principles||[]).map(x=>'- '+x.h+'：'+x.t).join('\n')
+        +'\n\n公司：'+co.name+'（'+co.code+'）\n以下是這家公司的官方財報數字與依上述原則算出的評分：\n'+src
+        +'\n\n請用繁體中文、以這位大師的口吻與標準，寫 120～200 字的評論：哪些地方符合他的標準、哪些地方不符合或需要留意。'
+        +'\n規則：①只能使用上面提供的數字，不可寫出任何其他數字（包括年份以外的任何推估）；②不可預測股價、不可給目標價、不可直接叫人買進或賣出；'
+        +'③不要假裝是大師本人說過的話，用「以他的標準來看」這類說法；④資料沒有的事（產業、管理層、產品）不要編造。'
+        +'\n只回傳 JSON：{"comment":"..."}';
+      const gmKey=getGmKey(); const isLocal=(location.protocol==='file:'||['localhost','127.0.0.1',''].indexOf(location.hostname)>-1);
+      try{ const r=await callAIWithPrompt(prompt, gmKey, !gmKey && !isLocal); txt=String(r&&r.comment||'').trim(); }catch(e){ txt=''; }
+      if(txt){ const g=__mpKeepGrounded(txt, src+'\n'+d.name); txt=g.text; }
+      if(txt){ try{ localStorage.setItem(ck, txt); }catch(e){} }
+    }
+    const aiEl=document.getElementById('mpAskAi');
+    if(aiEl) aiEl.innerHTML='<b>🤖 AI 以'+esc(nm)+'的觀點評論</b>'
+      + (txt ? esc(txt)+'<div class="muted" style="font-size:11px;margin-top:4px">AI 依上方財報數字撰寫，非大師本人言論；數字以上方為準。</div>'
+             : '<span class="muted">AI 評論暫時無法取得（免費模型壅塞），上方的評分與數字不受影響，請稍後再試。</span>');
+  }catch(e){
+    out.innerHTML='<div class="err-box">財報資料暫時取不到，請稍後再試。（'+esc(String(e&&e.message||e))+'）</div>';
+  }
 }
 // ── 8 大主題選單：把各架構主旨分組，點選單只看該群組 ──
 let __grp=1, __jumpAfterSearch=false;

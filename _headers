@@ -34,3 +34,9 @@
 # 法說會、AI 快取等資料檔：可以放心快取，內容只會新增不會改寫。
 /data/*
   Cache-Control: public, max-age=600, s-maxage=3600, stale-while-revalidate=86400
+
+# 大師選股評分公式：每週排程與 App 前端（動態 import）共用同一份。
+# 明確指定 JavaScript 型別，避免 .mjs 被當成未知檔案而無法以模組載入；不長期快取，改公式立即生效。
+/scripts/lib/master-score.mjs
+  Content-Type: text/javascript; charset=utf-8
+  Cache-Control: public, max-age=0, must-revalidate
