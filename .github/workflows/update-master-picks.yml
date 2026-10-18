@@ -4,7 +4,7 @@
 #   每位大師台股／美股各取前 3 名，寫進 data/masters/*.json。
 #   · 原本的 3 間若仍然最好就不變；有公司分數高出 3 分以上才替換（避免每週因小波動換來換去）
 #   · 說明文字全部由數字套版，不使用 AI
-#   詳細公式見 scripts/update-master-picks.mjs。
+#   詳細公式見 scripts/lib/master-score.mjs（App「用大師觀點看任一檔股票」共用同一份）。
 #
 # 【零費用】public repo 的 GitHub Actions 免費；約 800 次網站代理請求，不用任何 AI 額度。
 # 【失敗時】GitHub 會寄 email。資料來源異常（可評分的公司太少）時腳本會直接中止、不更新，
