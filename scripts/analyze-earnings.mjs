@@ -35,7 +35,7 @@ const OUT_DIR = process.env.OUT_DIR ? path.resolve(process.env.OUT_DIR) : path.j
 const UA_TW = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36';
 const UA_SEC = 'StockAnalyzer/1.0 (personal project; aa910517@gmail.com)';
 
-const MAX_ANALYSES = Number(process.env.MAX_ANALYSES || 40);
+const MAX_ANALYSES = Number(process.env.MAX_ANALYSES || 60);
 const DRY_RUN = process.env.DRY_RUN === '1';
 // 三把免費金鑰任一把有就能運作(與網站 /api/ai 相同的備援策略)
 // AI_PROXY_URL 是測試用逃生口（改打網站既有的 /api/ai，它自己有三層免費備援），設了就不需要本機金鑰
@@ -192,36 +192,67 @@ const pct = (a, b) => { const x = num(a), y = num(b); return (x != null && y) ? 
 
 async function getJson(url, ua) {
   for (let i = 0; i < 3; i++) {
-    try { const r = await fetch(url, { headers: { 'User-Agent': ua } }); if (r.ok) return await r.json(); if (r.status === 404) return null; }
+    try { const r = await fetch(url, { headers: { 'User-Agent': ua }, signal: AbortSignal.timeout(30000) }); if (r.ok) return await r.json(); if (r.status === 404) return null; }
     catch (e) {}
     await new Promise(r => setTimeout(r, 1500 * (i + 1)));
   }
   return null;
 }
 
-// ── 台股：2 個請求拿到全市場季度損益表 ──
+// ── 台股：全市場季度損益表 ──
+// ⚠️ 2026-10-18 稽核發現：原本只讀「一般業」（_ci），金控、銀行、保險、證券期貨、其他（異業）
+//   用的是另外的端點，所以第一階段的 2888 新光金、2834 臺企銀、2809 京城銀、5876 上海商銀等
+//   金融股從來不會自動更新。補上這些端點；金融業沒有「營業收入」欄位（銀行是「淨收益」、
+//   保險是「營業收入」或「收益合計」），所以用欄位名稱比對而不是寫死，並在紀錄印出實際對應到的欄位。
+const TW_FIN_SOURCES = [
+  { ind: 'ci', label: '上市一般業', url: 'https://openapi.twse.com.tw/v1/opendata/t187ap06_L_ci', c: '公司代號', n: '公司名稱', y: '年度', s: '季別' },
+  { ind: 'ci', label: '上櫃一般業', url: 'https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap06_O_ci', c: 'SecuritiesCompanyCode', n: 'CompanyName', y: 'Year', s: 'Season' },
+  ...['fh', 'basi', 'ins', 'bd', 'mim'].flatMap(ind => {
+    const zh = { fh: '金控業', basi: '銀行業', ins: '保險業', bd: '證券期貨業', mim: '異業' }[ind];
+    return [
+      { ind, label: '上市' + zh, url: `https://openapi.twse.com.tw/v1/opendata/t187ap06_L_${ind}`, c: '公司代號', n: '公司名稱', y: '年度', s: '季別' },
+      { ind, label: '上櫃' + zh, url: `https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap06_O_${ind}`, c: 'SecuritiesCompanyCode', n: 'CompanyName', y: 'Year', s: 'Season' }
+    ];
+  })
+];
+// 依欄位名稱找出各項目（一般業的欄位名稱也一定會被比中，行為與改版前相同）
+function twFinKeys(r) {
+  const ks = Object.keys(r);
+  const find = (...res) => { for (const re of res) { const k = ks.find(x => re.test(x)); if (k) return k; } return null; };
+  return {
+    rev: find(/^營業收入$/, /^營業收入合計$/, /^淨收益$/, /^收益合計$/, /^收入合計$/, /^營業收入淨額$/),
+    pre: find(/^稅前淨利（淨損）$/, /^繼續營業單位稅前(淨利|損益)/, /^稅前/),
+    ni: find(/^本期淨利（淨損）$/, /^本期稅後淨利（淨損）$/, /^本期淨利/),
+    parent: find(/^淨利（淨損）歸屬於母公司業主$/, /^本期淨利（淨損）歸屬於母公司業主$/, /^(?!.*綜合).*淨利.*歸屬於母公司業主/),
+    eps: find(/^基本每股盈餘（元）$/, /^基本每股盈餘/)
+  };
+}
 async function loadTwFinancials() {
   const map = {};
-  const srcs = [
-    { url: 'https://openapi.twse.com.tw/v1/opendata/t187ap06_L_ci', c: '公司代號', n: '公司名稱', y: '年度', s: '季別' },
-    { url: 'https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap06_O_ci', c: 'SecuritiesCompanyCode', n: 'CompanyName', y: 'Year', s: 'Season' }
-  ];
+  const srcs = TW_FIN_SOURCES;
   for (const src of srcs) {
     const j = await getJson(src.url, UA_TW);
     if (!Array.isArray(j)) { console.warn('⚠️ 台股季度損益表取得失敗:', src.url); continue; }
+    let used = 0, keysLogged = false;
     for (const r of j) {
       const code = String(r[src.c] || '').trim();
       if (!/^\d{4}$/.test(code)) continue;
+      if (map[code] && src.ind !== 'ci') continue;   // 一般業已有就不覆蓋
+      const k = twFinKeys(r);
+      if (!keysLogged && src.ind !== 'ci') { keysLogged = true; console.log(`  ${src.label} 欄位對應：營收←${k.rev || '（找不到）'}、淨利←${k.ni || '（找不到）'}、母公司淨利←${k.parent || '（找不到）'}、每股盈餘←${k.eps || '（找不到）'}`); }
       map[code] = {
         market: 'tw', name: r[src.n], year: rocToAd(r[src.y]), season: Number(r[src.s]), currency: '億元（新台幣）',
-        營業收入: toYiTw(r['營業收入']), 營業毛利: toYiTw(r['營業毛利（毛損）淨額'] ?? r['營業毛利（毛損）']),
-        營業利益: toYiTw(r['營業利益（損失）']), 稅前淨利: toYiTw(r['稅前淨利（淨損）']),
-        本期淨利: toYiTw(r['本期淨利（淨損）']),
+        營業收入: toYiTw(k.rev ? r[k.rev] : undefined), 營業毛利: toYiTw(r['營業毛利（毛損）淨額'] ?? r['營業毛利（毛損）']),
+        營業利益: toYiTw(r['營業利益（損失）']), 稅前淨利: toYiTw(k.pre ? r[k.pre] : undefined),
+        本期淨利: toYiTw(k.ni ? r[k.ni] : undefined),
         // ⚠️ 官方欄位名稱是「淨利（淨損）歸屬於母公司業主」，先前寫錯導致一律抓成 0.00
-        母公司業主淨利: toYiTw(r['淨利（淨損）歸屬於母公司業主']),
-        每股盈餘: num(r['基本每股盈餘（元）'])
+        母公司業主淨利: toYiTw(k.parent ? r[k.parent] : undefined),
+        每股盈餘: num(k.eps ? r[k.eps] : undefined),
+        ...(src.ind !== 'ci' ? { 產業別: src.label } : {})
       };
+      used++;
     }
+    console.log(`  ${src.label}：${used} 家`);
   }
   return map;
 }
@@ -654,9 +685,15 @@ for (const s of demand) {
 }
 const tierOf = x => demand.has(normSym(x.symbol)) ? 0 : stageOf(x);
 const within = (a, b) => (hotIdx(a) - hotIdx(b)) || (hasIr(a) - hasIr(b)) || (rank[a.priority] - rank[b.priority]);
+// ⚠️ 2026-10-18：「其他」層（不在五階段、也沒人點過）排除非普通股：認股權證(W)、單位(U)、
+//   認購權(R)、破產重整(Q) 的 5 碼代碼與特別股（-P…）。實測 10/18 的 40 個名額有 AENTW、CYCUW、
+//   CMLSQ、T-PC 這類，與母公司重複或已無意義，卻吃掉旺季寶貴的免費 AI 額度。
+//   只套用在「其他」層：使用者點過的或五階段名單裡的，一律照做。
+const nonCommon = x => x.market !== 'tw' && (/^[A-Z]{4}[WURQ]$/.test(x.symbol) || /-P[A-Z]?$|-W[A-Z]?$|-U$|-R[A-Z]?$/.test(x.symbol));
 const sorted = [];
+let droppedNonCommon = 0;
 for (let t = 0; t <= 6; t++) {
-  const inTier = queue.filter(x => tierOf(x) === t);
+  const inTier = queue.filter(x => tierOf(x) === t && !(t === 6 && nonCommon(x) && ++droppedNonCommon));
   const twQ = inTier.filter(x => x.market === 'tw').sort(within);
   const usQ = inTier.filter(x => x.market !== 'tw').sort(within);
   for (let i = 0; i < Math.max(twQ.length, usQ.length); i++) {
@@ -673,6 +710,7 @@ for (let t = 0; t <= 6; t++) {
   if (pend.length) console.log('  等待逐字稿升級：' + pend.map(([s]) => s).join('、') + '（已排到最前面）');
 }
 const tierCount = [0, 1, 2, 3, 4, 5, 6].map(t => queue.filter(x => tierOf(x) === t).length);
+if (droppedNonCommon) console.log('  「其他」層略過非普通股（權證／單位／認購權／破產／特別股）' + droppedNonCommon + ' 檔');
 console.log('  名額分配順序：使用者點過 ' + tierCount[0] + ' → 第1階段 ' + tierCount[1] + ' → 第2階段 ' + tierCount[2] +
   ' → 第3階段 ' + tierCount[3] + ' → 第4階段 ' + tierCount[4] + ' → 第5階段 ' + tierCount[5] + ' → 其他 ' + tierCount[6]);
 const irCount = queue.filter(x => !hasIr(x)).length, hotCount = queue.filter(x => hotIdx(x) < 99999).length;
@@ -707,6 +745,16 @@ let stoppedByTime = false;
 // 每家公司什麼時候看過、看到哪一季、是不是還在等逐字稿，記在 data/events/ir-checks.json。
 const IR_STATE_PATH = process.env.IR_STATE_PATH ? path.resolve(process.env.IR_STATE_PATH) : path.join(ROOT, 'data', 'events', 'ir-checks.json');
 let irState = {}; try { irState = JSON.parse(fs.readFileSync(IR_STATE_PATH, 'utf8')) || {}; } catch (e) { irState = {}; }
+// ⚠️⚠️ 2026-10-18 看門狗：10/14 這一步跑滿 42 分鐘被 GitHub 強制終止（conclusion=failure），當天 0 家入帳。
+//   時間預算只在「每家開始前」檢查；若某一家卡在沒有逾時的網路請求（官網、MOPS、SEC），
+//   預算就形同虛設。這裡在預算後 5 分鐘強制收工：寫入狀態檔後正常結束，
+//   已完成的公司（每家做完就寫檔）仍會由下一步提交，不會整天白做。
+//   unref()：正常跑完時不會因為這個計時器而多等。
+setTimeout(() => {
+  console.log(`⏱⏱ 看門狗：已超過時間預算 5 分鐘，可能有某個網站沒有回應。強制收工，已完成的結果照常提交。`);
+  try { fs.writeFileSync(IR_STATE_PATH, JSON.stringify(irState, null, 1)); } catch (e) {}
+  process.exit(0);
+}, TIME_BUDGET_MS + 5 * 60000).unref();
 // 【測試用，正式排程不會設定】法說會優先通道平常要等公司真的開法說會才測得到，所以留兩個模擬開關：
 //   ONLY_SYMBOLS="2330"                 只處理這幾家（逗號分隔）
 //   IR_TEST='{"2330":{"url":"…","shift":1}}'  這家改抓指定的官網頁，並假裝「手上已做到的季別」少 shift 季

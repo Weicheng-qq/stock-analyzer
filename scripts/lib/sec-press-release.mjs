@@ -13,14 +13,14 @@ const UA = 'StockAnalyzer/1.0 (personal project; aa910517@gmail.com)';
 
 async function getJson(url) {
   for (let i = 0; i < 3; i++) {
-    try { const r = await fetch(url, { headers: { 'User-Agent': UA } }); if (r.ok) return await r.json(); if (r.status === 404) return null; }
+    try { const r = await fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(30000) }); if (r.ok) return await r.json(); if (r.status === 404) return null; }
     catch (e) {}
     await new Promise(r => setTimeout(r, 1200 * (i + 1)));
   }
   return null;
 }
 async function getText(url) {
-  try { const r = await fetch(url, { headers: { 'User-Agent': UA } }); return r.ok ? await r.text() : null; }
+  try { const r = await fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(30000) }); return r.ok ? await r.text() : null; }
   catch (e) { return null; }
 }
 

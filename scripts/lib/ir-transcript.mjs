@@ -106,9 +106,11 @@ async function downloadDoc(ctx, page, url, referer) {
 }
 
 async function downloadInPage(page, url) {
-  const res = await page.evaluate(async (u) => {
+  // ⚠️ 2026-10-18：頁面內 fetch 原本沒有逾時，網站不回應時會無限等待（排程看門狗見 analyze-earnings.mjs）
+  const res = await Promise.race([page.evaluate(async (u) => {
     try {
-      const r = await fetch(u, { credentials: 'include' });
+      const ctl = new AbortController(); setTimeout(() => ctl.abort(), 60000);
+      const r = await fetch(u, { credentials: 'include', signal: ctl.signal });
       if (!r.ok) return { err: 'HTTP ' + r.status };
       const bytes = new Uint8Array(await r.arrayBuffer());
       if (bytes.length > 40 * 1024 * 1024) return { err: 'too large' };
@@ -117,7 +119,7 @@ async function downloadInPage(page, url) {
       for (let i = 0; i < bytes.length; i += CH) s += String.fromCharCode.apply(null, bytes.subarray(i, i + CH));
       return { b64: btoa(s), len: bytes.length };
     } catch (e) { return { err: String((e && e.message) || e) }; }
-  }, url);
+  }, url), new Promise(r => setTimeout(() => r({ err: 'timeout' }), 75000))]);
   if (!res || res.err) return null;
   return Buffer.from(res.b64, 'base64');
 }

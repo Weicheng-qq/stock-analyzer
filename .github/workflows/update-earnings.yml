@@ -25,7 +25,7 @@ on:
       max_analyses:
         description: '本次最多分析幾家公司'
         required: false
-        default: '40'
+        default: '60'
       lookback_days:
         description: 'SEC 回看天數'
         required: false
@@ -95,7 +95,7 @@ jobs:
           GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
           GROQ_KEY: ${{ secrets.GROQ_KEY }}
           OPENROUTER_KEY: ${{ secrets.OPENROUTER_KEY }}
-          MAX_ANALYSES: ${{ github.event.inputs.max_analyses || '40' }}
+          MAX_ANALYSES: ${{ github.event.inputs.max_analyses || '60' }}
           # 逐字稿路徑每家多花 15~30 秒，設上限避免整輪執行時間爆掉
           TRANSCRIPT_MAX: ${{ github.event.inputs.transcript_max || '12' }}
           NODE_PATH: scripts/node_modules
