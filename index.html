@@ -6583,7 +6583,7 @@ function renderMasterPickBody(d){
     + __mpAskHtml(d)
     + '<div class="note" style="margin-top:14px;padding-top:10px;border-top:1px solid var(--border);line-height:1.7">'
     + '⚠️ 本頁是「依這些大師公開發表過的選股原則，訂成評分公式後算出來的量化對照」，<b>不是這些大師本人的推薦或持股</b>，'
-    + '也不構成投資建議。評分只用得到的財務數字（近 4 個年度的財報與目前本益比），'
+    + '也不構成投資建議。評分只用得到的財務數字（近 10 個年度的財報與目前本益比；少數公司取不到官方歷史財報時只有近 4 年），'
     + '<b>看不到產業變化、管理層品質與一次性事件</b>；銀行、保險等金融業因為財報結構不同，這套公式無法評估。'
     + '每一檔的逐項得分與依據的數字都列在上面，請自行查證後再做決定。</div>';
   __mpTranslateNames();
@@ -6612,7 +6612,7 @@ async function __mpResolve(raw){
   const s=String(raw||'').trim(); if(!s) return null;
   const asTw=async()=>{ const r=await resolveTwInput(s); return r ? {symbol:r.sym, code:r.sym.replace(/\..*/,''), name:r.name, mkt:'tw'} : null; };
   const asUs=async()=>{ try{ await loadTickerMap(); const f=findCompany(s); if(!f) return null;
-      const sym=String(f.symbol).toUpperCase(); return {symbol:sym, code:sym, name:(typeof TICKER_ZH!=='undefined'&&TICKER_ZH[sym])||f.co?.title||sym, mkt:'us'}; }catch(e){ return null; } };
+      const sym=String(f.symbol).toUpperCase(); return {symbol:sym, code:sym, cik:f.co&&f.co.cik, name:(typeof TICKER_ZH!=='undefined'&&TICKER_ZH[sym])||f.co?.title||sym, mkt:'us'}; }catch(e){ return null; } };
   const twFirst = getMarket()==='tw' || /^\d{4,6}/.test(s);
   return twFirst ? ((await asTw()) || (await asUs())) : ((await asUs()) || (await asTw()));
 }
@@ -6640,7 +6640,19 @@ async function mpAskRun(){
     const now=Math.floor(Date.now()/1000), p1=now-86400*365*6;
     const j=await fetchJson(`https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/${co.symbol}?symbol=${co.symbol}&type=${M.TYPES}&period1=${p1}&period2=${now}`);
     if(__mpKey!==key) return;   // 等待期間切換了大師分頁
-    const m=M.metrics(M.parseFin(j));
+    // 近 10 年官方財報（與每週推薦同一套：台股 FinMind、美股 SEC；取不到就只用 Yahoo 近 4 年）
+    let hist=null;
+    try{
+      if(co.mkt==='tw'){
+        const st=(new Date().getFullYear()-11)+'-01-01', fm=ds=>fetch(`https://api.finmindtrade.com/api/v4/data?dataset=${ds}&data_id=${co.code}&start_date=${st}`).then(r=>r.ok?r.json():null);
+        const [a,b]=await Promise.all([fm('TaiwanStockFinancialStatements'), fm('TaiwanStockBalanceSheet')]);
+        if(a&&b) hist=M.parseFinMind(a,b);
+      } else if(co.cik){
+        hist=M.parseSecFacts(await fetchJson(`https://data.sec.gov/api/xbrl/companyfacts/CIK${String(co.cik).padStart(10,'0')}.json`));
+      }
+    }catch(e){ hist=null; }
+    if(__mpKey!==key) return;
+    const m=M.metrics(M.mergeHistory(M.parseFin(j), hist));
     if(!m){ out.innerHTML='<div class="err-box">'+esc(co.name)+'（'+esc(co.code)+'）的年度財報不足 3 年或太舊，這套評分公式無法評估。</div>'; return; }
     const parts=M.SCORERS[key](m), score=M.total(parts);
     const facts=M.facts(m,key), buy=M.BUY[key](m), risk=M.risk(m,key);
