@@ -6513,7 +6513,12 @@ function __mpPickHtml(pk, mkt){
   const parts=(Array.isArray(pk.parts)&&pk.parts.length)
     ? '<div class="mp-parts">'+pk.parts.map(q=> q.max>0
         ? '<span class="mp-part">'+esc(q.k)+' <b>'+esc(String(q.got))+'</b>/'+esc(String(q.max))+'（'+esc(q.val)+'）</span>'
-        : '<span class="mp-part neg">'+esc(q.k)+' <b>'+esc(String(q.got))+'</b>（'+esc(q.val)+'）</span>').join('')+'</div>' : '';
+        // ⚠️ 2026-10-18 使用者回報「輸入台積電，彼得林區和費雪顯示有虧損，是不是有錯」：
+        //   扣分項沒有扣分（得 0）時，原本照樣用紅色顯示「目前仍虧損（扣分項） 0」，看起來像在說這家公司虧損。
+        //   沒扣分就用一般顏色寫「不扣分」；真的扣分才用紅色。
+        : (Number(q.got)<0
+            ? '<span class="mp-part neg">'+esc(q.k)+' <b>'+esc(String(q.got))+'</b>（'+esc(q.val)+'）</span>'
+            : '<span class="mp-part">'+esc(String(q.k).replace(/（扣分項）/,'').replace(/^目前仍虧損$/,'虧損'))+'扣分：<b>無</b>（'+esc(q.val)+'）</span>')).join('')+'</div>' : '';
   return '<div class="mp-pick'+(clickable?' mp-tap':'')+'"'+onclick+'>'
     + '<div class="mp-p-head">'+logo
     + '<div class="mp-p-meta">'
