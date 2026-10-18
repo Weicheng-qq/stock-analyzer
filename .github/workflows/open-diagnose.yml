@@ -17,10 +17,14 @@ name: 台股開盤診斷
 
 on:
   schedule:
-    # 台灣時間平日 08:10（UTC 00:10）啟動，腳本自己等到 08:58 才開始取樣，取到 09:25。
-    #   ⚠️ 一定要完整觀察到「開盤後 10 分鐘」（09:00～09:10）—— 使用者回報的問題就發生在這一段。
-    #   GitHub 的排程常常延遲 5～30 分鐘（整點最嚴重，所以避開 :00），
-    #   提早 48 分鐘啟動，延遲再久也趕得上開盤；報告裡會寫明這 10 分鐘實際觀察到幾次。
+    # ⚠️ 一定要完整觀察到「開盤後 10 分鐘」（09:00～09:10）—— 使用者回報的問題就發生在這一段。
+    # ⚠️ 2026-10-18 實測：GitHub 排程不是延遲 5～30 分鐘，而是 4～7 小時
+    #   （原訂 08:10，10/12～10/16 實際在 12:20～14:39 才啟動，一次都沒趕上開盤）。
+    #   所以改成台灣時間平日 00:17～07:17 每小時排一次＋原本的 08:10（避開整點高峰）：
+    #   最早趕在開盤前啟動的那一次負責等到 08:58 取樣到 09:25；
+    #   其他的由下面「只留最早一次」步驟或腳本的時間判斷安靜結束，不會重複開 Issue。
+    #   UTC 16:17～23:17（週日～週四）＝台灣時間 00:17～07:17（週一～週五）
+    - cron: '17 16-23 * * 0-4'
     - cron: '10 0 * * 1-5'
   workflow_dispatch:
     inputs:
@@ -37,26 +41,45 @@ on:
 permissions:
   contents: read
   issues: write
-
-concurrency:
-  group: open-diagnose
-  cancel-in-progress: false
+  actions: read
 
 jobs:
   diagnose:
     runs-on: ubuntu-latest
-    timeout-minutes: 110
+    # 最早可能在 03:38 啟動（腳本最多等 320 分鐘）、等到 08:58 再取樣到 09:25 ≈ 350 分鐘（GitHub 上限 360）
+    timeout-minutes: 355
     env:
       # 改到這兩個檔案（push）或手動勾選測試時，走測試模式
       DIAG_TEST: ${{ (github.event_name == 'push' || inputs.test == true) && '1' || '' }}
     steps:
+      # 同一天可能有好幾次排程同時在跑（一次在等開盤、後面延遲的陸續啟動）。
+      # 只留 run id 最小（最早建立）的那一次，其餘直接結束，避免重複取樣、重複開 Issue。
+      # 不用 concurrency 群組：它會把排隊中的那次「取消」，而取消也可能寄失敗通知信。
+      - name: 只留最早一次
+        id: dedupe
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          older=$(gh run list --workflow open-diagnose.yml --status in_progress --limit 50 --json databaseId \
+            --jq "[.[] | select(.databaseId < ${RUN_ID})] | length")
+          if [ "${older:-0}" -gt 0 ]; then
+            echo "已有較早的一次正在等待／取樣，這次不重複執行。" | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "dup=1" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/checkout@v5
+        if: steps.dedupe.outputs.dup != '1'
 
       - uses: actions/setup-node@v5
+        if: steps.dedupe.outputs.dup != '1'
         with:
           node-version: '24'
 
       - name: 安裝無頭瀏覽器
+        if: steps.dedupe.outputs.dup != '1'
         working-directory: scripts
         run: |
           npm install --no-audit --no-fund --silent
@@ -64,10 +87,11 @@ jobs:
 
       - name: 開盤診斷
         id: diag
+        if: steps.dedupe.outputs.dup != '1'
         run: node scripts/open-diagnose.mjs
 
       - name: 把報告開成 Issue（GitHub 會寄 email 通知）
-        if: steps.diag.outputs.status != 'skip'
+        if: steps.dedupe.outputs.dup != '1' && steps.diag.outputs.status != 'skip'
         env:
           GH_TOKEN: ${{ github.token }}
           STATUS: ${{ steps.diag.outputs.status }}
