@@ -1,0 +1,48 @@
+{
+ "symbol": "ARI",
+ "market": "us",
+ "name": "Apollo Commercial Real Estate Finance, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Apollo Commercial Real Estate Finance, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.44",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.26",
+  "每股盈餘": 0.11,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-11",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1467760/000119312526343027/d155213dex992.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-18T00:57:20.319Z",
+ "result": {
+  "revenue": "本季度營業收入為 0.44 億美元。",
+  "eps": "每股盈餘（EPS）為 0.11 美元。",
+  "margins": "官方資料未提供營業毛利與營業利益（毛利率與營業利益率均標示為 0.0%）；本期淨利率為 59.1%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "公司本季營業收入為 0.44 億美元，本期淨利為 0.26 億美元。營運方面完成了商業地產貸款組合的出售，並運用部分所得償還相關擔保債務及企業級融資。",
+  "highlights": "• 完成將公司商業地產貸款組合出售予 Athene Holding Ltd.，交易價格為總貸款承諾額的 99.7%<br>• 本期淨利為 0.26 億美元，淨利率達 59.1%<br>• 扣除淨實現投資損失與債務處分損失前之可分配收益（Distributable Earnings）為 2,100 萬美元（每股 0.15 美元）",
+  "concerns": "• 資產出售結算時確認 3.38 億美元之淨實現損失<br>• 因提早償還債務，確認約 3,100 萬美元之債務清償損失（loss on extinguishment of debt）<br>• 加總資產處分相關損失後，可分配收益（Distributable Earnings）為虧損 3.49 億美元（每股虧損 2.62 美元）",
+  "risks": "• 大規模資產出售與債務清償帶來一次性重大虧損，嚴重衝擊可分配收益表現<br>• 財務報告未提供營運現金流、資本支出及營業利益等關鍵財務指標",
+  "keyPoints": "• 公司於 4 月 24 日完成商業地產貸款組合出售，交易價格為總貸款承諾額的 99.7%<br>• 計入資產出售淨實現損失（3.38 億美元）與債務清償損失（約 3,100 萬美元）後，可分配收益虧損 3.49 億美元<br>• 截至 2026 年 6 月 30 日，唯一剩餘未償債務僅為 Brooklyn Multifamily 物業之建設融資",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

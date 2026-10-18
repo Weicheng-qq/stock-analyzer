@@ -1,0 +1,48 @@
+{
+ "symbol": "CIFR",
+ "market": "us",
+ "name": "Cipher Digital Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Cipher Digital Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.25",
+  "營業毛利": null,
+  "營業利益": "-0.79",
+  "本期淨利": "-2.68",
+  "每股盈餘": -0.65,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-04",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1819989/000181998926000038/q226_earningsxprxdraftxvf.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-18T01:02:25.068Z",
+ "result": {
+  "revenue": "本季營業收入為 0.25 億美元（約 2,500 萬美元）。",
+  "eps": "每股盈餘（EPS）為 -0.65 美元，本季呈現虧損狀態。",
+  "margins": "本季營業毛利未提供（毛利率 0.0%）；營業利益率為 -316.0%，營業利益虧損 0.79 億美元；淨利率為 -1072.0%，本期淨利虧損 2.68 億美元。顯示公司現階段營運與營業外成本遠高於當期營收。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未提供具體數字財務預測，僅表示期待將第二季動能延續至第三季並取得顯著進展。",
+  "outlook": "公司正加速推進 Black Pearl、Stingray 及 Barber Lake 等資料中心園區的建設與交付，並取得 San Antonio 附近 Apollo 新址的購置選擇權（最高 900 MW）。雖然資料中心開發進度有所突破，但目前財務狀況仍處於大幅虧損階段。",
+  "highlights": "• Black Pearl 資料中心首批容量提早兩個月交付並開始收取租金<br>• 取得德州 San Antonio 附近最高達 900 MW 的 Apollo 資料中心新址選擇權<br>• 完成項目級債券融資以完全支應 Stingray 開發，並收回 5,670 萬美元先前投入資金",
+  "concerns": "• 本季持續面臨高額虧損，本期淨利虧損高達 2.68 億美元（淨利率 -1072.0%）<br>• 本季營業利益虧損 0.79 億美元（營業利益率 -316.0%），Adjusted EBITDA 為負 3,000 萬美元<br>• 營業毛利未提供且當期營收僅 0.25 億美元，相對整體開發與營運支出極低",
+  "risks": "本期淨虧損達 2.68 億美元，高額費用負擔對公司財務結構造成顯著壓力<br>資料中心基礎建設屬於高資本密集業務，高度依賴資本市場債券融資以維持大規模開發與營運資金",
+  "keyPoints": "• 本季營業收入為 0.25 億美元，每股盈餘為 -0.65 美元<br>• 本期淨利虧損 2.68 億美元，營業利益虧損 0.79 億美元<br>• Black Pearl 提早交付並開始收租，且取得最高 900 MW 的 Apollo 站點選擇權",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

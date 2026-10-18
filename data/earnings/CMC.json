@@ -1,0 +1,48 @@
+{
+ "symbol": "CMC",
+ "market": "us",
+ "name": "Commercial Metals Company",
+ "quarter": "2026 Q3（2026-03-01～2026-05-31）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Commercial Metals Company",
+  "currency": "億美元",
+  "periodStart": "2026-03-01",
+  "periodEnd": "2026-05-31",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "24.83",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "1.73",
+  "每股盈餘": 1.55,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-15",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/22444/000002244426000053/cmc-8312026xearningsreleas.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-18T00:53:46.610Z",
+ "result": {
+  "revenue": "本期營業收入為 24.83 億美元。",
+  "eps": "本期每股盈餘（EPS）為 1.55 美元。",
+  "margins": "官方未提供毛利率與營業利益率數字（顯示為 0.0%）；本期淨利率為 7.0%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "官方預期 2027 會計年度第一季北美鋼鐵群調整後 EBITDA 與上一季持平，歐洲鋼鐵群將實現顯著季成長。",
+  "outlook": "公司預期 2027 會計年度將是強勁的一年，受惠於健康均衡的市場環境、TAG 計畫及新投資帶來的效益。終端市場如數據中心、能源與基礎建設需求維持健全。",
+  "highlights": "• 本期營業收入達 24.83 億美元，本期淨利為 1.73 億美元，淨利率為 7.0%。<br>• 每股盈餘（EPS）達到 1.55 美元。<br>• 北美鋼鐵群與施工解決方案群（CSG）表現強勁，受惠於產品售價提升與收併購整合效益。",
+  "concerns": "• 官方未提供營業毛利、營業利益、營運現金流與資本支出等財務數據。<br>• Galvabar 未預期停機對本期鋼筋出貨量產生負面影響。<br>• 歐洲鋼鐵群受前一年同期認列碳排放配額高基期影響，調整後 EBITDA 年減。",
+  "risks": "• 未提供營運現金流與資本支出資料，無法評估自由現金流狀況與現金流動性壓力。<br>• 原材料及廢鋼成本波動與季節性出貨放緩，可能對短期邊際利潤造成壓力。",
+  "keyPoints": "1. 本期營業收入為 24.83 億美元，本期淨利 1.73 億美元，EPS 為 1.55 美元。<br>2. 淨利率為 7.0%，毛利率與營業利益率官方資料顯示為未提供。<br>3. 營運現金流、資本支出與自由現金流等現金流指標於本次資料中均未提供。",
+  "guidanceOfficial": "針對 2027 會計年度第一季，公司預期各事業群營運表現維持健全，但受正常季節性因素與成本影響：北美鋼鐵群（North America Steel Group）預估價格改善可大部分抵銷廢鋼成本上漲、開辦費用及出貨量季節性微幅下滑，調整後 EBITDA 預計與第四季近乎持平；施工解決方案群（Construction Solutions Group）調整後 EBITDA 預估受終端市場季節性趨勢影響而季減；歐洲鋼鐵群（Europe Steel Group）受惠於營運環境改善及碳排放配額（CO2 credit），預期調整後 EBITDA 將實現顯著的季成長。",
+  "segments": "• 北美鋼鐵群（North America Steel Group）：第四季調整後 EBITDA 為 3.175 億美元，年增 32.6%；成品出貨量年增 5.3%，其中商用棒鋼（merchant bar）出貨量年增 27.5%。<br>• 施工解決方案群（Construction Solutions Group）：第四季淨銷售額為 4.314 億美元，年增 94.5%；調整後 EBITDA 為 1.017 億美元，年增 100.9%。<br>• 歐洲鋼鐵群（Europe Steel Group）：第四季調整後 EBITDA 為 1,560 萬美元（約 0.156 億美元），低於前一年同期的 3,910 萬美元；成品出貨量年增 0.8%。"
+ }
+}
