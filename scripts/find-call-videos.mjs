@@ -135,13 +135,28 @@ for (const c of cands.values()) {
   if (!code) { console.log(`  ⚠️ 認不出公司：${c.title}`); continue; }
   if (!found[code] || c.published > found[code].published) found[code] = c;
 }
+// 影片頁上的確切上架日期。YouTube 的頁面格式會變，多種寫法都試：
+//   ISO（"publishDate":"2026-08-12T…"、itemprop 的 content）與中文（"2026年8月12日"）。
+function exactDate(page) {
+  const iso = page.match(/"(?:publishDate|uploadDate)":"(\d{4}-\d{2}-\d{2}[^"]*)"/)
+    || page.match(/itemprop="(?:datePublished|uploadDate)"\s+content="(\d{4}-\d{2}-\d{2}[^"]*)"/);
+  if (iso && !isNaN(new Date(iso[1]))) return new Date(iso[1]).toISOString();
+  const zh = page.match(/"(?:publishDate|dateText)":\{"simpleText":"[^"]*?(\d{4})年(\d{1,2})月(\d{1,2})日/)
+    || page.match(/"(?:publishDate|dateText)":\{"simpleText":"([A-Z][a-z]{2}) (\d{1,2}), (\d{4})/);
+  if (zh) {
+    if (/^\d{4}$/.test(zh[1])) return new Date(Date.UTC(+zh[1], +zh[2] - 1, +zh[3], 4)).toISOString();
+    const d = new Date(`${zh[1]} ${zh[2]}, ${zh[3]} 12:00 UTC`); if (!isNaN(d)) return d.toISOString();
+  }
+  return null;
+}
 // 搜尋頁只有「2 個月前」這種相對時間，會讓畫面上的上架日期不準（第一次執行：鴻海實際 8/12、推算成 8/19）。
 //   只對「比對成功」的幾支影片再開一次影片頁，取官方的確切上架日期。
 for (const c of Object.values(found)) {
   if (!c.approx) continue;
   const page = await get(`https://www.youtube.com/watch?v=${c.id}`);
-  const m = page.match(/"publishDate":"([^"]+)"/) || page.match(/itemprop="datePublished" content="([^"]+)"/) || page.match(/"uploadDate":"([^"]+)"/);
-  if (m && !isNaN(new Date(m[1]))) { c.published = new Date(m[1]).toISOString(); c.approx = false; }
+  const d = exactDate(page);
+  if (d) { c.published = d; c.approx = false; }
+  else { const i = page.search(/publishDate|uploadDate|datePublished|dateText/); console.log(`  ⚠️ 取不到 ${c.id} 的確切上架日期（頁面 ${page.length} 字）${i > -1 ? '：' + page.slice(i, i + 120).replace(/\s+/g, ' ') : ''}`); }
 }
 let changed = 0;
 for (const [code, c] of Object.entries(found)) {
