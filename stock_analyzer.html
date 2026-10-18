@@ -4813,7 +4813,7 @@ const IR_CALL_VIDEO = {
   'TSM': {id:'GhbjSJ9Szcs', q:'2026 第三季（10/15 法說會，AI 即時翻譯版）'},   // 台積電 Q3 法說會【完整公開】@投資看非凡（2026-10-18 更新；Q2 為 JOhMwPVXRHM）
   '2454':{id:'qEn6dHlz1h4', q:'2026 第一季'},              // 聯發科 Q1 線上法說會【完整公開】
   '2303':{id:'UyyeZiz2RPA', q:'2026 第一季'},              // 聯電 Q1 法說會【完整公開】(成熟製程技術升級)
-  '2317':{id:'taibJLhKXmY', q:'2026 第二季（8/12 法說會）'},   // 鴻海 Q2 法說會【完整公開】聚焦AI及營運展望（2026-10-18 更新；Q1 為 2D9nsifg8Ms）
+  '2317':{id:'-u2BzwbeDqg', q:'2026 第二季（8/12 法說會）'},   // 鴻海 Q2 法說會【完整公開】@投資看非凡（2026-10-18 更正：原填 taibJLhKXmY 經自動排程反查不屬於投資看非凡頻道）
   '3711':{id:'27jMy7OHrGQ', q:'2026 第一季'},              // 日月光投控 Q1 法說會【完整公開】
   '2327':{id:'C5DKdb_OU6Q', q:'2026 第一季'}               // 國巨 法說會【完整公開】
 };
@@ -5836,7 +5836,7 @@ function __irVideoFor(sym){
   if(!au || !/^[\w-]{11}$/.test(au.id||'')) return man;
   if(!man || man.id===au.id) return man || au;
   const a=__vq(au.q), m=__vq(man.q);
-  if(a && m) return a>m ? au : man;
+  if(a && m) return a>=m ? au : man;   // 同一季時用自動版：它已由排程確認屬於投資看非凡頻道
   return (Date.now()-new Date(au.published))/864e5<120 ? au : man;   // 標籤看不出季度：自動版 120 天內上架才採用
 }
 function irVideoBlock(sym, coName){
