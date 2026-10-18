@@ -25,7 +25,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { TYPES, parseFin, metrics, SCORERS, total, money, facts, BUY, risk, TAG, f1 } from './lib/master-score.mjs';
+import { TYPES, parseFin, parseFinMind, parseSecFacts, mergeHistory, metrics, SCORERS, total, money, facts, BUY, risk, TAG, f1 } from './lib/master-score.mjs';
 const ROOT = path.resolve(import.meta.dirname, '..');
 const SITE = (process.env.SITE_URL || 'https://weicheng-stock.pages.dev').replace(/\/+$/, '');
 const DRY_RUN = process.env.DRY_RUN === '1';
@@ -72,14 +72,81 @@ async function fetchFin(sym) {
 console.log(`▶ 候選公司 ${universe.length} 家（台股 ${universe.filter(isTwCode).length}、美股 ${universe.filter(c => !isTwCode(c)).length}）`);
 const data = new Map();   // code → metrics
 let fail = 0, thin = 0;
+// ① Yahoo：本益比、研發費用、最新年度（原本的 4 年資料也保留，供 COMPARE 對照）
+const yahoo = new Map(), data4 = new Map();
 for (let i = 0; i < universe.length; i += 5) {
   await Promise.all(universe.slice(i, i + 5).map(async code => {
-    try { const f = await fetchFin(symOf(code)); const m = f && metrics(f); if (m) data.set(code, m); else thin++; } catch (e) { fail++; }
+    try { const f = await fetchFin(symOf(code)); if (f) { yahoo.set(code, f); const m = metrics(f); if (m) data4.set(code, m); } } catch (e) { fail++; }
   }));
-  if ((i / 5) % 20 === 19) console.log(`  …已處理 ${Math.min(i + 5, universe.length)}/${universe.length}`);
+  if ((i / 5) % 20 === 19) console.log(`  …Yahoo 已處理 ${Math.min(i + 5, universe.length)}/${universe.length}`);
   await sleep(250);
 }
-console.log(`  可評分 ${data.size} 家；資料不足 ${thin} 家；抓取失敗 ${fail} 家`);
+// ② 近 10 年官方財報（2026-10-18 起；見 scripts/lib/master-score.mjs 的說明）
+//   美股：SEC companyfacts（每秒 10 次以內）；台股：FinMind 免費 API（未註冊約每小時 300 次，碰到上限就等）
+const SEC_UA = 'stock-research aa910517@gmail.com';
+let cikMap = {};
+try { const j = await (await fetch('https://www.sec.gov/files/company_tickers.json', { headers: { 'User-Agent': SEC_UA }, signal: AbortSignal.timeout(30000) })).json();
+  for (const v of Object.values(j)) cikMap[String(v.ticker).toUpperCase().replace('.', '-')] = String(v.cik_str).padStart(10, '0'); } catch (e) { console.log('  ⚠️ 取不到 SEC 代碼對照，美股只用 Yahoo 4 年資料'); }
+async function secHist(code) {
+  const cik = cikMap[code]; if (!cik) return null;
+  for (let i = 0; i < 3; i++) {
+    try { const r = await fetch(`https://data.sec.gov/api/xbrl/companyfacts/CIK${cik}.json`, { headers: { 'User-Agent': SEC_UA }, signal: AbortSignal.timeout(40000) });
+      if (r.status === 404) return null; if (r.ok) return parseSecFacts(await r.json()); } catch (e) {}
+    await sleep(2000 * (i + 1));
+  }
+  return null;
+}
+const FM = 'https://api.finmindtrade.com/api/v4/data';
+const FM_START = (new Date().getFullYear() - 11) + '-01-01';
+let fmWaited = 0;
+async function finmind(dataset, id) {
+  for (let i = 0; i < 6; i++) {
+    try {
+      const r = await fetch(`${FM}?dataset=${dataset}&data_id=${id}&start_date=${FM_START}`, { signal: AbortSignal.timeout(40000) });
+      const j = await r.json().catch(() => null);
+      if (r.ok && j && Array.isArray(j.data)) return j;
+      if (r.status === 402 || r.status === 429 || (j && /limit|upper/i.test(j.msg || ''))) {
+        if (fmWaited >= 100) return null;   // 總共最多等 100 分鐘，其餘公司退回 Yahoo 4 年資料
+        console.log(`  FinMind 免費額度到上限，等 10 分鐘（已等 ${fmWaited} 分鐘）`); await sleep(600000); fmWaited += 10; continue;
+      }
+    } catch (e) {}
+    await sleep(3000 * (i + 1));
+  }
+  return null;
+}
+async function twHist(code) {
+  const fsj = await finmind('TaiwanStockFinancialStatements', code); if (!fsj) return null;
+  const bsj = await finmind('TaiwanStockBalanceSheet', code); if (!bsj) return null;
+  return parseFinMind(fsj, bsj);
+}
+let n10 = 0, nOfficial = 0;
+for (const [i, code] of [...yahoo.keys()].entries()) {
+  const h = isTwCode(code) ? await twHist(code) : await secHist(code);
+  const f = mergeHistory(yahoo.get(code), h);
+  const m = metrics(f);
+  if (m) { m.years = f.years; m.histSrc = f.src; data.set(code, m); if (f.src !== 'yahoo') nOfficial++; if (m.n >= 8) n10++; } else thin++;
+  await sleep(isTwCode(code) ? 1200 : 150);
+  if (i % 100 === 99) console.log(`  …官方 10 年資料已處理 ${i + 1}/${yahoo.size}`);
+}
+console.log(`  可評分 ${data.size} 家（其中 ${nOfficial} 家用官方歷史財報、${n10} 家有 8 年以上）；資料不足 ${thin} 家；抓取失敗 ${fail} 家`);
+// COMPARE=1：印出「4 年（舊）vs 10 年（新）」的排名對照，只看不寫
+if (process.env.COMPARE === '1') {
+  const lines = ['## 4 年（舊） vs 10 年（新）評分對照', ''];
+  for (const key of MASTERS) for (const mk of ['tw', 'us']) {
+    const rank = src => [...src.entries()].filter(([c]) => (mk === 'tw') === isTwCode(c)).map(([c, m]) => ({ c, s: total(SCORERS[key](m)) })).sort((a, b) => b.s - a.s);
+    const o = rank(data4), nw = rank(data);
+    const nm = c => isTwCode(c) ? (TW_ALL[c] || c) : c;
+    lines.push(`### ${key} ${mk === 'tw' ? '台股' : '美股'}`, `- 舊前 5：${o.slice(0, 5).map(x => nm(x.c) + ' ' + x.s).join('、')}`, `- 新前 5：${nw.slice(0, 5).map(x => nm(x.c) + ' ' + x.s).join('、')}`);
+    for (const c of (mk === 'tw' ? ['2330', '2454', '2317'] : ['TSM', 'AAPL', 'NVDA', 'MSFT'])) {
+      const a = o.findIndex(x => x.c === c), b = nw.findIndex(x => x.c === c);
+      if (a > -1 || b > -1) lines.push(`- ${nm(c)}：舊 第${a + 1}名 ${a > -1 ? o[a].s : '—'} 分 → 新 第${b + 1}名 ${b > -1 ? nw[b].s : '—'} 分（${(data.get(c) || {}).years || '?'} 年資料）`);
+    }
+    lines.push('');
+  }
+  console.log(lines.join('\n'));
+  if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join('\n') + '\n');
+  process.exit(0);
+}
 if (data.size < Math.min(60, universe.length * 0.3)) { console.error('❌ 可評分的公司太少，可能是資料來源異常；為避免用殘缺資料改掉推薦，這次不更新'); process.exit(1); }
 
 async function usName(code) {   // 美股名稱：只對入選的幾家多問一次
@@ -135,7 +202,7 @@ for (const key of MASTERS) {
     const fys = [...new Set(chosen.map(x => x.m.fy))].sort();
     doc[mk] = {
       asOf: `${fys.join('／')} 年度財報與 ${today} 的本益比`,
-      sourceName: 'Yahoo Finance 彙整之公司年度財報（非交易所原始申報檔）',
+      sourceName: mk === 'tw' ? '近 10 年財報：FinMind 彙整之公開資訊觀測站財報；本益比與最新年度：Yahoo Finance' : '近 10 年財報：SEC 官方申報（10-K／20-F）；本益比與最新年度：Yahoo Finance',
       auto: true, updatedAt: today, poolSize: pool.length,
       note: `這 ${PICKS} 間是從你的第一、二階段公司（本次可評分 ${pool.length} 家）依上方評分公式算出來的前 ${PICKS} 名。每週自動重算一次；名單仍然最好就不變，有公司分數高出 ${SWAP_MARGIN} 分以上才替換。`,
       lastChange: changed ? (first ? `${today} 改為自動評分` : `${today}：新進 ${added.join('、')}；移出 ${removed.join('、')}`) : ((doc[mk] && doc[mk].lastChange) || ''),

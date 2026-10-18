@@ -16,6 +16,89 @@ export function parseFin(j) {
     rd: series('annualResearchAndDevelopment').m, ta: series('annualTotalAssets').m, pe: series('trailingPeRatio').m };
 }
 
+// ════════════════════════════════════════════════════════════════
+// 【近 10 年財報】2026-10-18 使用者認為台積電分數偏低，請我檢查並同意改用 10 年財報。
+//   原因：Yahoo 免費資料只有近 4 個年度，一次景氣循環低谷（台積電 2023 年營收年減）就佔整段的三分之一；
+//   巴菲特、費雪看的本來就是長期紀錄，App 其他財務指標也都看 10 年。
+//   台股用 FinMind（彙整公開資訊觀測站財報，App 財務指標本來就在用）、美股用 SEC 官方申報；
+//   Yahoo 仍負責本益比、研發費用與 FinMind／SEC 還沒有的最新年度。抓取由呼叫端各自處理（排程直連、App 走代理），
+//   這裡只做「解析＋合併」，排程與 App 用同一份，分數才會一致。
+// ════════════════════════════════════════════════════════════════
+const EMPTY = () => ({ rev: {}, gp: {}, ni: {}, eq: {}, ta: {} });
+// FinMind 綜合損益表（逐季、單季數字）＋資產負債表 → 年度。只收四季都齊的年份。
+export function parseFinMind(fsJson, bsJson) {
+  const out = EMPTY(), acc = {};
+  for (const r of (fsJson && fsJson.data) || []) {
+    const k = { Revenue: 'rev', GrossProfit: 'gp', IncomeAfterTaxes: 'ni' }[r.type]; if (!k) continue;
+    const y = String(r.date).slice(0, 4), v = Number(r.value); if (!Number.isFinite(v)) continue;
+    const a = acc[y] = acc[y] || { rev: 0, gp: 0, ni: 0, q: { rev: new Set(), gp: new Set(), ni: new Set() } };
+    a[k] += v; a.q[k].add(r.date);
+  }
+  for (const [y, a] of Object.entries(acc)) {
+    if (a.q.rev.size !== 4) continue;
+    const d = y + '-12-31';
+    out.rev[d] = a.rev; if (a.q.gp.size === 4) out.gp[d] = a.gp; if (a.q.ni.size === 4) out.ni[d] = a.ni;
+  }
+  for (const r of (bsJson && bsJson.data) || []) {
+    if (!/-12-31$/.test(r.date)) continue;
+    const v = Number(r.value); if (!Number.isFinite(v)) continue;
+    if (r.type === 'EquityAttributableToOwnersOfParent') out.eq[r.date] = v;
+    else if (r.type === 'TotalAssets') out.ta[r.date] = v;
+  }
+  return out;
+}
+// SEC companyfacts → 年度（10-K／20-F／40-F 的全年數字；同一期間以最後申報者為準）
+const SEC_TAGS = {
+  rev: ['us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax', 'us-gaap:Revenues', 'us-gaap:SalesRevenueNet', 'us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax', 'us-gaap:RevenuesNetOfInterestExpense', 'ifrs-full:Revenue', 'ifrs-full:RevenueFromContractsWithCustomers'],
+  gp: ['us-gaap:GrossProfit', 'ifrs-full:GrossProfit'],
+  cost: ['us-gaap:CostOfRevenue', 'us-gaap:CostOfGoodsAndServicesSold', 'us-gaap:CostOfGoodsSold', 'ifrs-full:CostOfSales'],
+  ni: ['us-gaap:NetIncomeLoss', 'us-gaap:ProfitLoss', 'ifrs-full:ProfitLossAttributableToOwnersOfParent', 'ifrs-full:ProfitLoss'],
+  eq: ['us-gaap:StockholdersEquity', 'us-gaap:StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest', 'ifrs-full:EquityAttributableToOwnersOfParent', 'ifrs-full:Equity'],
+  ta: ['us-gaap:Assets', 'ifrs-full:Assets']
+};
+export function parseSecFacts(j) {
+  const out = EMPTY(), facts = (j && j.facts) || {};
+  const pick = (tags, instant) => {
+    const m = {};
+    for (const t of tags) {
+      const [ns, name] = t.split(':'); const u = facts[ns] && facts[ns][name] && facts[ns][name].units; if (!u) continue;
+      const arr = Object.values(u)[0] || [];   // 只有一種貨幣單位；多種時取第一種（同一家公司的財報幣別固定）
+      for (const x of arr) {
+        if (!x.form || !/^(10-K|20-F|40-F)/.test(x.form) || !x.end) continue;
+        if (!instant) { if (!x.start) continue; const days = (new Date(x.end) - new Date(x.start)) / 864e5; if (days < 340 || days > 380) continue; }
+        if (m[x.end] && m[x.end].filed >= x.filed) continue;
+        m[x.end] = { v: x.val, filed: x.filed || '' };
+      }
+      if (Object.keys(m).length >= 3) break;   // 依優先順序，第一個有足夠年份的標籤就用
+    }
+    return Object.fromEntries(Object.entries(m).map(([d, x]) => [d, x.v]));
+  };
+  out.rev = pick(SEC_TAGS.rev); out.gp = pick(SEC_TAGS.gp); out.ni = pick(SEC_TAGS.ni);
+  out.eq = pick(SEC_TAGS.eq, true); out.ta = pick(SEC_TAGS.ta, true);
+  if (!Object.keys(out.gp).length) { const c = pick(SEC_TAGS.cost); for (const d in out.rev) if (c[d] != null) out.gp[d] = out.rev[d] - c[d]; }
+  return out;
+}
+// 合併：官方 10 年歷史為主，Yahoo 補「官方還沒有的最新年度」；本益比、研發費用沿用 Yahoo。
+//   重疊年份的營收差超過 10%（幣別或口徑不同）就不混用 Yahoo 的年度數字，只用官方歷史。
+export function mergeHistory(y, h, maxYears = 10) {
+  if (!h || Object.keys(h.rev || {}).length < 3) return { ...y, years: Object.keys(y.rev || {}).length, src: 'yahoo' };
+  const yr = d => String(d).slice(0, 4);
+  const hByYear = new Map(Object.keys(h.rev).map(d => [yr(d), d]));
+  let same = true, overlap = 0;
+  for (const d of Object.keys(y.rev || {})) { const hd = hByYear.get(yr(d)); if (hd && h.rev[hd] > 0) { overlap++; const r = y.rev[d] / h.rev[hd]; if (r < 0.9 || r > 1.1) same = false; } }
+  const out = { rev: { ...h.rev }, gp: { ...h.gp }, ni: { ...h.ni }, eq: { ...h.eq }, ta: { ...h.ta } };
+  if (same) for (const d of Object.keys(y.rev || {})) {
+    if (hByYear.has(yr(d))) continue;
+    for (const k of Object.keys(out)) if (y[k] && y[k][d] != null) out[k][d] = y[k][d];
+  }
+  const dates = Object.keys(out.rev).sort().slice(-maxYears);
+  const keep = o => Object.fromEntries(Object.entries(o).filter(([d]) => dates.includes(d)));
+  // 研發費用（費雪用）以年份對齊：官方期間結束日與 Yahoo 的日期可能差幾天（美股非 12 月制）
+  const rd = {}; for (const d of dates) { const yd = Object.keys(y.rd || {}).find(x => yr(x) === yr(d)); if (yd) rd[d] = y.rd[yd]; }
+  return { rev: keep(out.rev), gp: keep(out.gp), ni: keep(out.ni), eq: keep(out.eq), ta: keep(out.ta), rd,
+    pe: y.pe || {}, cur: y.cur, years: dates.length, src: same && overlap ? 'official+yahoo' : 'official' };
+}
+
 // ── 指標 ──
 export function metrics(f) {
   const dates = Object.keys(f.rev).sort();
@@ -44,7 +127,10 @@ export function metrics(f) {
     peg: (pe != null && pe > 0 && growth != null && growth > 0) ? pe / growth : null };
 }
 
-// ── 評分公式（滿分 100）──────────────────────────────────────────
+// ── 評分公式（滿分 100）──
+//   ⚠️ 2026-10-18：「營收衰退幾年」改以「衰退年數 ÷ 期間年數」連續給分。
+//      原本是 4 年資料寫死「衰退 1 年扣幾分」；改成 10 年後同樣一次景氣低谷的比重應該變小。
+//      4 年資料時（期間 3 年）各錨點的分數與改版前完全相同。────────────────────────────────────────
 //   lin(v, [[x, 分數], …])：依錨點做線性內插，連續給分。
 //   ⚠️ 第一版是「跨過門檻就給固定分數」，實測 770 家裡一堆公司同時拿到滿分 100，
 //      排名最後只靠本益比決定，「有更好的公司才替換」完全失去意義。
@@ -72,7 +158,7 @@ export const SCORERS = {
     P('股東權益報酬率持續性', lin(m.roeAvg, [[0, 0], [10, 8], [15, 18], [20, 25], [35, 30]]) - ((m.roeMin != null && m.roeMin < 10) ? 4 : 0), 30, `近 ${m.n} 年平均 ${f1(m.roeAvg)}%、最低 ${f1(m.roeMin)}%`),
     m.gm != null ? P('定價能力（毛利率）', lin(m.gm, [[0, 0], [20, 6], [30, 11], [40, 15], [70, 20]]), 20, `${f1(m.gm)}%`)
                  : P('定價能力（無毛利率，改看淨利率）', lin(m.nm, [[0, 0], [10, 8], [15, 11], [25, 14], [40, 16]]), 20, `淨利率 ${f1(m.nm)}%`),
-    P('獲利可預測', !m.niAllPos ? 3 : [20, 15, 9, 4][Math.min(m.declines, 3)], 20, `${m.niAllPos ? '年年獲利' : '曾有虧損'}、營收衰退 ${m.declines} 年`),
+    P('獲利可預測', !m.niAllPos ? 3 : lin(m.declines / m.span, [[0, 20], [1 / 3, 15], [2 / 3, 9], [1, 4]]), 20, `近 ${m.n} 年${m.niAllPos ? '年年獲利' : '曾有虧損'}、營收衰退 ${m.declines} 年`),
     P('獲利留存（淨利率）', lin(m.nm, [[0, 0], [5, 4], [10, 7], [30, 10]]), 10, `${f1(m.nm)}%`),
     P('價格合理（本益比）', lin(m.pe, [[8, 20], [15, 18], [20, 14], [25, 10], [35, 5], [60, 0]], 5), 20, m.pe ? `${f1(m.pe)} 倍` : '無資料'),
     LEVERAGE(m)
@@ -82,7 +168,7 @@ export const SCORERS = {
     P('成長速度', lin(m.growth, [[0, 0], [5, 9], [10, 17], [15, 25], [20, 31], [25, 35], [50, 35], [80, 22]]), 35, `${m.growthIsNi ? '獲利' : '營收'}年複合成長 ${f1(m.growth)}%`),
     P('價格相對成長（PEG）', lin(m.peg, [[0.3, 35], [0.5, 34], [1, 29], [1.5, 20], [2, 10], [3, 2]], 6), 35, m.peg != null ? `PEG ${m.peg.toFixed(2)}` : '無法計算'),
     P('獲利體質', (m.nm != null && m.nm > 0) ? lin(m.roe, [[0, 2], [10, 9], [15, 13], [25, 15]], 4) : 0, 15, `股東權益報酬率 ${f1(m.roe)}%`),
-    P('成長一致', [15, 9, 4, 2][Math.min(m.declines, 3)], 15, `營收衰退 ${m.declines} 年`),
+    P('成長一致', lin(m.declines / m.span, [[0, 15], [1 / 3, 9], [2 / 3, 4], [1, 2]]), 15, `近 ${m.n} 年營收衰退 ${m.declines} 年`),
     LOSS(m)
   ],
   // 查理蒙格：用合理的價格買「高品質」的公司 —— 報酬率高、而且每一年都高
@@ -100,7 +186,7 @@ export const SCORERS = {
     P('研發投入', lin(m.rd, [[0, 2], [2, 7], [5, 14], [10, 20], [15, 23], [25, 25]], 2), 25, m.rd != null ? `研發占營收 ${f1(m.rd)}%` : '未揭露研發費用'),
     P('利潤率改善', lin(m.gmTrend, [[-8, 0], [-3, 7], [0, 13], [3, 17], [8, 20]], 5), 20, m.gmTrend != null ? `毛利率 ${m.gmTrend >= 0 ? '+' : ''}${f1(m.gmTrend)} 個百分點` : '無毛利率'),
     P('利潤率水準', lin(m.gm, [[0, 0], [20, 3], [30, 7], [40, 10], [50, 12], [75, 15]], 3), 15, m.gm != null ? `毛利率 ${f1(m.gm)}%` : '無毛利率'),
-    P('成長沒有中斷', [10, 6, 3, 1][Math.min(m.declines, 3)], 10, `營收衰退 ${m.declines} 年`),
+    P('成長沒有中斷', lin(m.declines / m.span, [[0, 10], [1 / 3, 6], [2 / 3, 3], [1, 1]]), 10, `近 ${m.n} 年營收衰退 ${m.declines} 年`),
     LOSS(m)
   ]
 };

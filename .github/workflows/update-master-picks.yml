@@ -17,6 +17,11 @@ on:
     # 台灣時間每週一 05:20（UTC 週日 21:20）。年度財報一年才變一次，本益比每天變，一週一次足夠。
     - cron: '20 21 * * 0'
   workflow_dispatch:
+    inputs:
+      compare:
+        description: '只預覽「4 年 vs 10 年」評分對照，不更新推薦名單'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -28,7 +33,8 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # 2026-10-18 改用近 10 年財報：台股 FinMind 免費額度約每小時 300 次，碰到上限要等，最長約 2 小時
+    timeout-minutes: 170
     steps:
       - uses: actions/checkout@v5
 
@@ -37,9 +43,12 @@ jobs:
           node-version: '24'
 
       - name: 重新評分
+        env:
+          COMPARE: ${{ inputs.compare == true && '1' || '' }}
         run: node scripts/update-master-picks.mjs
 
       - name: 提交結果
+        if: inputs.compare != true
         run: |
           git config user.name  'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
