@@ -185,7 +185,9 @@ function irPageOf(pages, sym) {
 const TRANSCRIPT_MAX = Number(process.env.TRANSCRIPT_MAX || 12);
 
 const rocToAd = y => Number(y) + 1911;
-const num = v => { const n = Number(String(v ?? '').replace(/,/g, '')); return Number.isFinite(n) ? n : null; };
+// ⚠️ 2026-10-18：空字串、「-」原本會被 Number('') 變成 0，畫面就把「官方沒填」顯示成「0.00 億」。
+//   沒有值就是 null（不顯示），絕不能變成 0。
+const num = v => { const t = String(v ?? '').replace(/,/g, '').trim(); if (!t || t === '-' || t === '--') return null; const n = Number(t); return Number.isFinite(n) ? n : null; };
 const toYiTw = v => { const n = num(v); return n == null ? null : (n / 100000).toFixed(2); };   // 台股原始單位仟元 → 億元
 const toYiUs = v => { const n = num(v); return n == null ? null : (n / 1e8).toFixed(2); };      // 美元 → 億美元
 const pct = (a, b) => { const x = num(a), y = num(b); return (x != null && y) ? (x / y * 100).toFixed(1) + '%' : '未提供'; };
@@ -239,10 +241,18 @@ async function loadTwFinancials() {
       if (!/^\d{4}$/.test(code)) continue;
       if (map[code] && src.ind !== 'ci') continue;   // 一般業已有就不覆蓋
       const k = twFinKeys(r);
-      if (!keysLogged && src.ind !== 'ci') { keysLogged = true; console.log(`  ${src.label} 欄位對應：營收←${k.rev || '（找不到）'}、淨利←${k.ni || '（找不到）'}、母公司淨利←${k.parent || '（找不到）'}、每股盈餘←${k.eps || '（找不到）'}`); }
+      if (!keysLogged && src.ind !== 'ci') { keysLogged = true; console.log(`  ${src.label} 欄位對應：營收←${k.rev || '（找不到）'}、淨利←${k.ni || '（找不到）'}、母公司淨利←${k.parent || '（找不到）'}、每股盈餘←${k.eps || '（找不到）'}`);
+        if (!k.rev) console.log(`    （找不到營收欄位，全部欄位：${Object.keys(r).join('、')}）`); }
+      // 銀行業沒有單一營收欄位時，以「利息淨收益＋利息以外淨損益」為淨收益（與金控業「淨收益」同一定義）
+      let revRaw = k.rev ? num(r[k.rev]) : null;
+      if (revRaw == null && r['利息淨收益'] != null && r['利息以外淨損益'] != null && num(r['利息淨收益']) != null && num(r['利息以外淨損益']) != null)
+        revRaw = num(r['利息淨收益']) + num(r['利息以外淨損益']);
+      const niRaw = k.ni ? num(r[k.ni]) : null;
+      // 安全閥：淨利大於營收代表營收欄位對錯了（保險業曾出現），寧可不顯示營收也不顯示錯的數字
+      if (revRaw != null && niRaw != null && niRaw > revRaw && src.ind !== 'ci') { if (!map['__warned_' + src.ind]) console.log(`    ⚠️ ${src.label} 有公司淨利大於營收（例：${code}），營收欄位可能不正確，這類公司不顯示營收`); map['__warned_' + src.ind] = 1; revRaw = null; }
       map[code] = {
         market: 'tw', name: r[src.n], year: rocToAd(r[src.y]), season: Number(r[src.s]), currency: '億元（新台幣）',
-        營業收入: toYiTw(k.rev ? r[k.rev] : undefined), 營業毛利: toYiTw(r['營業毛利（毛損）淨額'] ?? r['營業毛利（毛損）']),
+        營業收入: revRaw == null ? null : (revRaw / 100000).toFixed(2), 營業毛利: toYiTw(r['營業毛利（毛損）淨額'] ?? r['營業毛利（毛損）']),
         營業利益: toYiTw(r['營業利益（損失）']), 稅前淨利: toYiTw(k.pre ? r[k.pre] : undefined),
         本期淨利: toYiTw(k.ni ? r[k.ni] : undefined),
         // ⚠️ 官方欄位名稱是「淨利（淨損）歸屬於母公司業主」，先前寫錯導致一律抓成 0.00
@@ -254,6 +264,7 @@ async function loadTwFinancials() {
     }
     console.log(`  ${src.label}：${used} 家`);
   }
+  for (const k of Object.keys(map)) if (k.startsWith('__warned_')) delete map[k];
   return map;
 }
 
@@ -797,7 +808,9 @@ for (const item of sorted) {
   // 營收為 0 或空白者略過：這類多是尚無實質營運的空殼／早期公司（實測 iBio、FIRST BREACH
   //   等營收 0.00 億、EPS 空白）。對它們做分析只會產出沒有內容的文字，還白白消耗免費額度，
   //   應該把額度留給真正有營運的公司。
-  if (!f || f.營業收入 == null || Number(f.營業收入) <= 0) { skipped++; continue; }
+  // 金融業（金控／銀行／保險／證券／異業）沒有可靠的營收欄位時，有官方淨利也照做（數字只顯示官方有給的）
+  const finInd = f && f.產業別;
+  if (!f || ((f.營業收入 == null || Number(f.營業收入) <= 0) && !(finInd && f.本期淨利 != null))) { skipped++; continue; }
 
   // 季度識別：同一家公司同一季只分析一次
   const qTag = f.market === 'tw' ? `${f.year}Q${f.season}` : `${f.year}${f.season}`;
