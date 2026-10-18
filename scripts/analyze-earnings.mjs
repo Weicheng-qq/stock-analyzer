@@ -222,7 +222,8 @@ function twFinKeys(r) {
   const ks = Object.keys(r);
   const find = (...res) => { for (const re of res) { const k = ks.find(x => re.test(x)); if (k) return k; } return null; };
   return {
-    rev: find(/^營業收入$/, /^營業收入合計$/, /^淨收益$/, /^收益合計$/, /^收入合計$/, /^營業收入淨額$/),
+    // 2026-10-18 第二次驗證實際欄位：證券期貨業＝「收益」、異業＝「收入」；銀行業沒有單一欄位（見呼叫端）
+    rev: find(/^營業收入$/, /^營業收入合計$/, /^淨收益$/, /^收益合計$/, /^收入合計$/, /^營業收入淨額$/, /^收益$/, /^收入$/),
     pre: find(/^稅前淨利（淨損）$/, /^繼續營業單位稅前(淨利|損益)/, /^稅前/),
     ni: find(/^本期淨利（淨損）$/, /^本期稅後淨利（淨損）$/, /^本期淨利/),
     parent: find(/^淨利（淨損）歸屬於母公司業主$/, /^本期淨利（淨損）歸屬於母公司業主$/, /^(?!.*綜合).*淨利.*歸屬於母公司業主/),
@@ -244,7 +245,9 @@ async function loadTwFinancials() {
       if (!keysLogged && src.ind !== 'ci') { keysLogged = true; console.log(`  ${src.label} 欄位對應：營收←${k.rev || '（找不到）'}、淨利←${k.ni || '（找不到）'}、母公司淨利←${k.parent || '（找不到）'}、每股盈餘←${k.eps || '（找不到）'}`);
         if (!k.rev) console.log(`    （找不到營收欄位，全部欄位：${Object.keys(r).join('、')}）`); }
       // 銀行業沒有單一營收欄位時，以「利息淨收益＋利息以外淨損益」為淨收益（與金控業「淨收益」同一定義）
-      let revRaw = k.rev ? num(r[k.rev]) : null;
+      // ⚠️ 金控業「淨收益」、保險業「營業收入」實測都出現淨利大於它的公司（2880 華南金、2816 旺旺保），
+      //   代表那不是總營收，無法驗證欄位意義 → 這兩業一律不顯示營收（只顯示官方淨利與每股盈餘）。
+      let revRaw = (k.rev && src.ind !== 'fh' && src.ind !== 'ins') ? num(r[k.rev]) : null;
       if (revRaw == null && r['利息淨收益'] != null && r['利息以外淨損益'] != null && num(r['利息淨收益']) != null && num(r['利息以外淨損益']) != null)
         revRaw = num(r['利息淨收益']) + num(r['利息以外淨損益']);
       const niRaw = k.ni ? num(r[k.ni]) : null;
