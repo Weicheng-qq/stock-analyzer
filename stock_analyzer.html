@@ -2437,7 +2437,10 @@ function __diagQuote(sym, mis, ytw, pick, errM, errY){
 //     E03 Yahoo股市抓不到（證交所正常，僅少了備援）
 //     E04 有來源的數字未通過驗證（違反漲跌停／當日高低／跳動單位）
 //     E05 超過 15 秒沒有成功更新，畫面是上一次的價格
-//     E06 兩個來源都是即時成交，但價格不同
+//     E06 兩個來源都是即時成交、成交時間相差 5 秒內，價格卻不同
+//         ⚠️ 2026-10-18 收緊：原本只要價格不同就亮 E06。但證交所快照常比 Yahoo股市晚 1～2 分鐘，
+//         兩邊是「不同時間點的成交」，價格不同是正常的（10/16 開盤診斷：6 檔整場都亮 E06，
+//         畫面價格卻 100% 與來源相符）。只有同一時間點價格卻不同，才代表有來源讀錯。
 //     E07 盤中資料時間落後超過 3 分鐘
 //     E08 拿不到成交價，畫面是開盤價　E10 畫面是延遲報價
 //     E09 輪詢曾卡住超過 15 秒被強制放行（記在紀錄裡，不顯示在列上）
@@ -2464,7 +2467,10 @@ function __dxSet(sym, mis, ytw, pick, errM, errY){
   else if(!mis){ const r=__dxErr(errM); codes.push('E02'+(r?('('+r+')'):'')); }
   else if(!ytw){ const r=__dxErr(errY); codes.push('E03'+(r?('('+r+')'):'')); }
   if(rj(mis)||rj(ytw)) codes.push('E04');
-  if(mis && ytw && mis.verdict==='live' && ytw.verdict==='live' && mis.exDate===ytw.exDate && mis.price!==ytw.price) codes.push('E06');
+  const __sec=t=>{ const a=String(t||'').split(':').map(Number); return a.length>=2&&a.every(Number.isFinite) ? a[0]*3600+a[1]*60+(a[2]||0) : null; };
+  const tm=__sec(mis&&mis.exTime), ty=__sec(ytw&&ytw.exTime);
+  if(mis && ytw && mis.verdict==='live' && ytw.verdict==='live' && mis.exDate===ytw.exDate && mis.price!==ytw.price
+     && (tm==null || ty==null || Math.abs(tm-ty)<=5)) codes.push('E06');
   if(pick && pick.verdict==='open') codes.push('E08');
   if(pick && pick.verdict==='delayed') codes.push('E10');
   const text=__dxState(mis,errM,'M')+' '+__dxState(ytw,errY,'Y')+(pick?('→'+(/^Yahoo/.test(pick.src||'')?'Y':'M')):'→無');
@@ -2554,7 +2560,7 @@ function __quoteDiagDump(){
     '頂端時間列: '+((document.getElementById('wlLastUpdate')||{}).textContent||''),
     '瀏覽器: '+navigator.userAgent,
     '診斷碼說明: M=證交所 Y=Yahoo股市; k即時 t即時(用trade.z) d延遲 o僅開盤價 p今日未成交 s前一交易日 r未通過驗證 x抓取失敗(T逾時/數字=錯誤碼/J非JSON/N網路)',
-    '錯誤碼: E01兩來源都失敗 E02證交所失敗 E03Yahoo股市失敗 E04未通過驗證 E05超過15秒未更新 E06兩來源價格不同 E07資料落後>3分 E08僅開盤價 E09輪詢曾卡住 E10延遲報價',
+    '錯誤碼: E01兩來源都失敗 E02證交所失敗 E03Yahoo股市失敗 E04未通過驗證 E05超過15秒未更新 E06兩來源同一時間價格不同 E07資料落後>3分 E08僅開盤價 E09輪詢曾卡住 E10延遲報價',
     '目前各檔: '+(typeof getWatchlist==='function'?getWatchlist().map(x=>{ const d=__dxLast.get(x.symbol); return x.symbol.replace(/\..*/,'')+'['+(d?((d.codes.join(',')||'OK')+' '+d.text):'無紀錄')+']'; }).join(' '):''),
     '--- 最近 '+__diag.length+' 筆（舊→新）---'
   ];

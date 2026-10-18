@@ -78,11 +78,17 @@ function finish() {
 // ── 時間窗 ──
 let now = tp();
 if (!TEST) {
-  if (now.min > 13 * 60 + 20) { out.status = 'skip'; out.title = '台股開盤診斷：已過盤中時段，未執行'; out.report = '啟動時間 ' + now.hms + '（台北），已超過 13:20。'; finish(); process.exit(0); }
+  // ⚠️ 2026-10-18：GitHub 排程實測延遲 4～7 小時（10/12～10/16 每一次都是中午後才啟動，
+  //   開盤後 10 分鐘一次都沒觀察到）。所以 workflow 改成半夜起每小時排一次，
+  //   最早「趕在開盤前」啟動的那一次負責等到 08:58 取樣，其他的在這裡安靜結束：
+  //   · 開盤後 10 分鐘已經開始（> 09:00）才啟動 → 再取樣也看不到最關鍵的時段，略過、不開 Issue
+  //   · 距離 08:58 超過 320 分鐘才啟動 → 等不到（GitHub 單一工作上限 6 小時），交給下一次排程
+  //   同時已有另一次在等待／取樣的情形，由 workflow 的「只留最早一次」步驟擋掉，不會重複取樣。
   const startMin = 8 * 60 + 58;
-  // 排程刻意提早到 08:10 啟動（GitHub 排程常延遲 5～30 分鐘），這裡再等到 08:58 才開始取樣，
-  //   確保「開盤後 10 分鐘」（09:00～09:10）一定完整觀察到 —— 使用者回報的問題就發生在這一段。
-  if (now.min < startMin) { const w = Math.min((startMin * 60 - now.sec) * 1000, 70 * 60000); console.log('等待到 08:58（' + Math.round(w / 60000) + ' 分鐘）…'); await sleep(w); }
+  if (now.min >= 9 * 60) { out.status = 'skip'; out.title = '台股開盤診斷：排程延遲，已錯過開盤，未執行'; out.report = '啟動時間 ' + now.hms + '（台北），已過 09:00，看不到開盤後 10 分鐘，略過（GitHub 排程延遲）。'; finish(); process.exit(0); }
+  const waitMin = (startMin * 60 - now.sec) / 60;
+  if (waitMin > 320) { out.status = 'skip'; out.title = '台股開盤診斷：啟動太早，交給下一次排程'; out.report = '啟動時間 ' + now.hms + '（台北），距離 08:58 還有 ' + Math.round(waitMin) + ' 分鐘，超過可等待上限。'; finish(); process.exit(0); }
+  if (waitMin > 0) { console.log('等待到 08:58（' + Math.round(waitMin) + ' 分鐘）…'); await sleep(waitMin * 60000); }
 }
 now = tp();
 const today = now.ymd;
@@ -207,7 +213,12 @@ if (samples.length && eY / samples.length > 0.2) notes.push('直接問 Yahoo股�
 if (pageErrors.length) problems.push('**網頁程式錯誤 ' + pageErrors.length + ' 筆**：' + pageErrors.slice(0, 3).join('；'));
 const med = a => { if (!a.length) return null; const b = [...a].sort((x, y) => x - y); return b[Math.floor(b.length / 2)]; };
 const mx = a => a.length ? Math.max(...a) : null;
-if (mx(stat.snapLag) != null && med(stat.snapLag) > 60) problems.push('**證交所快照時間的中位數落後 ' + med(stat.snapLag) + ' 秒**（資料來源本身沒有在更新）');
+// ⚠️ 2026-10-18：證交所落後本身不算問題 —— App 同時讀 Yahoo股市、取較新的成交（10/16 證交所中位數落後 64 秒，
+//   畫面價格仍 100% 與來源相符）。只有畫面也出錯時才升級為問題，否則列為觀察，避免每天誤報 ❌。
+if (mx(stat.snapLag) != null && med(stat.snapLag) > 60) {
+  const msg = '證交所快照時間的中位數落後 ' + med(stat.snapLag) + ' 秒（資料來源本身沒有在更新）';
+  if (problems.length) problems.push('**' + msg + '**'); else notes.push(msg + '；畫面已改用較新的 Yahoo股市，顯示價格不受影響');
+}
 
 // 開盤後 10 分鐘（09:00:00～09:10:00）有沒有完整觀察到。每 5 秒一次，完整應約 120 次。
 const O1 = 9 * 3600, O2 = 9 * 3600 + 600;
@@ -254,7 +265,7 @@ L.push('', '<details><summary>App 自己記的診斷紀錄（最後 40 行）</s
 L.push('', '最後一次頂端時間列：`' + ((samples[samples.length - 1] || {}).head || '') + '`',
   '最後一次診斷碼列：`' + ((samples[samples.length - 1] || {}).diag || '') + '`',
   '', '診斷碼說明：M＝證交所、Y＝Yahoo股市；k 即時、t 即時（用 trade.z）、d 延遲、o 僅開盤價、p 今日未成交、s 前一交易日、r 未通過驗證、x 抓取失敗（T 逾時／數字＝錯誤碼／J 非 JSON／N 網路）。',
-  'E01 兩來源都失敗、E02 證交所失敗、E03 Yahoo股市失敗、E04 未通過驗證、E05 超過 15 秒未更新、E06 兩來源價格不同、E07 資料落後超過 3 分鐘、E08 僅開盤價、E09 輪詢曾卡住、E10 延遲報價。');
+  'E01 兩來源都失敗、E02 證交所失敗、E03 Yahoo股市失敗、E04 未通過驗證、E05 超過 15 秒未更新、E06 兩來源同一時間價格不同、E07 資料落後超過 3 分鐘、E08 僅開盤價、E09 輪詢曾卡住、E10 延遲報價。');
 out.report = L.join('\n');
 // GitHub Issue 內文上限 65,536 字元，超過會整個開不成 —— 保險起見截斷
 if (out.report.length > 60000) out.report = out.report.slice(0, 60000) + '\n\n…（內容過長已截斷，完整報告見 Actions 執行紀錄）';
