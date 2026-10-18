@@ -3246,7 +3246,7 @@ function renderTwPeChecklist(finRows, pe, pe5, pePos, price){
 async function loadTwFinancials(symbol, gen){
   const el=document.getElementById('tw_fin');
   const code=String(symbol||'').replace(/\..*/,'');
-  let by={}, sourceLabel='', dFS_raw=null;
+  let by={}, sourceLabel='', dFS_raw=null, __twDualCum=null;
   // 雙掛牌(如 2330↔TSM)：改用與美股完全相同的 SEC 財報，確保同一家公司在兩個市場的財務指標數字一致。
   //   背景：FinMind(台灣申報季度加總)與 SEC 20-F 的稅後淨利本身就差約 1%(台積電 2024：1,172,200 vs 1,157,524 百萬)，
   //   兩者都是官方來源但口徑不同，導致使用者看到「同一家公司台股與美股淨利率/ROE 不同」。台積電 SEC 申報即以新台幣計價，幣別一致。
@@ -3279,6 +3279,17 @@ async function loadTwFinancials(symbol, gen){
               const y=+k, rv=yf.arY[k];
               if(rv==null || (by[y]&&by[y].rev!=null)) continue;
               by[y]={rev:rv, gp:yf.agY?.[y]??null, ni:yf.anY?.[y]??null, eq:yf.aeqY?.[y]??null};
+            }
+            // ⚠️ 2026-10-18：原本這條路徑只有整年度，台股 2330 完全沒有「今年累計」列（美股 TSM 有）。
+            //   改用與美股相同的 computeCumQuarters（同一份 Yahoo 季報＋法說會官方數字），兩市場數字一致。
+            //   幣別核對：Yahoo 年營收與 SEC 同年度差超過 10% 就不加（代表幣別不同，不能直接相加）。
+            const ys=Object.keys(by).map(Number).filter(y=>by[y].rev!=null && yf.arY?.[y]!=null);
+            const yChk=ys.length?Math.max(...ys):null;
+            const ratio=yChk!=null ? yf.arY[yChk]/by[yChk].rev : null;
+            if(ratio!=null && ratio>=0.9 && ratio<=1.1){
+              const c=computeCumQuarters(yf, 1, await loadIrLatestQ(code));
+              const cy=c ? +String(c.label).slice(0,4) : null;
+              if(c && cy && !by[cy]) __twDualCum={yr:cy, rev:c.rev, gm:c.gm, nm:c.nm, roe:null, partial:true, nQ:c.n, gr:c.yoy, irQ:c.irQ};
             }
           }catch(e){}
           const keep=Object.keys(by).map(Number).sort((a,b)=>a-b).slice(-10);
@@ -3373,15 +3384,16 @@ async function loadTwFinancials(symbol, gen){
         r.gr = (prev&&prev.rev&&!prev.partial)? (r.rev-prev.rev)/prev.rev*100 : null;
       }
     });
+    if(__twDualCum) rows.push(__twDualCum);   // 進行中年度放最後一列（雙掛牌；見上方 SEC 路徑說明）
     const ru=pickRevUnit(rows.map(r=>r.rev));
     const cc2=(v,g,m)=>v==null?'':(v>=g?'g':v>=m?'y':'r');
     const html=`<table class="dt"><tr><th>年份</th><th>毛利率</th><th>淨利率</th><th>ROE</th></tr>`
-      +rows.map(r=>`<tr><td><strong>${r.yr}${r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> Q1~Q${r.nQ}</span>`:''}</strong></td><td class="${cc2(r.gm,30,20)}">${r.gm!=null?r.gm.toFixed(1)+'%':'—'}</td><td class="${cc2(r.nm,15,5)}">${r.nm!=null?r.nm.toFixed(1)+'%':'—'}</td><td class="${cc2(r.roe,20,10)}">${r.roe!=null?r.roe.toFixed(1)+'%'+(r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> ${r.nQ}季</span>`:''):'—'}</td></tr>`).join('')
+      +rows.map(r=>`<tr><td><strong>${r.yr}${r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> Q1~Q${r.nQ}</span>`:''}</strong>${r.irQ?`<div style="color:var(--text2);font-weight:400;font-size:11px">${r.irQ}</div>`:''}</td><td class="${cc2(r.gm,30,20)}">${r.gm!=null?r.gm.toFixed(1)+'%':'—'}</td><td class="${cc2(r.nm,15,5)}">${r.nm!=null?r.nm.toFixed(1)+'%':'—'}</td><td class="${cc2(r.roe,20,10)}">${r.roe!=null?r.roe.toFixed(1)+'%'+(r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> ${r.nQ}季</span>`:''):'—'}</td></tr>`).join('')
       +`</table><div class="note" style="margin-top:8px">資料來源：${sourceLabel||'—'}</div>`;
     // 年營收明細獨立成卡(與美股同樣三張卡：財務指標／營收圖／營收明細)
     const revHtml=`<div class="note" style="margin:-2px 0 8px">單位：NT$${ru.label}</div>`
       +`<table class="dt"><tr><th>年份</th><th>年營收</th><th>較前年</th></tr>`
-      +rows.map(r=>`<tr><td><strong>${r.yr}${r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> Q1~Q${r.nQ}</span>`:''}</strong></td><td>${r.rev!=null?fmtRev(r.rev,ru):'—'}${r.partial?`<span style="color:var(--text2);font-size:11px"> 累計</span>`:''}</td><td class="${r.gr!=null?(r.gr>=0?'g':'r'):''}">${r.gr!=null?(r.gr>=0?'▲':'▼')+' '+Math.abs(r.gr).toFixed(1)+'%'+(r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> 同期比</span>`:''):'—'}</td></tr>`).join('')
+      +rows.map(r=>`<tr><td><strong>${r.yr}${r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> Q1~Q${r.nQ}</span>`:''}</strong>${r.irQ?`<div style="color:var(--text2);font-weight:400;font-size:11px">${r.irQ}</div>`:''}</td><td>${r.rev!=null?fmtRev(r.rev,ru):'—'}${r.partial?`<span style="color:var(--text2);font-size:11px"> 累計</span>`:''}</td><td class="${r.gr!=null?(r.gr>=0?'g':'r'):''}">${r.gr!=null?(r.gr>=0?'▲':'▼')+' '+Math.abs(r.gr).toFixed(1)+'%'+(r.partial?`<span style="color:var(--text2);font-weight:400;font-size:11px"> 同期比</span>`:''):'—'}</td></tr>`).join('')
       +`</table>`;
     const elRev=document.getElementById('tw_rev'); if(elRev) elRev.innerHTML=revHtml;
     if(el) el.innerHTML=html;
@@ -3547,7 +3559,7 @@ async function doSearchTW(symbol){
     try{ await Promise.race([fetchWikipediaZh(name, code), new Promise(r=>setTimeout(r,6000))]); }catch(e){}
     if(gen!==SEARCH_GEN) return;
     const finText = finRows.length
-      ? finRows.map(r=>`${r.yr}: 年營收NT$${r.rev!=null?(r.rev/1e8).toFixed(0)+'億':'NA'}, 成長${r.gr!=null?r.gr.toFixed(1)+'%':'NA'}, 毛利率${r.gm!=null?r.gm.toFixed(1)+'%':'NA'}, 淨利率${r.nm!=null?r.nm.toFixed(1)+'%':'NA'}, ROE${r.roe!=null?r.roe.toFixed(1)+'%':'NA'}`).join('\n')
+      ? finRows.map(r=>`${r.yr}${r.partial?`（進行中年度，只含Q1~Q${r.nQ}累計，成長率為與去年同期比）`:''}: 年營收NT$${r.rev!=null?(r.rev/1e8).toFixed(0)+'億':'NA'}, 成長${r.gr!=null?r.gr.toFixed(1)+'%':'NA'}, 毛利率${r.gm!=null?r.gm.toFixed(1)+'%':'NA'}, 淨利率${r.nm!=null?r.nm.toFixed(1)+'%':'NA'}, ROE${r.roe!=null?r.roe.toFixed(1)+'%':'NA'}`).join('\n')
       : `公司：${name}（台股 ${code}）。目前股價 NT$${price.toFixed(2)}。（財務資料有限，請依產業地位與基本面知識分析）`;
     const equivNote = usEquiv ? `（本公司即美股 ${usEquiv} 的同一實體，請以其真實主營業務與產業地位分析，產品與法說會展望已另用官方事實呈現）` : '';
     const peRangeText=pe5?`${pe5.min.toFixed(0)}~${pe5.max.toFixed(0)}x${pePos!=null?'（目前'+pePos.toFixed(0)+'%位置）':''}`:'無';
@@ -3658,7 +3670,7 @@ async function doSearch(){
             if(yf.anY[y]!=null) niM[y]=yf.anY[y]*scale;
             if(yf.aeqY&&yf.aeqY[y]!=null) eqM[y]=yf.aeqY[y]*scale;   // 補股東權益 → ROE 可算
           });
-          cum=computeCumQuarters(yf, scale); // 本財年累計季度（如 2026 Q1 累計）
+          cum=computeCumQuarters(yf, scale, await loadIrLatestQ(symbol)); // 本財年累計季度（如 2026 Q1 累計；Yahoo 未收錄的最新一季用法說會官方數字補）
         }
       }catch(e){}
       logOk('gap','最新數據與本益比載入完成');
@@ -3815,7 +3827,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
       <td class="${cc(r.gm,30,20)}">${r.gm!=null?r.gm.toFixed(1)+'%':'—'}</td>
       <td class="${cc(r.nm,15,5)}">${r.nm!=null?r.nm.toFixed(1)+'%':'—'}</td>
       <td class="${cc(r.roe,20,10)}">${r.roe!=null?r.roe.toFixed(1)+'%':'—'}</td></tr>`).join('')}
-    ${cum?`<tr style="border-top:2px solid var(--border)"><td><strong>${cum.label}</strong> <span style="color:var(--yellow)">†</span></td>
+    ${cum?`<tr style="border-top:2px solid var(--border)"><td><strong>${cum.label}</strong> <span style="color:var(--yellow)">†</span>${cum.irQ?`<div style="color:var(--text2);font-weight:400;font-size:11px">${cum.irQ}</div>`:''}</td>
       <td class="${cc(cum.gm,30,20)}">${cum.gm!=null?cum.gm.toFixed(1)+'%':'—'}</td>
       <td class="${cc(cum.nm,15,5)}">${cum.nm!=null?cum.nm.toFixed(1)+'%':'—'}</td>
       <td>—</td></tr>`:''}
@@ -3846,7 +3858,7 @@ function renderFinancials(symbol,co,revM,gpM,niM,eqM,shM,priceInfo,curr,secMaxYr
     <table class="dt"><tr><th>年份</th><th>年營收 <span style="color:var(--text2);font-weight:400">（${cs}${rUnit.label}）</span></th><th>較前年成長率</th></tr>
     ${rows.map(r=>{ const isGap=secMaxYr!=null&&r.yr>secMaxYr; const amtPrefix=(isGap&&gapEstimated)?'≈':''; return `<tr><td><strong>${r.yr}</strong>${isGap?' <span title="SEC尚未正式申報，來自Yahoo補充" style="color:var(--yellow)">†</span>':''}</td><td>${r.rev!=null?amtPrefix+fmtRev(r.rev,rUnit):'—'}</td>
       <td class="${r.gr!=null?(r.gr>=0?'g':'r'):''}">${r.gr!=null?(r.gr>=0?'▲':'▼')+' '+Math.abs(r.gr).toFixed(1)+'%':'—'}</td></tr>`; }).join('')}
-    ${cum?`<tr style="border-top:2px solid var(--border)"><td><strong>${cum.label}</strong> <span style="color:var(--yellow)">†</span></td><td>${gapEstimated?'≈':''}${fmtRev(cum.rev,rUnit)}</td>
+    ${cum?`<tr style="border-top:2px solid var(--border)"><td><strong>${cum.label}</strong> <span style="color:var(--yellow)">†</span>${cum.irQ?`<div style="color:var(--text2);font-weight:400;font-size:11px">${cum.irQ}</div>`:''}</td><td>${gapEstimated?'≈':''}${fmtRev(cum.rev,rUnit)}</td>
       <td class="${cum.yoy!=null?(cum.yoy>=0?'g':'r'):''}">${cum.yoy!=null?(cum.yoy>=0?'▲':'▼')+' '+Math.abs(cum.yoy).toFixed(1)+'% (年增)':'—'}</td></tr>`:''}
     </table>
   </div>
@@ -5953,10 +5965,27 @@ async function computePe5yRange(symbol, peNow, aeps){
 
 // 計算「本財年累計季度」：最新年報日期之後的所有季度加總（例：年報到2025-12，季度有2026-03 → 2026 Q1 累計）
 // 年增率 = 與去年同期（前一個年報日期後的相同季數）比較。回傳 {label, rev, gm, nm, yoy}
-function computeCumQuarters(yf, scale){
+function computeCumQuarters(yf, scale, ir){
   const aDates=Object.keys(yf.arD).sort();
   if(!aDates.length) return null;
   const lastA=aDates[aDates.length-1], prevA=aDates[aDates.length-2]||null;
+  // ⚠️ 2026-10-18 使用者回報「台積電最近十年財務指標沒有累計 2026 Q3」：
+  //   公司 10/15 開完法說會就公布了 Q3 營收／毛利率／淨利率，但 Yahoo 季度報表要晚幾天到幾週才收錄。
+  //   所以 Yahoo 還沒有這一季、而法說會優先通道（data/earnings）已有官方數字時，把這一季併進累計。
+  //   毛利、淨利用官方公布的毛利率／淨利率反推（四捨五入到 0.1%，誤差 <0.05 個百分點）。
+  //   安全閥：期間必須接在 Yahoo 最後一季之後、營收必須在上一季的 0.5～2 倍（擋住幣別或單位讀錯）。
+  let irUsed=null;
+  if(ir && ir.periodEnd && ir.rev>0){
+    const qd=Object.keys(yf.qr).sort(), lastQ=qd[qd.length-1];
+    const prevRev=lastQ?yf.qr[lastQ]:null;
+    if(lastQ && ir.periodEnd>lastQ && ir.periodEnd>lastA && prevRev>0){
+      const r=ir.rev/(scale||1), ratio=r/prevRev;
+      if(ratio>=0.5 && ratio<=2){
+        yf={...yf, qr:{...yf.qr,[ir.periodEnd]:r}, qg:{...yf.qg,[ir.periodEnd]:r*ir.gm/100}, qn:{...yf.qn,[ir.periodEnd]:r*ir.nm/100}};
+        irUsed=ir;
+      }
+    }
+  }
   const qDates=Object.keys(yf.qr).sort();
   const curQ=qDates.filter(d=>d>lastA);
   if(!curQ.length) return null;
@@ -5971,11 +6000,36 @@ function computeCumQuarters(yf, scale){
     const prevQ=qDates.filter(d=>d>prevA&&d<=lastA).slice(0,n);
     if(prevQ.length===n){ const pr=sum(yf.qr,prevQ); if(pr) yoy=(rev-pr)/Math.abs(pr)*100; }
   }
-  return { label, n,
+  return { label, n, irQ: irUsed ? ('Q'+n+' 為法說會公布數') : '',
     rev: rev*(scale||1),
     gm: (gp!=null&&rev)?gp/rev*100:null,
     nm: (ni!=null&&rev)?ni/rev*100:null,
     yoy };
+}
+
+// 法說會優先通道（data/earnings/{代碼}.json）的最新一季官方數字 → {periodEnd, rev(元), gm, nm}
+//   文字是 AI 依官方文件整理、並經程式「數字查核」的句子，例：
+//   「本季合併營收為 新台幣 1 兆 4,942.4 億元」「本季毛利率為 66.4%」「淨利率為 51.1%」。
+//   ⚠️ 目前只認新台幣（台股與台積電 ADR 的 Yahoo 財報都是新台幣）；任何一個數字讀不到就整個不用，絕不猜。
+async function loadIrLatestQ(sym){
+  try{
+    const s=String(sym||'').replace(/\..*/,'');
+    const key=/^\d/.test(s) ? s : (Object.keys(TW_US_EQUIV).find(k=>TW_US_EQUIV[k]===s) || US_TW_EQUIV[s] || s);
+    const r=await fetch('data/earnings/'+encodeURIComponent(key)+'.json', {cache:'no-cache'});
+    if(!r.ok) return null;
+    return __parseIrQ(await r.json());
+  }catch(e){ return null; }
+}
+function __parseIrQ(d){
+  if(!d || !d.irFirst || !d.official || !/^\d{4}-\d{2}-\d{2}$/.test(d.official.periodEnd||'')) return null;
+  const res=d.result||{}, rv=String(res.revenue||''), mg=String(res.margins||'');
+  const m=rv.match(/本季[^。；]{0,8}營收為\s*新台幣\s*(?:([\d,.]+)\s*兆\s*)?(?:([\d,.]+)\s*億)?\s*元/);
+  if(!m || (!m[1] && !m[2])) return null;
+  const n=x=>x?parseFloat(x.replace(/,/g,'')):0;
+  const yi=n(m[1])*10000+n(m[2]);
+  const gm=mg.match(/毛利率為\s*([\d.]+)\s*%/), nm=mg.match(/淨利率為\s*([\d.]+)\s*%/);
+  if(!(yi>0) || !gm || !nm) return null;
+  return {periodEnd:d.official.periodEnd, rev:yi*1e8, gm:+gm[1], nm:+nm[1], quarter:d.quarter||''};
 }
 
 // AI 回傳競爭對手美股代碼後，抓「真實」本益比做比較（Yahoo trailingPeRatio）
@@ -6013,7 +6067,7 @@ function drawChart(rows){
   window.__revRows=rows;                         // 供 showGroup(2) 發現 0×0 時重畫
   try{ if(window.__revChart) window.__revChart.destroy(); }catch(e){}   // 不先銷毀，重畫會報 canvas 已被占用
   window.__revChart=new Chart(el.getContext('2d'),{ type:'bar',
-    data:{ labels:rows.map(r=>r.yr), datasets:[
+    data:{ labels:rows.map(r=>r.partial?(r.yr+' Q1~Q'+r.nQ):r.yr), datasets:[   // 進行中年度要標季數，否則短一截的長條看起來像營收大衰退
       {label:'年營收(B)',data:rows.map(r=>r.rev?+(r.rev/1e9).toFixed(2):0),backgroundColor:'rgba(88,166,255,.3)',borderColor:'rgba(88,166,255,.8)',borderWidth:1,borderRadius:3,yAxisID:'y'},
       {label:'成長率%',data:rows.map(r=>r.gr!=null?+r.gr.toFixed(1):null),type:'line',borderColor:'#3fb950',backgroundColor:'rgba(63,185,80,.1)',pointBackgroundColor:'#3fb950',borderWidth:2,tension:.3,yAxisID:'y1',spanGaps:true}
     ]},
