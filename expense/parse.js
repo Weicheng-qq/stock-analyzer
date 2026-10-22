@@ -97,10 +97,16 @@
     const amount = findAmount(t);
     const merchant = findMerchant(t);
     const date = baseDate ? findDate(t, baseDate) : undefined;
-    const r = (status, type, reason) => ({
-      status, type: type || null, amount, merchant, date, reason: reason || '',
-      cat: type ? guessCat(merchant + ' ' + t, type) : null,
-    });
+    // 真正的交易通知一定帶個人資訊（卡號／帳號末四碼、交易時間…）；沒有的多半是廣告裡剛好出現「刷卡」「NT$」
+    const personal = /(您的|您於|帳戶|帳號|卡號|末四碼|末4碼|尾號|交易時間|入帳時間|消費時間|授權|交易通知|交易提醒|消費通知|入帳通知)/.test(t);
+    const r = (status, type, reason) => {
+      if (status === 'tx' && !personal) { status = 'review'; reason = '看不到卡號／帳號或交易時間，可能是廣告或活動訊息'; }
+      return {
+        status, type: type || null, amount, merchant, date, reason: reason || '',
+        cat: type ? guessCat(merchant + ' ' + t, type) : null,
+        weak: amount == null || !personal, // 歷史匯入時，這種不確定又沒用的直接略過，不塞爆待確認
+      };
+    };
 
     if (/驗證碼|OTP|一次性密碼|動態密碼/i.test(t)) return r('ignore', null, '驗證碼訊息');
     if (/(活動|優惠|抽獎|好禮|登錄|限時|專屬|加碼|最高回饋|享\d+%)/.test(t) && !/(您的|您於|帳戶|帳號|卡號|末四碼|末4碼|尾號|交易成功|已扣款|已入帳)/.test(t)) {
@@ -109,7 +115,7 @@
     if (amount == null) {
       // 銀行的卡片訊息（Flex）在通知裡常只剩一句摘要、沒有金額 → 放待確認讓使用者補金額，不要漏掉
       if (/(消費|刷卡|扣款|轉帳|轉出|轉入|入帳|存入|存款|提款|交易通知|交易提醒|授權)/.test(t)) {
-        const type = /入帳|存入|存款|轉入|退款|退刷/.test(t) ? 'income' : /消費|刷卡|扣款|轉出|提款|授權/.test(t) ? 'expense' : null;
+        const type = /消費|刷卡|扣款|扣帳|轉出|提款|授權/.test(t) ? 'expense' : /入帳|存入|存款|轉入|退款|退刷/.test(t) ? 'income' : null;
         return r('review', type, '通知裡沒有金額（銀行卡片訊息只顯示摘要），請打開 LINE 看金額後填入');
       }
       return r('ignore', null, '不是交易訊息');

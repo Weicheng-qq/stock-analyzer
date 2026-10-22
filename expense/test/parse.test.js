@@ -94,4 +94,15 @@ t('卡片訊息通知只有摘要、沒金額 → 待確認（不漏掉）', () 
   const b = P.parseBankMessage('華南銀行信用卡刷卡通知', '2026-10-22');
   assert.deepStrictEqual([b.status, b.type], ['review', 'expense']);
 });
+t('廣告裡出現「刷卡」與金額，但沒有卡號／帳號 → 不自動記帳', () => {
+  const r = P.parseBankMessage('華南卡分期好輕鬆！刷卡分3期，每期只要NT$3起', '2026-10-22');
+  assert.notStrictEqual(r.status, 'tx'); assert.strictEqual(r.weak, true);
+});
+t('LINE 卡片摘要（真實）：沒金額 → weak', () => {
+  for (const x of ['[📫您有一筆刷卡消費通知]', '[📣 好消息！你有一筆存款入帳囉！]', '[📣 小提醒！你有一筆存款扣帳囉！]']) {
+    const r = P.parseBankMessage(x, '2026-10-22');
+    assert.deepStrictEqual([r.status, r.weak], ['review', true], x);
+  }
+  assert.strictEqual(P.parseBankMessage('[📣 小提醒！你有一筆存款扣帳囉！]', '2026-10-22').type, 'expense');
+});
 console.log(`\n全部 ${n} 項通過`);

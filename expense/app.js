@@ -48,6 +48,17 @@ function save() {
 // 請瀏覽器把資料標成「持久保存」，降低被系統自動清掉的機率。
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
 
+// 舊資料整理（依新規則）：清掉金額不明的待確認、重新檢查自動記的 LINE 紀錄（使用者沒改過的才動）
+function migrate() {
+  if (typeof Parse === 'undefined') return;
+  const before = db.inbox.length + db.tx.length;
+  db.inbox = db.inbox.filter((m) => m.amount != null && !Parse.parseBankMessage(m.text, m.date).weak);
+  db.tx = db.tx.filter((t) => !(t.src === 'line' && t.catAuto !== false && !t.merged && t.raw
+    && Parse.parseBankMessage(t.raw, t.date).weak));
+  if (db.inbox.length + db.tx.length !== before) save();
+}
+migrate();
+
 // ---------- 工具 ----------
 const $ = (s) => document.querySelector(s);
 const pad = (n) => String(n).padStart(2, '0');
@@ -546,6 +557,11 @@ function processMessages(msgs) {
     if (db.seen.includes(key)) { n.dup++; continue; }
     markSeen(key);
     const r = Parse.parseBankMessage(m.text, m.date);
+    // 使用者要求：金額不明（LINE 卡片摘要）、疑似廣告的一律不顯示，只留在診斷紀錄
+    if (r.status !== 'ignore' && r.weak) {
+      r.status = 'ignore';
+      r.reason = r.amount == null ? '沒有金額（LINE 卡片訊息只有摘要），不記帳' : r.reason;
+    }
     // 診斷紀錄：保留最近 50 則收到的原文與解讀結果（設定頁可看）
     db.log.unshift({ at: `${m.date} ${m.time}`, sender: m.sender, text: m.text.slice(0, 500), status: r.status, amount: r.amount, reason: r.reason });
     if (db.log.length > 50) db.log.length = 50;
