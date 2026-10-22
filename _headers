@@ -40,3 +40,16 @@
 /scripts/lib/master-score.mjs
   Content-Type: text/javascript; charset=utf-8
   Cache-Control: public, max-age=0, must-revalidate
+
+# 隨手記帳 App（/expense/）：HTML 與它自己的 Service Worker 一律重新驗證，才能推新版。
+/expense/
+  Cache-Control: public, max-age=0, must-revalidate, no-cache
+
+/expense/index.html
+  Cache-Control: public, max-age=0, must-revalidate, no-cache
+
+/expense/sw.js
+  Cache-Control: public, max-age=0, must-revalidate, no-cache
+
+/expense/app.js
+  Cache-Control: public, max-age=0, must-revalidate, no-cache

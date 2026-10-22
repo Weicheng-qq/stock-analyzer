@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>隨手記帳</title>
+<meta name="description" content="免費、離線可用、資料只存在你手機上的記帳 App">
+<meta name="theme-color" content="#0f766e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="隨手記帳">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <h1 id="title">隨手記帳</h1>
+  <div class="month" id="monthBar" hidden>
+    <button class="icon-btn" id="prevMonth" aria-label="上個月">‹</button>
+    <span id="monthLabel"></span>
+    <button class="icon-btn" id="nextMonth" aria-label="下個月">›</button>
+  </div>
+</header>
+
+<main id="view"></main>
+
+<button class="fab" id="fab" aria-label="新增一筆">＋</button>
+
+<nav class="tabs">
+  <button data-tab="home" class="on"><span>🏠</span>總覽</button>
+  <button data-tab="list"><span>📋</span>明細</button>
+  <button data-tab="stats"><span>📊</span>統計</button>
+  <button data-tab="settings"><span>⚙️</span>設定</button>
+</nav>
+
+<!-- 新增／編輯 -->
+<div class="sheet-bg" id="sheetBg" hidden>
+  <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="sheet-head">
+      <button class="link" id="sheetCancel">取消</button>
+      <div class="seg" id="typeSeg">
+        <button data-type="expense" class="on">支出</button>
+        <button data-type="income">收入</button>
+      </div>
+      <button class="link danger" id="sheetDelete" hidden>刪除</button>
+    </div>
+    <h2 id="sheetTitle" class="sr">記一筆</h2>
+    <div class="amount" id="amountDisp">0</div>
+    <div class="cat-grid" id="catGrid"></div>
+    <div class="row">
+      <input type="date" id="dateInput" aria-label="日期">
+      <input type="text" id="noteInput" placeholder="備註（可不填）" maxlength="60" aria-label="備註">
+    </div>
+    <div class="keypad" id="keypad">
+      <button>7</button><button>8</button><button>9</button><button data-k="back">⌫</button>
+      <button>4</button><button>5</button><button>6</button><button data-k="clear">C</button>
+      <button>1</button><button>2</button><button>3</button><button data-k="save" class="save">完成</button>
+      <button data-k="00">00</button><button>0</button><button>.</button>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+<input type="file" id="importFile" accept=".json,application/json" hidden>
+
+<script src="app.js"></script>
+</body>
+</html>
