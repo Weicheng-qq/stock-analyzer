@@ -34,6 +34,18 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      # 自動更新用的版本指紋：畫面檔案（與 APK 內 assets/web 同一份清單）、Android 原始碼
+      - name: 計算版本指紋
+        run: |
+          cd expense
+          git -c core.quotepath=false ls-files | grep -v -E '^(交接清單/|test/|sw\.js$)' | sort > ../web-files.txt
+          cd ..
+          WEB_HASH=$(cd expense && while read f; do printf '%s ' "$f"; sha256sum "$f" | cut -d' ' -f1; done < ../web-files.txt | sha256sum | cut -d' ' -f1)
+          NATIVE_HASH=$(git -c core.quotepath=false ls-files expense-android | sort | while read f; do printf '%s ' "$f"; sha256sum "$f" | cut -d' ' -f1; done | sha256sum | cut -d' ' -f1)
+          echo "WEB_HASH=$WEB_HASH" >> $GITHUB_ENV
+          echo "NATIVE_HASH=$NATIVE_HASH" >> $GITHUB_ENV
+          echo "畫面 $WEB_HASH／主程式 $NATIVE_HASH"
+
       - name: 編譯 APK
         working-directory: expense-android
         run: gradle --no-daemon assembleRelease
@@ -47,6 +59,16 @@ jobs:
           BT=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1)
           $BT/apksigner verify --verbose --print-certs expense-app.apk
           $BT/aapt2 dump badging expense-app.apk | head -5
+
+      # web.zip＋update.json：App 開啟時自動下載新版畫面（不用重裝 APK）
+      - name: 打包自動更新檔
+        run: |
+          (cd expense && zip -q -X ../web.zip $(cat ../web-files.txt))
+          WEB_ZIP_SHA=$(sha256sum web.zip | cut -d' ' -f1)
+          printf '{"versionCode":%s,"webHash":"%s","nativeHash":"%s","webZipSha256":"%s","commit":"%s"}\n' \
+            "$GITHUB_RUN_NUMBER" "$WEB_HASH" "$NATIVE_HASH" "$WEB_ZIP_SHA" "$GITHUB_SHA" > update.json
+          cat update.json
+          unzip -l web.zip
 
       - uses: actions/upload-artifact@v4
         with:
@@ -67,4 +89,7 @@ jobs:
             新版直接覆蓋安裝，記帳資料會保留。
 
             版本：1.0.${{ github.run_number }}（${{ github.ref_name }} @ ${{ github.sha }}）
-          files: expense-app.apk
+          files: |
+            expense-app.apk
+            web.zip
+            update.json

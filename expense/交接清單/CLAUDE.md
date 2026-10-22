@@ -78,6 +78,17 @@
 - `.github/workflows/build-expense-apk.yml`：push 到 main 或 `claude/expense-*` 且改到 expense 相關檔案時編譯 → 更新 Release **`expense-app-latest`**（固定網址，附 expense-app.apk）。
   下載網址：https://github.com/weicheng-qq/stock-analyzer/releases/tag/expense-app-latest
 
+### 自動更新（2026-10-22 使用者要求「打開 App 直接就是新版」）
+- CI 每次編譯在 Release `expense-app-latest` 放 **expense-app.apk、web.zip、update.json**（update.json 最後上傳）。
+  update.json＝{versionCode, webHash, nativeHash, webZipSha256, commit}。webHash＝expense/ 畫面檔（同 APK 內 assets/web 清單）逐檔 sha256 再合併；nativeHash＝expense-android/ 全部 git 檔案。兩者也用 env 傳進 gradle → `BuildConfig.WEB_HASH／NATIVE_HASH`。
+- `Updater.java`：開 App（onResume，最多 10 分鐘一次）抓 update.json：
+  - nativeHash 不同且 versionCode 較新 → JS `__nativeUpdate()` 首頁顯示「App 有新版本」→ 按「更新」→ `installUpdate` 下載 APK、PackageInstaller 安裝（系統一定會跳確認；第一次要允許「隨手記帳」安裝應用程式）。此時**不換畫面**（新畫面可能依賴新主程式）。
+  - 只有 webHash 不同 → 背景下載 web.zip、驗 SHA-256、解壓到 files/web-live → JS `__updateReady()` 重新整理（正在輸入就等關面板）。`LivePathHandler` 讓 /assets/web/ 優先讀 web-live，origin 不變＝localStorage 資料不受影響。
+  - 安全網：新畫面換上後 JS 要呼叫 `bootOk()`；連續 3 次啟動沒回報 → 刪掉、退回 APK 內建版、該 webHash 列入黑名單。APK 更新（內建 WEB_HASH 改變）時清掉舊 web-live。
+- Manifest 新增 INTERNET、REQUEST_INSTALL_PACKAGES。
+- ⚠️ 已安裝的舊版（cdfc86d 以前）沒有更新器，**要手動用 Chrome 裝一次**這版，之後才會自動更新。
+- 只改 `expense/` 畫面／解析規則 → 使用者開 App 就自動更新；改 `expense-android/` → 使用者要按一次「更新」。**優先把修改放在 JS 端**。
+
 ### 使用者在手機上要做的事
 1. 下載安裝 APK（允許「安裝不明來源的應用程式」）。
 2. App → 設定 → 自動記帳 →「開啟」→ 允許「隨手記帳」的通知存取權。

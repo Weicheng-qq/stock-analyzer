@@ -71,6 +71,24 @@ final class Bridge {
         return Store.takeShared(act);
     }
 
+    /** 畫面成功啟動（自動更新的安全網用）。 */
+    @JavascriptInterface
+    public void bootOk() {
+        Updater.bootOk(act);
+    }
+
+    /** 下載並安裝新版 App（系統會跳出確認）。 */
+    @JavascriptInterface
+    public String installUpdate() {
+        return Updater.installApk(act);
+    }
+
+    @JavascriptInterface
+    public String appVersion() {
+        String w = Updater.currentWebHash(act);
+        return BuildConfig.VERSION_NAME + "（畫面 " + (w.length() > 7 ? w.substring(0, 7) : w) + "）";
+    }
+
     /** 備份／匯出：存到手機的「下載」資料夾。 */
     @JavascriptInterface
     public String saveFile(String name, String text) {

@@ -149,6 +149,7 @@ function renderHome() {
       <div><b>${m.amount ? money(m.amount) : '金額不明'}</b> <span class="hint">${esc(m.sender)} · ${m.date.slice(5).replace('-', '/')} ${m.time}</span></div>
       <div class="why">${esc(m.reason)}</div><div class="txt">${esc(m.text)}</div></button>`).join('')}</div>` : '';
   $('#view').innerHTML = `
+    ${updateBannerHtml()}
     ${autoStatusHtml()}
     ${inboxHtml}
     <div class="card summary">
@@ -163,6 +164,8 @@ function renderHome() {
     ${recent.length ? `<div class="card"><h3>最近幾筆</h3>${recent.map(txRow).join('')}</div>` : ''}`;
   bindRows();
   document.querySelectorAll('[data-inbox]').forEach((el) => el.addEventListener('click', () => openInbox(el.dataset.inbox)));
+  const up = $('#doUpdate');
+  if (up) up.addEventListener('click', () => toast(bridgeCall('installUpdate') || '更新失敗'));
   const go = $('#goAuto');
   if (go) go.addEventListener('click', () => document.querySelector('.tabs [data-tab=settings]').click());
 }
@@ -304,7 +307,7 @@ function renderSettings() {
       <div class="set-row"><span>從備份檔還原</span><button class="btn" id="restore">還原</button></div>
       <div class="set-row"><span>共 ${db.tx.length} 筆紀錄</span><button class="btn danger" id="wipe">全部清除</button></div>
     </div>
-    <p class="hint" style="text-align:center">隨手記帳 · 免費、離線可用、不蒐集任何資料</p>`;
+    <p class="hint" style="text-align:center">隨手記帳${android ? ' ' + esc(bridgeCall('appVersion') || '') : ''} · 免費、離線可用、不蒐集任何資料</p>`;
 
   if (android) {
     $('#openListener').addEventListener('click', () => bridgeCall('openListenerSettings'));
@@ -412,7 +415,10 @@ function openInbox(id) {
   const m = db.inbox.find((x) => x.id === id);
   if (m) openSheet(null, m);
 }
-function closeSheet() { $('#sheetBg').hidden = true; form = null; }
+function closeSheet() {
+  $('#sheetBg').hidden = true; form = null;
+  if (updatePending) window.__updateReady();
+}
 function syncSheet() {
   document.querySelectorAll('#typeSeg button').forEach((b) => b.classList.toggle('on', b.dataset.type === form.type));
   const cats = db.cats.filter((c) => c.type === form.type);
@@ -643,6 +649,25 @@ function pullNative() {
   }
 }
 window.__nativePush = pullNative;
+window.__nativeToast = (msg) => toast(msg);
+
+// ---------- 自動更新（Android App） ----------
+// 新版畫面已在背景下載好：沒在輸入就馬上重新整理；正在輸入就等關掉面板再換
+let updatePending = false;
+window.__updateReady = () => {
+  if (form) { updatePending = true; return; }
+  try { sessionStorage.setItem('justUpdated', '1'); } catch (e) {}
+  location.reload();
+};
+// Android 主程式有新版（需要使用者按一次確認）
+let nativeUpdate = false;
+window.__nativeUpdate = () => { nativeUpdate = true; if (!form) render(); };
+function updateBannerHtml() {
+  if (!nativeUpdate) return '';
+  return `<div class="card"><h3>🆕 App 有新版本</h3>
+    <div class="hint">按「更新」後系統會跳出安裝確認，記帳資料會保留。</div>
+    <button class="btn" id="doUpdate" style="margin-top:10px">更新</button></div>`;
+}
 // Android 返回鍵：先關掉面板，沒有面板才離開 App
 window.__onBack = () => {
   if (form) { closeSheet(); return true; }
@@ -653,6 +678,8 @@ window.__onBack = () => {
 render();
 
 if (isAndroid()) {
+  bridgeCall('bootOk'); // 告訴 App：這個版本的畫面能正常啟動（自動更新的安全網）
+  try { if (sessionStorage.getItem('justUpdated')) { sessionStorage.removeItem('justUpdated'); toast('已自動更新到最新版'); } } catch (e) {}
   syncKeywords();
   pullNative();
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { pullNative(); render(); } });

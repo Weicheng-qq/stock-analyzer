@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- 自動更新：下載新版畫面與 App -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <!-- Android 11+ 要宣告才查得到其他 App 的名稱（用來辨認「台北富邦」「華南」的銀行 App 推播） -->
     <queries>
         <intent>

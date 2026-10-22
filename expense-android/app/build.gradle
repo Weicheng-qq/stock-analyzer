@@ -22,6 +22,9 @@ android {
         // GitHub Actions 每次編譯的序號，確保新版可以直接覆蓋安裝（資料保留）
         versionCode((System.getenv('GITHUB_RUN_NUMBER') ?: '1') as int)
         versionName "1.0.${System.getenv('GITHUB_RUN_NUMBER') ?: '0'}"
+        // 自動更新比對用：CI 算好傳進來（畫面檔案與 Android 原始碼的雜湊），本機編譯為 dev
+        buildConfigField 'String', 'WEB_HASH', "\"${System.getenv('WEB_HASH') ?: 'dev'}\""
+        buildConfigField 'String', 'NATIVE_HASH', "\"${System.getenv('NATIVE_HASH') ?: 'dev'}\""
     }
 
     // ⚠️ 這把金鑰必須永遠相同：換金鑰的 APK 無法覆蓋安裝，使用者得先移除 App（記帳資料會跟著消失）。
@@ -41,6 +44,9 @@ android {
         debug {
             signingConfig signingConfigs.release
         }
+    }
+    buildFeatures {
+        buildConfig true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17

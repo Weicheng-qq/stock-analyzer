@@ -3,6 +3,7 @@ package tw.weicheng.expense;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInstaller;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,8 @@ import java.nio.charset.StandardCharsets;
 public class MainActivity extends Activity {
     private static final String START_URL = "https://appassets.androidplatform.net/assets/web/index.html";
     private static final int REQ_FILE = 1001;
+    static final String ACTION_INSTALL_STATUS = "tw.weicheng.expense.INSTALL_STATUS";
+    private static long lastUpdateCheck = 0;
     private static WeakReference<MainActivity> current = new WeakReference<>(null);
 
     private WebView web;
@@ -35,6 +38,39 @@ public class MainActivity extends Activity {
     static void notifyNewData() {
         MainActivity a = current.get();
         if (a != null) a.runOnUiThread(a::pushToJs);
+    }
+
+    static void toastFromNative(String msg) {
+        MainActivity a = current.get();
+        if (a != null) a.runOnUiThread(() -> a.js("window.__nativeToast && window.__nativeToast(" + org.json.JSONObject.quote(msg) + ")"));
+    }
+
+    private void js(String code) {
+        if (web != null) web.evaluateJavascript(code, null);
+    }
+
+    /** 每次開 App（最多 10 分鐘一次）檢查更新。 */
+    private void checkUpdate() {
+        long now = System.currentTimeMillis();
+        if (now - lastUpdateCheck < 10 * 60 * 1000L) return;
+        lastUpdateCheck = now;
+        Updater.checkAsync(this,
+                () -> runOnUiThread(() -> js("window.__updateReady && window.__updateReady()")),
+                () -> runOnUiThread(() -> js("window.__nativeUpdate && window.__nativeUpdate()")));
+    }
+
+    /** 系統安裝程式回報狀態：需要使用者確認就把確認畫面叫出來。 */
+    private boolean handleInstallStatus(Intent intent) {
+        if (intent == null || !ACTION_INSTALL_STATUS.equals(intent.getAction())) return false;
+        int status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -999);
+        if (status == PackageInstaller.STATUS_PENDING_USER_ACTION) {
+            Intent confirm = intent.getParcelableExtra(Intent.EXTRA_INTENT);
+            if (confirm != null) startActivity(confirm);
+        } else if (status != PackageInstaller.STATUS_SUCCESS) {
+            String m = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE);
+            toastFromNative("更新沒有完成" + (m != null ? "：" + m : ""));
+        }
+        return true;
     }
 
     private void pushToJs() {
@@ -47,9 +83,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         getWindow().setStatusBarColor(Color.parseColor("#0F766E"));
         current = new WeakReference<>(this);
+        Updater.checkBoot(this);
 
         final WebViewAssetLoader loader = new WebViewAssetLoader.Builder()
-                .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
+                .addPathHandler("/assets/", new Updater.LivePathHandler(this))
                 .build();
 
         web = new WebView(this);
@@ -96,12 +133,14 @@ public class MainActivity extends Activity {
         setContentView(web);
         handleShare(getIntent());
         web.loadUrl(START_URL);
+        handleInstallStatus(getIntent());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+        if (handleInstallStatus(intent)) return;
         if (handleShare(intent)) pushToJs();
     }
 
@@ -110,6 +149,7 @@ public class MainActivity extends Activity {
         super.onResume();
         current = new WeakReference<>(this);
         pushToJs();
+        checkUpdate();
     }
 
     /** 收到「分享」進來的 LINE 聊天記錄或載具明細檔：存起來，等 JS 取走匯入。 */
