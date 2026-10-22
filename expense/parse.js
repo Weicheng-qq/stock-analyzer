@@ -107,7 +107,11 @@
       return r('ignore', null, '廣告／活動訊息');
     }
     if (amount == null) {
-      if (/[0-9]/.test(t) && /(消費|刷卡|扣款|轉帳|轉出|轉入|入帳|存入|提款)/.test(t)) return r('review', null, '看得出是交易，但找不到金額');
+      // 銀行的卡片訊息（Flex）在通知裡常只剩一句摘要、沒有金額 → 放待確認讓使用者補金額，不要漏掉
+      if (/(消費|刷卡|扣款|轉帳|轉出|轉入|入帳|存入|存款|提款|交易通知|交易提醒|授權)/.test(t)) {
+        const type = /入帳|存入|存款|轉入|退款|退刷/.test(t) ? 'income' : /消費|刷卡|扣款|轉出|提款|授權/.test(t) ? 'expense' : null;
+        return r('review', type, '通知裡沒有金額（銀行卡片訊息只顯示摘要），請打開 LINE 看金額後填入');
+      }
       return r('ignore', null, '不是交易訊息');
     }
     if (/USD|JPY|EUR|CNY|KRW|HKD|美元|美金|日圓|日幣|歐元|人民幣|韓元|港幣|外幣/i.test(t) && !/(NT\$|新[臺台]幣|[臺台]幣)/.test(t)) {

@@ -26,7 +26,7 @@ const COLORS = ['#0f766e', '#ea580c', '#2563eb', '#ca8a04', '#9333ea', '#db2777'
 // inbox：自動抓到但看不懂（轉帳、卡費、外幣…）的訊息，等使用者確認
 // seen：處理過的訊息指紋，重複匯入／重複通知不會記兩次
 const DEFAULT_KEYWORDS = ['富邦', '華南'];
-const fresh = () => ({ tx: [], cats: DEFAULT_CATS.slice(), budget: 0, inbox: [], seen: [], keywords: DEFAULT_KEYWORDS.slice() });
+const fresh = () => ({ tx: [], cats: DEFAULT_CATS.slice(), budget: 0, inbox: [], seen: [], log: [], keywords: DEFAULT_KEYWORDS.slice() });
 let db = load();
 function load() {
   try {
@@ -276,6 +276,12 @@ function renderSettings() {
     <div class="set-row set-col"><div class="hint" style="margin-bottom:6px">測試：貼上一則銀行訊息，看 App 會怎麼解讀（不會記帳）</div>
       <textarea id="testMsg" placeholder="例：您的信用卡於10/21在全聯消費新臺幣256元"></textarea>
       <div id="testOut" class="hint"></div></div>
+    <details class="set-row set-col"><summary>最近收到的訊息（${db.log.length} 則，診斷用）</summary>
+      ${db.log.length ? db.log.map((l) => `<div class="inbox-item"><div><b>${{ tx: '✅ 已記帳', review: '⚠️ 待確認', ignore: '— 略過' }[l.status]}</b>
+        <span class="hint">${esc(l.sender)} · ${esc(l.at)}${l.amount ? ' · ' + money(l.amount) : ''}</span></div>
+        ${l.reason ? `<div class="why">${esc(l.reason)}</div>` : ''}<div class="txt">${esc(l.text)}</div></div>`).join('')
+      : `<p class="hint">還沒收到任何${android ? '富邦／華南的 LINE 通知' : '訊息'}。${android ? '如果剛剛明明有通知卻沒出現，請確認上面「讀取 LINE 銀行通知」是「已開啟」，以及 LINE 有開「顯示訊息內容」。' : ''}</p>`}
+    </details>
   </div>`;
   $('#view').innerHTML = `
     ${autoCard}
@@ -523,13 +529,16 @@ function processMessages(msgs) {
     if (db.seen.includes(key)) { n.dup++; continue; }
     markSeen(key);
     const r = Parse.parseBankMessage(m.text, m.date);
+    // 診斷紀錄：保留最近 50 則收到的原文與解讀結果（設定頁可看）
+    db.log.unshift({ at: `${m.date} ${m.time}`, sender: m.sender, text: m.text.slice(0, 500), status: r.status, amount: r.amount, reason: r.reason });
+    if (db.log.length > 50) db.log.length = 50;
     if (r.status === 'ignore') { n.ignored++; continue; }
     if (r.status === 'review') {
       db.inbox.push({ id: uid(), key, date: r.date, time: m.time, sender: m.sender, text: m.text, type: r.type, amount: r.amount, cat: r.cat, merchant: r.merchant, reason: r.reason });
       n.review++;
       continue;
     }
-    const res = addAuto({ src: 'line', key, type: r.type, amount: r.amount, cat: r.cat, date: r.date, note: r.merchant || m.sender, raw: m.text });
+    const res = addAuto({ src: 'line', key, type: r.type, amount: r.amount, cat: r.cat, date: r.date, note: (r.merchant || m.sender).replace(/股份有限公司|有限公司/g, ''), raw: m.text });
     n[res === 'merged' ? 'merged' : 'added']++;
   }
   save();

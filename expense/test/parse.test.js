@@ -78,4 +78,20 @@ t('沒寫「消費」但有「商店：」欄位 → 支出', () => {
   const r = P.parseBankMessage('交易通知\n金額：NT$1,230\n商店：麥當勞', B);
   assert.deepStrictEqual([r.status, r.type, r.cat], ['tx', 'expense', 'food']);
 });
+t('真實格式：華南信用卡刷卡卡片（2026-10-22 使用者截圖）', () => {
+  const txt = '遇信用卡詐騙事件應立即通知本行停掛卡片、通報165並向警方報案以阻斷損失擴大。\n謹慎理財 信用至上\n💳刷卡金額： NT$ 1,812 元\n👉交易時間：2026/10/22  10:51\n👉卡號末四碼：9111\n👉商店名稱：中華電信股份有限公司\n※外幣消費金額以授權時間約當新臺幣金額計算，商店名稱僅供參考，實際以帳單為準\n嗶仔好康報報';
+  const r = P.parseBankMessage(txt, '2026-10-22');
+  assert.deepStrictEqual([r.status, r.type, r.amount, r.merchant, r.cat, r.date], ['tx', 'expense', 1812, '中華電信股份有限公司', 'home', '2026-10-22']);
+});
+t('真實格式：富邦存款入帳卡片 → 待確認（可能是自己帳戶互轉）', () => {
+  const txt = '存款入帳\nNT$2,985\n入帳時間\n2026/10/22 13:48\n帳號末四碼\n0436\n交易摘要\nCD轉收\n查看交易明細';
+  const r = P.parseBankMessage(txt, '2026-10-22');
+  assert.deepStrictEqual([r.status, r.type, r.amount, r.date], ['review', 'income', 2985, '2026-10-22']);
+});
+t('卡片訊息通知只有摘要、沒金額 → 待確認（不漏掉）', () => {
+  const a = P.parseBankMessage('台北富邦銀行：您有一筆存款入帳通知', '2026-10-22');
+  assert.deepStrictEqual([a.status, a.type, a.amount], ['review', 'income', null]);
+  const b = P.parseBankMessage('華南銀行信用卡刷卡通知', '2026-10-22');
+  assert.deepStrictEqual([b.status, b.type], ['review', 'expense']);
+});
 console.log(`\n全部 ${n} 項通過`);

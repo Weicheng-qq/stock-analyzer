@@ -183,3 +183,5 @@ main { padding: 0 16px 72px; max-width: 640px; margin: 0 auto; }
 .set-col { display: block; }
 .steps { margin: 6px 0 0; padding-left: 20px; font-size: 14px; color: var(--muted); }
 .steps li { margin: 3px 0; }
+details.set-row summary { cursor: pointer; color: var(--brand); font-weight: 600; padding: 4px 0; }
+details.set-row .inbox-item .txt { -webkit-line-clamp: 8; }
