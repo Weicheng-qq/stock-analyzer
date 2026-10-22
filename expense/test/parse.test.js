@@ -105,4 +105,10 @@ t('LINE 卡片摘要（真實）：沒金額 → weak', () => {
   }
   assert.strictEqual(P.parseBankMessage('[📣 小提醒！你有一筆存款扣帳囉！]', '2026-10-22').type, 'expense');
 });
+t('真實格式：華南 SnY App 推播（2026-10-22 使用者截圖，民國年＋「卡友您」）', () => {
+  const r = P.parseBankMessage('華南銀行\n華南卡友您115年10月22日10點51分刷卡1,812元，若所列金額非您的消費，請儘速撥打卡片背面客服專線與我們聯絡。', '2026-10-22');
+  assert.deepStrictEqual([r.status, r.type, r.amount, r.date, r.weak], ['tx', 'expense', 1812, '2026-10-22', false]);
+  assert.strictEqual(P.parseBankMessage('SnY數位帳戶享有專屬活儲利率最高 2.3%！', '2026-10-22').status, 'ignore');
+  assert.strictEqual(P.parseBankMessage('股市動盪需要保障，你的人生更需要！', '2026-10-22').status, 'ignore');
+});
 console.log(`\n全部 ${n} 項通過`);
