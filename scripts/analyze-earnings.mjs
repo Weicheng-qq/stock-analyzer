@@ -775,7 +775,16 @@ setTimeout(() => {
 //   搭配 OUT_DIR 指到暫存資料夾，就能用上一季的真實官網頁，完整演練「新一季文件出現」的情境而不動到正式資料。
 const ONLY_SYMBOLS = new Set(String(process.env.ONLY_SYMBOLS || '').split(',').map(s => s.trim()).filter(Boolean));
 let IR_TEST = {}; try { IR_TEST = JSON.parse(process.env.IR_TEST || '{}') || {}; } catch (e) { IR_TEST = {}; }
-const IR_CHECK_MAX = Number(process.env.IR_CHECK_MAX || 15);   // 每輪最多「去官網看一眼」幾家（每家約 10～20 秒）
+// ⚠️ 2026-10-18 使用者要求：「如果過一陣子大多公司都完成了，加速更新五階段法說內容」。
+//   「大多公司都完成」＝今天真正有新事件要處理的公司（HIGH＋MEDIUM）很少。這時每天原本只去官網看 15 家，
+//   2,564 家要看 170 天，名額白白浪費。改成自動判斷：
+//     · 忙的日子（新事件 ≥ 40 家，例如財報季高峰）：維持 15 家，免費 AI 額度優先給有新財報的公司
+//     · 安靜的日子（新事件 < 40 家）：提高到 90 家，把空出來的時間拿去逐一看五階段公司的官網
+//   時間預算（TIME_BUDGET_MIN）仍然生效，不會因此跑超時；也可用環境變數 IR_CHECK_MAX 強制指定。
+const REAL_WORK = sorted.filter(x => x.priority === 'HIGH' || x.priority === 'MEDIUM').length;
+const QUIET_DAY = REAL_WORK < 40;
+const IR_CHECK_MAX = Number(process.env.IR_CHECK_MAX || (QUIET_DAY ? 90 : 15));   // 每輪最多「去官網看一眼」幾家（每家約 10～20 秒）
+console.log(`  今日新事件 ${REAL_WORK} 家 → ${QUIET_DAY ? '安靜日，官網巡視上限加速到 ' : '忙碌日，官網巡視上限維持 '}${IR_CHECK_MAX} 家`);
 const PENDING_DAYS = 45;                                        // 等逐字稿最多等幾天
 let irChecks = 0, irFirstDone = 0, irUpgraded = 0;
 const qKeyOfTag = tag => { const m = String(tag || '').match(/^(\d{4})Q?([1-4])$/) || String(tag || '').match(/^(\d{4})(FY)$/); return m ? (+m[1]) * 4 + (m[2] === 'FY' ? 4 : +m[2]) : 0; };
