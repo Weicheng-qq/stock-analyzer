@@ -1,0 +1,48 @@
+{
+ "symbol": "MSCI",
+ "market": "us",
+ "name": "MSCI INC.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "MSCI INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "8.92",
+  "營業毛利": null,
+  "營業利益": "5.02",
+  "本期淨利": "3.51",
+  "每股盈餘": 4.86,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-20",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1408198/000140819826000054/exhibit991earningsrelease-.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-22T01:31:37.416Z",
+ "result": {
+  "revenue": "營業收入為 8.92 億美元。",
+  "eps": "每股盈餘（EPS）為 4.86 美元。",
+  "margins": "營業利益率為 56.3%，淨利率為 39.3%，毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司提供了 2026 全年營運費用、調整後 EBITDA 費用、利息費用、折舊與攤銷費用、有效稅率、資本支出、營運現金流及自由現金流的官方預期。",
+  "outlook": "本季營業利益為 5.02 億美元，營業利益率達 56.3%，本期淨利為 3.51 億美元，淨利率達 39.3%。營運維持獲利狀態。",
+  "highlights": "• 營業收入為 8.92 億美元。<br>• 營業利益為 5.02 億美元，營業利益率為 56.3%。<br>• 本期淨利為 3.51 億美元，淨利率為 39.3%，每股盈餘（EPS）為 4.86 美元。",
+  "concerns": "• 營業毛利與毛利率未提供。<br>• 營運現金流與資本支出未提供。<br>• 自由現金流未提供。",
+  "risks": "• 本次官方提供之資料未包含完整資產負債表細項，無法計算流動比率或速動比率。<br>• 現金流量表相關之營運現金流與資本支出數據未提供，無法評估詳細現金流結構。",
+  "keyPoints": "• 本季營業收入為 8.92 億美元。<br>• 本季營業利益為 5.02 億美元，營業利益率達 56.3%。<br>• 本季本期淨利為 3.51 億美元，每股盈餘（EPS）為 4.86 美元。",
+  "guidanceOfficial": "Full-Year 2026 Guidance: Operating Expense $1,535 to 15.75 億美元; Adjusted EBITDA Expense $1,340 to 13.7 億美元; Interest Expense (including amortization of financing fees) $288 to 2.91 億美元; Depreciation & Amortization Expense $195 to 2.05 億美元; Effective Tax Rate 18.0% to 19.5%; Capital Expenditures $160 to 1.7 億美元; Net Cash Provided by Operating Activities $1,655 to 17.05 億美元; Free Cash Flow $1,485 to 15.45 億美元.",
+  "segments": "• Index Segment (Three Months Ended Sep. 30, 2026): Recurring subscriptions 2.7 億美元 (up 11.1%), Asset-based fees 2.47 億美元 (up 24.9%), Non-recurring 1,650 萬美元 (up 48.6%), Total operating revenues 5.33 億美元 (up 18.1%), Adjusted EBITDA 4.12 億美元 (up 17.8%).<br>• Analytics Segment (Three Months Ended Sep. 30, 2026): Recurring subscriptions 1.88 億美元 (up 5.5%), Non-recurring 290 萬美元 (down 25.6%), Total operating revenues 1.91 億美元 (up 4.8%), Adjusted EBITDA 8,570 萬美元 (down 4.9%).<br>• Sustainability and Climate Segment (Three Months Ended Sep. 30, 2026): Recurring subscriptions 9,220 萬美元 (up 3.9%), Non-recurring 150 萬美元 (up 7.1%), Total operating revenues 9,370 萬美元 (up 4.0%), Adjusted EBITDA 3,820 萬美元 (up 10.1%).<br>• All Other – Private Assets (Three Months Ended Sep. 30, 2026): Total operating revenues 7,470 萬美元 (up 6.7%), Adjusted EBITDA 1,850 萬美元 (down 4.6%)."
+ }
+}

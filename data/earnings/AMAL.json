@@ -1,0 +1,48 @@
+{
+ "symbol": "AMAL",
+ "market": "us",
+ "name": "Amalgamated Financial Corp.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Amalgamated Financial Corp.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "1.17",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.35",
+  "每股盈餘": 1.15,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-23",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1823608/000182360826000177/a202606earningsreleasefi.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-22T01:35:08.300Z",
+ "result": {
+  "revenue": "營業收入為 1.17 億美元。",
+  "eps": "每股盈餘（EPS）為 1.15 美元。",
+  "margins": "本期淨利為 0.35 億美元，淨利率為 29.9%。營業毛利與營業利益率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司官方財測／展望未於本次資料提供。",
+  "outlook": "根據官方數據，本季營業收入為 1.17 億美元，本期淨利為 0.35 億美元，淨利率達 29.9%。每股盈餘（EPS）為 1.15 美元。",
+  "highlights": "• 營業收入為 1.17 億美元。<br>• 本期淨利為 0.35 億美元，淨利率為 29.9%。<br>• 每股盈餘（EPS）為 1.15 美元。",
+  "concerns": "• 營業毛利與營業利益率未提供。<br>• 營運現金流與資本支出未提供。",
+  "risks": "• 因未提供營運現金流與資本支出，無法直接評估現金流量狀況。<br>• 營業毛利與營業利益相關數據未提供，成本結構透明度受限。",
+  "keyPoints": "• 本季營業收入為 1.17 億美元。<br>• 本期淨利為 0.35 億美元，淨利率為 29.9%。<br>• 每股盈餘（EPS）為 1.15 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "本次資料未揭露分部營收"
+ }
+}

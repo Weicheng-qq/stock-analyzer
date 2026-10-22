@@ -1,0 +1,52 @@
+{
+ "symbol": "HLT",
+ "market": "us",
+ "name": "Hilton Worldwide Holdings Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Hilton Worldwide Holdings Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "33.41",
+  "營業毛利": null,
+  "營業利益": "8.58",
+  "本期淨利": "4.82",
+  "每股盈餘": 2.1,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "",
+  "form": "法說會逐字稿",
+  "url": "https://d1io3yog0oux5.cloudfront.net/_eb77ab46388ff0a64113adf461e42f8e/hilton/db/3596/34610/webcast_transcript/hlt-2q-earnings-call-transcript.pdf"
+ },
+ "docKind": "transcript",
+ "savedAt": "2026-10-22T01:31:55.570Z",
+ "result": {
+  "revenue": "本季營業收入為 33.41 億美元。",
+  "eps": "本季每股盈餘（EPS）為 2.1 美元。",
+  "margins": "本季營業利益率為 25.7%，淨利率為 14.4%，營業毛利與毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "全年月 RevPAR 成長預期上調至 3% 至 3.5%，並預期全年淨利介於 1,883 百萬至 1,911 百萬美元、調整後 EBITDA 介於 4,040 百萬至 4,080 百萬美元之間。",
+  "outlook": "本季營業收入為 33.41 億美元，營業利益率為 25.7%，淨利率為 14.4%，每股盈餘為 2.1 美元。<br>管理層指出，受惠於旅遊需求持續改善及世界盃等因素，第二季 RevPAR、調整後 EBITDA 及 EPS 皆超過預期。",
+  "highlights": "•系統整體 RevPAR 年增 3.9%，受美國需求復甦與世界盃帶動。<br>•本季新開超過 200 家飯店（24,000 間客房），並簽約約 43,000 間客房，為歷史上第二高紀錄。<br>•全年月 RevPAR 成長預期上調至 3% 至 3.5%，預期全年資本回報約 35 億美元。",
+  "concerns": "•休閒過渡 RevPAR 受不利假期轉換及中東衝突壓力影響。<br>•第四季 RevPAR 預期將因行事曆轉換及期中選舉而表現稍低。<br>•部分地區如中東面臨衝突，雖簽約數仍微幅年增，但環境仍具不確定性。",
+  "risks": "•地緣政治衝突（如中東衝突）可能對特定地區的旅遊與 RevPAR 帶來壓力。<br>•假期 shifts 與行事曆轉換可能導致季度間的業績波動。",
+  "keyPoints": "•本季營業收入達 33.41 億美元，淨利為 4.82 億美元，EPS 為 2.1 美元。<br>•系統整體 RevPAR 年增 3.9%，管理層並將全年 RevPAR 成長預期上調至 3% 至 3.5%。<br>•第二季資本回報（含股利）達 966 百萬美元，全年預計回報股東約 35 億美元。",
+  "guidanceOfficial": "全年月 RevPAR 預期成長在 3.0% 至 3.5% 之間（以可比較且匯率中立基礎計算）；全年淨利預期在 1,883 百萬美元至 1,911 百萬美元之間；全年調整後 EBITDA 預期在 4,040 百萬美元至 4,080 百萬美元之間；全年資本回報預期約為 3.5 百億美元。",
+  "segments": "本次資料未揭露分部營收。",
+  "__unitRule": "⚠️⚠️ 單位換算鐵則（違反會讓數字差 10 倍，是最嚴重的錯誤）：英文 billion＝十億，所以 US$100 billion 必須寫成「1,000 億美元」不是「100 億美元」；US$60 billion 是「600 億美元」。million＝百萬，US$15.7 billion 是「157 億美元」。若無把握，直接保留原文寫法「US$100B」，不要自行換算成中文數字。",
+  "mgmtRemarks": "•執行長 Chris Nassetta 表示，第二季 RevPAR、調整後 EBITDA 及 EPS 皆超過預期，且簽約數創下歷史上最好的季度之一，持續推動破紀錄的開發案。<br>•執行長 Chris Nassetta 指出，我們正按計畫在全年向股東回報 35 億美元。<br>•執行長 Chris Nassetta 表示，我們將全年系統整體 RevPAR 成長預期上調至 3% 至 3.5%。",
+  "capexPlan": "未提供",
+  "techRoadmap": "•利用免除中介連接及其他更昂貴分銷管道的技術堆疊，為業主提供顯著的成本節省。<br>•運用具備 AI 就緒的技術堆疊推出了 Hilton AI Planner，為所有客戶帶來更具個性化、智能且有用的規劃工具。"
+ }
+}
