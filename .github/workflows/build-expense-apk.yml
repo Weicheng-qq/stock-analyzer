@@ -41,6 +41,13 @@ jobs:
       - name: 整理檔案
         run: cp expense-android/app/build/outputs/apk/release/app-release.apk expense-app.apk
 
+      # 用 Android 官方工具確認簽章有效、看得到套件資訊，避免發出裝不起來的 APK
+      - name: 驗證 APK
+        run: |
+          BT=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1)
+          $BT/apksigner verify --verbose --print-certs expense-app.apk
+          $BT/aapt2 dump badging expense-app.apk | head -5
+
       - uses: actions/upload-artifact@v4
         with:
           name: expense-app-apk
