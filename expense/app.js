@@ -261,13 +261,14 @@ function renderSettings() {
   const listenerOn = android && bridgeCall('isListenerEnabled') === true;
   const autoCard = `<div class="card"><h3>⚡ 自動記帳</h3>
     ${android ? `
-      <div class="set-row"><span>讀取 LINE 銀行通知 ${listenerOn ? '<span class="ok">已開啟</span>' : '<span class="warn">未開啟</span>'}</span>
+      <div class="set-row"><span>讀取銀行通知（LINE／銀行 App／簡訊） ${listenerOn ? '<span class="ok">已開啟</span>' : '<span class="warn">未開啟</span>'}</span>
         <button class="btn" id="openListener">${listenerOn ? '設定' : '開啟'}</button></div>
       <div class="set-row"><span class="grow">避免被系統關閉（電池最佳化設為「不限制」）</span><button class="btn" id="openBattery">設定</button></div>
       <ol class="steps">
         <li>按上面「開啟」→ 找到「隨手記帳」→ 允許</li>
-        <li>LINE → 設定 → 提醒 → 開啟「顯示訊息內容」（關掉的話通知裡看不到金額）</li>
-        <li>之後富邦、華南的 LINE 通知一跳出來就會自動記帳</li>
+        <li>⭐ 打開富邦、華南「手機銀行／信用卡 App」的交易推播（LINE 卡片通知沒有金額，銀行 App 推播或簡訊才有）</li>
+        <li>LINE → 設定 → 提醒 → 開啟「顯示訊息內容」</li>
+        <li>之後通知一跳出來就會自動記帳；只有 LINE 通知時會放「待確認」提醒你補金額</li>
       </ol>` : `<p class="hint" style="margin:0 0 6px">Android App 可以在 LINE 通知跳出來時自動記帳；網頁版請用下方匯入。</p>`}
     <div class="set-row"><span class="grow">銀行聊天室關鍵字（用逗號分隔）</span></div>
     <input class="search" id="keywords" value="${esc(db.keywords.join('，'))}" aria-label="銀行聊天室關鍵字">
@@ -521,6 +522,16 @@ function addAuto(rec) {
   return 'added';
 }
 
+// LINE 卡片訊息的通知只有「您有一筆刷卡消費通知」（沒金額，放待確認）；
+// 30 分鐘內同一家銀行的 App 推播／簡訊帶著金額進來並記帳後，這筆沒金額的待確認就多餘了 → 刪掉
+function dropPlaceholders(m) {
+  const bank = db.keywords.find((k) => (m.sender + m.text).includes(k));
+  if (!bank) return;
+  const at = Date.parse(`${m.date}T${m.time}`);
+  db.inbox = db.inbox.filter((x) => !(x.amount == null && (x.sender + x.text).includes(bank)
+    && Math.abs(Date.parse(`${x.date}T${x.time}`) - at) <= 30 * 60000));
+}
+
 // msgs: [{ date:'YYYY-MM-DD', time:'HH:MM', sender, text }]
 function processMessages(msgs) {
   const n = { added: 0, merged: 0, review: 0, ignored: 0, dup: 0 };
@@ -538,6 +549,7 @@ function processMessages(msgs) {
       n.review++;
       continue;
     }
+    dropPlaceholders(m);
     const res = addAuto({ src: 'line', key, type: r.type, amount: r.amount, cat: r.cat, date: r.date, note: (r.merchant || m.sender).replace(/股份有限公司|有限公司/g, ''), raw: m.text });
     n[res === 'merged' ? 'merged' : 'added']++;
   }
