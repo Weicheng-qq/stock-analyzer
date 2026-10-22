@@ -1,0 +1,48 @@
+{
+ "symbol": "CWK",
+ "market": "us",
+ "name": "Cushman & Wakefield Ltd.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Cushman & Wakefield Ltd.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "27.63",
+  "營業毛利": null,
+  "營業利益": "1.34",
+  "本期淨利": "0.53",
+  "每股盈餘": 0.22,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1628369/000162836926000116/cwk-ex991q22026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-22T16:04:20.030Z",
+ "result": {
+  "revenue": "依據官方資料，Cushman & Wakefield Ltd. 2026年第二季營業收入為27.63億美元（新聞稿提及約28億美元）。",
+  "eps": "本季每股盈餘（EPS）為0.22美元。",
+  "margins": "本季營業利益率為4.8%，淨利率為1.9%。營業毛利與毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司調升2026年全年調整後每股盈餘（Adjusted EPS）成長率目標至18%-23%。",
+  "outlook": "本季營業利益為1.34億美元，淨利為0.53億美元（新聞稿提及5,270萬美元）。整體營運在租賃與服務業務帶動下維持成長動能，但仍受到資本市場服務線及相關成本影響。",
+  "highlights": "• 租賃與服務業務呈現成長，其中租賃營收年增27%，服務營收年增8%。<br>• 公司調升2026年全年調整後每股盈餘成長預期至18%-23%。<br>• 調整後每股盈餘（Adjusted EPS）為0.35美元，年增17%。",
+  "concerns": "• 本季淨利為52.7百萬美元，較去年同期減少4.6百萬美元或8%。<br>• 資本市場營收減少1%，其中美洲地區因中型交易減少而下滑6%。<br>• 淨利息費用增加，且不動產投資未實現損失等因素對獲利造成壓力。",
+  "risks": "• 利息費用增加，包含信用協議修訂相關成本與提前贖回優先擔保票據之滅債損失。<br>• 資本市場部分領域（如美洲多戶住宅sector）交易減少，可能對相關業務表現帶來變數。",
+  "keyPoints": "• 第二季營業收入為27.63億美元，每股盈餘為0.22美元，淨利為52.7百萬美元。<br>• 租賃營收強勁成長27%，服務營收成長8%，帶動整體業績表現。<br>• 調整後每股盈餘（Adjusted EPS）達0.35美元，全年調整後EPS成長預期上調至18%-23%。",
+  "guidanceOfficial": "Cushman & Wakefield Ltd. 於第二季財報新聞稿中表示，調升 2026 年全年調整後每股盈餘（“Adjusted EPS”）指導目標至 18%-23% 的成長率，高於先前 15%-20% 的預期。",
+  "segments": "• Services revenue increased 8% (7% in local currency)，受惠於較高的物業管理與專案管理營收。<br>• Leasing revenue increased 27% (27% in local currency)，由美洲地區各交易規模的成長所驅動。<br>• Capital markets revenue decreased 1% (1% in local currency)，主因美洲地區下滑6%，由多戶住宅等中型交易減少所致，部分被EMEA與APAC的強勁表現所抵銷。<br>• Valuation and other revenue increased 10% (8% in local currency)。"
+ }
+}

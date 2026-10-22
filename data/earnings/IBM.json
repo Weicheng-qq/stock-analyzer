@@ -1,0 +1,48 @@
+{
+ "symbol": "IBM",
+ "market": "us",
+ "name": "INTERNATIONAL BUSINESS MACHINES CORPORATION",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "INTERNATIONAL BUSINESS MACHINES CORPORATION",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "171.03",
+  "營業毛利": "97.14",
+  "營業利益": null,
+  "本期淨利": "21.90",
+  "每股盈餘": 2.3,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-21",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/51143/000005114326000093/ibm-20261021xex991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-22T15:47:42.157Z",
+ "result": {
+  "revenue": "2026年第三季營業收入為171.03億美元。",
+  "eps": "2026年第三季每股盈餘（EPS）為2.3美元。",
+  "margins": "2026年第三季營業毛利為97.14億美元，毛利率為56.8%；本期淨利為21.90億美元，淨利率為12.8%；營業利益與營業利益率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期全年按固定匯率計算的營收成長率在四到五個百分點之間，並預期自由現金流將比去年增加超過10億美元。",
+  "outlook": "2026年第三季營業收入達到171.03億美元，毛利率為56.8%，本期淨利為21.90億美元，淨利率為12.8%。公司在全年的營運展望中，持續預期按固定匯率計算的營收成長率介於四到五個百分點。",
+  "highlights": "• 2026年第三季營業收入為171.03億美元，毛利率為56.8%。<br>• 本期淨利為21.90億美元，淨利率達12.8%。<br>• 每股盈餘（EPS）為2.3美元。",
+  "concerns": "• 營業利益與營業利益率未提供。<br>• 營運現金流與自由現金流的官方本季數字在XBRL官方申報中未提供。<br>• 資本支出未提供。",
+  "risks": "• 部分部門如諮詢與融資業務呈現持平或下滑，且軟體部門中的自動化業務年減3%。<br>• 資本支出與營運現金流數據未於官方申報中提供，需留意現金流透明度。",
+  "keyPoints": "• 2026年第三季營業收入為171.03億美元。<br>• 2026年第三季毛利率為56.8%，毛利金額為97.14億美元。<br>• 2026年第三季本期淨利為21.90億美元，每股盈餘（EPS）為2.3美元。",
+  "guidanceOfficial": "針對全年，我們持續預期按固定匯率計算的營收成長率在四到五個百分點的範圍內，且我們現在預期全年自由現金流較去年同期增加超過10億美元。",
+  "segments": "• Software — revenues of 78 億美元, up 8 percent, up 9 percent at constant currency<br>• Consulting — revenues of 53 億美元, flat, up 2 percent at constant currency<br>• Infrastructure — revenues of 37 億美元, up 4 percent, up 5 percent at constant currency<br>• Financing — revenues of 2 億美元, down 4 percent, down 3 percent at constant currency"
+ }
+}

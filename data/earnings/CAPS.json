@@ -1,0 +1,48 @@
+{
+ "symbol": "CAPS",
+ "market": "us",
+ "name": "Capstone Holding Corp.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Capstone Holding Corp.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.21",
+  "營業毛利": "0.06",
+  "營業利益": "0.00",
+  "本期淨利": "-0.01",
+  "每股盈餘": -0.11,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-12",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/887151/000143774926027159/ex_1003476.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-22T16:03:03.637Z",
+ "result": {
+  "revenue": "本季營收為 0.21 億美元，較去年同期成長 67%。",
+  "eps": "每股盈餘為 -0.11 美元，顯示本季虧損。",
+  "margins": "毛利率為 28.6%，營業利益率為 0.0%，淨利率為 -4.8%，顯示毛利率雖有改善，但營業與淨利仍為虧損。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司重申 2026 全年營收 72.1 百萬美元、毛利 18.7 百萬美元，Stone Business Adjusted EBITDA 約 3.8 百萬美元。",
+  "outlook": "營收與毛利均呈顯著成長，毛利率亦有提升，顯示規模效應開始發揮。然本季仍出現淨虧損，且營業利益為零，顯示獲利轉正仍需時間。未提供營運現金流與資本支出資訊，需持續關注現金狀況。",
+  "highlights": "• Stone Business Adjusted EBITDA 正向，達 2.0 百萬美元，邊際 9.4%。<br>• 毛利率提升 357 個基點至 27.9%。<br>• 新產品與新據點擴張：Eldorado Stone 於十週內進入 81 家經銷商，九號新據點於 8 月 17 日開幕。",
+  "concerns": "• 本季淨虧損 -0.01 億美元，仍處於虧損狀態。<br>• 營業利益為 0，營業利益率 0.0%，未產生營業層面的盈餘。<br>• 未提供營運現金流與資本支出資料，無法評估現金流健康度。",
+  "risks": "持續虧損可能影響公司的流動性與資金取得。<br>公司財報重點使用非 GAAP 的 Stone Business Adjusted EBITDA，與 GAAP 淨利可能存在差異，投資人需留意此差異。",
+  "keyPoints": "• 營收較去年同期成長 67%，達 0.21 億美元（約 21.5 百萬美元）。<br>• 毛利成長 92%，達 0.06 億美元（約 6.0 百萬美元），毛利率提升至 28.6%。<br>• Stone Business Adjusted EBITDA 轉正至 2.0 百萬美元，邊際 9.4%。",
+  "guidanceOfficial": "公司重申 FY2026 指引：營收 72.1 百萬美元、毛利 18.7 百萬美元，以及約 3.8 百萬美元的 Stone Business Adjusted EBITDA。",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}
