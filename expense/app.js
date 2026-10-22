@@ -22,16 +22,21 @@ const DEFAULT_CATS = [
 const COLORS = ['#0f766e', '#ea580c', '#2563eb', '#ca8a04', '#9333ea', '#db2777', '#0891b2', '#65a30d', '#dc2626', '#64748b'];
 
 // ---------- 資料 ----------
+// tx[].src：undefined＝手動、'line'＝銀行 LINE 通知、'invoice'＝載具發票；tx[].inv＝發票號碼；tx[].merged＝兩個來源已合併成一筆
+// inbox：自動抓到但看不懂（轉帳、卡費、外幣…）的訊息，等使用者確認
+// seen：處理過的訊息指紋，重複匯入／重複通知不會記兩次
+const DEFAULT_KEYWORDS = ['富邦', '華南'];
+const fresh = () => ({ tx: [], cats: DEFAULT_CATS.slice(), budget: 0, inbox: [], seen: [], keywords: DEFAULT_KEYWORDS.slice() });
 let db = load();
 function load() {
   try {
     const raw = localStorage.getItem(STORE_KEY);
     if (raw) {
       const d = JSON.parse(raw);
-      if (Array.isArray(d.tx) && Array.isArray(d.cats)) return { budget: 0, ...d };
+      if (Array.isArray(d.tx) && Array.isArray(d.cats)) return { ...fresh(), ...d };
     }
   } catch (e) {}
-  return { tx: [], cats: DEFAULT_CATS.slice(), budget: 0 };
+  return fresh();
 }
 function save() {
   try {
@@ -103,9 +108,12 @@ function render() {
 function txRow(t) {
   const c = catOf(t.cat);
   const sign = t.type === 'expense' ? '−' : '+';
+  const badge = t.merged ? '<span class="badge merged">LINE＋發票</span>'
+    : t.src === 'line' ? '<span class="badge line">LINE</span>'
+    : t.src === 'invoice' ? '<span class="badge invoice">發票</span>' : '';
   return `<button class="tx" data-id="${t.id}">
     <span class="ico">${c.icon}</span>
-    <span class="mid"><div class="name">${esc(c.name)}</div>${t.note ? `<div class="note">${esc(t.note)}</div>` : ''}</span>
+    <span class="mid"><div class="name">${esc(c.name)}${badge}</div>${t.note ? `<div class="note">${esc(t.note)}</div>` : ''}</span>
     <span class="amt ${t.type === 'expense' ? 'exp' : 'inc'}">${sign}${money(t.amount)}</span>
   </button>`;
 }
@@ -135,7 +143,14 @@ function renderHome() {
     budgetHtml = `<div class="card hint">到「設定」填入每月預算，就能看到每天還能花多少。</div>`;
   }
   const recent = db.tx.slice().sort(byNewest).filter((t) => t.date !== ymd(now)).slice(0, 5);
+  const inbox = db.inbox.slice().sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+  const inboxHtml = inbox.length ? `<div class="card"><h3>⚠️ 待確認 ${inbox.length} 筆（自動抓到但不確定，點一下確認或忽略）</h3>
+    ${inbox.map((m) => `<button class="inbox-item" data-inbox="${m.id}">
+      <div><b>${m.amount ? money(m.amount) : '金額不明'}</b> <span class="hint">${esc(m.sender)} · ${m.date.slice(5).replace('-', '/')} ${m.time}</span></div>
+      <div class="why">${esc(m.reason)}</div><div class="txt">${esc(m.text)}</div></button>`).join('')}</div>` : '';
   $('#view').innerHTML = `
+    ${autoStatusHtml()}
+    ${inboxHtml}
     <div class="card summary">
       <div class="big"><div class="stat-label">${now.getMonth() + 1} 月支出</div><div class="stat-num exp">${money(exp)}</div></div>
       <div><div class="stat-label">本月收入</div><div class="stat-num inc">${money(inc)}</div></div>
@@ -147,6 +162,23 @@ function renderHome() {
     </div>
     ${recent.length ? `<div class="card"><h3>最近幾筆</h3>${recent.map(txRow).join('')}</div>` : ''}`;
   bindRows();
+  document.querySelectorAll('[data-inbox]').forEach((el) => el.addEventListener('click', () => openInbox(el.dataset.inbox)));
+  const go = $('#goAuto');
+  if (go) go.addEventListener('click', () => document.querySelector('.tabs [data-tab=settings]').click());
+}
+
+// 首頁頂端的自動記帳狀態：Android App 內顯示通知權限狀態；網頁版提示可以匯入
+function autoStatusHtml() {
+  if (isAndroid()) {
+    if (bridgeCall('isListenerEnabled') === true) return '';
+    return `<div class="card"><h3>🔔 自動記帳尚未開啟</h3>
+      <div class="hint">需要允許「讀取通知」，才能自動記下富邦、華南的 LINE 交易通知。</div>
+      <button class="btn" id="goAuto" style="margin-top:10px">前往設定</button></div>`;
+  }
+  if (db.tx.some((t) => t.src)) return '';
+  return `<div class="card"><h3>⚡ 不想手動記帳？</h3>
+    <div class="hint">到「設定 → 自動記帳」匯入 LINE 銀行聊天記錄或載具發票明細，就會自動分類記好。</div>
+    <button class="btn" id="goAuto" style="margin-top:10px">前往設定</button></div>`;
 }
 
 function renderList() {
@@ -225,7 +257,28 @@ function renderStats() {
 function renderSettings() {
   const chips = (type) => db.cats.filter((c) => c.type === type).map((c) =>
     `<span class="chip">${c.icon} ${esc(c.name)}<button class="x" data-del="${c.id}" aria-label="刪除分類 ${esc(c.name)}">✕</button></span>`).join('');
+  const android = isAndroid();
+  const listenerOn = android && bridgeCall('isListenerEnabled') === true;
+  const autoCard = `<div class="card"><h3>⚡ 自動記帳</h3>
+    ${android ? `
+      <div class="set-row"><span>讀取 LINE 銀行通知 ${listenerOn ? '<span class="ok">已開啟</span>' : '<span class="warn">未開啟</span>'}</span>
+        <button class="btn" id="openListener">${listenerOn ? '設定' : '開啟'}</button></div>
+      <div class="set-row"><span class="grow">避免被系統關閉（電池最佳化設為「不限制」）</span><button class="btn" id="openBattery">設定</button></div>
+      <ol class="steps">
+        <li>按上面「開啟」→ 找到「隨手記帳」→ 允許</li>
+        <li>LINE → 設定 → 提醒 → 開啟「顯示訊息內容」（關掉的話通知裡看不到金額）</li>
+        <li>之後富邦、華南的 LINE 通知一跳出來就會自動記帳</li>
+      </ol>` : `<p class="hint" style="margin:0 0 6px">Android App 可以在 LINE 通知跳出來時自動記帳；網頁版請用下方匯入。</p>`}
+    <div class="set-row"><span class="grow">銀行聊天室關鍵字（用逗號分隔）</span></div>
+    <input class="search" id="keywords" value="${esc(db.keywords.join('，'))}" aria-label="銀行聊天室關鍵字">
+    <div class="set-row"><span class="grow">匯入 LINE 聊天記錄<div class="hint">補登過去的交易：LINE 銀行聊天室 → ≡ → 設定 → 傳送聊天記錄${android ? ' → 選「隨手記帳」，或存檔後按這裡' : '，存檔後按這裡'}</div></span><button class="btn" id="importLine">匯入</button></div>
+    <div class="set-row"><span class="grow">匯入載具發票明細<div class="hint">財政部電子發票整合服務平台 → 登入手機條碼 → 消費紀錄查詢 → 匯出 CSV，再按這裡</div></span><button class="btn" id="importInv">匯入</button></div>
+    <div class="set-row set-col"><div class="hint" style="margin-bottom:6px">測試：貼上一則銀行訊息，看 App 會怎麼解讀（不會記帳）</div>
+      <textarea id="testMsg" placeholder="例：您的信用卡於10/21在全聯消費新臺幣256元"></textarea>
+      <div id="testOut" class="hint"></div></div>
+  </div>`;
   $('#view').innerHTML = `
+    ${autoCard}
     <div class="card"><h3>預算</h3>
       <div class="set-row"><span>每月支出預算</span><input id="budget" type="number" inputmode="decimal" min="0" placeholder="未設定" value="${db.budget || ''}"></div>
     </div>
@@ -246,6 +299,25 @@ function renderSettings() {
     </div>
     <p class="hint" style="text-align:center">隨手記帳 · 免費、離線可用、不蒐集任何資料</p>`;
 
+  if (android) {
+    $('#openListener').addEventListener('click', () => bridgeCall('openListenerSettings'));
+    $('#openBattery').addEventListener('click', () => bridgeCall('openBatterySettings'));
+  }
+  $('#keywords').addEventListener('change', (e) => {
+    const kw = e.target.value.split(/[,，、\s]+/).map((x) => x.trim()).filter(Boolean);
+    db.keywords = kw.length ? kw : DEFAULT_KEYWORDS.slice();
+    save(); syncKeywords(); toast('關鍵字已儲存：' + db.keywords.join('、'));
+  });
+  $('#importLine').addEventListener('click', () => $('#lineFile').click());
+  $('#importInv').addEventListener('click', () => $('#invFile').click());
+  $('#testMsg').addEventListener('input', (e) => {
+    const v = e.target.value.trim();
+    if (!v) { $('#testOut').textContent = ''; return; }
+    const r = Parse.parseBankMessage(v, ymd(new Date()));
+    const label = { tx: '✅ 會自動記帳', review: '⚠️ 會放進「待確認」', ignore: '— 會忽略（不是交易）' }[r.status];
+    $('#testOut').innerHTML = `${label}<br>${r.type ? (r.type === 'expense' ? '支出' : '收入') : '收支不明'} · ${r.amount ? money(r.amount) : '金額不明'}`
+      + `${r.cat ? ' · ' + esc(catOf(r.cat).name) : ''}${r.merchant ? ' · ' + esc(r.merchant) : ''} · ${r.date}${r.reason ? '<br>原因：' + esc(r.reason) : ''}`;
+  });
   $('#budget').addEventListener('change', (e) => {
     db.budget = Math.max(0, Number(e.target.value) || 0); save(); toast('預算已儲存');
   });
@@ -268,11 +340,12 @@ function renderSettings() {
   $('#wipe').addEventListener('click', () => {
     if (!confirm('確定要清除全部記帳紀錄？此動作無法復原，建議先備份。')) return;
     if (!confirm('再確認一次：真的全部清除？')) return;
-    db = { tx: [], cats: DEFAULT_CATS.slice(), budget: 0 }; save(); renderSettings(); toast('已清除');
+    db = { ...fresh(), keywords: db.keywords }; save(); renderSettings(); toast('已清除');
   });
 }
 
 function download(name, text, type) {
+  if (isAndroid()) { toast(bridgeCall('saveFile', name, text) || '儲存失敗'); return; } // WebView 不支援 blob 下載，改由 App 存到「下載」資料夾
   const url = URL.createObjectURL(new Blob([text], { type }));
   const a = document.createElement('a');
   a.href = url; a.download = name;
@@ -297,7 +370,7 @@ $('#importFile').addEventListener('change', async (e) => {
     const valid = d.tx.every((t) => t && t.id && /^\d{4}-\d{2}-\d{2}$/.test(t.date) && Number.isFinite(t.amount) && (t.type === 'expense' || t.type === 'income'));
     if (!valid) throw new Error('紀錄內容有誤');
     if (!confirm(`備份檔有 ${d.tx.length} 筆紀錄，還原會取代目前的 ${db.tx.length} 筆。確定？`)) return;
-    db = { budget: 0, ...d }; save(); render(); toast('還原完成');
+    db = { ...fresh(), ...d }; save(); render(); toast('還原完成');
   } catch (err) {
     toast('還原失敗：' + err.message);
   }
@@ -305,15 +378,32 @@ $('#importFile').addEventListener('change', async (e) => {
 
 // ---------- 新增／編輯表單 ----------
 let form = null;
-function openSheet(tx) {
+function openSheet(tx, inboxMsg) {
   form = tx
-    ? { id: tx.id, type: tx.type, amount: String(tx.amount), cat: tx.cat, date: tx.date, note: tx.note || '', ts: tx.ts }
+    ? { ...tx, amount: String(tx.amount), note: tx.note || '' }
     : { id: null, type: 'expense', amount: '', cat: null, date: ymd(new Date()), note: '' };
-  $('#sheetDelete').hidden = !tx;
+  if (inboxMsg) {
+    Object.assign(form, {
+      inboxId: inboxMsg.id, src: 'line', key: inboxMsg.key,
+      type: inboxMsg.type || 'expense', amount: inboxMsg.amount ? String(inboxMsg.amount) : '',
+      cat: inboxMsg.cat || null, date: inboxMsg.date, note: inboxMsg.merchant || inboxMsg.sender || '',
+    });
+  }
+  const del = $('#sheetDelete');
+  del.hidden = !tx && !inboxMsg;
+  del.textContent = inboxMsg ? '忽略' : '刪除';
+  const raw = $('#rawText');
+  const rawSrc = inboxMsg ? inboxMsg : tx && tx.raw ? { reason: '', text: tx.raw } : null;
+  raw.hidden = !rawSrc;
+  if (rawSrc) raw.innerHTML = (rawSrc.reason ? `<b>${esc(rawSrc.reason)}</b>` : '') + esc(rawSrc.text);
   $('#dateInput').value = form.date;
   $('#noteInput').value = form.note;
   syncSheet();
   $('#sheetBg').hidden = false;
+}
+function openInbox(id) {
+  const m = db.inbox.find((x) => x.id === id);
+  if (m) openSheet(null, m);
 }
 function closeSheet() { $('#sheetBg').hidden = true; form = null; }
 function syncSheet() {
@@ -340,6 +430,10 @@ $('#catGrid').addEventListener('click', (e) => {
 $('#dateInput').addEventListener('change', (e) => { form.date = e.target.value; });
 $('#noteInput').addEventListener('input', (e) => { form.note = e.target.value; });
 $('#sheetDelete').addEventListener('click', () => {
+  if (form.inboxId) {
+    db.inbox = db.inbox.filter((m) => m.id !== form.inboxId); save(); closeSheet(); render(); toast('已忽略，不會記帳');
+    return;
+  }
   if (!confirm('刪除這筆紀錄？')) return;
   db.tx = db.tx.filter((t) => t.id !== form.id); save(); closeSheet(); render(); toast('已刪除');
 });
@@ -364,7 +458,13 @@ function saveForm() {
   const amount = Number(form.amount);
   if (!(amount > 0)) return toast('請輸入金額');
   if (!/^\d{4}-\d{2}-\d{2}$/.test(form.date)) return toast('請選擇日期');
-  const rec = { id: form.id || uid(), type: form.type, amount: Math.round(amount * 100) / 100, cat: form.cat, date: form.date, note: form.note.trim(), ts: form.ts || new Date().toISOString() };
+  const { inboxId, ...base } = form;
+  const rec = { ...base, id: form.id || uid(), amount: Math.round(amount * 100) / 100, note: form.note.trim(), ts: form.ts || new Date().toISOString(), catAuto: false };
+  if (inboxId) {
+    const m = db.inbox.find((x) => x.id === inboxId);
+    if (m) rec.raw = m.text;
+    db.inbox = db.inbox.filter((x) => x.id !== inboxId);
+  }
   const i = db.tx.findIndex((t) => t.id === rec.id);
   if (i >= 0) db.tx[i] = rec; else db.tx.push(rec);
   save();
@@ -385,9 +485,157 @@ document.addEventListener('keydown', (e) => {
   if (btn) btn.click();
 });
 
+// ---------- 自動記帳引擎 ----------
+const dayDiff = (a, b) => Math.abs(Date.parse(a) - Date.parse(b)) / 864e5;
+function markSeen(key) {
+  db.seen.push(key);
+  if (db.seen.length > 5000) db.seen = db.seen.slice(-4000);
+}
+
+// 加一筆自動紀錄。同一筆消費常常「銀行刷卡通知」和「載具發票」各來一次：
+// 金額相同、日期差 3 天內、來源不同 → 合併成一筆（保留發票的店名與品項），不重複計算。
+function addAuto(rec) {
+  if (rec.inv && db.tx.some((t) => t.inv === rec.inv)) return 'dup';
+  if (rec.type === 'expense') {
+    const twin = db.tx.find((t) => t.type === 'expense' && t.src && t.src !== rec.src && !t.merged
+      && Math.abs(t.amount - rec.amount) < 0.01 && dayDiff(t.date, rec.date) <= 3);
+    if (twin) {
+      const inv = rec.src === 'invoice' ? rec : twin;
+      const bank = rec.src === 'invoice' ? twin : rec;
+      twin.merged = true;
+      twin.inv = inv.inv;
+      twin.date = bank.date; // 銀行通知的日期是實際刷卡日
+      twin.note = inv.note || bank.note;
+      if (twin.catAuto !== false) twin.cat = inv.cat !== 'other' ? inv.cat : bank.cat;
+      twin.raw = [bank.raw, inv.raw].filter(Boolean).join('\n—\n');
+      return 'merged';
+    }
+  }
+  db.tx.push({ id: uid(), ts: new Date().toISOString(), catAuto: true, ...rec });
+  return 'added';
+}
+
+// msgs: [{ date:'YYYY-MM-DD', time:'HH:MM', sender, text }]
+function processMessages(msgs) {
+  const n = { added: 0, merged: 0, review: 0, ignored: 0, dup: 0 };
+  for (const m of msgs) {
+    const key = Parse.msgKey(m.date, m.time, m.text);
+    if (db.seen.includes(key)) { n.dup++; continue; }
+    markSeen(key);
+    const r = Parse.parseBankMessage(m.text, m.date);
+    if (r.status === 'ignore') { n.ignored++; continue; }
+    if (r.status === 'review') {
+      db.inbox.push({ id: uid(), key, date: r.date, time: m.time, sender: m.sender, text: m.text, type: r.type, amount: r.amount, cat: r.cat, merchant: r.merchant, reason: r.reason });
+      n.review++;
+      continue;
+    }
+    const res = addAuto({ src: 'line', key, type: r.type, amount: r.amount, cat: r.cat, date: r.date, note: r.merchant || m.sender, raw: m.text });
+    n[res === 'merged' ? 'merged' : 'added']++;
+  }
+  save();
+  return n;
+}
+
+function importInvoices(list) {
+  const n = { added: 0, merged: 0, dup: 0, void: 0 };
+  for (const v of list) {
+    if (v.void) { n.void++; continue; }
+    const items = v.items.map((x) => x.name).join('、');
+    const note = [v.seller.replace(/股份有限公司|有限公司/g, ''), items].filter(Boolean).join('：').slice(0, 60);
+    const res = addAuto({
+      src: 'invoice', inv: v.inv, type: 'expense', amount: v.amount, date: v.date, note,
+      cat: Parse.guessCat(v.seller + ' ' + items, 'expense'),
+      raw: `發票 ${v.inv}｜${v.seller}｜${v.amount} 元${items ? '｜' + items : ''}`,
+    });
+    n[res]++;
+  }
+  save();
+  return n;
+}
+
+function summary(n) {
+  const parts = [];
+  if (n.added) parts.push(`新增 ${n.added} 筆`);
+  if (n.merged) parts.push(`合併 ${n.merged} 筆（發票＋刷卡同一筆）`);
+  if (n.review) parts.push(`${n.review} 筆待確認`);
+  if (n.dup) parts.push(`${n.dup} 筆之前已匯入`);
+  if (n.void) parts.push(`${n.void} 張作廢發票略過`);
+  if (n.ignored) parts.push(`${n.ignored} 則非交易訊息略過`);
+  return parts.join('，') || '沒有可匯入的資料';
+}
+
+function importLineText(text) {
+  const msgs = Parse.parseLineExport(text, db.keywords);
+  if (!msgs.length) {
+    toast(/\[LINE\]/.test(text) ? `聊天記錄裡找不到含「${db.keywords.join('、')}」的訊息` : '看不懂這個檔案，請用 LINE「傳送聊天記錄」產生的文字檔');
+    return;
+  }
+  const n = processMessages(msgs);
+  render();
+  alert('LINE 聊天記錄匯入完成：\n' + summary(n));
+}
+$('#lineFile').addEventListener('change', async (e) => {
+  const f = e.target.files[0]; e.target.value = '';
+  if (f) importLineText(await f.text());
+});
+$('#invFile').addEventListener('change', async (e) => {
+  const f = e.target.files[0]; e.target.value = '';
+  if (!f) return;
+  const buf = await f.arrayBuffer();
+  let text = new TextDecoder('utf-8').decode(buf);
+  if (text.includes('�')) { try { text = new TextDecoder('big5').decode(buf); } catch (err) {} } // 舊版平台匯出可能是 Big5
+  const list = Parse.parseInvoiceCsv(text);
+  if (!list.length) { toast('看不懂這個檔案，請用財政部平台匯出的載具消費明細'); return; }
+  const n = importInvoices(list);
+  render();
+  alert(`載具發票匯入完成（共 ${list.length} 張）：\n` + summary(n));
+});
+
+// ---------- Android App 橋接（只有在 Android App 內才有 window.AndroidBridge） ----------
+function isAndroid() { return typeof window.AndroidBridge === 'object' && window.AndroidBridge !== null; }
+function bridgeCall(name, ...args) {
+  try { return isAndroid() && typeof AndroidBridge[name] === 'function' ? AndroidBridge[name](...args) : null; } catch (e) { return null; }
+}
+function syncKeywords() { bridgeCall('setKeywords', JSON.stringify(db.keywords)); }
+
+// App 在背景收到的通知先存在 Android 端，畫面打開時拿過來處理
+function pullNative() {
+  if (!isAndroid()) return;
+  let list = [];
+  try { list = JSON.parse(bridgeCall('getPending') || '[]'); } catch (e) {}
+  if (list.length) {
+    const msgs = list.map((x) => {
+      const d = new Date(Number(x.time));
+      return { date: ymd(d), time: `${pad(d.getHours())}:${pad(d.getMinutes())}`, sender: x.title || '', text: x.text || '' };
+    });
+    const n = processMessages(msgs);
+    bridgeCall('ack', JSON.stringify(list.map((x) => x.id)));
+    if (n.added || n.merged || n.review) toast('自動記帳：' + summary({ ...n, ignored: 0, dup: 0 }));
+    if (!form) render();
+  }
+  const shared = bridgeCall('takeSharedText');
+  if (shared) {
+    if (/^表頭=|發票號碼/.test(shared.slice(0, 500))) {
+      const inv = Parse.parseInvoiceCsv(shared);
+      const n = importInvoices(inv); render(); alert(`載具發票匯入完成（共 ${inv.length} 張）：\n` + summary(n));
+    } else importLineText(shared);
+  }
+}
+window.__nativePush = pullNative;
+// Android 返回鍵：先關掉面板，沒有面板才離開 App
+window.__onBack = () => {
+  if (form) { closeSheet(); return true; }
+  if (tab !== 'home') { document.querySelector('.tabs [data-tab=home]').click(); return true; }
+  return false;
+};
+
 render();
 
-// 離線可用：Service Worker 只管 /expense/ 範圍，不會影響同網域的其他頁面。
-if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+if (isAndroid()) {
+  syncKeywords();
+  pullNative();
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) { pullNative(); render(); } });
+} else if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  // 離線可用：Service Worker 只管 /expense/ 範圍，不會影響同網域的其他頁面。（Android App 內檔案本來就在手機裡，不需要）
   navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {});
 }

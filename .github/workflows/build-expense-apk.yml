@@ -1,0 +1,63 @@
+# 編譯「隨手記帳」Android App（APK），放到 GitHub Release 讓手機直接下載安裝。
+# 免費：public repo 的 GitHub Actions 不收費；不需要 Google Play 開發者帳號。
+name: 記帳 App 編譯 APK
+
+on:
+  push:
+    branches: [main, 'claude/expense-*']
+    paths: ['expense/**', 'expense-android/**', '.github/workflows/build-expense-apk.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: expense-apk
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 解析測試
+        run: node expense/test/parse.test.js
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: 編譯 APK
+        working-directory: expense-android
+        run: gradle --no-daemon assembleRelease
+
+      - name: 整理檔案
+        run: cp expense-android/app/build/outputs/apk/release/app-release.apk expense-app.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: expense-app-apk
+          path: expense-app.apk
+
+      # 固定的 Release「expense-app-latest」：手機下載網址永遠不變
+      - name: 更新下載頁
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: expense-app-latest
+          name: 隨手記帳 Android App（最新版）
+          prerelease: true
+          make_latest: false
+          target_commitish: ${{ github.sha }}
+          body: |
+            手機點下方 **expense-app.apk** 下載 → 開啟 → 允許「安裝不明來源的應用程式」→ 安裝。
+            新版直接覆蓋安裝，記帳資料會保留。
+
+            版本：1.0.${{ github.run_number }}（${{ github.ref_name }} @ ${{ github.sha }}）
+          files: expense-app.apk

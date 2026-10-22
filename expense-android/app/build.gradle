@@ -1,0 +1,58 @@
+plugins {
+    id 'com.android.application'
+}
+
+// 記帳畫面直接用 ../../expense（與網頁版同一份程式），編譯時複製進 APK 的 assets/web/
+def webOut = layout.buildDirectory.dir('generated/webassets')
+def copyWeb = tasks.register('copyWeb', Copy) {
+    from('../../expense') {
+        exclude '交接清單/**', 'test/**', 'sw.js'
+    }
+    into webOut.map { it.dir('web') }
+}
+
+android {
+    namespace 'tw.weicheng.expense'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'tw.weicheng.expense'
+        minSdk 26
+        targetSdk 34
+        // GitHub Actions 每次編譯的序號，確保新版可以直接覆蓋安裝（資料保留）
+        versionCode((System.getenv('GITHUB_RUN_NUMBER') ?: '1') as int)
+        versionName "1.0.${System.getenv('GITHUB_RUN_NUMBER') ?: '0'}"
+    }
+
+    // ⚠️ 這把金鑰必須永遠相同：換金鑰的 APK 無法覆蓋安裝，使用者得先移除 App（記帳資料會跟著消失）。
+    signingConfigs {
+        release {
+            storeFile file('expense-release.jks')
+            storePassword 'expense-app'
+            keyAlias 'expense'
+            keyPassword 'expense-app'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets {
+        main.assets.srcDirs += webOut
+    }
+}
+
+tasks.named('preBuild') { dependsOn copyWeb }
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.11.0'
+}

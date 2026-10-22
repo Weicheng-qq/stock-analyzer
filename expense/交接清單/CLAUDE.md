@@ -1,7 +1,7 @@
 # 記帳APP（隨手記帳）— 交接清單
 
 > 新 session 提到「記帳APP／記帳 App／隨手記帳」要繼續時，先讀這份。
-> 最後更新：2026-10-22（第一版建立）
+> 最後更新：2026-10-22（第二版：自動記帳 — Android App 讀 LINE 銀行通知＋載具發票匯入）
 
 ## 1. 這是什麼
 - 手機記帳 App，做成 **PWA 網頁 App**：手機瀏覽器打開 →「加入主畫面」→ 像一般 App 一樣使用、可離線。
@@ -49,11 +49,56 @@
 - 根目錄 kill-switch SW 若在某台裝置上啟動，會清掉所有快取（含 `expense-v1`）——只影響離線快取，**不影響記帳資料**（資料在 localStorage）。
 - 資料只在單一手機：換手機前要「設定 → 備份」，新手機「還原」。iOS 長時間不開啟可能清除網站資料，已呼叫 `navigator.storage.persist()` 降低機率，但仍建議定期備份。
 
+## 6.5 自動記帳（第二版，2026-10-22）
+使用者需求：「不想手動記帳，自動讀 LINE 上富邦、華南的聊天內容＋統一發票對獎 APP 的載具」。使用者手機是 **Android**。
+
+### 可行性結論（重要，別再重查）
+- **LINE 沒有任何 API 能讀個人聊天內容**。唯一自動的方法：Android 的「通知存取權」（NotificationListenerService）讀 LINE 跳出的通知。**iPhone 系統完全不允許**，iPhone 只能用「傳送聊天記錄」匯入。
+- **統一發票兌獎 APP 不開放資料**。載具發票來源＝財政部「電子發票整合服務平台」：
+  - 現在：使用者在平台網站匯出載具消費明細檔 → App 匯入（免費、官方）。
+  - 全自動：財政部 API 需向財政資訊中心申請 AppID＋APIKey，查到的申請文件對象是**營業人**，個人能否申請不確定 → 使用者同意「先做匯入，同時試申請 API」。**尚未申請**。
+- 雲端 session 連不到 dl.google.com／maven.google.com（403），**本機無法編 APK** → 用 GitHub Actions 編譯（public repo 免費）。
+
+### 架構
+- `expense/parse.js`：解析核心（純函式，Node 可測）：`parseBankMessage`（銀行訊息→ tx／review／ignore）、`parseLineExport`（LINE 匯出 txt）、`parseInvoiceCsv`（載具明細，`表頭=M|…` 格式與一般 CSV 都吃）、`guessCat`（依店名／品名關鍵字分類）、`msgKey`（去重指紋）。
+- `expense/test/parse.test.js`：15 項測試，`node expense/test/parse.test.js`；APK 編譯前 CI 會先跑。
+- `expense/app.js` 自動記帳引擎：`processMessages`、`addAuto`、`importInvoices`、`pullNative`。
+  - **發票＋刷卡通知合併**：支出、金額相同、日期差 ≤3 天、來源不同 → 合併成一筆（標「LINE＋發票」），不重複計算。
+  - **待確認（inbox）**：轉帳轉出／轉入（可能是自己帳戶互轉）、**繳信用卡費**（避免與逐筆刷卡重複）、外幣、看不出收支方向 → 不自動記，首頁顯示讓使用者確認或忽略。
+  - 驗證碼、廣告、非交易訊息 → 忽略。
+  - `db.seen` 存處理過的訊息指紋（上限 5000），重複匯入／重複通知不會重記。
+  - 資料新欄位：`tx.src`（line／invoice）、`tx.inv`、`tx.merged`、`tx.raw`（原文）、`tx.catAuto`；`db.inbox`、`db.seen`、`db.keywords`（預設 富邦、華南，設定頁可改）。
+- `expense-android/`：原生 Android 外殼（Java、無 Kotlin）
+  - `MainActivity`：WebView 經 `WebViewAssetLoader` 載入 `https://appassets.androidplatform.net/assets/web/index.html`（Gradle `copyWeb` 把 `expense/` 複製進 APK，排除 交接清單／test／sw.js）。處理檔案選擇、返回鍵（JS `__onBack`）、「分享」進來的 LINE 聊天記錄／載具檔。
+  - `NotifyService`：只收 `jp.naver.line.android`、聊天室名稱含關鍵字的通知；略過群組摘要；支援 MessagingStyle 多則訊息。**只照抄原文**，解析全在 JS。
+  - `Store`：SharedPreferences 暫存待處理通知；JS 存檔後才 `ack` 刪除（App 被殺也不漏記）。
+  - `Bridge`（`window.AndroidBridge`）：isListenerEnabled／openListenerSettings／openBatterySettings／getPending／ack／setKeywords／takeSharedText／saveFile（WebView 不支援 blob 下載，改存到「下載」資料夾）。
+  - 簽章金鑰 `expense-android/app/expense-release.jks`（密碼 expense-app）**已 commit 且必須永遠不換**：換金鑰的 APK 不能覆蓋安裝，使用者得移除 App＝記帳資料消失。風險：repo 公開，他人理論上可做同簽章 APK，但需使用者自己去安裝才有影響。
+  - versionCode＝GitHub Actions run number，新版可直接覆蓋安裝。
+- `.github/workflows/build-expense-apk.yml`：push 到 main 或 `claude/expense-*` 且改到 expense 相關檔案時編譯 → 更新 Release **`expense-app-latest`**（固定網址，附 expense-app.apk）。
+  下載網址：https://github.com/weicheng-qq/stock-analyzer/releases/tag/expense-app-latest
+
+### 使用者在手機上要做的事
+1. 下載安裝 APK（允許「安裝不明來源的應用程式」）。
+2. App → 設定 → 自動記帳 →「開啟」→ 允許「隨手記帳」的通知存取權。
+3. LINE → 設定 → 提醒 → 開啟「顯示訊息內容」（否則通知裡沒有金額）。
+4. 電池最佳化設為「不限制」（小米／OPPO／vivo 等還要允許「自啟動」）。
+5. 補登舊交易：LINE 銀行聊天室 → 傳送聊天記錄 → 分享給「隨手記帳」。
+6. 載具：財政部電子發票整合服務平台 → 手機條碼登入 → 消費明細匯出 → 分享給「隨手記帳」或在設定頁匯入。
+
+### 尚未確認（需要使用者提供）
+- **富邦、華南 LINE 通知的真實文字格式**：目前規則依常見台灣銀行通知寫成，沒看過真實訊息。請使用者貼幾則（遮掉帳號）→ 用設定頁「測試」框或加進 `test/parse.test.js` 調整。
+- 財政部載具匯出檔的實際欄位（新版平台可能改格式）——拿到真實檔案再驗證。
+- 第一次 GitHub Actions 編譯結果（雲端無法本機編譯，只做過 javac 對 Android 14 框架的編譯檢查）。
+
 ## 7. 犯過的錯與解法
 - 金額格式化寫成 `Math.round(n*100/100)`（沒有四捨五入到小數 2 位）→ 改 `Math.round(n*100)/100`。
 - 負數顯示成「NT$-176.5」→ `money()` 改為「−NT$176.5」。
 - 上億金額會超出卡片 → `.stat-num` 用 `clamp()` 字級＋`overflow-wrap:anywhere`；圓環中央數字太長時縮小字級。
 - 右下角 ＋ 按鈕擋住最後一張卡片 → `main` 底部加 72px 留白。
+- `.month { display:flex }` 蓋掉 `hidden` 屬性，月份切換在總覽／設定也出現 → 加全域 `[hidden]{display:none!important}`。
+- 解析：「於10/21在星巴克消費」店名抓成「10/21在星巴克」→ 去掉開頭日期與「在」；「交易通知＋商店：」沒寫「消費」被丟進待確認 → 有「商店：」欄位就視為支出。
+- 雲端連不到 Google Maven → 用 Maven Central 的 Robolectric `android-all` jar＋自寫 WebViewAssetLoader stub 做 javac 編譯檢查（scratchpad，不進 repo）。
 
 ## 8. 測試方式
 - 本機：在 repo 根目錄 `python3 -m http.server 8765` → 開 `http://localhost:8765/expense/`。
@@ -61,10 +106,12 @@
 
 ## 9. 工具／Skill／MCP／API Key
 - 未安裝任何 MCP、API Key、CLI；未建立新 Skill。
-- 使用到的只有：Python PIL（畫 PNG 圖示）、Playwright（測試）。
+- 使用到的只有：Python PIL（畫 PNG 圖示）、Playwright（測試）、keytool（產生簽章金鑰）、GitHub Actions（編譯 APK）。
+- 待申請（使用者本人）：財政部電子發票 API AppID（免費；申請表在電子發票整合服務平台）。
 
 ## 10. 之後可以做（建議，尚未實作）
-1. **上架 Google Play**（可賺錢管道）：用免費的 Bubblewrap／PWABuilder 把 PWA 包成 TWA，只需付 Google Play 一次性 US$25 註冊費（**需使用者同意才做**）。
+0. 財政部 API 申請到 AppID 後：做「載具自動同步」（需 Cloudflare Pages Function 轉送＋簽章，手機條碼驗證碼只存在手機）。
+1. **上架 Google Play**（注意：Google Play 對「通知存取權」審查嚴格，自動記帳版上架可能被拒）（可賺錢管道）：用免費的 Bubblewrap／PWABuilder 把 PWA 包成 TWA，只需付 Google Play 一次性 US$25 註冊費（**需使用者同意才做**）。
 2. 雲端同步（多裝置）：可用 Firebase 免費方案或 Cloudflare KV，但要登入機制，需評估。
 3. 固定支出（每月房租、訂閱自動記一筆）、多帳戶（現金／信用卡）、多幣別、發票載具匯入。
 4. 獲利：App 內放 Google AdSense（網頁版）或做「進階版」一次買斷。

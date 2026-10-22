@@ -47,6 +47,7 @@
       <button class="link danger" id="sheetDelete" hidden>刪除</button>
     </div>
     <h2 id="sheetTitle" class="sr">記一筆</h2>
+    <div class="raw" id="rawText" hidden></div>
     <div class="amount" id="amountDisp">0</div>
     <div class="cat-grid" id="catGrid"></div>
     <div class="row">
@@ -64,7 +65,10 @@
 
 <div class="toast" id="toast" hidden></div>
 <input type="file" id="importFile" accept=".json,application/json" hidden>
+<input type="file" id="lineFile" accept=".txt,text/plain" hidden>
+<input type="file" id="invFile" accept=".csv,.txt,text/csv,text/plain" hidden>
 
+<script src="parse.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
