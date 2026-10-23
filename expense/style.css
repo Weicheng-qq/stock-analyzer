@@ -207,3 +207,10 @@ details.set-row .inbox-item .txt { -webkit-line-clamp: 8; }
 .switch span::before { content: ""; position: absolute; width: 22px; height: 22px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; box-shadow: 0 1px 2px rgba(0,0,0,.2); }
 .switch input:checked + span { background: var(--brand); }
 .switch input:checked + span::before { transform: translateX(20px); }
+button.rank { width: 100%; text-align: left; border-radius: 10px; }
+button.rank:active, button.rank.open { background: var(--bg); }
+.rank .caret { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 2px; }
+.rank-items { margin: 0 0 8px 40px; padding: 0 8px 4px; border-left: 2px solid var(--line); }
+.rank-items .day-tag { font-size: 12px; color: var(--muted); margin-top: 8px; }
+.rank-items .tx { padding: 6px 0 8px; border-top: 0; }
+.rank-items .tx .ico { width: 30px; height: 30px; font-size: 15px; }

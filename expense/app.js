@@ -91,6 +91,7 @@ const sum = (arr, type) => arr.filter((t) => t.type === type).reduce((a, t) => a
 let tab = 'home';
 let curMonth = ym(new Date());
 let query = '';
+let statsOpenCat = null; // 統計頁展開中的分類
 
 document.querySelectorAll('.tabs button').forEach((b) => b.addEventListener('click', () => {
   tab = b.dataset.tab;
@@ -258,14 +259,26 @@ function renderStats() {
     ${ranks.length ? `<div class="card"><h3>支出分類</h3><div class="donut-wrap">${donut}</div>
       ${ranks.map(([id, v], i) => {
         const c = catOf(id);
-        return `<div class="rank"><span class="ico">${c.icon}</span><div class="mid">
-          <div class="top-line"><span><i class="dot" style="background:${COLORS[i % COLORS.length]}"></i>${esc(c.name)} ${(v / exp * 100).toFixed(1)}%</span><b>${money(v)}</b></div>
-          <div class="bar"><i style="width:${v / ranks[0][1] * 100}%;background:${COLORS[i % COLORS.length]}"></i></div></div></div>`;
+        const open = statsOpenCat === id;
+        const items = open ? list.filter((t) => t.type === 'expense' && t.cat === id).sort(byNewest) : [];
+        return `<button class="rank${open ? ' open' : ''}" data-rank="${id}" aria-expanded="${open}"><span class="ico">${c.icon}</span><div class="mid">
+          <div class="top-line"><span><i class="dot" style="background:${COLORS[i % COLORS.length]}"></i>${esc(c.name)} ${(v / exp * 100).toFixed(1)}%</span><b>${money(v)} <span class="caret">${open ? '▴' : '▾'}</span></b></div>
+          <div class="bar"><i style="width:${v / ranks[0][1] * 100}%;background:${COLORS[i % COLORS.length]}"></i></div></div></button>
+          ${open ? `<div class="rank-items">${items.map((t) => `<div class="day-tag">${dayLabel(t.date)}</div>${txRow(t)}`).join('')}
+            <div class="hint" style="text-align:right">共 ${items.length} 筆</div></div>` : ''}`;
       }).join('')}</div>
     <div class="card"><h3>每日支出（最高 ${money(maxD)}）</h3>
       <div class="daily">${daily.map((v, i) => `<i style="height:${v / maxD * 100}%" title="${m}/${i + 1} ${money(v)}"></i>`).join('')}</div>
       <div class="daily-axis"><span>1 日</span><span>${Math.ceil(days / 2)} 日</span><span>${days} 日</span></div></div>`
     : '<div class="empty">這個月還沒有支出紀錄</div>'}`;
+  // 點分類 → 展開／收合該分類本月的所有明細；明細可再點進去編輯
+  document.querySelectorAll('[data-rank]').forEach((el) => el.addEventListener('click', () => {
+    statsOpenCat = statsOpenCat === el.dataset.rank ? null : el.dataset.rank;
+    renderStats();
+    const again = document.querySelector(`[data-rank="${statsOpenCat}"]`);
+    if (again) again.scrollIntoView({ block: 'nearest' });
+  }));
+  bindRows();
 }
 
 function renderSettings() {
