@@ -26,7 +26,7 @@ const COLORS = ['#0f766e', '#ea580c', '#2563eb', '#ca8a04', '#9333ea', '#db2777'
 // inbox：自動抓到但看不懂（轉帳、卡費、外幣…）的訊息，等使用者確認
 // seen：處理過的訊息指紋，重複匯入／重複通知不會記兩次
 const DEFAULT_KEYWORDS = ['富邦', '華南'];
-const fresh = () => ({ tx: [], cats: DEFAULT_CATS.slice(), budget: 0, inbox: [], seen: [], log: [], keywords: DEFAULT_KEYWORDS.slice() });
+const fresh = () => ({ tx: [], cats: DEFAULT_CATS.slice(), budget: 0, inbox: [], seen: [], log: [], rules: [], keywords: DEFAULT_KEYWORDS.slice() });
 let db = load();
 function load() {
   try {
@@ -312,6 +312,16 @@ function renderSettings() {
         <button class="btn" id="addCat">新增</button>
       </div>
     </div>
+    <div class="card"><h3>🏷️ 自動分類規則（店名或通知內容含關鍵字 → 分類）</h3>
+      ${db.rules.map((r) => `<div class="set-row"><span class="grow">${esc(r.kws.join('、'))} → ${catOf(r.cat).icon} ${esc(catOf(r.cat).name)}</span>
+        <button class="x link danger" data-delrule="${r.id}" aria-label="刪除規則">✕</button></div>`).join('') || '<p class="hint">還沒有規則</p>'}
+      <div class="add-cat">
+        <input class="nm" id="ruleKw" placeholder="關鍵字（例：麥當勞）" aria-label="關鍵字">
+        <select id="ruleCatSel" aria-label="分類">${db.cats.filter((c) => c.type === 'expense').map((c) => `<option value="${c.id}">${c.icon} ${esc(c.name)}</option>`).join('')}</select>
+        <button class="btn" id="addRule">新增</button>
+      </div>
+      <p class="hint">也可以在明細點一筆、改分類時勾「以後都歸到這個分類」。</p>
+    </div>
     <div class="card"><h3>資料（只存在這支手機，換手機前請先備份）</h3>
       <div class="set-row"><span>匯出 Excel 可開的 CSV</span><button class="btn" id="exportCsv">匯出</button></div>
       <div class="set-row"><span>備份全部資料（JSON）</span><button class="btn" id="backup">備份</button></div>
@@ -354,6 +364,16 @@ function renderSettings() {
     if (!name) return toast('請輸入分類名稱');
     db.cats.push({ id: 'c' + uid(), name, icon: $('#newIcon').value.trim() || '🏷️', type: $('#newType').value });
     save(); renderSettings(); toast(`已新增「${name}」`);
+  });
+  document.querySelectorAll('[data-delrule]').forEach((b) => b.addEventListener('click', () => {
+    db.rules = db.rules.filter((r) => r.id !== b.dataset.delrule); save(); renderSettings(); toast('已刪除規則');
+  }));
+  $('#addRule').addEventListener('click', () => {
+    const kws = $('#ruleKw').value.split(/[,，、]+/).map((x) => x.trim()).filter(Boolean);
+    if (!kws.length) return toast('請輸入關鍵字');
+    db.rules.unshift({ id: uid(), kws, cat: $('#ruleCatSel').value });
+    const n = applyRules(); save(); renderSettings();
+    toast(`已新增規則${n ? `，重新分類 ${n} 筆` : ''}`);
   });
   $('#exportCsv').addEventListener('click', exportCsv);
   $('#backup').addEventListener('click', () => download(`記帳備份-${ymd(new Date())}.json`, JSON.stringify(db, null, 1), 'application/json'));
@@ -419,6 +439,11 @@ function openSheet(tx, inboxMsg) {
   if (rawSrc) raw.innerHTML = (rawSrc.reason ? `<b>${esc(rawSrc.reason)}</b>` : '') + esc(rawSrc.text);
   $('#dateInput').value = form.date;
   $('#noteInput').value = form.note;
+  // 改自動紀錄的分類時，可以順便教 App：以後這家店都歸這類
+  const learnKw = (form.note || '').split(/[：:]/)[0].trim();
+  $('#learnRow').hidden = !(tx && tx.src && learnKw && form.type === 'expense');
+  $('#learnKw').textContent = learnKw;
+  $('#learnChk').checked = false;
   syncSheet();
   $('#sheetBg').hidden = false;
 }
@@ -491,11 +516,18 @@ function saveForm() {
   }
   const i = db.tx.findIndex((t) => t.id === rec.id);
   if (i >= 0) db.tx[i] = rec; else db.tx.push(rec);
+  let learned = 0;
+  if (!$('#learnRow').hidden && $('#learnChk').checked) {
+    const kw = $('#learnKw').textContent;
+    db.rules = db.rules.filter((r) => !(r.kws.length === 1 && r.kws[0] === kw));
+    db.rules.unshift({ id: uid(), kws: [kw], cat: rec.cat });
+    learned = applyRules() + 1;
+  }
   save();
   const isNew = i < 0;
   closeSheet();
   render();
-  toast(isNew ? `已記下 ${catOf(rec.cat).name} ${money(rec.amount)}` : '已更新');
+  toast(isNew ? `已記下 ${catOf(rec.cat).name} ${money(rec.amount)}` : learned ? `已更新，以後「${$('#learnKw').textContent}」都歸到 ${catOf(rec.cat).name}` : '已更新');
 }
 
 // 實體鍵盤也能輸入（電腦上測試用）
@@ -508,6 +540,45 @@ document.addEventListener('keydown', (e) => {
   const btn = [...document.querySelectorAll('#keypad button')].find((b) => (b.dataset.k || b.textContent) === k);
   if (btn) btn.click();
 });
+
+// ---------- 自訂分類規則：店名／通知內容含關鍵字 → 指定分類（設定頁可增刪） ----------
+// 2026-10-23 使用者指定的 7 條，第一次載入時建立（含對應的新分類）
+const USER_RULES_V1 = [
+  { kws: ['立功'], name: '華碩中餐', icon: '🍛' },
+  { kws: ['加油', '中油', '台塑石油', '全國加油'], name: '汽車加油', icon: '⛽' },
+  { kws: ['統一超商', '7-ELEVEN', '7-11'], name: '7-11', icon: '🏪' },
+  { kws: ['停車'], name: '停車', icon: '🅿️' },
+  { kws: ['優食', 'Uber Eats', 'UberEats'], name: 'Uber點餐', icon: '🛵' },
+  { kws: ['咖啡色商行'], name: '彼得咖啡廳', icon: '☕' },
+  { kws: ['全家', 'FamilyMart'], name: '全家', icon: '🏬' },
+];
+function ensureCat(name, icon) {
+  let c = db.cats.find((x) => x.name === name && x.type === 'expense');
+  if (!c) { c = { id: 'c' + uid(), name, icon, type: 'expense' }; db.cats.push(c); }
+  return c.id;
+}
+function seedRules() {
+  if (db.rulesSeed === 1) return false;
+  for (const r of USER_RULES_V1) db.rules.push({ id: uid(), kws: r.kws, cat: ensureCat(r.name, r.icon) });
+  db.rulesSeed = 1;
+  return true;
+}
+// 規則依順序比對，第一條符合的勝出（「以後都歸這類」學到的規則放最前面）
+function ruleCat(text) {
+  const t = String(text || '').toLowerCase();
+  const r = db.rules.find((x) => db.cats.some((c) => c.id === x.cat) && x.kws.some((k) => k && t.includes(k.toLowerCase())));
+  return r ? r.cat : null;
+}
+// 套用到既有的自動紀錄（使用者手動改過分類的不動）
+function applyRules() {
+  let n = 0;
+  for (const t of db.tx) {
+    if (!t.src || t.catAuto === false || t.type !== 'expense') continue;
+    const c = ruleCat(`${t.note || ''} ${t.raw || ''}`);
+    if (c && c !== t.cat) { t.cat = c; n++; }
+  }
+  return n;
+}
 
 // ---------- 自動記帳引擎 ----------
 const dayDiff = (a, b) => Math.abs(Date.parse(a) - Date.parse(b)) / 864e5;
@@ -532,6 +603,8 @@ function addAuto(rec) {
       twin.note = inv.note || bank.note;
       if (twin.catAuto !== false) twin.cat = inv.cat !== 'other' ? inv.cat : bank.cat;
       twin.raw = [bank.raw, inv.raw].filter(Boolean).join('\n—\n');
+      const rc = ruleCat(`${twin.note} ${twin.raw}`);
+      if (rc && twin.catAuto !== false) twin.cat = rc;
       return 'merged';
     }
   }
@@ -567,12 +640,12 @@ function processMessages(msgs) {
     if (db.log.length > 50) db.log.length = 50;
     if (r.status === 'ignore') { n.ignored++; continue; }
     if (r.status === 'review') {
-      db.inbox.push({ id: uid(), key, date: r.date, time: m.time, sender: m.sender, text: m.text, type: r.type, amount: r.amount, cat: r.cat, merchant: r.merchant, reason: r.reason });
+      db.inbox.push({ id: uid(), key, date: r.date, time: m.time, sender: m.sender, text: m.text, type: r.type, amount: r.amount, cat: (r.type === 'expense' && ruleCat(`${r.merchant} ${m.text}`)) || r.cat, merchant: r.merchant, reason: r.reason });
       n.review++;
       continue;
     }
     dropPlaceholders(m);
-    const res = addAuto({ src: 'line', key, type: r.type, amount: r.amount, cat: r.cat, date: r.date, note: (r.merchant || m.sender).replace(/股份有限公司|有限公司/g, ''), raw: m.text });
+    const res = addAuto({ src: 'line', key, type: r.type, amount: r.amount, cat: (r.type === 'expense' && ruleCat(`${r.merchant} ${m.text}`)) || r.cat, date: r.date, note: (r.merchant || m.sender).replace(/股份有限公司|有限公司/g, ''), raw: m.text });
     n[res === 'merged' ? 'merged' : 'added']++;
   }
   save();
@@ -587,7 +660,7 @@ function importInvoices(list) {
     const note = [v.seller.replace(/股份有限公司|有限公司/g, ''), items].filter(Boolean).join('：').slice(0, 60);
     const res = addAuto({
       src: 'invoice', inv: v.inv, type: 'expense', amount: v.amount, date: v.date, note,
-      cat: Parse.guessCat(v.seller + ' ' + items, 'expense'),
+      cat: ruleCat(v.seller + ' ' + items) || Parse.guessCat(v.seller + ' ' + items, 'expense'),
       raw: `發票 ${v.inv}｜${v.seller}｜${v.amount} 元${items ? '｜' + items : ''}`,
     });
     n[res]++;
@@ -691,6 +764,7 @@ window.__onBack = () => {
   return false;
 };
 
+if (seedRules() | applyRules()) save();
 render();
 
 if (isAndroid()) {
