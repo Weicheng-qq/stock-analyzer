@@ -124,7 +124,7 @@ function txRow(t) {
     : t.src === 'invoice' ? '<span class="badge invoice">發票</span>' : '';
   return `<button class="tx" data-id="${t.id}">
     <span class="ico">${c.icon}</span>
-    <span class="mid"><div class="name">${esc(c.name)}${badge}</div>${t.note ? `<div class="note">${esc(t.note)}</div>` : ''}${t.memo ? `<div class="note memo-line">✏️ ${esc(t.memo)}</div>` : ''}</span>
+    <span class="mid"><div class="name">${esc(c.name)}${badge}</div>${t.note ? `<div class="note">${esc(t.note)}</div>` : ''}${t.memo ? `<div class="note memo-line">🔖 ${esc(t.memo)}</div>` : ''}</span>
     <span class="amt ${t.type === 'expense' ? 'exp' : 'inc'}">${sign}${money(t.amount)}</span>
   </button>`;
 }
@@ -205,7 +205,7 @@ function renderList() {
     return `<div class="day-head"><span>${dayLabel(d)}</span><span>支出 ${money(sum(g, 'expense'))}${sum(g, 'income') ? ` · 收入 ${money(sum(g, 'income'))}` : ''}</span></div>
       <div class="card">${g.map(txRow).join('')}</div>`;
   }).join('');
-  $('#view').innerHTML = `<input class="search" id="search" type="search" placeholder="搜尋分類、店名或筆記" value="${esc(query)}">
+  $('#view').innerHTML = `<input class="search" id="search" type="search" placeholder="搜尋分類、店名或自訂類別" value="${esc(query)}">
     ${html || `<div class="empty">${q ? '找不到符合的紀錄' : '這個月沒有紀錄'}</div>`}`;
   const s = $('#search');
   s.addEventListener('input', () => {
@@ -395,7 +395,7 @@ function download(name, text, type) {
 }
 function exportCsv() {
   const cell = (v) => `"${String(v).replace(/"/g, '""')}"`;
-  const rows = [['日期', '類型', '分類', '金額', '店名／備註', '筆記']].concat(
+  const rows = [['日期', '類型', '分類', '金額', '店名／備註', '自訂類別']].concat(
     db.tx.slice().sort((a, b) => (a.date + a.ts).localeCompare(b.date + b.ts))
       .map((t) => [t.date, t.type === 'expense' ? '支出' : '收入', catOf(t.cat).name, t.amount, t.note || '', t.memo || '']));
   // 開頭加 BOM，Excel 才不會把中文顯示成亂碼
