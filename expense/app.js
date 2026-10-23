@@ -287,7 +287,12 @@ function renderSettings() {
     <div class="set-row"><span class="grow">銀行聊天室關鍵字（用逗號分隔）</span></div>
     <input class="search" id="keywords" value="${esc(db.keywords.join('，'))}" aria-label="銀行聊天室關鍵字">
     <div class="set-row"><span class="grow">匯入 LINE 聊天記錄<div class="hint">補登過去的交易：LINE 銀行聊天室 → ≡ → 設定 → 傳送聊天記錄${android ? ' → 選「隨手記帳」，或存檔後按這裡' : '，存檔後按這裡'}</div></span><button class="btn" id="importLine">匯入</button></div>
-    <div class="set-row"><span class="grow">匯入載具發票明細<div class="hint">財政部電子發票整合服務平台 → 登入手機條碼 → 消費紀錄查詢 → 匯出 CSV，再按這裡</div></span><button class="btn" id="importInv">匯入</button></div>
+    <div class="set-row"><span class="grow">匯入載具發票明細<div class="hint">財政部電子發票整合服務平台 → 登入手機條碼 → 消費紀錄查詢 → 匯出 CSV，再按這裡（<a href="#" id="showGuide">看步驟</a>）</div></span><button class="btn" id="importInv">匯入</button></div>
+    ${android && typeof AndroidBridge.isReminderOn === 'function' ? `
+    <div class="set-row"><span class="grow">每月 1 號早上提醒匯入載具發票
+      ${bridgeCall('isReminderOn') && !bridgeCall('canNotify') ? '<div class="why">⚠️ 通知被關閉，提醒跳不出來 → <a href="#" id="allowNotify">允許通知</a></div>' : ''}</span>
+      <label class="switch"><input type="checkbox" id="remindChk" ${bridgeCall('isReminderOn') ? 'checked' : ''}><span></span></label></div>
+    ${bridgeCall('isReminderOn') && bridgeCall('canNotify') ? '<div class="set-row"><span class="grow hint">想先看看提醒長怎樣？</span><button class="btn" id="testRemind">試發一則</button></div>' : ''}` : ''}
     <div class="set-row set-col"><div class="hint" style="margin-bottom:6px">測試：貼上一則銀行訊息，看 App 會怎麼解讀（不會記帳）</div>
       <textarea id="testMsg" placeholder="例：您的信用卡於10/21在全聯消費新臺幣256元"></textarea>
       <div id="testOut" class="hint"></div></div>
@@ -346,6 +351,15 @@ function renderSettings() {
   });
   $('#importLine').addEventListener('click', () => $('#lineFile').click());
   $('#importInv').addEventListener('click', () => $('#invFile').click());
+  $('#showGuide').addEventListener('click', (e) => { e.preventDefault(); openInvoiceGuide(); });
+  if ($('#remindChk')) $('#remindChk').addEventListener('change', (e) => {
+    bridgeCall('setReminder', e.target.checked);
+    if (e.target.checked && !bridgeCall('canNotify')) bridgeCall('requestNotify');
+    toast(e.target.checked ? '已開啟：每月 1 號早上 9 點提醒' : '已關閉每月提醒');
+    renderSettings();
+  });
+  if ($('#allowNotify')) $('#allowNotify').addEventListener('click', (e) => { e.preventDefault(); bridgeCall('requestNotify'); });
+  if ($('#testRemind')) $('#testRemind').addEventListener('click', () => { bridgeCall('testReminder'); toast('已發出，請下拉通知欄查看'); });
   $('#testMsg').addEventListener('input', (e) => {
     const v = e.target.value.trim();
     if (!v) { $('#testOut').textContent = ''; return; }
@@ -768,6 +782,7 @@ function pullNative() {
     if (n.added || n.merged || n.review) toast('自動記帳：' + summary({ ...n, ignored: 0, dup: 0 }));
     if (!form) render();
   }
+  if (bridgeCall('takeLaunchAction') === 'invoice') openInvoiceGuide();
   const shared = bridgeCall('takeSharedText');
   if (shared) {
     if (/^表頭=|發票號碼/.test(shared.slice(0, 500))) {
@@ -777,6 +792,15 @@ function pullNative() {
   }
 }
 window.__nativePush = pullNative;
+
+// ---------- 每月 1 號載具發票提醒 ----------
+function openInvoiceGuide() { $('#guideBg').hidden = false; }
+function closeInvoiceGuide() { $('#guideBg').hidden = true; }
+$('#guideClose').addEventListener('click', closeInvoiceGuide);
+$('#guideBg').addEventListener('click', (e) => { if (e.target.id === 'guideBg') closeInvoiceGuide(); });
+$('#guideFile').addEventListener('click', () => { closeInvoiceGuide(); $('#invFile').click(); });
+$('#guideOpen').addEventListener('click', () => setTimeout(closeInvoiceGuide, 300)); // 連結由 App 交給瀏覽器開
+window.__permChanged = () => { if (tab === 'settings' && !form) renderSettings(); };
 window.__nativeToast = (msg) => toast(msg);
 
 // ---------- 自動更新（Android App） ----------
@@ -798,6 +822,7 @@ function updateBannerHtml() {
 }
 // Android 返回鍵：先關掉面板，沒有面板才離開 App
 window.__onBack = () => {
+  if (!$('#guideBg').hidden) { closeInvoiceGuide(); return true; }
   if (form) { closeSheet(); return true; }
   if (tab !== 'home') { document.querySelector('.tabs [data-tab=home]').click(); return true; }
   return false;
@@ -810,6 +835,10 @@ if (isAndroid()) {
   bridgeCall('bootOk'); // 告訴 App：這個版本的畫面能正常啟動（自動更新的安全網）
   try { if (sessionStorage.getItem('justUpdated')) { sessionStorage.removeItem('justUpdated'); toast('已自動更新到最新版'); } } catch (e) {}
   syncKeywords();
+  // 每月提醒預設開啟：第一次啟動時請使用者允許通知（Android 13+）
+  if (typeof AndroidBridge.canNotify === 'function' && bridgeCall('isReminderOn') && !bridgeCall('canNotify') && !db.askedNotify) {
+    db.askedNotify = true; save(); bridgeCall('requestNotify');
+  }
   pullNative();
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { pullNative(); render(); } });
 } else if ('serviceWorker' in navigator && location.protocol !== 'file:') {

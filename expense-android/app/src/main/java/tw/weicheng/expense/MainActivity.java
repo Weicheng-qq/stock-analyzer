@@ -28,6 +28,9 @@ public class MainActivity extends Activity {
     private static final String START_URL = "https://appassets.androidplatform.net/assets/web/index.html";
     private static final int REQ_FILE = 1001;
     static final String ACTION_INSTALL_STATUS = "tw.weicheng.expense.INSTALL_STATUS";
+    static final String ACTION_INVOICE_GUIDE = "tw.weicheng.expense.INVOICE_GUIDE";
+    /** 點了每月提醒通知 → 畫面開好後由 JS 取走，顯示匯入步驟。 */
+    static volatile String launchAction = "";
     private static long lastUpdateCheck = 0;
     private static WeakReference<MainActivity> current = new WeakReference<>(null);
 
@@ -90,6 +93,7 @@ public class MainActivity extends Activity {
         getWindow().setStatusBarColor(Color.parseColor("#0F766E"));
         current = new WeakReference<>(this);
         Updater.checkBoot(this);
+        Reminder.schedule(this);
 
         final WebViewAssetLoader loader = new WebViewAssetLoader.Builder()
                 .addPathHandler("/assets/", new Updater.LivePathHandler(this))
@@ -138,6 +142,7 @@ public class MainActivity extends Activity {
         });
         setContentView(web);
         handleShare(getIntent());
+        handleGuide(getIntent());
         web.loadUrl(START_URL);
         handleInstallStatus(getIntent());
     }
@@ -147,6 +152,7 @@ public class MainActivity extends Activity {
         super.onNewIntent(intent);
         setIntent(intent);
         if (handleInstallStatus(intent)) return;
+        if (handleGuide(intent)) { pushToJs(); return; }
         if (handleShare(intent)) pushToJs();
     }
 
@@ -156,6 +162,19 @@ public class MainActivity extends Activity {
         current = new WeakReference<>(this);
         pushToJs();
         checkUpdate();
+    }
+
+    private boolean handleGuide(Intent intent) {
+        if (intent == null || !ACTION_INVOICE_GUIDE.equals(intent.getAction())) return false;
+        launchAction = "invoice";
+        intent.setAction(Intent.ACTION_MAIN);
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        js("window.__permChanged && window.__permChanged()");
     }
 
     /** 收到「分享」進來的 LINE 聊天記錄或載具明細檔：存起來，等 JS 取走匯入。 */

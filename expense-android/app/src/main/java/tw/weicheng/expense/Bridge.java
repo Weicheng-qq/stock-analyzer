@@ -84,6 +84,48 @@ final class Bridge {
     }
 
     @JavascriptInterface
+    public String takeLaunchAction() {
+        String a = MainActivity.launchAction;
+        MainActivity.launchAction = "";
+        return a;
+    }
+
+    @JavascriptInterface
+    public boolean isReminderOn() {
+        return Reminder.isOn(act);
+    }
+
+    @JavascriptInterface
+    public void setReminder(boolean on) {
+        Reminder.setOn(act, on);
+    }
+
+    @JavascriptInterface
+    public boolean canNotify() {
+        return Reminder.canNotify(act);
+    }
+
+    /** Android 13+ 要使用者允許通知；被拒絕過就改開系統通知設定。 */
+    @JavascriptInterface
+    public void requestNotify() {
+        act.runOnUiThread(() -> {
+            if (Build.VERSION.SDK_INT >= 33 && act.checkSelfPermission("android.permission.POST_NOTIFICATIONS") != android.content.pm.PackageManager.PERMISSION_GRANTED
+                    && !act.getSharedPreferences("expense_reminder", 0).getBoolean("asked", false)) {
+                act.getSharedPreferences("expense_reminder", 0).edit().putBoolean("asked", true).apply();
+                act.requestPermissions(new String[] {"android.permission.POST_NOTIFICATIONS"}, 2001);
+            } else {
+                act.startActivity(new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, act.getPackageName()));
+            }
+        });
+    }
+
+    /** 測試用：立刻跳一次提醒通知。 */
+    @JavascriptInterface
+    public void testReminder() {
+        Reminder.post(act);
+    }
+
+    @JavascriptInterface
     public void checkUpdateNow() {
         if (act instanceof MainActivity) act.runOnUiThread(((MainActivity) act)::forceCheckUpdate);
     }

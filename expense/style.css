@@ -195,3 +195,15 @@ details.set-row .inbox-item .txt { -webkit-line-clamp: 8; }
 .memo-chips .chip { padding: 4px 10px; font-size: 13px; }
 .cat-grid button.new-cat { color: var(--brand); border: 1.5px dashed var(--line); }
 .cat-grid button.new-cat span { font-size: 20px; line-height: 26px; }
+
+.guide h2 { font-size: 19px; margin: 6px 0 4px; }
+.steps.big { font-size: 15px; color: var(--text); padding-left: 22px; }
+.steps.big li { margin: 8px 0; line-height: 1.5; }
+.btn.wide, .link.wide { display: block; width: 100%; text-align: center; margin-top: 10px; padding: 12px; text-decoration: none; box-sizing: border-box; }
+.link.wide { color: var(--muted); }
+.switch { position: relative; width: 48px; height: 28px; flex: none; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch span { position: absolute; inset: 0; background: var(--line); border-radius: 14px; transition: .2s; }
+.switch span::before { content: ""; position: absolute; width: 22px; height: 22px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; box-shadow: 0 1px 2px rgba(0,0,0,.2); }
+.switch input:checked + span { background: var(--brand); }
+.switch input:checked + span::before { transform: translateX(20px); }

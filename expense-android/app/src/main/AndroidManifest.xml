@@ -4,6 +4,9 @@
     <!-- 自動更新：下載新版畫面與 App -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- 每月 1 號載具發票提醒 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!-- Android 11+ 要宣告才查得到其他 App 的名稱（用來辨認「台北富邦」「華南」的銀行 App 推播） -->
     <queries>
@@ -41,7 +44,23 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/octet-stream" />
             </intent-filter>
+            <!-- 部分檔案管理 App 把 .csv 標成 Excel 類型 -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/vnd.ms-excel" />
+            </intent-filter>
         </activity>
+
+        <!-- 每月 1 號提醒：開機／App 更新後重新排程 -->
+        <receiver
+            android:name=".Reminder"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
 
         <!-- 讀取 LINE 通知（使用者須在系統設定手動允許「通知存取權」） -->
         <service

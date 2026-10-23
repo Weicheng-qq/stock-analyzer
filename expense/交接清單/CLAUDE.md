@@ -131,6 +131,15 @@
 - 分類格最後加「＋ 新增分類」（`data-cat="__new"`）→ prompt 名稱（8 字內）→ 依名稱猜圖示（保險🛡️、稅🧾、房租🏠、孝親👪、寵物🐾、教育🧒、貸款🏦，其他🏷️）→ 建立並選給這一筆。
 - 「以後都歸這類」在店名只是銀行名稱（含 db.keywords，例：台北富邦）時隱藏，避免整家銀行都被歸成同一類。
 
+### 每月 1 號載具發票提醒（2026-10-23 使用者要求）
+- 原生 `Reminder.java`（BroadcastReceiver）：AlarmManager `setWindow` 每月 1 號 09:00（1 小時誤差、不需精確鬧鐘權限）；觸發後排下個月；BOOT_COMPLETED／MY_PACKAGE_REPLACED 重新排程；`MainActivity.onCreate` 也排一次。`nextFireTime` 已測跨月跨年。
+- 通知頻道「每月載具發票提醒」，點通知 → `ACTION_INVOICE_GUIDE` → `launchAction="invoice"` → JS `takeLaunchAction()` 打開「📄 匯入上個月的載具發票」步驟面板（打開財政部平台／選擇檔案匯入）。
+- Manifest：POST_NOTIFICATIONS、RECEIVE_BOOT_COMPLETED、receiver；分享接收多加 `application/vnd.ms-excel`（部分檔案管理把 .csv 標成 Excel）。
+- Bridge：isReminderOn／setReminder／canNotify／requestNotify（第一次彈系統權限，之後改開 App 通知設定）／testReminder／takeLaunchAction。
+- 設定頁：「每月 1 號早上提醒」開關（預設開）、通知被關時顯示「允許通知」、「試發一則」；載具匯入列加「看步驟」。第一次啟動新版會請求通知權限一次（`db.askedNotify`）。
+- 需要使用者按一次「更新」（nativeHash 改變）。
+- 平台「匯出」按鈕的實際位置仍未經使用者確認（步驟文字寫「匯出」或「下載」）。
+
 ### 載具發票自動化（2026-10-22 調查結論）
 - 使用者問「載具要怎麼自動記帳」（附統一發票兌獎 App 截圖）。結論：**免費全自動做不到**。
   - 統一發票兌獎 App 不開放資料、每張發票不推播。

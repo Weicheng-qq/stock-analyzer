@@ -66,6 +66,23 @@
   </section>
 </div>
 
+<!-- 匯入載具發票步驟（每月 1 號提醒通知點進來會打開） -->
+<div class="sheet-bg" id="guideBg" hidden>
+  <section class="sheet guide" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+    <h2 id="guideTitle">📄 匯入上個月的載具發票</h2>
+    <ol class="steps big">
+      <li>按下面「打開財政部平台」，用<b>手機條碼＋驗證碼</b>登入</li>
+      <li>到載具／發票查詢，選<b>上個月</b>，按「匯出」或「下載」存成 CSV</li>
+      <li>下載完在通知或「我的檔案 → 下載」點那個檔案 →「分享」→ 選<b>隨手記帳</b>
+        <br><span class="hint">（或回來按「選擇檔案匯入」）</span></li>
+    </ol>
+    <p class="hint">匯入後會自動分類，刷卡已記過的會合併成一筆、不重複計算；同一份檔案匯入兩次也不會重複。</p>
+    <a class="btn wide" id="guideOpen" href="https://www.einvoice.nat.gov.tw/" target="_blank" rel="noopener">打開財政部平台</a>
+    <button class="btn wide" id="guideFile">選擇檔案匯入</button>
+    <button class="link wide" id="guideClose">關閉</button>
+  </section>
+</div>
+
 <div class="toast" id="toast" hidden></div>
 <input type="file" id="importFile" accept=".json,application/json" hidden>
 <input type="file" id="lineFile" accept=".txt,text/plain" hidden>
