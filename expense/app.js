@@ -124,7 +124,7 @@ function txRow(t) {
     : t.src === 'invoice' ? '<span class="badge invoice">發票</span>' : '';
   return `<button class="tx" data-id="${t.id}">
     <span class="ico">${c.icon}</span>
-    <span class="mid"><div class="name">${esc(c.name)}${badge}</div>${t.note ? `<div class="note">${esc(t.note)}</div>` : ''}</span>
+    <span class="mid"><div class="name">${esc(c.name)}${badge}</div>${t.note ? `<div class="note">${esc(t.note)}</div>` : ''}${t.memo ? `<div class="note memo-line">✏️ ${esc(t.memo)}</div>` : ''}</span>
     <span class="amt ${t.type === 'expense' ? 'exp' : 'inc'}">${sign}${money(t.amount)}</span>
   </button>`;
 }
@@ -197,7 +197,7 @@ function autoStatusHtml() {
 
 function renderList() {
   const q = query.trim().toLowerCase();
-  const list = monthTx(curMonth).filter((t) => !q || (catOf(t.cat).name + ' ' + (t.note || '')).toLowerCase().includes(q)).sort(byNewest);
+  const list = monthTx(curMonth).filter((t) => !q || (catOf(t.cat).name + ' ' + (t.note || '') + ' ' + (t.memo || '')).toLowerCase().includes(q)).sort(byNewest);
   const groups = {};
   list.forEach((t) => (groups[t.date] = groups[t.date] || []).push(t));
   const html = Object.keys(groups).map((d) => {
@@ -205,7 +205,7 @@ function renderList() {
     return `<div class="day-head"><span>${dayLabel(d)}</span><span>支出 ${money(sum(g, 'expense'))}${sum(g, 'income') ? ` · 收入 ${money(sum(g, 'income'))}` : ''}</span></div>
       <div class="card">${g.map(txRow).join('')}</div>`;
   }).join('');
-  $('#view').innerHTML = `<input class="search" id="search" type="search" placeholder="搜尋分類或備註" value="${esc(query)}">
+  $('#view').innerHTML = `<input class="search" id="search" type="search" placeholder="搜尋分類、店名或筆記" value="${esc(query)}">
     ${html || `<div class="empty">${q ? '找不到符合的紀錄' : '這個月沒有紀錄'}</div>`}`;
   const s = $('#search');
   s.addEventListener('input', () => {
@@ -395,9 +395,9 @@ function download(name, text, type) {
 }
 function exportCsv() {
   const cell = (v) => `"${String(v).replace(/"/g, '""')}"`;
-  const rows = [['日期', '類型', '分類', '金額', '備註']].concat(
+  const rows = [['日期', '類型', '分類', '金額', '店名／備註', '筆記']].concat(
     db.tx.slice().sort((a, b) => (a.date + a.ts).localeCompare(b.date + b.ts))
-      .map((t) => [t.date, t.type === 'expense' ? '支出' : '收入', catOf(t.cat).name, t.amount, t.note || '']));
+      .map((t) => [t.date, t.type === 'expense' ? '支出' : '收入', catOf(t.cat).name, t.amount, t.note || '', t.memo || '']));
   // 開頭加 BOM，Excel 才不會把中文顯示成亂碼
   download(`記帳明細-${ymd(new Date())}.csv`, '﻿' + rows.map((r) => r.map(cell).join(',')).join('\r\n'), 'text/csv;charset=utf-8');
 }
@@ -439,6 +439,7 @@ function openSheet(tx, inboxMsg) {
   if (rawSrc) raw.innerHTML = (rawSrc.reason ? `<b>${esc(rawSrc.reason)}</b>` : '') + esc(rawSrc.text);
   $('#dateInput').value = form.date;
   $('#noteInput').value = form.note;
+  $('#memoInput').value = form.memo || '';
   // 改自動紀錄的分類時，可以順便教 App：以後這家店都歸這類
   const learnKw = (form.note || '').split(/[：:]/)[0].trim();
   $('#learnRow').hidden = !(tx && tx.src && learnKw && form.type === 'expense');
@@ -474,10 +475,16 @@ $('#typeSeg').addEventListener('click', (e) => {
 });
 $('#catGrid').addEventListener('click', (e) => {
   const b = e.target.closest('button'); if (!b) return;
-  form.cat = b.dataset.cat; syncSheet();
+  form.cat = b.dataset.cat; form.catTouched = true; syncSheet();
 });
 $('#dateInput').addEventListener('change', (e) => { form.date = e.target.value; });
-$('#noteInput').addEventListener('input', (e) => { form.note = e.target.value; });
+$('#noteInput').addEventListener('input', (e) => {
+  form.note = e.target.value;
+  // 輸入的店名符合分類規則 → 自動切分類（使用者自己點過分類就不動）
+  const c = !form.catTouched && form.type === 'expense' && ruleCat(form.note);
+  if (c && c !== form.cat) { form.cat = c; syncSheet(); }
+});
+$('#memoInput').addEventListener('input', (e) => { form.memo = e.target.value; });
 $('#sheetDelete').addEventListener('click', () => {
   if (form.inboxId) {
     db.inbox = db.inbox.filter((m) => m.id !== form.inboxId); save(); closeSheet(); render(); toast('已忽略，不會記帳');
@@ -507,8 +514,9 @@ function saveForm() {
   const amount = Number(form.amount);
   if (!(amount > 0)) return toast('請輸入金額');
   if (!/^\d{4}-\d{2}-\d{2}$/.test(form.date)) return toast('請選擇日期');
-  const { inboxId, ...base } = form;
-  const rec = { ...base, id: form.id || uid(), amount: Math.round(amount * 100) / 100, note: form.note.trim(), ts: form.ts || new Date().toISOString(), catAuto: false };
+  const { inboxId, catTouched, ...base } = form;
+  const rec = { ...base, id: form.id || uid(), amount: Math.round(amount * 100) / 100, note: form.note.trim(), memo: (form.memo || '').trim(), ts: form.ts || new Date().toISOString(), catAuto: false };
+  if (!rec.memo) delete rec.memo;
   if (inboxId) {
     const m = db.inbox.find((x) => x.id === inboxId);
     if (m) rec.raw = m.text;
@@ -532,7 +540,7 @@ function saveForm() {
 
 // 實體鍵盤也能輸入（電腦上測試用）
 document.addEventListener('keydown', (e) => {
-  if (!form || e.target.tagName === 'INPUT') return;
+  if (!form || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
   const map = { Backspace: 'back', Enter: 'save', Escape: 'esc' };
   const k = map[e.key] || (/^[0-9.]$/.test(e.key) ? e.key : null);
   if (!k) return;
