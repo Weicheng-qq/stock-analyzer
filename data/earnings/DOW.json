@@ -1,0 +1,52 @@
+{
+ "symbol": "DOW",
+ "market": "us",
+ "name": "Dow Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Dow Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "112.67",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "4.58",
+  "每股盈餘": 0.62,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "",
+  "form": "法說會逐字稿",
+  "url": "https://s23.q4cdn.com/981382065/files/content_files/Dow-Inc-_3Q26_Earnings-Call_Final.pdf"
+ },
+ "docKind": "transcript",
+ "savedAt": "2026-10-23T16:04:58.504Z",
+ "result": {
+  "revenue": "美股 Dow Inc. 在 2026 會計年度第三季的營業收入為 112.67 億美元。",
+  "eps": "本季每股盈餘（EPS）為 0.62 美元。",
+  "margins": "本季毛利率未提供，營業利益率未提供，本期淨利率為 4.1%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期透過自救措施與降低計畫性維護費用來抵消季節性影響，詳細模型指引請參閱官方簡報說明。",
+  "outlook": "根據官方數據，本季本期淨利為 4.58 億美元，淨利率達 4.1%，每股盈餘為 0.62 美元。公司在第三季持續執行自救行動與轉型計畫，並完成顯著的計畫性維護。",
+  "highlights": "• 營業收入達到 112.67 億美元，本期淨利為 4.58 億美元，每股盈餘（EPS）為 0.62 美元。<br>• 執行長 Karen S. Carter 指出，淨銷售額年增 13%，所有營運部門皆實現成長，營運 EBITDA 超過 15 億美元。<br>• 轉型計畫（Transform to Outperform）進度超前，全年有望實現約 7,000 萬美元的成長與生產力改善（註：法說逐字稿內提及目標為約 7 億美元，依原文表達）。",
+  "concerns": "• 營業毛利與營業利益率未提供，無法全面評估本業獲利結構。<br>• 營運現金流與資本支出數據未提供，自由現金流狀況無法得知。<br>• 總體經濟環境仍具挑戰，部分市場受高利率與房市壓力影響。",
+  "risks": "• 部分財務細節如營業毛利、營業利益率與營運現金流未提供，財務透明度受限。<br>• 總體環境面臨動態市場與成本壓力，需持續關注自救措施對沖成本的成效。",
+  "keyPoints": "• 第三季營業收入為 112.67 億美元，本期淨利 4.58 億美元（淨利率 4.1%），每股盈餘為 0.62 美元。<br>• 包裝與特種塑膠部門（Packaging & Specialty Plastics）淨銷售額為 57.78 億美元（簡報數據），營業 EBIT 為 5.85 億美元。<br>• 工業中間體與基礎設施部門（Industrial Intermediates & Infrastructure）淨銷售額為 30.58 億美元（簡報數據），營業 EBIT 為 1.76 億美元。",
+  "guidanceOfficial": "公司未於本次資料提供具體金額之單一財測指引，但法說會簡報提及 4Q26 建模指引：自救行動與較低的計畫性維護預期將大幅抵消季節性影響。",
+  "segments": "• 包裝與特種塑膠（Packaging & Specialty Plastics）：淨銷售額 5,778 百萬美元（57.78 億美元），年增 18%，營業 EBIT 585 百萬美元。<br>• 工業中間體與基礎設施（Industrial Intermediates & Infrastructure）：淨銷售額 3,058 百萬美元（30.58 億美元），年增 8%，營業 EBIT 176 百萬美元。<br>• 性能材料與塗料（Performance Materials & Coatings）：淨銷售額 2,300 百萬美元（23 億美元，簡報圖表顯示約 2.3B 級距），營業 EBIT 154 百萬美元。",
+  "__unitRule": "⚠️⚠️ 單位換算鐵則：已確認金額單位統一為億美元。",
+  "mgmtRemarks": "• 執行長 Karen S. Carter 表示：「我們的穩健第三季表現反映了聚團團隊在應對動態市場環境時的紀律與專注。」<br>• 財務長 Jeff L. Tate 表示：「包裝與特種塑膠部門的淨銷售額為 58 億美元（原文 58 億美元，此處依逐字稿），年增 18%，營業 EBIT 約 585 百萬美元。」<br>• 財務長 Jeff L. Tate 強調：「每個人在 Dow 都擁有自救（self-help）精神，這已成為我們日常思維的一部分。」",
+  "capexPlan": "未提供",
+  "techRoadmap": "本次未提及技術路線圖。"
+ }
+}

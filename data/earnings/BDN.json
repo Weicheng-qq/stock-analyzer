@@ -1,0 +1,48 @@
+{
+ "symbol": "BDN",
+ "market": "us",
+ "name": "BRANDYWINE REALTY TRUST",
+ "quarter": "2026 Q1（2026-01-01～2026-03-31）",
+ "quarterTag": "2026Q1",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "BRANDYWINE REALTY TRUST",
+  "currency": "億美元",
+  "periodStart": "2026-01-01",
+  "periodEnd": "2026-03-31",
+  "year": 2026,
+  "season": "Q1",
+  "form": "10-Q",
+  "營業收入": "1.27",
+  "營業毛利": "0.75",
+  "營業利益": "0.02",
+  "本期淨利": "-0.49",
+  "每股盈餘": -0.28,
+  "營運現金流": "0.10",
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-22",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/790816/000079081626000041/bdnearningsrelease-ex991q3.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-23T16:19:04.897Z",
+ "result": {
+  "revenue": "營業收入為 1.27 億美元。整體營收規模反映出當前的營運水位。",
+  "eps": "每股盈餘（EPS）為 -0.28 美元，顯示本季處於每股虧損狀態。",
+  "margins": "營業毛利率為 59.1%，營業利益率為 1.6%，而淨利率則為 -38.6%。儘管毛利水準維持在 59.1%，但受到各項費用與損失影響，導致本期淨利呈現虧損。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司將 2026 年 FFO 財測調整為 Core FFO 範圍每股 0.54 至 0.56 美元，並調整每股虧損預期至 $(0.64) 至 $(0.62) 之間。",
+  "outlook": "本季營業利益為 0.02 億美元，營業利益率僅 1.6%。然而本期淨利為 -0.49 億美元，淨利率為 -38.6%，顯示本季整體營運仍處於虧損。",
+  "highlights": "• 營業收入達到 1.27 億美元。<br>• 營業毛利為 0.75 億美元，毛利率為 59.1%。<br>• 營業利益為 0.02 億美元，營業利益率為 1.6%。",
+  "concerns": "• 本期淨利為 -0.49 億美元，淨利率為 -38.6%，呈現顯著虧損。<br>• 每股盈餘（EPS）為 -0.28 美元。<br>• 自由現金流與資本支出均未提供，無法由官方數據評估現金流狀況。",
+  "risks": "• 本期淨利率為 -38.6%，反映出本期面臨嚴重的虧損狀態。<br>• 每股盈餘為負值（-0.28 美元），顯示股東每股收益為虧損。",
+  "keyPoints": "• 營收與營業利益：本季營業收入為 1.27 億美元，營業利益為 0.02 億美元（營業利益率 1.6%）。<br>• 獲利與每股盈餘：本期淨利為 -0.49 億美元（淨利率 -38.6%），每股盈餘（EPS）為 -0.28 美元。<br>• 毛利表現：營業毛利為 0.75 億美元，毛利率達 59.1%。",
+  "guidanceOfficial": "Based on current plans and assumptions and subject to the risks and uncertainties more fully described in our Securities and Exchange Commission filings, we are adjusting our 2026 loss per share guidance from $(0.45) - $(0.41) per share to $(0.64) – $(0.62) per share and we are also adjusting our previous 2026 FFO guidance from $0.53 - $0.57 per diluted share to a Core FFO range of $0.54 - $0.56 per diluted share which excludes losses on the early extinguishment of debt.",
+  "segments": "本次資料未揭露分部營收"
+ }
+}

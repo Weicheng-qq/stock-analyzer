@@ -1,0 +1,48 @@
+{
+ "symbol": "SPCX",
+ "market": "us",
+ "name": "Space Exploration Technologies Corp.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Space Exploration Technologies Corp.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "145.75",
+  "營業毛利": null,
+  "營業利益": "27.91",
+  "本期淨利": "44.04",
+  "每股盈餘": 0.35,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-20",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026066482/spaceexplorationtechnologi.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-23T16:06:11.006Z",
+ "result": {
+  "revenue": "2026年Q3營業收入為145.75億美元，年增161%，主要由超級智能（SI）與連線（Connectivity）業務加速成長所驅動。",
+  "eps": "每股盈餘（EPS）為0.35美元。",
+  "margins": "營業利益率為19.1%，營業利益達27.91億美元；淨利率為30.2%，本期淨利為44.04億美元。毛利與毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司官方財測／展望請見 guidanceOfficial 欄位。",
+  "outlook": "本季營業利益為27.91億美元，營業利益率19.1%；淨利為44.04億美元，淨利率30.2%。整體營收及獲利皆呈現強勁成長動能。",
+  "highlights": "• 成功執行首次具營收貢獻的星艦（Starship）任務，部署26顆Starlink V3衛星。<br>• 截至2026年9月30日，算力規模（nameplate compute）達到1.7 GW。<br>• 達成145.75億美元的營業收入，年增161%，本期淨利為44.04億美元。",
+  "concerns": "• Space segment（太空部門）本季營業利益為負0.07億美元（虧損0.07億美元）。<br>• SI segment（超級智能部門）的資本支出規模龐大，本季資本支出高達164.44億美元。<br>• Space segment（太空部門）九個月累計營業利益為負12.11億美元（虧損12.11億美元）。",
+  "risks": "• Space segment與SI segment在部分期間仍處於營業虧損狀態，特別是太空部門九個月累計虧損12.11億美元、SI部門九個月累計虧損32.95億美元。<br>• SI部門的資本支出極高（本季達164.44億美元），對現金流與財務結構可能構成資金壓力。",
+  "keyPoints": "• 本季營業收入達145.75億美元，年增161%，本期淨利為44.04億美元，EPS為0.35美元。<br>• 營業利益為27.91億美元，營業利益率19.1%，淨利率30.2%。<br>• Starlink消費者訂閱數達到13.6百萬戶，SI與Connectivity業務皆帶動整體營收大幅成長。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Space：營業收入17.67億美元，營業利益（虧損）$(7)百萬美元，資本支出$1,606百萬美元。<br>• Connectivity：營業收入52.48億美元，營業利益$2,367百萬美元，資本支出$1,543百萬美元。<br>• SI：營業收入75.60億美元，營業利益$431百萬美元，資本支出$16,444百萬美元。"
+ }
+}
