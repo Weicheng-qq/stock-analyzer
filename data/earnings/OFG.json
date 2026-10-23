@@ -1,0 +1,48 @@
+{
+ "symbol": "OFG",
+ "market": "us",
+ "name": "OFG Bancorp",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "OFG Bancorp",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "1.97",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.59",
+  "每股盈餘": 1.39,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-21",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1030469/000103046926000043/ofg-20263qexx99.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-23T01:34:48.564Z",
+ "result": {
+  "revenue": "營業收入為 1.97 億美元。",
+  "eps": "每股盈餘（EPS）為 1.39 美元。",
+  "margins": "本期淨利為 0.59 億美元，淨利率為 29.9%。營業毛利、毛利率、營業利益及營業利益率均未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司表示 Puerto Rico’s economy remains stable, supported by a healthy labor market and ongoing expansion by local and mainland businesses.",
+  "outlook": "根據官方數字，本期營業收入為 1.97 億美元，本期淨利為 0.59 億美元，淨利率達 29.9%，每股盈餘（EPS）為 1.39 美元。其餘營運細節未提供。",
+  "highlights": "• 營業收入為 1.97 億美元。<br>• 本期淨利為 0.59 億美元，淨利率為 29.9%。<br>• 每股盈餘（EPS）為 1.39 美元。",
+  "concerns": "• 營業毛利與營業利益相關數據未提供。<br>• 營運現金流與資本支出數據未提供。<br>• 自由現金流狀況未提供。",
+  "risks": "• 因官方財報資料未提供完整之現金流量表與損益表細項，流動性與資本支出風險無法從現有數據進一步評估。<br>• 營業毛利及營業利益數據缺漏，無法完整評估其本業獲利結構。",
+  "keyPoints": "• 本期營業收入達 1.97 億美元。<br>• 本期淨利為 0.59 億美元，淨利率為 29.9%。<br>• 每股盈餘（EPS）為 1.39 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "本次資料未揭露分部營收"
+ }
+}

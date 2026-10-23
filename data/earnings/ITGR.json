@@ -1,0 +1,48 @@
+{
+ "symbol": "ITGR",
+ "market": "us",
+ "name": "INTEGER HOLDINGS CORPORATION",
+ "quarter": "2026 Q2（2026-04-04～2026-07-03）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "INTEGER HOLDINGS CORPORATION",
+  "currency": "億美元",
+  "periodStart": "2026-04-04",
+  "periodEnd": "2026-07-03",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "4.64",
+  "營業毛利": "1.13",
+  "營業利益": "0.35",
+  "本期淨利": "0.24",
+  "每股盈餘": 0.69,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-03",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114483/000117184326005137/exh_991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-23T01:29:43.419Z",
+ "result": {
+  "revenue": "美股 Integer Holdings Corporation 2026 Q2 營業收入為 4.64 億美元。",
+  "eps": "本季每股盈餘（EPS）為 0.69 美元，低於去年同期的 1.04 美元。",
+  "margins": "本季營業毛利為 1.13 億美元，毛利率為 24.4%，營業利益率為 7.5%，本期淨利率則為 5.2%。各項利潤率反映出當期的營運獲利水準。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "鑑於即將進行的交易，Integer 已撤回先前發布的財務展望，且將不舉辦原定於 2026 年 8 月 6 日星期四舉行的財報電話會議與網路直播。",
+  "outlook": "根據官方財報數字，本季營業收入為 4.64 億美元，營業利益為 0.35 億美元，本期淨利為 0.24 億美元。公司已進入被 KKR 管理的投資基金相關聯屬公司以每股 127 美元現金收購的交易協議中。",
+  "highlights": "• 營業收入為 4.64 億美元，毛利率達 24.4%。<br>• 本季每股盈餘（EPS）為 0.69 美元。<br>• 簽署一項最終協議，將由 KKR 管理的投資基金之聯屬公司以全現金交易方式收購所有已發行股份，企業價值達 57 億美元。",
+  "concerns": "• 營業利益為 0.35 億美元，營業利益率為 7.5%。<br>• 本期淨利為 0.24 億美元，淨利率為 5.2%。<br>• 由於進行中的收購交易，公司已撤回先前發布的財務展望並取消財報會議。",
+  "risks": "• 營運獲利指標如營業利益率（7.5%）與淨利率（5.2%）處於特定水準。<br>• 正在進行重大企業併購交易，並已撤回財報預測與取消法說會。",
+  "keyPoints": "• 2026 Q2 營業收入為 4.64 億美元、每股盈餘（EPS）為 0.69 美元。<br>• 本季營業利益為 0.35 億美元（營業利益率 7.5%），淨利為 0.24 億美元（淨利率 5.2%）。<br>• 宣佈將由 KKR 相關企業以每股 127 美元現金進行收購，企業價值 57 億美元，並撤回先前財務展望。",
+  "guidanceOfficial": "鑑於即將進行的交易，Integer 已撤回先前發布的財務展望，且將不舉辦原定於 2026 年 8 月 6 日星期四舉行的財報電話會議與網路直播。",
+  "segments": "• Cardio & Vascular sales decreased 2% to 2.8 億美元 in the second quarter 2026 compared to the second quarter 2025, reflecting the previously communicated impact from the two new Electrophysiology products.<br>• Cardiac Rhythm Management & Neuromodulation sales increased 1% to 1.74 億美元 in the second quarter 2026 compared to the second quarter 2025. Growth was partially offset by the previously communicated impact from the one new Neuromodulation product.<br>• Other Markets sales totaled 1,000 萬美元 in the second quarter 2026, compared to 1,800 萬美元 in the second quarter 2025, primarily due to the Portable Medical exit."
+ }
+}
