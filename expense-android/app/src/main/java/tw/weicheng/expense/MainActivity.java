@@ -49,14 +49,20 @@ public class MainActivity extends Activity {
         if (web != null) web.evaluateJavascript(code, null);
     }
 
-    /** 每次開 App（最多 10 分鐘一次）檢查更新。 */
+    /** 每次開 App（最多 1 分鐘一次）檢查更新。 */
     private void checkUpdate() {
         long now = System.currentTimeMillis();
-        if (now - lastUpdateCheck < 10 * 60 * 1000L) return;
+        if (now - lastUpdateCheck < 60 * 1000L) return;
         lastUpdateCheck = now;
         Updater.checkAsync(this,
                 () -> runOnUiThread(() -> js("window.__updateReady && window.__updateReady()")),
                 () -> runOnUiThread(() -> js("window.__nativeUpdate && window.__nativeUpdate()")));
+    }
+
+    /** 設定頁「檢查更新」按鈕：不管多久前檢查過，立刻再查一次。 */
+    void forceCheckUpdate() {
+        lastUpdateCheck = 0;
+        checkUpdate();
     }
 
     /** 系統安裝程式回報狀態：需要使用者確認就把確認畫面叫出來。 */

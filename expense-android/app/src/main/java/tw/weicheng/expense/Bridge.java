@@ -84,6 +84,11 @@ final class Bridge {
     }
 
     @JavascriptInterface
+    public void checkUpdateNow() {
+        if (act instanceof MainActivity) act.runOnUiThread(((MainActivity) act)::forceCheckUpdate);
+    }
+
+    @JavascriptInterface
     public String appVersion() {
         String w = Updater.currentWebHash(act);
         return BuildConfig.VERSION_NAME + "（畫面 " + (w.length() > 7 ? w.substring(0, 7) : w) + "）";

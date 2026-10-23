@@ -111,4 +111,8 @@ t('真實格式：華南 SnY App 推播（2026-10-22 使用者截圖，民國年
   assert.strictEqual(P.parseBankMessage('SnY數位帳戶享有專屬活儲利率最高 2.3%！', '2026-10-22').status, 'ignore');
   assert.strictEqual(P.parseBankMessage('股市動盪需要保障，你的人生更需要！', '2026-10-22').status, 'ignore');
 });
+t('真實格式：台北富邦 App 推播（2026-10-23 使用者截圖）', () => {
+  const r = P.parseBankMessage('帳務通知\n【存款扣款-繳費/稅】您的存款帳號末四碼4830於10/23 12:08有金額扣款臺幣31,990元', '2026-10-23');
+  assert.deepStrictEqual([r.status, r.type, r.amount, r.date, r.weak], ['tx', 'expense', 31990, '2026-10-23', false]);
+});
 console.log(`\n全部 ${n} 項通過`);

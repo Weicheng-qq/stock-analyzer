@@ -328,9 +328,14 @@ function renderSettings() {
       <div class="set-row"><span>從備份檔還原</span><button class="btn" id="restore">還原</button></div>
       <div class="set-row"><span>共 ${db.tx.length} 筆紀錄</span><button class="btn danger" id="wipe">全部清除</button></div>
     </div>
-    <p class="hint" style="text-align:center">隨手記帳${android ? ' ' + esc(bridgeCall('appVersion') || '') : ''} · 免費、離線可用、不蒐集任何資料</p>`;
+    ${android ? `<div class="card"><div class="set-row"><span class="grow">目前版本 ${esc(bridgeCall('appVersion') || '')}</span><button class="btn" id="checkUpd">檢查更新</button></div></div>` : ''}
+    <p class="hint" style="text-align:center">隨手記帳 · 免費、離線可用、不蒐集任何資料</p>`;
 
   if (android) {
+    $('#checkUpd').addEventListener('click', () => {
+      if (typeof AndroidBridge.checkUpdateNow !== 'function') { toast('這版 App 還不支援，請先在總覽按「更新」'); return; }
+      bridgeCall('checkUpdateNow'); toast('檢查中…有新版會自動套用或在總覽出現「更新」');
+    });
     $('#openListener').addEventListener('click', () => bridgeCall('openListenerSettings'));
     $('#openBattery').addEventListener('click', () => bridgeCall('openBatterySettings'));
   }
@@ -440,6 +445,10 @@ function openSheet(tx, inboxMsg) {
   $('#dateInput').value = form.date;
   $('#noteInput').value = form.note;
   $('#memoInput').value = form.memo || '';
+  // 用過的自訂類別（最近的在前，最多 8 個）→ 點一下就填入
+  const used = [];
+  for (const t of db.tx.slice().sort(byNewest)) if (t.memo && !used.includes(t.memo) && used.push(t.memo) >= 8) break;
+  $('#memoChips').innerHTML = used.map((m) => `<button type="button" class="chip" data-memo="${esc(m)}">🔖 ${esc(m.length > 12 ? m.slice(0, 12) + '…' : m)}</button>`).join('');
   // 改自動紀錄的分類時，可以順便教 App：以後這家店都歸這類
   const learnKw = (form.note || '').split(/[：:]/)[0].trim();
   $('#learnRow').hidden = !(tx && tx.src && learnKw && form.type === 'expense');
@@ -485,6 +494,10 @@ $('#noteInput').addEventListener('input', (e) => {
   if (c && c !== form.cat) { form.cat = c; syncSheet(); }
 });
 $('#memoInput').addEventListener('input', (e) => { form.memo = e.target.value; });
+$('#memoChips').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-memo]'); if (!b) return;
+  form.memo = b.dataset.memo; $('#memoInput').value = form.memo;
+});
 $('#sheetDelete').addEventListener('click', () => {
   if (form.inboxId) {
     db.inbox = db.inbox.filter((m) => m.id !== form.inboxId); save(); closeSheet(); render(); toast('已忽略，不會記帳');
