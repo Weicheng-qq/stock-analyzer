@@ -193,3 +193,5 @@ details.set-row .inbox-item .txt { -webkit-line-clamp: 8; }
 .memo-chips { margin: -4px 0 10px; gap: 6px; }
 .memo-chips:empty { display: none; }
 .memo-chips .chip { padding: 4px 10px; font-size: 13px; }
+.cat-grid button.new-cat { color: var(--brand); border: 1.5px dashed var(--line); }
+.cat-grid button.new-cat span { font-size: 20px; line-height: 26px; }

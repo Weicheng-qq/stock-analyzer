@@ -451,7 +451,9 @@ function openSheet(tx, inboxMsg) {
   $('#memoChips').innerHTML = used.map((m) => `<button type="button" class="chip" data-memo="${esc(m)}">🔖 ${esc(m.length > 12 ? m.slice(0, 12) + '…' : m)}</button>`).join('');
   // 改自動紀錄的分類時，可以順便教 App：以後這家店都歸這類
   const learnKw = (form.note || '').split(/[：:]/)[0].trim();
-  $('#learnRow').hidden = !(tx && tx.src && learnKw && form.type === 'expense');
+  // 店名只是銀行名稱（推播沒有商店名）時不提供：否則會把這家銀行的所有交易都歸到同一類
+  const isBankName = db.keywords.some((k) => learnKw.includes(k));
+  $('#learnRow').hidden = !(tx && tx.src && learnKw && !isBankName && form.type === 'expense');
   $('#learnKw').textContent = learnKw;
   $('#learnChk').checked = false;
   syncSheet();
@@ -470,7 +472,8 @@ function syncSheet() {
   const cats = db.cats.filter((c) => c.type === form.type);
   if (!cats.some((c) => c.id === form.cat)) form.cat = cats[0] && cats[0].id;
   $('#catGrid').innerHTML = cats.map((c) =>
-    `<button data-cat="${c.id}" class="${c.id === form.cat ? 'on' : ''}"><span>${c.icon}</span>${esc(c.name)}</button>`).join('');
+    `<button data-cat="${c.id}" class="${c.id === form.cat ? 'on' : ''}"><span>${c.icon}</span>${esc(c.name)}</button>`).join('')
+    + '<button data-cat="__new" class="new-cat"><span>＋</span>新增分類</button>';
   const disp = $('#amountDisp');
   disp.textContent = form.amount ? Number(form.amount.replace(/\.$/, '')).toLocaleString('zh-TW') + (form.amount.endsWith('.') ? '.' : '') : '0';
   disp.className = 'amount ' + (form.type === 'expense' ? 'exp' : 'inc');
@@ -484,6 +487,21 @@ $('#typeSeg').addEventListener('click', (e) => {
 });
 $('#catGrid').addEventListener('click', (e) => {
   const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.cat === '__new') {
+    // 在編輯畫面直接建立新分類並套用到這一筆
+    const name = (prompt(`新增${form.type === 'expense' ? '支出' : '收入'}分類名稱（例：個人保險費）`) || '').trim().slice(0, 8);
+    if (!name) return;
+    let c = db.cats.find((x) => x.name === name && x.type === form.type);
+    if (!c) {
+      const icon = /保險|保費/.test(name) ? '🛡️' : /稅/.test(name) ? '🧾' : /房|租/.test(name) ? '🏠' : /孝親|家用|爸|媽/.test(name) ? '👪'
+        : /寵物|貓|狗/.test(name) ? '🐾' : /小孩|孩子|教育|學費/.test(name) ? '🧒' : /貸款|房貸|車貸/.test(name) ? '🏦' : '🏷️';
+      c = { id: 'c' + uid(), name, icon, type: form.type };
+      db.cats.push(c); save();
+    }
+    form.cat = c.id; form.catTouched = true; syncSheet();
+    toast(`已新增分類「${name}」，按「完成」儲存這筆`);
+    return;
+  }
   form.cat = b.dataset.cat; form.catTouched = true; syncSheet();
 });
 $('#dateInput').addEventListener('change', (e) => { form.date = e.target.value; });
