@@ -1,0 +1,48 @@
+{
+ "symbol": "FIP",
+ "market": "us",
+ "name": "FTAI INFRASTRUCTURE INC.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "FTAI INFRASTRUCTURE INC.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "1.87",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "-1.39",
+  "每股盈餘": -1.41,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1899883/000189988326000031/fip63020268-kxexhibit991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-24T14:34:20.485Z",
+ "result": {
+  "revenue": "本季營業收入為 1.87 億美元，展現一定的業務規模。",
+  "eps": "每股盈餘（EPS）為 -1.41 美元，顯示本季處於每股虧損狀態。",
+  "margins": "本期淨利為 -1.39 億美元，淨利率為 -74.3%，顯示公司目前處於顯著虧損水準；營業毛利率與營業利益率則因未提供相關數據而無法計算。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供明確的財測，但提到 Long Ridge 出售案待監管批准，且 Jefferson 完成 SSP 雙向管線專案，Repauno 第二階段持續推進預期於 2027 年初開始營運。",
+  "outlook": "本季調整後 EBITDA（Adjusted EBITDA）達 7,611.3 萬美元，其中四大核心部門調整後 EBITDA 合計為 8,303.1 萬美元。鐵路業務表現強勁，Q2 創下創紀錄的營收與調整後 EBITDA，並於 2026 年 6 月 29 日宣布收購 Tidewater Logistics。",
+  "highlights": "• 鐵路部門表現強勁，Q2 創下創紀錄的營收與調整後 EBITDA，並於 2026 年 6 月 29 日宣布收購 Tidewater Logistics。<br>• 董事會宣佈對截至 2026 年 6 月 30 日止的普通股派發每股 0.03 美元的現金股利。<br>• 預期出售 Long Ridge 交易案待監管批准，交割時將立即消除 11.6 億美元的 Long Ridge 債務，並用淨收益償還約 3 億美元的其他債務。",
+  "concerns": "• 本季歸屬於普通股股東的淨虧損為 1.66464 億美元（-166,464 千美元），每股虧損達 -1.41 美元。<br>• 本期淨利為 -1.39 億美元，淨利率為 -74.3%，反映整體獲利壓力仍大。",
+  "risks": "• 公司本季出現每股盈餘 -1.41 美元及淨利 -1.39 億美元的虧損，需留意持續虧損對財務結構的影響。<br>• 雖有處分資產（如 Long Ridge）以消除債務的規劃，但該交易仍須等待監管批准。",
+  "keyPoints": "• 本季每股盈餘（EPS）為 -1.41 美元，本期淨利為 -1.39 億美元（淨利率 -74.3%）。<br>• 本季營業收入為 1.87 億美元，調整後 EBITDA（Adjusted EBITDA）為 7,611.3 萬美元。<br>• 董事會宣佈派發每股 0.03 美元的普通股現金股利，預計於 2026 年 9 月 8 日發放。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Railroad：調整後 EBITDA 為 42,356 千美元。<br>• Jefferson Terminal：調整後 EBITDA 未單獨列示最終數（依表列減除與加項計算）。<br>• Repauno：調整後 EBITDA 未單獨列示最終數（依表列減除與加項計算）。<br>• Power and Gas：調整後 EBITDA 未單獨列示最終數（依表列減除與加項計算）。"
+ }
+}

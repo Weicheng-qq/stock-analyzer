@@ -1,0 +1,48 @@
+{
+ "symbol": "DOLE",
+ "market": "us",
+ "name": "Dole plc",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Dole plc",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "24.99",
+  "營業毛利": "1.95",
+  "營業利益": "0.47",
+  "本期淨利": "0.26",
+  "每股盈餘": 0.27,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-10",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1857475/000185747526000074/doleplcreportssecondquarte.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-24T14:32:42.210Z",
+ "result": {
+  "revenue": "營業收入為 24.99 億美元，年增 2.9% 或 71.0 億美元（新聞稿未提供億美元單位的完整計算明細，僅註明部分業務細節）。在同店／比較基礎（like-for-like）下，營收增加 1.7% 或 40.7 億美元。",
+  "eps": "每股盈餘（EPS）為 0.27 美元。調整後稀釋每股盈餘為 0.46 美元，低於去年同期的 0.55 美元。",
+  "margins": "營業毛利為 1.95 億美元，毛利率為 7.8%。營業利益為 0.47 億美元，營業利益率為 1.9%。本期淨利為 0.26 億美元，淨利率為 1.0%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司目標 2026 全年調整後 EBITDA（Adjusted EBITDA）約為 4 億美元。",
+  "outlook": "營收為 24.99 億美元，營業毛利為 1.95 億美元（毛利率 7.8%），營業利益為 0.47 億美元（營業利益率 1.9%）。本期淨利為 0.26 億美元（淨利率 1.0%）。",
+  "highlights": "• 第二季營業收入達 24.99 億美元，年增 2.9%。<br>• 本期淨利增加至 0.26 億美元（新聞稿顯示淨利為 3,510 萬美元）。<br>• 董事會宣告 2026 年第二季每股現金股利為 0.085 美元。",
+  "concerns": "• 營業毛利減少 2,300 萬美元，主要受到鮮果部門（Fresh Fruit）水果採購成本上升影響。<br>• 調整後 EBITDA 下降 14.8%，減少 2,040 萬美元。<br>• 營業利益減少 5,570 萬美元，受毛利下降、歷史法律事項和重組成本等 SG&A 費用增加影響。",
+  "risks": "• 鮮果部門面臨水果採購成本、運輸成本及惡劣天氣導致鳳梨種育成本上升的壓力。<br>• 調整後稀釋每股盈餘從去年同期的 0.55 美元降至 0.46 美元，獲利能力受到成本上揚的擠壓。",
+  "keyPoints": "• 第二季營業收入為 24.99 億美元，本期淨利為 0.26 億美元，EPS 為 0.27 美元。<br>• 營業毛利為 1.95 億美元（毛利率 7.8%），營業利益為 0.47 億美元（營業利益率 1.9%）。<br>• 公司目標 2026 全年調整後 EBITDA 約為 4 億美元，預期全年常規資本支出約 1 億美元、利息費用約 5,800 萬美元。",
+  "guidanceOfficial": "Taking these factors together, we are targeting full-year Adjusted EBITDA of approximately 4 億美元 for 2026. We continue to expect routine capital expenditures of approximately 1 億美元 and interest expense of approximately 5,800 萬美元 for the full year.",
+  "segments": "• Fresh Fruit：營收 972,824 千美元（調整後 EBITDA 50,257 千美元），去年同期營收 972,591 千美元（調整後 EBITDA 72,756 千美元）。<br>• Diversified Fresh Produce - EMEA：營收 1,111,431 千美元（調整後 EBITDA 45,931 千美元），去年同期營收 1,100,797 千美元（調整後 EBITDA 48,984 千美元）。<br>• Diversified Fresh Produce - Americas & ROW：營收 440,114 千美元（調整後 EBITDA 20,574 千美元），去年同期營收 386,348 千美元（調整後 EBITDA 15,378 千美元）。"
+ }
+}

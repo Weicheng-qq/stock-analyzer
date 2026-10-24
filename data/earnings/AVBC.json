@@ -1,0 +1,48 @@
+{
+ "symbol": "AVBC",
+ "market": "us",
+ "name": "Avidia Bancorp, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Avidia Bancorp, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.33",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.07",
+  "每股盈餘": 0.39,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-23",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/2058758/000119312526430532/avbc-ex99_1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-24T14:29:53.053Z",
+ "result": {
+  "revenue": "Avidia Bancorp, Inc. 在會計年度 2026 Q2 的營業收入為 0.33 億美元。",
+  "eps": "每股盈餘（EPS）為 0.39 美元。",
+  "margins": "本期淨利為 0.07 億美元，淨利率為 21.2%。營業毛利與營業利益率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "本季本期淨利為 0.07 億美元，淨利率達 21.2%，每股盈餘（EPS）為 0.39 美元。營運現金流與資本支出等細節於本次官方資料中未提供。",
+  "highlights": "• 本期淨利為 0.07 億美元。<br>• 淨利率達 21.2%。<br>• 每股盈餘（EPS）為 0.39 美元。",
+  "concerns": "• 營業毛利與營業利益率未提供。<br>• 營運現金流與資本支出未提供。",
+  "risks": "• 部分核心財務與現金流指標因官方未提供而無法全面評估。<br>• 相關營運與資產品質細節需依後續申報為準。",
+  "keyPoints": "• 營業收入為 0.33 億美元。<br>• 本期淨利為 0.07 億美元，淨利率為 21.2%。<br>• 每股盈餘（EPS）為 0.39 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "本次資料未揭露分部營收"
+ }
+}
