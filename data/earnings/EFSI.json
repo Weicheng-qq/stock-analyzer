@@ -1,0 +1,48 @@
+{
+ "symbol": "EFSI",
+ "market": "us",
+ "name": "EAGLE FINANCIAL SERVICES, INC.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "EAGLE FINANCIAL SERVICES, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.24",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.05",
+  "每股盈餘": 0.92,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-22",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/880641/000088064126000026/efsi-ex99_1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-24T01:37:27.865Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q2 的營業收入為 0.24 億美元。",
+  "eps": "本期每股盈餘（EPS）為 0.92 美元。",
+  "margins": "本期淨利率為 20.8%，本期淨利為 0.05 億美元。營業毛利率與營業利益率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "根據官方提供之財務數字，本期營業收入為 0.24 億美元，本期淨利為 0.05 億美元，每股盈餘（EPS）為 0.92 美元，淨利率為 20.8%。其餘營運現金流、資本支出等項目則未提供。",
+  "highlights": "• 本期營業收入為 0.24 億美元。<br>• 本期淨利為 0.05 億美元，淨利率達 20.8%。<br>• 每股盈餘（EPS）為 0.92 美元。",
+  "concerns": "• 營業毛利與營業利益相關數值未提供。<br>• 營運現金流與資本支出數據未提供。<br>• 自由現金流狀況未提供。",
+  "risks": "• 因官方提供的財務資訊有限，部分關鍵損益與現金流項目未提供，透明度受限。<br>• 無法自現有官方數據完整評估資本支出與營運現金流對財務結構的潛在影響。",
+  "keyPoints": "• 營業收入為 0.24 億美元。<br>• 本期淨利為 0.05 億美元，淨利率 20.8%。<br>• 每股盈餘（EPS）為 0.92 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "本次資料未揭露分部營收"
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "symbol": "LEE",
+ "market": "us",
+ "name": "LEE ENTERPRISES, INC",
+ "quarter": "2026 Q3（2026-03-30～2026-06-28）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "LEE ENTERPRISES, INC",
+  "currency": "億美元",
+  "periodStart": "2026-03-30",
+  "periodEnd": "2026-06-28",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1.26",
+  "營業毛利": null,
+  "營業利益": "0.09",
+  "本期淨利": "0.05",
+  "每股盈餘": 0.21,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-06",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/58361/000005836126000057/lee-2026x628xexx991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-24T01:44:00.571Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q3 營業收入為 1.26 億美元。",
+  "eps": "本期每股盈餘（EPS）為 0.21 美元。",
+  "margins": "營業利益率為 7.1%，淨利率為 4.0%，反映本期達成 0.09 億美元的營業利益與 0.05 億美元的本期淨利。營業毛利與毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 2026 會計年度 Adjusted EBITDA 將有 22% 至 28% 的年增長率。",
+  "outlook": "公司在 2026 Q3 實現營業利益 0.09 億美元與本期淨利 0.05 億美元。財務結構方面，帳上現金為 59 億美元（註：此處依官方新聞稿金額為 59 百萬美元），債務本金為 455 億美元（註：依官方新聞稿金額為 455 百萬美元），淨債務為 395 億美元。",
+  "highlights": "• 營業收入為 1.26 億美元，營業利益為 0.09 億美元，本期淨利為 0.05 億美元，每股盈餘（EPS）為 0.21 美元。<br>• 依據官方新聞稿，Q3 調整後 EBITDA 較去年同期成長 23%，數位營收佔總營收 57%。<br>• 依據官方新聞稿，Q3 結束時現金餘額為 59 億美元（依新聞稿原文數字），債務本金總計 455 億美元。",
+  "concerns": "• 上方官方數字未提供營業毛利、毛利率、營運現金流與資本支出等數據。<br>• 依據官方新聞稿，債務本金高達 455 億美元，淨債務達 395 億美元。<br>• 公司仍面臨傳統印刷營收及訂戶下滑的挑戰（見前瞻性聲明風險）。",
+  "risks": "• 公司負債規模龐大，債務本金總計達 455 億美元（扣除現金後淨債務為 395 億美元），利息支出與債務結構對財務表現具關鍵影響。<br>• 營運高度依賴數位轉型的持續執行與成本控制，印刷業務相關營收若持續下滑將對整體財務結構帶來壓力。",
+  "keyPoints": "• 本期營業收入為 1.26 億美元，營業利益為 0.09 億美元，本期淨利為 0.05 億美元，每股盈餘（EPS）為 0.21 美元。<br>• 依據官方新聞稿，Q3 結束時現金餘額為 59 億美元，債務本金總計 455 億美元，淨債務為 395 億美元，資本支出為 1 億美元（依新聞稿原文金額）。<br>• 公司官方調高 2026 會計年度調整後 EBITDA（Adjusted EBITDA）展望，預期年增長率在 22% 至 28% 之間。",
+  "guidanceOfficial": "我們現在預期以年增長率介於 22% 至 28% 結束本年度。排除今年收到與去年網路事件有關的保險收益後，這依然相當於調整後 EBITDA 年增長率接近 10%。",
+  "segments": "• Total operating revenue was 1.26 億美元.<br>• Total Digital Revenue was 7,200 萬美元 and represented 57% of our total operating revenue.<br>• Revenue from digital-only subscribers totaled 2,200 萬美元.<br>• Digital advertising and marketing services revenue represented 76% of our total advertising revenue and totaled 4,500 萬美元.<br>• Amplified Digital ® Agency revenue totaled 2,700 萬美元 in the quarter.<br>• Digital services revenue, which is predominantly from BLOX Digital, totaled 500 萬美元.<br>• Total Print Revenue was 5,400 萬美元."
+ }
+}

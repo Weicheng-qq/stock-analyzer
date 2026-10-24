@@ -1,0 +1,48 @@
+{
+ "symbol": "HTH",
+ "market": "us",
+ "name": "Hilltop Holdings Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Hilltop Holdings Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1.92",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.25",
+  "每股盈餘": 0.44,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-22",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1265131/000110465926118167/hth-ex99d1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-24T01:41:39.958Z",
+ "result": {
+  "revenue": "營業收入為 1.92 億美元。",
+  "eps": "每股盈餘（EPS）為 0.44 美元，低於 2025 年同期的 0.74 美元。",
+  "margins": "本期淨利率為 13.0%，本期淨利為 0.25 億美元。營業毛利與營業利益率官方皆未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期經濟條件及相關因素將繼續對剩餘季度的營運結果產生不利影響，詳細內容見下方說明。",
+  "outlook": "公司在 2026 年第三季面臨波動的經濟環境，其中信用損失準備金增加至 1,020 萬美元，非利息收入與非利息費用分別為 187.1 百萬美元與 264.1 百萬美元。總資產與貸款規模維持穩定，總資產為 162 億美元，淨貸款為 83 億美元。",
+  "highlights": "• 歸屬於普通股股東的淨利為 2,490 萬美元，稀釋每股盈餘為 0.44 美元。<br>• 綜合淨利息收益率（Net Interest Margin）上升至 3.33%。<br>• 維持強健資本水準，第一類槓桿比率（Tier 1 Leverage Ratio）為 12.63%，普通股權第一類資本比率（CET1）為 18.28%。",
+  "concerns": "• 信用損失準備金增加至 1,020 萬美元，主要受銀行部門貸款組合變化及經濟展望影響。<br>• 非利息收入為 187.1 百萬美元，較 2025 年同期的 217.8 百萬美元減少 14.1%。<br>• PrimeLending 申報稅前虧損 1,100 萬美元。",
+  "risks": "• 總存款中估計無保險存款（uninsured deposits）約達 60 億美元，佔總存款約 55%。<br>• 受到利率波動、融資成本變化及經濟不確定性影響，持續對營運結果產生不利衝擊。",
+  "keyPoints": "• 本期淨利為 0.25 億美元，每股盈餘（EPS）為 0.44 美元。<br>• 信用損失準備金為 1,020 萬美元，相比 2026 年第二季的迴轉 100 萬美元及 2025 年同期的迴轉 250 萬美元有所增加。<br>• 總資產為 162 億美元，總存款為 110 億美元。",
+  "guidanceOfficial": "The extent of the impact of uncertain economic conditions on our financial performance during the remainder of 2026 will depend in part on developments outside of our control, including, among others, changes in the political environment, the impact of tariffs and reciprocal tariffs, the timing and significance of further changes in U.S. Treasury yields and mortgage interest rates, and a volatile economic forecast. These conditions, coupled with exposure to changes in funding costs, inflationary pressures, elevated energy prices, and international armed conflicts and their impact on supply chains within our business segments during the third quarter of 2026 have had, and are expected to continue to have, an adverse impact on our operating results during the remainder of 2026.",
+  "segments": "• 銀行（Banking）：稅前淨利 44,075 仟美元。<br>• 經紀商（Broker-Dealer）：稅前淨利 6,846 仟美元。<br>• 房貸業務（Mortgage Origination）：稅前虧損 10,782 仟美元。<br>• 所有其他及公司（All Other and Corporate）：稅前虧損 5,102 仟美元。"
+ }
+}
