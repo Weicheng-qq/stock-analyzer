@@ -1,0 +1,48 @@
+{
+ "symbol": "MYE",
+ "market": "us",
+ "name": "Myers Industries, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Myers Industries, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "1.79",
+  "營業毛利": "0.61",
+  "營業利益": "0.31",
+  "本期淨利": "0.20",
+  "每股盈餘": 0.53,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-30",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/69488/000119312526324868/mye-ex99_1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-25T01:05:44.732Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q2 營業收入為 1.79 億美元。",
+  "eps": "本會計年度 2026 Q2 每股盈餘（EPS）為 0.53 美元。",
+  "margins": "本期營業毛利率為 34.1%，營業利益率為 17.3%，淨利率則為 11.2%。各項利潤率水準展現出良好的獲利表現。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "官方財測內容請參閱下方 guidanceOfficial 欄位。",
+  "outlook": "根據官方財報新聞稿，各終端市場呈現不同表現，其中基礎設施與食品飲料市場成長顯著。同時，公司透過轉型計畫改善產品組合與降低製造成本。",
+  "highlights": "• 營業收入為 1.79 億美元。<br>• 營業毛利為 0.61 億美元，毛利率達 34.1%。<br>• 每股盈餘（EPS）為 0.53 美元。",
+  "concerns": "• 部分終端市場如車輛與消費需求較為疲軟，分別下滑 19% 與 14%。<br>• 需持續關注材料成本等相關成本變動對營運的影響。",
+  "risks": "• 原物料成本上升及材料供應狀況可能對製造成本造成壓力。<br>• 業務重組與策略轉型計畫能否如預期達成效益仍存在不確定性。",
+  "keyPoints": "• 本期營業收入達 1.79 億美元，營業利益為 0.31 億美元。<br>• 本期淨利為 0.20 億美元，淨利率為 11.2%。<br>• 每股盈餘（EPS）為 0.53 美元。",
+  "guidanceOfficial": "公司未於本次資料提供明確的下一季或全年具體數值財測，僅對各終端市場提出展望：工業（Moderate growth）、基礎設施（Strong growth）、車輛（Stable）、消費（Stable, affected by normal level of storm response）、食品與飲料（Moderate growth）。",
+  "segments": "• Industrial：66,295 萬美元，年增 2%<br>• Infrastructure：48,589 萬美元，年增 52%<br>• Consumer：22,504 萬美元，年減 (14%)<br>• Food & Beverage：21,309 萬美元，年增 48%<br>• Vehicle：20,505 萬美元，年減 (19%)"
+ }
+}

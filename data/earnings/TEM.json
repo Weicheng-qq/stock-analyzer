@@ -1,0 +1,48 @@
+{
+ "symbol": "TEM",
+ "market": "us",
+ "name": "Tempus AI, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Tempus AI, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "3.82",
+  "營業毛利": null,
+  "營業利益": "-0.76",
+  "本期淨利": "0.06",
+  "每股盈餘": 0.03,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-30",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1717115/000119312526326083/tem-ex99_1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-25T01:12:27.271Z",
+ "result": {
+  "revenue": "營業收入為 3.82 億美元（根據新聞稿詳細數據為 3.825 億美元，年增 22%）。整體營收表現持續成長，其中 Diagnostics 貢獻 2.893 億美元、Data and Applications 貢獻 0.932 億美元。",
+  "eps": "每股盈餘（EPS）為 0.03 美元（基本每股盈餘為 0.03 美元，相較去年同期的 -0.25 美元有所改善）。非 GAAP 基本每股盈餘則為 -0.04 美元。",
+  "margins": "營業利益率為 -19.9%，顯示公司本季營業利益仍處於虧損狀態（營業利益為 -0.76 億美元）；淨利率則為 1.6%，本期淨利為 0.06 億美元（GAAP 淨利為 560 萬美元）。毛利表現方面，營業毛利為 2.465 億美元，年增 26%，毛利率未提供具體百分比。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司調高 2026 全年營收財測至 15.95 億至 16.05 億美元，並預期全年 Adjusted EBITDA 約為 6,500 萬美元。",
+  "outlook": "公司本季營收與毛利皆較去年同期成長，並成功達成 GAAP 淨利 560 萬美元與 Adjusted EBITDA 800 萬美元。同時，公司於期後宣佈收購 Personalis，並持續推進人工智慧與精準醫療領域的合作與應用。",
+  "highlights": "• 營業收入為 3.825 億美元，較去年同期成長 22%，Diagnostics 與 Data and Applications 兩大業務皆維持成長。<br>• 營業毛利增加 26% 至 2.465 億美元，GAAP 淨利轉正為 560 萬美元（含 5,560 萬美元股票酬勞費用）。<br>• 截至 2026 年 6 月 30 日，現金及有價證券部位為 8.207 億美元，並完成 4.6 億美元的 2032 年到期零息可轉換優先票據發行。",
+  "concerns": "• 營業利益仍呈現虧損，金額為 -0.76 億美元（營業利益率 -19.9%，非 GAAP 營業利益則為 -0.2708 億美元）。<br>• 本期淨利為正但包含大額的股票酬勞費用與相關僱主薪資稅（共計 5,560 萬美元），非 GAAP 淨損仍為 -0.07726 億美元。<br>• 營運現金流與資本支出等現金流量數據於官方申報中未提供。",
+  "risks": "• 公司營業利益仍為負值（營業利益率 -19.9%），本業尚未完全擺脫虧損狀態。<br>• 財務結構中包含股票酬勞等非現金項目對 GAAP 淨利產生顯著影響，且未提供營運現金流與自由現金流數據，現金創造能力需持續觀察。",
+  "keyPoints": "• 營收與獲利指標：本季營業收入為 3.82 億美元（年增 22%），GAAP 淨利為 0.06 億美元（EPS 0.03 美元）。<br>• 本業獲利狀況：營業利益為 -0.76 億美元（營業利益率 -19.9%），本業仍處於虧損狀態。<br>• 全年財測更新：公司調高 2026 全年營收預期至 15.95 億至 16.05 億美元，預期全年 Adjusted EBITDA 約為 6,500 萬美元。",
+  "guidanceOfficial": "Tempus is increasing its full year 2026 revenue guidance to $1.595 to 16.05 億美元, which represents ~25% annual growth. We continue to expect 2026 Adjusted EBITDA to be ~6,500 萬美元. Guidance assumes no impact from the Personalis transaction, which is expected to close in late Q4 2026 or early 2027.",
+  "segments": "• Diagnostics: 2.89 億美元, representing 20% year-over-year growth.<br>• Data and Applications: 9,320 萬美元, representing 28% year-over-year growth."
+ }
+}

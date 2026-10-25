@@ -1,0 +1,48 @@
+{
+ "symbol": "PROV",
+ "market": "us",
+ "name": "PROVIDENT FINANCIAL HOLDINGS, INC.",
+ "quarter": "2026 Q3（2026-01-01～2026-03-31）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "PROVIDENT FINANCIAL HOLDINGS, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-01-01",
+  "periodEnd": "2026-03-31",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.14",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.01",
+  "每股盈餘": 0.21,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-28",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1010470/000093905726000143/prov8k72826exh991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-25T01:08:04.246Z",
+ "result": {
+  "revenue": "營業收入為 0.14 億美元。",
+  "eps": "每股盈餘（EPS）為 0.21 美元。",
+  "margins": "營業毛利與營業利益未提供，淨利率為 7.1%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司管理層表示 well positioned to further strengthen our fundamentals in fiscal 2027。",
+  "outlook": "本季本期淨利為 0.01 億美元，淨利率達 7.1%。營運現金流與資本支出等細節於本次官方數據中未提供。",
+  "highlights": "• 本期淨利為 0.01 億美元。<br>• 每股盈餘（EPS）為 0.21 美元。<br>• 淨利率為 7.1%。",
+  "concerns": "• 營業毛利未提供。<br>• 營業利益未提供。<br>• 營運現金流與資本支出未提供。",
+  "risks": "• 官方申報資料中部分獲利與現金流指標未提供。<br>• 無法取得完整的營運現金流與資本支出數據以評估自由現金流狀況。",
+  "keyPoints": "• 本季營業收入為 0.14 億美元。<br>• 本季本期淨利為 0.01 億美元，淨利率為 7.1%。<br>• 每股盈餘（EPS）為 0.21 美元。",
+  "guidanceOfficial": "We are well positioned to further strengthen our fundamentals in fiscal 2027, supported by our disciplined credit culture, strong capital position, and a more favorable interest rate environment。",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

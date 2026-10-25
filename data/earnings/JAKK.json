@@ -1,0 +1,48 @@
+{
+ "symbol": "JAKK",
+ "market": "us",
+ "name": "JAKKS Pacific, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "JAKKS Pacific, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "1.39",
+  "營業毛利": "0.45",
+  "營業利益": "-0.00",
+  "本期淨利": "0.06",
+  "每股盈餘": 0.49,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-23",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1009829/000143774926033328/ex_1029446.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-25T01:03:15.351Z",
+ "result": {
+  "revenue": "營業收入為 1.39 億美元，展現特定期間的營收規模。",
+  "eps": "每股盈餘（EPS）為 0.49 美元，反映本期之每股獲利表現。",
+  "margins": "本季毛利率為 32.4%、營業利益率為 0.0%、淨利率為 4.3%。毛利率維持在一定水準，營業利益率顯示本業收支相抵，淨利率則反映最終實現淨利。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "根據官方數字，營業收入為 1.39 億美元，營業利益為 -0.00 億美元，顯示本業呈現微幅虧損狀態。本期淨利為 0.06 億美元，淨利率為 4.3%，在營業利益為負的情況下仍具備淨利表現。",
+  "highlights": "•營業收入達 1.39 億美元。<br>•本期淨利為 0.06 億美元，淨利率 4.3%。<br>•每股盈餘（EPS）為 0.49 美元。",
+  "concerns": "•營業利益為 -0.00 億美元，營業利益率為 0.0%，顯示本業處於虧損狀態。<br>•營運現金流與自由現金流等數據未提供，無法評估現金流入狀況。",
+  "risks": "•營業利益為負值（-0.00 億美元），本業獲利能力仍需持續觀察。<br>•現金流量相關數據未提供，財務結構透明度受限。",
+  "keyPoints": "•本季營業收入為 1.39 億美元，營業利益為 -0.00 億美元。<br>•本期淨利為 0.06 億美元，每股盈餘（EPS）為 0.49 美元。<br>•毛利率為 32.4%，淨利率為 4.3%。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "•Toys/Consumer Products net sales were 1.92 億美元, up 23% from 1.56 億美元 last year<br>•Costumes net sales were 6,220 萬美元, a year-over-year increase of 13%"
+ }
+}

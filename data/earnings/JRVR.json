@@ -1,0 +1,48 @@
+{
+ "symbol": "JRVR",
+ "market": "us",
+ "name": "James River Group Holdings, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "James River Group Holdings, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "1.61",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.06",
+  "每股盈餘": 0.1,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-10",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1620459/000162045926000044/a2q26jrvrpressrelease.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-25T01:04:23.616Z",
+ "result": {
+  "revenue": "2026年第二季營業收入為1.61億美元。",
+  "eps": "本季每股盈餘（EPS）為0.1美元。",
+  "margins": "本季淨利率為3.7%。由於官方未提供營業毛利與營業利益相關數據，故無法計算毛利率與營業利益率。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "公司目前專注於審慎的風險選擇、費用管理及營運效率提升。在競爭激烈的E&S市場環境下，公司持續執行核心業務策略以追求股東回報。",
+  "highlights": "•歸屬於普通股股東之淨利為0.044億美元，較去年同期成長59%。<br>•Excess and Surplus Lines (E&S) 部門之綜合成本率為92.8%。<br>•集團整體保費保留率由去年同期的47%提升至55%。",
+  "concerns": "•Specialty Admitted Insurance部門之總簽單保費較去年同期大幅衰退76%。<br>•投資收益表現平淡，其中私募投資收益較去年同期減少0.007億美元。",
+  "risks": "•保險合約準備金估計存在內在不確定性，實際理賠損失可能高於預期。<br>•受限於特定經紀商與代理商的業務集中度，以及保險子公司財務實力評級下降的風險。",
+  "keyPoints": "•本季淨利為0.044億美元，EPS為0.1美元。<br>•E&S部門綜合成本率為92.8%，費用率為27.4%，損失率為65.4%。<br>•總投資收益為0.20277億美元，較去年同期微幅下降1%。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "•Excess and Surplus Lines：總簽單保費2.5017億美元，年減17%；淨簽單保費1.47657億美元，年減11%。<br>•Specialty Admitted Insurance：總簽單保費0.18729億美元，年減76%；淨簽單保費0.00741億美元，年減92%。"
+ }
+}

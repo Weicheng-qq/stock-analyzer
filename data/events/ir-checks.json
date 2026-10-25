@@ -27,6 +27,13 @@
   "seen": "沒有文件",
   "kind": ""
  },
+ "1409": {
+  "at": "2026-10-25T01:00:47.992Z",
+  "market": "tw",
+  "name": "新纖",
+  "seen": "沒有文件",
+  "kind": ""
+ },
  "1503": {
   "at": "2026-10-23T01:23:22.390Z",
   "market": "tw",
@@ -199,6 +206,13 @@
   "at": "2026-10-23T01:24:34.425Z",
   "market": "tw",
   "name": "中華",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "2207": {
+  "at": "2026-10-25T01:00:04.058Z",
+  "market": "tw",
+  "name": "和泰車",
   "seen": "沒有文件",
   "kind": ""
  },
@@ -534,12 +548,26 @@
   "seen": "沒有文件",
   "kind": ""
  },
+ "2812": {
+  "at": "2026-10-25T01:00:43.292Z",
+  "market": "tw",
+  "name": "台中銀",
+  "seen": "沒有文件",
+  "kind": ""
+ },
  "2834": {
   "at": "2026-10-23T01:23:45.766Z",
   "market": "tw",
   "name": "臺企銀",
   "seen": "沒有文件",
   "kind": ""
+ },
+ "2838": {
+  "at": "2026-10-25T01:00:08.247Z",
+  "market": "tw",
+  "name": "聯邦銀",
+  "seen": "季別不明",
+  "kind": "presentation"
  },
  "2892": {
   "at": "2026-10-22T01:30:12.860Z",
@@ -1395,10 +1423,10 @@
   "kind": ""
  },
  "AXP": {
-  "at": "2026-10-17T01:13:54.153Z",
+  "at": "2026-10-25T00:59:10.608Z",
   "market": "us",
-  "name": "AMERICAN EXPRESS CO",
-  "seen": "2026Q2",
+  "name": "AMERICAN EXPRESS COMPANY",
+  "seen": "2026Q3",
   "kind": "presentation"
  },
  "ABBV": {
@@ -1505,7 +1533,7 @@
   "kind": ""
  },
  "TXN": {
-  "at": "2026-10-22T07:27:01.301Z",
+  "at": "2026-10-25T00:59:14.858Z",
   "market": "us",
   "name": "TEXAS INSTRUMENTS INCORPORATED",
   "seen": "沒有文件",
@@ -1791,5 +1819,68 @@
   "name": "Snap-on Inc",
   "seen": "2026Q3",
   "kind": "release"
+ },
+ "SLB": {
+  "at": "2026-10-25T00:59:19.124Z",
+  "market": "us",
+  "name": "SLB LIMITED/NV",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "CME": {
+  "at": "2026-10-25T00:59:23.822Z",
+  "market": "us",
+  "name": "CME GROUP INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "HAL": {
+  "at": "2026-10-25T00:59:27.596Z",
+  "market": "us",
+  "name": "HALLIBURTON COMPANY",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "JBHT": {
+  "at": "2026-10-25T00:59:31.510Z",
+  "market": "us",
+  "name": "J.B. HUNT TRANSPORT SERVICES, INC.",
+  "seen": "2026Q3",
+  "kind": "release"
+ },
+ "LVS": {
+  "at": "2026-10-25T00:59:37.450Z",
+  "market": "us",
+  "name": "LAS VEGAS SANDS CORP.",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "STLD": {
+  "at": "2026-10-25T00:59:42.410Z",
+  "market": "us",
+  "name": "Steel Dynamics, Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "TDY": {
+  "at": "2026-10-25T00:59:45.463Z",
+  "market": "us",
+  "name": "TELEDYNE TECHNOLOGIES INC",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "NDSN": {
+  "at": "2026-10-25T00:59:53.767Z",
+  "market": "us",
+  "name": "NORDSON CORPORATION",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "SPGI": {
+  "at": "2026-10-25T00:59:58.217Z",
+  "market": "us",
+  "name": "S&P Global Inc.",
+  "seen": "沒有文件",
+  "kind": ""
  }
 }
