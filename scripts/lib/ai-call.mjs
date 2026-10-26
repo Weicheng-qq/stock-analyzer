@@ -92,14 +92,20 @@ async function modelsFor(provider, key) {
 }
 
 // 各層的用量統計，供腳本結束時回報「實際用了哪一層」
-export const aiStats = { gemini: 0, groq: 0, openrouter: 0, failed: 0, exhausted: false };
+export const aiStats = { gemini: 0, groq: 0, openrouter: 0, failed: 0, exhausted: false, consecFail: 0, lastRateLimitAt: 0 };
 
 // 本次排程中額度已用完（429）的模型。
 // ⚠️ 2026-09-19 修正：原本任何一個模型回 429 就「放棄整個 Gemini」直接跳去 Groq。
 //   但免費額度是【每個模型分開算】的 —— 3.8-flash 用完了，3.7、3.6、3.5 還各有一份，
 //   原本的寫法等於把它們的額度全部浪費掉。現在是記住用完的那一個、換同一家的下一個模型，
 //   整家都用完才換下一家。
-const exhausted = new Set();
+// ⚠️ 2026-10-26：使用者要求「不設每天上限，只要免費就一直做」，一次執行可能長達數小時。
+//   原本某個模型碰到一次 429（可能只是「每分鐘」限速）就整輪永遠不再用它；長時間執行時會越用越少。
+//   改為「冷卻 10 分鐘後再試」：每分鐘限速很快恢復；真的是每日額度用完就一直 429，冷卻期滿再試一次、
+//   仍 429 就再冷卻，成本只是多一個失敗請求。
+const COOL_MS = 10 * 60 * 1000;
+const coolUntil = new Map();
+const exhausted = { has: m => (coolUntil.get(m) || 0) > Date.now(), add: m => { coolUntil.set(m, Date.now() + COOL_MS); aiStats.lastRateLimitAt = Date.now(); } };
 
 async function tryEndpoint(url, key, models, prompt, extra = {}) {
   for (const model of models) {
@@ -150,35 +156,40 @@ export async function callAI(prompt) {
         const j = await r.json();
         const txt = j?.choices?.[0]?.message?.content || '';
         const m = txt.match(/\{[\s\S]*\}/);
-        if (m) { try { const o = JSON.parse(m[0]); aiStats.gemini++; return o; } catch (e) {} }
+        if (m) { try { const o = JSON.parse(m[0]); aiStats.gemini++; aiStats.consecFail = 0; return o; } catch (e) {} }
       }
     } catch (e) {}
-    aiStats.failed++;
+    aiStats.failed++; aiStats.consecFail++;
     return null;
   }
 
   if (gk) {
     const r = await tryEndpoint('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', gk, await modelsFor('gemini', gk), prompt);
-    if (r.result) { aiStats.gemini++; return r.result; }
+    if (r.result) { aiStats.gemini++; aiStats.consecFail = 0; return r.result; }
     if (r.rateLimited) console.log('   ↳ Gemini 免費額度已用盡，改用備援（不會產生費用）');
   }
   if (qk) {
     const r = await tryEndpoint('https://api.groq.com/openai/v1/chat/completions', qk, await modelsFor('groq', qk), prompt,
       model => (/gpt-oss/.test(model) ? { reasoning_effort: 'medium' } : {}));
-    if (r.result) { aiStats.groq++; return r.result; }
+    if (r.result) { aiStats.groq++; aiStats.consecFail = 0; return r.result; }
     if (r.rateLimited) console.log('   ↳ Groq 免費額度也已用盡，改用 OpenRouter');
   }
   if (ok) {
     const r = await tryEndpoint('https://openrouter.ai/api/v1/chat/completions', ok, await modelsFor('openrouter', ok), prompt);
-    if (r.result) { aiStats.openrouter++; return r.result; }
+    if (r.result) { aiStats.openrouter++; aiStats.consecFail = 0; return r.result; }
   }
-  aiStats.failed++;
+  aiStats.failed++; aiStats.consecFail++;
   // 三層都不通才視為真的沒額度了，呼叫端據此提前結束
   if (!gk && !qk && !ok) aiStats.exhausted = true;
   return null;
 }
 
 // 連續失敗過多時判定為「所有免費層都用盡」，讓呼叫端停止而不是空轉
+//   ⚠️ 2026-10-26：原本是「失敗 ≥5 且從來沒成功過」才停，長時間執行時（前面已有成功）永遠不會停，
+//   額度用完後會空轉把整個佇列都記成失敗。改為「連續失敗」：
+//     · 連續 5 次失敗，而且最近 15 分鐘內碰過 429 限速 → 判定免費額度用盡
+//     · 連續 20 次失敗（不論原因，例如 AI 服務整個掛了）→ 也停，避免空轉
 export function shouldStop() {
-  return aiStats.failed >= 5 && (aiStats.gemini + aiStats.groq + aiStats.openrouter) === 0;
+  if (aiStats.consecFail >= 20) return true;
+  return aiStats.consecFail >= 5 && (Date.now() - aiStats.lastRateLimitAt) < 15 * 60 * 1000;
 }

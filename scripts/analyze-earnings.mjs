@@ -35,7 +35,10 @@ const OUT_DIR = process.env.OUT_DIR ? path.resolve(process.env.OUT_DIR) : path.j
 const UA_TW = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36';
 const UA_SEC = 'StockAnalyzer/1.0 (personal project; aa910517@gmail.com)';
 
-const MAX_ANALYSES = Number(process.env.MAX_ANALYSES || 60);
+// ⚠️ 2026-10-26 使用者要求：「不用設一天上限幾間，只要免費的，就一直不停作法說會內容」。
+//   預設不設上限（0＝無上限）；實際的煞車只有：免費額度用盡（見 ai-call.mjs shouldStop）、時間預算、佇列做完。
+//   手動測試時仍可用環境變數 MAX_ANALYSES 指定上限。
+const MAX_ANALYSES = Number(process.env.MAX_ANALYSES || 0) || Infinity;
 const DRY_RUN = process.env.DRY_RUN === '1';
 // 三把免費金鑰任一把有就能運作(與網站 /api/ai 相同的備援策略)
 // AI_PROXY_URL 是測試用逃生口（改打網站既有的 /api/ai，它自己有三層免費備援），設了就不需要本機金鑰
@@ -728,14 +731,17 @@ if (droppedNonCommon) console.log('  「其他」層略過非普通股（權證�
 console.log('  名額分配順序：使用者點過 ' + tierCount[0] + ' → 第1階段 ' + tierCount[1] + ' → 第2階段 ' + tierCount[2] +
   ' → 第3階段 ' + tierCount[3] + ' → 第4階段 ' + tierCount[4] + ' → 第5階段 ' + tierCount[5] + ' → 其他 ' + tierCount[6]);
 const irCount = queue.filter(x => !hasIr(x)).length, hotCount = queue.filter(x => hotIdx(x) < 99999).length;
-console.log(`▶ 佇列 ${sorted.length} 家（熱門股 ${hotCount} 家、有官網 IR 頁 ${irCount} 家，已依序排到最前面），本次上限 ${MAX_ANALYSES} 家`);
+console.log(`▶ 佇列 ${sorted.length} 家（熱門股 ${hotCount} 家、有官網 IR 頁 ${irCount} 家，已依序排到最前面），${MAX_ANALYSES === Infinity ? '不設上限（做到免費額度用完或佇列做完）' : '本次上限 ' + MAX_ANALYSES + ' 家'}`);
 
 const tickMap = await getJson('https://www.sec.gov/files/company_tickers.json', UA_SEC);
 const tk2cik = new Map();
 for (const v of Object.values(tickMap || {})) tk2cik.set(v.ticker, v.cik_str);
 console.log(`  已載入美股代碼→CIK 對照 ${tk2cik.size} 家`);
 
-let done = 0, skipped = 0, failed = 0, stoppedByQuota = false, usedTranscript = 0, manualCovered = 0;
+let done = 0, skipped = 0, failed = 0, stoppedByQuota = false, usedTranscript = 0, manualCovered = 0, stoppedByCap = false;
+// 給 workflow 判斷「要不要接著跑下一輪」：continue＝因時間預算停、還有東西沒做；quota＝免費額度用盡；capped＝手動指定的上限；done＝佇列做完
+const STATUS_FILE = process.env.STATUS_FILE || 'analyze-status.txt';
+const writeStatus = s => { try { fs.writeFileSync(STATUS_FILE, s + '\n'); } catch (e) {} };
 
 // ── 時間預算 ──────────────────────────────────────────────────────
 // ⚠️⚠️ 2026-10-10 發現：最近 6 天有 5 天整個排程被 GitHub「取消」。
@@ -767,6 +773,7 @@ let irState = {}; try { irState = JSON.parse(fs.readFileSync(IR_STATE_PATH, 'utf
 setTimeout(() => {
   console.log(`⏱⏱ 看門狗：已超過時間預算 5 分鐘，可能有某個網站沒有回應。強制收工，已完成的結果照常提交。`);
   try { fs.writeFileSync(IR_STATE_PATH, JSON.stringify(irState, null, 1)); } catch (e) {}
+  writeStatus(done > 0 ? 'continue' : 'done');
   process.exit(0);
 }, TIME_BUDGET_MS + 5 * 60000).unref();
 // 【測試用，正式排程不會設定】法說會優先通道平常要等公司真的開法說會才測得到，所以留兩個模擬開關：
@@ -804,7 +811,7 @@ console.log('  已載入人工建置季度索引 ' + Object.keys(MANUAL_INDEX).l
 const stat = { tw: 0, us: 0 };
 
 for (const item of sorted) {
-  if (done >= MAX_ANALYSES) { console.log(`⏸ 已達本次上限 ${MAX_ANALYSES} 家，其餘留待下次執行`); break; }
+  if (done >= MAX_ANALYSES) { stoppedByCap = true; console.log(`⏸ 已達本次上限 ${MAX_ANALYSES} 家，其餘留待下次執行`); break; }
   if (ONLY_SYMBOLS.size && !ONLY_SYMBOLS.has(item.symbol)) continue;
   if (Date.now() - T0 > TIME_BUDGET_MS) { stoppedByTime = true; console.log(`⏱ 已執行 ${Math.round((Date.now() - T0) / 60000)} 分鐘，達到時間預算，先收工讓結果能提交；其餘留待下次執行`); break; }
 
@@ -985,3 +992,5 @@ console.log(`   AI 來源：Gemini ${aiStats.gemini}／Groq ${aiStats.groq}／Op
 console.log(`✅ 完成：新分析 ${done} 家（台股 ${stat.tw}、美股 ${stat.us}）、略過 ${skipped} 家、失敗 ${failed} 家${stoppedByQuota ? '（因免費額度用盡提前結束）' : ''}`);
 console.log('   其中「人工版已是最新一季」而略過：' + manualCovered + ' 家（人工建置優先）');
 console.log(`   其中 ${usedTranscript} 家使用了公司官網逐字稿／文件（品質最高的來源）`);
+writeStatus(stoppedByQuota ? 'quota' : stoppedByCap ? 'capped' : (stoppedByTime && done > 0) ? 'continue' : 'done');
+console.log('   → 本輪狀態：' + fs.readFileSync(STATUS_FILE, 'utf8').trim());
