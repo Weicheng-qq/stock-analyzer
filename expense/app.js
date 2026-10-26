@@ -72,6 +72,21 @@ function recoverFromLog() {
   return n;
 }
 
+// 2026-10-26 使用者指定：華南推播補記的兩筆（224、736，LINE 卡片顯示商店 UBER FORMOSA）歸「Uber點餐」，
+// 並讓「UBER FORMOSA」以後也自動歸 Uber點餐。冪等：每次載入都檢查，改過就不再動（catAuto=false）。
+function fixUber1026() {
+  const cat = ensureCat('Uber點餐', '🛵');
+  let changed = false;
+  const rule = db.rules.find((r) => r.cat === cat);
+  if (rule && !rule.kws.includes('UBER FORMOSA')) { rule.kws.push('UBER FORMOSA'); changed = true; }
+  for (const t of db.tx) {
+    if (t.date === '2026-10-26' && t.src && t.catAuto !== false && (t.amount === 224 || t.amount === 736)) {
+      t.cat = cat; t.note = 'UBER FORMOSA'; t.catAuto = false; changed = true;
+    }
+  }
+  if (changed) save();
+}
+
 function migrate() {
   if (typeof Parse === 'undefined') return;
   const before = db.inbox.length + db.tx.length;
@@ -882,6 +897,7 @@ window.__onBack = () => {
 
 if (seedRules() | applyRules()) save();
 const recoveredN = recoverFromLog();
+fixUber1026();
 render();
 if (recoveredN) setTimeout(() => toast(`已補記 ${recoveredN} 筆先前漏掉的交易`), 800);
 
