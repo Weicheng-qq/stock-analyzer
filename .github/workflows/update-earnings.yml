@@ -19,17 +19,17 @@ on:
   schedule:
     # 台灣時間每天早上 7:00（UTC 23:00），台股法說會多在前一日盤後、美股財報多在美東盤後，
     # 這個時間點兩邊的新資料都已經出來了，使用者早上打開 App 就是最新的。
-    - cron: '0 23 * * *'
-    # 2026-10-18 使用者要求加速：每天加跑第二次（台灣時間約 19:00）。公開 repo 免費；
-    #   沒事可做時約 3～5 分鐘就結束，有積壓時再處理 60 家。Gemini 免費額度以太平洋時間午夜換日，
-    #   與早上那一次分屬不同的額度日，互不排擠；兩次由 concurrency 群組排隊、不會同時跑。
-    - cron: '0 11 * * *'
+    # ⚠️ 2026-10-26 使用者要求「不設每天上限，只要免費就一直不停做」：
+    #   一次執行最長約 5.5 小時（GitHub 單一工作上限 6 小時），做不完會「自己再觸發下一次」接著做（見最後一步），
+    #   佇列做完或免費 AI 額度用盡才停。這個排程只是保險：每 3 小時檢查一次，
+    #   前一輪還在跑就排隊（concurrency），沒事可做時 3～5 分鐘就結束。公開 repo 的 Actions 免費。
+    - cron: '17 */3 * * *'
   workflow_dispatch:        # 允許手動觸發，方便測試與補跑
     inputs:
       max_analyses:
-        description: '本次最多分析幾家公司'
+        description: '本次最多分析幾家公司（0＝不設上限；手動測試時才填數字）'
         required: false
-        default: '60'
+        default: '0'
       lookback_days:
         description: 'SEC 回看天數'
         required: false
@@ -42,6 +42,7 @@ on:
 # 只授予寫入 repo 內容的最小權限
 permissions:
   contents: write
+  actions: write      # 做不完時用 workflow_dispatch 自己再觸發下一輪（GITHUB_TOKEN 允許這一種，不會無限遞迴）
 
 # 避免前一次還沒跑完就被下一次觸發，導致 commit 互相衝突
 concurrency:
@@ -56,7 +57,7 @@ jobs:
     #   現在三道保護：① 腳本自己看時間，34 分鐘就優雅收工（TIME_BUDGET_MIN）
     #                 ② AI 那一步另設 42 分鐘上限，超過只讓那一步失敗，不會取消整個工作
     #                 ③「提交結果」改成不論前面成功、失敗、逾時都會執行（if: always()）
-    timeout-minutes: 60
+    timeout-minutes: 350   # GitHub 上限 360；AI 分析那一步自己最多 335 分鐘
     steps:
       # v4 會觸發「Node.js 20 is deprecated」警告（GitHub 已強制改用 Node 24 執行），改用 v5
       - uses: actions/checkout@v5
@@ -91,21 +92,55 @@ jobs:
           LOOKBACK_DAYS: ${{ github.event.inputs.lookback_days || '3' }}
         run: node scripts/detect-events.mjs
 
-      - name: AI 分析（僅處理有新事件者，額度用完自動停止）
-        timeout-minutes: 42
+      # ⚠️ 2026-10-26：改成「連續多輪」。每輪（約 30 分鐘）結束就先 commit＋push，結果不會因為後面逾時而遺失。
+      #   每輪的結束狀態寫在 analyze-status.txt：
+      #     continue＝因時間預算停、還有東西沒做 → 接著跑下一輪
+      #     quota   ＝免費 AI 額度用盡 → 停（下一次排程再試；不會切換到任何付費模式）
+      #     done    ＝佇列做完 → 停
+      #     capped  ＝手動測試指定了上限 → 停
+      #   整個工作累計跑到約 4 小時 45 分鐘就不再開新的一輪，剩下的交給「自己再觸發」。
+      - name: AI 分析（持續處理，直到佇列做完或免費額度用盡）
+        timeout-minutes: 335
         env:
-          # 腳本執行超過這個分鐘數就做完手上這一家後收工，讓下面的提交步驟一定有時間跑
-          TIME_BUDGET_MIN: '34'
+          GH_TOKEN: ${{ github.token }}
+          TIME_BUDGET_MIN: '30'
           GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
           GROQ_KEY: ${{ secrets.GROQ_KEY }}
           OPENROUTER_KEY: ${{ secrets.OPENROUTER_KEY }}
-          MAX_ANALYSES: ${{ github.event.inputs.max_analyses || '60' }}
-          # 逐字稿路徑每家多花 15~30 秒，設上限避免整輪執行時間爆掉
+          MAX_ANALYSES: ${{ github.event.inputs.max_analyses || '0' }}
+          # 逐字稿路徑每家多花 15~30 秒；這是「每一輪」的上限，多輪累計後總量會隨輪數增加
           TRANSCRIPT_MAX: ${{ github.event.inputs.transcript_max || '12' }}
           NODE_PATH: scripts/node_modules
-        run: node scripts/analyze-earnings.mjs
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          commit_push() {
+            git add data/
+            if git diff --staged --quiet; then echo "這一輪沒有新資料，不產生 commit"; return 0; fi
+            n=$(git diff --staged --name-only | grep -cE "^data/(ai|earnings)/" || true)
+            git commit -q -m "自動更新：新增 ${n} 家公司的法說會 AI 分析" \
+              -m "由 GitHub Actions 排程產生，資料來源為 SEC EDGAR 與 TWSE/TPEx 官方 OpenAPI，AI 分析使用 Gemini／Groq 免費層。"
+            git pull -q --rebase --autostash origin main && git push -q || { sleep 8; git pull -q --rebase --autostash origin main && git push -q; }
+          }
+          start=$(date +%s); status=done
+          for i in $(seq 1 12); do
+            echo "::group::第 $i 輪（已執行 $(( ($(date +%s)-start)/60 )) 分鐘）"
+            rm -f analyze-status.txt
+            node scripts/analyze-earnings.mjs || echo "⚠️ 這一輪結束碼不是 0，仍嘗試提交已完成的部分"
+            echo "::endgroup::"
+            commit_push || echo "⚠️ 這一輪的提交／推送失敗，已完成的內容留在硬碟，最後一步會再試一次"
+            status=$(cat analyze-status.txt 2>/dev/null || echo done)
+            echo "第 $i 輪狀態：$status"
+            [ "$status" = "continue" ] || break
+            [ $(( ($(date +%s)-start)/60 )) -ge 285 ] && { echo "已累計約 285 分鐘，不再開新的一輪"; break; }
+          done
+          echo "最後狀態：$status" | tee -a "$GITHUB_STEP_SUMMARY"
+          # 做不完 → 自己再觸發下一次（只在正式排程／未指定上限、而且在 main 上時；有進度才會是 continue，不會空轉）
+          if [ "$status" = "continue" ] && [ "${MAX_ANALYSES:-0}" = "0" ] && [ "$GITHUB_REF_NAME" = "main" ]; then
+            gh workflow run update-earnings.yml --ref main && echo "已觸發下一次執行"
+          fi
 
-      - name: 提交結果
+      - name: 提交結果（保險：前一步被強制中止時，至少把已完成的存下來）
         # 不論上一步成功、失敗或逾時都要提交：分析結果是一家一家寫進硬碟的，做了多少就存多少
         if: always()
         run: |
@@ -113,16 +148,11 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add data/
           if git diff --staged --quiet; then
-            echo "今日無新資料，不產生 commit"
+            echo "沒有尚未提交的新資料"
           else
-            # ⚠️ 2026-09-19 修正：分析結果實際寫在 data/earnings/，原本只數 data/ai/，
-            #   導致每天都顯示「新增 0 家」，看起來像排程壞掉，其實每天都有分析約 40 家。
             n=$(git diff --staged --name-only | grep -cE "^data/(ai|earnings)/" || true)
-            git commit -m "自動更新：新增 ${n} 家公司的法說會 AI 分析
-
-          由 GitHub Actions 每日排程產生，資料來源為 SEC EDGAR 與
-          TWSE/TPEx 官方 OpenAPI，AI 分析使用 Gemini 免費層。"
-            # 期間若有其他 commit（例如人工批次），先 rebase 再推，避免覆蓋他人變更
-            git pull --rebase --autostash origin main
-            git push
+            git commit -q -m "自動更新：新增 ${n} 家公司的法說會 AI 分析" \
+              -m "由 GitHub Actions 排程產生，資料來源為 SEC EDGAR 與 TWSE/TPEx 官方 OpenAPI，AI 分析使用 Gemini／Groq 免費層。"
+            git pull -q --rebase --autostash origin main
+            git push -q
           fi

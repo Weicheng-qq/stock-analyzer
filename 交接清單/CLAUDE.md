@@ -60,6 +60,12 @@
 - 官網巡視只對「從來沒看過」或「有新事件／還在等逐字稿」的公司做（`irDue`）；截至 10/22 `ir-checks.json` 只有 176 家，加速後約 2 週可全部看過一輪。
 - ⚠️ 尚未支援：同一季「一般文件 → 官網逐字稿」的升級（目前只有法說會優先通道產生的內容才會升級）。若要把全部五階段都升到官網逐字稿品質，需新增這條路徑並用 `ONLY_SYMBOLS`＋`IR_TEST` 手動驗證。
 
+### 0.2.6 2026-10-26 不設每天上限、免費就一直做（使用者原話：「不用設一天上限幾間，只要免費的，就一直不停作法說會內容」）
+- `analyze-earnings.mjs`：`MAX_ANALYSES` 預設 0＝無上限（手動測試才填數字）。煞車只剩：免費額度用盡、時間預算、佇列做完。每輪結束把狀態寫進 `analyze-status.txt`（continue／quota／done／capped）。
+- `update-earnings.yml`：改成「連續多輪」（每輪 TIME_BUDGET 30 分鐘，每輪先 commit＋push），累計約 285 分鐘後不再開新一輪；若狀態仍是 continue 就用 `gh workflow run` 自己再觸發下一次（需 `actions: write`；GITHUB_TOKEN 允許 workflow_dispatch 這一種）。排程改為每 3 小時一次當保險；concurrency 不會讓兩次重疊。
+- `lib/ai-call.mjs`（長時間執行必修的兩處）：①429 冷卻 10 分鐘後重試（原本整輪永久停用該模型）②`shouldStop`＝「連續失敗 5 次且 15 分鐘內碰過 429」或「連續失敗 20 次」（原本要「從沒成功過」才停，長時間執行時額度用完會空轉）。
+- ⚠️ 零費用保證不變：只用 Gemini／Groq 免費層，Actions 公開 repo 免費；OpenRouter 在排程裡沒有金鑰。**永遠不要在 Gemini 金鑰的 Google Cloud 專案啟用帳單。**
+
 ### 0.3 待辦
 - [ ] 確認 2026-10-19（週一）起開盤診斷有在 08:58 前啟動、完整觀察開盤後 10 分鐘（看 Issue 標題是 ✅ 或 ❌，而非 ⚠️）。若仍趕不上，改用 Cloudflare Worker Cron（免費、準時）去觸發 workflow_dispatch（需使用者在 Cloudflare 設一個 GitHub 權杖，見 6.27）。
 - [ ] 健康檢查（原訂 09:30）同樣被 GitHub 延遲到下午才跑，目前影響不大，暫不處理。
