@@ -115,4 +115,11 @@ t('真實格式：台北富邦 App 推播（2026-10-23 使用者截圖）', () =
   const r = P.parseBankMessage('帳務通知\n【存款扣款-繳費/稅】您的存款帳號末四碼4830於10/23 12:08有金額扣款臺幣31,990元', '2026-10-23');
   assert.deepStrictEqual([r.status, r.type, r.amount, r.date, r.weak], ['tx', 'expense', 31990, '2026-10-23', false]);
 });
+t('真實格式：華南推播在通知列只顯示前半句（2026-10-26 漏記 224 元）', () => {
+  const r = P.parseBankMessage('華南銀行\n【信用卡即時消費提醒服務】您115年10月26日17點45分刷卡224元', '2026-10-26');
+  assert.deepStrictEqual([r.status, r.type, r.amount, r.date, r.weak], ['tx', 'expense', 224, '2026-10-26', false]);
+  // 廣告仍要擋住
+  assert.notStrictEqual(P.parseBankMessage('華南卡分期好輕鬆！刷卡分3期，每期只要NT$3起', '2026-10-26').status, 'tx');
+  assert.notStrictEqual(P.parseBankMessage('北水減倉港股近21億港元，淨買入智譜超4億港元', '2026-10-26').status, 'tx');
+});
 console.log(`\n全部 ${n} 項通過`);

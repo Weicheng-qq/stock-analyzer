@@ -49,6 +49,29 @@ function save() {
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
 
 // 舊資料整理（依新規則）：清掉金額不明的待確認、重新檢查自動記的 LINE 紀錄（使用者沒改過的才動）
+// 規則修正後補記：診斷紀錄裡最近 7 天「略過」的訊息，用新規則重看一次，該記的補上（只跑一次／版）
+const RECOVER_VERSION = 1; // 2026-10-26：華南「即時消費提醒」通知被誤判為廣告
+function recoverFromLog() {
+  if (typeof Parse === 'undefined' || (db.recovered || 0) >= RECOVER_VERSION) return 0;
+  db.recovered = RECOVER_VERSION;
+  const since = ymd(new Date(Date.now() - 7 * 864e5));
+  let n = 0;
+  for (const l of db.log.slice().reverse()) {
+    if (l.status !== 'ignore' || !l.at || l.at.slice(0, 10) < since) continue;
+    const [date, time] = l.at.split(' ');
+    const r = Parse.parseBankMessage(l.text, date);
+    if (r.status !== 'tx' || r.weak) continue;
+    const key = Parse.msgKey(date, time, l.text);
+    if (db.tx.some((t) => t.key === key)) continue;
+    const res = addAuto({ src: 'line', key, type: r.type, amount: r.amount, cat: (r.type === 'expense' && ruleCat(`${r.merchant} ${l.text}`)) || r.cat,
+      date: r.date, note: (r.merchant || l.sender).replace(/股份有限公司|有限公司/g, ''), raw: l.text });
+    l.status = 'tx'; l.reason = '規則更新後補記';
+    if (res !== 'dup') n++;
+  }
+  save();
+  return n;
+}
+
 function migrate() {
   if (typeof Parse === 'undefined') return;
   const before = db.inbox.length + db.tx.length;
@@ -858,7 +881,9 @@ window.__onBack = () => {
 };
 
 if (seedRules() | applyRules()) save();
+const recoveredN = recoverFromLog();
 render();
+if (recoveredN) setTimeout(() => toast(`已補記 ${recoveredN} 筆先前漏掉的交易`), 800);
 
 if (isAndroid()) {
   bridgeCall('bootOk'); // 告訴 App：這個版本的畫面能正常啟動（自動更新的安全網）

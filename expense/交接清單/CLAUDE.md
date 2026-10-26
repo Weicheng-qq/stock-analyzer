@@ -149,6 +149,10 @@
 - 原生：`onListenerConnected/Disconnected` 記狀態、每則通知 `Store.heartbeat`（只記時間不記內容）；`Store.isConnected`＝連線中且 2 小時內有運作；`MainActivity.onResume` 若已授權但不健康 → `NotifyService.ensureConnected`（停用再啟用元件＋requestRebind）。
 - Bridge：`listenerStatus()`、`reconnectListener()`；設定頁顯示「通知讀取最後運作：N 分鐘前（未連線）」＋「重新連線」按鈕。
 - 需要使用者按一次「更新」。
+- ✅ **真正原因已確認（使用者截圖通知欄）**：華南推播在通知裡只有前半句 `【信用卡即時消費提醒服務】您115年10月26日17點45分刷卡224元`，沒有「非您的消費」→ `personal` 判斷不成立 → 被當廣告略過。**通知讀取本身是正常的。**
+- 修正：personal 補「消費提醒／即時消費／您＋民國年／您＋月日／刷卡＋金額元」；測試第 23 項（含廣告仍擋住）。
+- `recoverFromLog()`（`RECOVER_VERSION`，每版只跑一次）：診斷紀錄中最近 7 天被略過、用新規則判定為交易的訊息自動補記（以 msgKey 去重），提示「已補記 N 筆」。之後若再修規則造成漏記，把 RECOVER_VERSION +1 即可補回。
+- 教訓：**加嚴格過濾條件前，要用真實「通知列」文字測（通知常被截斷），不能只用 App 內完整訊息測**。
 
 ### 載具發票自動化（2026-10-22 調查結論）
 - 使用者問「載具要怎麼自動記帳」（附統一發票兌獎 App 截圖）。結論：**免費全自動做不到**。

@@ -98,7 +98,7 @@
     const merchant = findMerchant(t);
     const date = baseDate ? findDate(t, baseDate) : undefined;
     // 真正的交易通知一定帶個人資訊（卡號／帳號末四碼、交易時間…）；沒有的多半是廣告裡剛好出現「刷卡」「NT$」
-    const personal = /(您的|您於|帳戶|帳號|卡號|末四碼|末4碼|尾號|交易時間|入帳時間|消費時間|授權|交易通知|交易提醒|消費通知|入帳通知|卡友您|非您的消費|非本人)/.test(t);
+    const personal = /(您的|您於|帳戶|帳號|卡號|末四碼|末4碼|尾號|交易時間|入帳時間|消費時間|授權|交易通知|交易提醒|消費通知|入帳通知|卡友您|非您的消費|非本人|消費提醒|即時消費|您(?:於)?\s*\d{2,4}\s*年|您(?:於)?\s*\d{1,2}\s*[\/月]\s*\d{1,2}|刷卡\s*(?:NT\$|新?[臺台]幣)?\s*[0-9][0-9,]*\s*元)/.test(t);
     const r = (status, type, reason) => {
       if (status === 'tx' && !personal) { status = 'review'; reason = '看不到卡號／帳號或交易時間，可能是廣告或活動訊息'; }
       return {
