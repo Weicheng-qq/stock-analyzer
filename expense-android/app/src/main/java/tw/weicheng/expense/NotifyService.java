@@ -19,6 +19,7 @@ public class NotifyService extends NotificationListenerService {
     public void onNotificationPosted(StatusBarNotification sbn) {
         try {
             if (sbn == null) return;
+            Store.heartbeat(this); // 診斷用：通知讀取「最後一次有在運作」的時間（不記內容）
             String pkg = sbn.getPackageName();
             if (pkg == null || pkg.equals(getPackageName())) return;
             Notification n = sbn.getNotification();
@@ -101,8 +102,27 @@ public class NotifyService extends NotificationListenerService {
     }
 
     @Override
+    public void onListenerConnected() {
+        Store.setConnected(this, true);
+    }
+
+    @Override
     public void onListenerDisconnected() {
         // 被系統斷開時要求重新連線
+        Store.setConnected(this, false);
         requestRebind(new ComponentName(this, NotifyService.class));
+    }
+
+    /**
+     * App 更新後 Android 有時不會自動接回通知讀取（使用者已授權、但服務沒在跑）。
+     * 打開 App 時呼叫：停用再啟用元件，逼系統重新綁定。
+     */
+    static void ensureConnected(android.content.Context c) {
+        ComponentName cn = new ComponentName(c, NotifyService.class);
+        if (Store.isConnected(c)) return;
+        android.content.pm.PackageManager pm = c.getPackageManager();
+        pm.setComponentEnabledSetting(cn, android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED, android.content.pm.PackageManager.DONT_KILL_APP);
+        pm.setComponentEnabledSetting(cn, android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED, android.content.pm.PackageManager.DONT_KILL_APP);
+        requestRebind(cn);
     }
 }

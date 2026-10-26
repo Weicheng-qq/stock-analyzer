@@ -182,6 +182,17 @@ function renderHome() {
   if (go) go.addEventListener('click', () => document.querySelector('.tabs [data-tab=settings]').click());
 }
 
+// 通知讀取健康狀態（新版 App 才有 listenerStatus）
+function listenerStatusHtml() {
+  if (typeof AndroidBridge.listenerStatus !== 'function') return '';
+  let st = {};
+  try { st = JSON.parse(bridgeCall('listenerStatus') || '{}'); } catch (e) {}
+  const ago = st.lastAny ? Math.round((Date.now() - st.lastAny) / 60000) : null;
+  const when = ago == null ? '還沒收到任何通知' : ago < 1 ? '剛剛' : ago < 60 ? `${ago} 分鐘前` : ago < 1440 ? `${Math.round(ago / 60)} 小時前` : `${Math.round(ago / 1440)} 天前`;
+  return `<div class="set-row"><span class="grow">通知讀取最後運作：${when}${st.connected ? '' : ' <span class="warn">（未連線）</span>'}
+    <div class="hint">刷卡沒記到時：先按「重新連線」，再看下方「最近收到的訊息」</div></span><button class="btn" id="reconnect">重新連線</button></div>`;
+}
+
 // 首頁頂端的自動記帳狀態：Android App 內顯示通知權限狀態；網頁版提示可以匯入
 function autoStatusHtml() {
   if (isAndroid()) {
@@ -290,6 +301,7 @@ function renderSettings() {
     ${android ? `
       <div class="set-row"><span>讀取銀行通知（LINE／銀行 App／簡訊） ${listenerOn ? '<span class="ok">已開啟</span>' : '<span class="warn">未開啟</span>'}</span>
         <button class="btn" id="openListener">${listenerOn ? '設定' : '開啟'}</button></div>
+      ${listenerStatusHtml()}
       <div class="set-row"><span class="grow">避免被系統關閉（電池最佳化設為「不限制」）</span><button class="btn" id="openBattery">設定</button></div>
       <ol class="steps">
         <li>按上面「開啟」→ 找到「隨手記帳」→ 允許</li>
@@ -356,6 +368,10 @@ function renderSettings() {
     });
     $('#openListener').addEventListener('click', () => bridgeCall('openListenerSettings'));
     $('#openBattery').addEventListener('click', () => bridgeCall('openBatterySettings'));
+    if ($('#reconnect')) $('#reconnect').addEventListener('click', () => {
+      bridgeCall('reconnectListener'); toast('已重新連線通知讀取');
+      setTimeout(() => { if (tab === 'settings' && !form) renderSettings(); }, 1500);
+    });
   }
   $('#keywords').addEventListener('change', (e) => {
     const kw = e.target.value.split(/[,，、\s]+/).map((x) => x.trim()).filter(Boolean);

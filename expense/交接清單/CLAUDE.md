@@ -143,6 +143,13 @@
 ### 統計頁分類可展開明細（2026-10-23）
 - 「支出分類」每一列改成按鈕（`data-rank`），點了展開該分類「本月」所有支出（依日期新到舊、附日期標籤、共 N 筆），再點收合；同時只展開一個（`statsOpenCat`）。展開的明細可再點進去編輯。
 
+### 2026-10-26 華南刷卡 224 沒記到 → 通知讀取自動修復
+- 使用者回報剛刷華南 224 元沒記帳（原因尚未確認：已請使用者看「最近收到的訊息」、通知欄有沒有華南推播、通知存取權關開一次）。
+- 推測主因：App 更新（PackageInstaller）後 Android 沒重新綁定 NotificationListenerService，或三星把服務停掉。
+- 原生：`onListenerConnected/Disconnected` 記狀態、每則通知 `Store.heartbeat`（只記時間不記內容）；`Store.isConnected`＝連線中且 2 小時內有運作；`MainActivity.onResume` 若已授權但不健康 → `NotifyService.ensureConnected`（停用再啟用元件＋requestRebind）。
+- Bridge：`listenerStatus()`、`reconnectListener()`；設定頁顯示「通知讀取最後運作：N 分鐘前（未連線）」＋「重新連線」按鈕。
+- 需要使用者按一次「更新」。
+
 ### 載具發票自動化（2026-10-22 調查結論）
 - 使用者問「載具要怎麼自動記帳」（附統一發票兌獎 App 截圖）。結論：**免費全自動做不到**。
   - 統一發票兌獎 App 不開放資料、每張發票不推播。

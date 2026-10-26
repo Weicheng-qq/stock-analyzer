@@ -108,6 +108,34 @@ final class Store {
         }
     }
 
+    // ---- 診斷：通知讀取是否連線中、最後運作時間 ----
+    static void heartbeat(Context c) {
+        long now = System.currentTimeMillis();
+        SharedPreferences p = prefs(c);
+        if (now - p.getLong("last_any", 0) > 60000L) p.edit().putLong("last_any", now).putBoolean("connected", true).apply();
+    }
+
+    static void setConnected(Context c, boolean on) {
+        prefs(c).edit().putBoolean("connected", on).putLong(on ? "connected_at" : "disconnected_at", System.currentTimeMillis()).apply();
+    }
+
+    /** 連線中，且最近 2 小時內有運作（收到任何通知或剛連上）；三星有時會無聲無息把服務停掉。 */
+    static boolean isConnected(Context c) {
+        SharedPreferences p = prefs(c);
+        long last = Math.max(p.getLong("last_any", 0), p.getLong("connected_at", 0));
+        return p.getBoolean("connected", false) && System.currentTimeMillis() - last < 2 * 3600 * 1000L;
+    }
+
+    static String status(Context c) {
+        SharedPreferences p = prefs(c);
+        try {
+            return new JSONObject().put("connected", p.getBoolean("connected", false))
+                    .put("lastAny", p.getLong("last_any", 0)).toString();
+        } catch (JSONException e) {
+            return "{}";
+        }
+    }
+
     static synchronized void setShared(Context c, String text) {
         prefs(c).edit().putString(K_SHARED, text).apply();
     }

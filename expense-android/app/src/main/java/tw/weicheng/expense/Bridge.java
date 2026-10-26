@@ -83,6 +83,18 @@ final class Bridge {
         return Updater.installApk(act);
     }
 
+    /** {connected, lastAny}：通知讀取是否連線、最後一次收到任何通知的時間（診斷用）。 */
+    @JavascriptInterface
+    public String listenerStatus() {
+        return Store.status(act);
+    }
+
+    @JavascriptInterface
+    public void reconnectListener() {
+        Store.setConnected(act, false);
+        if (isListenerEnabled()) NotifyService.ensureConnected(act);
+    }
+
     @JavascriptInterface
     public String takeLaunchAction() {
         String a = MainActivity.launchAction;

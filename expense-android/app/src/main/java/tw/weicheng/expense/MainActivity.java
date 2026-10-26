@@ -162,6 +162,11 @@ public class MainActivity extends Activity {
         current = new WeakReference<>(this);
         pushToJs();
         checkUpdate();
+        // 已授權通知讀取但服務沒連上（常見於 App 更新後）→ 自動重新綁定
+        try {
+            if (new Bridge(this).isListenerEnabled()) NotifyService.ensureConnected(this);
+        } catch (Exception ignored) {
+        }
     }
 
     private boolean handleGuide(Intent intent) {
