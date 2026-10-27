@@ -1,13 +1,23 @@
 {
- "generatedAt": "2026-10-27T05:12:21.435Z",
+ "generatedAt": "2026-10-27T12:19:48.296Z",
  "lookbackDays": 3,
  "counts": {
-  "high": 0,
+  "high": 1,
   "medium": 302,
-  "low": 1974,
+  "low": 1973,
   "total": 2276
  },
  "queue": [
+  {
+   "market": "tw",
+   "symbol": "3272",
+   "name": "東碩",
+   "reasons": [
+    "上櫃重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151026",
+   "priority": "HIGH"
+  },
   {
    "market": "us",
    "symbol": "AZO",
@@ -331,7 +341,7 @@
   },
   {
    "market": "us",
-   "symbol": "PSA-PF",
+   "symbol": "PSA-PS",
    "forms": [
     "10-Q",
     "8-K"
@@ -1815,7 +1825,7 @@
   },
   {
    "market": "us",
-   "symbol": "EVEXW",
+   "symbol": "EVEX-WT",
    "forms": [
     "8-K"
    ],
@@ -2145,7 +2155,7 @@
   },
   {
    "market": "us",
-   "symbol": "KKRS",
+   "symbol": "KKRT",
    "forms": [
     "8-K"
    ],
@@ -8681,14 +8691,6 @@
    "market": "tw",
    "symbol": "3268",
    "name": "海德威",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第2季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "3272",
-   "name": "東碩",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第2季",
    "priority": "LOW"

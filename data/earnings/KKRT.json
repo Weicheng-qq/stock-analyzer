@@ -1,0 +1,48 @@
+{
+ "symbol": "KKRT",
+ "market": "us",
+ "name": "KKR & CO. INC.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "KKR & CO. INC.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "57.26",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "7.00",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-30",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1404912/000140491226000022/q226earningsrelease_vf.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-27T12:25:01.235Z",
+ "result": {
+  "revenue": "根據官方財務數字，KKR & CO. INC. 在 2026 Q2 的營業收入為 57.26 億美元。",
+  "eps": "根據官方財務數字，本季每股盈餘（EPS）為未提供 美元。",
+  "margins": "根據官方財務數字，本季毛利率與營業利益率皆未提供；本期淨利為 70 億美元，淨利率為 12.2%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供具體的下一季或全年官方財測。",
+  "outlook": "根據官方提供之資料，本季本期淨利為 70 億美元，淨利率達 12.2%。整體財務與營運狀況可參考官方公佈之各項會計與營運指標。",
+  "highlights": "• 依據官方申報資料，本季本期淨利為 70 億美元，淨利率達 12.2%。<br>• Asset Management Segment 方面，Assets Under Management 達 796,487,000 千美元，Fee Paying Assets Under Management 達 638,403,000 千美元。<br>• Private Equity 業務之 Assets Under Management 達 254,736,000 千美元，Fee Paying Assets Under Management 達 168,137,000 千美元。",
+  "concerns": "• 營業毛利、營業利益、營運現金流與資本支出等官方數字皆未提供。<br>• 每股盈餘（EPS）官方數字亦未提供。<br>• 需持續關注各項費用與非 GAAP 調整項目的實際變動狀況。",
+  "risks": "• 部分關鍵財務指標如營業毛利、營業利益及自由現金流於官方申報中未提供，增添財務透明度評估的難度。<br>• 資本支出與營運現金流資訊未提供，無法直接由官方數字評估其現金流量結構與資本配置風險。",
+  "keyPoints": "• 營收表現：本季營業收入為 57.26 億美元。<br>• 獲利表現：本季本期淨利為 70 億美元，淨利率為 12.2%。<br>• 資產管理規模：Asset Management Segment 的 Assets Under Management 達 796,487,000 千美元，Fee Paying Assets Under Management 達 638,403,000 千美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• 資產管理部門（Asset Management Segment）資產管理規模（AUM）：796,487,000 千美元（2Q'25 為 685,806,000 千美元）<br>• 費付資產管理規模（Fee Paying Assets Under Management）：638,403,000 千美元（2Q'25 為 556,247,000 千美元）<br>• 私募股權部門（Private Equity）資產管理規模（AUM）：254,736,000 千美元（2Q'25 為 214,576,000 千美元）<br>• 私募股權部門費付資產管理規模（Fee Paying Assets Under Management）：168,137,000 千美元（2Q'25 為 141,222,000 千美元）"
+ }
+}
