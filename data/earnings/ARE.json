@@ -1,0 +1,48 @@
+{
+ "symbol": "ARE",
+ "market": "us",
+ "name": "ALEXANDRIA REAL ESTATE EQUITIES, INC.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "ALEXANDRIA REAL ESTATE EQUITIES, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "6.71",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "-6.38",
+  "每股盈餘": -3.74,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-26",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1035443/000103544326000077/a3q26ex991supp.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-27T05:19:22.951Z",
+ "result": {
+  "revenue": "本季營業收入為 6.71 億美元。",
+  "eps": "本季每股盈餘（EPS）為 -3.74 美元，呈現虧損狀態。",
+  "margins": "本季毛利率與營業利益率官方未提供；淨利率為 -95.1%，主因包含計入待售房地產資產減損費用，致使本季產生大幅淨虧損。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預測 2026 年資產處置與出售部分權益指導目標中位數為 19 億美元，第四季年化淨債務對調整後 EBITDA 槓桿目標為 5.6x 至 6.2x。",
+  "outlook": "營運物業出租率為 87.1%（包含已簽約未來入住租約則為 90.8%），第三季租賃量達 120 萬可租賃平方英尺。同物業淨營業收入（NOI）年增長率則下降 6.7%。",
+  "highlights": "• 第三季總租賃量達 120 萬可租賃平方英尺（RSF），高於 1Q25–2Q26 季度平均水準。<br>• 營運物業出租率為 87.1%，加上已簽約未來入住租約後之出租率達到 90.8%。<br>• 保持強健資產負債表，擁有約 46 億美元流動資金，固定利率債務占比達 95.5%。",
+  "concerns": "• 本季本期淨虧損達 6.38 億美元（EPS -3.74 美元），其中包含 6.379 億美元待售資產之房地產減損費用。<br>• 同物業淨營業收入（NOI）年減 6.7%（現金基礎下降 2.8%）。<br>• 同物業平均出租率由去年同期的 91.7% 下降至本期的 88.1%。",
+  "risks": "• 第四季年化淨債務及特別股對調整後 EBITDA 目標比率介於 5.6x 至 6.2x，債務槓桿水準需持續關注。<br>• 待售房地產資產本季認列 6.379 億美元減損費用，顯示部分非核心資產價值面臨調整承壓。",
+  "keyPoints": "• 本季營業收入 6.71 億美元，本期淨虧損 6.38 億美元，每股盈餘為 -3.74 美元，淨利率為 -95.1%。<br>• 第三季營運結果包含 6.379 億美元房地產資產減損，調整後每股 FFO（FFO per share, as adjusted）為 1.54 美元。<br>• 2026 全年資產處置與處分部分權益指導目標中位數為 19 億美元，第四季年化淨債務與特別股對調整後 EBITDA 比率預期為 5.6x 至 6.2x。",
+  "guidanceOfficial": "公司預測 2026 年資產處置與出售部分權益（Dispositions and sales of partial interests）指導目標中位數為 19 億美元（完成與進行中交易金額約 26.20 億美元）；第四季年化淨債務與特別股對調整後 EBITDA 比率（Net Debt and Preferred Stock to Adjusted EBITDA）預期介於 5.6x 至 6.2x，固定費用覆蓋率（Fixed-Charge Coverage Ratio）預期介於 3.4x 至 3.9x。",
+  "segments": "本次資料未揭露分部營收"
+ }
+}

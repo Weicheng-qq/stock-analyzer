@@ -1,0 +1,48 @@
+{
+ "symbol": "GABC",
+ "market": "us",
+ "name": "German American Bancorp, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "German American Bancorp, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "1.27",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.38",
+  "每股盈餘": 1.02,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-26",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/714395/000071439526000041/exhibit991q32026final.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-27T05:33:41.127Z",
+ "result": {
+  "revenue": "German American Bancorp, Inc.（代碼 GABC）在 2026 會計年度第二季的官方營業收入為 1.27 億美元。",
+  "eps": "本季每股盈餘（EPS）為 1.02 美元。",
+  "margins": "本期淨利為 0.38 億美元，淨利率為 29.9%。營業毛利與營業利益率由於官方未提供，因此無法計算。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "根據官方財報資料，本季淨利率維持在 29.9%，每股盈餘（EPS）為 1.02 美元，各項未提供數據則維持未提供狀態，無法進行進一步推估。",
+  "highlights": "• 本季本期淨利為 0.38 億美元，淨利率達 29.9%。<br>• 本季每股盈餘（EPS）為 1.02 美元。<br>• 營業收入為 1.27 億美元。",
+  "concerns": "• 營業毛利官方未提供。<br>• 營業利益官方未提供。<br>• 營運現金流與資本支出官方未提供。",
+  "risks": "本季官方未提供營運現金流與資本支出相關數據，現金流狀況不明。<br>營業毛利與營業利益等關鍵獲利指標未在官方資料中提供。",
+  "keyPoints": "1. 本季營業收入為 1.27 億美元。<br>2. 本季本期淨利為 0.38 億美元，淨利率為 29.9%。<br>3. 本季每股盈餘（EPS）為 1.02 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "本次資料未揭露分部營收"
+ }
+}

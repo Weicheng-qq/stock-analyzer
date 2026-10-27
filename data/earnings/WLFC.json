@@ -1,0 +1,48 @@
+{
+ "symbol": "WLFC",
+ "market": "us",
+ "name": "WILLIS LEASE FINANCE CORP",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "WILLIS LEASE FINANCE CORP",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "1.94",
+  "營業毛利": null,
+  "營業利益": "0.34",
+  "本期淨利": "0.30",
+  "每股盈餘": 1.31,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-04",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1018164/000101816426000065/q22026ex991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-27T05:46:19.856Z",
+ "result": {
+  "revenue": "營業收入為 1.94 億美元。",
+  "eps": "每股盈餘（EPS）為 1.31 美元。",
+  "margins": "營業利益率為 17.5%，營業利益為 0.34 億美元；淨利率為 15.5%，本期淨利為 0.30 億美元。毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "本季營業利益為 0.34 億美元，營業利益率達 17.5%，本期淨利為 0.30 億美元，淨利率為 15.5%。資產管理規模（AUM）成長至 44 億美元，展現資產規模的擴張。",
+  "highlights": "• 營業利益達到 0.34 億美元，營業利益率為 17.5%。<br>• 本期淨利為 0.30 億美元，淨利率為 15.5%，每股盈餘（EPS）為 1.31 美元。<br>• 營運資產管理規模（AUM）擴大至 44 億美元。",
+  "concerns": "• 營業毛利與毛利率未提供。<br>• 營運現金流與自由現金流相關數據未提供。<br>• 資本支出數據未提供。",
+  "risks": "• 財務數據中缺乏營運現金流與資本支出資訊，需留意現金流量狀況。<br>• 毛利相關數據未提供，限制了成本結構的完整評估。",
+  "keyPoints": "• 本季營業收入為 1.94 億美元。<br>• 營業利益為 0.34 億美元，營業利益率為 17.5%。<br>• 本期淨利為 0.30 億美元，淨利率為 15.5%，每股盈餘為 1.31 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• 租金收入（Lease rent revenue）：7,710 萬美元，年增 6.7%<br>• 核心租金與維護準備金收入（Core lease rent and maintenance reserve revenues）：1.236 億美元，年增 0.5%<br>• 租賃設備出售利益（Gain on sale of leased equipment）：3,200 萬美元，年增 16.2%"
+ }
+}
