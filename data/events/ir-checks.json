@@ -3590,7 +3590,7 @@
   "kind": ""
  },
  "3324": {
-  "at": "2026-10-12T02:18:23.509Z",
+  "at": "2026-10-28T09:57:00.155Z",
   "market": "tw",
   "name": "雙鴻",
   "seen": "沒有文件",
@@ -4421,7 +4421,7 @@
   "kind": ""
  },
  "GM": {
-  "at": "2026-10-22T07:27:23.190Z",
+  "at": "2026-10-28T09:52:17.698Z",
   "market": "us",
   "name": "GENERAL MOTORS COMPANY",
   "seen": "沒有文件",
@@ -4886,5 +4886,123 @@
   "name": "DOLLAR GENERAL CORP",
   "seen": "沒有文件",
   "kind": ""
+ },
+ "KO": {
+  "at": "2026-10-28T09:47:49.078Z",
+  "market": "us",
+  "name": "COCA COLA CO",
+  "seen": "2026Q3",
+  "kind": "release"
+ },
+ "AVGO": {
+  "at": "2026-10-28T09:47:52.119Z",
+  "market": "us",
+  "name": "Broadcom Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "V": {
+  "at": "2026-10-28T09:47:55.604Z",
+  "market": "us",
+  "name": "VISA INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "STX": {
+  "at": "2026-10-28T09:55:18.270Z",
+  "market": "us",
+  "name": "Seagate Technology Holdings plc",
+  "seen": "2027Q1",
+  "kind": "release",
+  "done": "2027Q1",
+  "pending": true,
+  "pendingSince": "2026-10-28T09:55:18.270Z"
+ },
+ "SOFI": {
+  "at": "2026-10-28T09:56:48.560Z",
+  "market": "us",
+  "name": "SoFi Technologies, Inc.",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-28T09:56:48.560Z"
+ },
+ "CNP": {
+  "at": "2026-10-28T10:01:11.706Z",
+  "market": "us",
+  "name": "CENTERPOINT ENERGY INC",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "BXP": {
+  "at": "2026-10-28T10:08:02.002Z",
+  "market": "us",
+  "name": "BXP, INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "BKR": {
+  "at": "2026-10-28T10:08:39.073Z",
+  "market": "us",
+  "name": "Baker Hughes Company",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-28T10:08:39.073Z"
+ },
+ "BX": {
+  "at": "2026-10-28T10:08:50.224Z",
+  "market": "us",
+  "name": "Blackstone Inc.",
+  "seen": "季別不明",
+  "kind": "presentation"
+ },
+ "GLW": {
+  "at": "2026-10-28T10:09:50.831Z",
+  "market": "us",
+  "name": "CORNING INC /NY",
+  "seen": "2026Q3",
+  "kind": "release",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-28T10:09:50.832Z"
+ },
+ "CSGP": {
+  "at": "2026-10-28T10:10:01.009Z",
+  "market": "us",
+  "name": "COSTAR GROUP, INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "ECL": {
+  "at": "2026-10-28T10:10:10.857Z",
+  "market": "us",
+  "name": "ECOLAB INC.",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-28T10:10:10.857Z"
+ },
+ "ESS": {
+  "at": "2026-10-28T10:10:27.246Z",
+  "market": "us",
+  "name": "ESSEX PROPERTY TRUST, INC.",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-28T10:10:27.246Z"
+ },
+ "FFIV": {
+  "at": "2026-10-28T10:11:07.145Z",
+  "market": "us",
+  "name": "F5, INC.",
+  "done": "2026Q4",
+  "kind": "presentation",
+  "pending": true,
+  "pendingSince": "2026-10-28T10:11:07.145Z"
  }
 }
