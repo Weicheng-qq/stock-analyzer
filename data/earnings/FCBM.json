@@ -1,0 +1,48 @@
+{
+ "symbol": "FCBM",
+ "market": "us",
+ "name": "First Carolina Financial Services, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "First Carolina Financial Services, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.06",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.05",
+  "每股盈餘": 0.2,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-27",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1531193/000162828026067640/exhibit991fcfsq32026earnin.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-28T10:31:00.796Z",
+ "result": {
+  "revenue": "營業收入為 0.06 億美元。",
+  "eps": "每股盈餘（EPS）為 0.2 美元。",
+  "margins": "毛利率未提供、營業利益率未提供。本期淨利為 0.05 億美元，淨利率為 83.3%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供具體財測數字。",
+  "outlook": "根據官方財報數字，本期營業收入為 0.06 億美元，本期淨利為 0.05 億美元，淨利率達 83.3%，每股盈餘為 0.2 美元。其餘營業毛利、營業利益及營運現金流等項目皆未提供。",
+  "highlights": "• 本期營業收入為 0.06 億美元。<br>• 本期淨利為 0.05 億美元，淨利率達 83.3%。<br>• 每股盈餘（EPS）為 0.2 美元。",
+  "concerns": "• 營業毛利與營業利益未提供，無法評估本業獲利結構。<br>• 營運現金流與資本支出未提供，現金流量狀況不明。",
+  "risks": "• 關鍵財務項目如營業利益、現金流量皆未提供，資訊透明度受限。<br>• 缺乏完整的成本與費用明細數據，潛在財務風險難以全面評估。",
+  "keyPoints": "• 營收表現：本期營業收入為 0.06 億美元。<br>• 獲利表現：本期淨利為 0.05 億美元，淨利率達 83.3%。<br>• 每股盈餘：每股盈餘（EPS）為 0.2 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "symbol": "INFU",
+ "market": "us",
+ "name": "INFUSYSTEM HOLDINGS, INC",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "INFUSYSTEM HOLDINGS, INC",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.37",
+  "營業毛利": "0.21",
+  "營業利益": "0.04",
+  "本期淨利": "0.03",
+  "每股盈餘": 0.15,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-04",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1337013/000162828026052112/infu-20260630xexx991earnin.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-28T10:33:10.590Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q2 營業收入為 0.37 億美元。官方新聞稿指出，淨營收為 3,690 萬美元，較去年同期增加 2.6%。",
+  "eps": "本會計年度 2026 Q2 每股盈餘（EPS）為 0.15 美元。根據官方新聞稿，本期淨利為 3.2 百萬美元，對應每股稀釋盈餘為 0.15 美元。",
+  "margins": "本會計年度 2026 Q2 營業毛利為 0.21 億美元，毛利率為 56.8%（官方新聞稿則指出毛利率為 58%）。營業利益為 0.04 億美元，營業利益率為 10.8%，本期淨利為 0.03 億美元，淨利率為 8.1%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "InfuSystem 重申 2026 全年營收財測。",
+  "outlook": "公司本季營收與毛利皆較去年同期有所成長，淨利亦從去年同期的 2.6 百萬美元增加至 3.2 百萬美元。整體營運表現維持穩健，且調整後 EBITDA 呈現增長。",
+  "highlights": "• 營業收入為 0.37 億美元，較去年同期增加 2.6%。<br>• 毛利率為 56.8%（官方新聞稿載明毛利率為 58%）。<br>• 每股盈餘（EPS）為 0.15 美元，高於去年同期的 0.12 美元。",
+  "concerns": "• Device Solutions 淨營收為 1,210 萬美元，較去年同期減少 16%。<br>• 營業與行政費用（G&A）較去年同期有所增加。<br>• 銷售及行銷費用較去年同期增加 10.5%。",
+  "risks": "• Device Solutions 部門受到合約重組及設備銷售減少的影響，營收呈現年減。<br>• 營運相關的費用與成本（如員工薪資與醫療保險費用）呈現增長壓力。<br>",
+  "keyPoints": "• 2026 Q2 營業收入為 0.37 億美元，淨利為 0.03 億美元。<br>• 每股盈餘（EPS）為 0.15 美元。<br>• Patient Services 淨營收為 2,480 萬美元，年增 15%，而 Device Solutions 淨營收為 1,210 萬美元，年減 16%。",
+  "guidanceOfficial": "InfuSystemisreaffirmingannualnetrevenueguidanceforthefullyear2026.Afteradjustingfortheimpactofthereducedrevenuer",
+  "segments": "• Patient Services net revenue: 2,480 萬美元, an increase of 15% vs. prior year.<br>• Device Solutions net revenue: 1,210 萬美元, a decrease of 16% vs. prior year."
+ }
+}

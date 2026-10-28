@@ -1,0 +1,48 @@
+{
+ "symbol": "MOD",
+ "market": "us",
+ "name": "MODINE MANUFACTURING CO",
+ "quarter": "2027 Q1（2026-04-01～2026-06-30）",
+ "quarterTag": "2027Q1",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "MODINE MANUFACTURING CO",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2027,
+  "season": "Q1",
+  "form": "10-Q",
+  "營業收入": "8.74",
+  "營業毛利": "1.82",
+  "營業利益": "0.75",
+  "本期淨利": "0.74",
+  "每股盈餘": 1.37,
+  "營運現金流": "0.41",
+  "資本支出": "0.46",
+  "自由現金流": "-0.05"
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/67347/000110465926088230/mod-20260729xex99d1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-28T10:34:34.773Z",
+ "result": {
+  "revenue": "本公司 2027 會計年度第一季營業收入為 8.74 億美元。根據新聞稿指出，淨銷售額達 8.741 億美元，較前一年度增加 1.913 億美元或 28%。",
+  "eps": "本季每股盈餘（EPS）為 1.37 美元，較前一年度增加 0.42 美元或 44%。調整後每股盈餘為 1.53 美元，較前一年度增加 0.47 美元或 44%。",
+  "margins": "本季營業毛利為 1.82 億美元，毛利率為 20.8%；營業利益為 0.75 億美元，營業利益率為 8.6%；本期淨利為 0.74 億美元，淨利率為 8.5%。毛利率較前一年度下降 340 個基點，主要受各業務部門毛利率下降影響。",
+  "fcf": "自由現金流為 -0.05 億美元（即使用 500 萬美元），較前一年度減少 5.2 億美元，主要由於資本支出增加以提升資料中心部門產能。",
+  "capex": "本季資本支出為 0.46 億美元。",
+  "guidance": "公司維持 2027 會計年度全年財測不變，預期全年淨銷售額成長 20% 至 35%，調整後 EBITDA 為 6.50 至 6.80 億美元。",
+  "outlook": "本季營收年增 28% 且淨利與 EPS 均有顯著成長，顯示核心成長引擎持續帶動頂線擴張。然而，供應鏈限制影響了產能並暫時壓縮毛利率，公司正採取積極措施以確保供應並提升營運效率。",
+  "highlights": "• 淨銷售額達 8.741 億美元，較前一年度增加 28%。<br>• 本期淨利達 74.3 百萬美元，較前一年度增加 44%。<br>• 資料中心與商業 HVAC 營收分別強勁成長 90% 與 22%。",
+  "concerns": "• 毛利率較前一年度下降 340 個基點至 20.8%。<br>• 自由現金流為 -0.05 億美元，呈現現金流出狀態。<br>• 受到供應鏈限制影響，限制了生產並暫時降低資料中心部門毛利率。",
+  "risks": "• 淨債務增加至 432.9 百萬美元，主要因執行股票回購計畫以支付員工稅務義務。<br>• 須持續面對供應鏈限制、材料與關稅成本上升及重組與分拆相關成本帶來的壓力。",
+  "keyPoints": "• 營業收入達 8.74 億美元，年增 28%，帶動本期淨利達 0.74 億美元、EPS 為 1.37 美元。<br>• 自由現金流為 -0.05 億美元，資本支出為 0.46 億美元，反映積極擴充資料中心產能。<br>• 維持 2027 會計年度全年財測，預期淨銷售額成長 20% 至 35%、調整後 EBITDA 達 6.50 至 6.80 億美元。",
+  "guidanceOfficial": "Fiscal 2027 Current Outlook Net Sales +20% to 35% Adjusted EBITDA $650 to 6.8 億美元",
+  "segments": "• Data Centers segment sales were 3.49 億美元, compared with 1.84 億美元 one year ago, an increase of 90 percent.<br>• Commercial HVAC segment sales were 2.62 億美元, compared with 2.14 億美元 one year ago, an increase of 22 percent.<br>• Performance Technologies segment sales were 2.78 億美元, compared with 2.86 億美元 one year ago, a decrease of 3 percent."
+ }
+}

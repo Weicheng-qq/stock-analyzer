@@ -1,0 +1,48 @@
+{
+ "symbol": "IBCP",
+ "market": "us",
+ "name": "INDEPENDENT BANK CORPORATION",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "INDEPENDENT BANK CORPORATION",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.08",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.19",
+  "每股盈餘": 0.9,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-27",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/39311/000003931126000065/ibcp-20261027ex991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-28T10:32:58.699Z",
+ "result": {
+  "revenue": "營業收入為 0.08 億美元。",
+  "eps": "每股盈餘（EPS）為 0.9 美元。",
+  "margins": "本期淨利率為 237.5%，反映淨利相對於營收的比率水準；營業毛利率與營業利益率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "本期淨利為 0.19 億美元，淨利率為 237.5%，每股盈餘（EPS）為 0.9 美元。營業收入為 0.08 億美元，其餘營業毛利、營業利益及營運現金流皆未提供。",
+  "highlights": "• 營業收入為 0.08 億美元。<br>• 本期淨利為 0.19 億美元，淨利率達 237.5%。<br>• 每股盈餘（EPS）為 0.9 美元。",
+  "concerns": "• 營業毛利未提供，無法評估毛利表現。<br>• 營業利益未提供，無法評估本業獲利能力。<br>• 營運現金流與資本支出均未提供。",
+  "risks": "• 官方未提供營運現金流與資本支出等現金流量數據，流動性與資本配置情形不明。<br>• 官方未提供營業毛利與營業利益相關數據，本業實際獲利結構與成本控制情形無法從現有數據完全得知。",
+  "keyPoints": "• 本期營業收入為 0.08 億美元。<br>• 本期淨利為 0.19 億美元，淨利率達 237.5%。<br>• 每股盈餘（EPS）為 0.9 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "本次資料未揭露分部營收"
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "symbol": "WERN",
+ "market": "us",
+ "name": "WERNER ENTERPRISES, INC.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "WERNER ENTERPRISES, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "9.34",
+  "營業毛利": null,
+  "營業利益": "0.17",
+  "本期淨利": "0.06",
+  "每股盈餘": 0.11,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-27",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/793074/000079307426000165/wern-2026x930xex991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-28T10:42:46.797Z",
+ "result": {
+  "revenue": "依據官方數字，營業收入為 9.34 億美元。",
+  "eps": "每股盈餘（EPS）為 0.11 美元。",
+  "margins": "營業毛利與毛利率未提供；營業利益率為 1.8%，本期淨利率為 0.6%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司已更新 2026 年全年展望假設，包含 TTS 平均卡車數量成長等預期。",
+  "outlook": "根據官方財報新聞稿，第三季總營收為 950,508 基準（新聞稿顯示部分金額單位為千美元），營業利益為 17.0 百萬美元，本期淨利歸屬於 Werner 為 6,595 千美元。公司提到快速上升的燃料成本和偏高的索賠短期內影響了近期的利潤率。",
+  "highlights": "• 依據官方新聞稿，第三季總營收為 950,508 千美元。<br>• 營業利益為 16,988 千美元，較去年同期的營業虧損 13,021 千美元增加。<br>• 歸屬於 Werner 的本期淨利為 6,595 千美元，稀釋每股盈餘為 0.11 美元。",
+  "concerns": "• 營業利益率為 1.8%，淨利率為 0.6%，顯示整體利潤率水準偏低。<br>• 營運現金流與自由現金流等項目在官方財報摘要中未提供。",
+  "risks": "• 本期淨利率僅 0.6%，獲利空間較小。<br>• 燃料成本與索賠等因素對短期利潤率造成影響。",
+  "keyPoints": "• 營業收入為 9.34 億美元。<br>• 營業利益為 0.17 億美元，營業利益率 1.8%。<br>• 本期淨利為 0.06 億美元，淨利率 0.6%，每股盈餘（EPS）為 0.11 美元。",
+  "guidanceOfficial": "Prior 2026 Guidance (as of 7/28/26) Actual (as of 9/30/26) Current 2026 Guidance (as of 10/27/26) TTS average truck count growth 16% to 18% (2026 vs. 2025) 15.8% (YTD26 vs. 2025) 16% to 17% (2026 vs. 2025) Dedicated RPTPW (1) growth 3% to 5% (2026 vs. 2025) 4.0% (YTD26 vs. YTD25) 4% to 5% (2026 vs. 2025) One-Way Truckload RPTM (1) growth 10% to 13% (3Q26 vs. 3Q25) 9.7% (3Q26 vs. 3Q25) 10% to 13% (4Q26 vs. 4Q25) Net capital expenditures $215M to $250M (2026) $29M (YTD) $190M to $205M (2026) Assumptions Effective income tax rate (GAAP) 25.5% to 26.5% (2026) 17.0% (YTD) 24.5% to 25.5% (2026)",
+  "segments": "• Truckload Transportation Services (TTS) revenues: $714,002 thousand, an increase of 37% year over year.<br>• Werner Logistics revenues: $215,827 thousand, a decrease of (7)% year over year."
+ }
+}

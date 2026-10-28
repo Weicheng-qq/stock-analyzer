@@ -1,0 +1,48 @@
+{
+ "symbol": "HG",
+ "market": "us",
+ "name": "Hamilton Insurance Group, Ltd.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Hamilton Insurance Group, Ltd.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "8.40",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "2.55",
+  "每股盈餘": 1.42,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-06",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1593275/000159327526000094/hg991pressreleaseq226.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-28T10:32:38.107Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q2 的營業收入為 8.40 億美元。依據公司官方新聞稿節錄，總保費收入與淨保費皆有成長表現。",
+  "eps": "本期每股盈餘（EPS）為 1.42 美元。本期淨利為 2.55 億美元，淨利率達 30.4%。",
+  "margins": "本期淨利率為 30.4%，本期淨利達 2.55 億美元。營業毛利、營業利益率與毛利率均未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供具體明文財測，僅強調審慎的風險選擇與長期價值創造。",
+  "outlook": "本季本期淨利達 2.55 億美元，每股盈餘（EPS）為 1.42 美元，淨利率為 30.4%。業務方面，總保費與淨保費收入皆呈現增長趨勢，並維持 95% 的綜合成本率（Combined ratio）。",
+  "highlights": "• 本期淨利為 2.55 億美元，每股盈餘（EPS）達 1.42 美元，淨利率為 30.4%。<br>• 綜合成本率（Combined ratio）為 95.0%。<br>• 執行長 Pina Albo 的任期已獲董事會延長至 2029 年 12 月 31 日。",
+  "concerns": "• 本季受到中東衝突影響，導致淨負債準備與災難損失增加。<br>• 國際部門與百慕達部門的綜合成本率分別為 97.0% 與 93.0%。",
+  "risks": "• 災難損失（含中東衝突等）對整體理賠與損失準備造成影響。<br>• 業務組合的改變可能導致賠付率與費用率波動。",
+  "keyPoints": "• 本期營業收入為 8.40 億美元。<br>• 本期淨利為 2.55 億美元，每股盈餘（EPS）為 1.42 美元，淨利率為 30.4%。<br>• 公司綜合成本率（Combined ratio）為 95.0%。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• 國際部門（International Segment）：保費與淨保費等相關數據有顯著成長，第二季營業利益為 912.4 萬美元，綜合成本率為 97.0%。<br>• 百慕達部門（Bermuda Segment）：第二季營業利益為 1,998.8 萬美元，綜合成本率為 93.0%。"
+ }
+}
