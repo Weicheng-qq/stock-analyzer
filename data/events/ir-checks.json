@@ -4255,7 +4255,7 @@
   "kind": ""
  },
  "JNJ": {
-  "at": "2026-10-25T14:39:13.158Z",
+  "at": "2026-10-28T18:25:20.600Z",
   "market": "us",
   "name": "Johnson & Johnson",
   "seen": "2026Q3",
@@ -4352,14 +4352,14 @@
   "kind": "presentation"
  },
  "CB": {
-  "at": "2026-10-25T14:39:06.073Z",
+  "at": "2026-10-28T18:25:05.895Z",
   "market": "us",
   "name": "CHUBB LIMITED",
-  "done": "2026Q2",
+  "done": "2026Q3",
   "kind": "presentation",
   "pending": true,
   "pendingSince": "2026-10-22T01:29:32.037Z",
-  "seen": "2026Q2"
+  "seen": "2026Q3"
  },
  "TSLA": {
   "at": "2026-10-22T07:24:59.368Z",
@@ -4731,7 +4731,7 @@
   "kind": "release"
  },
  "LVS": {
-  "at": "2026-10-25T00:59:37.450Z",
+  "at": "2026-10-28T18:28:12.611Z",
   "market": "us",
   "name": "LAS VEGAS SANDS CORP.",
   "seen": "2026Q3",
@@ -4759,11 +4759,11 @@
   "kind": "presentation"
  },
  "SPGI": {
-  "at": "2026-10-25T00:59:58.217Z",
+  "at": "2026-10-28T18:29:30.240Z",
   "market": "us",
   "name": "S&P Global Inc.",
-  "seen": "沒有文件",
-  "kind": ""
+  "seen": "2026Q3",
+  "kind": "presentation"
  },
  "VRT": {
   "at": "2026-10-27T05:19:01.233Z",
@@ -5112,5 +5112,88 @@
   "done": "2026Q3",
   "pending": true,
   "pendingSince": "2026-10-28T10:21:42.868Z"
+ },
+ "HOOD": {
+  "at": "2026-10-28T18:25:59.738Z",
+  "market": "us",
+  "name": "Robinhood Markets, Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "FE": {
+  "at": "2026-10-28T18:26:15.465Z",
+  "market": "us",
+  "name": "FIRSTENERGY CORP",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "FCX": {
+  "at": "2026-10-28T18:26:59.787Z",
+  "market": "us",
+  "name": "Freeport-McMoRan Inc.",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-28T18:26:59.787Z"
+ },
+ "HAS": {
+  "at": "2026-10-28T18:27:10.022Z",
+  "market": "us",
+  "name": "HASBRO, INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "HCA": {
+  "at": "2026-10-28T18:27:13.956Z",
+  "market": "us",
+  "name": "HCA Healthcare, Inc.",
+  "seen": "2026Q3",
+  "kind": "release"
+ },
+ "ITW": {
+  "at": "2026-10-28T18:27:58.978Z",
+  "market": "us",
+  "name": "ILLINOIS TOOL WORKS INC",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "IVZ": {
+  "at": "2026-10-28T18:28:02.874Z",
+  "market": "us",
+  "name": "Invesco Ltd.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "JCI": {
+  "at": "2026-10-28T18:28:07.122Z",
+  "market": "us",
+  "name": "JOHNSON CONTROLS INTERNATIONAL PLC",
+  "seen": "2026Q4",
+  "kind": "presentation"
+ },
+ "MRSH": {
+  "at": "2026-10-28T18:28:16.277Z",
+  "market": "us",
+  "name": "MARSH & MCLENNAN COMPANIES, INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "OKE": {
+  "at": "2026-10-28T18:28:27.044Z",
+  "market": "us",
+  "name": "ONEOK INC /NEW/",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-28T18:28:27.044Z"
+ },
+ "PCAR": {
+  "at": "2026-10-28T18:28:37.914Z",
+  "market": "us",
+  "name": "PACCAR Inc",
+  "seen": "沒有文件",
+  "kind": ""
  }
 }
