@@ -3506,7 +3506,7 @@
   "kind": ""
  },
  "3081": {
-  "at": "2026-10-20T01:44:11.401Z",
+  "at": "2026-10-29T10:15:34.469Z",
   "market": "tw",
   "name": "聯亞",
   "seen": "沒有文件",
@@ -3520,7 +3520,7 @@
   "kind": ""
  },
  "3105": {
-  "at": "2026-10-23T15:52:52.275Z",
+  "at": "2026-10-29T10:15:07.079Z",
   "market": "tw",
   "name": "穩懋",
   "seen": "沒有文件",
@@ -3660,7 +3660,7 @@
   "kind": ""
  },
  "3529": {
-  "at": "2026-10-18T00:49:03.583Z",
+  "at": "2026-10-29T10:15:13.167Z",
   "market": "tw",
   "name": "力旺",
   "seen": "沒有文件",
@@ -3716,7 +3716,7 @@
   "kind": ""
  },
  "3680": {
-  "at": "2026-10-18T02:38:42.229Z",
+  "at": "2026-10-29T10:15:28.427Z",
   "market": "tw",
   "name": "家登",
   "seen": "沒有文件",
@@ -3996,7 +3996,7 @@
   "kind": ""
  },
  "6274": {
-  "at": "2026-10-18T00:49:10.232Z",
+  "at": "2026-10-29T10:15:13.464Z",
   "market": "tw",
   "name": "台燿",
   "seen": "沒有文件",
@@ -4773,11 +4773,11 @@
   "kind": "presentation"
  },
  "VRT": {
-  "at": "2026-10-27T05:19:01.233Z",
+  "at": "2026-10-29T10:13:01.290Z",
   "market": "us",
   "name": "Vertiv Holdings Co",
-  "seen": "沒有文件",
-  "kind": ""
+  "seen": "2026Q3",
+  "kind": "presentation"
  },
  "AZO": {
   "at": "2026-10-27T05:19:01.668Z",
@@ -4794,18 +4794,18 @@
   "kind": ""
  },
  "EQT": {
-  "at": "2026-10-27T05:20:54.664Z",
+  "at": "2026-10-29T10:21:39.790Z",
   "market": "us",
   "name": "EQT CORPORATION",
-  "seen": "2026Q2",
-  "kind": "transcript"
+  "seen": "2026Q3",
+  "kind": "presentation"
  },
  "FDX": {
-  "at": "2026-10-27T05:21:00.499Z",
+  "at": "2026-10-29T10:21:44.415Z",
   "market": "us",
-  "name": "FEDEX CORP",
+  "name": "FedEx Corporation",
   "seen": "2026Q4",
-  "kind": "transcript"
+  "kind": "presentation"
  },
  "DHI": {
   "at": "2026-10-27T05:21:04.121Z",
@@ -4853,9 +4853,9 @@
   "kind": ""
  },
  "CDNS": {
-  "at": "2026-10-27T05:49:06.847Z",
+  "at": "2026-10-29T10:08:19.046Z",
   "market": "us",
-  "name": "CADENCE DESIGN SYSTEMS, INC.",
+  "name": "Cadence Design Systems, Inc.",
   "seen": "2026Q3",
   "kind": "commentary"
  },
@@ -5238,6 +5238,48 @@
   "at": "2026-10-29T01:07:46.740Z",
   "market": "us",
   "name": "Waste Management, Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "MSFT": {
+  "at": "2026-10-29T10:08:13.618Z",
+  "market": "us",
+  "name": "MICROSOFT CORPORATION",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "BSX": {
+  "at": "2026-10-29T10:13:06.037Z",
+  "market": "us",
+  "name": "BOSTON SCIENTIFIC CORPORATION",
+  "seen": "季別不明",
+  "kind": "presentation"
+ },
+ "AEP": {
+  "at": "2026-10-29T10:15:38.199Z",
+  "market": "us",
+  "name": "American Electric Power Company, Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "VTR": {
+  "at": "2026-10-29T10:28:00.227Z",
+  "market": "us",
+  "name": "Ventas, Inc.",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "AES": {
+  "at": "2026-10-29T10:28:05.730Z",
+  "market": "us",
+  "name": "THE AES CORPORATION",
+  "seen": "季別不明",
+  "kind": "presentation"
+ },
+ "ALGN": {
+  "at": "2026-10-29T10:28:08.838Z",
+  "market": "us",
+  "name": "ALIGN TECHNOLOGY, INC.",
   "seen": "沒有文件",
   "kind": ""
  }

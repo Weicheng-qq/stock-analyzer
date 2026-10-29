@@ -1,0 +1,48 @@
+{
+ "symbol": "FELE",
+ "market": "us",
+ "name": "FRANKLIN ELECTRIC CO., INC.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "FRANKLIN ELECTRIC CO., INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "6.34",
+  "營業毛利": "2.24",
+  "營業利益": "0.87",
+  "本期淨利": "0.61",
+  "每股盈餘": 1.35,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-28",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/38725/000003872526000064/a20261028ex991earningsrele.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T10:35:13.593Z",
+ "result": {
+  "revenue": "營業收入為 6.34 億美元，合併淨銷售額較去年同期增加 9%。",
+  "eps": "每股盈餘（EPS）為 1.35 美元，調整後稀釋 EPS 為 1.50 美元。",
+  "margins": "營業毛利為 2.24 億美元，毛利率為 35.3%；營業利益為 0.87 億美元，營業利益率為 13.7%；本期淨利為 0.61 億美元，淨利率為 9.6%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司調高 2026 全年淨銷售額及調整後稀釋 EPS 的官方財測。",
+  "outlook": "本季合併淨銷售額與營業利益較去年同期皆有成長，且三大部門（Water Systems、Energy Systems、Distribution）淨銷售額皆呈現增加。公司透過 disciplined pricing、productivity initiatives 及 operational execution 持續推動業務。",
+  "highlights": "• 合併淨銷售額達到 633.6 百萬美元（約 6.34 億美元），較去年同期增加 9%。<br>• GAAP 完全稀釋每股盈餘（EPS）為 1.35 美元，較去年同期增加 265%，調整後稀釋 EPS 為 1.50 美元增加 15%。<br>• 各部門淨銷售額皆成長：Water Systems 增加 5%、Energy Systems 增加 15%、Distribution 增加 15%。",
+  "concerns": "• Water Systems 營業利益由去年同期的 60.2 百萬美元下降 2% 至 58.9 百萬美元。<br>• Energy Systems 營業利益由去年同期的 25.4 百萬美元變動至 23.7 百萬美元，其中包含 4.7 百萬美元收購相關成本及 3.1 百萬美元庫存公允價值調整影響。<br>• 營業利益率為 13.7%，較去年同期的 14.6% 略微下降。",
+  "risks": "• 本季部分部門（如 Energy Systems 及 Water Systems）受到收購相關成本與重組費用的影響。<br>• 營業利益成長幅度（增加 2%）小於營收成長幅度（增加 9%），顯示成本或費用支出增加。",
+  "keyPoints": "• 第三季營業收入為 6.34 億美元，營業利益為 0.87 億美元，本期淨利為 0.61 億美元。<br>• 各部門營收表現中，Distribution 營收為 226.1 百萬美元（年增 15%）、Energy Systems 營收為 91.7 百萬美元（年增 15%）、Water Systems 營收為 352.5 百萬美元（年增 5%）。<br>• 公司調高 2026 全年淨銷售額預期至 22.3 億美元至 23 億美元之間，調整後稀釋 EPS 預期在 4.62 美元至 4.82 美元之間。",
+  "guidanceOfficial": "The Company is raising its guidance for full year 2026 net sales to be in the range of 22.3 億美元 to 23 億美元 and full year 2026 Adjusted Diluted EPS to be in the range of $4.62 to $4.82.",
+  "segments": "• Water Systems：淨銷售額為 352.5 百萬美元，較 2025 年同期增加 $15.9 百萬美元或 5 percent。<br>• Distribution：淨銷售額為 226.1 百萬美元，較 2025 年同期增加 $28.8 百萬美元或 15 percent。<br>• Energy Systems：淨銷售額在 2026 年第三季為 91.7 百萬美元，較 2025 年同期增加 $11.7 百萬美元或 15 percent。"
+ }
+}

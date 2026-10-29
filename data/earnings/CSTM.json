@@ -1,0 +1,48 @@
+{
+ "symbol": "CSTM",
+ "market": "us",
+ "name": "Constellium SE",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Constellium SE",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "26.39",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "1.17",
+  "每股盈餘": 0.84,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-28",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1563411/000156341126000198/a2026-q3xearningspressre.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T10:33:26.265Z",
+ "result": {
+  "revenue": "營業收入為 26.39 億美元。",
+  "eps": "每股盈餘（EPS）為 0.84 美元。",
+  "margins": "本期淨利為 1.17 億美元，淨利率為 4.4%。營業毛利、毛利率、營業利益及營業利益率均未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司調升 2026 全年財測，預期 Adjusted EBITDA 在 10.3 億美元至 10.6 億美元之間，自由現金流超過 3.0 億美元。",
+  "outlook": "根據官方新聞稿，本季營收為 26.39 億美元（新聞稿稱 26 億美元），淨利為 1.19 億美元，出貨量為 368 千公噸。公司提到受益於 aerospace 和 TID 環境改善、北美汽車軋製品供應短缺及回收業務表現強勁。",
+  "highlights": "• 營收達 26.39 億美元。<br>• 本期淨利為 1.17 億美元（新聞稿淨利為 119 百萬美元），淨利率 4.4%。<br>• 每股盈餘（EPS）為 0.84 美元。",
+  "concerns": "• AS&I 部門之 Segment Adjusted EBITDA 為 21 百萬美元，較 Q3 2025 下降 36%。<br>• P&ARP 與 AS&I 部門的出貨量較 Q3 2025 下降，分別為 266 千公噸（年減 3%）與 46 千公噸（年減 4%）。<br>• 集團出貨量為 368 千公噸，較 Q3 2025 下降 1%。",
+  "risks": "• AS&I 部門受到未達成目標之客戶補償等因素影響，導致價格與組合不利。<br>• 營業現金流與資本支出等細節於 XBRL 官方申報資料中未提供。",
+  "keyPoints": "• 官方申報之營業收入為 26.39 億美元，本期淨利為 1.17 億美元，EPS 為 0.84 美元。<br>• 依據新聞稿，A&T 部門營收為 664 百萬美元（年增 38%），P&ARP 部門營收為 1,625 百萬美元（年增 24%），AS&I 部門營收為 402 百萬美元（年減 2%）。<br>• 公司調升 2026 年全年展望，預期 Adjusted EBITDA 介於 10.3 億美元至 10.6 億美元，自由現金流超過 3.0 億美元。",
+  "guidanceOfficial": "Based on our current outlook, we are raising our guidance for 2026 and now expect Adjusted EBITDA in the range of 10.3 億美元 to 10.6 億美元, excluding the non-cash impact of metal price lag, and Free Cash Flow in excess of 3 億美元.",
+  "segments": "• Aerospace & Transportation (A&T)：營收 664 百萬美元，年增 38%<br>• Packaging & Automotive Rolled Products (P&ARP)：營收 1,625 百萬美元，年增 24%<br>• Automotive Structures & Industry (AS&I)：營收 402 百萬美元，年減 2%"
+ }
+}

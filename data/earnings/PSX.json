@@ -1,0 +1,52 @@
+{
+ "symbol": "PSX",
+ "market": "us",
+ "name": "Phillips 66",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Phillips 66",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "505.40",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "56.16",
+  "每股盈餘": 14.08,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "",
+  "form": "法說會逐字稿",
+  "url": "https://s22.q4cdn.com/128149789/files/content_files/PSX-3Q2026-Earnings-Conference-Call-Transcript.pdf"
+ },
+ "docKind": "transcript",
+ "savedAt": "2026-10-29T10:27:13.098Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q3 營業收入為 505.40 億美元，展現一定的營收規模。",
+  "eps": "本會計年度 2026 Q3 每股盈餘（EPS）為 14.08 美元，反映出穩健的獲利水準。",
+  "margins": "本期淨利為 56.16 億美元，淨利率為 11.1%。營業毛利與營業利益率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司對第四季在化學品、煉油及企業成本等面向皆提出了相關的 utilization 與費用展望。",
+  "outlook": "公司在營運表現上維持強勁，煉油廠利用率達 98%，蒸餾產率達 41% 的第三季紀錄。同時在中游與化學品業務上持續推動多項擴建與資本配置計畫。",
+  "highlights": "• 煉油業務維持強勁表現，煉油廠利用率達 98% 並創下第三季蒸餾產率 41% 的紀錄。<br>• 資本配置紀律維持不變，致力於將扣除營運資金後的大於 50% 營運現金流回饋給股東。<br>• 本季成功償還債務，使總債務降至 185.30 億美元，淨債務降至 126.82 億美元，淨債務對資本比率降至 26%。",
+  "concerns": "• 本季營運現金流、自由現金流及資本支出的部分官方細項數據於指定揭露中未提供。<br>• 營業毛利與營業利益率等獲利指標於指定揭露中未提供。",
+  "risks": "• 資本支出與債務結構變化需持續關注。<br>• 相關能源與化學品市場的商品週期波動可能影響未來表現。",
+  "keyPoints": "• 本會計年度 2026 Q3 營業收入為 505.40 億美元。<br>• 本會計年度 2026 Q3 本期淨利為 56.16 億美元，淨利率為 11.1%，每股盈餘（EPS）為 14.08 美元。<br>• 總債務為 185.30 億美元，淨債務為 126.82 億美元，淨債務對資本比率為 26%。",
+  "guidanceOfficial": "Looking ahead to the fourth quarter on Slide 6. In Chemicals, we expect the Global O&P utilization rate to be in the mid-80s. In Refining, we expect the worldwide crude utilization rate to be in the mid-90s. Turnaround expense is expected to be between 1.4 億美元 and 1.7 億美元. We anticipate corporate and other costs to be between 3.5 億美元 and 3.8 億美元.",
+  "segments": "本次資料未揭露分部營收。",
+  "__unitRule": "⚠️⚠️ 單位換算鐵則（違反會讓數字差 10 倍，是最嚴重的錯誤）：英文 billion＝十億，所以 US$100 billion 必須寫成「1,000 億美元」不是「100 億美元」；US$60 billion 是「600 億美元」。million＝百萬，US$15.7 billion 是「157 億美元」。若無把握，直接保留原文寫法「US$100B」，不要自行換算成中文數字。",
+  "mgmtRemarks": "• 執行長 Mark Lashier 表示，營運表現持續強勁，煉油廠利用率達 98%，並在中游業務實現超過每日 100 萬桶的分餾量。<br>• 執行長 Mark Lashier 強調，公司致力於將扣除營運資金後的營運現金流中超過 50% 回饋給股東。<br>• 財務長 Kevin Mitchell 表示，本季減少了 20 億美元的債務，總債務以 18.5 十億美元結束該季，淨債務為 12.7 十億美元，淨債務對資本比率降至 26%。",
+  "capexPlan": "未提供",
+  "techRoadmap": "本次未提及技術路線圖。"
+ }
+}

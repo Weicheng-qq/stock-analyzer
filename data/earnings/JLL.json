@@ -1,0 +1,48 @@
+{
+ "symbol": "JLL",
+ "market": "us",
+ "name": "Jones Lang LaSalle Incorporated",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Jones Lang LaSalle Incorporated",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "72.81",
+  "營業毛利": null,
+  "營業利益": "3.91",
+  "本期淨利": "3.19",
+  "每股盈餘": 6.85,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-28",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1037976/000103797626000187/exhibit991thirdquarter2026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T10:36:34.837Z",
+ "result": {
+  "revenue": "營業收入為 72.81 億美元（新聞稿提及總營收為 73 億美元），營運表現強勁。<br>各主要業務如租賃諮詢、資本市場服務及房地產管理服務皆有顯著成長。",
+  "eps": "每股盈餘（EPS）為 6.85 美元，較去年同期顯著成長。<br>稀釋後每股盈餘在當地貨幣計算下年增 50%。",
+  "margins": "營業利益率為 5.4%，營業利益為 3.91 億美元。<br>淨利率為 4.4%，本期淨利為 3.19 億美元。<br>獲利成長主要由較高的營收與增量的平台槓桿所帶動。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司對全年財務表現保持樂觀，並調高了全年調整後 EPS 目標區間。",
+  "outlook": "本季營運表現穩健，主要受惠於租賃諮詢與資本市場服務的高成長。<br>公司持續透過自由現金流產生穩健的財務體質，並積極執行股份回購。",
+  "highlights": "• 稀釋後每股盈餘達 6.85 美元，年增 49%（當地貨幣計算年增 50%）。<br>• 營業利益率為 5.4%，本期淨利達 3.19 億美元。<br>• 擬執行 5.0 億美元的加速股份回購，使全年回購金額超過 10 億美元。",
+  "concerns": "• 營業現金流在三個月期間呈現微幅年減（1%）。<br>• 部分地區如歐洲與亞太地區出現局部 softness（疲軟）。",
+  "risks": "• 雖然淨槓桿率維持在 0.5x 的健康水準，但仍需關注全球房地產市場波動對業務帶來的潛在影響。<br>• 商業票據計畫尚有 1.135 億美元流通在外，需持續留意流動性與融資成本變化。",
+  "keyPoints": "• 第三季營業收入為 72.81 億美元，營業利益為 3.91 億美元。<br>• 每股盈餘（EPS）達 6.85 美元，調整後稀釋每股盈餘為 6.76 美元。<br>• 淨債務降至 8.587 億美元，淨槓桿率為 0.5x，公司流動資金達 35.673 億美元。",
+  "guidanceOfficial": "Given the strength of our pipelines and operating trends, we are optimistic about a strong finish to 2026 and have raised our full-year Adjusted EPS target range, reflecting 37% growth at the midpoint.",
+  "segments": "• 房地產管理服務營收為 54.974 億美元（年增 9%）<br>• 租賃諮詢營收為 9.418 億美元（年增 27%）<br>• 資本市場服務營收為 73.68 億美元（年增 20%）"
+ }
+}
