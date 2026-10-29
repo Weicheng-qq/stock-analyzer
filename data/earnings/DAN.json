@@ -1,0 +1,48 @@
+{
+ "symbol": "DAN",
+ "market": "us",
+ "name": "Dana Incorporated",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Dana Incorporated",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "20.10",
+  "營業毛利": null,
+  "營業利益": "0.76",
+  "本期淨利": "-0.05",
+  "每股盈餘": -0.05,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-28",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/26780/000119312526435068/d160614dex991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T11:01:54.638Z",
+ "result": {
+  "revenue": "依據官方財務數字，營業收入為 20.10 億美元。",
+  "eps": "依據官方財務數字，每股盈餘（EPS）為 -0.05 美元，本期呈現每股虧損。",
+  "margins": "依據官方財務數字，營業利益率為 3.8%，營業利益為 0.76 億美元；淨利率為 -0.2%，本期淨利為 -0.05 億美元，處於虧損狀態。毛利率未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司修訂全年財測，調高銷售展望並維持調整後 EBITDA、調整後每股盈餘與調整後自由現金流目標。",
+  "outlook": "依據官方數字，營業利益為 0.76 億美元，營業利益率為 3.8%，本期淨利為 -0.05 億美元，淨利率為 -0.2%，每股盈餘為 -0.05 美元。",
+  "highlights": "• 營業收入達 20.10 億美元。<br>• 營業利益為 0.76 億美元，營業利益率為 3.8%。",
+  "concerns": "• 本期淨利為 -0.05 億美元，處於虧損狀態。<br>• 淨利率為 -0.2%。<br>• 每股盈餘為 -0.05 美元，呈現每股虧損。",
+  "risks": "• 本期淨利為負值（-0.05 億美元），顯示公司目前處於虧損狀態。<br>• 淨利率為 -0.2%，且每股盈餘為 -0.05 美元。",
+  "keyPoints": "• 營業收入為 20.10 億美元。<br>• 營業利益為 0.76 億美元，營業利益率達 3.8%。<br>• 本期淨利為 -0.05 億美元，每股盈餘（EPS）為 -0.05 美元。",
+  "guidanceOfficial": "Revised 2026 Financial Targets Revised Guidance Sales $7.75 to 78.5 億美元 Adjusted EBITDA $800 to 8.5 億美元 Implied adjusted EBITDA margin ~10.6% Diluted Adjusted EPS $1.75 to $2.25 Adjusted free cash flow $275 to 3.75 億美元",
+  "segments": "• Light Vehicle：銷售額 13.71 億美元（2025年同期為 13.53 億美元），調整後 EBITDA 為 1.51 億美元（2025年同期為 1.26 億美元）。<br>• Commercial Vehicle：銷售額 0.67 億美元（原文中 Commercial Vehicle 3個月銷售額為 667 百萬美元，即 6.67 億美元；2025年同期為 564 百萬美元，即 5.64 億美元），調整後 EBITDA 為 0.69 億美元（2025年同期為 0.51 億美元）。"
+ }
+}

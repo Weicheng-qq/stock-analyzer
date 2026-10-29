@@ -1,0 +1,48 @@
+{
+ "symbol": "MBINN",
+ "market": "us",
+ "name": "MERCHANTS BANCORP",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "MERCHANTS BANCORP",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "2.94",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.78",
+  "每股盈餘": 1.48,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-28",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1629019/000110465926119617/mbin-ex99d1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T11:11:44.599Z",
+ "result": {
+  "revenue": "營業收入為 2.94 億美元。",
+  "eps": "每股盈餘（EPS）為 1.48 美元。",
+  "margins": "本期淨利為 0.78 億美元，淨利率為 26.5%。營業毛利與營業利益率未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "本季本期淨利為 0.78 億美元，淨利率達 26.5%，每股盈餘為 1.48 美元。資產總額與各項細節依官方數據呈現。",
+  "highlights": "• 本季本期淨利為 0.78 億美元，淨利率為 26.5%。<br>• 本季每股盈餘（EPS）為 1.48 美元。<br>• 營業收入為 2.94 億美元。",
+  "concerns": "• 營業毛利與營業利益率未提供。<br>• 營運現金流與自由現金流未提供。<br>• 資本支出未提供。",
+  "risks": "• 因官方財務資料未提供營業現金流與資本支出，無法由財務結構評估其現金流量風險。<br>• 部分財務指標如營業毛利與營業利益率未提供，限制了對核心獲利能力的完整評估。",
+  "keyPoints": "• 本季營業收入為 2.94 億美元。<br>• 本季本期淨利為 0.78 億美元，淨利率 26.5%。<br>• 本季每股盈餘（EPS）為 1.48 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• 銀行業務（Banking）：提供零售和通訊住宅抵押貸款銀行業務、農業貸款及傳統社區銀行業務。<br>• 多戶住宅抵押貸款銀行業務（Multi-family Mortgage Banking）：主要提供多戶住宅和醫療保健設施融資與服務，並擔任低收入住房稅收抵免和債務基金的辛迪加機構。<br>• 抵押貸款倉儲（Mortgage Warehousing）：提供抵押貸款倉儲融資、商業貸款及存款服務。"
+ }
+}

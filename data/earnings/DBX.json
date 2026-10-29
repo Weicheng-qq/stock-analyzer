@@ -1,0 +1,48 @@
+{
+ "symbol": "DBX",
+ "market": "us",
+ "name": "Dropbox, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Dropbox, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "6.32",
+  "營業毛利": "5.07",
+  "營業利益": "1.65",
+  "本期淨利": "0.96",
+  "每股盈餘": 0.42,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-06",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1467623/000146762326000045/q22026er-exhibit991q2xq4.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T11:02:06.833Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q2 營業收入為 6.32 億美元（新聞稿指出 Total revenue 總計為 631.5 百萬美元，年增 0.9%）。",
+  "eps": "本期每股盈餘（EPS）為 0.42 美元。",
+  "margins": "本季營業毛利為 5.07 億美元，毛利率高達 80.2%，顯示公司具備優異的成本控制與產品定價能力。營業利益為 1.65 億美元，營業利益率為 26.1%，本期淨利則為 0.96 億美元，淨利率為 15.2%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "本季營業收入為 6.32 億美元，營業毛利達 5.07 億美元，展現穩健的營利基礎。本期淨利為 0.96 億美元，維持獲利狀態，每股盈餘為 0.42 美元。",
+  "highlights": "• 營業收入達 6.32 億美元，總營收較去年同期增加 0.9%，排除 FormSwift 後成長 1.7%。<br>• 營業毛利達 5.07 億美元，毛利率維持在 80.2% 的高水準。<br>• 營業利益為 1.65 億美元，營業利益率達 26.1%，本期淨利為 0.96 億美元。",
+  "concerns": "• 總營收年增率僅 0.9%，若排除 FormSwift 則為 1.7%，整體營收成長動能相對平緩。<br>• 官方現金流與資本支出數據於本次資料中未提供，無法進一步評估現金回收與再投資效率。<br>• 官方財測與未來展望未於本次資料提供，無法得知後續營收成長預期。",
+  "risks": "• 營收年增率處於個位數（0.9%），核心業務成長力道有限。<br>• 財務資料中營運現金流與資本支出均未提供，流動性與現金配置細節不明。",
+  "keyPoints": "• 2026 Q2 營業收入為 6.32 億美元，年增 0.9%。<br>• 本季營業毛利為 5.07 億美元，毛利率為 80.2%，營業利益率為 26.1%。<br>• 本期淨利為 0.96 億美元，每股盈餘（EPS）為 0.42 美元。",
+  "guidanceOfficial": "Dropbox will provide forward-looking guidance in connection with this quarterly earnings announcement on its conference call, webcast, and on its investor relations website at http://investors.dropbox.com .",
+  "segments": "• Total revenue was 6.32 億美元, an increase of 0.9%. Excluding FormSwift, revenue grew 1.7%. On a constant currency basis, total revenue excluding FormSwift increased by 0.1%.<br>• Total ARR was 25.66 億美元, an increase of 1.0%. Excluding FormSwift, Total ARR grew 1.7%, and 0.2% on a constant currency basis."
+ }
+}

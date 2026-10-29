@@ -1,0 +1,48 @@
+{
+ "symbol": "MORN",
+ "market": "us",
+ "name": "MORNINGSTAR, INC.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "MORNINGSTAR, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "6.72",
+  "營業毛利": null,
+  "營業利益": "1.67",
+  "本期淨利": "1.16",
+  "每股盈餘": 3.06,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-28",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1289419/000128941926000056/exhibit991-pressrelease_09.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T10:47:02.958Z",
+ "result": {
+  "revenue": "營業收入為 6.72 億美元。",
+  "eps": "每股盈餘（EPS）為 3.06 美元。",
+  "margins": "營業利益率為 24.9%，淨利率為 17.3%。毛利率未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "營業利益為 1.67 億美元，營業利益率達 24.9%，本期淨利為 1.16 億美元，淨利率為 17.3%。本季各主要業務部門如 Morningstar Direct Platform、PitchBook、Morningstar Credit、Morningstar Wealth 與 Morningstar Retirement 皆有相應的營收與營運表現貢獻。",
+  "highlights": "• 營業收入達 6.72 億美元，營業利益為 1.67 億美元，營業利益率為 24.9%。<br>• 本期淨利為 1.16 億美元，每股盈餘（EPS）為 3.06 美元。<br>• 各主要 reportable segments 總營收達 6.068 億美元，Corporate and All Other 營收為 653 萬美元。",
+  "concerns": "• 部分部門如 PitchBook 的 adjusted operating income 較去年同期下降 1.1% 至 52.3 百萬美元，adjusted operating margin 減少 1.5 個百分點至 29.8%，主要受補償與技術基礎設施成本增加影響。<br>• 部分業務受產品重整影響，例如 Morningstar Wealth 營收較去年同期減少 4.3%，主因包含 sunsetting Morningstar Office 的影響。<br>• 技術基礎設施與人工智慧（AI）相關倡議導致部分營運成本增加。",
+  "risks": "• 技術基礎設施成本與雲端遷移費用以及人工智慧（AI）相關倡議可能持續對成本結構帶來壓力。<br>• 特定客戶流失（例如 Morningstar Wealth 失去日本 Asset Allocation Services 客戶，以及 PitchBook 在企業與創投客戶群面臨較高的客戶流失率）可能對相關業務表現造成影響。",
+  "keyPoints": "• 本季營業收入為 6.72 億美元，營業利益為 1.67 億美元（營業利益率 24.9%）。<br>• 本期淨利為 1.16 億美元，每股盈餘（EPS）為 3.06 美元。<br>• 各主要部門營收貢獻包含：Morningstar Direct Platform 222.5 百萬美元、PitchBook 175.6 百萬美元、Morningstar Credit 107.8 百萬美元、Morningstar Wealth 59.4 百萬美元、Morningstar Retirement 41.5 百萬美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Morningstar Direct Platform：貢獻營收 222.5 百萬美元，年增 5.4%（或有機成長 6.2%）<br>• PitchBook：貢獻營收 175.6 百萬美元，年增 3.9%（或有機成長 4.0%）<br>• Morningstar Credit：貢獻營收 107.8 百萬美元，年增 18.3%（或有機成長 19.1%）<br>• Morningstar Wealth：貢獻營收 59.4 百萬美元，年減 4.3%（或有機成長 6.0%）<br>• Morningstar Retirement：貢獻營收 41.5 百萬美元，年增 21.3%<br>• Morningstar Sustainalytics：營收為 26.3 百萬美元<br>• Morningstar Indexes：營收為 39.0 百萬美元"
+ }
+}

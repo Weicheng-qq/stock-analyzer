@@ -1,0 +1,48 @@
+{
+ "symbol": "GOOGM",
+ "market": "us",
+ "name": "Alphabet Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Alphabet Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1275.77",
+  "營業毛利": null,
+  "營業利益": "405.76",
+  "本期淨利": "264.68",
+  "每股盈餘": 2.12,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-28",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000080/googexhibit991q32026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T10:57:30.478Z",
+ "result": {
+  "revenue": "營業收入為 1275.77 億美元，較去年同期的 1023.46 億執行成長 25%。",
+  "eps": "每股盈餘（EPS）為 2.12 美元，本期淨利為 264.68 億美元。",
+  "margins": "營業利益率為 31.8%，本期淨利率為 20.7%。營業毛利與毛利率上方未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "本季總營業收入達 1275.77 億美元，營業利益為 405.76 億美元，展現穩健的營運規模。Google 服務與 Google Cloud 均繳出營收成長表現。",
+  "highlights": "• 總營業收入達 1275.77 億美元，較去年同期成長 25%。<br>• Google Services 總營收達 963.02 億美元，Google Search & other 營收達 633.50 億美元。<br>• Google Cloud 營收達 307.09 億美元，營業利益達 111.21 億美元。",
+  "concerns": "• 其他收入（費用）淨額為虧損 82.21 億美元，主要受權益證券淨損失 86.64 億美元影響。<br>• Other Bets 本季營業利益為虧損 20.47 億美元。<br>• Alphabet-level 活動之營業利益為虧損 76.55 億美元。",
+  "risks": "• 權益證券價值波動大，本季因權益證券淨損失 86.64 億美元導致其他收入（費用）淨額為虧損，可能持續對淨利造成波動影響。<br>",
+  "keyPoints": "• Alphabet 本季總營業收入為 1275.77 億美元，年增 25%。<br>• Google Cloud 營收大幅成長至 307.09 億美元，營業利益為 111.21 億美元。<br>• 本期淨利為 264.68 億美元，EPS 為 2.12 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Google Search & other：633.50 億美元（2025 年同期為 56,567 百萬美元）<br>• YouTube ads：112.07 億美元（2025 年同期為 10,261 百萬美元）<br>• Google Network：74.55 億美元（2025 年同期為 7,354 百萬美元）<br>• Google subscriptions, platforms, and devices：142.90 億美元（2025 年同期為 12,870 百萬美元）<br>• Google Services total：963.02 億美元（2025 年同期為 87,052 百萬美元，營業利益 391.57 億美元）<br>• Google Cloud：307.09 億美元（2025 年同期為 15,157 百萬美元，營業利益 111.21 億美元）<br>• Other Bets：3.72 億美元（2025 年同期為 344 百萬美元，營業利益為虧損 20.47 億美元）<br>• Hedging gains (losses)：1.94 億美元（2025 年同期為虧損 2.07 億美元）"
+ }
+}

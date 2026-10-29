@@ -1,0 +1,48 @@
+{
+ "symbol": "FCELB",
+ "market": "us",
+ "name": "FUELCELL ENERGY, INC.",
+ "quarter": "2026 Q3（2026-05-01～2026-07-31）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "FUELCELL ENERGY, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-05-01",
+  "periodEnd": "2026-07-31",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.33",
+  "營業毛利": null,
+  "營業利益": "-0.47",
+  "本期淨利": "-0.44",
+  "每股盈餘": -0.64,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-09-02",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/886128/000110465926104498/fcel-20260902xex99d1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T11:04:41.579Z",
+ "result": {
+  "revenue": "會計年度 2026 Q3 的營業收入為 0.33 億美元，相較去年同期下降約 29%。",
+  "eps": "本季每股盈餘（EPS）為 -0.64 美元，呈現虧損狀態。",
+  "margins": "本季毛利率未提供；營業利益率為 -142.4%，顯示本季營業利益為 -0.47 億美元，仍處於營業虧損狀態；淨利率為 -133.3%，顯示本季本期淨利為 -0.44 億美元，持續面臨淨虧損。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期在 2026 會計年度第四季開始交付 Fit Energy 的初始階段（Phase 0，30 MW），並以 2026 年 10 月達成 100 MW 年化產能為目標，預期在 2027 會計年度第四季實現調整後 EBITDA 為正。",
+  "outlook": "根據官方財報與新聞稿，公司積極推進資料中心策略，承諾積壓訂單（Committed Backlog）為 13 億美元，並持續擴充康乃狄克州托靈頓製造廠的產能。本季面臨產品成本與製造費用高於合約定價以及存貨評價減損的影響。",
+  "highlights": "• 截至 2026 年 7 月 31 日，承諾積壓訂單（Committed Backlog）達 13 億美元，年增約 4.1%，其中包括 Fit Energy 購買 30 MW 發電容量燃料電池系統的承諾。<br>• 獲得 Fit Energy 購買高達 350 MW 額外燃料電池系統選擇權相關的 24 億美元獲授權容量積壓訂單。<br>• 季後與德州一家大型資料中心營運商簽署首份容量預留協議，規劃 75 MW 專案並獲得前期預留款。",
+  "concerns": "• 本季營業收入為 0.33 億美元，較去年同期的 46.7 百萬美元下降約 29%。<br>• 本季營業毛利未提供，但官方指出毛損為 $(24.5) 百萬美元，較去年同期的 $(5.1) 百萬美元增加約 377%。<br>• 營業利益率為 -142.4%，本季營業利益為 -0.47 億美元（或 $(46.7) 百萬美元）。",
+  "risks": "• 本季每股盈餘（EPS）為 -0.64 美元，本期淨利為 -0.44 億美元，公司持續處於淨虧損狀態。<br>• 產品成本與製造固定成本受到第 37.1 MW 的低年化產生產速率影響，目前成本仍高於與 Fit Energy 簽訂之 CEPA 合約定價，且本季記錄了 1,700 萬美元的存貨與採購承諾評價減損。",
+  "keyPoints": "• 本季營業收入為 0.33 億美元，EPS 為 -0.64 美元，營業利益率為 -142.4%，淨利率為 -133.3%。<br>• 承諾積壓訂單（Committed Backlog）截至 2026 年 7 月 31 日為 13 億美元，現金、現金等價物、受限制現金及受限制現金等價物總計 7.373 億美元。<br>• 營業利益為 -0.47 億美元，本期淨利為 -0.44 億美元，毛損為 $(24.5) 百萬美元，調整後 EBITDA 為 $(36.7) 百萬美元。",
+  "guidanceOfficial": "Based on this planned increase in annualized production rate, the Company is now targeting achieving positive Adjusted EBITDA results in the fourth quarter of fiscal 2027, subject to the conversion of Awarded Capacity Backlog into Committed Backlog, customer delivery schedules and continued execution of the Company’s cost reduction initiatives.",
+  "segments": "本次資料未揭露分部營收"
+ }
+}

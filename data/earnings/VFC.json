@@ -1,0 +1,48 @@
+{
+ "symbol": "VFC",
+ "market": "us",
+ "name": "V. F. CORPORATION",
+ "quarter": "2027 Q2（2026-06-28～2026-09-26）",
+ "quarterTag": "2027Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "V. F. CORPORATION",
+  "currency": "億美元",
+  "periodStart": "2026-06-28",
+  "periodEnd": "2026-09-26",
+  "year": 2027,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "26.95",
+  "營業毛利": null,
+  "營業利益": "3.68",
+  "本期淨利": "2.85",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-28",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/103379/000010337926000134/q22027earningspressrelease.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T10:54:19.739Z",
+ "result": {
+  "revenue": "營業收入為 26.95 億美元。",
+  "eps": "每股盈餘（EPS）為 未提供 美元。",
+  "margins": "營業利益率為 13.7%，淨利率為 10.6%，營業毛利與毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司重申 2027 會計年度全年展望。",
+  "outlook": "本季營業利益為 3.68 億美元，本期淨利為 2.85 億美元，營業利益率與淨利率分別為 13.7% 與 10.6%。",
+  "highlights": "• 營業利益達 3.68 億美元，營業利益率為 13.7%。<br>• 本期淨利為 2.85 億美元，淨利率為 10.6%。<br>• 董事會授權發放每股 0.09 美元的季度股利。",
+  "concerns": "• 營業收入為 26.95 億美元。<br>• 營運現金流、資本支出與自由現金流皆未提供。<br>• 每股盈餘（EPS）未提供。",
+  "risks": "• 財務報表未提供營運現金流與資本支出數據，無法直接評估自由現金流狀況。<br>• 部分關鍵財務指標如毛利與 EPS 於官方數據中未提供。",
+  "keyPoints": "• 本季營業收入為 26.95 億美元。<br>• 本季營業利益為 3.68 億美元，營業利益率 13.7%。<br>• 本季本期淨利為 2.85 億美元，淨利率 10.6%。",
+  "guidanceOfficial": "Affirming FY'27 guidance • Revenue +2% or better C$ vs. LY 1 • Adjusted OM of approximately 8% • Normalized 2 free cash flow flat to up vs. LY of $405M; actual free cash flow to be $515M or higher • FYE'27 leverage ratio of 2.6x to 2.9x",
+  "segments": "• Outdoor segment: $ 1,733,182 thousand, 4% vs. LY<br>• Active segment: $ 700,262 thousand, (8%) vs. LY<br>• All Other: $ 261,688 thousand, (31%) vs. LY"
+ }
+}

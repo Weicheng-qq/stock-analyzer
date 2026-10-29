@@ -1,0 +1,48 @@
+{
+ "symbol": "GLIBK",
+ "market": "us",
+ "name": "Liberty Capital Corp/NV",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Liberty Capital Corp/NV",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "2.61",
+  "營業毛利": null,
+  "營業利益": "0.29",
+  "本期淨利": "0.16",
+  "每股盈餘": 0.4,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-06",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/2057463/000205746326000019/glbk-20260806xex99d1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T11:09:26.752Z",
+ "result": {
+  "revenue": "Liberty Capital Corp/NV（代碼 GLIBK）會計年度 2026 Q2 的營業收入為 2.61 億美元。整體營收表現反映了當季的業務規模。",
+  "eps": "本季每股盈餘（EPS）為 0.4 美元。此數字反映了當季每股的獲利水準。",
+  "margins": "本季營業毛利與毛利率未提供。營業利益率為 11.1%，營業利益為 0.29 億美元；淨利率則為 6.1%，本期淨利為 0.16 億美元，顯示公司在營運過程中仍維持一定的獲利能力。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "GCI's net capital expenditures for the full year 2026 are expected to be 2.9 億美元, including 2,000 萬美元 carried over from 2025 due to normal course timing shifts.",
+  "outlook": "根據官方數據，公司在 2026 年第二季實現營業利益 0.29 億美元及本期淨利 0.16 億美元，營業利益率與淨利率分別為 11.1% 和 6.1%。相關的資本支出與現金流細節則依官方揭露為準。",
+  "highlights": "• 營業收入為 2.61 億美元。<br>• 營業利益為 0.29 億美元，營業利益率達 11.1%。<br>• 本期淨利為 0.16 億美元，淨利率為 6.1%，每股盈餘（EPS）為 0.4 美元。",
+  "concerns": "• 營業毛利與毛利率官方未提供。<br>• 營運現金流與資本支出等數據官方未提供。<br>• 營運利益受到 Quintillion 相關收購成本的影響。",
+  "risks": "• 部分財務指標如毛利、營運現金流與資本支出於本次官方資料中未提供，影響財務透明度的完整評估。<br>• 營業利益受到收購成本（如 Quintillion 相關費用）的干擾。",
+  "keyPoints": "• 營業收入為 2.61 億美元，營業利益為 0.29 億美元，營業利益率為 11.1%。<br>• 本期淨利為 0.16 億美元，淨利率為 6.1%，每股盈餘（EPS）為 0.4 美元。<br>• 全年 GCI 淨資本支出預期為 2.9 億美元，其中包括從 2025 年結轉的 0.2 億美元。",
+  "guidanceOfficial": "GCI's net capital expenditures for the full year 2026 are expected to be 2.9 億美元, including 2,000 萬美元 carried over from 2025 due to normal course timing shifts.",
+  "segments": "• GCI Consumer Data：三個月營收 60 百萬美元（持平 0%），六個月營收 119 百萬美元（年減 2%）。<br>• GCI Consumer Wireless：三個月營收 52 百萬美元（年增 2%），六個月營收 104 百萬美元（年增 3%）。<br>• GCI Consumer Other：三個月營收 5 百萬美元（年減 38%），六個月營收 9 百萬美元（年減 50%）。<br>• GCI Consumer Total revenue：三個月營收 117 百萬美元（年減 2%），六個月營收 232 百萬美元（年減 3%）。"
+ }
+}
