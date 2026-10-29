@@ -1,0 +1,48 @@
+{
+ "symbol": "ULBI",
+ "market": "us",
+ "name": "EnerSys",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "EnerSys",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.48",
+  "營業毛利": "0.14",
+  "營業利益": "0.03",
+  "本期淨利": "0.03",
+  "每股盈餘": 15,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-07",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/875657/000143774926026573/ex_1001163.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T11:31:57.046Z",
+ "result": {
+  "revenue": "本季營業收入為 0.48 億美元。",
+  "eps": "本季每股盈餘（EPS）為 15 美元。",
+  "margins": "本季營業毛利為 0.14 億美元，毛利率為 29.2%；營業利益為 0.03 億美元，營業利益率為 6.3%；本期淨利為 0.03 億美元，淨利率為 6.3%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "這些多年的營收機會結合我們持續的毛利率改善計畫，強化了我們對 2026 年獲利成長的展望。",
+  "outlook": "根據官方提供之資料，本季營業收入為 0.48 億美元，營業毛利為 0.14 億美元，營業利益與本期淨利皆為 0.03 億美元。整體營運表現維持在獲利狀態。",
+  "highlights": "•營業收入為 0.48 億美元。<br>•營業毛利為 0.14 億美元，毛利率達 29.2%。<br>•營業利益與本期淨利皆為 0.03 億美元，利益率與淨利率皆為 6.3%。",
+  "concerns": "•營運現金流與資本支出等數據未提供，無法評估自由現金流狀況。<br>•本季營業利益率與淨利率皆為 6.3%，獲利空間相對有限。",
+  "risks": "•各項現金流與資本支出數據未提供，財務透明度受限。<br>•營運利益與淨利規模較小（皆為 0.03 億美元），對成本波動的抵禦能力需持續關注。",
+  "keyPoints": "•本季營業收入為 0.48 億美元。<br>•本季營業毛利率為 29.2%，營業利益率與淨利率皆為 6.3%。<br>•本季每股盈餘（EPS）為 15 美元。",
+  "guidanceOfficial": "這些多年的營收機會結合我們持續的毛利率改善計畫，強化了我們對 2026 年獲利成長的展望。",
+  "segments": "•Battery & Energy Products sales decreased 3.7% to 4,420 萬美元 compared to 4,590 萬美元 last year.<br>•Communications Systems sales increased by 39.3% to 380 萬美元 compared to 270 萬美元 for the same period last year."
+ }
+}

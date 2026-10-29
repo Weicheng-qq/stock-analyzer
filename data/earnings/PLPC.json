@@ -1,0 +1,48 @@
+{
+ "symbol": "PLPC",
+ "market": "us",
+ "name": "Preformed Line Products Company",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Preformed Line Products Company",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "2.13",
+  "營業毛利": "0.73",
+  "營業利益": "0.28",
+  "本期淨利": "0.22",
+  "每股盈餘": 4.49,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-28",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/80035/000008003526000034/plpc-10qxexx991x2026q3.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T11:25:46.900Z",
+ "result": {
+  "revenue": "本會計年度營業收入為 2.13 億美元。",
+  "eps": "每股盈餘（EPS）為 4.49 美元。",
+  "margins": "營業毛利為 0.73 億美元，毛利率為 34.3%。營業利益為 0.28 億美元，營業利益率為 13.1%。本期淨利為 0.22 億美元，淨利率為 10.3%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "根據官方數據，本期營業收入為 2.13 億美元，毛利率維持在 34.3%，營業利益率達 13.1%，淨利率為 10.3%。整體營運表現穩定。",
+  "highlights": "• 營業收入達 2.13 億美元。<br>• 營業毛利為 0.73 億美元，毛利率為 34.3%。<br>• 每股盈餘（EPS）為 4.49 美元。",
+  "concerns": "• 官方未提供營運現金流與資本支出等現金流相關數字。<br>• 官方未提供自由現金流數據。",
+  "risks": "• 本次官方資料未提供營運現金流及資本支出數據，無法由財務結構評估現金流量風險。<br>• 相關財測與資本支出數據未提供，限制了對未來財務結構變化的觀察。",
+  "keyPoints": "• 營業收入為 2.13 億美元，展現一定的營收規模。<br>• 營業利益為 0.28 億美元，營業利益率達 13.1%。<br>• 每股盈餘（EPS）為 4.49 美元，本期淨利為 0.22 億美元（淨利率 10.3%）。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• PLP-USA：net sales growth was 28% for the first nine months of 2026, driven significantly by transmission and distribution markets.<br>• The Americas：net sales grew 7% on a constant-currency basis, benefiting from the May 2026 acquisition of Delta Star Conetores Electricos Ltda (\"Delta Star\") and higher communications volumes.<br>• Asia-Pacific：net sales grew 17% on a constant-currency basis, driven by higher volumes in energy sales."
+ }
+}

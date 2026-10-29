@@ -1,0 +1,48 @@
+{
+ "symbol": "PVH",
+ "market": "us",
+ "name": "PVH CORP.",
+ "quarter": "2026 Q2（2026-05-04～2026-08-02）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "PVH CORP.",
+  "currency": "億美元",
+  "periodStart": "2026-05-04",
+  "periodEnd": "2026-08-02",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "20.97",
+  "營業毛利": "13.22",
+  "營業利益": "-1.91",
+  "本期淨利": "-1.03",
+  "每股盈餘": -2.23,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-09-02",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/78239/000007823926000055/ex99120262q8k.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T11:26:11.508Z",
+ "result": {
+  "revenue": "營業收入為 20.97 億美元，較去年同期減少 3%。",
+  "eps": "每股盈餘（EPS）為 -2.23 美元，呈現每股虧損狀態。",
+  "margins": "營業毛利為 13.22 億美元，毛利率達 63.0%；營業利益為 -1.91 億美元，營業利益率為 -9.1%；本期淨利為 -1.03 億美元，淨利率為 -4.9%，本季處於營業虧損與淨損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司全面重申（Reaffirm）其 2026 全年非 GAAP 基礎之營收、營業利益率與每股盈餘（EPS）展望。",
+  "outlook": "本季營業利益率為 -9.1%，本期淨利為 -1.03 億美元，整體處於營業虧損與淨損狀態。儘管如此，公司已重申全年的非 GAAP 財務展望，並維持特定的非 GAAP 營業利益率與 EPS 目標。",
+  "highlights": "• 第二季營業收入達 20.97 億美元，符合公司預期。<br>• 營業毛利為 13.22 億美元，毛利率維持在 63.0% 的水準。<br>• 官方重申全年非 GAAP 營收、營業利益率以及每股盈餘（EPS）之展望。",
+  "concerns": "• 本季營業利益為 -1.91 億美元，營業利益率為 -9.1%。<br>• 本期淨利為 -1.03 億美元，淨利率為 -4.9%，顯示本季面臨虧損。<br>• 每股盈餘（EPS）為 -2.23 美元。",
+  "risks": "• 本季營業利益呈現負值（-1.91 億美元），營業利益率為 -9.1%，本業營運面臨虧損。<br>• 本期淨利為 -1.03 億美元，淨利率為 -4.9%，顯示公司整體獲利能力受損。",
+  "keyPoints": "• 官方營業收入為 20.97 億美元。<br>• 本季營業利益為 -1.91 億美元（營業利益率 -9.1%），本期淨利為 -1.03 億美元（淨利率 -4.9%）。<br>• 每股盈餘（EPS）為 -2.23 美元。",
+  "guidanceOfficial": "Full Year 2026 Guidance: Revenue: Reaffirming outlook of approximately flat on a reported basis (decrease slightly on a constant currency basis). Operating margin: Reaffirming outlook of approximately 8.8% on a non-GAAP basis, flat compared to 8.8% in the prior year. EPS: Reaffirming outlook in a range of $11.80 to $12.10 on a non-GAAP basis compared to $11.40 on a non-GAAP basis in the prior year.",
+  "segments": "• EMEA revenue decreased 6% on both a reported and a constant currency basis compared to the prior year period<br>• Americas revenue decreased 1% on both a reported and a constant currency basis compared to the prior year period<br>• APAC revenue increased 3% compared to the prior year period"
+ }
+}

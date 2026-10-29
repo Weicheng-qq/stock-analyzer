@@ -1,0 +1,48 @@
+{
+ "symbol": "TXNM",
+ "market": "us",
+ "name": "TXNM Energy, Inc.",
+ "quarter": "2026 Q1（2026-01-01～2026-03-31）",
+ "quarterTag": "2026Q1",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "TXNM Energy, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-01-01",
+  "periodEnd": "2026-03-31",
+  "year": 2026,
+  "season": "Q1",
+  "form": "10-Q",
+  "營業收入": "5.05",
+  "營業毛利": null,
+  "營業利益": "0.77",
+  "本期淨利": "0.08",
+  "每股盈餘": 0.03,
+  "營運現金流": "1.53",
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-31",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1108426/000110842626000046/ex99107312026earningsrelea.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-29T11:30:30.697Z",
+ "result": {
+  "revenue": "TXNM Energy, Inc. 在 2026 Q1 的官方營業收入為 5.05 億美元。營業利益為 0.77 億美元。",
+  "eps": "本期每股盈餘（EPS）為 0.03 美元。本期淨利為 0.08 億美元。",
+  "margins": "官方提供的營業利益率為 15.2%，顯示公司具備一定的本業獲利能力；淨利率則為 1.6%，反映出在扣除各項費用與稅負後的最終獲利比例相對較低。營業毛利與毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "根據官方財務數據，本季營業收入為 5.05 億美元，營業利益為 0.77 億美元（營業利益率 15.2%）。本期淨利為 0.08 億美元，淨利率為 1.6%，每股盈餘為 0.03 美元。",
+  "highlights": "• 營運現金流達到 1.53 億美元。<br>• 營業利益率為 15.2%，本業營運保持正向。<br>• 本期淨利為 0.08 億美元，維持獲利狀態。",
+  "concerns": "• 本期淨利率僅為 1.6%，獲利空間相對有限。<br>• 本期淨利為 0.08 億美元、EPS 為 0.03 美元，絕對數值偏低。",
+  "risks": "• 淨利率僅 1.6%，顯示成本與費用對最終淨利的侵蝕程度較高，獲利抗壓能力需持續關注。<br>",
+  "keyPoints": "• 2026 Q1 營業收入為 5.05 億美元，營業利益為 0.77 億美元（營業利益率 15.2%）。<br>• 本期淨利為 0.08 億美元，淨利率為 1.6%，每股盈餘（EPS）為 0.03 美元。<br>• 營運現金流表現強勁，達 1.53 億美元。",
+  "guidanceOfficial": "As previously announced, TXNM Energy does not plan to issue earnings guidance during pendency of the proposed transaction with Blackstone Infrastructure.",
+  "segments": "• PNM – a vertically integrated electric utility in New Mexico with distribution, transmission and generation assets。<br>• TNMP – an electric transmission and distribution utility in Texas。<br>• Corporate and Other – reflects the TXNM Energy holding company and other subsidiaries。"
+ }
+}

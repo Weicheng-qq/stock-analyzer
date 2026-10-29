@@ -4554,14 +4554,14 @@
   "kind": ""
  },
  "CBRE": {
-  "at": "2026-10-24T01:29:07.896Z",
+  "at": "2026-10-29T11:19:28.731Z",
   "market": "us",
   "name": "CBRE GROUP, INC.",
   "seen": "2026Q3",
   "kind": "transcript"
  },
  "FIX": {
-  "at": "2026-10-24T01:29:11.382Z",
+  "at": "2026-10-29T11:19:32.051Z",
   "market": "us",
   "name": "COMFORT SYSTEMS USA, INC.",
   "seen": "沒有文件",
@@ -5380,5 +5380,108 @@
   "name": "LENNOX INTERNATIONAL INC",
   "seen": "沒有文件",
   "kind": ""
+ },
+ "MAS": {
+  "at": "2026-10-29T11:17:59.294Z",
+  "market": "us",
+  "name": "Masco Corporation",
+  "seen": "2026Q3",
+  "kind": "transcript"
+ },
+ "MGM": {
+  "at": "2026-10-29T11:18:03.259Z",
+  "market": "us",
+  "name": "MGM Resorts International",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "NI": {
+  "at": "2026-10-29T11:18:07.367Z",
+  "market": "us",
+  "name": "NiSource Inc.",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "POOL": {
+  "at": "2026-10-29T11:18:12.301Z",
+  "market": "us",
+  "name": "POOL CORPORATION",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "PSX": {
+  "at": "2026-10-29T11:18:16.665Z",
+  "market": "us",
+  "name": "Phillips 66",
+  "seen": "2026Q3",
+  "kind": "transcript"
+ },
+ "TYL": {
+  "at": "2026-10-29T11:18:21.874Z",
+  "market": "us",
+  "name": "TYLER TECHNOLOGIES, INC.",
+  "seen": "2026Q3",
+  "kind": "commentary"
+ },
+ "VLO": {
+  "at": "2026-10-29T11:18:25.858Z",
+  "market": "us",
+  "name": "VALERO ENERGY CORP/TX",
+  "seen": "2026Q3",
+  "kind": "release"
+ },
+ "VICI": {
+  "at": "2026-10-29T11:18:28.907Z",
+  "market": "us",
+  "name": "VICI Properties Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "LNT": {
+  "at": "2026-10-29T11:18:46.087Z",
+  "market": "us",
+  "name": "ALLIANT ENERGY CORP",
+  "seen": "2026Q2",
+  "kind": "presentation",
+  "done": "2026Q2",
+  "pending": true,
+  "pendingSince": "2026-10-29T11:18:46.087Z"
+ },
+ "APH": {
+  "at": "2026-10-29T11:18:53.818Z",
+  "market": "us",
+  "name": "AMPHENOL CORPORATION",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "ADP": {
+  "at": "2026-10-29T11:19:03.407Z",
+  "market": "us",
+  "name": "Automatic Data Processing, Inc.",
+  "seen": "2027Q1",
+  "kind": "presentation",
+  "done": "2027Q1",
+  "pending": true,
+  "pendingSince": "2026-10-29T11:19:03.407Z"
+ },
+ "CHRW": {
+  "at": "2026-10-29T11:19:17.683Z",
+  "market": "us",
+  "name": "C. H. ROBINSON WORLDWIDE, INC.",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-29T11:19:17.683Z"
+ },
+ "EBAY": {
+  "at": "2026-10-29T11:19:42.370Z",
+  "market": "us",
+  "name": "eBay Inc.",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-29T11:19:42.370Z"
  }
 }
