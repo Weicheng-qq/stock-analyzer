@@ -1,0 +1,48 @@
+{
+ "symbol": "CLX",
+ "market": "us",
+ "name": "The Clorox Company",
+ "quarter": "2026 Q3（2026-01-01～2026-03-31）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "The Clorox Company",
+  "currency": "億美元",
+  "periodStart": "2026-01-01",
+  "periodEnd": "2026-03-31",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "16.70",
+  "營業毛利": "7.22",
+  "營業利益": null,
+  "本期淨利": "1.87",
+  "每股盈餘": 1.54,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-03",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/21076/000002107626000028/ex991-pressreleasedatedaug.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T10:28:33.855Z",
+ "result": {
+  "revenue": "根據官方財報數字，The Clorox Company（代碼 CLX）在會計年度 2026 Q3 的營業收入為 16.70 億美元。",
+  "eps": "根據官方財報數字，本季每股盈餘（EPS）為 1.54 美元。",
+  "margins": "本季營業毛利為 7.22 億美元，毛利率為 43.2%。本期淨利為 1.87 億美元，淨利率為 11.2%，營業利益率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "官方財測／展望請見 guidanceOfficial 欄位之詳細內容。",
+  "outlook": "本季營業收入為 16.70 億美元，毛利率為 43.2%，並實現本期淨利 1.87 億美元，淨利率達 11.2%。營運現金流、資本支出與營業利益等項目則未提供。",
+  "highlights": "• 營業收入達 16.70 億美元，營業毛利為 7.22 億美元，毛利率為 43.2%。<br>• 本期淨利為 1.87 億美元，淨利率為 11.2%。<br>• 每股盈餘（EPS）為 1.54 美元。",
+  "concerns": "• 營業利益率、營運現金流與資本支出等重要財務指標皆未提供。<br>• 自由現金流亦因缺乏營運現金流與資本支出數據而無法計算。",
+  "risks": "• 因官方財報未提供完整的營運現金流與資本支出數據，財務結構中的現金產生與再投資能力無法完整評估。<br>• 營業利益等關鍵獲利指標未提供，限制了對本業核心獲利能力的分析。",
+  "keyPoints": "• 本會計年度 2026 Q3 營業收入為 16.70 億美元。<br>• 本季毛利率為 43.2%，營業毛利 7.22 億美元。<br>• 本期淨利為 1.87 億美元（淨利率 11.2%），每股盈餘（EPS）為 1.54 美元。",
+  "guidanceOfficial": "Fiscal Year 2027 Outlook The following are the key drivers of the company’s fiscal year 2027 outlook: • Net sales are expected to be up 13% to 14% compared to the prior year, including about 9.5 points of benefit from the GOJO acquisition. Organic sales are expected to increase about 3.5% to 4.5%, including more than 3.5 points of benefit from lapping the ERP-related drawdown in the prior fiscal year. • Gross margin is expected to be about 42%, reflecting higher-than-normal inflationary headwinds and negative mix more than offsetting the benefits from cost savings. This includes about 20 basis points of negative impact primarily related to the GOJO inventory step-up. • Selling and administrative expenses are expected to be about 16% of net sales. This includes about 40 basis points of negative impact from GOJO transaction-related costs. • Advertising and sales promotion spending is expected to be about 10% of net sales. This assumes over 11% of net sales for its retail businesses. • The company's effective tax rate is expected to be about 23%. • Diluted EPS is expected to be between $5.41 and $5.71, a year-over-year increase of 12% to 19%, respectively. This includes about 29 cents of impact from transaction-related costs associated with the GOJO acquisition, which are expected to flow through cost of goods sold as well as selling and administrative expenses. • Adjusted EPS is expected to be between $5.70 and $6.00, or an increase between 3% and 8%, respectively. These growth rates include the benefit of lapping the inventory drawdown related to the ERP transition in the prior year.",
+  "segments": "• Health and Wellness (Cleaning; Professional Products, now including Clorox Purell)：Net sales increased 16%, driven by 10 points of higher volume and 6 points of favorable price mix. The GOJO acquisition contributed approximately 28 points to net sales growth. Organic sales declined 12%, primarily driven by the impact of lapping the incremental shipments related to the ERP transition in the year-ago quarter.<br>• Household (Bags and Wraps; Cat Litter; Grilling)：Net sales decreased 18%, driven by 16 points of lower volume and 2 points of unfavorable price mix.<br>• Lifestyle (Food; Water Filtration; Natural Personal Care)：Net sales decreased 17%, driven by 14 points of lower volume and 3 points of unfavorable price mix.<br>• International (Sales Outside the U.S.)：Net sales increased 4%, primarily driven by favorable foreign exchange rates. Organic sales grew 1%."
+ }
+}

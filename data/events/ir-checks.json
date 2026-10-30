@@ -3576,7 +3576,7 @@
   "kind": ""
  },
  "3260": {
-  "at": "2026-10-18T02:49:04.388Z",
+  "at": "2026-10-30T10:20:07.465Z",
   "market": "tw",
   "name": "威剛",
   "seen": "沒有文件",
@@ -3653,7 +3653,7 @@
   "kind": ""
  },
  "3491": {
-  "at": "2026-10-13T03:31:48.058Z",
+  "at": "2026-10-30T10:20:03.600Z",
   "market": "tw",
   "name": "昇達科",
   "seen": "沒有文件",
@@ -4376,7 +4376,7 @@
   "kind": ""
  },
  "META": {
-  "at": "2026-10-22T07:25:16.833Z",
+  "at": "2026-10-30T10:11:51.857Z",
   "market": "us",
   "name": "Meta Platforms, Inc.",
   "seen": "2026Q3",
@@ -4428,7 +4428,7 @@
   "kind": ""
  },
  "GM": {
-  "at": "2026-10-28T09:52:17.698Z",
+  "at": "2026-10-30T10:19:53.651Z",
   "market": "us",
   "name": "GENERAL MOTORS COMPANY",
   "seen": "沒有文件",
@@ -4822,7 +4822,7 @@
   "kind": ""
  },
  "NUE": {
-  "at": "2026-10-27T05:21:18.969Z",
+  "at": "2026-10-30T10:09:42.207Z",
   "market": "us",
   "name": "NUCOR CORP",
   "seen": "2026Q3",
@@ -4916,7 +4916,7 @@
   "kind": ""
  },
  "STX": {
-  "at": "2026-10-28T09:55:18.270Z",
+  "at": "2026-10-30T10:17:40.442Z",
   "market": "us",
   "name": "Seagate Technology Holdings plc",
   "seen": "2027Q1",
@@ -4967,7 +4967,7 @@
   "kind": "presentation"
  },
  "GLW": {
-  "at": "2026-10-28T10:09:50.831Z",
+  "at": "2026-10-30T10:21:59.683Z",
   "market": "us",
   "name": "CORNING INC /NY",
   "seen": "2026Q3",
@@ -4984,7 +4984,7 @@
   "kind": ""
  },
  "ECL": {
-  "at": "2026-10-28T10:10:10.857Z",
+  "at": "2026-10-30T10:22:50.935Z",
   "market": "us",
   "name": "ECOLAB INC.",
   "seen": "2026Q3",
@@ -5013,7 +5013,7 @@
   "pendingSince": "2026-10-28T10:11:07.145Z"
  },
  "ENPH": {
-  "at": "2026-10-28T10:20:10.031Z",
+  "at": "2026-10-30T10:19:03.544Z",
   "market": "us",
   "name": "Enphase Energy, Inc.",
   "seen": "沒有文件",
@@ -5620,5 +5620,62 @@
   "done": "2026Q3",
   "pending": false,
   "pendingSince": ""
+ },
+ "SBUX": {
+  "at": "2026-10-30T10:13:01.353Z",
+  "market": "us",
+  "name": "Starbucks Corporation",
+  "seen": "2026Q4",
+  "kind": "transcript",
+  "done": "2026Q4",
+  "pending": false,
+  "pendingSince": ""
+ },
+ "CAT": {
+  "at": "2026-10-30T10:18:53.442Z",
+  "market": "us",
+  "name": "CATERPILLAR INC",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-30T10:18:53.442Z"
+ },
+ "MRK": {
+  "at": "2026-10-30T10:19:57.269Z",
+  "market": "us",
+  "name": "Merck & Co., Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "AMP": {
+  "at": "2026-10-30T10:27:50.480Z",
+  "market": "us",
+  "name": "AMERIPRISE FINANCIAL, INC.",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-30T10:27:50.480Z"
+ },
+ "AJG": {
+  "at": "2026-10-30T10:28:06.323Z",
+  "market": "us",
+  "name": "ARTHUR J. GALLAGHER & CO.",
+  "seen": "2026Q3",
+  "kind": "commentary",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-30T10:28:06.323Z"
+ },
+ "AVY": {
+  "at": "2026-10-30T10:28:22.811Z",
+  "market": "us",
+  "name": "AVERY DENNISON CORPORATION",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-30T10:28:22.811Z"
  }
 }

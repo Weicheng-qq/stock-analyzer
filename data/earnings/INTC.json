@@ -1,0 +1,48 @@
+{
+ "symbol": "INTC",
+ "market": "us",
+ "name": "Intel Corporation",
+ "quarter": "2026 Q3（2026-06-28～2026-09-26）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Intel Corporation",
+  "currency": "億美元",
+  "periodStart": "2026-06-28",
+  "periodEnd": "2026-09-26",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "165.13",
+  "營業毛利": "70.96",
+  "營業利益": "25.22",
+  "本期淨利": "33.20",
+  "每股盈餘": 0.6,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "",
+  "form": "法說會官方文件（管理報告／簡報／新聞稿）",
+  "url": "https://d1io3yog0oux5.cloudfront.net/_47986fe477a6ac84fe34efbcbf38dd13/intel/db/887/9273/prepared_remarks/Q3%2726_Prepared_Remarks.pdf"
+ },
+ "docKind": "commentary",
+ "savedAt": "2026-10-30T10:14:55.066Z",
+ "result": {
+  "revenue": "本季營業收入為 165.13 億美元，較去年同期成長。",
+  "eps": "本季每股盈餘（EPS）為 0.6 美元。",
+  "margins": "本季營業毛利率為 43.0%，營業利益率為 15.3%，淨利率則為 20.1%，顯示公司在營收規模擴大的同時維持一定的獲利水準。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期第四季營收為 150 億至 160 億美元。",
+  "outlook": "本季營業收入達 165.13 億美元，毛利率為 43.0%。營運維持獲利狀態，本期淨利為 33.20 億美元。",
+  "highlights": "•第三季營業收入達到 165.13 億美元，年增 21%。<br>•本季營業利益為 25.22 億美元，營業利益率達 15.3%。<br>•本季本期淨利為 33.20 億美元，淨利率為 20.1%。",
+  "concerns": "•資本支出與營運現金流相關數據未提供，無法完整評估現金流動情形。<br>•自由現金流數據未提供。<br>•各細分部門的具體營收數字未在官方財務資料中揭露。",
+  "risks": "•公司未提供營運現金流與資本支出數據，使財務結構的現金流透明度受限。<br>•若未來面臨資本支出顯著增加而現金流未同步成長，可能對財務資源配置造成壓力。",
+  "keyPoints": "•本季營業收入為 165.13 億美元，年增 21%。<br>•本季本期淨利為 33.20 億美元，淨利率達 20.1%。<br>•本季每股盈餘（EPS）為 0.6 美元。",
+  "guidanceOfficial": "Forecasting fourth-quarter 2026 revenue of 150 億美元 to 160 億美元; forecasting fourth-quarter EPS attributable to Intel of $0.10 and non-GAAP EPS attributable to Intel of $0.25.",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

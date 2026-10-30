@@ -1,0 +1,48 @@
+{
+ "symbol": "CDNA",
+ "market": "us",
+ "name": "CAREDX, INC.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "CAREDX, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1.39",
+  "營業毛利": null,
+  "營業利益": "0.08",
+  "本期淨利": "0.19",
+  "每股盈餘": 0.35,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1217234/000121723426000059/cdna-20261029_earningsrele.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T10:36:17.427Z",
+ "result": {
+  "revenue": "營業收入為 1.39 億美元。",
+  "eps": "每股盈餘（EPS）為 0.35 美元。",
+  "margins": "營業利益率為 5.8%，淨利率為 13.7%，毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司調升 2026 全年營收及調整後 EBITDA 預期。",
+  "outlook": "本季營業利益為 0.08 億美元，營業利益率為 5.8%。本季淨利為 0.19 億美元，淨利率為 13.7%。",
+  "highlights": "• 營業收入為 1.39 億美元。<br>• 營業利益為 0.08 億美元，營業利益率為 5.8%。<br>• 本期淨利為 0.19 億美元，淨利率為 13.7%，每股盈餘（EPS）為 0.35 美元。",
+  "concerns": "• 營業毛利與毛利率未提供。<br>• 營運現金流與資本支出未提供。<br>• 自由現金流未提供。",
+  "risks": "• 部分核心財務指標如營業毛利、毛利率、營運現金流與資本支出在官方財報中未提供，需留意資訊完整性。<br>• 資本支出與自由現金流缺乏官方數字，無法據以評估現金再投資與實質自由現金創造能力。",
+  "keyPoints": "• 本季營業收入達 1.39 億美元。<br>• 本季營業利益為 0.08 億美元，營業利益率 5.8%。<br>• 本期淨利為 0.19 億美元，淨利率 13.7%，每股盈餘（EPS）為 0.35 美元。",
+  "guidanceOfficial": "調升 2026 年營收預期至 5.20 億美元到 5.30 億美元，並調升調整後 EBITDA 預期至 9,000 萬美元到 1 億美元。",
+  "segments": "• Testing Services revenue: 1.19 億美元, an increase of 65% year-over-year<br>• Patient and Digital Solutions revenue: 2,000 萬美元, an increase of 31% year-over-year"
+ }
+}

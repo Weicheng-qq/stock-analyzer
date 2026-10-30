@@ -1,0 +1,48 @@
+{
+ "symbol": "ICE",
+ "market": "us",
+ "name": "INTERCONTINENTAL EXCHANGE, INC.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "INTERCONTINENTAL EXCHANGE, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "36.30",
+  "營業毛利": null,
+  "營業利益": "14.10",
+  "本期淨利": "9.40",
+  "每股盈餘": 1.67,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1571949/000110465926119880/tm2628301d1_ex99-1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T10:25:08.820Z",
+ "result": {
+  "revenue": "美股 Intercontinental Exchange, INC.（代碼 ICE）2026 Q3 營業收入為 36.30 億美元（若扣除交易相關費用後之合併淨營收為 27.65 億美元）。",
+  "eps": "2026 Q3 每股盈餘（EPS）為 1.67 美元。",
+  "margins": "2026 Q3 營業利益率為 38.8%，淨利率為 25.9%，官方新聞稿亦指出合併營業利益率為 51%、調整後營業利益率為 61%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 2026 年資本支出約為 10.50 億美元，並預期 2027 年第一季完成 MarketAxess 的併購案。",
+  "outlook": "根據官方數據，本季合併淨營收達 27.65 億美元，合併營業利益為 14.10 億美元（依新聞稿則為 14 億美元之營業利益及 51% 營業利益率），展現一定的營運規模。截至 2026 年前三季，公司已透過股票回購及股利向股東回饋 25 億美元，其中包含 16 億美元的股票回購。",
+  "highlights": "• 2026 Q3 每股盈餘（EPS）為 1.67 美元，合併淨營收為 27.65 億美元（總營業收入為 36.30 億美元）。<br>• 營業利益為 14.10 億美元，營業利益率達 38.8%（官方新聞稿則指出合併營業利益率為 51%，調整後營業利益率達 61%）。<br>• 本期淨利為 9.40 億美元，淨利率為 25.9%。",
+  "concerns": "• 截至 2026 年 9 月 30 日，公司的未償還債務達 233 億美元，而無限制現金為 9.36 億美元。<br>• 房地產科技（Mortgage Technology）部門本季營業利益率僅 2%，顯示該部門獲利能力相對偏低。<br>• 本季營運現金流與資本支出等細節於部分官方SEC標示中未提供，需留意債務水準與現金部位的變化。",
+  "risks": "• 截至 2026 年 9 月 30 日，公司持有 233 億美元的未償還債務，高於同日的 9.36 億美元無限制現金部位，顯示面臨一定的債務槓桿壓力。<br>",
+  "keyPoints": "• 2026 Q3 營業收入為 36.30 億美元，扣除交易相關費用後之合併淨營收為 27.65 億美元。<br>• 2026 Q3 本期淨利為 9.40 億美元，每股盈餘（EPS）為 1.67 美元。<br>• 截至 2026 年 9 月 30 日，未償還債務為 233 億美元，無限制現金為 9.36 億美元。",
+  "guidanceOfficial": "2026 年交易所經常性營收成長率預期 9%；2026 年固定收益與數據服務經常性營收成長率預期 8%；4Q26 營業費用預期 1.317 - 1.327 十億美元（調整後為 1.082 - 1.092 十億美元）；4Q26 非營業費用預期 1.70 - 1.80 百萬美元（調整後為 1.75 - 1.85 百萬美元）；2026 年資本支出預期約 1.050 十億美元；4Q26 加權平均流通股數預期 558 - 563 百萬股。",
+  "segments": "• 交易所部門（Exchanges）：營收 15.42 億美元，營業利益率 75%，調整後營業利益率 76%（其中 Energy 6.03 億美元、Ags and Metals 0.83 億美元、Financials 1.90 億美元、Cash Equities and Equity Options 1.32 億美元、OTC and Other 1.12 億美元、Data and Connectivity Services 2.92 億美元、Listings 1.30 億美元）。<br>• 固定收益與數據服務部門（Fixed Income and Data Services）：營收 6.74 億美元，營業利益率 36%，調整後營業利益率 46%（其中 Fixed Income Execution 0.34 億美元、CDS Clearing 1.02 億美元、Fixed Income Data and Analytics 3.36 億美元、Data and Network Technology 2.02 億美元）。<br>• 房地產科技部門（Mortgage Technology）：營收 5.49 億美元，營業利益率 2%，調整後營業利益率 40%（其中 Origination Technology 1.89 億美元、Closing Solutions 0.60 億美元、Servicing Software 2.29 億美元、Data and Analytics 0.71 億美元）。"
+ }
+}

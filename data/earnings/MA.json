@@ -1,0 +1,48 @@
+{
+ "symbol": "MA",
+ "market": "us",
+ "name": "Mastercard Incorporated",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Mastercard Incorporated",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "98.07",
+  "營業毛利": null,
+  "營業利益": "58.62",
+  "本期淨利": "46.28",
+  "每股盈餘": 5.28,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "",
+  "form": "法說會官方文件（管理報告／簡報／新聞稿）",
+  "url": "https://investor.mastercard.com/files/content_files/3Q26-Mastercard-Earnings-Presentation.pdf"
+ },
+ "docKind": "presentation",
+ "savedAt": "2026-10-30T10:15:24.846Z",
+ "result": {
+  "revenue": "營業收入為 98.07 億美元，較去年同期成長 14%。",
+  "eps": "每股盈餘（EPS）為 5.28 美元，較去年同期成長 22%（調整後每股盈餘為 5.31 美元）。",
+  "margins": "毛利率未提供。營業利益率為 59.8%（調整後營業利益率為 60.5%），淨利率為 47.2%，展現強勁獲利能力且營業利益率較去年同期提升。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "官方預計 2026 全年及第四季按 Non-GAAP 貨幣中立基礎（排除非經常性活動）之營收均成長低雙位數高段（High end of low double digits）。",
+  "outlook": "本季支付網路與加值服務解決方案營收均實現雙位數成長，處理交易筆數與總卡數持續穩定擴增。在跨境交易與各項評估費用強勁成長帶動下，營運保持穩健成長態勢。",
+  "highlights": "•營業收入達 98.07 億美元（年增 14%），調整後每股盈餘達 5.31 美元（年增 21%）<br>•加值服務與解決方案營收達 40.58 億美元，年增 19%<br>•處理交易筆數達 45.4 億筆（年增 9%），總卡數達到 39.5 億張（年增 5%）",
+  "concerns": "•現金回饋與獎勵支出（Rebates and incentives）達 63.69 億美元，較去年同期成長 18%<br>•GAAP 營業費用達 39.45 億美元，年增 11%（調整後營業費用達 38.72 億美元，年增 12%）",
+  "risks": "•現金回饋與獎勵支出成長速度（年增 18%）高於整體營收成長率，可能對支付網路淨營收形成壓抑<br>•一般及管理費用增加（調整後 G&A 費用年增 13%）以及潛在訴訟準備金變動，對費用端控管構成挑戰",
+  "keyPoints": "•營業收入達 98.07 億美元（年增 14%），營業利益率 59.8%，每股盈餘（EPS）為 5.28 美元<br>•總支付金額（GDV）達 2,9520 億美元（當地貨幣年增 7%），跨境交易金額年增 11%<br>•加值服務與解決方案營收達 40.58 億美元（年增 19%），持續提供支付網路之外的多元成長動力",
+  "guidanceOfficial": "2026 全年展望：GAAP 營收預期年增低雙位數（Low teens），GAAP 營業費用預期年增低雙位數低段（Low end of low double digits）；Non-GAAP 貨幣中立且排除非經常性活動之營收預期年增低雙位數高段（High end of low double digits），營業費用預期年增低雙位數（Low double digits）。\n2026 年第四季展望：GAAP 營收預期年增低雙位數高段（High end of low double digits），GAAP 營業費用預期年增高個位數（High single digit）；Non-GAAP 貨幣中立且排除非經常性活動之營收預期年增低雙位數高段（High end of low double digits），營業費用預期年增低雙位數高段（High end of low double digits）。",
+  "segments": "•支付網路（Payment Network）：57.49 億美元，年增 11%（已扣除現金回饋與獎勵支出 63.69 億美元，年增 18%）<br>  - 國內評估費用（Domestic Assessments）：47.81 億美元，年增 14%<br>  - 跨境評估費用（Cross-Border Assessments）：32.11 億美元，年增 16%<br>  - 交易處理評估費用（Transaction Processing Assessments）：41.91 億美元，年增 14%<br>  - 其他網路評估費用（Other Network Assessments）：2.85 億美元，年增 10%<br>•加值服務與解決方案（Value-added Services and Solutions）：40.58 億美元，年增 19%"
+ }
+}
