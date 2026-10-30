@@ -1,0 +1,48 @@
+{
+ "symbol": "PACK",
+ "market": "us",
+ "name": "RANPAK HOLDINGS CORP.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "RANPAK HOLDINGS CORP.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1.02",
+  "營業毛利": "0.36",
+  "營業利益": "0.00",
+  "本期淨利": "-0.07",
+  "每股盈餘": -0.08,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1712463/000162828026068022/a04pack-202609xex99x1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T10:52:21.650Z",
+ "result": {
+  "revenue": "會計年度 2026 Q3 營業收入為 1.02 億美元，較去年同期成長 2.3%。",
+  "eps": "每股盈餘（EPS）為 -0.08 美元，本期淨利為 -0.07 億美元，公司仍處於虧損狀態。",
+  "margins": "營業毛利為 0.36 億美元，毛利率為 35.3%；營業利益為 0.00 億美元，營業利益率為 0.0%；本期淨利率為 -6.9%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期實現先前的全年指引，並維持成本紀律與推進營收成長及毛利改善。",
+  "outlook": "本季營業收入達到 1.02 億美元，帶動毛利率來到 35.3%。然而，營業利益率為 0.0% 且本期淨利呈現 -0.07 億美元的虧損，顯示獲利能力仍待提升。",
+  "highlights": "• 營業收入達到 1.02 億美元，年成長 2.3%，固定匯率計算下成長 3.4%。<br>• 營業毛利為 0.36 億美元，毛利率為 35.3%。<br>• 營業利益率為 0.0%。",
+  "concerns": "• 本期淨利為 -0.07 億美元，淨利率為 -6.9%，顯示公司本季仍面臨虧損。<br>• 營業利益為 0.00 億美元，營業利益率為 0.0%，本業獲利表現較為疲弱。",
+  "risks": "• 本期淨利為負值（-0.07 億美元），且淨利率為 -6.9%，顯示持續承受虧損壓力。<br>• 營業利益為 0.00 億美元，本業獲利空間有限。",
+  "keyPoints": "• 營業收入為 1.02 億美元，年增 2.3%。<br>• 毛利率為 35.3%，營業毛利為 0.36 億美元。<br>• 本期淨利為 -0.07 億美元，每股盈餘（EPS）為 -0.08 美元。",
+  "guidanceOfficial": "While volatility has stepped up markedly since the end of the second quarter, we believe we are executing well on the things that are in our control and expect to achieve our prior guidance for the year.",
+  "segments": "• Automation：營收 14.6 百萬美元，年增 22.7%（固定匯率且排除認股權證下年增 26.9%）。<br>• wrapping：營收 9.2 百萬美元，年增 8.2%。<br>• cushioning：營收 35.9 百萬美元，年增 0.3%。<br>• void-fill：營收 42.2 百萬美元，年減 2.8%。"
+ }
+}

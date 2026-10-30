@@ -1,0 +1,48 @@
+{
+ "symbol": "HIPO",
+ "market": "us",
+ "name": "HIPPO HOLDINGS INC.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "HIPPO HOLDINGS INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1.56",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.09",
+  "每股盈餘": 0.33,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1828105/000182810526000048/q326earningsreleasefinal.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T10:44:39.504Z",
+ "result": {
+  "revenue": "本期營業收入為 1.56 億美元。根據官方新聞稿指出，營收較去年同期的 1.21 億美元增加 29%。",
+  "eps": "本期每股盈餘（EPS）為 0.33 美元。相關獲利表現已反映於官方申報資料中。",
+  "margins": "本期營業毛利與營業利益率未提供。本期淨利率為 5.8%，反映本期淨利為 0.09 億美元相對於營收的比例。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司更新 2026 全年財測，其中預期全年 Gross Written Premium 為 1.7 - 1.75B、Net Written Premium 為 565 - 580M、Revenue 為 585 - 590M、Combined Ratio 為 97% - 98%、CAT Loss Ratio 為 8%、Adjusted Net Income 為 77 - 80M。",
+  "outlook": "本期營業收入為 1.56 億美元，淨利為 0.09 億美元，淨利率為 5.8%。總股東權益為 4.69 億美元，較 2025 年底的 4.36 億美元增加 8%。",
+  "highlights": "•營業收入為 1.56 億美元，較去年同期增加。<br>•本期淨利為 0.09 億美元，每股盈餘（EPS）為 0.33 美元。<br>•總股東權益為 4.69 億美元，較 2025 年底增加 8%。",
+  "concerns": "•淨損失率（Net loss ratio）為 56.7%，高於去年同期的 47.6%。<br>•綜合成本率（Combined ratio）為 98.4%。<br>•自然災害損失（CAT losses）佔比為 6.5%，高於去年同期的無 CAT 損失。",
+  "risks": "•淨損失率上升至 56.7%，且 CAT 損失佔比增加至 6.5%，可能對未來獲利穩定性造成影響。<br>•部分快速成長的業務線（如 Casualty 和 CMP）保留水準較低，可能影響整體淨保費成長動能。",
+  "keyPoints": "•本期營業收入為 1.56 億美元，本期淨利為 0.09 億美元，每股盈餘為 0.33 美元。<br>•總股東權益達 4.69 億美元，每股帳面價值為 17.62 美元。<br>•更新 2026 全年財測，預期調整後淨利為 77 至 80 百萬美元。",
+  "guidanceOfficial": "Prior Updated 2026 FY Guidance 2026 FY Guidance Gross Written Premium $1.65 - $1.7B $1.7 - $1.75B Net Written Premium $565 - $580M $565 - $580M Revenue $580 - $585M $585 - $590M Combined Ratio 99% - 101% 97% - 98% CAT Loss Ratio 10 % 8 % Adjusted Net Income (Loss)(1) $62 - $70M $77 - $80M Stock-based compensation + Depreciation and Amortization $42M $42M",
+  "segments": "•Homeowners 保費金額：三個月為 112.2 百萬美元（去年同期 101.0 百萬美元，年增 11%）<br>•Renters 保費金額：三個月為 73.9 百萬美元（去年同期 59.3 百萬美元，年增 25%）<br>•Commercial Multi-Peril 保費金額：三個月為 65.6 百萬美元（去年同期 32.4 百萬美元，年增 102%）<br>•Casualty 保費金額：三個月為 29.8 百萬美元（去年同期 4.5 百萬美元，年增 562%）<br>•Other 保費金額：三個月為 2.0 百萬美元（去年同期 2.4 百萬美元，年減 17%）"
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "symbol": "STGW",
+ "market": "us",
+ "name": "Stagwell Inc",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Stagwell Inc",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "8.16",
+  "營業毛利": null,
+  "營業利益": "0.48",
+  "本期淨利": "0.18",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/876883/000087688326000030/a3q26earningspresentatio.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T10:55:09.000Z",
+ "result": {
+  "revenue": "根據官方財報資料，Stagwell Inc 2026年第三季營業收入為 8.16 億美元。",
+  "eps": "根據官方財報資料，本季每股盈餘（EPS）未提供。",
+  "margins": "本季營業利益率為 5.9%，營業利益為 0.48 億美元；淨利率則為 2.2%，本期淨利為 0.18 億美元。毛利率與相關毛利數據官方未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司官方上調 2026 年調整後 EBITDA 財測至 4.90 億至 5.40 億美元，調整後每股盈餘預期為 1.07 至 1.21 美元。",
+  "outlook": "根據官方數據，本季營業收入為 8.16 億美元，營業利益為 0.48 億美元，創造本期淨利 0.18 億美元。整體營運在營業利益率 5.9% 與淨利率 2.2% 的水準下維持獲利狀態。",
+  "highlights": "• 依據官方新聞稿節錄，有機淨營收年增 7% 至 6.64 億美元，有機營收年增 11% 至 8.16 億美元。<br>• 調整後 EBITDA 成長 25% 至 1.45 億美元，利潤率達 22%，較 2025 年同期高出 290 個基點。<br>• 本季獲得 1.68 億美元的淨新業務（Net New Business），使過去十二個月（LTM）淨新業務達到 5.86 億美元。",
+  "concerns": "• 本季官方申報的財報數據中，營業毛利、毛利率、營運現金流與資本支出等項目皆未提供。<br>• 官方新聞稿節錄指出需留意總體經濟因素、客戶支出減少、匯率波動及債務合約與或有給付義務等潛在風險。<br>• 官方新聞稿中列舉了多項可能影響公司業務與client需求的外在風險與變數。",
+  "risks": "• 公司在營運過程中面臨總體經濟因素、通膨、客戶支出減少及金融失敗等不確定性。<br>• 須留意公司能否持續符合債務協議規範，並如期融資其或有給付義務（包含可贖回非控制權益、遞延收購對價及利潤權益等）。",
+  "keyPoints": "• 2026年第三季營業收入為 8.16 億美元，營業利益為 0.48 億美元（營業利益率 5.9%）。<br>• 本期淨利為 0.18 億美元，淨利率為 2.2%。<br>• 官方上調 2026 年調整後 EBITDA 財測至 4.90 億至 5.40 億美元，調整後每股盈餘預期為 1.07 至 1.21 美元。",
+  "guidanceOfficial": "Raise ADJUSTED EBITDA$490M - $540M IN ADJUSTED EARNINGS PER SHARE$1.07 - $1.21 Reiterate TOTAL NET REVENUE GROWTH8% - 12% EBITDA CONVERSION ON FREE CASH FLOW50% - 60%",
+  "segments": "• 行銷服務（Marketing Services）：佔 3Q26 淨營收 32%<br>• 媒體與商務（Media & Commerce）：佔 3Q26 淨營收 18%<br>• 通訊（Communications）：佔 3Q26 淨營收 24%<br>• 數位轉型（Digital Transformation）：佔 3Q26 淨營收 18%<br>• 行銷雲（The Marketing Cloud）：佔 3Q26 淨營收 8%"
+ }
+}

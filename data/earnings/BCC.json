@@ -1,0 +1,48 @@
+{
+ "symbol": "BCC",
+ "market": "us",
+ "name": "Boise Cascade Company",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Boise Cascade Company",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "18.31",
+  "營業毛利": null,
+  "營業利益": "0.84",
+  "本期淨利": "0.57",
+  "每股盈餘": 1.63,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-05-04",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1328581/000132858126000015/bccexhibit9913312026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T11:00:55.196Z",
+ "result": {
+  "revenue": "會計年度 2026 Q2 的營業收入為 18.31 億美元。",
+  "eps": "本季每股盈餘（EPS）為 1.63 美元。",
+  "margins": "本季營業利益率為 4.6%，淨利率為 3.1%，營業毛利及毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "未提供",
+  "outlook": "根據官方數據，本季營業利益為 0.84 億美元，營業利益率為 4.6%，本期淨利為 0.57 億美元，淨利率為 3.1%。營運現金流與資本支出等細節本季並未提供。",
+  "highlights": "• 營業收入達到 18.31 億美元。<br>• 營業利益為 0.84 億美元，營業利益率為 4.6%。<br>• 本期淨利為 0.57 億美元，淨利率為 3.1%，每股盈餘（EPS）為 1.63 美元。",
+  "concerns": "• 營業毛利及毛利率未提供。<br>• 營運現金流與資本支出相關數據未提供。<br>• 自由現金流數據未提供。",
+  "risks": "• 官方公布的財務資料中缺乏營運現金流與資本支出數據，無法全面評估流動性與現金配置狀況。<br>• 營業毛利與毛利率未提供，限制了對成本控制與毛利水準的深入分析。",
+  "keyPoints": "• 本季營業收入為 18.31 億美元。<br>• 本季營業利益為 0.84 億美元，營業利益率達 4.6%。<br>• 本季本期淨利為 0.57 億美元，淨利率為 3.1%，每股盈餘（EPS）為 1.63 美元。",
+  "guidanceOfficial": "Second Quarter 2026 Guidance:<br>BMD EBITDA ~$65 - 8,000 萬美元<br>Wood Products EBITDA ~$32 - 4,700 萬美元<br>Unallocated Corporate Costs ~($14) - ($12) million<br>Total Company Adjusted EBITDA ~$83 - 1.15 億美元",
+  "segments": "• Building Materials Distribution sales $ 1,388,948 thousand, (1) % change vs 1Q 2025<br>• Building Materials Distribution income $ 32,942 thousand, (32) % change vs 1Q 2025<br>• Building Materials Distribution EBITDA $ 48,225 thousand, (23) % change vs 1Q 2025<br>• Wood Products sales $ 398,204 thousand, (4) % change vs 1Q 2025<br>• Wood Products income $ 8,492 thousand, (52) % change vs 1Q 2025<br>• Wood Products EBITDA $ 31,957 thousand, (20) % change vs 1Q 2025"
+ }
+}

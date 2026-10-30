@@ -1,0 +1,48 @@
+{
+ "symbol": "FTI",
+ "market": "us",
+ "name": "TechnipFMC plc",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "TechnipFMC plc",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "28.96",
+  "營業毛利": null,
+  "營業利益": "5.64",
+  "本期淨利": "4.18",
+  "每股盈餘": 1.05,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1681459/000168145926000050/technipfmc2026930-8kerex.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T10:56:13.791Z",
+ "result": {
+  "revenue": "2026年第三季營業收入為28.96億美元，較前一季與去年同期皆呈現成長。",
+  "eps": "2026年第三季每股盈餘（EPS）為1.05美元，官方新聞稿指出稀釋每股盈餘同為1.05美元。",
+  "margins": "本季營業利益率為19.5%，本期淨利率為14.4%，官方新聞稿指出淨利率較去年同期提升270個基點至14.4%。毛利率與毛利金額官方數字未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司調升2026年全年Subsea營收與自由現金流財測，並首次發布2027年Subsea財務指引。",
+  "outlook": "根據官方財報與新聞稿，公司第三季營收為28.96億美元，本期淨利為4.18億美元，整體營運維持穩健成長。管理層指出Subsea Opportunities List已連續九季增加至320億美元，展現深海市場的持續需求。",
+  "highlights": "• 總公司2026年第三季營業收入為28.96億美元，本期淨利達4.18億美元，稀釋每股盈餘為1.05美元。<br>• Subsea部門第三季營收為26.00億美元，營業利益達522.6百萬美元，營業利益率為20.1%。<br>• 公司調升2026年全年Subsea營收預期至96至98億美元，自由現金流預期調升至14.5至15.5億美元。",
+  "concerns": "• 依據官方新聞稿，本季總公司Inbound orders為2,319.5百萬美元，較前一季減少14.9%，較去年同期減少12.4%。<br>• 總公司Backlog為16,065.8百萬美元，較前一季減少2.3%，較去年同期減少4.4%。<br>• Subsea部門Inbound orders為2,051.5百萬美元，較前一季減少18.2%，較去年同期減少13.9%。",
+  "risks": "• 本季官方申報資料與新聞稿中未提供營運現金流與資本支出等完整現金流數據，無法直接計算自由現金流。<br>• 部分業務指標如新接訂單（Inbound orders）與訂單儲備（Backlog）在季增與年增幅度上呈現下滑趨勢。",
+  "keyPoints": "• 2026年第三季營業收入為28.96億美元，營業利益為5.64億美元（營業利益率19.5%），本期淨利為4.18億美元（淨利率14.4%）。<br>• 每股盈餘（EPS）為1.05美元，稀釋每股盈餘同為1.05美元。<br>• 官方調升2026年全年Subsea營收至96-98億美元，自由現金流至14.5-15.5億美元，並初估2027年Subsea營收為100-104億美元。",
+  "guidanceOfficial": "• Subsea revenue in a range of $9.6 - 98 億美元, which increased from the previous guidance range of $9.2 - 96 億（原文未註明幣別）.<br>• Effective tax rate in a range of 25 - 27%, which decreased from the previous guidance range of 27 - 31%.<br>• Free cash flow in a range of $1.45 - 15.5 億（原文未註明幣別）, which increased from the previous guidance range of $1.3 - 14.5 億（原文未註明幣別）.<br>• Subsea revenue in a range of $10.0 - 104 億（原文未註明幣別） (2027)<br>• Subsea adjusted EBITDA margin in a range of 22.5 - 24.0% (2027)",
+  "segments": "• Subsea 營收：2,600.0 百萬美元，季增 4.5%、年增 12.1%<br>• Surface Technologies 營收：295.8 百萬美元，季增 7.1%、年減 9.8%"
+ }
+}

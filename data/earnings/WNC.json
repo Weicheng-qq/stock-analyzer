@@ -1,0 +1,48 @@
+{
+ "symbol": "WNC",
+ "market": "us",
+ "name": "WABASH NATIONAL CORPORATION",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "WABASH NATIONAL CORPORATION",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "4.76",
+  "營業毛利": "0.15",
+  "營業利益": "-0.20",
+  "本期淨利": "-0.21",
+  "每股盈餘": -0.51,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/879526/000087952626000101/wnc-20260930xex991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T10:57:19.475Z",
+ "result": {
+  "revenue": "2026年Q3營業收入為4.76億美元，相較去年同期有所增長。",
+  "eps": "2026年Q3每股盈餘（EPS）為-0.51美元，呈現虧損狀態。",
+  "margins": "2026年Q3營業毛利率為3.2%，營業利益率為-4.2%，淨利率為-4.4%，整體獲利能力面臨虧損與低毛利壓力。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "預期2026年Q4營收中位數為4.35億美元，EPS為-0.65美元。",
+  "outlook": "2026年Q3總積壓訂單（Backlog）達11.98億美元，較2026年Q2增加25%，表現超越傳統季節性趨勢。",
+  "highlights": "• 2026年Q3營業收入為4.76億美元。<br>• 總積壓訂單（Backlog）截至2026年9月30日為11.98億美元，較Q2增加25%。<br>• 運輸解決方案（Transportation Solutions）部門營收達407.86萬美元，零件與服務（Parts & Services）部門營收達69.36萬美元。",
+  "concerns": "• 營業利益為-0.20億美元，營業利益率為-4.2%。<br>• 本期淨利為-0.21億美元，淨利率為-4.4%。<br>• 營業毛利率僅為3.2%。",
+  "risks": "• 公司目前處於營業利益與淨利皆為負數的虧損狀態。<br>• 營業毛利率處於3.2%的低水準，本業獲利能力偏弱。",
+  "keyPoints": "• 2026年Q3營業收入為4.76億美元，但本期淨利為-0.21億美元，每股盈餘（EPS）為-0.51美元，顯示仍在虧損。<br>• 2026年Q3總積壓訂單為11.98億美元，較Q2增加25%。<br>• 官方預期2026年Q4營收中位數為4.35億美元，EPS預期為-0.65美元。",
+  "guidanceOfficial": "Q4-2026 revenue outlook midpoint of 4.35 億美元, EPS outlook $(0.65). For the fourth quarter of 2026, the Company guides its revenue to be in the range of 4.2 億美元 to 4.5 億美元 and Non-GAAP adjusted EPS to a range of $(0.75) to $(0.55).",
+  "segments": "• 運輸解決方案（Transportation Solutions）網通營收 407,860 仟美元，年增 21.9%，營業損失 7,541 仟美元（營業損失率 1.8%）。<br>• 零件與服務（Parts & Services）營收 69,356 仟美元，年增 13.8%，營業利益 5,756 仟美元（營業利益率 8.3%）。"
+ }
+}

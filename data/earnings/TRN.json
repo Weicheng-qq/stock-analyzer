@@ -1,0 +1,48 @@
+{
+ "symbol": "TRN",
+ "market": "us",
+ "name": "TRINITY INDUSTRIES INC",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "TRINITY INDUSTRIES INC",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "5.35",
+  "營業毛利": null,
+  "營業利益": "0.96",
+  "本期淨利": "0.18",
+  "每股盈餘": 0.22,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/99780/000009978026000135/exh991pressrelease9302026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T10:56:02.161Z",
+ "result": {
+  "revenue": "本季營業收入為 5.35 億美元，年增率為 18%，主要受惠於外部交車量增加及外部維修組合。",
+  "eps": "本季每股盈餘（EPS）為 0.22 美元（官方新聞稿之 GAAP 稀釋 EPS 為 0.27 美元）。",
+  "margins": "本季營業利益率為 17.9%，本期淨利率為 3.4%。營業毛利與毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 2026 全年產業交車量低於 25,000 輛、EPS 介於 2.20 至 2.40 美元。",
+  "outlook": "本季租賃車隊稼動率維持在 97.0%，且接獲 2,190 輛鐵路貨車訂單並交付 2,030 輛。截至季末，訂單積壓金額（backlog）為 16 億美元。",
+  "highlights": "• 季營業收入達 5.35 億美元，年增 18%，營業利益為 0.96 億美元。<br>• 租賃車隊稼動率維持在 97.0%，新接鐵路貨車訂單 2,190 輛，交車量 2,030 輛。<br>• 年初至今（YTD）來自持續經營的營運現金流為 2.427 億美元（新聞稿節錄顯示 2.43 億美元），資產組合出售淨收益達 3,900 萬美元。",
+  "concerns": "• 營業利益從去年同期的 1.186 億美元降至 0.956 億美元（官方數字營業利益 0.96 億美元），主要受租賃資產組合出售收益減少及銷售、工程與行政費用增加影響。<br>• 歸屬於公司的持續經營淨利從去年同期的 3,140 萬美元降至 2,160 萬美元。<br>• 有效稅率上升至 29.0%，高於去年同期的 23.0%。",
+  "risks": "• 淨利與營業利益較去年同期下滑，且利息支出淨額仍達 6,580 萬美元，對獲利形成一定壓力。<br>• 營業利益受到租賃資產組合出售收益波動與營業費用上升的影響。",
+  "keyPoints": "• 本季營業收入為 5.35 億美元，GAAP 稀釋 EPS 為 0.27 美元（官方本期淨利為 0.18 億美元）。<br>• 季末鐵路貨車訂單積壓金額（backlog）為 16 億美元，交車量達 2,030 輛。<br>• 公司維持 2026 全年 EPS 財測在 2.20 至 2.40 美元之間。",
+  "guidanceOfficial": "2026 Guidance • Industry deliveries of below 25,000 railcars • Net fleet investment of 3 億美元 to 3.5 億美元 • Operating and administrative capital expenditures of 5,500 萬美元 to 6,500 萬美元 • EPS of $2.20 to $2.40",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "symbol": "MCS",
+ "market": "us",
+ "name": "MARCUS CORP",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "MARCUS CORP",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "2.38",
+  "營業毛利": null,
+  "營業利益": "0.30",
+  "本期淨利": "0.19",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/62234/000006223426000046/mcs-20261029xex991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T10:47:36.675Z",
+ "result": {
+  "revenue": "營業收入為 2.38 億美元。",
+  "eps": "每股盈餘（EPS）為 未提供 美元。",
+  "margins": "營業利益率為 12.6%，淨利率為 8.0%，營業毛利與毛利率則為未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期假期電影陣容及密爾瓦基釀酒人的歷史性世界大賽之旅，加上假期旅遊與活動將有利於飯店業務。",
+  "outlook": "本季營業收入達 2.38 億美元，營業利益為 0.30 億美元，本期淨利為 0.19 億美元。整體營運在電影院與飯店度假村部門的帶動下表現穩健。",
+  "highlights": "• 營業收入為 2.38 億美元。<br>• 營業利益為 0.30 億美元，營業利益率 12.6%。<br>• 本期淨利為 0.19 億美元，淨利率 8.0%。",
+  "concerns": "• 每股盈餘（EPS）未提供。<br>• 營運現金流與自由現金流未提供。",
+  "risks": "• 本期財務資料未提供完整的現金流與資本支出數據。<br>• 部分獲利指標如毛利率等官方數據未提供。",
+  "keyPoints": "• 本季營業收入為 2.38 億美元。<br>• 本季營業利益為 0.30 億美元，利益率達 12.6%。<br>• 本期淨利為 0.19 億美元，淨利率達 8.0%。",
+  "guidanceOfficial": "Looking to the remainder of the year, there are even more exciting films ahead, with the holiday movie slate featuring several franchise-driven tentpole films that are expected to appeal to a wide range of audiences. The historic World Series run for the Milwaukee Brewers, along with upcoming holiday travel and events, also bode well for our hotels business as we round out the year.",
+  "segments": "• Theatres：營收 145,011 千美元，營業利益 22,181 千美元。<br>• Hotels/ Resorts：營收 92,667 千美元，營業利益 15,339 千美元。<br>• Corporate Items：營收 76 千美元，營業虧損 7,237 千美元。"
+ }
+}

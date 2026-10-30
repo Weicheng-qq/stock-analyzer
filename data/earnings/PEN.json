@@ -1,0 +1,48 @@
+{
+ "symbol": "PEN",
+ "market": "us",
+ "name": "Penumbra, Inc",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Penumbra, Inc",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "4.10",
+  "營業毛利": "2.80",
+  "營業利益": "0.51",
+  "本期淨利": "0.42",
+  "每股盈餘": 1.07,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1321732/000132173226000042/pen-93026xexhibit991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T10:51:17.096Z",
+ "result": {
+  "revenue": "2026年第三季營業收入為4.10億美元（新聞稿指出為410.1萬美元，年增15.6%）。整體營收維持增長態勢。",
+  "eps": "2026年第三季每股盈餘（EPS）為1.07美元。本期淨利為0.42億美元（新聞稿指出為42.3萬美元）。",
+  "margins": "本季營業毛利為2.80億美元，毛利率為68.3%，較去年同期增加0.5%。營業利益率為12.4%，本期淨利率為10.2%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "鑑於Boston Scientific Corporation擬議收購Penumbra, Inc.，公司將不提供2026年全年財務指導。詳細內容請見guidanceOfficial欄位。",
+  "outlook": "2026年第三季營業收入達4.10億美元，營業利益為0.51億美元。本季總營業費用為229.6百萬美元，其中包含與Boston Scientific Corporation收購案相關的7.1百萬美元收購相關費用。",
+  "highlights": "• 全球血栓切除術（thrombectomy）營收達2.792億美元，較2025年第三季增加18.1%，其中美國VTE營收年增26.0%。<br>• 全球栓塞與通路（embolization and access）營收達1.310億美元，較2025年第三季增加10.8%。<br>• 美國神經（neuro）營收達77.9百萬美元，較2025年第三季增加19.3%。",
+  "concerns": "• 營業費用包含7.1百萬美元與Boston Scientific Corporation收購案相關的費用。<br>• 由於擬議中的收購案，公司未提供2026年全年的財務指導，亦未主持財報電話會議。",
+  "risks": "• 總營業費用高達229.6百萬美元，其中研發費用為25.4百萬美元，SG&A為204.2百萬美元，包含收購相關費用。<br>• 營運高度受限於Boston Scientific Corporation擬議收購案的後續進展。",
+  "keyPoints": "• 2026年第三季營業收入為4.10億美元，年增15.6%；每股盈餘（EPS）為1.07美元。<br>• 本季營業毛利率為68.3%，營業利益為0.51億美元（營業利益率12.4%），淨利為0.42億美元（淨利率10.2%）。<br>• 由於Boston Scientific Corporation擬議收購案，公司宣佈不提供2026年全年財務指導及不舉行法說會。",
+  "guidanceOfficial": "Given the pending acquisition of Penumbra, Inc. by Boston Scientific Corporation (NYSE: BSX), the Company will not be providing financial guidance for the full year 2026 or hosting a conference call to discuss financial results for the three months ended September 30, 2026.",
+  "segments": "• 全球血栓切除術（global thrombectomy）營收：2.792億美元（2.79 億美元美元），年增 18.1%。<br>• 美國VTE營收：年增 26.0%。<br>• 全球栓塞與通路（global embolization and access）營收：1.310億美元（1.31 億美元美元），年增 10.8%。<br>• 美國神經（U.S. neuro）營收：77.9百萬美元（7,790 萬美元美元），年增 19.3%。"
+ }
+}

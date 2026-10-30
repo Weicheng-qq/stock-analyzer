@@ -1,0 +1,48 @@
+{
+ "symbol": "HIVE",
+ "market": "us",
+ "name": "HIVE DIGITAL TECHNOLOGIES LTD.",
+ "quarter": "2027 Q1（2026-04-01～2026-06-30）",
+ "quarterTag": "2027Q1",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "HIVE DIGITAL TECHNOLOGIES LTD.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2027,
+  "season": "Q1",
+  "form": "10-Q",
+  "營業收入": "0.79",
+  "營業毛利": "-0.29",
+  "營業利益": null,
+  "本期淨利": "-1.43",
+  "每股盈餘": -0.54,
+  "營運現金流": "0.04",
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-17",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1720424/000106299326004447/exhibit99-1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T11:09:53.847Z",
+ "result": {
+  "revenue": "營業收入為 0.79 億美元，展現一定的營收規模。",
+  "eps": "每股盈餘（EPS）為 -0.54 美元，處於虧損狀態。",
+  "margins": "營業毛利為 -0.29 億美元，毛利率為 -36.7%，本期淨利為 -1.43 億美元，淨利率為 -181.0%，顯示公司目前面臨營業毛損與本期淨虧損的財務壓力。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供明確的具體財測數字。",
+  "outlook": "根據官方數字，營業收入為 0.79 億美元，而本期淨利為 -1.43 億美元，營運現金流為 0.04 億美元。整體營運仍處於虧損狀況，需持續觀察成本與費用控制。",
+  "highlights": "• 營業收入達到 0.79 億美元。<br>• 營運現金流為正數，金額計 0.04 億美元。",
+  "concerns": "• 營業毛利為 -0.29 億美元，毛利率為 -36.7%，顯示本業面臨毛損。<br>• 本期淨利為 -1.43 億美元，淨利率為 -181.0%，虧損金額擴大。<br>• 營業利益、資本支出與自由現金流等關鍵指標未提供。",
+  "risks": "• 本期淨利為 -1.43 億美元，反映出顯著的淨虧損風險。<br>• 營業毛利為負值（-0.29 億美元），核心本業成本高於營收，對財務結構造成壓力。",
+  "keyPoints": "• 營收表現：本季營業收入為 0.79 億美元。<br>• 獲利表現：營業毛利為 -0.29 億美元（毛利率 -36.7%），本期淨利為 -1.43 億美元（淨利率 -181.0%），每股盈餘（EPS）為 -0.54 美元。<br>• 現金流表現：營運現金流為 0.04 億美元，資本支出與自由現金流未提供。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Digital Currency Revenue: 7,210 萬美元, up 76.6% year-over-year and 7.3% sequentially driven by higher Bitcoin production.<br>• HPC Revenue: BUZZ HPC revenue was 710 萬美元, up 46.7% year-over-year and 52.1% sequentially."
+ }
+}

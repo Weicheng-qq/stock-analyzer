@@ -4533,11 +4533,11 @@
   "kind": ""
  },
  "LHX": {
-  "at": "2026-10-24T01:28:51.265Z",
+  "at": "2026-10-30T10:41:08.310Z",
   "market": "us",
   "name": "L3HARRIS TECHNOLOGIES, INC.",
-  "seen": "2026Q2",
-  "kind": "transcript"
+  "seen": "2026Q3",
+  "kind": "presentation"
  },
  "WDC": {
   "at": "2026-10-24T01:28:54.867Z",
@@ -4860,9 +4860,9 @@
   "kind": "commentary"
  },
  "VZ": {
-  "at": "2026-10-27T05:49:10.856Z",
+  "at": "2026-10-30T10:41:16.689Z",
   "market": "us",
-  "name": "VERIZON COMMUNICATIONS INC",
+  "name": "Verizon Communications Inc.",
   "seen": "沒有文件",
   "kind": ""
  },
@@ -5677,5 +5677,96 @@
   "done": "2026Q3",
   "pending": true,
   "pendingSince": "2026-10-30T10:28:22.811Z"
+ },
+ "AMZN": {
+  "at": "2026-10-30T10:40:45.596Z",
+  "market": "us",
+  "name": "AMAZON.COM, INC.",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "INTC": {
+  "at": "2026-10-30T10:40:50.449Z",
+  "market": "us",
+  "name": "Intel Corporation",
+  "seen": "2026Q3",
+  "kind": "commentary"
+ },
+ "MA": {
+  "at": "2026-10-30T10:40:54.939Z",
+  "market": "us",
+  "name": "Mastercard Incorporated",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "LLY": {
+  "at": "2026-10-30T10:40:57.882Z",
+  "market": "us",
+  "name": "ELI LILLY AND COMPANY",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "COIN": {
+  "at": "2026-10-30T10:41:03.143Z",
+  "market": "us",
+  "name": "Coinbase Global, Inc.",
+  "seen": "2026Q3",
+  "kind": "transcript"
+ },
+ "RIVN": {
+  "at": "2026-10-30T10:41:12.863Z",
+  "market": "us",
+  "name": "Rivian Automotive, Inc. / DE",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "GILD": {
+  "at": "2026-10-30T10:41:23.152Z",
+  "market": "us",
+  "name": "GILEAD SCIENCES, INC.",
+  "seen": "2026Q3",
+  "kind": "commentary"
+ },
+ "MO": {
+  "at": "2026-10-30T10:41:30.846Z",
+  "market": "us",
+  "name": "Altria Group, Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "BAX": {
+  "at": "2026-10-30T10:41:34.994Z",
+  "market": "us",
+  "name": "BAXTER INTERNATIONAL INC.",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "BLDR": {
+  "at": "2026-10-30T10:41:39.038Z",
+  "market": "us",
+  "name": "BUILDERS FIRSTSOURCE, INC.",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "BG": {
+  "at": "2026-10-30T10:41:44.394Z",
+  "market": "us",
+  "name": "BUNGE GLOBAL SA",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "CARR": {
+  "at": "2026-10-30T10:41:50.226Z",
+  "market": "us",
+  "name": "CARRIER GLOBAL CORPORATION",
+  "seen": "2026Q3",
+  "kind": "transcript"
+ },
+ "CTSH": {
+  "at": "2026-10-30T10:41:55.155Z",
+  "market": "us",
+  "name": "COGNIZANT TECHNOLOGY SOLUTIONS CORPORATION",
+  "seen": "2026Q3",
+  "kind": "transcript"
  }
 }

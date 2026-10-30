@@ -1,0 +1,48 @@
+{
+ "symbol": "ADT",
+ "market": "us",
+ "name": "ADT Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "ADT Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "13.12",
+  "營業毛利": null,
+  "營業利益": "3.16",
+  "本期淨利": "1.54",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-30",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1703056/000170305626000097/q22026adtearningsrelease-e.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T10:59:37.510Z",
+ "result": {
+  "revenue": "營業收入為 13.12 億美元，較去年同期成長 2%。",
+  "eps": "每股盈餘（EPS）未提供。",
+  "margins": "營業利益率為 24.1%，淨利率為 11.7%，毛利率未提供。本期淨利為 1.54 億美元。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司調升 2026 全年財務展望，預期調整後自由現金流量（含利率交換）成長約 30%、總營收成長約 2%、調整後 EPS 成長約 2%。",
+  "outlook": "ADT 營運表現展現韌性，受惠於強勁的現金產生能力，支援了資本回饋股東並進行股份回購。公司同時積極推進 ADT+ 平台、環境感測技術及 ADT Blu 等策略布局。",
+  "highlights": "• 總營收達 13.12 億美元，較去年同期成長 2%。<br>• 期末經常性每月收入（RMR）為 3.6 億美元，營收回收期為 2.3 年。<br>• 本期淨利為 1.54 億美元，淨利率為 11.7%。",
+  "concerns": "• 營業利益為 3.16 億美元，營業利益率為 24.1%。<br>• 持續面對動態且競爭激烈的環境。",
+  "risks": "• 未提供完整的資產負債表與現金流量細節。<br>• 相關營運成本與費用變動仍需持續關注。",
+  "keyPoints": "• 2026 會計年度第二季營業收入為 13.12 億美元。<br>• 本期淨利為 1.54 億美元，營業利益為 3.16 億美元。<br>• 官方調升 2026 全年財務展望，預期調整後自由現金流量（含利率交換）成長約 30%。",
+  "guidanceOfficial": "Based on performance through the end of the second quarter and expected progress during the second half of the year, the Company is raising its 2026 financial outlook and now projects Adjusted Free Cash Flow (including interest rate swaps) growth of approximately 30% versus the prior year, Total Revenue growth of approximately 2% versus the prior year, and Adjusted EPS growth of approximately 2% versus the prior year.",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

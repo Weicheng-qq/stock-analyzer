@@ -1,0 +1,48 @@
+{
+ "symbol": "AAMI",
+ "market": "us",
+ "name": "Acadian Asset Management Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Acadian Asset Management Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "1.85",
+  "營業毛利": null,
+  "營業利益": "0.32",
+  "本期淨利": "0.27",
+  "每股盈餘": 0.76,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1748824/000174882426000003/aamiearningspresentation.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T11:00:20.418Z",
+ "result": {
+  "revenue": "營業收入為 1.85 億美元。",
+  "eps": "每股盈餘（EPS）為 0.76 美元。",
+  "margins": "營業利益率為 17.3%，淨利率為 14.6%，毛利率未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "本季營業利益為 0.32 億美元，營業利益率達 17.3%。本期淨利為 0.27 億美元，淨利率為 14.6%。",
+  "highlights": "• 營業收入為 1.85 億美元。<br>• 營業利益為 0.32 億美元，營業利益率達 17.3%。<br>• 本期淨利為 0.27 億美元，淨利率為 14.6%，每股盈餘（EPS）為 0.76 美元。",
+  "concerns": "• 營業毛利與毛利率未提供。<br>• 營運現金流與資本支出未提供。<br>• 自由現金流未提供。",
+  "risks": "• 營運現金流與資本支出等現金流量資訊未提供，無法評估實際現金創造能力。<br>• 毛利與毛利率數據未提供，成本結構透明度受限。",
+  "keyPoints": "• 營業收入為 1.85 億美元。<br>• 營業利益為 0.32 億美元，營業利益率為 17.3%。<br>• 本期淨利為 0.27 億美元，每股盈餘（EPS）為 0.76 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "本次資料未揭露分部營收"
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "symbol": "KBR",
+ "market": "us",
+ "name": "KBR, Inc.",
+ "quarter": "2026 Q3（2026-07-04～2026-10-02）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "KBR, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-04",
+  "periodEnd": "2026-10-02",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "20.28",
+  "營業毛利": "3.01",
+  "營業利益": "1.86",
+  "本期淨利": "1.33",
+  "每股盈餘": 1.06,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1357615/000135761526000194/q326kbr-exhibit991x10022026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T10:46:31.328Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q3 的營業收入為 20.28 億美元。<br>公司整體營運維持一定的規模。",
+  "eps": "本會計年度 2026 Q3 的每股盈餘（EPS）為 1.06 美元。<br>該數字反映了本季的獲利能力。",
+  "margins": "本會計年度 2026 Q3 的營業毛利率為 14.8%，營業利益率為 9.2%，淨利率則為 6.6%。<br>各項利潤率顯示了公司在該期間的成本控制與盈利表現。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司重申全年 2026 年的各項財務預期。<br>詳細財測數據請參考 guidanceOfficial 欄位。",
+  "outlook": "根據官方新聞稿，公司重申了全年 2026 年財測，預期全年度營收介於 7.90B 至 8.36B 億美元、調整後 EBITDA 介於 980M 至 1,040M 億美元、調整後 EPS 介於 $3.87 至 $4.22，以及調整後營運現金流介於 560M 至 600M 億美元。<br>同時，公司正積極推進 Mission Technology Solutions 業務的分割計畫，預計於 2027 年 1 月 4 日完成獨立上市。",
+  "highlights": "• 營收達 20.28 億美元，營業利益為 1.86 億美元，本期淨利為 1.33 億美元。<br>• 調整後 EBITDA 為 2.68 億美元（利潤率 13.2%），調整後每股盈餘為 1.12 美元。<br>• 推進 Mission Technology Solutions 業務分割計畫，目標於 2027 年 1 月 4 日完成獨立。",
+  "concerns": "• Mission Technology Solutions 部門營收較去年同期下降 5% 或 60 百萬美元，主要受 NASA 相關聯邦民用客戶預期逆風影響。<br>• 須留意分割案進行中的相關行政與系統建置進度及其對成本的影響。",
+  "risks": "• 部門營收表現分歧，Mission Technology Solutions 營收下滑可能對整體成長動能造成壓力。<br>• 企業分割計畫（將 Mission Technology Solutions 獨立為 Trinzic）在執行過程中可能伴隨營運或系統整合風險。",
+  "keyPoints": "• 本季營業收入為 20.28 億美元，營業利益為 1.86 億美元，每股盈餘（EPS）為 1.06 美元。<br>• 本季毛利率為 14.8%，營業利益率為 9.2%，淨利率為 6.6%。<br>• 公司重申 2026 全年財測，營收預期 7.90B - 8.36B 億美元，調整後 EPS 預期 $3.87 - $4.22。",
+  "guidanceOfficial": "Fiscal Year 2026 Guidance: Revenues $7.90B - $8.36B, Adjusted EBITDA $980M - $1,040M, Adjusted EPS $3.87 - $4.22, Adjusted operating cash flows $560M - $600M。",
+  "segments": "• Mission Technology Solutions：營收 1,266 百萬美元（2025 年同期為 1,326 百萬美元），九個月累計 3,870 百萬美元。<br>• Sustainable Technology Solutions：營收 762 百萬美元（2025 年同期為 605 百萬美元），九個月累計 2,065 百萬美元。"
+ }
+}

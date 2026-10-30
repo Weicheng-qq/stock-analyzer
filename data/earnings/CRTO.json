@@ -1,0 +1,48 @@
+{
+ "symbol": "CRTO",
+ "market": "us",
+ "name": "CRITEO S.A.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "CRITEO S.A.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "4.28",
+  "營業毛利": "2.22",
+  "營業利益": "0.15",
+  "本期淨利": "0.11",
+  "每股盈餘": 0.22,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1576427/000162828026052913/exhibit991-8xkq22026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T11:04:31.953Z",
+ "result": {
+  "revenue": "營業收入為 4.28 億美元，較去年同期下滑。公司指出營收減少主因受特定客戶範疇變更等因素影響。",
+  "eps": "每股盈餘（EPS）為 0.22 美元。相較去年同期的稀釋 EPS 呈現下滑。",
+  "margins": "營業毛利為 2.22 億美元，毛利率為 51.9%。營業利益為 0.15 億美元，營業利益率為 3.5%，本期淨利為 0.11 億美元，淨利率為 2.6%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "全年 Contribution ex-TAC 預期年減 -12% 至 -10%（按固定匯率計算），Adjustged EBITDA 利益率預期約佔 Contribution ex-TAC 的 30%。",
+  "outlook": "本季營收與毛利皆較去年同期衰退，主要受到特定客戶範疇變更等因素影響。公司持續透過資本配置進行股票回購，並擴展其零售媒體與AI相關業務合作。",
+  "highlights": "• 成為 OpenAI 首家廣告技術合作夥伴，超過 2,000 個品牌在 ChatGPT 上進行廣告投放。<br>• 於 2026 年第二季部署 300 週萬美元（或新聞稿提及之 3000 萬美元）用於股份回購。<br>• 擴大零售媒體版圖，新增加拿大 Loblaw Advance 等合作夥伴。",
+  "concerns": "• 營業收入 4.28 億美元較去年同期下滑，毛利與淨利亦呈衰退趨勢。<br>• 營業利益率與淨利率處於較低水準（分別為 3.5% 與 2.6%）。",
+  "risks": "• 營運獲利能力偏低，本期淨利僅 0.11 億美元，淨利率為 2.6%，顯示獲利空間受到壓縮。<br>• 營收及毛利面臨年減壓力，受客戶範疇變更及市場變動影響。",
+  "keyPoints": "• 第二季營業收入為 4.28 億美元，營業毛利為 2.22 億美元（毛利率 51.9%）。<br>• 第二季本期淨利為 0.11 億美元（淨利率 2.6%），每股盈餘（EPS）為 0.22 美元。<br>• 公司預期 2026 全年 Contribution ex-TAC 按固定匯率計算將年減 -12% 至 -10%。",
+  "guidanceOfficial": "公司預期 2026 全年 Contribution ex-TAC 按固定匯率計算將減少 -12% 至 -10%；預期 Adjusted EBITDA 利益率約佔 Contribution ex-TAC 的 30%。預期 2026 年第三季 Contribution ex-TAC 介於 2.37 億美元至 2.41 億美元之間，按固定匯率計算年減 -15% 至 -14%；預期 Adjusted EBITDA 介於 5,400 萬美元至 5,800 萬美元之間。",
+  "segments": "• Retail Media 營收減少 (21)%，按固定匯率計算減少 (22)%，Retail Media Contribution ex-TAC 減少 (21)%，按固定匯率計算減少 (22)%。"
+ }
+}

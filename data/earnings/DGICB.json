@@ -1,0 +1,48 @@
+{
+ "symbol": "DGICB",
+ "market": "us",
+ "name": "Donegal Group Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Donegal Group Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "2.41",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.22",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/800457/000117184326006950/exh_991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T11:05:02.101Z",
+ "result": {
+  "revenue": "會計年度 2026 Q2 營業收入為 2.41 億美元。",
+  "eps": "本期每股盈餘（EPS）官方未提供。",
+  "margins": "營業毛利與營業利益率未提供，本期淨利率為 9.1%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "本季營業收入為 2.41 億美元，本期淨利為 0.22 億美元，淨利率為 9.1%。其餘營運與現金流等詳細細節官方未提供，無法做進一步推估。",
+  "highlights": "• 本期營業收入為 2.41 億美元。<br>• 本期淨利為 0.22 億美元，淨利率達 9.1%。",
+  "concerns": "• 營業毛利與營業利益率未提供。<br>• 營運現金流與資本支出等現金流量資訊未提供。",
+  "risks": "• 本期未提供營運現金流與資本支出數據，財務結構之現金流狀況不明。<br>• 營業毛利及營業利益率資訊未提供，無法全面評估本業獲利能力。",
+  "keyPoints": "• 本期營業收入為 2.41 億美元。<br>• 本期淨利為 0.22 億美元，淨利率為 9.1%。<br>• 包含營業毛利、營業利益率、每股盈餘與營運現金流等重要財務指標均未提供。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• 商業險汽車保險：保費年減 3.7%、9.1% 等相關 statutory combined ratios 變動，詳細分部金額未完整揭露於官方數字中。"
+ }
+}
