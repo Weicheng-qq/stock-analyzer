@@ -1,0 +1,48 @@
+{
+ "symbol": "PMTV",
+ "market": "us",
+ "name": "PennyMac Mortgage Investment Trust",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "PennyMac Mortgage Investment Trust",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.73",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.31",
+  "每股盈餘": 0.23,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1464423/000119312526437878/d179622dex991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T11:22:24.652Z",
+ "result": {
+  "revenue": "依據官方數字，本期營業收入為 0.73 億美元。",
+  "eps": "依據官方數字，本期每股盈餘（EPS）為 0.23 美元。",
+  "margins": "本期毛利率未提供，營業利益率未提供，本期淨利率為 42.5%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期減少當前股息以利股份回購。",
+  "outlook": "依據官方數字，本期本期淨利為 0.31 億美元，淨利率達 42.5%。資本支出與營運現金流皆未提供，故無法進一步評估現金流狀況。",
+  "highlights": "• 本期營業收入為 0.73 億美元。<br>• 本期本期淨利為 0.31 億美元。<br>• 本期每股盈餘（EPS）為 0.23 美元。",
+  "concerns": "• 營業毛利與營業利益率未提供。<br>• 營運現金流與資本支出未提供。",
+  "risks": "• 營運現金流與資本支出均未提供，無法評估真實現金流入與資本配置狀況。<br>• 營業毛利與營業利益率未提供，成本控管與本業獲利能力缺乏完整細節。",
+  "keyPoints": "• 營收表現：本期營業收入為 0.73 億美元。<br>• 獲利表現：本期本期淨利為 0.31 億美元，淨利率為 42.5%。<br>• 每股盈餘：本期每股盈餘（EPS）為 0.23 美元。",
+  "guidanceOfficial": "Given these dynamics and considering PMT currently trades at a steep discount to book value, we expect to decrease our current dividend in favor of share repurchases.",
+  "segments": "• Credit Sensitive Strategies Segment：Organically-created CRT investments (at period end) Fair value 8.78 億美元 (Q/Q (6)%, Y/Y (14)%), Underlying UPB 168.78 億（原文未註明幣別） (Q/Q (7)%, Y/Y (15)%); Fair value of subordinate MBS held in VIE from PMT private label securitizations (at period end) 9.3 億美元 (Q/Q 9%, Y/Y 158%); Total income contribution (42) million, Weighted average equity allocated 4.09 億（原文未註明幣別） (Q/Q (1)%, Y/Y (5)%), Annualized ROE (41)% (Q/Q (52)%, Y/Y (58)%).<br>• Interest Rate Sensitive Strategies Segment：MSR portfolio (at period end) Fair value 35.14 億（原文未註明幣別） (Q/Q (2)%, Y/Y (4)%), Unpaid principal balance (UPB) 1,921.36 億（原文未註明幣別） (Q/Q (8)%, Y/Y (12)%); Fair value of MBS portfolio (at period end) 43.06 億（原文未註明幣別） (Q/Q 6%, Y/Y (7)%); Fair value of senior MBS held in VIE from PMT private label securitizations (at period end) 1.08 億（原文未註明幣別） (Q/Q 29%, Y/Y 5%); Total income contribution 3,600 萬美元 (Q/Q 300%, Y/Y 11%), Weighted average equity allocated 11.97 億（原文未註明幣別） (Q/Q 1%, Y/Y 4%), Annualized ROE 12% (Q/Q 9%, Y/Y 1%).<br>• Aggregation and Securitization Segment：Correspondent production volume (UPB) Conventional conforming 5,200 萬（原文未註明幣別） (Q/Q (96)%, Y/Y (98)%), Jumbo 7.47 億（原文未註明幣別） (Q/Q (19)%, Y/Y 34%), Non-QM 4 億（原文未註明幣別） (Q/Q 45%), Total 11.99 億（原文未註明幣別） (Q/Q (53)%, Y/Y (64)%); UPB of loans acquired from PFSI production 20.78 億（原文未註明幣別） (Q/Q (7)%, Y/Y 60%); Total UPB of loans acquired 32.76 億（原文未註明幣別） (Q/Q (32)%, Y/Y (29)%); Total income contribution 200 萬美元 (Q/Q (81)%, Y/Y (77)%), Weighted average equity allocated 1.78 億（原文未註明幣別） (Q/Q (17)%, Y/Y 2%), Annualized ROE 5% (Q/Q (16)%, Y/Y (16)%)."
+ }
+}

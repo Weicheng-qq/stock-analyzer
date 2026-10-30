@@ -1,0 +1,48 @@
+{
+ "symbol": "MPLX",
+ "market": "us",
+ "name": "MPLX LP",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "MPLX LP",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "33.12",
+  "營業毛利": null,
+  "營業利益": "13.78",
+  "本期淨利": "10.87",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-04",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1552000/000155200026000035/mplxq22026earningsrelease.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T11:19:30.826Z",
+ "result": {
+  "revenue": "MPLX LP 在 2026 年第二季的營業收入為 33.12 億美元。",
+  "eps": "每股盈餘（EPS）為 未提供 美元。",
+  "margins": "營業利益率為 41.6%，營業利益達 13.78 億美元；本期淨利率則為 32.8%，本期淨利為 10.87 億美元。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "MPLX 預期 2026 年和 2027 年的分派（distribution）將分別增加 12.5%。",
+  "outlook": "公司在 2026 年第二季營運表現穩健，營業利益為 13.78 億美元，淨利達到 10.87 億美元。各主要業務部門調整後 EBITDA 均較去年同期有所成長，其中物流部門為 11.61 億美元，天然氣與 NGL 服務部門則為 6.14 億美元。",
+  "highlights": "• 2026 年第二季歸屬於 MPLX 的淨利為 1,077 百萬美元，調整後 EBITDA 歸屬於 MPLX 達 1,775 百萬美元。<br>• 原油與產品物流部門調整後 EBITDA 為 1,161 百萬美元，天然氣與 NGL 服務部門調整後 EBITDA 為 614 百萬美元。<br>• 產生 1,702 百萬美元的營運現金流，可分配現金流（DCF）為 1,450 百萬美元，調整後自由現金流為 668 百萬美元。",
+  "concerns": "• 總 MPLX 管線輸送量（throughput）較去年同期減少 4%，由 6,103 mbpd 降至 5,876 mbpd。<br>• 天然氣處理量（Natural gas processed）較去年同期減少 2%，由 9,740 MMcf/d 降至 9,590 MMcf/d。",
+  "risks": "• 原油管線輸送量下滑及營運費用增加，可能對物流業務的毛利率或獲利能力造成潛在壓力。<br>• 資本支出的增加（如將 2026 年成長型資本支出上調 500 百萬美元至 29 億美元）可能對未來現金流及財務結構帶來資金配置壓力。",
+  "keyPoints": "• 2026 年第二季營業收入為 33.12 億美元，營業利益為 13.78 億美元，淨利為 10.87 億美元。<br>• 第二季歸屬於 MPLX 的調整後 EBITDA 為 1,775 百萬美元，可分配現金流（DCF）達 1,450 百萬美元。<br>• 宣佈 2026 年第二季每普通單位分派 1.0765 美元，當季分派覆蓋率（distribution coverage）為 1.3x，槓桿比率為 3.7x。",
+  "guidanceOfficial": "MPLX expects distribution increases of 12.5% in 2026 and 2027",
+  "segments": "• Crude Oil and Products Logistics segment adjusted EBITDA: 11.61 億美元 (相較 2025 年同期的 11.38 億美元 增加 2,300 萬美元 或 2%)。<br>• Natural Gas and NGL Services segment adjusted EBITDA: 6.14 億美元 (相較 2025 年同期的 5.52 億美元 增加 6,200 萬美元 或 11%)。"
+ }
+}

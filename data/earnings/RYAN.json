@@ -1,0 +1,48 @@
+{
+ "symbol": "RYAN",
+ "market": "us",
+ "name": "RYAN SPECIALTY HOLDINGS, INC.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "RYAN SPECIALTY HOLDINGS, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "9.17",
+  "營業毛利": null,
+  "營業利益": "1.80",
+  "本期淨利": "0.42",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-29",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1849253/000184925326000045/ryan-20260930xex991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-30T11:23:37.505Z",
+ "result": {
+  "revenue": "營業收入為 9.17 億美元。",
+  "eps": "每股盈餘（EPS）未提供。",
+  "margins": "營業利益率為 19.6%，淨利率為 4.6%；營業毛利與毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司維持 2026 全年有機營收成長率指引，並更新調整後 EBITDAC 利潤率指引。",
+  "outlook": "根據官方提供之數字，本期營業利益為 1.80 億美元，營業利益率為 19.6%，本期淨利為 0.42 億美元，淨利率為 4.6%。其餘營運細節於官方數字中未完全揭露。",
+  "highlights": "• 營業利益達 1.80 億美元，營業利益率為 19.6%。<br>• 本期淨利為 0.42 億美元，淨利率為 4.6%。",
+  "concerns": "• 淨利率僅為 4.6%，相較於營業利益率 19.6% 有所落差。<br>• 營業毛利、營運現金流與資本支出等重要指標官方皆未提供。",
+  "risks": "• 本期淨利率僅有 4.6%，獲利轉化為實際淨利的比例偏低。<br>• 官方申報資料中缺乏現金流與資本支出的數據，難以全面評估財務結構的健全度。",
+  "keyPoints": "• 營業收入為 9.17 億美元。<br>• 營業利益為 1.80 億美元，營業利益率達 19.6%。<br>• 本期淨利為 0.42 億美元，淨利率為 4.6%。",
+  "guidanceOfficial": "公司維持 2026 全年有機營收成長率指引中等個位數成長（in the mid-single digits for 2026），並預期 2026 全年調整後 EBITDAC 利潤率（Adjusted EBITDAC Margin）較前一年度略有下降（down modestly for 2026, as compared to the prior year）。",
+  "segments": "• Wholesale Brokerage：三個月營收 394,283 千美元（佔總額 50.9%），年增 4.6%；九個月營收 1,270,881 千美元（佔總額 51.7%），年增 4.6%。<br>• Binding Authority：三個月營收 93,012 千美元（佔總額 12.0%），年增 3.8%；九個月營收 303,182 千美元（佔總額 12.3%），年增 6.0%。<br>• Underwriting Management：三個月營收 287,786 千美元（佔總額 37.1%），年增 5.4%；九個月營收 886,649 千美元（佔總額 36.0%），年增 17.3%。"
+ }
+}
