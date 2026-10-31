@@ -1,0 +1,48 @@
+{
+ "symbol": "TCBK",
+ "market": "us",
+ "name": "TriCo Bancshares",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "TriCo Bancshares",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.14",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.34",
+  "每股盈餘": 1.06,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-22",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/356171/000035617126000115/tcbk-20269308xkearningsrel.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-31T06:18:08.295Z",
+ "result": {
+  "revenue": "本期營業收入為 0.14 億美元。",
+  "eps": "本期每股盈餘（EPS）為 1.06 美元。",
+  "margins": "本期淨利率為 242.9%，本期淨利為 0.34 億美元；毛利率與營業利益率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "根據官方數據，本期營業收入為 0.14 億美元，本期淨利為 0.34 億美元，每股盈餘（EPS）為 1.06 美元。非利息支出方面，新聞稿顯示總非利息支出在截至 2026 年 9 月 30 日止的季度增加至 66.5 百萬美元，主要受到 First Hawaiian, Inc. 相關的併購費用（Merger and acquisition expenses）3.87 百萬美元影響。",
+  "highlights": "• 本期營業收入為 0.14 億美元，本期淨利達 0.34 億美元。<br>• 每股盈餘（EPS）為 1.06 美元。<br>• 根據新聞稿節錄，總非利息支出受到 First Hawaiian, Inc. 相關併購費用 3.87 百萬美元影響。",
+  "concerns": "• 截至 2026 年 9 月 30 日止的季度，總非利息支出增加至 66.5 百萬美元，較前一季增加 3.6 百萬美元（5.7%），較去年同期增加 6.1 百萬美元（10.0%）。<br>• 本季包含 3.87 百萬美元的併購及收購相關費用（Merger and acquisition expenses）。",
+  "risks": "• 非利息支出因併購費用與激勵薪酬等項目上升，可能對獲利表現造成推升成本的壓力。<br>• 部分營運項目如佔比較高的薪資與福利、資料處理及軟體費用呈現增加趨勢。",
+  "keyPoints": "• 本期營業收入為 0.14 億美元，本期淨利為 0.34 億美元，每股盈餘（EPS）為 1.06 美元。<br>• 截至 2026 年 9 月 30 日止的季度，總非利息支出為 66.5 百萬美元，較前一季增加 3.6 百萬美元（5.7%）。<br>• 本季包含 3.87 百萬美元的 First Hawaiian, Inc. 相關併購及收購費用。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "本次資料未揭露分部營收"
+ }
+}

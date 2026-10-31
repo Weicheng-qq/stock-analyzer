@@ -1872,7 +1872,7 @@
   "kind": ""
  },
  "2337": {
-  "at": "2026-10-28T00:35:22.106Z",
+  "at": "2026-10-31T05:54:42.260Z",
   "market": "tw",
   "name": "旺宏",
   "seen": "2026Q3",
@@ -4272,9 +4272,9 @@
   "pendingSince": "2026-10-15T01:24:27.402Z"
  },
  "PG": {
-  "at": "2026-10-24T01:28:36.611Z",
+  "at": "2026-10-31T05:52:01.373Z",
   "market": "us",
-  "name": "PROCTER & GAMBLE CO",
+  "name": "PROCTER & GAMBLE Co",
   "seen": "沒有文件",
   "kind": ""
  },
@@ -4310,14 +4310,14 @@
   "kind": ""
  },
  "AXP": {
-  "at": "2026-10-25T00:59:10.608Z",
+  "at": "2026-10-31T05:54:08.744Z",
   "market": "us",
-  "name": "AMERICAN EXPRESS COMPANY",
+  "name": "AMERICAN EXPRESS CO",
   "seen": "2026Q3",
   "kind": "presentation"
  },
  "ABBV": {
-  "at": "2026-10-17T01:14:00.846Z",
+  "at": "2026-10-31T05:54:12.222Z",
   "market": "us",
   "name": "AbbVie Inc.",
   "seen": "沒有文件",
@@ -4331,11 +4331,14 @@
   "kind": "release"
  },
  "XOM": {
-  "at": "2026-10-18T00:48:54.290Z",
+  "at": "2026-10-31T05:54:25.102Z",
   "market": "us",
   "name": "ExxonMobil Holdings Corp",
-  "seen": "2026Q2",
-  "kind": "commentary"
+  "seen": "2026Q3",
+  "kind": "commentary",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-10-31T05:54:25.102Z"
  },
  "ETN": {
   "at": "2026-10-18T02:37:44.926Z",
@@ -5111,7 +5114,7 @@
   "kind": ""
  },
  "EXR": {
-  "at": "2026-10-28T10:21:42.868Z",
+  "at": "2026-10-31T05:56:20.176Z",
   "market": "us",
   "name": "EXTRA SPACE STORAGE INC.",
   "seen": "2026Q3",
@@ -5438,26 +5441,26 @@
   "kind": ""
  },
  "LNT": {
-  "at": "2026-10-29T11:18:46.087Z",
+  "at": "2026-10-31T05:54:59.021Z",
   "market": "us",
   "name": "ALLIANT ENERGY CORP",
-  "seen": "2026Q2",
+  "seen": "2026Q3",
   "kind": "presentation",
-  "done": "2026Q2",
+  "done": "2026Q3",
   "pending": true,
   "pendingSince": "2026-10-29T11:18:46.087Z"
  },
  "APH": {
-  "at": "2026-10-29T11:18:53.818Z",
+  "at": "2026-10-31T05:55:07.444Z",
   "market": "us",
   "name": "AMPHENOL CORPORATION",
   "seen": "沒有文件",
   "kind": ""
  },
  "ADP": {
-  "at": "2026-10-29T11:19:03.407Z",
+  "at": "2026-10-31T05:55:12.512Z",
   "market": "us",
-  "name": "Automatic Data Processing, Inc.",
+  "name": "AUTOMATIC DATA PROCESSING, INC.",
   "seen": "2027Q1",
   "kind": "presentation",
   "done": "2027Q1",
@@ -5465,9 +5468,9 @@
   "pendingSince": "2026-10-29T11:19:03.407Z"
  },
  "CHRW": {
-  "at": "2026-10-29T11:19:17.683Z",
+  "at": "2026-10-31T05:55:17.404Z",
   "market": "us",
-  "name": "C. H. ROBINSON WORLDWIDE, INC.",
+  "name": "C.H. ROBINSON WORLDWIDE, INC.",
   "seen": "2026Q3",
   "kind": "presentation",
   "done": "2026Q3",
@@ -5485,7 +5488,7 @@
   "pendingSince": "2026-10-29T11:19:42.370Z"
  },
  "EG": {
-  "at": "2026-10-29T18:33:35.743Z",
+  "at": "2026-10-31T05:56:11.845Z",
   "market": "us",
   "name": "EVEREST GROUP, LTD.",
   "seen": "2026Q3",
@@ -5955,6 +5958,34 @@
   "at": "2026-10-30T22:28:51.359Z",
   "market": "us",
   "name": "The Clorox Company",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "CVX": {
+  "at": "2026-10-31T05:54:16.646Z",
+  "market": "us",
+  "name": "Chevron Corp",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "D": {
+  "at": "2026-10-31T05:56:01.339Z",
+  "market": "us",
+  "name": "DOMINION ENERGY, INC",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "DASH": {
+  "at": "2026-10-31T05:56:04.948Z",
+  "market": "us",
+  "name": "DOORDASH, INC.",
+  "seen": "2026Q3",
+  "kind": "release"
+ },
+ "EXC": {
+  "at": "2026-10-31T05:56:15.764Z",
+  "market": "us",
+  "name": "EXELON CORPORATION",
   "seen": "沒有文件",
   "kind": ""
  }

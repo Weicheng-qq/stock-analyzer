@@ -1,0 +1,48 @@
+{
+ "symbol": "OIS",
+ "market": "us",
+ "name": "OIL STATES INTERNATIONAL, INC",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "OIL STATES INTERNATIONAL, INC",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1.70",
+  "營業毛利": null,
+  "營業利益": "0.06",
+  "本期淨利": "0.03",
+  "每股盈餘": 0.05,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-30",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121484/000112148426000036/ois_20261030x991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-31T06:03:22.520Z",
+ "result": {
+  "revenue": "本季營業收入為 1.70 億美元，較上一季成長 8%。",
+  "eps": "本季每股盈餘（EPS）為 0.05 美元，本期淨利為 0.03 億美元（淨利率 1.8%）。",
+  "margins": "本季營業利益為 0.06 億美元，營業利益率為 3.5%。營業毛利與毛利率在官方數字中未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司表示 Offshore Manufactured Products 訂單暢旺且能見度提高，將持續聚焦擴大訂單與創造強勁現金流。",
+  "outlook": "本季營業利益率為 3.5%，淨利率為 1.8%，顯示獲利水準偏低。受惠於 Offshore Manufactured Products 及 Downhole Technologies 營收增長，帶動整體營收較上一季提升 8%。",
+  "highlights": "• 營業收入達 1.70 億美元，較上一季成長 8%。<br>• Offshore Manufactured Products 營收較上一季增加 13%，且訂單出貨比（book-to-bill ratio）為 1.3x，訂單積壓（Backlog）成長 7% 達到 4.82 億美元，創下 2014 年 12 月以來最高水準。<br>• Downhole Technologies 營收為 42,221 千美元（約 0.42 億美元），較上一季成長 6%。",
+  "concerns": "• 本季營業利益僅 0.06 億美元，營業利益率為 3.5%，本期淨利僅 0.03 億美元，獲利空間有限。<br>• Completion and Production Services 營收較上一季下滑 5%。<br>• 公司本季包含 550 萬美元的相關 charges，對整體獲利造成影響。",
+  "risks": "• 營業利益率僅 3.5% 且淨利率僅 1.8%，本業獲利能力較為薄弱，若成本波動可能對盈餘造成較大壓抑。<br>• 部分業務如 Completion and Production Services 營收呈現季減，顯示不同業務板塊表現存在分歧。",
+  "keyPoints": "• 本季營業收入為 1.70 億美元，季增 8%，本期淨利為 0.03 億美元，每股盈餘（EPS）為 0.05 美元。<br>• Offshore Manufactured Products 表現亮眼，營收季增 13%，訂單積壓達 4.82 億美元（創 2014 年 12 月以來最高），訂單出貨比為 1.3x。<br>• 營運現金流、資本支出與自由現金流官方皆未提供，財務結構中的現金流量狀況尚待更多數據評估。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Offshore Manufactured Products：104,384 千美元，季增 13%、年減 4%<br>• Completion and Production Services：23,159 千美元，季減 5%、年減 16%<br>• Downhole Technologies：42,221 千美元，季增 6%、年增 45%"
+ }
+}

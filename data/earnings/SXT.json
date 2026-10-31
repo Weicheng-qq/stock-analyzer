@@ -1,0 +1,48 @@
+{
+ "symbol": "SXT",
+ "market": "us",
+ "name": "Sensient Technologies Corp",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Sensient Technologies Corp",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "4.56",
+  "營業毛利": null,
+  "營業利益": "0.72",
+  "本期淨利": "0.48",
+  "每股盈餘": 1.13,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-30",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/310142/000114036126041223/ef20084537_ex99-1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-31T06:05:44.414Z",
+ "result": {
+  "revenue": "營業收入為 4.56 億美元，相較去年同期有所成長。整體營收表現維持穩定成長動能。",
+  "eps": "每股盈餘（EPS）為 1.13 美元。相較去年同期呈現增長表現。",
+  "margins": "營業利益率為 15.8%，營業利益達 0.72 億美元；本期淨利率為 10.5%，本期淨利達 0.48 億美元。毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "本地貨幣營收預期維持高個位數至低雙位數成長，稀釋後每股盈餘（GAAP）預期介於 4.15 美元至 4.20 美元之間。",
+  "outlook": "本季營業利益為 0.72 億美元，營業利益率達 15.8%，本期淨利為 0.48 億美元，淨利率為 10.5%。各項核心財務指標皆反映出本季的營運規模與盈利水準。",
+  "highlights": "• 營業收入達到 4.56 億美元。<br>• 營業利益為 0.72 億美元，營業利益率為 15.8%。<br>• 每股盈餘（EPS）為 1.13 美元。",
+  "concerns": "• 本期淨利率為 10.5%，本期淨利為 0.48 億美元。<br>• 營業毛利與毛利率官方未提供。<br>• 營運現金流與資本支出等現金流數據未提供。",
+  "risks": "• 現金流與資本支出數據未提供，無法評估自由現金流量狀況。<br>• 營業毛利相關數據缺漏，需持續追蹤成本結構變化。",
+  "keyPoints": "• 本季營業收入為 4.56 億美元。<br>• 本季營業利益為 0.72 億美元，營業利益率 15.8%。<br>• 本季每股盈餘（EPS）為 1.13 美元。",
+  "guidanceOfficial": "Local Currency Revenue：High Single-Digit to Low Double-Digit Growth。<br>Local Currency Adjusted EBITDA：Mid-Teen to High Teen Growth。<br>Diluted EPS (GAAP)：Between $4.15 and $4.20。<br>Local Currency Adjusted Diluted EPS：Mid-Teen to High Teen Growth。",
+  "segments": "• Flavors & Extracts：營業收入 209,973 千美元（約 2.10 億美元），年增 3.5%；部門營業利益 30,519 千美元，年增 8.8%。<br>• Color：營業收入 210,343 千美元（約 2.10 億美元），年增 18.1%；部門營業利益 46,054 千美元，年增 22.0%。<br>• Asia Pacific：營業收入 47,304 千美元（約 0.47 億美元），年增 12.4%；部門營業利益 12,364 千美元，年增 29.6%。"
+ }
+}

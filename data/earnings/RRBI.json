@@ -1,0 +1,48 @@
+{
+ "symbol": "RRBI",
+ "market": "us",
+ "name": "Red River Bancshares, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Red River Bancshares, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.39",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.12",
+  "每股盈餘": 1.78,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-04-30",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1071236/000107123626000035/rrbiq12026exhibit991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-31T06:16:44.806Z",
+ "result": {
+  "revenue": "營業收入為 0.39 億美元。",
+  "eps": "每股盈餘（EPS）為 1.78 美元。",
+  "margins": "本期淨利為 0.12 億美元，淨利率為 30.8%。營業毛利與營業利益率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供具體的財測數字。",
+  "outlook": "資產維持穩定，貸款與存款金額亦保持一致。管理層預期貸款成長將在今年剩餘時間恢復。",
+  "highlights": "• 本期淨利為 0.12 億美元，淨利率達 30.8%，每股盈餘（EPS）為 1.78 美元。<br>• 營業收入為 0.39 億美元。<br>• 相關資產與貸款水準維持穩定。",
+  "concerns": "• 營業毛利、營業利益及營運現金流等項目未提供。<br>• 部分財務細節與分部營收數據需依官方後續申報為準。",
+  "risks": "• 本期部分財務指標與現金流資訊未提供，透明度受限。<br>• 須留意未來市場利率變動對資產品質與營運表現的潛在影響。",
+  "keyPoints": "• 營業收入為 0.39 億美元。<br>• 本期淨利為 0.12 億美元，淨利率為 30.8%。<br>• 每股盈餘（EPS）為 1.78 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

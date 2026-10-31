@@ -1,0 +1,48 @@
+{
+ "symbol": "TE",
+ "market": "us",
+ "name": "T1 Energy Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "T1 Energy Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "2.50",
+  "營業毛利": "0.49",
+  "營業利益": "-0.23",
+  "本期淨利": "-0.44",
+  "每股盈餘": -0.16,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-12",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1992243/000121390026088022/ea030161501ex99-1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-10-31T06:17:57.472Z",
+ "result": {
+  "revenue": "本季營業收入為 2.50 億美元。",
+  "eps": "本季每股盈餘（EPS）為 -0.16 美元，本期淨利為 -0.44 億美元（淨利率 -17.6%），處於虧損狀態。",
+  "margins": "本季營業毛利為 0.49 億美元，毛利率為 19.6%。營業利益為 -0.23 億美元，營業利益率為 -9.2%，本期淨利率為 -17.6%，顯示公司目前仍處於營業與淨利皆為虧損的水準。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 2026 年產量將落在先前公布之 2026 年產量範圍 3.1 - 4.2 GW 的較高水準，且 G2_Austin Phase 1 的資本支出預計總計為 5.1 億美元。",
+  "outlook": "本季營業收入為 2.50 億美元，營業利益率為 -9.2%，淨利率為 -17.6%，顯示本季持續面臨虧損。公司在營運上面臨 G2_Austin 資本支出與 Texas 數據中心建設市場緊縮的成本壓力。同時，公司也透過完成 1.2 億美元可轉換優先票據私募融資，作為 G2_Austin 資本支出的橋樑融資。",
+  "highlights": "• Q2 2026 實現總淨銷售額 250.1 百萬美元，G1_Dallas 模組產量達 935 MW。<br>• 2026 年 7 月完成總本金 1.2 億美元、2031 年到期之 4.75% 可轉換優先票據私募。<br>• 2026 年 7 月完成收購 KORE Power, Inc.，進入能源儲存與 AI 數據中心基礎設施市場。",
+  "concerns": "• 本季營業利益為 -0.23 億美元（營業利益率 -9.2%），本期淨利為 -0.44 億美元（淨利率 -17.6%），顯示持續虧損。<br>• 截至 2026 年 6 月 30 日，現金、現金等價物及受限制現金為 1.564 億美元，其中未受限制現金為 7,910.9 萬美元。",
+  "risks": "• 公司持續處於營業利益與淨利皆為負數的虧損狀態，營運現金流與資本支出數據未提供，財務結構需持續關注。<br>• 德州數據中心建設市場的勞動與材料成本緊縮，可能對 G2_Austin Phase 1 預計 5.1 億美元的資本支出帶來成本壓力。",
+  "keyPoints": "• 本季營業收入為 2.50 億美元，營業利益為 -0.23 億美元，本期淨利為 -0.44 億美元，每股盈餘（EPS）為 -0.16 美元。<br>• 截至 2026 年 6 月 30 日，公司現金、現金等價物及受限制現金為 1.564 億美元（未受限制現金為 7,910.9 萬美元），並於 7 月完成 1.2 億美元可轉換優先票據私募。<br>• 公司預期 2026 年產量將落於 3.1 - 4.2 GW 範圍的較高水準，且 G2_Austin Phase 1 資本支出預計總計為 5.1 億美元。",
+  "guidanceOfficial": "T1 expects the run rate of production in Q3 and Q4 2026 will exceed Q2 2026 production and believes 2026 production will fall within the higher end of its previously disclosed 2026 production range of 3.1 - 4.2 GW. T1 is projecting that capital expenditures for G2_Austin Phase 1 will total 5.1 億美元 in accordance with the recent addition of a 20% contingency.",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}
