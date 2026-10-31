@@ -3548,7 +3548,7 @@
   "kind": ""
  },
  "3211": {
-  "at": "2026-10-23T01:23:59.536Z",
+  "at": "2026-10-31T12:46:47.195Z",
   "market": "tw",
   "name": "順達",
   "seen": "沒有文件",
@@ -4668,7 +4668,7 @@
   "kind": "transcript"
  },
  "HRL": {
-  "at": "2026-10-24T14:20:53.087Z",
+  "at": "2026-10-31T12:47:51.225Z",
   "market": "us",
   "name": "HORMEL FOODS CORPORATION",
   "seen": "2026Q3",
@@ -4811,7 +4811,7 @@
   "kind": "presentation"
  },
  "DHI": {
-  "at": "2026-10-27T05:21:04.121Z",
+  "at": "2026-10-31T12:47:55.348Z",
   "market": "us",
   "name": "D.R. Horton, Inc.",
   "seen": "沒有文件",
@@ -4929,14 +4929,14 @@
   "pendingSince": "2026-10-28T09:55:18.270Z"
  },
  "SOFI": {
-  "at": "2026-10-28T09:56:48.560Z",
+  "at": "2026-10-31T12:45:51.626Z",
   "market": "us",
   "name": "SoFi Technologies, Inc.",
   "seen": "2026Q3",
-  "kind": "presentation",
+  "kind": "transcript",
   "done": "2026Q3",
-  "pending": true,
-  "pendingSince": "2026-10-28T09:56:48.560Z"
+  "pending": false,
+  "pendingSince": ""
  },
  "CNP": {
   "at": "2026-10-28T10:01:11.706Z",
@@ -4953,14 +4953,14 @@
   "kind": ""
  },
  "BKR": {
-  "at": "2026-10-28T10:08:39.073Z",
+  "at": "2026-10-31T12:43:26.992Z",
   "market": "us",
   "name": "Baker Hughes Company",
   "seen": "2026Q3",
-  "kind": "presentation",
+  "kind": "transcript",
   "done": "2026Q3",
-  "pending": true,
-  "pendingSince": "2026-10-28T10:08:39.073Z"
+  "pending": false,
+  "pendingSince": ""
  },
  "BX": {
   "at": "2026-10-28T10:08:50.224Z",
@@ -4997,7 +4997,7 @@
   "pendingSince": "2026-10-28T10:10:10.857Z"
  },
  "ESS": {
-  "at": "2026-10-28T10:10:27.246Z",
+  "at": "2026-10-31T12:41:30.331Z",
   "market": "us",
   "name": "ESSEX PROPERTY TRUST, INC.",
   "seen": "2026Q3",
@@ -5007,13 +5007,14 @@
   "pendingSince": "2026-10-28T10:10:27.246Z"
  },
  "FFIV": {
-  "at": "2026-10-28T10:11:07.145Z",
+  "at": "2026-10-31T12:41:24.357Z",
   "market": "us",
   "name": "F5, INC.",
   "done": "2026Q4",
   "kind": "presentation",
   "pending": true,
-  "pendingSince": "2026-10-28T10:11:07.145Z"
+  "pendingSince": "2026-10-28T10:11:07.145Z",
+  "seen": "2026Q4"
  },
  "ENPH": {
   "at": "2026-10-30T10:19:03.544Z",
@@ -5427,7 +5428,7 @@
   "kind": "commentary"
  },
  "VLO": {
-  "at": "2026-10-29T11:18:25.858Z",
+  "at": "2026-10-31T12:47:24.348Z",
   "market": "us",
   "name": "VALERO ENERGY CORP/TX",
   "seen": "2026Q3",
@@ -6063,6 +6064,55 @@
   "at": "2026-10-31T06:23:50.209Z",
   "market": "us",
   "name": "Sandisk Corporation",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "TWLO": {
+  "at": "2026-10-31T12:47:01.335Z",
+  "market": "us",
+  "name": "TWILIO INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "VLTO": {
+  "at": "2026-10-31T12:47:06.698Z",
+  "market": "us",
+  "name": "VERALTO CORPORATION",
+  "seen": "2026Q3",
+  "kind": "commentary"
+ },
+ "WEC": {
+  "at": "2026-10-31T12:47:10.552Z",
+  "market": "us",
+  "name": "WEC ENERGY GROUP, INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "WY": {
+  "at": "2026-10-31T12:47:15.131Z",
+  "market": "us",
+  "name": "WEYERHAEUSER COMPANY",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "AI": {
+  "at": "2026-10-31T12:47:15.684Z",
+  "market": "us",
+  "name": "C3.ai, Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "CTAS": {
+  "at": "2026-10-31T12:47:18.892Z",
+  "market": "us",
+  "name": "Cintas Corporation",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "JKHY": {
+  "at": "2026-10-31T12:47:58.504Z",
+  "market": "us",
+  "name": "JACK HENRY & ASSOCIATES, INC.",
   "seen": "沒有文件",
   "kind": ""
  }
