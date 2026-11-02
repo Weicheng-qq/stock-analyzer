@@ -1,13 +1,263 @@
 {
- "generatedAt": "2026-11-02T11:18:27.118Z",
+ "generatedAt": "2026-11-02T21:44:31.569Z",
  "lookbackDays": 3,
  "counts": {
-  "high": 0,
+  "high": 25,
   "medium": 0,
-  "low": 84,
-  "total": 84
+  "low": 81,
+  "total": 106
  },
  "queue": [
+  {
+   "market": "tw",
+   "symbol": "1454",
+   "name": "台富",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2328",
+   "name": "廣宇",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2301",
+   "name": "光寶科",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6235",
+   "name": "華孚",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2327",
+   "name": "國巨*",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6756",
+   "name": "威鋒電子",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "3533",
+   "name": "嘉澤",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "3029",
+   "name": "零壹",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "4960",
+   "name": "誠美材",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2409",
+   "name": "友達",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "3042",
+   "name": "晶技",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2886",
+   "name": "兆豐金",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "1535",
+   "name": "中宇",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6908",
+   "name": "宏碁遊戲-創",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2383",
+   "name": "台光電",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "1802",
+   "name": "台玻",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2498",
+   "name": "宏達電",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "3004",
+   "name": "豐達科",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "3704",
+   "name": "合勤控",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2890",
+   "name": "永豐金",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "1560",
+   "name": "中砂",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6278",
+   "name": "台表科",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "1309",
+   "name": "台達化",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6112",
+   "name": "邁達特",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6531",
+   "name": "愛普*",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151102",
+   "priority": "HIGH"
+  },
   {
    "market": "tw",
    "symbol": "1232",
@@ -66,14 +316,6 @@
   },
   {
    "market": "tw",
-   "symbol": "2301",
-   "name": "光寶科",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "2303",
    "name": "聯電",
    "reason": "站上尚無此公司資料",
@@ -100,14 +342,6 @@
    "market": "tw",
    "symbol": "2337",
    "name": "旺宏",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "2383",
-   "name": "台光電",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -180,14 +414,6 @@
    "market": "tw",
    "symbol": "2912",
    "name": "統一超",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "3004",
-   "name": "豐達科",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
