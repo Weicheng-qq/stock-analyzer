@@ -1,0 +1,48 @@
+{
+ "symbol": "HLMN",
+ "market": "us",
+ "name": "Hillman Solutions Corp.",
+ "quarter": "2026 Q2（2026-03-29～2026-06-27）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Hillman Solutions Corp.",
+  "currency": "億美元",
+  "periodStart": "2026-03-29",
+  "periodEnd": "2026-06-27",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "4.42",
+  "營業毛利": null,
+  "營業利益": "0.41",
+  "本期淨利": "0.21",
+  "每股盈餘": 0.11,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-02",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1822492/000182249226000157/ex991hillmanq32026earnings.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-03T07:26:37.959Z",
+ "result": {
+  "revenue": "根據官方數據，Hillman Solutions Corp. 在 2026 會計年度 Q2 的營業收入為 4.42 億美元。",
+  "eps": "根據官方數據，該公司在 2026 會計年度 Q2 的每股盈餘（EPS）為 0.11 美元。",
+  "margins": "根據官方數據，營業利益率為 9.3%，淨利率為 4.8%，本期淨利為 0.21 億美元。營業毛利與毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "管理層更新 2026 全年財測，調整淨銷售額預期區間，並維持 Adjusted EBITDA 與自由現金流預期不變。",
+  "outlook": "根據 Q2 官方數字，營業收入為 4.42 億美元，營業利益為 0.41 億美元，本期淨利為 0.21 億美元。其餘詳細營運細節需參考後續或完整財報。",
+  "highlights": "• 營業收入為 4.42 億美元。<br>• 營業利益為 0.41 億美元，營業利益率達 9.3%。<br>• 本期淨利為 0.21 億美元，淨利率為 4.8%，EPS 為 0.11 美元。",
+  "concerns": "• 營業毛利與毛利率數值未提供，無法評估成本控制細節。<br>• 營運現金流與資本支出等現金流數據未提供。<br>• 新聞稿節錄中顯示 Q3 淨利年減、但部分非 GAAP 指標如 Adjusted EBITDA 與自由現金流變動方向不同。",
+  "risks": "• 官方公布的財報數據中缺乏自由現金流與資本支出資訊，流動性與現金配置風險較難全面評估。<br>• 官方未提供毛利相關數據，毛利率變動風險尚無法從基本數據中完全掌握。",
+  "keyPoints": "• 2026 Q2 營業收入為 4.42 億美元。<br>• 2026 Q2 營業利益為 0.41 億美元，營業利益率為 9.3%。<br>• 2026 Q2 本期淨利為 0.21 億美元，EPS 為 0.11 美元。",
+  "guidanceOfficial": "Full Year 2026 Guidance - Updated Based on year-to-date performance and its expectations for the remainder of the year, management updated its guidance most recently provided on August 3, 2026. Previous FY 2026 Guidance: Net Sales $1.670 to 17.2 億美元, Adjusted EBITDA ~2.85 億美元, Free Cash Flow $105 to 1.15 億美元. Updated FY 2026 Guidance: Net Sales $1.660 to 16.8 億美元, Adjusted EBITDA ~2.85 億美元, Free Cash Flow $105 to 1.15 億美元.",
+  "segments": "• Robotics and Digital Solutions segment: up 19.2%<br>• Kanebridge acquisition: completed, establishing position as a long-tail master distributor in the U.S. industrial market."
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "symbol": "CRD-B",
+ "market": "us",
+ "name": "CRAWFORD & CO",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "CRAWFORD & CO",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "3.30",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.15",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-02",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/25475/000119312526443691/crda-ex99_1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-03T07:11:10.289Z",
+ "result": {
+  "revenue": "依據官方數字，本期營業收入為 3.30 億美元。",
+  "eps": "依據官方數字，每股盈餘（EPS）未提供。",
+  "margins": "本期淨利率為 4.5%。至於毛利率與營業利益率，官方數字皆未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "管理層預期較低的理賠頻率和溫和的天氣相關活動將對第四季業績造成壓力。",
+  "outlook": "本期本淨利為 0.15 億美元，淨利率達 4.5%。營運表現受國際業務改善支持，但公司指出第四季可能面臨理賠頻率降低及天氣相關活動減緩的壓力。",
+  "highlights": "• 本期本淨利為 0.15 億美元，淨利率達 4.5%。<br>• 國際營運表現改善，支持整體營運成果。",
+  "concerns": "• 第四季可能面臨較低理賠頻率與溫和天氣活動帶來的業績壓力。<br>• 營業毛利、營業利益及每股盈餘等重要指標官方皆未提供。",
+  "risks": "• 營運現金流與資本支出等財務結構細節未提供，透明度受限。<br>• 官方警示未來一季恐受外在環境壓力影響表現。",
+  "keyPoints": "• 本期營業收入為 3.30 億美元。<br>• 本期本淨利為 0.15 億美元，淨利率為 4.5%。<br>• 官方指出第四季將面臨理賠頻率降低與天氣活動減緩的壓力。",
+  "guidanceOfficial": "While lower claims frequency and moderating weather-related activity are expected to pressure fourth-quarter results, our priorities remain clear: drive profitable market-share growth, accelerate our U.S. realignment, strengthen operating discipline, and build the capabilities required for long-term success.",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

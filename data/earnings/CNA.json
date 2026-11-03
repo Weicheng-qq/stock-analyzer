@@ -1,0 +1,48 @@
+{
+ "symbol": "CNA",
+ "market": "us",
+ "name": "CNA FINANCIAL CORPORATION",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "CNA FINANCIAL CORPORATION",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "38.21",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "1.96",
+  "每股盈餘": 0.72,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-02",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/21175/000002117526000055/q32026ex994earningsremarks.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-03T07:11:00.136Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q3 的營業收入為 38.21 億美元。",
+  "eps": "本期每股盈餘（EPS）為 0.72 美元。",
+  "margins": "本期本期淨利為 1.96 億美元，淨利率為 5.1%。營業毛利、營業利益率與營業毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期第四季固定收益及其他投資收入約 600 百萬美元，全年預期超過 23 億美元。",
+  "outlook": "本季 P&C 商業險與專門險的綜合比率與本期營運表現受到不同程度的災難損失與準備金調整影響。固定收益資產的有效收益率在第三季提升至 5.0%，並持續高於投資組合的有效收益率。",
+  "highlights": "• 第三季核心收入為 203 百萬美元，P&C 營運核心收入為 397 百萬美元。<br>• 財產與意外險（P&C）費用率在第三季為 29.7%，今年前九個月為 29.9%。<br>• 公司宣佈發放每股 0.48 美元的普通股季股利。",
+  "concerns": "• 核心收入較去年同期下降，主要反映 LTC 儲備假設更新造成的 137 百萬美元稅後不利影響。<br>• 壽險與集團部門（Life & Group）本季記錄核心虧損 171 百萬美元。<br>• 商業險組合中的超額責任險因社會通膨影響索賠軌跡，導致準備金增強。",
+  "risks": "• 長期照顧（LTC）準備金的年度假設更新帶來了 1.37 億美元的稅後不利影響。<br>• AOCI（累積其他綜合收益）受到較高利率對固定收益證券未實現損失影響，使包含 AOCI 的股東權益降至 102 億美元。",
+  "keyPoints": "• 本會計年度 2026 Q3 營業收入為 38.21 億美元，本期淨利為 1.96 億美元，淨利率為 5.1%，每股盈餘（EPS）為 0.72 美元。<br>• P&C 淨已賺保費成長 3%，新業務成長 1%，續保保費變化 3%，費率變化改善至 2%。<br>• 壽險與集團部門因年度 LTC 儲備假設審查，包含 1.37 億美元稅後費用，導致該部門核心虧損 171 百萬美元。",
+  "guidanceOfficial": "Looking ahead, based on the current interest rate environment, we expect income from fixed income and other investments to be approximately 6 億美元 in the fourth quarter. For the full year, we expect income from fixed income and other investments to be over 23 億美元.",
+  "segments": "• 商業險（Commercial）：淨保費成長 2%，新業務成長 2% 至 332 百萬美元，all-in 綜合比率為 99.7%，基礎綜合比率為 92.5%，費率變化增加 2%。<br>• 專門險（Specialty）：淨保費成長 4%，新業務成長 5% 至 137 百萬美元，all-in 綜合比率為 96.8%，基礎綜合比率為 96.7%，續保保費變化 5%，費率變化 4%。<br>• 國際險（International）：淨保費增加 4%（或排除匯率波動為 6%），新業務減少 8 百萬美元至 86 百萬美元，all-in 綜合比率為 86.1%，基礎損失率 59.8%，費用率 34.3%。"
+ }
+}

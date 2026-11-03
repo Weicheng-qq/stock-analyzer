@@ -1872,11 +1872,11 @@
   "kind": ""
  },
  "2337": {
-  "at": "2026-10-31T05:54:42.260Z",
+  "at": "2026-11-03T06:59:45.061Z",
   "market": "tw",
   "name": "旺宏",
-  "seen": "2026Q3",
-  "kind": "release",
+  "seen": "沒有文件",
+  "kind": "",
   "done": "2026Q3",
   "pending": true,
   "pendingSince": "2026-10-28T00:35:22.106Z"
@@ -4384,7 +4384,7 @@
   "pendingSince": "2026-10-15T01:24:27.402Z"
  },
  "PG": {
-  "at": "2026-10-31T05:52:01.373Z",
+  "at": "2026-11-03T06:59:01.765Z",
   "market": "us",
   "name": "PROCTER & GAMBLE Co",
   "seen": "沒有文件",
@@ -4429,7 +4429,7 @@
   "kind": "presentation"
  },
  "ABBV": {
-  "at": "2026-10-31T05:54:12.222Z",
+  "at": "2026-11-03T06:59:48.229Z",
   "market": "us",
   "name": "AbbVie Inc.",
   "seen": "沒有文件",
@@ -4443,14 +4443,14 @@
   "kind": "release"
  },
  "XOM": {
-  "at": "2026-10-31T05:54:25.102Z",
+  "at": "2026-11-03T06:59:37.170Z",
   "market": "us",
-  "name": "ExxonMobil Holdings Corp",
+  "name": "ExxonMobil Holdings Corporation",
   "seen": "2026Q3",
-  "kind": "commentary",
+  "kind": "transcript",
   "done": "2026Q3",
-  "pending": true,
-  "pendingSince": "2026-10-31T05:54:25.102Z"
+  "pending": false,
+  "pendingSince": ""
  },
  "ETN": {
   "at": "2026-10-18T02:37:44.926Z",
@@ -4725,7 +4725,7 @@
   "kind": "presentation"
  },
  "JBL": {
-  "at": "2026-10-30T22:27:16.684Z",
+  "at": "2026-11-03T06:58:52.184Z",
   "market": "us",
   "name": "JABIL INC",
   "seen": "2026Q4",
@@ -4756,7 +4756,7 @@
   "kind": "transcript"
  },
  "BR": {
-  "at": "2026-10-30T22:27:11.104Z",
+  "at": "2026-11-03T06:58:47.040Z",
   "market": "us",
   "name": "BROADRIDGE FINANCIAL SOLUTIONS, INC.",
   "done": "2026Q4",
@@ -4787,7 +4787,7 @@
   "kind": "transcript"
  },
  "PNC": {
-  "at": "2026-10-30T22:27:05.367Z",
+  "at": "2026-11-03T06:58:42.898Z",
   "market": "us",
   "name": "PNC FINANCIAL SERVICES GROUP, INC.",
   "seen": "2026Q3",
@@ -5227,7 +5227,7 @@
   "kind": ""
  },
  "EXR": {
-  "at": "2026-10-31T05:56:20.176Z",
+  "at": "2026-11-03T06:58:36.205Z",
   "market": "us",
   "name": "EXTRA SPACE STORAGE INC.",
   "seen": "2026Q3",
@@ -5554,7 +5554,7 @@
   "kind": ""
  },
  "LNT": {
-  "at": "2026-10-31T05:54:59.021Z",
+  "at": "2026-11-03T06:58:29.808Z",
   "market": "us",
   "name": "ALLIANT ENERGY CORP",
   "seen": "2026Q3",
@@ -5571,7 +5571,7 @@
   "kind": ""
  },
  "ADP": {
-  "at": "2026-10-31T05:55:12.512Z",
+  "at": "2026-11-03T06:58:24.980Z",
   "market": "us",
   "name": "AUTOMATIC DATA PROCESSING, INC.",
   "seen": "2027Q1",
@@ -5581,7 +5581,7 @@
   "pendingSince": "2026-10-29T11:19:03.407Z"
  },
  "CHRW": {
-  "at": "2026-10-31T05:55:17.404Z",
+  "at": "2026-11-03T06:58:20.957Z",
   "market": "us",
   "name": "C.H. ROBINSON WORLDWIDE, INC.",
   "seen": "2026Q3",
@@ -5601,14 +5601,14 @@
   "pendingSince": "2026-10-29T11:19:42.370Z"
  },
  "EG": {
-  "at": "2026-10-31T05:56:11.845Z",
+  "at": "2026-11-03T06:58:09.354Z",
   "market": "us",
   "name": "EVEREST GROUP, LTD.",
   "seen": "2026Q3",
-  "kind": "presentation",
+  "kind": "transcript",
   "done": "2026Q3",
-  "pending": true,
-  "pendingSince": "2026-10-29T18:33:35.743Z"
+  "pending": false,
+  "pendingSince": ""
  },
  "FLEX": {
   "at": "2026-10-31T06:23:11.651Z",
@@ -6258,5 +6258,26 @@
   "done": "2026Q2",
   "pending": false,
   "pendingSince": ""
+ },
+ "AAPL": {
+  "at": "2026-11-03T06:58:56.784Z",
+  "market": "us",
+  "name": "Apple Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "DE": {
+  "at": "2026-11-03T06:59:52.140Z",
+  "market": "us",
+  "name": "DEERE & CO",
+  "seen": "2026Q3",
+  "kind": "transcript"
+ },
+ "FN": {
+  "at": "2026-11-03T06:59:55.335Z",
+  "market": "us",
+  "name": "FABRINET",
+  "seen": "沒有文件",
+  "kind": ""
  }
 }

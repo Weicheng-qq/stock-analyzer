@@ -1,0 +1,48 @@
+{
+ "symbol": "CC",
+ "market": "us",
+ "name": "The Chemours Company",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "The Chemours Company",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "15.91",
+  "營業毛利": "2.86",
+  "營業利益": null,
+  "本期淨利": "-2.74",
+  "每股盈餘": -1.81,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-02",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1627223/000162722326000032/cc-ex99_1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-03T07:23:00.797Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q2 營業收入為 15.91 億美元。",
+  "eps": "每股盈餘（EPS）為 -1.81 美元，本期呈現每股虧損。",
+  "margins": "營業毛利為 2.86 億美元，毛利率為 18.0%。本期淨利為 -2.74 億美元，淨利率為 -17.2%，顯示公司處於淨虧損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次 10-Q 官方財報申報資料中提供明確的財測展望，相關展望細節請參考 8-K 官方新聞稿節錄。",
+  "outlook": "根據官方申報數據，本期營業收入為 15.91 億美元，毛利率為 18.0%，但本期淨利為 -2.74 億美元，淨利率為 -17.2%，顯示獲利能力面臨挑戰。",
+  "highlights": "• 營業收入達到 15.91 億美元。<br>• 營業毛利為 2.86 億美元，毛利率達 18.0%。",
+  "concerns": "• 本期淨利為 -2.74 億美元，顯示公司處於虧損狀態。<br>• 淨利率為 -17.2%，反映獲利表現疲弱。",
+  "risks": "• 本期淨利為負值（-2.74 億美元），且淨利率為 -17.2%，面臨持續虧損的獲利結構風險。<br>• 官方申報資料中營業利益、營運現金流與資本支出皆未提供，財務透明度與現金流評估受限。",
+  "keyPoints": "• 2026 Q2 營業收入為 15.91 億美元。<br>• 2026 Q2 營業毛利為 2.86 億美元，毛利率為 18.0%。<br>• 2026 Q2 本期淨利為 -2.74 億美元，EPS 為 -1.81 美元，呈現淨虧損。",
+  "guidanceOfficial": "第四季展望：公司預期合併淨銷貨收入將較上一季下降 5% 至 10%，主要受 TSS 與 TT 的季節性影響；合併調整後 EBITDA 預計介於 1.6 億美元至 1.85 億美元之間。公司費用預計約 4,000 萬至 4,500 萬美元，資本支出預計介於 7,500 萬至 8,500 萬美元之間，自由現金流為正。全年 2026 展望：公司預期 2026 年淨銷貨收入較 2025 年成長約 2%，調整後 EBITDA 介於 7.75 億至 8 億美元之間，資本支出預計介於 2.2 億至 2.3 億美元，整體自由現金流轉換率高於 15%（包含收到與 PFAS 保險理賠備忘錄相關之 15 億美元限制性現金）。",
+  "segments": "• Thermal & Specialized Solutions (TSS) Q3 2026 Net Sales: 5.1 億美元 (down 9% Y-o-Y, down 14% Q-o-Q), Adjusted EBITDA: 1.36 億美元.<br>• Titanium Technologies (TT) Q3 2026 Net Sales: 6.8 億美元 (up 11% Y-o-Y, up 3% Q-o-Q), Adjusted EBITDA: 8,500 萬美元.<br>• Advanced Performance Materials (APM) Q3 2026 Net Sales: 3.37 億美元 (up 8% Y-o-Y, up 3% Q-o-Q), Adjusted EBITDA: 2,400 萬美元.<br>• Other Non-Reportable Segment (Performance Chemicals and Intermediates) Q3 2026 Net Sales: 1,300 萬美元, Adjusted EBITDA: 100 萬美元."
+ }
+}

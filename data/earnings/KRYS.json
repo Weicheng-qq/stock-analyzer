@@ -1,0 +1,48 @@
+{
+ "symbol": "KRYS",
+ "market": "us",
+ "name": "Krystal Biotech, Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Krystal Biotech, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1.27",
+  "營業毛利": null,
+  "營業利益": "0.71",
+  "本期淨利": "0.63",
+  "每股盈餘": 2.05,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-02",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1711279/000171127926000072/exhibit991-3q26pressrelease.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-03T07:14:44.299Z",
+ "result": {
+  "revenue": "本季營業收入為 1.27 億美元，展現穩健的營收規模。",
+  "eps": "本季每股盈餘（EPS）為 2.05 美元，提供良好的獲利基礎。",
+  "margins": "本季毛利率未提供；營業利益率為 55.9%，顯示公司具備優異的營業獲利能力；淨利率為 49.6%，反映本期淨利占營收將近一半的高水準表現。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 2026 全年 Non-GAAP 研發（R&D）及銷售、行政管理（SG&A）費用介於 1.55 億至 1.65 億美元之間。",
+  "outlook": "本季營業利益為 0.71 億美元，本期淨利為 0.63 億美元，整體營運維持獲利狀態。財務結構顯示公司具備穩健的獲利與現金創造能力。",
+  "highlights": "• 營業收入達到 1.27 億美元，營業利益為 0.71 億美元。<br>• 本期淨利為 0.63 億美元，淨利率達 49.6%。<br>• 每股盈餘（EPS）為 2.05 美元。",
+  "concerns": "• 營業毛利與毛利率於官方會計年度 2026 Q3 官方數字中未提供。<br>• 營運現金流與資本支出等數據未於官方申報中提供。<br>• 須留意未來費用支出對獲利能力的潛在影響。",
+  "risks": "• 部分關鍵財務數據如毛利、營運現金流與資本支出未提供，資訊透明度受限。<br>• 財務表現高度集中於現有營業狀況，未來若相關費用如 R&D 與 SG&A 增加，可能對獲利造成變動。",
+  "keyPoints": "• 營業收入為 1.27 億美元，營業利益為 0.71 億美元，營業利益率達 55.9%。<br>• 本期淨利為 0.63 億美元，淨利率為 49.6%，每股盈餘（EPS）為 2.05 美元。<br>• 官方提供 2026 全年 Non-GAAP R&D 及 SG&A 費用財測為 1.55 億至 1.65 億美元。",
+  "guidanceOfficial": "FY 2026 Guidance Non-GAAP Research and Development (“R&D”) and Selling, General and Administrative (“SG&A”) expense (1) $155.0 - $165.0 百萬美元。",
+  "segments": "• VYJUVEK 全球淨產品營收：127.3 百萬美元（或 1.27 億美元），較前一年同期成長 30%。"
+ }
+}

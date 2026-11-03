@@ -1,0 +1,48 @@
+{
+ "symbol": "CRGY",
+ "market": "us",
+ "name": "Crescent Energy Company",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Crescent Energy Company",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "13.51",
+  "營業毛利": null,
+  "營業利益": "4.79",
+  "本期淨利": "-0.02",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-02",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1866175/000186617526000148/exhibit991q32026earningsre.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-03T07:11:51.615Z",
+ "result": {
+  "revenue": "本季營業收入為 13.51 億美元。",
+  "eps": "每股盈餘（EPS）未提供。",
+  "margins": "營業利益率為 35.5%，營業利益為 4.79 億美元；淨利率為 -0.1%，本期淨利為 -0.02 億美元，顯示本季處於虧損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期交易預計於 2026 年第四季或 2027 年初完成，並持續推進相關整合與優化。",
+  "outlook": "本季營業利益為 4.79 億美元，營業利益率達 35.5%，但本期淨利為 -0.02 億美元，呈現小幅虧損。整體營運包含油氣及 NGLs 的產出與銷售。",
+  "highlights": "•Delivered strong financial and operating performance, exceeding expectations across all key metrics。<br>•Generated Operating Cash Flow of 6.08 億美元 and Levered Free Cash Flow of 3.67 億美元。<br>•Produced 328 MBoe/d, including 134 MBo/d of oil。",
+  "concerns": "•本期淨利為 -0.02 億美元，淨利率為 -0.1%，顯示本季仍處於虧損狀態。<br>•部分財務與營運指標如營運現金流、資本支出、自由現金流及每股盈餘（EPS）在官方財報中未提供。<br>•需留意未來交易完成後的整合風險及相關條件。",
+  "risks": "•本期淨利為負值（-0.02 億美元），顯示公司面臨獲利壓力。<br>•多項關鍵財務數據（如營運現金流、資本支出、每股盈餘）未提供，財務透明度受限。",
+  "keyPoints": "•本季營業收入為 13.51 億美元。<br>•營業利益為 4.79 億美元，營業利益率達 35.5%。<br>•本期淨利為 -0.02 億美元，淨利率為 -0.1%，維持虧損狀態。",
+  "guidanceOfficial": "公司預期該交易預計於 2026 年第四季或 2027 年初完成，惟須符合慣常交割條件。",
+  "segments": "•Oil (MBbls/d)：134（2026年第三季）<br>•Natural gas (MMcf/d)：716（2026年第三季）<br>•NGLs (MBbls/d)：74（2026年第三季）<br>•Total (MBoe/d)：328（2026年第三季）"
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "symbol": "CRBD",
+ "market": "us",
+ "name": "Corebridge Financial, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Corebridge Financial, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "39.14",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.02",
+  "每股盈餘": -0.04,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-02",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1889539/000188953926000156/corebridgefinancial-pressr.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-03T07:23:23.071Z",
+ "result": {
+  "revenue": "依據官方資料，Corebridge Financial, Inc.（代碼 CRBD）會計年度 2026 Q2 的營業收入為 39.14 億美元。",
+  "eps": "本季每股盈餘（EPS）為 -0.04 美元，處於每股虧損狀態。",
+  "margins": "本季營業毛利與營業利益皆未提供，因此無法計算毛利率與營業利益率；本期淨利為 0.02 億美元，淨利率為 0.1%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "本季營業收入為 39.14 億美元，本期淨利為 0.02 億美元，淨利率為 0.1%。每股盈餘（EPS）為 -0.04 美元，呈現每股虧損。",
+  "highlights": "• 營業收入達 39.14 億美元。<br>• 本期淨利為 0.02 億美元，淨利率為 0.1%。",
+  "concerns": "• 每股盈餘（EPS）為 -0.04 美元，呈現每股虧損。<br>• 營業毛利與營業利益等指標未提供，無法完整評估本業獲利能力。<br>• 營運現金流與資本支出等現金流指標未提供。",
+  "risks": "• 本季每股盈餘為 -0.04 美元，處於虧損狀態，且淨利率僅 0.1%，獲利結構偏弱。<br>• 營運現金流、資本支出、營業毛利與營業利益等關鍵財務項目未提供，透明度受限。",
+  "keyPoints": "• 營業收入為 39.14 億美元。<br>• 本期淨利為 0.02 億美元，淨利率為 0.1%。<br>• 每股盈餘（EPS）為 -0.04 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "• Individual Retirement：調整後稅前營業利益為 466 百萬美元（2025 年同期：保費 23 百萬美元、保單費 80 百萬美元）。<br>• Group Retirement：調整後稅前營業利益為 164 百萬美元（2025 年同期：保費 3 百萬美元、保單費 114 百萬美元）。<br>• Life Insurance：保費為 358 百萬美元，保單費為 350 百萬美元，調整後稅前營業利益為 17 百萬美元（2025 年同期：保費 366 百萬美元、保單費 357 百萬美元）。<br>• Institutional Markets：保費為 156 百萬美元，保單費為 52 百萬美元，調整後稅前營業利益為 198 百萬美元（2025 年同期：保費 1,547 百萬美元、保單費 52 百萬美元）。<br>• Corporate & Other：調整後稅前營業虧損為 168 百萬美元。"
+ }
+}
