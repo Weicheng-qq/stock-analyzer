@@ -1,0 +1,48 @@
+{
+ "symbol": "SAIC",
+ "market": "us",
+ "name": "Science Applications International Corporation",
+ "quarter": "2027 Q2（2026-05-02～2026-07-31）",
+ "quarterTag": "2027Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Science Applications International Corporation",
+  "currency": "億美元",
+  "periodStart": "2026-05-02",
+  "periodEnd": "2026-07-31",
+  "year": 2027,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "18.80",
+  "營業毛利": null,
+  "營業利益": "1.52",
+  "本期淨利": "1.02",
+  "每股盈餘": 2.38,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-31",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1571123/000157112326000131/saic08312026ex991earningsr.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-03T07:39:13.412Z",
+ "result": {
+  "revenue": "本季營業收入為 18.80 億美元。",
+  "eps": "本季每股盈餘（EPS）為 2.38 美元。",
+  "margins": "本季營業利益率為 8.1%，淨利率為 5.4%。營業毛利、毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司調升會計年度 2027 的營收、調整後 EBITDA、調整後 EBITDA 利潤率及調整後稀釋每股盈餘的財測，並維持自由現金流財測。",
+  "outlook": "根據官方數據，本季營業利益為 1.52 億美元，營業利益率為 8.1%，本期淨利為 1.02 億美元，淨利率為 5.4%。",
+  "highlights": "• 營業收入為 18.80 億美元。<br>• 營業利益為 1.52 億美元，營業利益率 8.1%。<br>• 本期淨利為 1.02 億美元，淨利率 5.4%，每股盈餘（EPS）為 2.38 美元。",
+  "concerns": "• 本期淨利為 1.02 億美元，每股盈餘為 2.38 美元。<br>• 營業毛利與毛利率未提供。",
+  "risks": "• 本期淨利與每股盈餘等盈利指標需持續追蹤。<br>• 營運現金流與資本支出等數據未於本資料完整提供。",
+  "keyPoints": "• 本季營業收入達 18.80 億美元。<br>• 本季營業利益為 1.52 億美元，營業利益率為 8.1%。<br>• 本季本期淨利為 1.02 億美元，每股盈餘（EPS）為 2.38 美元。",
+  "guidanceOfficial": "會計年度 2027 財測（截至 2026 年 8 月 31 日）：營收預期 7.2B - 7.3B 美元；有機成長預期 (2%) - (0%)；調整後 EBITDA 預期 750M - 755M 美元；調整後 EBITDA 利潤率預期 10.3% - 10.5%；調整後稀釋每股盈餘預期 $10.65 - $10.75；自由現金流預期 >$600M。",
+  "segments": "• 防禦與情報（Defense and Intelligence）：本季營收 14.49 億美元，去年同期為 13.74 億美元；六個月累計營收 29.15 億美元。<br>• 民事（Civilian）：本季營收 4.31 億美元，去年同期為 3.95 億美元；六個月累計營收 8.71 億美元。"
+ }
+}
