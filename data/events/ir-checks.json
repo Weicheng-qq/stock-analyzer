@@ -4683,7 +4683,7 @@
   "kind": ""
  },
  "DOV": {
-  "at": "2026-10-24T01:29:15.383Z",
+  "at": "2026-11-03T17:14:03.229Z",
   "market": "us",
   "name": "DOVER Corp",
   "seen": "沒有文件",
@@ -5075,11 +5075,14 @@
   "pendingSince": ""
  },
  "BX": {
-  "at": "2026-10-28T10:08:50.224Z",
+  "at": "2026-11-03T17:13:45.701Z",
   "market": "us",
   "name": "Blackstone Inc.",
-  "seen": "季別不明",
-  "kind": "presentation"
+  "seen": "2026Q3",
+  "kind": "transcript",
+  "done": "2026Q3",
+  "pending": false,
+  "pendingSince": ""
  },
  "GLW": {
   "at": "2026-11-02T11:19:48.802Z",
@@ -5109,7 +5112,7 @@
   "pendingSince": "2026-10-28T10:10:10.857Z"
  },
  "ESS": {
-  "at": "2026-10-31T12:41:30.331Z",
+  "at": "2026-11-03T17:08:08.126Z",
   "market": "us",
   "name": "ESSEX PROPERTY TRUST, INC.",
   "seen": "2026Q3",
@@ -5119,7 +5122,7 @@
   "pendingSince": "2026-10-28T10:10:27.246Z"
  },
  "FFIV": {
-  "at": "2026-10-31T12:41:24.357Z",
+  "at": "2026-11-03T17:08:02.239Z",
   "market": "us",
   "name": "F5, INC.",
   "done": "2026Q4",
@@ -5268,7 +5271,7 @@
   "kind": ""
  },
  "HCA": {
-  "at": "2026-10-30T11:12:48.174Z",
+  "at": "2026-11-03T17:14:12.069Z",
   "market": "us",
   "name": "HCA Healthcare, Inc.",
   "seen": "2026Q3",
@@ -5642,9 +5645,9 @@
   "pendingSince": "2026-10-29T18:34:20.989Z"
  },
  "KMB": {
-  "at": "2026-10-29T18:34:31.684Z",
+  "at": "2026-11-03T17:14:23.446Z",
   "market": "us",
-  "name": "KIMBERLY-CLARK CORPORATION",
+  "name": "KIMBERLY CLARK CORP",
   "seen": "沒有文件",
   "kind": ""
  },
@@ -6138,7 +6141,7 @@
   "kind": "presentation"
  },
  "KVUE": {
-  "at": "2026-10-31T06:23:28.329Z",
+  "at": "2026-11-03T17:14:37.357Z",
   "market": "us",
   "name": "Kenvue Inc.",
   "seen": "沒有文件",
@@ -6342,5 +6345,64 @@
   "name": "ON SEMICONDUCTOR CORP",
   "seen": "沒有文件",
   "kind": ""
+ },
+ "PGR": {
+  "at": "2026-11-03T17:10:06.508Z",
+  "market": "us",
+  "name": "PROGRESSIVE CORP/OH/",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "PEG": {
+  "at": "2026-11-03T17:12:23.837Z",
+  "market": "us",
+  "name": "Public Service Enterprise Group Incorporated",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-11-03T17:12:23.837Z"
+ },
+ "ROKU": {
+  "at": "2026-11-03T17:12:35.172Z",
+  "market": "us",
+  "name": "Roku, Inc.",
+  "seen": "2026Q3",
+  "kind": "commentary"
+ },
+ "ROP": {
+  "at": "2026-11-03T17:12:38.608Z",
+  "market": "us",
+  "name": "ROPER TECHNOLOGIES, INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "WMB": {
+  "at": "2026-11-03T17:12:42.383Z",
+  "market": "us",
+  "name": "WILLIAMS COMPANIES, INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "FANG": {
+  "at": "2026-11-03T17:14:07.996Z",
+  "market": "us",
+  "name": "Diamondback Energy, Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "DOC": {
+  "at": "2026-11-03T17:14:17.999Z",
+  "market": "us",
+  "name": "Healthpeak Properties, Inc.",
+  "seen": "季別不明",
+  "kind": "presentation"
+ },
+ "KEYS": {
+  "at": "2026-11-03T17:14:42.948Z",
+  "market": "us",
+  "name": "KEYSIGHT TECHNOLOGIES, INC.",
+  "seen": "2026Q3",
+  "kind": "commentary"
  }
 }
