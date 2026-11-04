@@ -1,0 +1,48 @@
+{
+ "symbol": "FNMAH",
+ "market": "us",
+ "name": "FEDERAL NATIONAL MORTGAGE ASSOCIATION FANNIE MAE",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "FEDERAL NATIONAL MORTGAGE ASSOCIATION FANNIE MAE",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "76.51",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "41.77",
+  "每股盈餘": 0.18,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-28",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/310522/000031052226000090/fnma2026q3pressrelease.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-04T17:42:55.761Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q3 的營業收入為 76.51 億美元。",
+  "eps": "本期每股盈餘（EPS）為 0.18 美元。",
+  "margins": "本期淨利為 41.77 億美元，淨利率為 54.6%。營業毛利率與營業利益率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "本季營業收入為 76.51 億美元，本期淨利為 41.77 億美元，淨利率達 54.6%，每股盈餘（EPS）為 0.18 美元。其餘營運與現金流等數據於官方資料中未完全提供。",
+  "highlights": "• 本季營業收入為 76.51 億美元。<br>• 本期淨利為 41.77 億美元，淨利率達 54.6%。<br>• 每股盈餘（EPS）為 0.18 美元。",
+  "concerns": "• 營業毛利、營業利益、營運現金流與資本支出等重要財務數據均未提供。<br>• 官方新聞稿節錄顯示部分業務淨利較去年同期呈現減少，例如節錄中指出 Net income $ 535 降至 $ 789 減少 (254) (32) %。<br>• 多戶房擔保業務的平均計費擔保費率在期末為 69.9 bps，較前期有所變動。",
+  "risks": "• 資本支出與營運現金流未提供，無法完整評估其現金流健康狀況與資本配置能力。<br>• 部分財務與業務指標顯示淨利與費率在跨期比較中出現變動，需持續關注長期獲利穩定性。",
+  "keyPoints": "• 營業收入為 76.51 億美元。<br>• 本期淨利為 41.77 億美元，淨利率為 54.6%。<br>• 每股盈餘（EPS）為 0.18 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "• 多戶房擔保業務書籍期末平均收費擔保費率為 69.9 bps。<br>• 根據新聞稿節錄，第三季淨利為 535 百萬美元（或對應之相關節錄數值）。"
+ }
+}
