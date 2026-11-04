@@ -1,0 +1,48 @@
+{
+ "symbol": "SUN",
+ "market": "us",
+ "name": "SUNOCO LP",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "SUNOCO LP",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "142.59",
+  "營業毛利": null,
+  "營業利益": "5.83",
+  "本期淨利": "2.83",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-03",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1552275/000155227526000090/ex991sunocoandsunococorper.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-04T07:47:44.744Z",
+ "result": {
+  "revenue": "營業收入為 142.59 億美元。",
+  "eps": "每股盈餘（EPS）為 未提供 美元。",
+  "margins": "營業利益率為 4.1%，淨利率為 2.0%。由於官方未提供營業毛利，故毛利率未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期將超過 2026 年 Adjusted EBITDA 導引範圍的 35 億美元至 37 億美元。",
+  "outlook": "根據官方財務數字，本期營業利益為 5.83 億美元，本期淨利為 2.83 億美元。整體營運表現維持獲利水準，營業利益率與淨利率分別為 4.1% 與 2.0%。",
+  "highlights": "• 營業收入為 142.59 億美元。<br>• 營業利益為 5.83 億美元，營業利益率為 4.1%。<br>• 本期淨利為 2.83 億美元，淨利率為 2.0%。",
+  "concerns": "• 官方財務數字中營業毛利、營業現金流、資本支出與每股盈餘均未提供。<br>• 自由現金流狀況未提供。",
+  "risks": "• 因官方財報資料未提供資本支出與營運現金流數據，短期內無法由官方數字直接評估現金流與償債壓力。<br>• 相關財務細節與毛利表現因缺乏官方揭露而受限。",
+  "keyPoints": "• 本期營業收入達 142.59 億美元。<br>• 本期營業利益為 5.83 億美元，對應營業利益率 4.1%。<br>• 本期淨利為 2.83 億美元，對應淨利率 2.0%。",
+  "guidanceOfficial": "Expects to exceed 2026 Adjusted EBITDA guidance range of 35 億美元 to 37 億美元",
+  "segments": "• Fuel Distribution: Adjusted EBITDA for the third quarter of 2026 was 5.23 億美元 compared to 2.32 億美元 in the third quarter of 2025. Sold approximately 42 億（原文未註明幣別） gallons of fuel with a fuel margin of 16.8 cents per gallon.<br>• Pipeline Systems: Adjusted EBITDA for the third quarter of 2026 was 1.66 億美元 compared to 1.82 億美元 in the third quarter of 2025, averaging throughput volumes of approximately 130 萬（原文未註明幣別） barrels per day.<br>• Terminals: Adjusted EBITDA for the third quarter of 2026 was 1.22 億美元 compared to 7,500 萬美元 in the third quarter of 2025, averaging throughput volumes of approximately 100 萬美元 barrels per day.<br>• Refinery: Adjusted EBITDA for the third quarter of 2026 was 2.38 億美元, averaging throughput volumes of approximately 57 thousand barrels per day."
+ }
+}
