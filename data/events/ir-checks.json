@@ -1393,7 +1393,7 @@
   "kind": ""
  },
  "2014": {
-  "at": "2026-10-19T01:05:50.026Z",
+  "at": "2026-11-04T06:41:15.589Z",
   "market": "tw",
   "name": "中鴻",
   "seen": "沒有文件",
@@ -3464,7 +3464,7 @@
   "kind": ""
  },
  "3034": {
-  "at": "2026-10-12T02:17:30.616Z",
+  "at": "2026-11-04T06:39:42.352Z",
   "market": "tw",
   "name": "聯詠",
   "seen": "沒有文件",
@@ -5146,7 +5146,7 @@
   "kind": ""
  },
  "AMGN": {
-  "at": "2026-10-28T10:20:16.572Z",
+  "at": "2026-11-04T06:40:11.990Z",
   "market": "us",
   "name": "Amgen Inc.",
   "seen": "沒有文件",
@@ -5337,7 +5337,7 @@
   "kind": "presentation"
  },
  "UPS": {
-  "at": "2026-11-01T06:16:02.466Z",
+  "at": "2026-11-04T06:35:36.878Z",
   "market": "us",
   "name": "UNITED PARCEL SERVICE INC",
   "seen": "2026Q3",
@@ -5788,7 +5788,7 @@
   "pendingSince": "2026-10-30T10:28:06.323Z"
  },
  "AVY": {
-  "at": "2026-11-02T11:19:12.284Z",
+  "at": "2026-11-04T06:42:22.818Z",
   "market": "us",
   "name": "AVERY DENNISON CORPORATION",
   "seen": "2026Q3",
@@ -5868,7 +5868,7 @@
   "kind": "presentation"
  },
  "BG": {
-  "at": "2026-10-30T10:41:44.394Z",
+  "at": "2026-11-04T06:46:35.539Z",
   "market": "us",
   "name": "BUNGE GLOBAL SA",
   "seen": "2026Q3",
@@ -5931,7 +5931,7 @@
   "kind": "presentation"
  },
  "ERIE": {
-  "at": "2026-10-30T11:12:29.651Z",
+  "at": "2026-11-04T06:46:42.822Z",
   "market": "us",
   "name": "ERIE INDEMNITY COMPANY",
   "seen": "沒有文件",
@@ -6225,7 +6225,7 @@
   "kind": ""
  },
  "JKHY": {
-  "at": "2026-10-31T12:47:58.504Z",
+  "at": "2026-11-04T06:46:55.492Z",
   "market": "us",
   "name": "JACK HENRY & ASSOCIATES, INC.",
   "seen": "沒有文件",
@@ -6421,5 +6421,69 @@
   "done": "2026Q3",
   "pending": true,
   "pendingSince": "2026-11-03T23:34:38.446Z"
+ },
+ "AMD": {
+  "at": "2026-11-04T06:39:13.219Z",
+  "market": "us",
+  "name": "ADVANCED MICRO DEVICES INC",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-11-04T06:39:13.219Z"
+ },
+ "UDR": {
+  "at": "2026-11-04T06:45:40.149Z",
+  "market": "us",
+  "name": "UDR, Inc.",
+  "seen": "2026Q3",
+  "kind": "release"
+ },
+ "VRTX": {
+  "at": "2026-11-04T06:45:43.351Z",
+  "market": "us",
+  "name": "VERTEX PHARMACEUTICALS INC / MA",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "AIG": {
+  "at": "2026-11-04T06:46:06.192Z",
+  "market": "us",
+  "name": "AMERICAN INTERNATIONAL GROUP, INC.",
+  "seen": "2026Q3",
+  "kind": "release",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-11-04T06:46:06.192Z"
+ },
+ "ANET": {
+  "at": "2026-11-04T06:46:23.010Z",
+  "market": "us",
+  "name": "Arista Networks, Inc.",
+  "done": "2026Q3",
+  "kind": "presentation",
+  "pending": true,
+  "pendingSince": "2026-11-04T06:46:23.010Z"
+ },
+ "DLTR": {
+  "at": "2026-11-04T06:46:39.185Z",
+  "market": "us",
+  "name": "DOLLAR TREE, INC.",
+  "seen": "2026Q2",
+  "kind": "presentation"
+ },
+ "EXPD": {
+  "at": "2026-11-04T06:46:46.721Z",
+  "market": "us",
+  "name": "EXPEDITORS INTERNATIONAL OF WASHINGTON, INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "GPN": {
+  "at": "2026-11-04T06:46:52.289Z",
+  "market": "us",
+  "name": "GLOBAL PAYMENTS INC.",
+  "seen": "2026Q2",
+  "kind": "transcript"
  }
 }
