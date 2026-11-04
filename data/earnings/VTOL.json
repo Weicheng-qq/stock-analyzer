@@ -1,0 +1,48 @@
+{
+ "symbol": "VTOL",
+ "market": "us",
+ "name": "Bristow Group Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Bristow Group Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "4.12",
+  "營業毛利": null,
+  "營業利益": "0.40",
+  "本期淨利": "0.21",
+  "每股盈餘": 0.7,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-03",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1525221/000152522126000103/ex992_q32026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-04T07:27:08.896Z",
+ "result": {
+  "revenue": "會計年度 2026 Q2 的營業收入為 4.12 億美元。",
+  "eps": "本季每股盈餘（EPS）為 0.7 美元。",
+  "margins": "營業毛利與毛利率未提供。營業利益為 0.40 億美元，營業利益率為 9.7%。本期淨利為 0.21 億美元，淨利率為 5.1%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司更新 2026 年全年總營收預期為 1,640 至 1,700 億美元，並預期 Adjusted EBITDA 介於 300 至 320 億美元。",
+  "outlook": "依據官方公布資料，本季營業收入為 4.12 億美元，營業利益為 0.40 億美元（營業利益率 9.7%）。本期淨利為 0.21 億美元，淨利率為 5.1%，每股盈餘為 0.7 美元。",
+  "highlights": "• 營業收入達 4.12 億美元，本期淨利為 0.21 億美元。<br>• 營業利益為 0.40 億美元，營業利益率為 9.7%。<br>• 每股盈餘（EPS）為 0.7 美元。",
+  "concerns": "• 營業毛利與毛利率未提供，無法評估成本控制細節。<br>• 營運現金流與資本支出等數據未提供，現金流量狀況不明。",
+  "risks": "• 部分關鍵財務指標如營運現金流與資本支出未提供，流動性與資本配置透明度受限。<br>• 官方新聞稿節錄指出業務面臨匯率等已知與未知風險，可能導致實際結果與前瞻性聲明有所差異。",
+  "keyPoints": "• 本季營業收入為 4.12 億美元，每股盈餘（EPS）為 0.7 美元。<br>• 營業利益為 0.40 億美元，營業利益率達 9.7%，本期淨利為 0.21 億美元（淨利率 5.1%）。<br>• 公司更新 2026 全年總營收預期為 1,640 至 1,700 億美元，Adjusted EBITDA 預期為 300 至 320 億美元。",
+  "guidanceOfficial": "總營收預期：1,640 - 1,700 億美元；Adjusted EBITDA 預期：300 - 320 億美元；離岸能源服務（Offshore Energy Services）營收預期：1,015 - 1,035 億美元；政府服務（Government Services）營收預期：470 - 490 億美元；其他服務（Other Services）營收預期：155 - 175 億美元；離岸能源服務 Adjusted Operating Income 預期：240 - 250 億美元；政府服務 Adjusted Operating Income 預期：35 - 45 億美元；其他服務 Adjusted Operating Income 預期：25 - 30 億美元；維護資本支出（Maintenance Capital Expenditures）預期：25 - 30 億美元；現金稅（Cash Taxes）預期約 30 億美元；現金利息（Cash Interest）預期約 45 億美元。",
+  "segments": "• 離岸能源服務（Offshore Energy Services）：佔營收 63%<br>• 政府服務（Government Services）：佔營收 28%<br>• 其他服務（Other Services）：佔營收 9%"
+ }
+}

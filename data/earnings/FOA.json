@@ -1,0 +1,48 @@
+{
+ "symbol": "FOA",
+ "market": "us",
+ "name": "FINANCE OF AMERICA COMPANIES INC.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "FINANCE OF AMERICA COMPANIES INC.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.62",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.02",
+  "每股盈餘": -1.28,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-03",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1828937/000162828026069479/foacompaniesex-99193026ear.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-04T07:30:07.885Z",
+ "result": {
+  "revenue": "營業收入為 0.62 億美元。營業毛利與營業利益則未提供。",
+  "eps": "每股盈餘（EPS）為 -1.28 美元，呈現虧損。本期淨利為 0.02 億美元，淨利率為 3.2%。",
+  "margins": "毛利率與營業利益率皆未提供。本期淨利率為 3.2%，本期淨利為 0.02 億美元。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "根據官方數據，本期營業收入為 0.62 億美元，本期淨利為 0.02 億美元（淨利率 3.2%），每股盈餘（EPS）為 -1.28 美元。Portfolio Management Segment 認列了稅前虧損 1.38 億美元，反映了證券化保留權益的負向非現金公允價值調整。",
+  "highlights": "• Retirement Solutions 部門之 Funded volume 增加 24% 至 7.48 億美元（相較於 2025 年第三季的 6.03 億美元），反映居家權益解決方案的需求持續成長。<br>• 截至 2026 年 9 月 30 日，Assets under management 年增 23% 至 37,426 百萬美元，主要來自新創貸與 2026 年 6 月收購 Onity HECM servicing portfolio 的成長。<br>• 截至 2026 年 9 月 30 日，總權益為 3.07 億美元，歸屬於普通股的總權益為 2.59 億美元，每股普通股帳面價值為 28.08 美元。",
+  "concerns": "• Portfolio Management 部門認列稅前虧損 138 百萬美元，主因係證券化保留權益之負向非現金公允價值調整。<br>• 總體營收受到基準利率上升帶動營收利潤率壓力的影響，例如 Retirement Solutions 總收益為 67 百萬美元（季減 9%、年減 1%）。<br>• 經調整後淨利益在各主要部門皆呈現下滑，例如 Portfolio Management 調整後淨利為 11 百萬美元（季減 39%、年減 63%）。",
+  "risks": "• Portfolio Management 部門因市場利率變動影響特定保留資產之公允價值，認列顯著之稅前虧損 138 百萬美元。<br>• 利率上升對融資與原創業務利潤率造成壓力，影響整體獲利表現。",
+  "keyPoints": "• 營業收入為 0.62 億美元，每股盈餘（EPS）為 -1.28 美元，本期淨利為 0.02 億美元（淨利率 3.2%）。<br>• Retirement Solutions 部門的 Funded volume 達到 7.48 億美元，年增 24%，但受到利率上升帶動的利潤率壓力影響，總收益降至 67 百萬美元。<br>• Portfolio Management 部門之 Assets under management 年增 23% 至 37,426 百萬美元，但因證券化保留權益之負向公允價值調整，導致該部門認列稅前虧損 138 百萬美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Retirement Solutions：Q3'26 Funded volume 為 748 百萬美元（季增 2%、年增 24%），Total revenues 為 67 百萬美元（季減 9%、年減 1%），Pre-tax income 為 3 百萬美元（季減 70%、年減 82%），Adjusted net income 為 (1) 百萬美元（季減 40%、年減 55%）。<br>• Portfolio Management：Q3'26 Assets under management 為 37,426 百萬美元（季增 1%、年增 23%），Assets excluding HMBS and nonrecourse obligations 為 1,711 百萬美元（季增 2%、年增 18%），Total revenues 為 (112) 百萬美元（季減 11,300%、年減 515%），Adjusted total revenues 為 31 百萬美元（季減 21%、年減 37%），Pre-tax income (loss) 為 (138) 百萬美元（季減 431%、年減 1,155%），Adjusted net income 為 11 百萬美元（季減 39%、年減 63%）。"
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "symbol": "WSFS",
+ "market": "us",
+ "name": "WSFS FINANCIAL CORPORATION",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "WSFS FINANCIAL CORPORATION",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "2.64",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "0.89",
+  "每股盈餘": 1.75,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-22",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/828944/000082894426000034/exhibit991earningsrelease0.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-04T07:23:12.380Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q3 的營業收入為 2.64 億美元。",
+  "eps": "本會計年度 2026 Q3 的每股盈餘（EPS）為 1.75 美元，實現年增率 28%。",
+  "margins": "本會計年度 2026 Q3 的本期淨利為 0.89 億美元，淨利率為 33.7%。營業毛利、營業利益、毛利率與營業利益率皆未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "本季本期淨利為 0.89 億美元，淨利率達 33.7%，每股盈餘（EPS）為 1.75 美元。<br>相關營運表現如財報新聞稿所載，未提供其他進一步的預測數據。",
+  "highlights": "• 本季每股盈餘（EPS）為 1.75 美元，年增率達 28%。<br>• 本季本期淨利為 0.89 億美元，淨利率達 33.7%。<br>• Wealth and Trust segment pre-tax income was 5,270 萬美元, increasing 500 萬美元 compared to 2Q 2026.",
+  "concerns": "• Provision for credit losses increased to 840 萬（原文未註明幣別） in 3Q 2026 compared to 500 萬美元 in 2Q 2026 and 660 萬（原文未註明幣別） in 3Q 2025。<br>• 營業收入為 2.64 億美元，部分財務細節如營運現金流與資本支出未提供。",
+  "risks": "• 信用損失準備金（Provision for credit losses）在本季增加至 8.4 百萬美元。<br>• 財報中列有非 GAAP 項目調整（如非利息費用與費率調整），需留意其對核心結果的影響。",
+  "keyPoints": "• 本季每股盈餘（EPS）為 1.75 美元，實現 28% 的年增率。<br>• 本季本期淨利為 0.89 億美元，淨利率達 33.7%。<br>• 營業收入官方數字為 2.64 億美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Wealth and Trust segment pre-tax income: 5,270 萬美元, increased 500 萬美元 compared to 2Q 2026.<br>• WSFS Institutional Services ® and BMT of DE fee revenue: 3,820 萬（原文未註明幣別）.<br>• Private Wealth Management fee revenue: 1,660 萬（原文未註明幣別）."
+ }
+}

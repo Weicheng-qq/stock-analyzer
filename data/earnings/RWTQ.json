@@ -1,0 +1,48 @@
+{
+ "symbol": "RWTQ",
+ "market": "us",
+ "name": "REDWOOD TRUST INC",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "REDWOOD TRUST INC",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "3.85",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "-0.01",
+  "每股盈餘": -0.03,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-07-28",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/930236/000093023626000024/a2026q2earningsrelease.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-04T07:37:35.028Z",
+ "result": {
+  "revenue": "營業收入為 3.85 億美元。",
+  "eps": "每股盈餘（EPS）為 -0.03 美元，呈現虧損。",
+  "margins": "營業毛利率與營業利益率皆未提供。本期淨利為 -0.01 億美元，淨利率為 -0.3%，處於淨虧損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供具體的下一季或全年財測數字。",
+  "outlook": "本季總體產出維持動能，房貸銀行業務整體 GAAP 淨利較上一季增加 9%，但整體合併 GAAP 仍呈現淨虧損 -0.29 百萬美元（或 EPS -0.03 美元），每股帳面價值由上一季的 7.12 美元降至 6.90 美元。",
+  "highlights": "• 房貸銀行（Mortgage Banking）產出連續第二季超過 8 百萬美元，創下公司歷史上第二高的季度產量。<br>• 總體房貸銀行 GAAP 淨利較 2026 年第一季增加 9%，各房貸銀行平台維持連續第八季超過 20% 的資本報酬率（ROC）。<br>• 非 GAAP 可分派盈餘（EAD）為每股 0.15 美元，非 GAAP 核心部門 EAD 為 0.25 美元。",
+  "concerns": "• GAAP 合併淨虧損為 0.029 億美元（即 290 萬美元），每股虧損 0.03 美元。<br>• GAAP 每股帳面價值從 2026 年 3 月 31 日的 7.12 美元下滑至 2026 年 6 月 30 日的 6.90 美元。<br>• 遺留投資（Legacy Investments）部門 GAAP 淨虧損達 23.3 百萬美元。",
+  "risks": "• 具有高額的具追索權債務（Recourse debt）達 45 億美元，具追索權槓桿比率為 5.0x。<br>• 遺留投資（Legacy Investments）部門的具追索權槓桿比率達到 2.1x，且本季該部門出現 23.3 百萬美元的 GAAP 淨虧損。",
+  "keyPoints": "• 本季營業收入為 3.85 億美元，本期淨利為 -0.01 億美元，淨利率為 -0.3%，每股盈餘（EPS）為 -0.03 美元。<br>• 非 GAAP 可分派盈餘（EAD）為 2,030 萬美元（每股 0.15 美元），核心部門 EAD 為 3,400 萬美元（每股 0.25 美元）。<br>• 公司宣告並支付每普通股 0.18 美元的常規季度股息，GAAP 每股帳面價值為 6.90 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Sequoia 房貸銀行（Sequoia Mortgage Banking）：GAAP 淨利 31.6 百萬美元（2026 年第一季為 37.8 百萬美元）<br>• Aspire 房貸銀行（Aspire Mortgage Banking）：GAAP 淨利 7.3 百萬美元（2026 年第一季為 2.3 百萬美元）<br>• CoreVest 房貸銀行（CoreVest Mortgage Banking）：GAAP 淨利 1.2 百萬美元（2026 年第一季為 -3.4 百萬美元）<br>• Redwood 投資（Redwood Investments）：GAAP 淨利 0.7 百萬美元（2026 年第一季為 -8.0 百萬美元）<br>• 遺留投資（Legacy Investments）：GAAP 淨虧損 23.3 百萬美元（2026 年第一季為 -13.1 百萬美元）<br>• 公司／其他（Corporate/Other）：GAAP 淨虧損 20.4 百萬美元（2026 年第一季為 -22.9 百萬美元）"
+ }
+}

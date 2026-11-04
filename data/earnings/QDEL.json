@@ -1,0 +1,48 @@
+{
+ "symbol": "QDEL",
+ "market": "us",
+ "name": "QUIDELORTHO CORP",
+ "quarter": "2026 Q2（2026-03-30～2026-06-28）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "QUIDELORTHO CORP",
+  "currency": "億美元",
+  "periodStart": "2026-03-30",
+  "periodEnd": "2026-06-28",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "6.31",
+  "營業毛利": null,
+  "營業利益": "-0.22",
+  "本期淨利": "-0.93",
+  "每股盈餘": -1.36,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-03",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1906324/000190632426000040/qdel9272026ex991earningsre.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-04T07:37:12.979Z",
+ "result": {
+  "revenue": "營業收入為 6.31 億美元。",
+  "eps": "每股盈餘（EPS）為 -1.36 美元，處於每股虧損狀態。",
+  "margins": "營業利益率為 -3.5%，本期淨利率為 -14.7%，兩者皆呈現負值，顯示公司目前處於營業虧損與淨虧損狀態。毛利率未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司更新了 2026 全年財務財測並微幅收窄先前預估範圍。",
+  "outlook": "根據官方數據，營業利益與本期淨利皆為負值（分別為 -0.22 億美元與 -0.93 億美元），顯示本季持續面臨虧損壓力。營運表現與現金流數據受限於官方提供的揭露範圍。",
+  "highlights": "• 營業收入達 6.31 億美元。<br>• 每股盈餘（EPS）為 -1.36 美元。",
+  "concerns": "• 營業利益為 -0.22 億美元，營業利益率為 -3.5%。<br>• 本期淨利為 -0.93 億美元，淨利率為 -14.7%，顯示本季處於淨虧損狀態。",
+  "risks": "• 營業利益與本期淨利皆為負值，分別為 -0.22 億美元與 -0.93 億美元，本業與整體獲利能力面臨挑戰。<br>• 營業利益率與淨利率分別為 -3.5% 與 -14.7%，財務結構顯示持續虧損。",
+  "keyPoints": "• 營業收入為 6.31 億美元。<br>• 營業利益為 -0.22 億美元（營業利益率 -3.5%）。<br>• 本期淨利為 -0.93 億美元（淨利率 -14.7%），每股盈餘（EPS）為 -1.36 美元。",
+  "guidanceOfficial": "Full-year 2026 Financial Guidance As of 11/3/2026 As of 8/6/2026 Total revenues (reported) $2.52 - 25.4 億美元 $2.52 - 26 億美元 Adjusted EBITDA $540 - 5.45 億美元 $540 - 5.6 億美元 Adjusted EBITDA margin ~21% 21% - 22% Adjusted diluted EPS $0.65 - $0.70 $0.65 - $0.90",
+  "segments": "• Labs：353.2 百萬美元，較去年同期減少 5.5%（固定匯率下減少 5.9%）<br>• Immunohematology：142.0 百萬美元，較去年同期持平（固定匯率下增加 0.9%）<br>• Donor Screening：1.7 百萬美元，較去年同期減少 88.4%<br>• Point of Care：119.6 百萬美元，較去年同期減少 27.3%（固定匯率下減少 27.2%）<br>• Molecular Diagnostics：2.4 百萬美元，較去年同期減少 50.0%（固定匯率下減少 49.3%）<br>• Total revenues：618.9 百萬美元，較去年同期減少 11.6%"
+ }
+}
