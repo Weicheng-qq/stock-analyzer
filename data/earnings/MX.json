@@ -1,0 +1,48 @@
+{
+ "symbol": "MX",
+ "market": "us",
+ "name": "MAGNACHIP SEMICONDUCTOR Corp",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "MAGNACHIP SEMICONDUCTOR Corp",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.45",
+  "營業毛利": "0.09",
+  "營業利益": "-0.10",
+  "本期淨利": "-0.05",
+  "每股盈餘": -0.13,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-04",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1325702/000119312526447409/mx-ex99_1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-05T08:58:03.242Z",
+ "result": {
+  "revenue": "2026年第二季營業收入為0.45億美元。",
+  "eps": "2026年第二季每股盈餘（EPS）為-0.13美元，呈現虧損狀態。",
+  "margins": "第二季毛利率為20.0%，營業利益率為-22.2%，淨利率為-11.1%。數據顯示公司雖有毛利，但營業利益與淨利均為負值，顯示公司處於虧損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期第四季營收介於0.41億至0.45億美元之間，毛利率預期介於10%至12%之間。",
+  "outlook": "公司目前正處於轉型階段，致力於開發新一代功率半導體產品以提升競爭力。然而，近期財務表現受限於 legacy 產品的逆風、匯率波動以及電力設施升級帶來的影響。",
+  "highlights": "• 獲得 Navitas Semiconductor 500 萬美元的戰略股權投資，深化合作關係。<br>• 推出 15 款第六代 E6 超接面 MOSFET，鎖定電視、筆電轉接器及工業電源應用。",
+  "concerns": "• 第二季營業利益率為 -22.2%，淨利率為 -11.1%，顯示公司持續虧損。<br>• 預期第四季毛利率將下滑至 10% 至 12%，主要受工廠電力設施升級導致的產能利用率下降及韓元升值影響。",
+  "risks": "• 營業利益率為負值，顯示現有營運模式未能產生足夠的獲利來覆蓋營業費用。<br>• 營收呈現季減與年減趨勢，且毛利率面臨匯率與產能利用率的雙重壓力。",
+  "keyPoints": "• 2026年第二季營業收入為 0.45 億美元，每股盈餘為 -0.13 美元。<br>• 營業利益率為 -22.2%，顯示公司目前營運處於虧損狀態。<br>• 第四季毛利率展望下調至 10% 至 12%，反映出產能利用率下降及匯率不利因素。",
+  "guidanceOfficial": "Consolidated revenue from continuing operations (which includes Power Analog Solutions and Power IC businesses) to be in the range of 4,100 萬美元 to 4,500 萬美元. Consolidated gross profit margin from continuing operations to be in the range of 10% to 12%.",
+  "segments": "• Power Analog Solutions：39,636 千美元，季減 2.3%、年減 4.6%<br>• Power IC：4,342 千美元，季增 5.1%、年減 1.3%"
+ }
+}

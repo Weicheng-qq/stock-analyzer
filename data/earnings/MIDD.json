@@ -1,0 +1,48 @@
+{
+ "symbol": "MIDD",
+ "market": "us",
+ "name": "THE MIDDLEBY CORPORATION",
+ "quarter": "2026 Q2（2026-04-05～2026-07-04）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "THE MIDDLEBY CORPORATION",
+  "currency": "億美元",
+  "periodStart": "2026-04-05",
+  "periodEnd": "2026-07-04",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "8.76",
+  "營業毛利": "3.35",
+  "營業利益": "1.48",
+  "本期淨利": "0.55",
+  "每股盈餘": 1.21,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-11",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/769520/000076952026000044/middex991er-q22026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-05T08:59:20.565Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q2 營業收入為 8.76 億美元。依據公司新聞稿，總淨銷售額較前一年同期增加 10%（有機成長 6%）。",
+  "eps": "本季每股盈餘（EPS）官方數字為 1.21 美元。依據財報新聞稿，稀釋 GAAP EPS 為 1.20 美元，調整後 EPS 為 2.35 美元。",
+  "margins": "本季營業毛利率為 38.2%、營業利益率為 16.9%、淨利率為 6.3%。營運獲利水準反映本期淨利為 0.55 億美元，營業利益為 1.48 億美元。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "管理層提供第三季及全年 2026 年（排除食品加工與住宅業務後）之營收、調整後 EBITDA 與調整後 EPS 展望。",
+  "outlook": "本季商業餐飲服務（Commercial Foodservice）展現 8% 的有機銷售成長。公司已完成食品加工業務的分割（Spin-off），轉型為純商業餐飲服務公司，並持續執行股份回購計畫。",
+  "highlights": "• Q2 2026 營收與調整後 EBITDA 超出財測高標，商業餐飲服務實現 8% 的有機銷售成長。<br>• 於 2026 年 7 月 6 日完成食品加工業務的分割，轉型為純商業餐飲服務公司。<br>• 於 Q2 2026 回購 140 萬股（佔已發行股份 2.9%），今年累計至 Q2 已回購 380 萬股（佔 7.8%）。",
+  "concerns": "• 本季營業利益為 1.48 億美元，其中包含 1,400 萬美元與業務組合轉型相關的策略交易成本。<br>• 稀釋 GAAP EPS 由去年同期的 1.91 美元降至 1.20 美元。<br>• 信用協議下的總槓桿比率在分拆後估計為 2.7x（季末為 2.4x）。",
+  "risks": "• 業務組合轉型及策略交易成本持續對當期營業利益產生影響。<br>• 須留意可轉換公司債到期所帶來的較高利息成本及稅率變動。",
+  "keyPoints": "• 本季營業收入達 8.76 億美元，淨利 0.55 億美元，每股盈餘（EPS）為 1.21 美元。<br>• 成功完成食品加工業務分拆，商業餐飲服務部門淨銷售額為 6.306 億美元，食品加工部門淨銷售額為 2.449 億美元。<br>• 官方上調 2026 年全年展望，預期商業餐飲服務營收成長 6-8%，全年總營收預期 2.48-2.53 億（B）美元。",
+  "guidanceOfficial": "管理層針對第三季及全年 2026 年（總公司後續分拆食品加工業務且排除住宅業務）預期如下：<br>第三季 2026：網銷售額 $620-$640 M，有機成長 4%，調整後 EBITDA $143-150 M，調整後 EPS $1.67-1.83。<br>全年 2026：網銷售額 $2.48-2.53 B，有機成長 7%，調整後 EBITDA $572-588 M，調整後 EPS $6.73-6.89。",
+  "segments": "• 商業餐飲服務（Commercial Foodservice）：Net Sales 6.31 億美元，Reported Net Sales Growth 8.6%，Organic Net Sales Growth 8.3%，Adjusted EBITDA 1.63 億美元。<br>• 食品加工（Food Processing）：Net Sales 2.45 億美元，Reported Net Sales Growth 13.3%，Organic Net Sales Growth 1.3%，Adjusted EBITDA 4,980 萬美元。<br>• 總公司（Total Company）：Net Sales 8.76 億美元，Reported Net Sales Growth 9.9%，Organic Net Sales Growth 6.4%，Adjusted EBITDA 1.93 億美元。"
+ }
+}

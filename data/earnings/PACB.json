@@ -1,0 +1,48 @@
+{
+ "symbol": "PACB",
+ "market": "us",
+ "name": "Pacific Biosciences of California, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Pacific Biosciences of California, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.39",
+  "營業毛利": "0.13",
+  "營業利益": "-0.45",
+  "本期淨利": "-0.45",
+  "每股盈餘": -0.14,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-04",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1299130/000129913026000133/earnings8-kxex991xq3x26.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-05T09:02:56.217Z",
+ "result": {
+  "revenue": "2026 Q2 營業收入為 0.39 億美元。",
+  "eps": "2026 Q2 每股盈餘（EPS）為 -0.14 美元，呈現虧損狀態。",
+  "margins": "本季毛利率為 33.3%，營業利益率與淨利率均為 -115.4%，顯示公司目前處於顯著的營業虧損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 2026 全年營收將落在 1.55 億美元至 1.6 億美元之間。",
+  "outlook": "公司目前營收規模仍無法覆蓋營運成本，導致營業利益與淨利皆為負值。財務表現顯示公司處於持續虧損的營運階段。",
+  "highlights": "• 透過與 Verily 及 TychoBio 等公司的合作，推動 HiFi 與 Kinnex 定序技術在 AI 模型訓練及藥物研發領域的應用。<br>• 執行長 Mark Van Oene 強調將透過 SPRQ-Nx 技術改善 HiFi 定序的經濟效益，並持續擴大在臨床與群體基因組學的市場布局。",
+  "concerns": "• 營業利益率與淨利率高達 -115.4%，顯示公司本業獲利能力極為疲弱。<br>• 財務長（CFO）職位異動，目前由執行長 Mark Van Oene 暫代，並由 Bill Meyer 出任首席會計官（CAO）。",
+  "risks": "• 營運持續虧損，且缺乏自由現金流與資本支出數據，財務結構透明度與穩定性面臨挑戰。<br>• 營收規模與成本結構不匹配，導致淨利率呈現大幅負值，顯示經營風險較高。",
+  "keyPoints": "• 2026 Q2 營業收入為 0.39 億美元，但營業利益與淨利均為 -0.45 億美元。<br>• 本季每股盈餘（EPS）為 -0.14 美元。<br>• 營業利益率與淨利率均為 -115.4%，顯示公司仍處於虧損狀態。",
+  "guidanceOfficial": "PacBio 目前預期 2026 全年營收將落在 1.55 億美元至 1.6 億美元的範圍內。",
+  "segments": "• 消耗品營收：20.8 百萬美元（2026 Q3）<br>• 儀器營收：13.2 百萬美元（2026 Q3）<br>• 服務與其他營收：6.6 百萬美元（2026 Q3）"
+ }
+}
