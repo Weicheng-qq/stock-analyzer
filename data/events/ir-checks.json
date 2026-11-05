@@ -882,7 +882,7 @@
   "kind": ""
  },
  "1597": {
-  "at": "2026-10-20T01:43:58.524Z",
+  "at": "2026-11-05T07:00:58.627Z",
   "market": "tw",
   "name": "直得",
   "seen": "沒有文件",
@@ -3527,7 +3527,7 @@
   "kind": ""
  },
  "3090": {
-  "at": "2026-10-22T15:47:13.804Z",
+  "at": "2026-11-05T07:01:02.914Z",
   "market": "tw",
   "name": "日電貿",
   "seen": "沒有文件",
@@ -4115,7 +4115,7 @@
   "kind": ""
  },
  "6285": {
-  "at": "2026-10-23T01:24:14.742Z",
+  "at": "2026-11-05T07:01:07.025Z",
   "market": "tw",
   "name": "啟碁",
   "seen": "沒有文件",
@@ -5382,9 +5382,9 @@
   "kind": ""
  },
  "MSFT": {
-  "at": "2026-10-29T10:08:13.618Z",
+  "at": "2026-11-05T06:57:36.010Z",
   "market": "us",
-  "name": "MICROSOFT CORPORATION",
+  "name": "MICROSOFT CORP",
   "seen": "沒有文件",
   "kind": ""
  },
@@ -5772,14 +5772,14 @@
   "pendingSince": ""
  },
  "CAT": {
-  "at": "2026-11-02T11:19:27.328Z",
+  "at": "2026-11-05T06:58:57.646Z",
   "market": "us",
   "name": "CATERPILLAR INC",
   "seen": "2026Q3",
-  "kind": "presentation",
+  "kind": "transcript",
   "done": "2026Q3",
-  "pending": true,
-  "pendingSince": "2026-10-30T10:18:53.442Z"
+  "pending": false,
+  "pendingSince": ""
  },
  "MRK": {
   "at": "2026-10-30T10:19:57.269Z",
@@ -6406,7 +6406,7 @@
   "kind": ""
  },
  "FANG": {
-  "at": "2026-11-03T17:14:07.996Z",
+  "at": "2026-11-05T07:02:21.451Z",
   "market": "us",
   "name": "Diamondback Energy, Inc.",
   "seen": "沒有文件",
@@ -6696,5 +6696,71 @@
   "name": "Sysco Corporation",
   "seen": "2027Q1",
   "kind": "presentation"
+ },
+ "MCD": {
+  "at": "2026-11-05T06:57:36.735Z",
+  "market": "us",
+  "name": "McDONALD’S CORPORATION",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "QCOM": {
+  "at": "2026-11-05T06:57:42.531Z",
+  "market": "us",
+  "name": "QUALCOMM INC/DE",
+  "seen": "2026Q3",
+  "kind": "transcript"
+ },
+ "COHR": {
+  "at": "2026-11-05T06:59:08.525Z",
+  "market": "us",
+  "name": "Coherent Corp.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "ARM": {
+  "at": "2026-11-05T07:00:26.230Z",
+  "market": "us",
+  "name": "ARM HOLDINGS PLC /UK",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "AAOI": {
+  "at": "2026-11-05T07:00:29.519Z",
+  "market": "us",
+  "name": "APPLIED OPTOELECTRONICS, INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "MELI": {
+  "at": "2026-11-05T07:00:48.531Z",
+  "market": "us",
+  "name": "MercadoLibre, Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "SEDG": {
+  "at": "2026-11-05T07:00:52.035Z",
+  "market": "us",
+  "name": "SOLAREDGE TECHNOLOGIES, INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "MMM": {
+  "at": "2026-11-05T07:07:00.213Z",
+  "market": "us",
+  "name": "3M COMPANY",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "AFL": {
+  "at": "2026-11-05T07:07:09.762Z",
+  "market": "us",
+  "name": "Aflac Incorporated",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-11-05T07:07:09.762Z"
  }
 }

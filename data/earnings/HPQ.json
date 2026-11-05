@@ -1,0 +1,51 @@
+{
+ "symbol": "HPQ",
+ "market": "us",
+ "name": "HP INC.",
+ "quarter": "2026 Q3（2026-05-01～2026-07-31）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "HP INC.",
+  "currency": "億美元",
+  "periodStart": "2026-05-01",
+  "periodEnd": "2026-07-31",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "156.77",
+  "營業毛利": "29.45",
+  "營業利益": "8.92",
+  "本期淨利": "6.61",
+  "每股盈餘": 0.71,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "",
+  "form": "法說會逐字稿",
+  "url": "https://s203.q4cdn.com/918857832/files/content_files/Q3-2026_HP-Inc_Earnings-Transcript.pdf"
+ },
+ "docKind": "transcript",
+ "savedAt": "2026-11-05T07:00:38.227Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q3 營業收入為 156.77 億美元，新聞稿亦指出淨 revenue 達 157 億美元（註：官方數字列為 156.77 億美元），較去年同期成長。",
+  "eps": "本期每股盈餘（EPS）為 0.71 美元，新聞稿並指出 GAAP 稀釋每股盈餘為 0.71 美元（含關稅退款帶來的 0.11 美元正面影響），Non-GAAP 稀釋每股盈餘為 0.83 美元。",
+  "margins": "本季營業毛利為 29.45 億美元，毛利率為 18.8%；營業利益為 8.92 億美元，營業利益率為 5.7%；本期淨利為 6.61 億美元，淨利率為 4.2%。整體維持穩定的獲利水準。",
+  "fcf": "自由現金流（營運現金流 − 資本支出）：未提供",
+  "capex": "資本支出狀況：未提供",
+  "guidance": "公司調高 2026 會計年度每股盈餘（EPS）與自由現金流展望。",
+  "outlook": "根據官方數字，本季營業收入達到 156.77 億美元，營業利益為 8.92 億美元，本期淨利為 6.61 億美元。整體營運展現持續的營收規模與獲利能力。",
+  "highlights": "• 營業收入達 156.77 億美元，本期淨利為 6.61 億美元。<br>• 每股盈餘（EPS）為 0.71 美元。<br>• 官方新聞稿指出調高 2026 會計年度每股盈餘與自由現金流展望。",
+  "concerns": "• 營業利益率為 5.7%，淨利率為 4.2%，獲利空間相對有限。<br>• 部分財務細節如營運現金流與資本支出於官方基本數字中未提供。",
+  "risks": "• 毛利率為 18.8%，若面臨成本上升或價格競爭壓力，毛利空間可能受壓縮。<br>• 淨利率僅 4.2%，獲利對於營運成本與費用變動的敏感度較高。",
+  "keyPoints": "• 第三季營業收入為 156.77 億美元，營業利益為 8.92 億美元。<br>• 第三季本期淨利為 6.61 億美元，每股盈餘（EPS）為 0.71 美元。<br>• 營業毛利為 29.45 億美元，毛利率為 18.8%。",
+  "guidanceOfficial": "Raising fiscal year 2026 earnings per share (\"EPS\") and free cash flow outlook",
+  "segments": "• Personal Systems: 營收年增 18%（實現連續第 10 季營收成長）<br>• Print: 營收年減 2%<br>• Advanced compute solutions and workforce solutions: 實現雙位數營收擴張",
+  "mgmtRemarks": "• 代理執行長 Bruce Broussard 表示，本季實現了創紀錄的第三季營收，且 EPS 持續超出預期。<br>• 代理執行長 Bruce Broussard 指出，個人系統（Personal Systems）實現連續第 10 季營收成長，年增 18%，且 AI PC 持續成長，預期將佔今年底出貨組合的 50%。<br>• 代理執行長 Bruce Broussard 指出，我們持續採取行動強化基礎、聚焦優先事項並改善執行力。",
+  "capexPlan": "未提供",
+  "techRoadmap": "• 推出 advancements 協助客戶在 AI 時代 thrive，未來 AI 是混合型（hybrid），將在雲端與 edge 運作。<br>• 透過 HP Z Boost 實現 GPU 共享並整合 WXP 軟體層、安全與裝置功能。<br>• 持續推進裝置成為 AI-leading，將更多運算帶至 edge。"
+ }
+}
