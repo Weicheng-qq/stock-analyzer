@@ -1,0 +1,48 @@
+{
+ "symbol": "SVC",
+ "market": "us",
+ "name": "SERVICE PROPERTIES TRUST",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "SERVICE PROPERTIES TRUST",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "4.00",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "-0.88",
+  "每股盈餘": -0.68,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-04",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/945394/000094539426000060/svc_093026xexhibitx992.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-05T08:22:56.341Z",
+ "result": {
+  "revenue": "本季營業收入為 4.00 億美元。",
+  "eps": "本季每股盈餘（EPS）為 -0.68 美元，呈現虧損狀態。",
+  "margins": "本季淨利率為 -22.0%，顯示公司處於虧損狀態。營業毛利與營業利益率均未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司下調了 2026 年全年財測，其中 Normalized FFO 預期區間調整為 1.13 億至 1.28 億美元。",
+  "outlook": "根據財報數據，公司目前處於淨損狀態，且已下調全年財務預期。公司正與貸款機構討論延長或再融資其擔保循環信貸額度，顯示資金流動性管理為當前營運重點。",
+  "highlights": "• 於 2026 年 7 月 6 日收盤後執行 1 股換 5 股的反向股票分割。<br>• 宣布每股普通股配發 0.05 美元的季度股利。<br>• 截至 2026 年 9 月 30 日，擁有現金及約當現金，並有 6.5 億美元可用於循環信貸額度。",
+  "concerns": "• 本季淨損達 0.88 億美元，每股盈餘為 -0.68 美元。<br>• 全年財測指標如 Adjusted EBITDAre 與 Normalized FFO 均較先前預期下調。<br>• 正在與貸款機構進行債務展期或再融資的討論。",
+  "risks": "• 財務結構面臨虧損壓力，且需透過再融資來維持循環信貸額度。<br>• 營運現金流與資本支出等關鍵數據未揭露，財務透明度受限。",
+  "keyPoints": "• 本季淨損為 0.88 億美元，淨利率為 -22.0%。<br>• 2026 年全年 Normalized FFO 預期下調至 1.13 億至 1.28 億美元。<br>• 截至 2026 年 9 月 30 日，循環信貸額度尚有 6.5 億美元可用空間。",
+  "guidanceOfficial": "2026 年全年財測（單位：千美元，除 RevPAR、股份及每股數據外）：Total RevPAR 預期為 111.00 至 116.00 美元；Hotel EBITDA 預期為 124,000 至 134,000 千美元；Net Lease NOI 預期為 373,000 至 379,000 千美元；Adjusted EBITDAre 預期為 489,000 至 498,000 千美元；Normalized FFO 預期為 113,000 至 128,000 千美元；Normalized FFO 每股預期為 1.07 至 1.22 美元；總資本支出預期為 115,000 至 125,000 千美元。",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

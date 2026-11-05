@@ -1,0 +1,48 @@
+{
+ "symbol": "TSQ",
+ "market": "us",
+ "name": "Townsquare Media, Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Townsquare Media, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1.11",
+  "營業毛利": "0.29",
+  "營業利益": "0.06",
+  "本期淨利": "-0.04",
+  "每股盈餘": -0.23,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-08-06",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1499832/000149983226000044/a63026pressrelease.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-05T08:26:35.509Z",
+ "result": {
+  "revenue": "會計年度 2026 Q3 營業收入為 1.11 億美元。",
+  "eps": "每股盈餘（EPS）為 -0.23 美元，呈現每股虧損狀態。",
+  "margins": "營業毛利率為 26.1%，營業利益率為 5.4%，淨利率則為 -3.6%，本期呈現淨利虧損。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "針對 2026 年第三季與全年，公司提供具體的營收與 Adjusted EBITDA 預期範圍。",
+  "outlook": "根據官方數字，本季營業收入為 1.11 億美元，營業利益為 0.06 億美元，但本期淨利為 -0.04 億美元，顯示營運仍處於淨虧損狀態。",
+  "highlights": "• 營業利益維持正數，金額為 0.06 億美元。<br>• 營業毛利為 0.29 億美元，毛利率達 26.1%。",
+  "concerns": "• 本期淨利為 -0.04 億美元，淨利率為 -3.6%，處於虧損狀態。<br>• 每股盈餘（EPS）為 -0.23 美元。",
+  "risks": "• 本期淨利為負值（-0.04 億美元），顯示公司目前面臨盈利能力壓力。<br>• 由於未提供營運現金流與資本支出，無法從財務結構直接評估自由現金流風險。",
+  "keyPoints": "• 本季營業收入為 1.11 億美元，營業利益為 0.06 億美元。<br>• 本期淨利為 -0.04 億美元，呈現淨虧損，淨利率為 -3.6%。<br>• 每股盈餘（EPS）為 -0.23 美元。",
+  "guidanceOfficial": "對於第三季 2026，營收預期介於 1.08 億美元與 1.10 億美元之間，且 Adjusted EBITDA 預期介於 22.5 百萬美元與 23.5 百萬美元之間。對於全年 2026，營收預期介於 4.25 億美元與 4.31 億美元之間，且 Adjusted EBITDA 預期介於 87 百萬美元與 90 百萬美元之間。",
+  "segments": "• 數位廣告（Digital Advertising，對外行銷為 Townsquare Ignite）：包含數位程式化廣告平台、自有及營運之數位資產，以及第一方數據數位管理平台。<br>• 訂閱數位行銷解決方案（Subscription Digital Marketing Solutions）：包含訂閱數位行銷解決方案業務 Townsquare Interactive。<br>• 廣播廣告（Broadcast Advertising）：包含透過無線廣播播送之地方、區域與全國廣告產品及解決方案，以及與廣播廣告平台相關之其他雜項收入。<br>• 其他（Other）：包含現場活動業務。"
+ }
+}

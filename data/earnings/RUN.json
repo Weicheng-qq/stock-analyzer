@@ -1,0 +1,48 @@
+{
+ "symbol": "RUN",
+ "market": "us",
+ "name": "Sunrun Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Sunrun Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "10.99",
+  "營業毛利": null,
+  "營業利益": "1.53",
+  "本期淨利": "1.53",
+  "每股盈餘": 0.56,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-04",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1469367/000162828026070143/exhibit991q326.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-05T08:24:50.913Z",
+ "result": {
+  "revenue": "營業收入為 10.99 億美元。",
+  "eps": "每股盈餘（EPS）為 0.56 美元。",
+  "margins": "營業毛利與毛利率未提供。營業利益率為 13.9%，本期淨利率亦為 13.9%，帶動本期淨利達到 1.53 億美元。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "全年 Aggregate Subscriber Value 預期約 46 億美元，Cash Generation 預期約 200 百萬美元（排除設備安全港投資）。",
+  "outlook": "本季營業利益與本期淨利皆為 1.53 億美元，營業利益率與淨利率均為 13.9%。營運維持獲利表現。",
+  "highlights": "• 營業收入為 10.99 億美元。<br>• 營業利益與本期淨利皆為 1.53 億美元，營業利益率與淨利率同為 13.9%。<br>• 每股盈餘（EPS）為 0.56 美元。",
+  "concerns": "• 營業毛利與毛利率資訊未提供。<br>• 營運現金流與資本支出等現金流數據未提供。<br>• 自由現金流數據未提供。",
+  "risks": "• 官方財務揭露中缺乏營運現金流與資本支出數據，無法直接評估實際自由現金流量狀況。<br>• 毛利與毛利率細節未提供，限縮了成本結構的深入分析能力。",
+  "keyPoints": "• 本季營業收入達到 10.99 億美元。<br>• 營業利益與本期淨利雙雙為 1.53 億美元，淨利率達 13.9%。<br>• 每股盈餘（EPS）報 0.56 美元。",
+  "guidanceOfficial": "For the full-year 2026, Aggregate Subscriber Value is now expected to be approximately 46 億美元, compared to the company’s prior guidance of 46 億美元 to 49 億美元. Cash Generation 1, 2 is now expected to be approximately 2 億美元 for the full-year 2026, excluding investments related to equipment safe harboring, compared to the company’s prior guidance of 2 億美元 to 3.75 億美元.",
+  "segments": "• 客戶合約與獎勵營收：553.5 百萬美元，較 2025 年同期增加 61.9 百萬美元或 13%。<br>• 能源系統與產品銷售營收：546.0 百萬美元，較 2025 年同期增加 313.1 百萬美元或 134%。"
+ }
+}

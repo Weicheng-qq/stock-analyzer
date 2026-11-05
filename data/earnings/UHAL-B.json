@@ -1,0 +1,48 @@
+{
+ "symbol": "UHAL-B",
+ "market": "us",
+ "name": "U-Haul Holding Company",
+ "quarter": "2026 Q2（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "U-Haul Holding Company",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "17.73",
+  "營業毛利": null,
+  "營業利益": "2.65",
+  "本期淨利": "1.37",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-04",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/4457/000119312526447346/uhal-ex99_1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-05T08:28:00.480Z",
+ "result": {
+  "revenue": "營業收入為 17.73 億美元，相較去年同期有所成長。",
+  "eps": "每股盈餘（EPS）官方數字未提供，但根據公司官方新聞稿，Non-Voting Common Stock (UHAL.B) 的每股盈餘為 0.71 美元，高於去年同期的 0.54 美元。",
+  "margins": "營業利益率為 14.9%，淨利率為 7.7%，毛利率則未提供。這些數據反映了本季的獲利能力水準。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司表示結果為 modest win，並將持續進行再投資但採取適當較慢的步伐。",
+  "outlook": "本季營業利益為 2.65 億美元，本期淨利為 1.37 億美元。整體營運在自我搬遷設備租賃與倉儲營收帶動下呈現成長。",
+  "highlights": "• Moving and Storage earnings from operations 增加 44.5 百萬美元至 241.9 百萬美元。<br>• Self-storage revenues 增加 15.8 百萬美元，或 6.4%。<br>• Self-moving equipment rental revenues 增加 37.4 百萬美元，或 3.4%。",
+  "concerns": "• 營業費用增加的主要貢獻者包含 freight and shipping costs 增加 24.4 百萬美元、personnel expense 增加 10.2 百萬美元、property taxes 增加 4.7 百萬美元以及 self-insured liability costs 增加 6.2 百萬美元。<br>• Moving and storage 的現金與信用額度從 2026 年 3 月 31 日的 1,479.4 百萬美元下降至 2026 年 9 月 30 日的 1,335.1 百萬美元。",
+  "risks": "• Moving and Storage Debt Metrics 中，總債務（Total debt）為 8,273,277 千美元。<br>• 浮動利率債務佔比較前期上升，反映在 2026 年 9 月 30 日的 Percent of debt floating 為 10.3%。",
+  "keyPoints": "• 本季營業收入為 17.73 億美元，營業利益為 2.65 億美元，本期淨利為 1.37 億美元。<br>• 自我搬遷設備租賃營收增加 37.4 百萬美元（3.4%），自助倉儲營收增加 15.8 百萬美元（6.4%）。<br>• 於第二季回購了 149,927 股投票普通股與 1,095,478 股無投票權普通股。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Moving and storage：營收 1,694,151 千美元，Earnings from operations before equity in earnings of subsidiaries 為 241,886 千美元。<br>• Property and casualty insurance：營收 37,008 千美元，Earnings from operations 為 16,978 千美元。<br>• Life insurance：營收 44,900 千美元，Earnings from operations 為 6,210 千美元。"
+ }
+}
