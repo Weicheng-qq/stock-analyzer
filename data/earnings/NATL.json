@@ -1,0 +1,48 @@
+{
+ "symbol": "NATL",
+ "market": "us",
+ "name": "NCR ATLEOS CORPORATION",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "NCR ATLEOS CORPORATION",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "10.99",
+  "營業毛利": null,
+  "營業利益": "1.83",
+  "本期淨利": "0.97",
+  "每股盈餘": 1.27,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-04",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1974138/000162828026069799/ex-991ncratleosearningsrel.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-05T07:54:16.155Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q3 營業收入為 10.99 億美元。根據新聞稿節錄，合併營收較去年同期減少 2%。",
+  "eps": "本會計年度 2026 Q3 每股盈餘（EPS）為 1.27 美元。調整後稀釋每股盈餘為 1.35 美元，較去年同期增加 24%。",
+  "margins": "本期營業毛利未提供，毛利率未提供（新聞稿 GAAP 顯示毛利率為 25.8%）。營業利益率為 16.7%，淨利率為 8.8%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "本季營業利益為 1.83 億美元，本期淨利為 0.97 億美元。依據官方新聞稿，鑒於與 The Brink’s Company 的待定交易，Atleos 將不舉辦第三季財報電話會議或提供財務展望。",
+  "highlights": "• Q3 營業收入為 10.99 億美元，營業利益為 1.83 億美元，本期淨利為 0.97 億美元。<br>• 調整後 EBITDA 為 2.41 億美元，較去年同期增加 10%。<br>• 第三季營運現金流為 1.98 億美元，無限制調整後自由現金流為 1.56 億美元。",
+  "concerns": "• 合併營收為 10.99 億美元，較去年同期減少 2%。<br>• Self-Service Banking 部門營收為 7.31 億美元，年減 2%；Network 部門營收為 3.22 億美元，年減 2%。<br>• 鑑於與 The Brink’s Company 的待定交易，公司不提供財務展望及不舉辦財報會議。",
+  "risks": "• 公司正進行與 The Brink’s Company 的待定交易，營運策略與相關程序存在不確定性。<br>• 部分主要業務部門（如 Self-Service Banking 與 Network）營收較去年同期呈現年減。",
+  "keyPoints": "• 營收為 10.99 億美元，EPS 為 1.27 美元，營業利益為 1.83 億美元，本期淨利為 0.97 億美元。<br>• 調整後 EBITDA 達到 2.41 億美元（年增 10%），調整後自由現金流為 1.56 億美元。<br>• 因與 The Brink’s Company 進行待定交易，公司決定不舉辦第三季財報會議或提供財務展望。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "• Self-Service Banking：731 百萬美元，年減 (2)%<br>• Network：322 百萬美元，年減 (2)%<br>• T&T：41 百萬美元，年增 2%"
+ }
+}

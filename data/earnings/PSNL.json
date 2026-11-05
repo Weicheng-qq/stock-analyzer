@@ -1,0 +1,48 @@
+{
+ "symbol": "PSNL",
+ "market": "us",
+ "name": "Personalis, Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Personalis, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.26",
+  "營業毛利": null,
+  "營業利益": "-0.36",
+  "本期淨利": "-0.34",
+  "每股盈餘": -0.32,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-04",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1527753/000119312526447196/psnl-ex99_1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-05T08:00:15.403Z",
+ "result": {
+  "revenue": "Personalis 2026 Q3 營業收入為 0.26 億美元。",
+  "eps": "本季每股盈餘（EPS）為 -0.32 美元，顯示公司處於虧損狀態。",
+  "margins": "營業利益率為 -138.5%，淨利率為 -130.8%，兩項指標均顯示公司目前營運處於虧損狀態。毛利率項目官方未提供相關數據。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司因已與 Tempus AI, Inc. 簽署合併協議，將不再提供財務指引或召開季度財報電話會議。",
+  "outlook": "公司目前正處於與 Tempus AI, Inc. 的合併程序中。由於公司已停止提供財務指引，且本季營運呈現虧損，後續營運將受合併案進度影響。",
+  "highlights": "• 推出 NeXT Personal® Real-Time Variant Tracker™，於 MRD 檢測報告中提供臨床相關抗藥性與治療標靶變異資訊。<br>• 發布 B-STRONGER-1 研究的初步結果，顯示在三陰性乳癌（TNBC）患者中具有 96% 的 ctDNA 檢測靈敏度。<br>• 透過與加州大學聖地牙哥分校（UCSD）合作，證實超靈敏 ctDNA 檢測在預測早期免疫治療反應上的價值。",
+  "concerns": "• 本季營業利益為 -0.36 億美元，顯示公司持續處於營業虧損狀態。<br>• 本季淨利為 -0.34 億美元，顯示公司尚未達成獲利。",
+  "risks": "• 財務結構顯示公司目前營運虧損，營業利益率為 -138.5%，顯示營運成本高於營收。<br>• 公司已進入合併程序，未來營運方向與財務獨立性將面臨重大變動。",
+  "keyPoints": "• 營業收入為 0.26 億美元，但營業利益為 -0.36 億美元，顯示營運虧損。<br>• 每股盈餘（EPS）為 -0.32 美元，反映公司當前的獲利能力挑戰。<br>• 公司已與 Tempus AI, Inc. 簽署合併協議，並停止提供後續財務展望。",
+  "guidanceOfficial": "由於 2026 年 7 月 20 日宣布 Personalis 與 Tempus AI, Inc. 已簽署合併協議與計畫，Personalis 將不再提供財務指引或召開季度財報電話會議。",
+  "segments": "• 臨床檢測量：13,157 次<br>• 臨床營收：440 萬美元<br>• 總營收：2,560 萬美元"
+ }
+}
