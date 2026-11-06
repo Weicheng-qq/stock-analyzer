@@ -1,0 +1,48 @@
+{
+ "symbol": "MNKD",
+ "market": "us",
+ "name": "MannKind Corporation",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "MannKind Corporation",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1.02",
+  "營業毛利": null,
+  "營業利益": "-0.02",
+  "本期淨利": "-0.23",
+  "每股盈餘": -0.07,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/899460/000119312526449743/mnkd-ex99_1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T08:31:31.503Z",
+ "result": {
+  "revenue": "MannKind Corporation 2026年第三季營業收入為 1.02 億美元。",
+  "eps": "2026年第三季每股盈餘（EPS）為 -0.07 美元，本期淨利為 -0.23 億美元，淨利率為 -22.5%，顯示本季處於虧損狀態。",
+  "margins": "本季營業毛利率未提供；營業利益為 -0.02 億美元，營業利益率為 -2.0%，顯示本業處於微幅虧損；本期淨利為 -0.23 億美元，淨利率為 -22.5%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 Furoscix 在第四季將產生比 2026 年上半年更多的營收。",
+  "outlook": "根據官方數據，本季營業收入為 1.02 億美元，但營業利益率為 -2.0%、淨利率為 -22.5%，顯示公司在創造營收的同時仍處於營業利益與本期淨利的虧損狀態。截至 2026 年 9 月 30 日，現金、現金等價物及投資總計為 96.6 百萬美元。",
+  "highlights": "• Furoscix 於 2026 年第三季產生 22.4 百萬美元的淨營收，Furoscix ReadyFlow 於 9 月中旬開始出貨。<br>• Afrezza 於 2026 年第三季產生 19.3 百萬美元的淨銷售額，總處方量較 2022 Q2 增加約 17%。<br>• 於 2026 年 7 月 24 日完成 5,000 萬美元私募增資，所得款項用於支付 FDA 批准 Furoscix ReadyFlow 所觸發的 4,500 萬美元 CVR 款項。",
+  "concerns": "• 營業利益為 -0.02 億美元，營業利益率為 -2.0%，本業呈現虧損。<br>• 本期淨利為 -0.23 億美元，淨利率為 -22.5%，持續面臨淨損壓力。",
+  "risks": "• 公司本季本期淨利為 -0.23 億美元，淨利率達 -22.5%，持續處於虧損狀態。<br>• 營業利益為 -0.02 億美元（營業利益率 -2.0%），本業尚未轉虧為盈。",
+  "keyPoints": "• 2026年第三季營業收入為 1.02 億美元，總營收較去年同期增加 24%。<br>• 本季每股盈餘（EPS）為 -0.07 美元，本期淨利為 -0.23 億美元，淨利率為 -22.5%。<br>• 截至 2026 年 9 月 30 日，現金、現金等價物及投資總計為 96.6 百萬美元。",
+  "guidanceOfficial": "Furoscix ReadyFlow is off to an exceptionally strong start, and we believe Furoscix will generate more revenue in the fourth quarter than it did in the first half of 2026.",
+  "segments": "• Afrezza：19,349 千美元，年增 5%<br>• Furoscix：22,376 千美元，年增 N/A<br>• V-Go：3,277 千美元，年減 (14 %)<br>• Collaborations and services：19,405 千美元，年減 (27 %)<br>• Royalties：37,463 千美元，年增 12%"
+ }
+}

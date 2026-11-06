@@ -1,0 +1,48 @@
+{
+ "symbol": "OTEX",
+ "market": "us",
+ "name": "OPEN TEXT CORP",
+ "quarter": "2027 Q1（2026-07-01～2026-09-30）",
+ "quarterTag": "2027Q1",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "OPEN TEXT CORP",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2027,
+  "season": "Q1",
+  "form": "10-Q",
+  "營業收入": "12.37",
+  "營業毛利": "9.06",
+  "營業利益": "2.51",
+  "本期淨利": "1.55",
+  "每股盈餘": 0.64,
+  "營運現金流": "1.72",
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1002638/000100263826000097/q1-27pressreleaseexhibit991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T08:37:00.528Z",
+ "result": {
+  "revenue": "美股 OPEN TEXT CORP 會計年度 2027 Q1 營業收入為 12.37 億美元，較去年同期有所下降。",
+  "eps": "本季每股盈餘（EPS）為 0.64 美元，展現一定的獲利基礎。",
+  "margins": "本季營業毛利為 9.06 億美元，毛利率達 73.2%，營業利益率為 20.3%，淨利率為 12.5%，顯示公司維持一定的毛利與獲利水準。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "根據官方數字，本季營業利益為 2.51 億美元，本期淨利為 1.55 億美元，營運現金流為 1.72 億美元。整體營運維持獲利與正向現金流狀態。",
+  "highlights": "• 營業收入達 12.37 億美元。<br>• 營業毛利達 9.06 億美元，毛利率達 73.2%。<br>• 本期淨利為 1.55 億美元，淨利率 12.5%。",
+  "concerns": "• 營業收入較去年同期減少 4.0%，總營收為 12.37 億美元。<br>• 部分業務如 Client support 與 License 呈現年減。",
+  "risks": "• 營收呈現年減（總營收為 12.37 億美元，年減 4.0%），需留意核心業務成長動能。<br>• 部分成本與費用項目變動可能對營業利益（2.51 億美元）及淨利（1.55 億美元）造成影響。",
+  "keyPoints": "• 本季營業收入為 12.37 億美元，營業利益為 2.51 億美元。<br>• 毛利率為 73.2%，營業利益率為 20.3%，本期淨利為 1.55 億美元（淨利率 12.5%）。<br>• 每股盈餘（EPS）為 0.64 美元，營運現金流為 1.72 億美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Cloud services and subscriptions：5.05 億美元<br>• Client support：5.34 億（原文未註明幣別）<br>• License：1.24 億（原文未註明幣別）<br>• Professional service and other：7,300 萬（原文未註明幣別）"
+ }
+}

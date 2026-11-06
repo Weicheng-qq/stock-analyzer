@@ -1,0 +1,48 @@
+{
+ "symbol": "LMND",
+ "market": "us",
+ "name": "Lemonade, Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Lemonade, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "3.36",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "-0.44",
+  "每股盈餘": -0.56,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1691421/000169142126000064/lmndshareholderletterq32.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T08:29:41.094Z",
+ "result": {
+  "revenue": "營業收入為 3.36 億美元。",
+  "eps": "每股盈餘（EPS）為 -0.56 美元，處於虧損狀態。",
+  "margins": "毛利率未提供、營業利益率未提供。本期淨利率為 -13.1%，顯示公司仍處於淨虧損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "我們重申全年 IFP 財測，調高 GEP 與營收財測，並持續預期 2026 年 Q4 調整後 EBITDA 為正數，隨後在 2027 會計年度迎來首个全年調整後 EBITDA 為正數的一年。",
+  "outlook": "公司本季營業收入為 3.36 億美元，本期淨利為 -0.44 億美元（淨利率 -13.1%），每股盈餘為 -0.56 美元。<br>管理層在新聞稿中指出，In Force Premium 達到 15.5 億美元（原文提及 15.5 億美元），營收成長率達 73%，毛利成長 48% 至創紀錄的 1.18 億美元。<br>此外，本季調整後 EBITDA 虧損為 0.20 億美元，調整後自由現金流為 2700 萬美元。",
+  "highlights": "• In Force Premium 達到 15.5 億美元，成長 34%，連續第 12 季加速成長。<br>• 營業收入成長 73% 達到 3.36 億美元。<br>• 毛利增加 48% 至創紀錄的 1.18 億美元。",
+  "concerns": "• 本季本期淨利為 -0.44 億美元，持續處於淨虧損狀態。<br>• 每股盈餘（EPS）為 -0.56 美元。",
+  "risks": "• 公司本季本期淨利為負值（-0.44 億美元），顯示仍未脫離虧損階段。<br>• 營業利益及營業毛利等官方數字未提供，財務透明度受限於現有揭露資料。",
+  "keyPoints": "• 營業收入為 3.36 億美元。<br>• 本期淨利為 -0.44 億美元，淨利率為 -13.1%，每股盈餘為 -0.56 美元。<br>• 官方新聞稿指出 In Force Premium 達 15.5 億美元（年增 34%），毛利達 1.18 億美元（年增 48%）。",
+  "guidanceOfficial": "Q4 2026 與 全年 2026（單位皆為百萬美元）：<br>In force premium (IFP)  Q4 2026 預期為 $1,632-$1,639，全年 2026 預期為 $1,632-$1,639。<br>Gross earned premium (GEP) Q4 2026 預期為 $379-$383，全年 2026 預期為 $1,382-$1,386。<br>Revenue Q4 2026 預期為 $342-$346，全年 2026 預期為 $1,231-$1,235。<br>Adjusted EBITDA Q4 2026 預期為 $5-$9，全年 2026 預期為 ($51)-($47)。<br>Stock-based compensation expense Q4 2026 預期為 $24，全年 2026 預期為 $93。<br>Weighted avg. common shares Q4 2026 預期為 78，全年 2026 預期為 77。",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

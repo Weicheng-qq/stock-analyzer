@@ -1,0 +1,48 @@
+{
+ "symbol": "OESX",
+ "market": "us",
+ "name": "Orion Energy Systems, Inc.",
+ "quarter": "2026 Q2（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Orion Energy Systems, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.22",
+  "營業毛利": "0.06",
+  "營業利益": "-0.01",
+  "本期淨利": "-0.01",
+  "每股盈餘": -0.2,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1409375/000119312526448520/oesx-ex99_1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T08:37:11.275Z",
+ "result": {
+  "revenue": "本季營業收入為 0.22 億美元。",
+  "eps": "本季每股盈餘（EPS）為 -0.2 美元，處於每股虧損狀態。",
+  "margins": "本季營業毛利為 0.06 億美元，毛利率為 27.3%；營業利益為 -0.01 億美元，營業利益率為 -4.5%；本期淨利為 -0.01 億美元，淨利率為 -4.5%，顯示公司目前處於營業利益及淨利皆為負數的虧損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 FY'27 全年營收介於 1 億美元至 1.02 億美元之間，且全年調整後 EBITDA 期望為正數。",
+  "outlook": "本季營業收入為 0.22 億美元，營業毛利為 0.06 億美元，但營業利益與本期淨利均為 -0.01 億美元，顯示公司在該期間內面臨虧損。本季每股盈餘為 -0.2 美元。",
+  "highlights": "• 官方公布之營業收入為 0.22 億美元，營業毛利為 0.06 億美元。<br>• 本季毛利率維持在 27.3% 的水準。<br>• 根據新聞稿，公司於 FY'27 預期達成正的調整後 EBITDA，且全年營收預期介於 1 億美元 至 1.02 億美元 美元之間。",
+  "concerns": "• 本季營業利益為 -0.01 億美元，營業利益率為 -4.5%。<br>• 本期淨利為 -0.01 億美元，淨利率為 -4.5%，處於虧損狀態。<br>• 每股盈餘（EPS）為 -0.2 美元。",
+  "risks": "• 公司本季本期淨利為 -0.01 億美元，營業利益同為 -0.01 億美元，顯示目前本業及整體獲利能力面臨虧損風險。<br>• 營運現金流與資本支出等現金流量資訊於本次官方申報資料中未提供，無法評估其現金流轉與資本配置狀況。",
+  "keyPoints": "• 本季營業收入為 0.22 億美元，毛利率為 27.3%。<br>• 本季營業利益與本期淨利皆為 -0.01 億美元，處於淨利率 -4.5% 的虧損狀態。<br>• 本季每股盈餘（EPS）為 -0.2 美元。",
+  "guidanceOfficial": "全 fiscal year 預期在 FY'27（自 2026 年 4 月 1 日開始）實現營收介於 1 億美元（1 億美元）至 1.02 億美元（1.02 億美元）之間，且調整後 EBITDA 為正數。公司並指出預期下半年表現強勁，將在第三季與第四季交付重大專案。",
+  "segments": "• LED lighting revenue was approximately $14.9M in Q2'27, compared to $10.7M in Q2'26。<br>• Maintenance services revenue was $4.0M in Q2'27, compared to $4.5M in Q2'26。<br>• EV charging solutions revenue was $2.8M in Q2'27, compared to $4.8M in Q2'26。"
+ }
+}

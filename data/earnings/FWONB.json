@@ -1,0 +1,48 @@
+{
+ "symbol": "FWONB",
+ "market": "us",
+ "name": "LIBERTY MEDIA CORPORATION",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "LIBERTY MEDIA CORPORATION",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "12.26",
+  "營業毛利": null,
+  "營業利益": "2.37",
+  "本期淨利": "1.63",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1560385/000156038526000028/lmca-ex99d1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T08:30:12.533Z",
+ "result": {
+  "revenue": "營業收入為 12.26 億美元。",
+  "eps": "每股盈餘（EPS）為 未提供 美元。",
+  "margins": "營業利益率為 19.3%，本期淨利率為 13.3%；毛利率則未提供。營業利益率與淨利率反映出本季具體的獲利水準。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供具體財測數字。",
+  "outlook": "本季營業利益為 2.37 億美元，營業利益率達 19.3%，本期淨利為 1.63 億美元，淨利率為 13.3%。各項營運與現金流細節請參閱官方申報表單。",
+  "highlights": "•Formula 1 營收增加 28% 至 $1,115 百萬美元，營業利益為 $270 百萬美元，Adjusted OIBDA 增加 44% 至 $338 百萬美元。<br>•公司宣佈達成一項新協議，將於 2030 年代初期開始在盧安達舉辦非洲大獎賽。<br>•發行 $690 百萬美元 2.375% 於 2032 年到期的可轉換優先票據。",
+  "concerns": "•MotoGP 營收因比賽場數減少而較前一年度同期下降 34% 至 $111 百萬美元。<br>•MotoGP 於本季產生 $3 百萬美元的營業虧損，且 Adjusted OIBDA 下滑 47% 至 $35 百萬美元。<br>•Corporate and other 項目本季持續呈現營業虧損與 Adjusted OIBDA 虧損。",
+  "risks": "•公司資本結構與債務變動包含發行 $690 百萬美元可轉換優先票據以償還 2027 年到期票據。<br>•MotoGP 業務在部分期間出現營業虧損，增添整體財務結構的變數。",
+  "keyPoints": "•本季官方申報之營業收入為 12.26 億美元，營業利益為 2.37 億美元（營業利益率 19.3%）。<br>•本季本期淨利為 1.63 億美元（淨利率 13.3%），EPS 未提供。<br>•Formula 1 營收達 $1,115 百萬美元（年增 28%），MotoGP 營收為 $111 百萬美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "•Formula 1：營收 $1,115 百萬美元，年增 28%，營業利益 $270 百萬美元，Adjusted OIBDA $338 百萬美元。<br>•MotoGP：營收 $111 百萬美元，年減 34%，營業虧損 $3 百萬美元，Adjusted OIBDA $35 百萬美元。<br>•Corporate and other：營收 $6 百萬美元，營業虧損 $30 百萬美元，Adjusted OIBDA 虧損 $20 百萬美元。"
+ }
+}
