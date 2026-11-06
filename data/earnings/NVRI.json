@@ -1,0 +1,48 @@
+{
+ "symbol": "NVRI",
+ "market": "us",
+ "name": "ENVIRI CORPORATION",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "ENVIRI CORPORATION",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "3.25",
+  "營業毛利": null,
+  "營業利益": "0.24",
+  "本期淨利": "0.02",
+  "每股盈餘": 0.09,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/2104052/000210405226000141/pressreleasefinancialstate.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T07:55:44.389Z",
+ "result": {
+  "revenue": "本季營業收入為 3.25 億美元。",
+  "eps": "本季每股盈餘（EPS）為 0.09 美元。",
+  "margins": "營業利益率為 7.4%，淨利率為 0.6%。毛利率未提供，顯示公司在營運成本控制與獲利能力上，目前僅能觀察到營業利益與淨利皆維持在低個位數的水平。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司已調升 2026 年全年 Harsco Environmental 與 Harsco Rail 的調整後 EBITDA 展望。",
+  "outlook": "公司本季營運呈現獲利狀態，GAAP 淨利為 0.06 億美元。管理層指出透過內部改善計畫，預計未來兩年將帶來約 40 億美元的獲利成長。",
+  "highlights": "• 營業收入達 3.25 億美元，營業利益為 0.24 億美元。<br>• 調整後 EBITDA 達 0.47 億美元，高於去年同期的 0.39 億美元。<br>• Harsco Environmental 部門營收達 2.73 億美元，年增 5%。",
+  "concerns": "• 營運現金流為負值，本季淨現金流出為 0.07 億美元。<br>• 調整後每股虧損為 0.16 美元，顯示排除特殊項目後仍處於虧損狀態。<br>• Harsco Rail 部門營收年減，反映出合約結束後的業務調整壓力。",
+  "risks": "• 營運現金流呈現負值，顯示公司本業產生現金的能力面臨挑戰。<br>• 調整後每股盈餘為負值，凸顯排除特殊項目後的獲利結構仍不穩定。",
+  "keyPoints": "• 本季 GAAP 淨利為 0.06 億美元，較去年同期虧損 0.21 億美元有所改善。<br>• 調整後 EBITDA 達 0.47 億美元，調整後 EBITDA 利潤率為 14.4%。<br>• Harsco Environmental 部門營收 2.73 億美元，Harsco Rail 部門營收 0.52 億美元。",
+  "guidanceOfficial": "Harsco Environmental 全年調整後 EBITDA 預期為 1.80 億美元至 1.84 億美元；Harsco Rail 全年調整後 EBITDA 預期為 -0.07 億美元至 -0.10 億美元。",
+  "segments": "• Harsco Environmental：營收 2.73 億美元，較去年同期增加 5%。<br>• Harsco Rail：營收 0.52 億美元，較去年同期減少。"
+ }
+}

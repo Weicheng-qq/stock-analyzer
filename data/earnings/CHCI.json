@@ -1,0 +1,48 @@
+{
+ "symbol": "CHCI",
+ "market": "us",
+ "name": "Comstock Holding Companies, Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Comstock Holding Companies, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.18",
+  "營業毛利": null,
+  "營業利益": "0.02",
+  "本期淨利": "0.01",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1299969/000162828026071174/q326earningsreleasefinal.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T07:49:14.965Z",
+ "result": {
+  "revenue": "Comstock Holding Companies, Inc. 2026年第三季營業收入為 0.18 億美元。",
+  "eps": "每股盈餘（EPS）為未提供。",
+  "margins": "營業利益率為 11.1%，淨利率為 5.6%。毛利率未提供，顯示公司在扣除營運成本後的獲利能力表現。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司表示 2026 年有望實現創紀錄的業績表現。",
+  "outlook": "公司本季營收與淨利均呈現正值，且營業利益率維持在 11.1% 的水準。公司持續擴展其資產管理規模，並積極投入數據中心與多戶住宅開發項目。",
+  "highlights": "• 實現連續 8 個季度的雙位數營收成長。<br>• 調整後 EBITDA 較去年同期成長超過一倍。<br>• 管理資產組合數量由去年同期的 91 個增加至 115 個。",
+  "concerns": "• 營運現金流與資本支出等關鍵現金流指標未提供。<br>• 雖然淨利為正，但淨利率僅為 5.6%，獲利空間相對有限。",
+  "risks": "• 應收帳款中來自關係人的金額達 0.20 億美元，高於當季總營收，存在高度關聯交易風險。<br>• 現金及約當現金由 2025 年底的 0.31 億美元下降至 2026 年第三季的 0.23 億美元。",
+  "keyPoints": "• 2026年第三季營收為 0.18 億美元，淨利為 0.01 億美元。<br>• 調整後 EBITDA 達 0.02 億美元，顯示營運獲利能力較去年同期增強。<br>• 應收關係人款項達 0.20 億美元，需關注其回收狀況與對現金流的影響。",
+  "guidanceOfficial": "公司表示 2026 年有望實現創紀錄的業績表現。",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

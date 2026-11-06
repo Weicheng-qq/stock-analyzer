@@ -1,0 +1,48 @@
+{
+ "symbol": "CALY",
+ "market": "us",
+ "name": "Callaway Golf Company",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Callaway Golf Company",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "4.37",
+  "營業毛利": "2.27",
+  "營業利益": "0.45",
+  "本期淨利": "0.46",
+  "每股盈餘": 0.25,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/837465/000083746526000025/earningsreleaseq32026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T07:46:02.796Z",
+ "result": {
+  "revenue": "2026年第三季營業收入為4.37億美元。整體營收表現反映出公司調整鐵桿上市時程及精簡低毛利產品的策略影響。",
+  "eps": "2026年第三季每股盈餘（EPS）為0.25美元。此數據展現了本季的獲利能力。",
+  "margins": "2026年第三季營業毛利率為51.9%，營業利益率為10.3%，淨利率為10.5%。各項利潤率表現反映了公司持續推動毛利率改善計畫的成效。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司提高全年度2026年的淨銷售額與調整後EBITDA展望。",
+  "outlook": "公司指出，雖然第三季部分地區受到外匯逆風影響，但受惠於Mini Spinner球道木桿與TRTL推桿的成功推出，營收表現優於預期。同時，持續推動毛利率改善計畫與成本管理，支撐了整體獲利表現。",
+  "highlights": "• Q3 Net Sales and Adjusted EBITDA both exceeded expectations.<br>• Q3 GAAP and Non-GAAP Gross Margin increased 1,210 basis points and 520 basis points year-over-year, respectively.<br>• Repurchased 1.35 億美元 of common shares year to date through September 2026.",
+  "concerns": "• Golf Equipment segment net sales decreased 7.9% year-over-year for the three months ended September 30, 2026.<br>• Apparel, Gear and Other segment net sales decreased 1.1% year-over-year for the three months ended September 30, 2026.<br>• 2026第四季預期Adjusted EBITDA為負值（$(53) 百萬至 $(45) 百萬），第四季業績預期將較去年同期下滑。",
+  "risks": "從財報與新聞稿數據顯示，第四季調整後EBITDA預期為負數（$(53) 至 $(45) 百萬），顯示短期獲利面臨季節性或策略調整帶來的壓力。<br>受限於官方揭露資訊，部分現金流與資本支出細節未提供，需持續追蹤其現金部位變動。",
+  "keyPoints": "本季營業收入為4.37億美元，每股盈餘（EPS）為0.25美元，毛利率達51.9%。<br>公司提高全年2026年淨銷售額預期至20.65億至20.78億美元，以及調整後EBITDA預期至2.72億至2.80億美元。<br>截至2026年9月30日止，今年累計回購約1.35億美元的普通股，且公司維持淨現金部位，擁有4.34億美元的無限制現金及現金等價物。",
+  "guidanceOfficial": "公司將全年 2026 年淨銷售額展望提高至 20.65 億美元 - 20.78 億美元，調整後 EBITDA 展望提高至 2.72 億美元 - 2.80 億美元。第四季 2026 年營收預期 3.28 億至 3.41 億美元，調整後 EBITDA 預期 $(53) 百萬至 $(45) 百萬。",
+  "segments": "• Golf Equipment：281.5 百萬美元，較 2025 年同期減少 7.9%（固定匯率下減少 7.1%）<br>• Apparel, Gear and Other：155.4 百萬美元，較 2025 年同期減少 1.1%（固定匯率下持平）"
+ }
+}

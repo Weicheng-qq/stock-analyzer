@@ -1,0 +1,48 @@
+{
+ "symbol": "EXFY",
+ "market": "us",
+ "name": "EXPENSIFY, INC.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "EXPENSIFY, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.33",
+  "營業毛利": "0.15",
+  "營業利益": "-0.03",
+  "本期淨利": "-0.03",
+  "每股盈餘": -0.04,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1476840/000147684026000080/exhibit991-8xkq326earnings.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T07:56:28.987Z",
+ "result": {
+  "revenue": "本季營業收入為 0.33 億美元。",
+  "eps": "本季每股盈餘（EPS）為 -0.04 美元，呈現虧損狀態。",
+  "margins": "本季毛利率為 45.5%，營業利益率與淨利率均為 -9.1%，顯示公司目前處於營業虧損與淨虧損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預估 2026 全年自由現金流為 13.5 億美元至 15.5 億美元。",
+  "outlook": "公司目前處於虧損狀態，但透過調整營運策略與產品功能更新，試圖改善現金流表現。公司正積極推動 Expensify Card 與旅遊業務的擴張，並透過回購股票回饋股東。",
+  "highlights": "• Expensify Card 互換收入成長至 580 萬美元，年增 8%。<br>• Expensify Travel 業務成長顯著，預訂量年增 40%，季增 13%。<br>• 公司回購了 722,121 股 A 類普通股，金額約 130 萬美元。",
+  "concerns": "• 付費會員數為 63 萬，較去年同期減少 2%。<br>• 本季淨虧損為 330 萬美元，較去年同期的 230 萬美元虧損擴大。",
+  "risks": "• 公司目前處於淨虧損狀態，且付費會員數呈現年減趨勢。<br>• 營運高度依賴股票薪酬（Stock Based Compensation）作為費用結構的一部分，未來幾季仍有相關費用支出。",
+  "keyPoints": "• 本季營收為 0.33 億美元，營業利益與淨利均為 -0.03 億美元。<br>• 付費會員數年減 2%，顯示用戶成長面臨挑戰。<br>• 公司預估 2026 全年自由現金流為 13.5 億美元至 15.5 億美元。",
+  "guidanceOfficial": "Expensify 預估 2026 年 12 月 31 日結束之會計年度的自由現金流為 13.5 億美元至 15.5 億美元。",
+  "segments": "• Expensify Card 互換收入：580 萬美元，年增 8%。<br>• New Expensify 營收：季增 30%、年增 212%。<br>• Expensify Travel 預訂量：年增 40%、季增 13%。"
+ }
+}

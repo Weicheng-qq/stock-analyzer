@@ -1,0 +1,48 @@
+{
+ "symbol": "BARK",
+ "market": "us",
+ "name": "BARK, INC.",
+ "quarter": "2027 Q2（2026-07-01～2026-09-30）",
+ "quarterTag": "2027Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "BARK, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2027,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.88",
+  "營業毛利": "0.52",
+  "營業利益": "-0.05",
+  "本期淨利": "-0.04",
+  "每股盈餘": -0.43,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1819574/000162828026071107/q2fy27pressrelease.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T07:40:46.017Z",
+ "result": {
+  "revenue": "營業收入為 0.88 億美元，較去年同期有所下滑。",
+  "eps": "每股盈餘（EPS）為 -0.43 美元，本期處於虧損狀態。",
+  "margins": "營業毛利為 0.52 億美元，毛利率為 59.1%；營業利益為 -0.05 億美元，營業利益率為 -5.7%；本期淨利為 -0.04 億美元，淨利率為 -4.5%，各項利潤率指標顯示公司目前仍在虧損。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期全年總淨營收在 32.5 億至 34.0 億美元之間，調整後 EBITDA 在 7.0 億至 10.0 億美元之間。",
+  "outlook": "根據官方財報數據，營業利益與本期淨利皆為負數，顯示本季仍處於營運虧損。不過調整後 EBITDA 表現為正數，現金與現金等價物有所增加。",
+  "highlights": "• 營業收入為 0.88 億美元。<br>• 營業毛利為 0.52 億美元，毛利率達 59.1%。<br>• 每股盈餘（EPS）為 -0.43 美元，淨利為 -0.04 億美元。",
+  "concerns": "• 營業利益為 -0.05 億美元，營業利益率為 -5.7%。<br>• 本期淨利為 -0.04 億美元，淨利率為 -4.5%。<br>• 每股盈餘（EPS）為 -0.43 美元，顯示本季處於虧損。",
+  "risks": "• 營業利益與本期淨利均為負數，反映出公司目前仍面臨虧損壓力。<br>• 營業利益率為 -5.7%、淨利率為 -4.5%，本業與整體獲利能力仍待改善。",
+  "keyPoints": "• 本季營業收入為 0.88 億美元。<br>• 本季營業毛利為 0.52 億美元，毛利率為 59.1%。<br>• 本季每股盈餘（EPS）為 -0.43 美元，本期淨利為 -0.04 億美元。",
+  "guidanceOfficial": "對於 fiscal year 2027，本公司預期 total net revenue 在 3.25 億美元 至 3.4 億美元 美元之間，且 Adjusted EBITDA 在 700 萬美元 至 1,000 萬美元 美元之間。對於 fiscal third quarter 2027，本公司預期 net revenue 在 8,800 萬美元 至 9,200 萬美元 美元之間，且 Adjusted EBITDA 在 100 萬美元 至 300 萬美元 美元之間。",
+  "segments": "• Toys & Accessories: 30,435 thousand dollars（Three Months Ended September 30, 2026）<br>• Consumables: 27,895 thousand dollars（Three Months Ended September 30, 2026）<br>• Other (BARK Air): 3,518 thousand dollars（Three Months Ended September 30, 2026）<br>• Commerce: 25,715 thousand dollars（Three Months Ended September 30, 2026）"
+ }
+}
