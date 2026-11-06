@@ -1,0 +1,48 @@
+{
+ "symbol": "ZIONP",
+ "market": "us",
+ "name": "ZIONS BANCORPORATION, NATIONAL ASSOCIATION",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "ZIONS BANCORPORATION, NATIONAL ASSOCIATION",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1.92",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "2.63",
+  "每股盈餘": 1.78,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-19",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/109380/000010938026000125/exh991earningsrelease20260.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T09:05:32.950Z",
+ "result": {
+  "revenue": "營業收入為 1.92 億美元，由於上方未提供去年同期或上一季的比較數據，無法計算營收成長率。",
+  "eps": "每股盈餘（EPS）為 1.78 美元，反映本季的獲利水準。",
+  "margins": "營業毛利與營業利益未提供，因此毛利率與營業利益率未提供；本期淨利為 2.63 億美元，淨利率為 137.0%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期資產敏感型資產負債表在升息環境下將產生較強的淨利息收入，且非利息收入持續改善並延續至明年。",
+  "outlook": "根據官方數據，本季客戶存款以年化近 10% 的速度自第二季水準成長，且放款呆帳（net charge-offs）為 3 百萬美元，較去年同期的 5,600 萬美元下降。同時，淨利息收益率（Net Interest Margin）為 3.23%，效率比（Efficiency ratio）為 61.9%。",
+  "highlights": "• 淨利息收益率為 3.23%，調整後 PPNR（前撥備淨營收）為 3.38 億美元。<br>• 淨呆帳（Net charge-offs）降至 3 百萬美元，相較於去年同期的 5,600 萬美元顯著減少。<br>• 於 7 月底完成收購 Basis Investment Group 旗下子公司 Basis Multifamily Finance I, LLC。",
+  "concerns": "• 效率比從去年同期的 59.6% 上升至 61.9%。<br>• 淨利息收益率自去年同期的 3.28% 下降至 3.23%。<br>• 由於貸款投放速度加快及市場競爭激烈，貸款成長與第二季相比持平。",
+  "risks": "• 總貸款與租賃金額為 624.72 億美元，其中非accrual 貸款為 3.11 億美元，總不良資產（Nonperforming assets）為 3.15 億美元。<br>• 分類貸款（Classified loans）為 21.23 億美元，佔總貸款與租賃的比例為 3.40%。",
+  "keyPoints": "• 本期淨利為 2.63 億美元，淨利率達 137.0%，每股盈餘（EPS）為 1.78 美元。<br>• 淨呆帳金額減少至 3 百萬美元，低於去年同期的 5,600 萬美元。<br>• 營業收入為 1.92 億美元，效率比為 61.9%。",
+  "guidanceOfficial": "短中期利率在該季最後一個月開始上升，我們預期具資產敏感性的資產負債表在較高利率環境下應能產生更強的淨利息收入，同時我們看到非利息收入持續改善，預期這項改善將持續到明年。",
+  "segments": "本次資料未揭露分部營收"
+ }
+}

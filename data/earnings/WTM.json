@@ -1,0 +1,48 @@
+{
+ "symbol": "WTM",
+ "market": "us",
+ "name": "WHITE MOUNTAINS INSURANCE GROUP, LTD",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "WHITE MOUNTAINS INSURANCE GROUP, LTD",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "6.41",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "-0.39",
+  "每股盈餘": -17.71,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/776867/000162828026070627/wtmq32026earningsrelease.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T09:03:13.845Z",
+ "result": {
+  "revenue": "白山保險集團（WTM）2026年第三季營業收入為 6.41 億美元。",
+  "eps": "2026年第三季每股盈餘（EPS）為 -17.71 美元，較去年同期的 44.18 美元轉為虧損。",
+  "margins": "本期淨利為 -0.39 億美元，淨利率為 -6.1%，顯示本季處於虧損狀態。營業毛利與營業利益官方皆未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "根據官方數據，本季營業收入為 6.41 億美元，但本期淨利為 -0.39 億美元，每股盈餘為 -17.71 美元，顯示本季營運面臨虧損與獲利壓力。",
+  "highlights": "• 截至2026年9月30日，每股帳面價值為 $2,243 美元，第三季下跌 1%，前九個月累計包含股息在內增加 3%。<br>• Ark 保險業務維持 75% 的綜合成本率（combined ratio），並創造 3.86 億美元的保費收入。<br>• 依據 QTD 分部損益表，Ark 本季稅前淨利為 63.8 百萬美元，WTM Partners 本季稅前淨利為 1.4 百萬美元。",
+  "concerns": "• 本季本期淨利為 -0.39 億美元，每股盈餘為 -17.71 美元，呈現虧損。<br>• MediaAlpha 股價在第三季下跌 24%，對剩餘持股產生 5,400 萬美元的市值損失（mark-to-market losses）。<br>• Kudu 營運數據顯示總收入為 $(5) 百萬美元、稅前虧損 15 百萬美元；HG Global 稅前虧損達 $(27.8) 百萬美元；Distinguished 稅前虧損達 $(12.7) 百萬美元。",
+  "risks": "• 投資組合受到利率變動影響，例如 Kudu 因利率上升導致折現率提高、合約公允價值下降，以及 MediaAlpha 股價下跌造成顯著未實現投資損失。<br>• 部分業務如 Kudu、HG Global、Distinguished 及 Other Operations 本季呈現稅前虧損，對整體財務表現造成負面壓力。",
+  "keyPoints": "• 2026年第三季營業收入為 6.41 億美元，本期淨利為 -0.39 億美元，淨利率為 -6.1%。<br>• 2026年第三季每股盈餘（EPS）為 -17.71 美元。<br>• 截至2026年9月30日，每股帳面價值為 $2,243 美元，單季下滑 1%。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "• Ark/WM Outrigger：總收入 501.0 百萬美元，稅前淨利 63.8 百萬美元。<br>• Kudu：總收入 $(5.0) 百萬美元，稅前虧損 15.3 百萬美元。<br>• HG Global：總收入 $(21.5) 百萬美元，稅前虧損 27.8 百萬美元。<br>• Distinguished：總收入 56.0 百萬美元，稅前虧損 12.7 百萬美元。<br>• WTM Partners：總收入 106.8 百萬美元，稅前淨利 1.4 百萬美元。<br>• Other Operations：總收入 4.0 百萬美元，稅前虧損 32.7 百萬美元。"
+ }
+}

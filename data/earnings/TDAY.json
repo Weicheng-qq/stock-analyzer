@@ -1,0 +1,48 @@
+{
+ "symbol": "TDAY",
+ "market": "us",
+ "name": "USA TODAY CO., INC.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "USA TODAY CO., INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "5.19",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "-0.05",
+  "每股盈餘": -0.03,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1579684/000157968426000056/tdayq32026ex991earningsrel.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T09:00:52.883Z",
+ "result": {
+  "revenue": "本季營業收入為 5.19 億美元。根據新聞稿，總營收較去年同期減少 7.4%。",
+  "eps": "每股盈餘（EPS）為 -0.03 美元，顯示本季處於每股虧損狀態。",
+  "margins": "本期淨利率為 -1.0%，顯示本季處於淨利虧損狀態。營業毛利率與營業利益率由於官方未提供，故不予填列。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 2026 全年總營收在同店基礎上下降中個位數，總調整後 EBITDA、營業現金流與自由現金流預期較前一年下降，但第四季預期將有順序性改善。",
+  "outlook": "本季總營收為 5.19 億美元，本期淨利為 -0.05 億美元，淨利率為 -1.0%。公司在第三季末實施了 1 億美元的年度化成本削減計畫，並預期此舉將在第四季帶來成本結構改善、毛利擴張及調整後 EBITDA 與自由現金流的順序性增長。",
+  "highlights": "• 總營收為 5.19 億美元，總數位營收達 2.493 億美元，占總營收 48.0%。<br>• 本季平均每月不重複訪客為 1.61 億，高於第二季的 1.58 億。<br>• 數位專屬訂閱營收達 4600 萬美元，實現連續第三季年增長，且數位專屬平均每用戶營收（ARPU）達創紀錄的 10.82 美元，年增 23%。",
+  "concerns": "• 本季本期淨利為 -0.05 億美元（歸屬於美國時代公司的淨虧損為 460 萬美元），每股盈餘（EPS）為 -0.03 美元。<br>• 總營收較去年同期減少 7.4%，反映出消費者搜尋習慣的改變以及通膨壓力的影響。<br>• 總調整後 EBITDA、營業現金流與自由現金流預期在 2026 全年將較前一年下降。",
+  "risks": "• 截至 2026 年 9 月 30 日，總債務本金未償金額高達 952.9 億美元（應為 952.9 百萬美元，依官方單位呈現），其中包含 705.1 百萬美元的第一留置權債務，第一留置權淨槓桿率為 2.5 倍。<br>• 本季面臨消費者搜尋行為改變與通膨壓力，且總調整後 EBITDA、營運現金流與自由現金流全年預期將較前一年下降。",
+  "keyPoints": "• 2026 年 Q3 營業收入為 5.19 億美元，本期淨利為 -0.05 億美元（淨利率 -1.0%），每股盈餘（EPS）為 -0.03 美元。<br>• 總數位營收達 2.493 億美元（占總營收 48.0%），其中數位專屬訂閱營收 4600 萬美元，ARPU 達 10.82 美元（年增 23%）。<br>• 截至 2026 年 9 月 30 日，現金及現金等價物為 68.2 百萬美元，總債務本金未償金額為 952.9 百萬美元（含 705.1 百萬美元第一留置權債務）。",
+  "guidanceOfficial": "The Company is updating its full year 2026 outlook. • Full Year 2026 Business Outlook ◦ Total revenues are expected to be down in the mid-single digits on a same store basis ▪ Total digital revenues are expected to make up 50%+ of total revenues during 2027 ◦ Net income attributable to USA TODAY Co. is expected to grow versus the prior year; expect sequential improvement in the fourth quarter of 2026 ◦ Total Adjusted EBITDA, cash provided by operating activities, and free cash flow are expected to decline versus the prior year; expect sequential improvement in the fourth quarter of 2026",
+  "segments": "• 總數位營收：2.493 億美元（佔總營收 48.0%）<br>• 數位廣告營收：7500 萬美元<br>• 數位專屬訂閱營收：4600 萬美元<br>• LocaliQ部門核心平台營收：1.054 億美元"
+ }
+}

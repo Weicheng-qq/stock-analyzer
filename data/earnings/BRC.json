@@ -1,0 +1,48 @@
+{
+ "symbol": "BRC",
+ "market": "us",
+ "name": "BRADY CORP",
+ "quarter": "2026 Q3（2026-02-01～2026-04-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "BRADY CORP",
+  "currency": "億美元",
+  "periodStart": "2026-02-01",
+  "periodEnd": "2026-04-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "4.35",
+  "營業毛利": "2.25",
+  "營業利益": "0.73",
+  "本期淨利": "0.58",
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-05-18",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/746598/000074659826000019/exhibit991pressrelease0430.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T09:10:08.157Z",
+ "result": {
+  "revenue": "本公司營業收入為 4.35 億美元。依新聞稿指出，銷貨收入較去年同期增加 13.8% 至 4.352 億美元。",
+  "eps": "本期每股盈餘（EPS）官方數字未提供。依新聞稿指出，稀釋每股盈餘為 1.21 美元，調整後稀釋每股盈餘為 1.50 美元。",
+  "margins": "營業毛利率為 51.7%，營業利益率為 16.8%，淨利率為 13.3%。顯示公司在營業活動中維持穩健的毛利水準與獲利能力。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司將截至 2026 年 7 月 31 日的全年 GAAP 稀釋每股盈餘財測調整為 4.66 至 4.76 美元，並將全年調整後稀釋每股盈餘財測調高至 5.20 至 5.30 美元。",
+  "outlook": "本季營業收入為 4.35 億美元，營業毛利為 2.25 億美元，營業利益為 0.73 億美元，本期淨利為 0.58 億美元。營運現金流增加至 7,820 萬美元，且公司處於淨現金部位 1.486 億美元。",
+  "highlights": "• 營業收入達 4.35 億美元，銷貨收入較去年同期增加 13.8%。<br>• 本期淨利為 0.58 億美元，稀釋每股盈餘為 1.21 美元，調整後稀釋每股盈餘為 1.50 美元。<br>• 營運現金流增加至 7,820 萬美元，截至 2026 年 4 月 30 日的淨現金部位為 1.486 億美元。",
+  "concerns": "• 自由現金流與資本支出官方數字未提供。<br>• EPS 的官方標準數字未直接提供於 XBRL 摘要中，需依賴新聞稿補充。<br>• 相關非經常性併購相關成本與開支可能對短期費用造成影響。",
+  "risks": "• 資本支出與自由現金流資訊未提供，無法自官方摘要中完整評估現金再投資與資本配置效率。<br>• 依賴外匯換算與收購所帶動的營收成長，可能面臨匯率波動與併購整合的不確定性風險。",
+  "keyPoints": "• 本季營業收入為 4.35 億美元，營業利益為 0.73 億美元，淨利為 0.58 億美元。<br>• 營運現金流增加至 7,820 萬美元，淨現金部位達 1.486 億美元。<br>• 全年調整後稀釋每股盈餘財測調高至 5.20 至 5.30 美元。",
+  "guidanceOfficial": "GAAP earnings per diluted Class A Nonvoting Common share guidance for the year ending July 31, 2026 was adjusted from the previous range of $4.62 to $4.82 per share to $4.66 to $4.76 per share. Adjusted Diluted EPS* Guidance was raised for the full year ending July 31, 2026 from the previous range of $4.95 to $5.15 per share to the new range of $5.20 to $5.30 per share。",
+  "segments": "• 美洲與亞洲（Americas & Asia）三個月淨銷售額為 290,055 千美元（去年同期為 253,652 千美元），九個月淨銷售額為 810,552 千美元（去年同期為 732,926 千美元）。<br>• 歐洲與澳洲（Europe & Australia）三個月淨銷售額為 145,182 千美元（去年同期為 128,938 千美元），九個月淨銷售額為 414,109 千美元（去年同期為 383,404 千美元）。"
+ }
+}

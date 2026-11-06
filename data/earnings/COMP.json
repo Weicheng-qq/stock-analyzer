@@ -1,0 +1,48 @@
+{
+ "symbol": "COMP",
+ "market": "us",
+ "name": "COMPASS, INC.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "COMPASS, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "43.06",
+  "營業毛利": null,
+  "營業利益": "1.24",
+  "本期淨利": "0.92",
+  "每股盈餘": 0.11,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1563190/000156319026000175/exhibit9918-k3q26pr.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T09:10:32.827Z",
+ "result": {
+  "revenue": "營業收入為 43.06 億美元。",
+  "eps": "每股盈餘（EPS）為 0.11 美元。",
+  "margins": "營業利益率為 2.9%，營業利益為 1.24 億美元；淨利率為 2.1%，本期淨利為 0.92 億美元。毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司提供了第四季與全年 2026 年的營運展望與財測。",
+  "outlook": "根據官方數據，本季營業收入為 43.06 億美元，營業利益為 1.24 億美元，本期淨利為 0.92 億美元，整體維持獲利狀態。",
+  "highlights": "• 營業利益為 1.24 億美元，營業利益率達 2.9%。<br>• 本期淨利為 0.92 億美元，淨利率達 2.1%。<br>• 每股盈餘（EPS）為 0.11 美元。",
+  "concerns": "• 營業毛利與毛利率未提供。<br>• 營運現金流與自由現金流未提供。",
+  "risks": "• 部分關鍵財務數據如營運現金流與資本支出未提供，增添財務結構評估的侷限。<br>• 營業利益率為 2.9%、淨利率為 2.1%，獲利空間相對有限。",
+  "keyPoints": "• 本季營業收入達 43.06 億美元。<br>• 本季營業利益為 1.24 億美元，本期淨利為 0.92 億美元。<br>• 每股盈餘（EPS）為 0.11 美元。",
+  "guidanceOfficial": "Q4 2026 Outlook: ● Revenue of 31.5 億美元 to 33.5 億美元 for Q4 ● Adjusted EBITDA of 1 億美元 to 1.3 億美元 for Q4 Full Year 2026 Outlook: ● Non-GAAP OPEX of 27.1 億美元 to 27.3 億美元, reflecting a decrease from the prior range of 27.5 億美元 to 28 億美元 ● Free cash flow positive for the full year 2026",
+  "segments": "• Brokerage: Q3 2026 Segment revenue 35.78 億美元<br>• Franchise: Q3 2026 Segment revenue 1.22 億美元<br>• Integrated Services: Q3 2026 Segment revenue 1.97 億美元"
+ }
+}

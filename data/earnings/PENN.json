@@ -1,0 +1,48 @@
+{
+ "symbol": "PENN",
+ "market": "us",
+ "name": "PENN Entertainment, Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "PENN Entertainment, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "18.40",
+  "營業毛利": null,
+  "營業利益": "1.27",
+  "本期淨利": "0.33",
+  "每股盈餘": 0.24,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/921738/000092173826000026/pennex991-q32026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T08:48:55.639Z",
+ "result": {
+  "revenue": "本季營業收入為 18.40 億美元，展現一定的規模水準。",
+  "eps": "本季每股盈餘（EPS）為 0.24 美元，實現獲利表現。",
+  "margins": "本季營業毛利與毛利率未提供；營業利益率為 6.9%，本期淨利率則為 1.8%，顯示整體營運獲利空間相對有限。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期達成 Interactive 區段的全年 Adjusted EBITDA 目標。",
+  "outlook": "根據官方數據，本季營業利益為 1.27 億美元，本期淨利為 0.33 億美元，維持獲利狀態。Retail 區段持續展現穩健的營運表現與調整後 EBITDAR，Interactive 區段則持續朝獲利目標推進。",
+  "highlights": "• Retail 區段營收達 15 億美元，Segment Adjusted EBITDAR 達 501.8 百萬美元，利潤率達 33.7%。<br>• Interactive 區段營收達 348.4 百萬美元（包含 191.4 百萬美元稅務總額），Adjusted EBITDA 虧損 18.3 百萬美元。<br>• 截至 2026 年 9 月 30 日，總流動性為 20 億美元，其中包括 10 億美元的現金及現金等價物。",
+  "concerns": "• Interactive 區段本季仍處於 Adjusted EBITDA 虧損 18.3 百萬美元的狀態。<br>• 營業利益率為 6.9%，淨利率僅為 1.8%，獲利空間較窄。",
+  "risks": "• 公司需持續應對來自 Interactive 區段的虧損壓力與獲利改善進度。<br>• 須留意整體營運成本與利息支出對本期淨利（0.33 億美元）的壓抑風險。",
+  "keyPoints": "• 本季營業收入為 18.40 億美元，營業利益為 1.27 億美元。<br>• 本期淨利為 0.33 億美元，每股盈餘（EPS）為 0.24 美元。<br>• Retail 區段表現穩健，營收達 15 億美元，而 Interactive 區段則呈 18.3 百萬美元的 Adjusted EBITDA 虧損。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Retail segment revenues: 15 億美元。<br>• Retail segment Adjusted EBITDAR: 5.02 億美元。<br>• Retail segment Adjusted EBITDAR margins: 33.7%。<br>• Interactive segment Revenues: 3.48 億美元 (including tax gross-up of 1.91 億美元)。<br>• Interactive segment Adjusted EBITDA loss: 1,830 萬美元。"
+ }
+}

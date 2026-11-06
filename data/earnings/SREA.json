@@ -1,0 +1,48 @@
+{
+ "symbol": "SREA",
+ "market": "us",
+ "name": "SEMPRA",
+ "quarter": "2026 Q1（2026-01-01～2026-03-31）",
+ "quarterTag": "2026Q1",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "SEMPRA",
+  "currency": "億美元",
+  "periodStart": "2026-01-01",
+  "periodEnd": "2026-03-31",
+  "year": 2026,
+  "season": "Q1",
+  "form": "10-Q",
+  "營業收入": "34.28",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "10.37",
+  "每股盈餘": 1.58,
+  "營運現金流": "18.09",
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1032208/000103220826000051/ex99_1x20260930xearningsta.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T08:54:08.812Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q1 營業收入為 34.28 億美元。<br>營業毛利與營業利益則未提供相關數據。",
+  "eps": "本會計年度 2026 Q1 每股盈餘（EPS）為 1.58 美元。<br>本期淨利為 10.37 億美元，淨利率為 30.3%。",
+  "margins": "本期毛利率未提供，營業利益率亦未提供。<br>本期淨利率為 30.3%，顯示本期淨利佔營業收入之比例。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "Sempra 更新 2026 全年 GAAP EPS 財測區間至 $7.41 至 $8.41，並將調整後 EPS 財測區間指引至高標 $4.80 至 $5.30。",
+  "outlook": "本期營運現金流為 18.09 億美元，本期淨利為 10.37 億美元，每股盈餘為 1.58 美元。<br>資本支出、自由現金流、營業毛利及營業利益等項目均未提供。",
+  "highlights": "• 本會計年度 2026 Q1 營業收入為 34.28 億美元。<br>• 本期淨利為 10.37 億美元，淨利率為 30.3%。<br>• 本期營運現金流達 18.09 億美元，每股盈餘（EPS）為 1.58 美元。",
+  "concerns": "• 營業毛利、營業利益及相關利潤率均未提供。<br>• 資本支出與自由現金流數據未提供。<br>• 部分財務細節與未提供項目需留意官方後續揭露。",
+  "risks": "• 因官方財報資料未提供資本支出與自由現金流，無法完全評估其現金再投資與資本配置能力。<br>• 營業毛利與營業利益未提供，限制了對核心本業獲利結構的完整分析。",
+  "keyPoints": "• 營運收入為 34.28 億美元，本期淨利為 10.37 億美元。<br>• 每股盈餘（EPS）為 1.58 美元，淨利率為 30.3%。<br>• 營運現金流為 18.09 億美元，資本支出與自由現金流則未提供。",
+  "guidanceOfficial": "Sempra is updating its full-year 2026 GAAP earnings-per-common share (EPS) guidance range to $7.41 to $8.41, reflecting strong results through the third quarter, guiding to the high end of its 2026 adjusted EPS guidance range of $4.80 to $5.30 and affirming its 2027 EPS guidance range of $5.10 to $5.70。",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

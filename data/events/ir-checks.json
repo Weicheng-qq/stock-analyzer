@@ -4732,14 +4732,14 @@
   "kind": ""
  },
  "CBRE": {
-  "at": "2026-10-29T11:19:28.731Z",
+  "at": "2026-11-06T08:44:22.282Z",
   "market": "us",
   "name": "CBRE GROUP, INC.",
   "seen": "2026Q3",
   "kind": "transcript"
  },
  "FIX": {
-  "at": "2026-10-29T11:19:32.051Z",
+  "at": "2026-11-06T08:44:25.488Z",
   "market": "us",
   "name": "COMFORT SYSTEMS USA, INC.",
   "seen": "沒有文件",
@@ -4860,7 +4860,7 @@
   "pendingSince": "2026-10-24T14:22:07.989Z"
  },
  "WYNN": {
-  "at": "2026-10-24T14:22:37.332Z",
+  "at": "2026-11-06T08:42:52.688Z",
   "market": "us",
   "name": "WYNN RESORTS, LIMITED",
   "seen": "沒有文件",
@@ -5487,7 +5487,7 @@
   "kind": ""
  },
  "AWK": {
-  "at": "2026-10-29T10:43:13.899Z",
+  "at": "2026-11-06T08:43:40.474Z",
   "market": "us",
   "name": "AMERICAN WATER WORKS COMPANY, INC.",
   "seen": "季別不明",
@@ -6316,10 +6316,10 @@
   "kind": "presentation"
  },
  "VRSK": {
-  "at": "2026-10-31T19:24:34.025Z",
+  "at": "2026-11-06T08:42:46.636Z",
   "market": "us",
   "name": "Verisk Analytics, Inc.",
-  "seen": "2026Q2",
+  "seen": "2026Q3",
   "kind": "transcript",
   "done": "2026Q2",
   "pending": false,
@@ -7217,5 +7217,90 @@
   "name": "UNITY SOFTWARE INC.",
   "seen": "2026Q3",
   "kind": "release"
+ },
+ "VTRS": {
+  "at": "2026-11-06T08:42:49.747Z",
+  "market": "us",
+  "name": "VIATRIS INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "ZTS": {
+  "at": "2026-11-06T08:42:57.302Z",
+  "market": "us",
+  "name": "Zoetis Inc.",
+  "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "AKAM": {
+  "at": "2026-11-06T08:43:00.280Z",
+  "market": "us",
+  "name": "Akamai Technologies, Inc",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "AEE": {
+  "at": "2026-11-06T08:43:08.638Z",
+  "market": "us",
+  "name": "AMEREN CORP",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-11-06T08:43:08.638Z"
+ },
+ "AXON": {
+  "at": "2026-11-06T08:43:25.127Z",
+  "market": "us",
+  "name": "AXON ENTERPRISE, INC.",
+  "seen": "2026Q3",
+  "kind": "transcript",
+  "done": "2026Q3",
+  "pending": false,
+  "pendingSince": ""
+ },
+ "APD": {
+  "at": "2026-11-06T08:43:35.364Z",
+  "market": "us",
+  "name": "AIR PRODUCTS AND CHEMICALS, INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "TEAM": {
+  "at": "2026-11-06T08:43:45.205Z",
+  "market": "us",
+  "name": "Atlassian Corporation",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "BDX": {
+  "at": "2026-11-06T08:43:52.746Z",
+  "market": "us",
+  "name": "BECTON, DICKINSON AND COMPANY",
+  "seen": "2026Q4",
+  "kind": "presentation",
+  "done": "2026Q4",
+  "pending": true,
+  "pendingSince": "2026-11-06T08:43:52.746Z"
+ },
+ "CPT": {
+  "at": "2026-11-06T08:44:10.908Z",
+  "market": "us",
+  "name": "CAMDEN PROPERTY TRUST",
+  "seen": "2026Q3",
+  "kind": "release",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-11-06T08:44:10.908Z"
+ },
+ "DVN": {
+  "at": "2026-11-06T08:44:33.045Z",
+  "market": "us",
+  "name": "DEVON ENERGY CORP/DE",
+  "seen": "2026Q3",
+  "kind": "presentation",
+  "done": "2026Q3",
+  "pending": true,
+  "pendingSince": "2026-11-06T08:44:33.045Z"
  }
 }
