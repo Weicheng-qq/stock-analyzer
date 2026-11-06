@@ -1,0 +1,48 @@
+{
+ "symbol": "VIRT",
+ "market": "us",
+ "name": "Virtu Financial, Inc.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Virtu Financial, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "11.90",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "1.51",
+  "每股盈餘": 1.63,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1592386/000110465926123022/tm2629046d1_ex99-1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T09:36:16.512Z",
+ "result": {
+  "revenue": "營業收入為 11.90 億美元。",
+  "eps": "每股盈餘（EPS）為 1.63 美元。",
+  "margins": "本期淨利為 1.51 億美元，淨利率為 12.7%。毛利率與營業利益率未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "根據官方數字，本期營收為 11.90 億美元，本期淨利為 1.51 億美元，淨利率達 12.7%，每股盈餘（EPS）為 1.63 美元。其餘財務細節未在官方數據中提供。",
+  "highlights": "• 營業收入達 11.90 億美元。<br>• 本期淨利為 1.51 億美元，淨利率 12.7%。<br>• 每股盈餘（EPS）為 1.63 美元。",
+  "concerns": "• 營業毛利與營業利益率未提供。<br>• 營運現金流與資本支出等現金流數據未提供。<br>• 自由現金流數據未提供。",
+  "risks": "• 因官方僅提供部分財報數字，缺乏毛利率、營業利益率與現金流等完整結構數據，較難全面評估其成本控制與資金流向風險。<br>• 營業毛利與營業利益相關指標未提供，增加營運獲利穩定性的評估難度。",
+  "keyPoints": "• 本期營業收入為 11.90 億美元。<br>• 本期淨利為 1.51 億美元，淨利率為 12.7%。<br>• 每股盈餘（EPS）為 1.63 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Market Making：三個月營收 Trading income, net 為 $819,716 千美元、Commissions, net and technology services 為 $17,614 千美元、Interest and dividends income 為 $147,941 千美元、Other, net 為 $1,507 千美元，Total Revenues 為 $986,778 千美元。<br>• Execution Services：三個月營收 Trading income, net 為 $482 千美元、Commissions, net and technology services 為 $154,612 千美元、Interest and dividends income 為 $3,214 千美元、Other, net 為 $4,723 千美元，Total Revenues 為 $163,031 千美元。<br>• Corporate：三個月營收 Other, net 為 $4,131 千美元，Total Revenues 為 $4,131 千美元。"
+ }
+}

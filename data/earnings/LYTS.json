@@ -1,0 +1,48 @@
+{
+ "symbol": "LYTS",
+ "market": "us",
+ "name": "LSI Industries Inc.",
+ "quarter": "2026 FY（2026-04-01～2026-06-30）",
+ "quarterTag": "2026FY",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "LSI Industries Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "FY",
+  "form": "10-K",
+  "營業收入": "2.35",
+  "營業毛利": "0.57",
+  "營業利益": null,
+  "本期淨利": "0.07",
+  "每股盈餘": 0.18,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/763532/000143774926035087/ex_1038447.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T09:28:44.304Z",
+ "result": {
+  "revenue": "營業收入為 2.35 億美元。",
+  "eps": "每股盈餘（EPS）為 0.18 美元。",
+  "margins": "營業毛利為 0.57 億美元，毛利率為 24.3%，本期淨利為 0.07 億美元，淨利率為 3.0%，營業利益率與營業利益則未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "根據官方財報新聞稿，營業收入較去年同期成長 44%，其中 Display Solutions Segment 銷售額增加 83%，Lighting Segment 則較去年同期下滑 6%。本季本期淨利為 0.07 億美元，淨利率為 3.0%。",
+  "highlights": "•營業收入達 2.35 億美元，銷售額較去年同期成長 44%。<br>•營業毛利為 0.57 億美元，毛利率達 24.3%。<br>•每股盈餘（EPS）為 0.18 美元。",
+  "concerns": "•Lighting Segment 淨銷售額較去年同期下滑 6%，反映更廣泛的商業與工業市場需求疲軟。<br>•本期淨利為 0.07 億美元，淨利率為 3.0%。",
+  "risks": "•營業利益與營業利益率未提供，無法從官方財報摘要中直接檢視核心本業獲利能力。<br>•營運現金流與資本支出未提供，無法評估自由現金流的實際變動風險。",
+  "keyPoints": "•本季營業收入為 2.35 億美元，較去年同期成長 44%。<br>•本季毛利率為 24.3%，營業毛利為 0.57 億美元。<br>•每股盈餘（EPS）為 0.18 美元，淨利率為 3.0%。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "•Lighting Segment：淨銷售額 64,823 千美元，較去年同期減少 6%。<br>•Display Solutions Segment (Comparable Display Solutions Sales)：88,620 千美元，較去年同期增加 1%。<br>•Display Solutions Segment (Royston)：72,412 千美元。<br>•Total Display Solutions Sales：161,032 千美元，較去年同期增加 83%。"
+ }
+}

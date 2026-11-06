@@ -1,0 +1,48 @@
+{
+ "symbol": "MP",
+ "market": "us",
+ "name": "MP Materials Corp. / DE",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "MP Materials Corp. / DE",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "1.08",
+  "營業毛利": null,
+  "營業利益": "-0.32",
+  "本期淨利": "-0.20",
+  "每股盈餘": -0.11,
+  "營運現金流": null,
+  "資本支出": "2.30",
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1801368/000180136826000056/mpmcq32026er.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T09:29:50.661Z",
+ "result": {
+  "revenue": "營業收入為 1.08 億美元。",
+  "eps": "每股盈餘（EPS）為 -0.11 美元，本期呈現淨損。",
+  "margins": "營業利益率為 -29.6%，淨利率為 -18.5%，顯示公司目前仍處於營業與淨利虧損狀態，毛利率則未提供。",
+  "fcf": "未提供",
+  "capex": "資本支出為 2.30 億美元。",
+  "guidance": "公司已完成通用汽車（GM）磁鐵認證，預計於第四季開始進行可銷售的磁鐵交付與營收認列。",
+  "outlook": "根據官方財報資料，公司本季營業利益率為 -29.6%、淨利率為 -18.5%，本期淨利為 -0.20 億美元，顯示本季仍處於虧損狀態。同時，資本支出達 2.30 億美元，並完成通用汽車磁鐵認證，預期相關交付與營收將於第四季開始貢獻。",
+  "highlights": "• 營業收入達 1.08 億美元。<br>• 完成通用汽車（GM）磁鐵認證，預計第四季開始有可銷售的磁鐵交付與營收。<br>• 本期淨損為 -0.20 億美元，每股盈餘（EPS）為 -0.11 美元。",
+  "concerns": "• 本季營業利益為 -0.32 億美元，營業利益率為 -29.6%。<br>• 本期淨利為 -0.20 億美元，淨利率為 -18.5%，持續處於虧損狀態。<br>• 資本支出達 2.30 億美元。",
+  "risks": "• 公司目前呈現營業利益率 -29.6% 與淨利率 -18.5% 的虧損情況。<br>• 資本支出達 2.30 億美元，對現金流形成顯著支出壓力。",
+  "keyPoints": "• 營業收入為 1.08 億美元，每股盈餘（EPS）為 -0.11 美元。<br>• 營業利益為 -0.32 億美元（營業利益率 -29.6%），本期淨利為 -0.20 億美元（淨利率 -18.5%），仍處於虧損。<br>• 資本支出為 2.30 億美元，且已完成通用汽車磁鐵認證並預計第四季開始營收認列。",
+  "guidanceOfficial": "Most importantly, we completed the GM qualification process, with saleable magnet deliveries and revenue beginning in the fourth quarter.",
+  "segments": "• 材料部門（Materials Segment）營收 133,539 千美元，年增 322%（相較 2025 年同期 31,641 千美元）<br>• 磁鐵部門（Magnetics Segment）營收 18,623 千美元，年減 15%（相較 2025 年同期 21,912 千美元）<br>• 內部沖銷（Intercompany eliminations）營收 -1 千美元（相較 2025 年同期 -4,507 千美元）"
+ }
+}

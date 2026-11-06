@@ -1,0 +1,48 @@
+{
+ "symbol": "TEAD",
+ "market": "us",
+ "name": "Teads Holding Co.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Teads Holding Co.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "2.85",
+  "營業毛利": "0.96",
+  "營業利益": "-0.16",
+  "本期淨利": "-0.42",
+  "每股盈餘": -0.44,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1454938/000145493826000074/q32026er-exhibit991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-06T09:35:21.172Z",
+ "result": {
+  "revenue": "2026 Q2 營業收入為 2.85 億美元，反映公司整體的營收規模。",
+  "eps": "2026 Q2 每股盈餘（EPS）為 -0.44 美元，呈現虧損狀態。",
+  "margins": "2026 Q2 營業毛利為 0.96 億美元，毛利率為 33.7%；營業利益為 -0.16 億美元，營業利益率為 -5.6%；本期淨利為 -0.42 億美元，淨利率為 -14.7%，顯示本季處於營業利益及本期淨利皆為負值的虧損情況。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司已暫停包括 2026 全年調整後 EBITDA 財測在內的所有指引，目前不提供財測。",
+  "outlook": "根據官方財務數據，本季營業收入為 2.85 億美元，但營業利益率為 -5.6% 且淨利率為 -14.7%，顯示本季面臨營運虧損。同時，公司在申報資料中提到已暫停全年 2026 相關財測指引，目前未提供未來預測。",
+  "highlights": "• 營業收入達到 2.85 億美元。<br>• 營業毛利為 0.96 億美元，毛利率為 33.7%。",
+  "concerns": "• 營業利益為 -0.16 億美元，營業利益率為 -5.6%，呈現營業虧損。<br>• 本期淨利為 -0.42 億美元，淨利率為 -14.7%，每股盈餘（EPS）為 -0.44 美元。<br>• 公司已暫停包括 2026 全年調整後 EBITDA 在內的所有財測指引。",
+  "risks": "• 公司本季持續處於虧損狀態，營業利益與本期淨利均為負值。<br>• 管理層已選擇暫停提供 2026 全年相關財務指引。",
+  "keyPoints": "• 本季營業收入為 2.85 億美元，毛利率為 33.7%。<br>• 本季每股盈餘（EPS）為 -0.44 美元，本期淨利為 -0.42 億美元（淨利率 -14.7%）。<br>• 官方已暫停全年 2026 調整後 EBITDA 等財測指引。",
+  "guidanceOfficial": "As previously announced, we have suspended guidance, including our full-year 2026 Adjusted EBITDA guidance, and we are not providing guidance at this time.",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}
