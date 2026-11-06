@@ -1872,11 +1872,11 @@
   "kind": ""
  },
  "2337": {
-  "at": "2026-11-03T06:59:45.061Z",
+  "at": "2026-11-06T07:00:06.098Z",
   "market": "tw",
   "name": "旺宏",
-  "seen": "沒有文件",
-  "kind": "",
+  "seen": "2026Q3",
+  "kind": "release",
   "done": "2026Q3",
   "pending": true,
   "pendingSince": "2026-10-28T00:35:22.106Z"
@@ -3408,7 +3408,7 @@
   "kind": ""
  },
  "3013": {
-  "at": "2026-10-17T01:15:31.046Z",
+  "at": "2026-11-06T07:01:25.527Z",
   "market": "tw",
   "name": "晟銘電",
   "seen": "沒有文件",
@@ -4213,7 +4213,7 @@
   "kind": ""
  },
  "6505": {
-  "at": "2026-10-15T01:29:53.578Z",
+  "at": "2026-11-06T07:01:09.777Z",
   "market": "tw",
   "name": "台塑化",
   "seen": "沒有文件",
@@ -4255,7 +4255,7 @@
   "kind": ""
  },
  "6643": {
-  "at": "2026-11-04T07:08:47.448Z",
+  "at": "2026-11-06T07:01:15.297Z",
   "market": "tw",
   "name": "M31",
   "seen": "沒有文件",
@@ -4346,7 +4346,7 @@
   "kind": ""
  },
  "8210": {
-  "at": "2026-10-28T00:35:51.577Z",
+  "at": "2026-11-06T07:01:30.374Z",
   "market": "tw",
   "name": "勤誠",
   "seen": "沒有文件",
@@ -4409,7 +4409,7 @@
   "kind": ""
  },
  "MU": {
-  "at": "2026-10-11T01:47:56.952Z",
+  "at": "2026-11-06T06:59:18.488Z",
   "market": "us",
   "name": "Micron Technology, Inc.",
   "seen": "沒有文件",
@@ -4711,9 +4711,9 @@
   "kind": ""
  },
  "LHX": {
-  "at": "2026-10-30T10:41:08.310Z",
+  "at": "2026-11-06T07:01:00.763Z",
   "market": "us",
-  "name": "L3HARRIS TECHNOLOGIES, INC.",
+  "name": "L3HARRIS TECHNOLOGIES, INC. /DE/",
   "seen": "2026Q3",
   "kind": "presentation"
  },
@@ -4788,7 +4788,7 @@
   "kind": "presentation"
  },
  "JBL": {
-  "at": "2026-11-03T06:58:52.184Z",
+  "at": "2026-11-06T06:59:08.383Z",
   "market": "us",
   "name": "JABIL INC",
   "seen": "2026Q4",
@@ -4819,14 +4819,14 @@
   "kind": "transcript"
  },
  "BR": {
-  "at": "2026-11-03T06:58:47.040Z",
+  "at": "2026-11-06T06:59:03.160Z",
   "market": "us",
   "name": "BROADRIDGE FINANCIAL SOLUTIONS, INC.",
   "done": "2026Q4",
   "kind": "presentation",
   "pending": true,
   "pendingSince": "2026-10-24T14:20:31.304Z",
-  "seen": "2026Q4"
+  "seen": "2027Q1"
  },
  "CRH": {
   "at": "2026-11-05T08:42:15.947Z",
@@ -5087,7 +5087,7 @@
   "kind": ""
  },
  "V": {
-  "at": "2026-10-28T09:47:55.604Z",
+  "at": "2026-11-06T06:59:22.741Z",
   "market": "us",
   "name": "VISA INC.",
   "seen": "沒有文件",
@@ -5104,7 +5104,7 @@
   "pendingSince": ""
  },
  "SOFI": {
-  "at": "2026-10-31T12:45:51.626Z",
+  "at": "2026-11-06T07:00:55.501Z",
   "market": "us",
   "name": "SoFi Technologies, Inc.",
   "seen": "2026Q3",
@@ -5293,7 +5293,7 @@
   "kind": ""
  },
  "EXR": {
-  "at": "2026-11-03T06:58:36.205Z",
+  "at": "2026-11-06T06:58:55.547Z",
   "market": "us",
   "name": "EXTRA SPACE STORAGE INC.",
   "seen": "2026Q3",
@@ -5620,7 +5620,7 @@
   "kind": ""
  },
  "LNT": {
-  "at": "2026-11-03T06:58:29.808Z",
+  "at": "2026-11-06T06:58:50.037Z",
   "market": "us",
   "name": "ALLIANT ENERGY CORP",
   "seen": "2026Q3",
@@ -5637,7 +5637,7 @@
   "kind": ""
  },
  "ADP": {
-  "at": "2026-11-03T06:58:24.980Z",
+  "at": "2026-11-06T06:58:44.836Z",
   "market": "us",
   "name": "AUTOMATIC DATA PROCESSING, INC.",
   "seen": "2027Q1",
@@ -7077,5 +7077,12 @@
   "done": "2026Q3",
   "pending": true,
   "pendingSince": "2026-11-05T09:17:45.306Z"
+ },
+ "ROK": {
+  "at": "2026-11-06T07:01:03.911Z",
+  "market": "us",
+  "name": "Rockwell Automation, Inc.",
+  "seen": "沒有文件",
+  "kind": ""
  }
 }
