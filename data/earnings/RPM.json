@@ -1,0 +1,48 @@
+{
+ "symbol": "RPM",
+ "market": "us",
+ "name": "RPM International Inc.",
+ "quarter": "2026 Q1（2026-06-01～2026-08-31）",
+ "quarterTag": "2026Q1",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "RPM International Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-06-01",
+  "periodEnd": "2026-08-31",
+  "year": 2026,
+  "season": "Q1",
+  "form": "10-Q",
+  "營業收入": "22.16",
+  "營業毛利": "9.14",
+  "營業利益": null,
+  "本期淨利": "2.56",
+  "每股盈餘": 2.01,
+  "營運現金流": "2.64",
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-10-06",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/110621/000119312526414916/d80757dex991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-07T07:17:43.169Z",
+ "result": {
+  "revenue": "本季營業收入為 22.16 億美元。",
+  "eps": "本季每股盈餘（EPS）為 2.01 美元。",
+  "margins": "本季毛利率為 41.2%，淨利率為 11.6%。營業利益率則為未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 2027 會計年度第二季及全年的銷售額與調整後 EBITDA 將呈現低至中個位數的成長。",
+  "outlook": "公司營運受到 Performance Coatings Group 與 Consumer Group 的有機成長帶動，儘管面臨原物料通膨與部分市場需求放緩的挑戰，整體仍維持獲利表現。公司透過製造與 SG&A 的效率優化措施，成功抵銷了部分成本壓力。",
+  "highlights": "• 營業收入達 22.16 億美元，本期淨利為 2.56 億美元。<br>• 營運現金流為 2.64 億美元，顯示良好的營運資金效率。<br>• Performance Coatings Group 與 Consumer Group 表現穩健，帶動整體銷售成長。",
+  "concerns": "• Construction Products Group 部門營收成長不如預期，且調整後 EBITDA 較去年同期下滑 9.7%。<br>• 受到原物料通膨、歐洲業務保固費用以及客戶破產導致的呆帳費用影響，部分獲利空間受到壓縮。",
+  "risks": "• 營運面臨原物料通膨與供應鏈短缺的持續性壓力。<br>• 歐洲特定業務面臨保固費用增加及潛在關閉風險，且客戶破產導致呆帳費用增加。",
+  "keyPoints": "• 營收達 22.16 億美元，每股盈餘（EPS）為 2.01 美元。<br>• 營運現金流為 2.64 億美元，較去年同期有所改善。<br>• 儘管面臨通膨與部分部門需求疲軟，公司仍維持 2027 全年銷售與調整後 EBITDA 中個位數成長的展望。",
+  "guidanceOfficial": "2027 會計年度第二季展望：合併銷售額預計較去年同期成長低至中個位數；Construction Products Group 銷售額預計成長低個位數；Performance Coatings Group 銷售額預計成長中至高個位數；Consumer Group 銷售額預計成長低至中個位數；合併調整後 EBITDA 預計成長低至中個位數。2027 會計年度全年展望：合併銷售額預計較去年同期成長中個位數；合併調整後 EBITDA 預計成長中個位數。",
+  "segments": "• Construction Products Group：8.59 億美元，年增 0.8%。<br>• Performance Coatings Group：6.30 億美元，年增 10.2%。<br>• Consumer Group：7.27 億美元，年增 5.3%。"
+ }
+}
