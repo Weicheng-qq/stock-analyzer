@@ -1,0 +1,48 @@
+{
+ "symbol": "KG",
+ "market": "us",
+ "name": "Kestrel Group Ltd",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Kestrel Group Ltd",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.05",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "-0.16",
+  "每股盈餘": -2.09,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-06",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/2055116/000162828026071709/kg-20261106.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-07T06:52:33.703Z",
+ "result": {
+  "revenue": "本季營業收入為 0.05 億美元。",
+  "eps": "本季每股盈餘（EPS）為 -2.09 美元，呈現虧損狀態。",
+  "margins": "本季淨利率為 -320.0%，顯示公司處於虧損狀態。營業毛利與營業利益率均未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司目標在未來一年內實現約 500 萬美元的經常性費用節省。",
+  "outlook": "公司目前正透過廣泛的費用削減計畫來優化成本結構。營運重點在於將資源集中於具備最高潛在回報的業務領域。",
+  "highlights": "• Program Services 部門表現強勁，費用收入達 290 萬美元，年增 203%。<br>• Program Services 客戶產生的保費總額為 1.212 億美元，年增 132%。<br>• 截至 2026 年 9 月 30 日，公司每股帳面價值為 12.44 美元。",
+  "concerns": "• 本季淨損達 1,640 萬美元，每股虧損 2.09 美元。<br>• Legacy Reinsurance 部門本季出現 640 萬美元的承保損失。",
+  "risks": "• Legacy Reinsurance 部門的 Diversified 業務面臨持續的承保損失與準備金發展壓力。<br>• 公司目前仍處於淨虧損狀態，且營運現金流與資本支出等財務數據未提供，財務透明度受限。",
+  "keyPoints": "• Program Services 部門費用收入年增 203%，顯示該業務具成長動能。<br>• 公司正執行費用削減計畫，目標在未來一年內節省約 500 萬美元費用。<br>• 本季淨損為 1,640 萬美元，每股虧損為 2.09 美元。",
+  "guidanceOfficial": "公司目標在未來一年內實現約 500 萬美元的經常性費用節省。",
+  "segments": "• Program Services 部門：費用收入 290 萬美元（年增 203%），費用營收 410 萬美元（年增 151%），客戶產生保費 1.212 億美元（年增 132%）。<br>• Legacy Reinsurance 部門：承保損失 640 萬美元（其中 AmTrust 業務承保收入 0.1 萬美元，Diversified 業務承保損失 650 萬美元）。"
+ }
+}

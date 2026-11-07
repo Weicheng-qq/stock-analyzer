@@ -1,0 +1,48 @@
+{
+ "symbol": "IMCR",
+ "market": "us",
+ "name": "Immunocore Holdings plc",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Immunocore Holdings plc",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1.02",
+  "營業毛利": null,
+  "營業利益": "-0.14",
+  "本期淨利": "-0.14",
+  "每股盈餘": -0.28,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-06",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1671927/000167192726000034/pressrelease-q32026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-07T06:48:58.997Z",
+ "result": {
+  "revenue": "本季營業收入為 1.02 億美元。",
+  "eps": "本季每股盈餘（EPS）為 -0.28 美元，呈現虧損狀態。",
+  "margins": "本季營業利益率與淨利率皆為 -13.7%，顯示公司目前處於營業虧損狀態。毛利率相關資訊未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供具體的財務預測數字。",
+  "outlook": "公司目前處於商業化階段，主要營收來源為 KIMMTRAK 產品銷售。營運狀況顯示公司正持續投入資源於研發活動，目前仍處於虧損狀態。",
+  "highlights": "•本季營業收入達 1.02 億美元。<br>•KIMMTRAK 產品銷售持續於美國、歐洲及國際市場成長。<br>•研發費用為 74.7 百萬美元。",
+  "concerns": "•本季營業利益為 -0.14 億美元，顯示公司仍處於虧損。<br>•本季淨利為 -0.14 億美元，呈現虧損狀態。<br>•營運現金流與資本支出資訊未提供，無法評估現金流動性。",
+  "risks": "•公司目前處於虧損狀態，營業利益率與淨利率皆為 -13.7%。<br>•研發費用支出高達 74.7 百萬美元，對公司財務結構造成壓力。",
+  "keyPoints": "•本季營業收入為 1.02 億美元。<br>•本季每股盈餘（EPS）為 -0.28 美元，呈現虧損。<br>•營業利益與淨利均為 -0.14 億美元，顯示公司尚未轉虧為盈。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "•KIMMTRAK 美國銷售：62.2 百萬美元。<br>•KIMMTRAK 歐洲銷售：34.9 百萬美元。<br>•KIMMTRAK 國際地區銷售：5.1 百萬美元。"
+ }
+}
