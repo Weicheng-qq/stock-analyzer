@@ -1,0 +1,48 @@
+{
+ "symbol": "CG",
+ "market": "us",
+ "name": "Carlyle Group Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Carlyle Group Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "3.34",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "-0.08",
+  "每股盈餘": -0.02,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-05",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1527166/000152716626000049/cg202609308-kexx992edgar.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-07T19:35:21.953Z",
+ "result": {
+  "revenue": "本季營業收入為 3.34 億美元。",
+  "eps": "本季每股盈餘（EPS）為 -0.02 美元，呈虧損狀態。",
+  "margins": "毛利率與營業利益率官方資料標示未提供。本期淨利率為 -2.4%，反映公司在 GAAP 基礎下本季營運呈現虧損。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供具體財測。",
+  "outlook": "公司管理層指出目前具備接近歷史新高水準的待收費資產管理規模（Pending FEAUM），對未來成長保持正面看待。但從 GAAP 損益來看，本季淨利仍處於虧損 -0.08 億美元的狀態。",
+  "highlights": "• 總部門營收（Total Segment Revenues）達 9.945 億美元，優於去年同期的 7.825 億美元。<br>• 可分配盈餘（Distributable Earnings）達 4.325 億美元（每股 1.12 美元），高於去年同期的 3.684 億美元（每股 0.96 美元）。<br>• 總資產管理規模（Total AUM）達 4,790 億美元，較去年同期成長 1%。",
+  "concerns": "• 本期淨利為 -0.08 億美元（淨利率 -2.4%），每股盈餘為 -0.02 美元，呈現虧損。<br>• GAAP 基金管理費收入（Fund management fees）由去年同期的 5.833 億美元下滑至 5.554 億美元。<br>• 費用相關盈餘（Fee Related Earnings）由去年同期的 3.119 億美元降至 2.926 億美元。",
+  "risks": "部分公開投資項目市場價格下跌導致未實現績效分配沖回，對 GAAP 損益造成壓力。<br>截至 2026 年 9 月 30 日，前三季綜合基礎設施基金投資之累積未實現投資虧損達約 2.22 億美元，預計將於 2026 年第四季處置時實現該筆虧損。",
+  "keyPoints": "營業收入為 3.34 億美元，本期淨利為 -0.08 億美元（每股盈餘 -0.02 美元）。<br>部門總營收為 9.945 億美元，每股稅後可分配盈餘（Distributable Earnings per share）為 1.12 美元。<br>期末總資產管理規模（AUM）為 4,790 億美元，收費資產管理規模（FEAUM）為 3,300 億美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "本次資料未揭露分部營收"
+ }
+}
