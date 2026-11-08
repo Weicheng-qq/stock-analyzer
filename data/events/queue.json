@@ -1,31 +1,21 @@
 {
- "generatedAt": "2026-11-08T17:57:31.032Z",
+ "generatedAt": "2026-11-08T22:11:52.867Z",
  "lookbackDays": 3,
  "counts": {
-  "high": 3,
+  "high": 2,
   "medium": 665,
   "low": 402,
-  "total": 1070
+  "total": 1069
  },
  "queue": [
   {
    "market": "tw",
-   "symbol": "2248",
-   "name": "華勝-KY",
+   "symbol": "4912",
+   "name": "聯德控股-KY",
    "reasons": [
     "上市重大訊息：法說會/財報"
    ],
-   "eventDate": "1151107",
-   "priority": "HIGH"
-  },
-  {
-   "market": "tw",
-   "symbol": "6272",
-   "name": "驊陞",
-   "reasons": [
-    "上市重大訊息：法說會/財報"
-   ],
-   "eventDate": "1151107",
+   "eventDate": "1151108",
    "priority": "HIGH"
   },
   {
@@ -977,7 +967,7 @@
   },
   {
    "market": "us",
-   "symbol": "CGABL",
+   "symbol": "CG",
    "forms": [
     "10-Q"
    ],
@@ -1295,7 +1285,7 @@
   },
   {
    "market": "us",
-   "symbol": "EFC-PC",
+   "symbol": "EFC-PD",
    "forms": [
     "10-Q"
    ],
@@ -3312,7 +3302,7 @@
   },
   {
    "market": "us",
-   "symbol": "RC-PC",
+   "symbol": "RC-PE",
    "forms": [
     "10-Q"
    ],
@@ -3546,7 +3536,7 @@
   },
   {
    "market": "us",
-   "symbol": "SHO-PH",
+   "symbol": "SHO-PI",
    "forms": [
     "10-Q",
     "8-K"
@@ -3598,7 +3588,7 @@
   },
   {
    "market": "us",
-   "symbol": "TDS-PU",
+   "symbol": "TDS-PV",
    "forms": [
     "10-Q",
     "8-K"
@@ -3764,7 +3754,7 @@
   },
   {
    "market": "us",
-   "symbol": "UEPEM",
+   "symbol": "UEPCO",
    "forms": [
     "10-Q"
    ],
@@ -4233,7 +4223,7 @@
   },
   {
    "market": "us",
-   "symbol": "AQNB",
+   "symbol": "AGQPF",
    "forms": [
     "6-K"
    ],
@@ -5613,7 +5603,7 @@
   },
   {
    "market": "us",
-   "symbol": "ELME",
+   "symbol": "ELMES",
    "forms": [
     "8-K"
    ],
@@ -5883,7 +5873,7 @@
   },
   {
    "market": "us",
-   "symbol": "IIPR-PB",
+   "symbol": "IIPR-PA",
    "forms": [
     "8-K"
    ],
@@ -6213,7 +6203,7 @@
   },
   {
    "market": "us",
-   "symbol": "ONFOW",
+   "symbol": "ONFOP",
    "forms": [
     "8-K"
    ],
@@ -6373,7 +6363,7 @@
   },
   {
    "market": "us",
-   "symbol": "PSA-PL",
+   "symbol": "PSA-PF",
    "forms": [
     "8-K"
    ],
