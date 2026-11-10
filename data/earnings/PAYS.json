@@ -1,0 +1,48 @@
+{
+ "symbol": "PAYS",
+ "market": "us",
+ "name": "PAYSIGN, INC.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "PAYSIGN, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.28",
+  "營業毛利": "0.18",
+  "營業利益": "0.07",
+  "本期淨利": "0.07",
+  "每股盈餘": 0.11,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-09",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1496443/000168316826008440/paysign_ex9901.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-10T05:32:06.246Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q2 的營業收入為 0.28 億美元。",
+  "eps": "本會計年度 2026 Q2 的每股盈餘（EPS）為 0.11 美元。",
+  "margins": "本會計年度 2026 Q2 的營業毛利為 0.18 億美元，毛利率為 64.3%；營業利益為 0.07 億美元，營業利益率為 25.0%；本期淨利為 0.07 億美元，淨利率為 25.0%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "確認全年 2026 年營收展望為 1.14 億美元至 1.17 億美元，並調高毛利率、淨利、GAAP 稀釋每股盈餘及調整後 EBITDA 之全年財測。",
+  "outlook": "根據官方財報資料，本會計年度 2026 Q2 營業收入為 0.28 億美元，營業利益與本期淨利均為 0.07 億美元，獲利表現穩定。同時，公司在新聞稿中指出病人負擔能力業務持續成長，帶動相關營運與利潤擴張。",
+  "highlights": "• 營業收入達 0.28 億美元，營業利益與本期淨利皆為 0.07 億美元。<br>• 營業毛利為 0.18 億美元，毛利率水準達 64.3%。<br>• 每股盈餘（EPS）為 0.11 美元。",
+  "concerns": "• 營運現金流與資本支出等現金流量資訊於本次官方資料中未提供。<br>• 根據新聞稿節錄，第四季預期將有 113 個血漿中心轉移至其他提供者。",
+  "risks": "• 血漿業務客戶可能將部分中心轉移至競爭對手或其他提供者，進而影響相關業務營收。<br>",
+  "keyPoints": "• 本會計年度 2026 Q2 營業收入為 0.28 億美元，每股盈餘（EPS）為 0.11 美元。<br>• 營業利益率與淨利率皆為 25.0%，本期淨利為 0.07 億美元。<br>• 營運現金流與資本支出於本期官方資料中未提供。",
+  "guidanceOfficial": "Full Year 2026 Revenue $114.0M – $117.0M Revenue growth (YoY) 39.0% – 43.0% Gross profit margin 63.5% – 64.5% Net income $23.0M – $24.0M Diluted EPS $0.37 – $0.38 Adjusted EBITDA $38.5M – $40.0M",
+  "segments": "• Pharma revenue increased 109.8% to 1,662 萬美元 in Q3’26 versus Q3’25; added 62 net patient affordability programs during the past 12 months, exiting the quarter with 167 active programs<br>• Plasma revenue increased 7.5% to 1,383 萬美元 in Q3’26 versus Q3’25; total net plasma center count decreased by 33 during the past 12 months, exiting the quarter with 562 centers"
+ }
+}
