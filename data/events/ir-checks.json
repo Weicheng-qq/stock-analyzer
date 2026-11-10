@@ -4906,9 +4906,9 @@
   "seen": "2027Q1"
  },
  "CRH": {
-  "at": "2026-11-05T08:42:15.947Z",
+  "at": "2026-11-10T04:53:09.803Z",
   "market": "us",
-  "name": "CRH public limited company",
+  "name": "CRH PUBLIC LTD CO",
   "seen": "2026Q3",
   "kind": "presentation"
  },
@@ -5056,10 +5056,10 @@
   "kind": "presentation"
  },
  "FDX": {
-  "at": "2026-10-29T10:21:44.415Z",
+  "at": "2026-11-10T04:53:14.700Z",
   "market": "us",
   "name": "FedEx Corporation",
-  "seen": "2026Q4",
+  "seen": "2026Q3",
   "kind": "presentation"
  },
  "DHI": {
@@ -5136,7 +5136,7 @@
   "kind": ""
  },
  "CINF": {
-  "at": "2026-10-27T05:49:22.977Z",
+  "at": "2026-11-10T04:53:06.220Z",
   "market": "us",
   "name": "CINCINNATI FINANCIAL CORPORATION",
   "seen": "2026Q3",
@@ -5293,7 +5293,7 @@
   "kind": ""
  },
  "AMT": {
-  "at": "2026-10-28T10:20:49.651Z",
+  "at": "2026-11-10T04:52:59.337Z",
   "market": "us",
   "name": "AMERICAN TOWER CORPORATION",
   "seen": "沒有文件",
@@ -5861,9 +5861,9 @@
   "kind": "presentation"
  },
  "TEL": {
-  "at": "2026-11-08T17:58:22.784Z",
+  "at": "2026-11-10T04:52:25.164Z",
   "market": "us",
-  "name": "TE CONNECTIVITY PLC",
+  "name": "TE CONNECTIVITY PLC",
   "seen": "2026Q4",
   "kind": "presentation",
   "done": "2026Q4",
@@ -6740,7 +6740,7 @@
   "kind": "presentation"
  },
  "KDP": {
-  "at": "2026-11-07T13:12:09.253Z",
+  "at": "2026-11-10T04:52:36.510Z",
   "market": "us",
   "name": "Keurig Dr Pepper Inc.",
   "seen": "2026Q3",
@@ -6933,7 +6933,7 @@
   "kind": "presentation"
  },
  "CRL": {
-  "at": "2026-11-05T07:31:59.577Z",
+  "at": "2026-11-10T04:53:02.396Z",
   "market": "us",
   "name": "CHARLES RIVER LABORATORIES INTERNATIONAL, INC.",
   "seen": "沒有文件",
@@ -7311,7 +7311,7 @@
   "kind": "presentation"
  },
  "AKAM": {
-  "at": "2026-11-06T08:43:00.280Z",
+  "at": "2026-11-10T04:52:56.023Z",
   "market": "us",
   "name": "Akamai Technologies, Inc",
   "seen": "沒有文件",
@@ -7396,10 +7396,10 @@
   "kind": ""
  },
  "VST": {
-  "at": "2026-11-06T09:18:56.905Z",
+  "at": "2026-11-10T04:52:53.089Z",
   "market": "us",
-  "name": "Vistra Operations Company LLC",
-  "seen": "2026Q2",
+  "name": "Vistra Corp.",
+  "seen": "2026Q3",
   "kind": "presentation"
  },
  "DAL": {
@@ -7410,13 +7410,14 @@
   "kind": "transcript"
  },
  "BEN": {
-  "at": "2026-11-07T06:10:57.267Z",
+  "at": "2026-11-10T04:52:21.009Z",
   "market": "us",
-  "name": "FRANKLIN RESOURCES INC",
+  "name": "FRANKLIN TEMPLETON, INC.",
   "done": "2026Q4",
   "kind": "presentation",
   "pending": true,
-  "pendingSince": "2026-11-07T06:10:57.267Z"
+  "pendingSince": "2026-11-07T06:10:57.267Z",
+  "seen": "2026Q4"
  },
  "MRNA": {
   "at": "2026-11-07T06:37:40.547Z",
@@ -7451,6 +7452,41 @@
   "market": "us",
   "name": "NIKE, Inc.",
   "seen": "2027Q1",
+  "kind": "transcript"
+ },
+ "CEG": {
+  "at": "2026-11-10T04:52:28.570Z",
+  "market": "us",
+  "name": "CONSTELLATION ENERGY CORPORATION",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "FERG": {
+  "at": "2026-11-10T04:52:32.268Z",
+  "market": "us",
+  "name": "Ferguson Enterprises Inc.",
+  "seen": "季別不明",
+  "kind": "presentation"
+ },
+ "NRG": {
+  "at": "2026-11-10T04:52:39.727Z",
+  "market": "us",
+  "name": "NRG ENERGY, INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "TTWO": {
+  "at": "2026-11-10T04:52:43.706Z",
+  "market": "us",
+  "name": "TAKE-TWO INTERACTIVE SOFTWARE, INC.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "TTD": {
+  "at": "2026-11-10T04:52:49.669Z",
+  "market": "us",
+  "name": "TRADE DESK, INC.",
+  "seen": "2026Q3",
   "kind": "transcript"
  }
 }

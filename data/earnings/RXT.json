@@ -1,0 +1,48 @@
+{
+ "symbol": "RXT",
+ "market": "us",
+ "name": "RACKSPACE TECHNOLOGY, INC.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "RACKSPACE TECHNOLOGY, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "6.09",
+  "營業毛利": "1.13",
+  "營業利益": "-0.13",
+  "本期淨利": "-0.54",
+  "每股盈餘": -0.21,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-09",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1810019/000181001926000113/rxt991_q32026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-10T05:10:43.999Z",
+ "result": {
+  "revenue": "營業收入為 6.09 億美元，較去年同期下滑約 9.3%。其中私有雲營收成長，公有雲營收則呈現顯著衰退。",
+  "eps": "每股盈餘（EPS）為 -0.21 美元，相較去年同期的 -0.28 美元有所改善，但本季仍處於每股虧損狀態。",
+  "margins": "營業毛利率為 18.6%，營業利益率為 -2.1%，本期淨利率則為 -8.9%。儘管毛利維持正向，但營業利益與本期淨利皆為負數，顯示本季仍面臨營運虧損。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司小幅調高全年營收展望，同時維持非公認會計原則（Non-GAAP）營業利益與調整後 EBITDA 展望不變。",
+  "outlook": "本季整體營收較去年同期減少，主因公有雲營收下滑所致，儘管營業利益與淨利仍為負數，但虧損金額較去年同期有所收斂。<br>公司全年營收展望預期在 2,510 至 2,560 百萬美元之間，並持續執行其企業 AI 基礎設施與解決方案之營運計畫。",
+  "highlights": "• 私有雲營收為 2.60 億美元，較去年同期成長 4%（按報導及固定匯率基準）。<br>• 營業損失自去年同期的 -0.34 億美元改善至 -0.13 億美元。<br>• 淨損為 -0.54 億美元，較去年同期的 -0.67 億美元減少。",
+  "concerns": "• 公有雲營收為 3.49 億美元，較去年同期大幅下滑 17.2%。<br>• 本季營業利益率為 -2.1%，營業利益為 -0.13 億美元，本業尚未轉虧為盈。<br>• 本季淨利率為 -8.9%，本期淨利為 -0.54 億美元，持續處於虧損狀態。",
+  "risks": "• 公司本季營業利益與本期淨利皆為負數，顯示持續承受本業與淨利虧損的財務壓力。<br>• 公有雲營收年減幅度達 17.2%，反映出特定業務板塊面臨明顯的營收衰退風險。",
+  "keyPoints": "• 第三季營業收入為 6.09 億美元，年減約 9%。<br>• 第三季每股盈餘（EPS）為 -0.21 美元，本期淨利為 -0.54 億美元，持續呈現虧損。<br>• 全年營收預期調整為 2,510 至 2,560 百萬美元（中位數調高 35 百萬美元），私有雲預期 995 至 1,015 百萬美元，公有雲預期 1,515 至 1,545 百萬美元。",
+  "guidanceOfficial": "FY 2026 Guidance Total Revenue $2,510 - 25.6 億美元 Private Cloud Revenue $995 - 10.15 億美元 Public Cloud Revenue $1,515 - 15.45 億美元 Non-GAAP Operating Profit $125 - 1.35 億美元 Adjusted EBITDA $285 - 2.95 億美元 Non-GAAP Loss Per Share ($0.25) - ($0.30) Non-GAAP Other Income (Expense) ($220) – ($230) million Non-GAAP Tax Expense Rate 26% Non-GAAP Weighted Average Shares 265 - 2.75 億（原文未註明幣別）",
+  "segments": "• Public Cloud: Revenue 3.49 億美元, down 17.2% Actual and Constant Currency.<br>• Private Cloud: Revenue 2.6 億美元, up 4.2% Actual and Constant Currency.<br>• Total consolidated revenue: 6.09 億美元, down 9.3% Actual and 9.2% Constant Currency."
+ }
+}
