@@ -1,0 +1,48 @@
+{
+ "symbol": "AMCX",
+ "market": "us",
+ "name": "AMC Global Media Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "AMC Global Media Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "5.66",
+  "營業毛利": null,
+  "營業利益": "-0.42",
+  "本期淨利": "-0.47",
+  "每股盈餘": -1.13,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-09",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1514991/000151499126000109/amcx-11926ex991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-10T04:34:50.063Z",
+ "result": {
+  "revenue": "美股 AMC Global Media Inc.（代碼 AMCX）會計年度 2026 Q3 的營業收入為 5.66 億美元。",
+  "eps": "本季每股盈餘（EPS）為 -1.13 美元，呈現虧損狀態。",
+  "margins": "本季營業利益率為 -7.4%，淨利率為 -8.3%，兩項指標皆為負值，顯示公司目前處於營業利益與本期淨利皆虧損的狀況。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "根據官方提供之數字，本季營業利益為 -0.42 億美元（營業利益率 -7.4%），本期淨利為 -0.47 億美元（淨利率 -8.3%），顯示本季營運持續面臨虧損壓力。",
+  "highlights": "• 國內業務中，串流媒體營收增加 4% 至 1.81 億美元，內容授權營收增加 42% 至 8.4 億美元。<br>• 國際業務之總營收為 7,325 萬美元（約 0.73 億美元），較去年同期減少 5.0%。<br>• 達成與羅曼·柯克曼等原告之法律和解協議，總對價為 1.2 億美元（包含已支付之 8,500 萬美元現金及 3,500 萬美元合約預付款）。",
+  "concerns": "• 營業利益為 -0.42 億美元，營業利益率為 -7.4%，本期淨利為 -0.47 億美元，淨利率為 -8.3%，顯示公司持續虧損。<br>• 國內業務中，有線電視基本訂閱戶減少導致有線電視營收下降 11% 至 1.27 億美元，廣告營收亦減少 7% 至 1.02 億美元。<br>• 國內分部調整後營業利益（Segment Adjusted Operating Income）減少 21% 至 8,913 萬美元，主要受技術與營運費用增加影響。",
+  "risks": "• 公司本季本期淨利為 -0.47 億美元，每股盈餘（EPS）為 -1.13 美元，持續面臨淨利虧損與每股盈餘為負的財務風險。<br>• 債務結構顯示總債務達 17.35 億美元，且槓桿比率達 4.5 倍，需留意相應的債務償還與流動性壓力。",
+  "keyPoints": "• 營收表現：2026 Q3 營業收入為 5.66 億美元。<br>• 獲利表現：營業利益為 -0.42 億美元（營業利益率 -7.4%），本期淨利為 -0.47 億美元（淨利率 -8.3%），每股盈餘（EPS）為 -1.13 美元。<br>• 債務狀況：總債務為 1,735,554 萬美元（約 17.35 億美元），槓桿比率為 4.5x。",
+  "guidanceOfficial": "公司未於本次資料提供財測。",
+  "segments": "• Domestic Operations - Subscription: 308,447 thousand dollars，年減 (2.5) %<br>• Domestic Operations - Advertising: 102,448 thousand dollars，年減 (6.9) %<br>• Domestic Operations - Content licensing and other: 84,247 thousand dollars，年增 41.7 %<br>• International - Subscription: 46,088 thousand dollars，年減 (4.2) %<br>• International - Advertising: 24,255 thousand dollars，年減 (6.3) %<br>• International - Content licensing and other: 2,911 thousand dollars，年減 (7.9) %"
+ }
+}

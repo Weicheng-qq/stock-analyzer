@@ -1,0 +1,48 @@
+{
+ "symbol": "DCGO",
+ "market": "us",
+ "name": "DocGo Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "DocGo Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.73",
+  "營業毛利": null,
+  "營業利益": "-0.17",
+  "本期淨利": "-0.17",
+  "每股盈餘": -0.17,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-09",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1822359/000162828026072138/ex-991xq326xer.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-10T04:43:14.588Z",
+ "result": {
+  "revenue": "營業收入為 0.73 億美元。",
+  "eps": "每股盈餘（EPS）為 -0.17 美元，本期呈現虧損。",
+  "margins": "營業利益率為 -23.3%，淨利率為 -23.3%，本期營業利益與本期淨利皆為 -0.17 億美元，顯示公司處於營業虧損與淨虧損狀態。官方毛利率未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "全年月營業收入預期約 300 百萬美元，全年調整後 EBITDA 預期為（-17 至 -22）百萬美元。",
+  "outlook": "營業利益與本期淨利皆為 -0.17 億美元，營業利益率與淨利率同為 -23.3%，顯示公司目前仍面臨虧損壓力。營收規模為 0.73 億美元，每股盈餘為 -0.17 美元。",
+  "highlights": "• 營業收入為 0.73 億美元。<br>• 每股盈餘（EPS）為 -0.17 美元。",
+  "concerns": "• 營業利益為 -0.17 億美元，營業利益率為 -23.3%，顯示本業處於虧損狀態。<br>• 本期淨利為 -0.17 億美元，淨利率為 -23.3%，顯示公司整體財務仍處於虧損。",
+  "risks": "• 本期營業利益與本期淨利皆為負值（-0.17 億美元），且營業利益率與淨利率均為 -23.3%，反映出持續的獲利能力風險。<br>• 每股盈餘為 -0.17 美元，顯示股東每股收益為負。",
+  "keyPoints": "• 營業收入達 0.73 億美元。<br>• 營業利益與本期淨利皆為 -0.17 億美元，營業利益率與淨利率皆為 -23.3%。<br>• 每股盈餘（EPS）為 -0.17 美元。",
+  "guidanceOfficial": "全年的營收預期約為 300 百萬美元，相較於公司先前預期的 305-310 百萬美元有所修正，修正主因是由於持續消除與重組不具獲利的業務線；全年的調整後 EBITDA 預期為（-17 至 -22）百萬美元，維持上一季不變。",
+  "segments": "• Medical Transportation Services revenue in the third quarter of 2026 was 5,330 萬美元, compared to 5,010 萬美元 for the third quarter of 2025.<br>• Mobile Health Services revenue for the third quarter of 2026 was 2,020 萬美元, compared to 2,070 萬美元 for the third quarter of 2025."
+ }
+}
