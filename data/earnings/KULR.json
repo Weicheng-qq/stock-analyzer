@@ -1,0 +1,48 @@
+{
+ "symbol": "KULR",
+ "market": "us",
+ "name": "KULR Technology Group, Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "KULR Technology Group, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.07",
+  "營業毛利": "0.00",
+  "營業利益": "-0.11",
+  "本期淨利": "0.04",
+  "每股盈餘": 0.1,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-10",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1662684/000110465926124826/tm2629340d2_ex99-1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-11T07:59:32.452Z",
+ "result": {
+  "revenue": "本季營業收入為 0.07 億美元。",
+  "eps": "本季每股盈餘（EPS）為 0.1 美元。",
+  "margins": "本季營業毛利為 0.00 億美元，毛利率為 0.0%；營業利益為 -0.11 億美元，營業利益率為 -157.1%，處於營業虧損狀態；本期淨利為 0.04 億美元，淨利率為 57.1%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期研發費用將自 2026 年第四季起開始減少並於 2027 年進一步降低。",
+  "outlook": "本季營業利益為 -0.11 億美元，顯示本業營運仍處於虧損狀態；本期淨利雖為 0.04 億美元，但新聞稿指出淨利是受非經常性位元資產（Bitcoin）公允價值變動驅動，並未反映營業獲利能力。",
+  "highlights": "• 營業收入為 0.07 億美元。<br>• 本期淨利為 0.04 億美元，每股盈餘（EPS）為 0.1 美元。<br>• 截至季末現金水位為 54.5 百萬美元，且無流通在外借款與數位資產。",
+  "concerns": "• 營業毛利為 0.00 億美元，毛利率為 0.0%。<br>• 營業利益為 -0.11 億美元，營業利益率為 -157.1%，本業持續處於虧損。<br>• 本季淨利 0.04 億美元主要是由非經常性數位資產公允價值變動驅動，不代表營業獲利。",
+  "risks": "• 本業營運持續虧損，營業利益率為 -157.1%，且毛利率為 0.0%。<br>• 自由現金流與資本支出數據未提供，無法由官方申報數評估現金流實質創造能力。",
+  "keyPoints": "• 營業收入達 0.07 億美元，毛利率為 0.0%。<br>• 營業利益為 -0.11 億美元（營業利益率 -157.1%），本業仍有虧損。<br>• 本期淨利為 0.04 億美元（淨利率 57.1%），每股盈餘（EPS）為 0.1 美元。",
+  "guidanceOfficial": "n in annualized cost savings; research and development expenses are expected to decrease beginning in the fourth quarter of 2026 and further in 2027.",
+  "segments": "• 產品銷售額增加 299% 至約 6.49 億美元，相較去年同期的約 1.62 億美元。"
+ }
+}

@@ -1,0 +1,48 @@
+{
+ "symbol": "VG",
+ "market": "us",
+ "name": "VENTURE GLOBAL, INC.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "VENTURE GLOBAL, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "47.56",
+  "營業毛利": null,
+  "營業利益": "22.95",
+  "本期淨利": "26.28",
+  "每股盈餘": 0.96,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-10",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/2007855/000200785526000091/vgincq32026earningsrelease.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-11T08:09:30.934Z",
+ "result": {
+  "revenue": "營業收入為 47.56 億美元（新聞稿提及 Q3 營收為 48 億美元，年增 43%）。",
+  "eps": "每股盈餘（EPS）為 0.96 美元。",
+  "margins": "營業利益率為 48.3%，營業利益達 22.95 億美元；淨利率為 55.3%，本期淨利達 26.28 億美元（新聞稿提及淨利為 25 億美元，年增 493%）。毛利率未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司將全年 Consolidated Adjusted EBITDA 財測調升至 10.0 - 103 億美元。",
+  "outlook": "公司營運表現強勁，Plaquemines Phase 1 已於 10 月 31 日開始商業運營，並將 2026 年預期貨物裝載範圍調整至 509 - 518 批貨物。<br>同時公司積極擴展 off-grid AI utility 業務，已與 GE Vernova 及 Baker Hughes Energy Services 簽署框架協議以支援資料中心建設。",
+  "highlights": "• Q3 營業收入達 47.56 億美元、營業利益 22.95 億美元、淨利 26.28 億美元。<br>• Plaquemines Phase 1 於 2026 年 10 月 31 日開始商業運營。<br>• 將 2026 全年 Consolidated Adjusted EBITDA 財測調高至 10.0 - 103 億美元。",
+  "concerns": "• 營業收入、毛利率與自由現金流等部分數據在官方申報資料與新聞稿間存在揭露差異。<br>• 資本支出與營運現金流在官方財報數字中未提供。",
+  "risks": "• 營運現金流與資本支出數據未提供，無法完整評估短期現金流轉與資本投入風險。<br>• 財測與業績表現高度依賴天然氣價格波動及固定液化費率（fixed liquefaction fee）的假設條件。",
+  "keyPoints": "• 官方申報 Q3 營業收入為 47.56 億美元，本期淨利為 26.28 億美元，每股盈餘（EPS）為 0.96 美元。<br>• 營業利益率為 48.3%，淨利率達 55.3%，獲利能力表現亮眼。<br>• 公司調高 2026 全年 Consolidated Adjusted EBITDA 財測至 10.0 - 103 億美元，並擴展 off-grid AI utility 相關框架協議。",
+  "guidanceOfficial": "• Consolidated Adjusted EBITDA 1 財測為 100 億美元 - 103 億美元。<br>• 假設 2026 年剩餘未售出貨物的固定液化費率範圍為 21.00 美元/MMBtu - 22.00 美元/MMBtu。<br>• 固定液化費率變動 +/- 1.00 美元/MMBtu 將使 2026 全年 Consolidated Adjusted EBITDA 受到 20 美元 - 30 美元影響。<br>• 預期 2026 年將自 Calcasieu 專案出口 152 - 154 批貨物，自 Plaquemines 專案出口 357 - 364 批貨物。",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}
