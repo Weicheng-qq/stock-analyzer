@@ -1,0 +1,48 @@
+{
+ "symbol": "UONEK",
+ "market": "us",
+ "name": "URBAN ONE, INC.",
+ "quarter": "2026 Q2（2026-04-01～2026-06-30）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "URBAN ONE, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-04-01",
+  "periodEnd": "2026-06-30",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.86",
+  "營業毛利": null,
+  "營業利益": "-0.11",
+  "本期淨利": "-0.07",
+  "每股盈餘": -1.58,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-10",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1041657/000162828026072780/uone-20261110xexx991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-11T09:17:38.570Z",
+ "result": {
+  "revenue": "營業收入為 0.86 億美元。",
+  "eps": "每股盈餘（EPS）為 -1.58 美元，處於每股虧損狀態。",
+  "margins": "營業毛利與毛利率未提供。營業利益為 -0.11 億美元，營業利益率為 -12.8%，顯示本業處於虧損狀態；本期淨利為 -0.07 億美元，淨利率為 -8.1%，顯示公司持續虧損。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 2026 年修正後的調整後 EBITDA（Revised Adjusted EBITDA）為 40.0 百萬美元。",
+  "outlook": "本季營業利益率為 -12.8%、淨利率為 -8.1%，顯示公司面臨營運虧損。每股盈餘（EPS）為 -1.58 美元，反映本季具體虧損情形。",
+  "highlights": "• 營業收入為 0.86 億美元。<br>• 營業利益為 -0.11 億美元，營業利益率為 -12.8%。<br>• 本期淨利為 -0.07 億美元，淨利率為 -8.1%。",
+  "concerns": "• 每股盈餘（EPS）為 -1.58 美元，反映虧損情形。<br>• 營業利益與本期淨利皆為負值，分別為 -0.11 億美元與 -0.07 億美元。<br>• 營業利益率（-12.8%）與淨利率（-8.1%）均呈現負數。",
+  "risks": "• 公司本季出現營業利益與本期淨利虧損，營業利益率與淨利率均為負數。<br>• 每股盈餘（EPS）為負 1.58 美元，顯示獲利結構面臨下行壓力。",
+  "keyPoints": "• 本季營業收入為 0.86 億美元。<br>• 本季營業利益為 -0.11 億美元，營業利益率為 -12.8%。<br>• 本季每股盈餘（EPS）為 -1.58 美元，本期淨利為 -0.07 億美元。",
+  "guidanceOfficial": "year is expected to be 880 萬美元 across all divisions. Weak demand in the Cable TV scatter market shifted more inventory to the direct response category at lower rates in the third quarter. We saw an increase in local digital revenue in our radio markets, but large client attrition and suppressed rates in national direct digital revenue meant significant revenue declines in the overall digital segment. Revised Adjusted EBITDA (2) guide for 2026 is now 4,000 萬美元 given the realities of the current advertising marketplace. Management is hyper-focused on cost reductions heading into next year and has identified at least 2,000 萬美元 of annualized savings.",
+  "segments": "• Consolidated NET REVENUE: $88,005 thousand (2026 Q3) vs $92,677 thousand (2025 Q3)<br>• Radio Broadcasting: $36,740 thousand (2026 Q3) vs $34,725 thousand (2025 Q3)<br>• Reach Media: $5,057 thousand (2026 Q3) vs $6,147 thousand (2025 Q3)<br>• Digital: $9,578 thousand (2026 Q3) vs $12,696 thousand (2025 Q3)<br>• Cable Television: $37,320 thousand (2026 Q3) vs $39,790 thousand (2025 Q3)"
+ }
+}
