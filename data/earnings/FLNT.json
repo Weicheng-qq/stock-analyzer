@@ -1,0 +1,48 @@
+{
+ "symbol": "FLNT",
+ "market": "us",
+ "name": "Fluent, Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Fluent, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.54",
+  "營業毛利": null,
+  "營業利益": "-0.03",
+  "本期淨利": "-0.03",
+  "每股盈餘": -0.12,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-12",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1460329/000143774926036569/ex_1006462.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-13T13:34:05.926Z",
+ "result": {
+  "revenue": "2026年第三季營業收入為0.54億美元。",
+  "eps": "2026年第三季每股盈餘（EPS）為-0.12美元，呈現虧損狀態。",
+  "margins": "營業利益率為-5.6%，淨利率為-5.6%，顯示公司本季處於虧損狀態。毛利率官方數字未提供。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期全年營收將實現雙位數成長，並改善全年調整後 EBITDA。",
+  "outlook": "公司營收規模為0.54億美元，但營業利益與淨利均為-0.03億美元，顯示目前營運尚未轉虧為盈。公司正積極調整業務組合，試圖透過 Commerce Media Solutions 帶動成長。",
+  "highlights": "• Commerce Media Solutions 營收成長 100% 至 37.5 百萬美元，佔總營收 70%。<br>• 聚合持續性業務（aggregate continuing businesses）營收年增 29%。",
+  "concerns": "• 本季營業利益為 -0.03 億美元，淨利亦為 -0.03 億美元，顯示公司仍處於虧損狀態。<br>• 營運現金流與資本支出等關鍵財務數據未提供，無法評估現金創造能力。",
+  "risks": "• 財務結構顯示公司依賴未承諾的融資協議，存在持續經營能力的重大疑慮。<br>• 業務高度依賴遊戲產業及數位行銷產業，且面臨客戶行銷支出減少或流失的風險。",
+  "keyPoints": "• 第三季營收為 0.54 億美元，每股盈餘為 -0.12 美元。<br>• Commerce Media Solutions 業務營收達 37.5 百萬美元，佔總營收比重達 70%。<br>• 營業利益率與淨利率均為 -5.6%，顯示公司本季仍處於虧損。",
+  "guidanceOfficial": "公司預期第四季營收成長且調整後 EBITDA 轉正；預期全年聚合持續性業務將實現雙位數營收成長，並改善全年調整後 EBITDA，其中 Commerce Media Solutions 將實現高雙位數營收成長；預期 2027 年將實現雙位數合併營收成長。",
+  "segments": "• Commerce Media Solutions：37.5 百萬美元，年增 100%，佔合併營收 70%。"
+ }
+}

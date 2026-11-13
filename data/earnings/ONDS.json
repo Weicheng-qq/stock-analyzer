@@ -1,0 +1,48 @@
+{
+ "symbol": "ONDS",
+ "market": "us",
+ "name": "Ondas Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Ondas Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1.67",
+  "營業毛利": "0.36",
+  "營業利益": "-1.90",
+  "本期淨利": "-0.65",
+  "每股盈餘": -0.1,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-12",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1646188/000119312526457088/onds-ex99_1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-13T13:48:44.558Z",
+ "result": {
+  "revenue": "本季營業收入為 1.67 億美元。",
+  "eps": "本季每股盈餘（EPS）為 -0.1 美元，處於虧損狀態。",
+  "margins": "本季營業毛利為 0.36 億美元，毛利率為 21.6%；營業利益為 -1.90 億美元，營業利益率為 -113.8%；本期淨利為 -0.65 億美元，淨利率為 -38.9%，顯示本季面臨明顯的營業與淨利虧損。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司官方上調 2026 全年營收目標至至少 550 億美元，並預期 Q4 營收超過 250 億美元、2027 全年營收至少 11 億美元。",
+  "outlook": "根據官方財報與新聞稿，公司本季營收為 1.67 億美元，並在第三季新增 2.14 億美元訂單，期末積壓訂單（backlog）增至 835 億美元。同時公司預期營運平台調整後 EBITDA 將於 2026 年第四季實現獲利，全公司調整後 EBITDA 獲利目標則提前至 2027 年第三季。",
+  "highlights": "• 營業收入達 1.67 億美元。<br>• 第四季新獲訂單 2.14 億美元，期末積壓訂單增加至 835 億美元。<br>• 調整後營業費用為 1.187 億美元，營運平台調整後 EBITDA 預期於 2026 年 Q4 達到損益平衡。",
+  "concerns": "• 本季營業利益為 -1.90 億美元（營業利益率 -113.8%），本期淨利為 -0.65 億美元（淨利率 -38.9%），仍處於虧損狀態。<br>• 營業費用增加至 2.260 億美元，主要受 8,810 萬美元非現金費用（含 5,780 萬美元股份基礎給付、2,530 萬美元攤銷費用）及 1,410 萬美元與收購相關的現金費用影響。<br>• 精密打擊（precision strike）區塊比重較高導致生產與交付效率不彰，影響了毛利率表現。",
+  "risks": "• 本季營業利益率為 -113.8%、淨利率為 -38.9%，營業與本期淨利皆呈大幅虧損。<br>• 營運費用因股份基礎給付、攤銷與收購相關現金費用而大幅攀升至 2.260 億美元，對短期獲利能力造成壓力。",
+  "keyPoints": "• 本季營業收入為 1.67 億美元，毛利率為 21.6%，但營業利益為 -1.90 億美元、每股盈餘為 -0.1 美元。<br>• 本季期末積壓訂單（backlog）達 835 億美元，現金、約當現金、受限制現金及短期投資合計為 820.3 億美元。<br>• 公司官方上調 2026 全年營收目標至至少 550 億美元，預期 Q4 營收超過 250 億美元，並預期 2027 全年營收至少達 11 億美元。",
+  "guidanceOfficial": "公司官方財報新聞稿指出：「Raises full-year 2026 revenue target to at least 5.5 億美元; targets more than 2.5 億美元 of Q4 revenue and at least 75% pro forma organic year-over-year growth in Q4. Initiates 2027 revenue target of at least 11 億美元, excluding additional acquisitions. Expects operating-platform Adjusted EBITDA profitability in Q4 2026 and pulls forward company-wide Adjusted EBITDA profitability target to Q3 2027.」",
+  "segments": "本次資料未揭露分部營收。"
+ }
+}

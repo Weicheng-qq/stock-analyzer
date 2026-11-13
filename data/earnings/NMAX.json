@@ -1,0 +1,48 @@
+{
+ "symbol": "NMAX",
+ "market": "us",
+ "name": "NEWSMAX INC.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "NEWSMAX INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.69",
+  "營業毛利": "0.38",
+  "營業利益": "0.14",
+  "本期淨利": "0.15",
+  "每股盈餘": 0.12,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-12",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/2026478/000202647826000070/nmax_q32026earningsrelease.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-13T13:48:00.357Z",
+ "result": {
+  "revenue": "營業收入為 0.69 億美元，展現顯著的營收規模與成長。",
+  "eps": "每股盈餘（EPS）為 0.12 美元，帶動本期淨利表現提升。",
+  "margins": "營業毛利率為 55.1%、營業利益率為 20.3%、淨利率為 21.7%，顯示公司具備穩健的毛利水準及盈利能力。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司更新並維持全年 2026 年營收財測，涵蓋排除與包含一次性項目的不同預期範圍。",
+  "outlook": "公司本季營業利益為 0.14 億美元、本期淨利為 0.15 億美元，實現獲利表現。<br>各項利潤率皆維持在一定水準，營運狀況保持穩定。",
+  "highlights": "• 營業收入達到 0.69 億美元，營業毛利為 0.38 億美元。<br>• 營業利益為 0.14 億美元，本期淨利為 0.15 億美元。<br>• 每股盈餘（EPS）為 0.12 美元。",
+  "concerns": "• 營運現金流與資本支出等數據未於本次官方數字中提供。<br>• 自由現金流亦未提供，需持續追蹤現金流動情形。",
+  "risks": "• 現金流與資本支出相關財務指標未提供，外部觀察流動性與資本配置的資訊有限。<br>• 相關財務資訊若未全面揭露，可能增加評估企業實質現金創造能力的難度。",
+  "keyPoints": "• 本季營業收入為 0.69 億美元。<br>• 本季本期淨利為 0.15 億美元，每股盈餘（EPS）為 0.12 美元。<br>• 本季營業毛利率達 55.1%，營業利益率達 20.3%。",
+  "guidanceOfficial": "公司正在維持其全年 2026 年基礎營收財測為 2.12 億美元至 2.16 億美元，此範圍不包含第三季認列的 1,400 萬美元一次性營收項目，代表以區間中位數計算年增率為 13%。若包含該一次性營收項目，公司全年 2026 年營收財測為 2.26 億美元至 2.30 億美元。",
+  "segments": "• Broadcasting Advertising：2,430 萬美元，年增 3.1%<br>• Affiliate fee：1,430 萬美元，年增 77.4%<br>• Service revenue termination fee：1,400 萬美元，年增 100.0%<br>• Subscription（Broadcasting）：340 萬美元，年減 9.4%<br>• Licensing（Broadcasting）：470 萬美元，年增 291.0%<br>• Total Broadcasting revenues：6,070 萬美元，年增 65.9%<br>• Digital Advertising：380 萬美元，年減 4.6%<br>• Subscription（Digital）：270 萬美元，年減 15.1%<br>• Product sales：120 萬美元，年減 21.2%<br>• Licensing（Digital）：60 萬美元，年增 100.0%<br>• Total Digital revenues：830 萬美元，年減 4.1%<br>• Total Revenues：6,900 萬美元，年增 52.5%"
+ }
+}

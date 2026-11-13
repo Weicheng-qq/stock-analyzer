@@ -1,0 +1,48 @@
+{
+ "symbol": "BTCS",
+ "market": "us",
+ "name": "BTCS Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "BTCS Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.04",
+  "營業毛利": "0.04",
+  "營業利益": null,
+  "本期淨利": "0.55",
+  "每股盈餘": 1.1,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-12",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1436229/000149315226051205/ex99-1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-13T13:25:55.682Z",
+ "result": {
+  "revenue": "BTCS Inc. 2026年Q3營業收入為 0.04 億美元。根據官方新聞稿，Q3總營收為 410 萬美元，較 2026 年 Q2 的 240 萬美元成長 67%。",
+  "eps": "BTCS Inc. 2026年Q3每股盈餘（EPS）為 1.1 美元。",
+  "margins": "本季營業毛利為 0.04 億美元，毛利率為 100.0%（官方新聞稿則指出毛利率為 86%）。本期淨利為 0.55 億美元，淨利率高達 1375.0%，主要受到數位資產未實現利益帶動。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 Imperium 將持續成為業務的主要驅動力，並計劃在第四季繼續擴大 Imperium 規模。",
+  "outlook": "公司在 2026 年前九個月已實現全年 600 萬美元的毛利率目標，主要由 Imperium 的 DeFi 營收成長所驅動。區塊鏈基礎設施營收則因區塊建構的變異性及資源重新分配而有所下降。",
+  "highlights": "• 2026年Q3總營收成長至 410 萬美元，較 2026 年 Q2 增加 67%，主要由 Imperium 的 DeFi 營收成長所帶動。<br>• 本季毛利成長至 3,500,000 美元（毛利率 86%），較 2026 年 Q2 的 150 萬美元（61%毛利率）增加 134%。<br>• 年初至今的毛利達到 600 萬美元，在前九個月即達成公司全年 600 萬美元的毛利目標。",
+  "concerns": "• 區塊鏈基礎設施營收（包含 NodeOps 與 Builder+）從 2026 年 Q2 的 0.9 百萬美元降至 Q3 的 0.6 百萬美元。<br>• 淨利達 5,450 萬美元主要是由 5,830 萬美元的數位資產未實現利得以及 360 萬美元的已實現利得所驅動，部分被 570 萬美元的無形數位資產減損損失所抵銷，未來結果可能隨數位資產價格大幅波動。",
+  "risks": "• 本期淨利極大程度依賴數位資產價格上漲所帶動的 5,830 萬美元未實現利得，顯示財務結果高度受加密貨幣價格波動影響。<br>• 遭遇 570 萬美元的無形數位資產減損損失，反映出數位資產評價潛在的減值風險。",
+  "keyPoints": "• 2026年Q3營業收入為 0.04 億美元（新聞稿指出總營收為 4.1 百萬美元，季增 67%），EPS 為 1.1 美元。<br>• 本季淨利達 0.55 億美元（新聞稿指出 54.5 百萬美元），主要來自 5,830 萬美元的數位資產未實現利得。<br>• 前九個月毛利已達 600 萬美元，成功達成公司全年毛利目標，其中 Imperium 的 DeFi 營收為主要成長引擎。",
+  "guidanceOfficial": "Looking to the fourth quarter, we intend to keep scaling Imperium, and we expect it to remain the leading driver of our business. Having surpassed its full-year gross profit target of 600 萬美元 through the first nine months of 2026, the Company expects Imperium to remain the primary driver of revenue and gross p",
+  "segments": "• DeFi revenues (Imperium)：350 萬美元，季增 133%、佔總營收約 86%<br>• Blockchain infrastructure revenues (NodeOps and Builder+)：60 萬美元，季減"
+ }
+}
