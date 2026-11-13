@@ -1,0 +1,48 @@
+{
+ "symbol": "SHIM",
+ "market": "us",
+ "name": "Shimmick Corporation",
+ "quarter": "2026 Q3（2026-07-04～2026-10-02）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Shimmick Corporation",
+  "currency": "億美元",
+  "periodStart": "2026-07-04",
+  "periodEnd": "2026-10-02",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "1.36",
+  "營業毛利": "0.17",
+  "營業利益": "0.04",
+  "本期淨利": "0.01",
+  "每股盈餘": 0.02,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-12",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1887944/000119312526458344/shim-ex99_1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-13T14:01:13.647Z",
+ "result": {
+  "revenue": "2026 Q3 營業收入為 1.36 億美元。",
+  "eps": "2026 Q3 每股盈餘（EPS）為 0.02 美元。",
+  "margins": "本季營業毛利率為 12.5%，營業利益率為 2.9%，淨利率為 0.7%。這些數據顯示公司在該季度實現了獲利，結束了自 2023 年第三季以來的虧損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司重申 2026 全年調整後 EBITDA 預期為 2,000 萬至 2,500 萬美元，並預期全年營收介於 5 億至 5.25 億美元之間。",
+  "outlook": "公司目前正透過將業務重心轉向核心的 Shimmick Projects 以提升毛利率。隨著非核心業務的縮減，管理層預期核心業務的獲利能力與現金產生潛力將逐漸顯現。",
+  "highlights": "• 2026 Q3 營收達 1.36 億美元，且 Shimmick Projects 營收較上一季成長 28%。<br>• 本季淨利為 0.01 億美元，為自 2023 年 Q3 以來首次實現單季淨利轉正。<br>• 調整後 EBITDA 為 0.09 億美元，較上一季成長 106%。",
+  "concerns": "• 儘管本季轉盈，但淨利率僅 0.7%，獲利空間仍相當薄弱。<br>• 截至 2026 Q3，公司仍有非核心業務（Non-Core Projects）的清理與收尾工作。",
+  "risks": "• 營運高度依賴 Shimmick Projects，該項目佔總積壓訂單（Backlog）約 98%，業務集中度風險高。<br>• 需持續關注非核心業務清理過程中的法律費用與潛在訴訟成本對財務的影響。",
+  "keyPoints": "• 2026 Q3 營收為 1.36 億美元，且積壓訂單（Backlog）總額約為 9.07 億美元。<br>• 截至 2026 年 10 月 2 日，公司流動性資金為 0.53 億美元，較上一季增加 0.20 億美元。<br>• 2026 財年訂單出貨比（book-to-burn ratio）為 1.3x，且有 4.01 億美元的新增訂單正在洽談中。",
+  "guidanceOfficial": "截至 2026 年 11 月 12 日，針對 2026 全財年：我們重申合併調整後 EBITDA 在 2,000 萬至 2,500 萬美元之間的指引，代表中位數年增長率為 350%；我們預期合併營收將在 5 億至 5.25 億美元之間，代表中位數年增長率為 4%。",
+  "segments": "• Shimmick Projects：營收 1.36 億美元，毛利 0.17 億美元（註：原文提及 Shimmick Projects 貢獻 1.36 億美元營收與 0.18 億美元毛利）。<br>• Non-Core Projects：營收 0 億美元。"
+ }
+}

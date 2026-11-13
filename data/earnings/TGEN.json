@@ -1,0 +1,48 @@
+{
+ "symbol": "TGEN",
+ "market": "us",
+ "name": "TECOGEN INC.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "TECOGEN INC.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.08",
+  "營業毛利": "0.03",
+  "營業利益": "-0.02",
+  "本期淨利": "-0.02",
+  "每股盈餘": -0.05,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-12",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1537435/000153743526000095/tgenq32026earningsrelease.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-13T14:04:53.934Z",
+ "result": {
+  "revenue": "營業收入為 0.08 億美元。",
+  "eps": "每股盈餘（EPS）為 -0.05 美元，顯示本季處於每股虧損狀態。",
+  "margins": "營業毛利為 0.03 億美元，毛利率為 37.5%；營業利益為 -0.02 億美元，營業利益率為 -25.0%；本期淨利為 -0.02 億美元，淨利率為 -25.0%，顯示公司目前本業與整體營運皆處於虧損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供具體財測數字。",
+  "outlook": "根據官方財務數字，2026 Q3 營業收入為 0.08 億美元，營業利益與本期淨利均為 -0.02 億美元，反映本季持續面臨虧損。詳細的營運細節可參考官方新聞稿中關於各業務部門的營收表現。",
+  "highlights": "• 2026 Q3 營業收入達 0.08 億美元。<br>• 營業毛利為 0.03 億美元，毛利率為 37.5%。<br>• 本季每股盈餘（EPS）為 -0.05 美元。",
+  "concerns": "• 營業利益為 -0.02 億美元，營業利益率為 -25.0%，本業呈現虧損。<br>• 本期淨利為 -0.02 億美元，淨利率為 -25.0%，顯示公司整體仍處於虧損狀態。",
+  "risks": "• 公司營業利益與本期淨利均為負數（-0.02 億美元），反映持續虧損的財務結構風險。<br>• 營業利益率與淨利率均為 -25.0%，顯示獲利能力有待改善。",
+  "keyPoints": "• 2026 Q3 營業收入為 0.08 億美元，營業毛利為 0.03 億美元（毛利率 37.5%）。<br>• 本季營業利益與本期淨利皆為 -0.02 億美元，營業利益率與淨利率同為 -25.0%。<br>• 每股盈餘（EPS）為 -0.05 美元。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Products revenues in the three months ended September 30, 2026 were 305 萬美元 compared to 298 萬美元 for the same period in 2025, an increase of 2.2%.<br>• Services revenues in the three months ended September 30, 2026 were 446 萬美元, compared to 394 萬美元 for the same period in 2025, an increase of 13.2%.<br>• Energy Production revenues in the three months ended September 30, 2026 were 36 萬美元 compared to 26 萬美元 for the same period in 2025, an increase of 42.0%."
+ }
+}

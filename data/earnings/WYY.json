@@ -1,0 +1,48 @@
+{
+ "symbol": "WYY",
+ "market": "us",
+ "name": "WidePoint Corporation",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "WidePoint Corporation",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.45",
+  "營業毛利": "0.06",
+  "營業利益": "-0.00",
+  "本期淨利": "-0.00",
+  "每股盈餘": -0.02,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-05-20",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1034760/000165495426005146/wyy_ex992.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-13T14:11:49.366Z",
+ "result": {
+  "revenue": "本季營業收入為 0.45 億美元，反映目前的營運規模。請參閱官方申報數據掌握營收水位。",
+  "eps": "本季每股盈餘（EPS）為 -0.02 美元，處於虧損狀態。請持續關注後續獲利改善情形。",
+  "margins": "本季營業毛利為 0.06 億美元，毛利率為 13.3%。營業利益率與淨利率均為 0.0%，顯示本季獲利能力偏低，營運處於損益邊緣。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期結果將在 2026 年下半年正常化，並預期對 Q2 整體營收結果影響極小。",
+  "outlook": "根據官方財報數字，本季營業利益與本期淨利皆為 -0.00 億美元，EPS 為 -0.02 美元。毛利率維持在 13.3%，整體獲利動能尚待後續觀察。",
+  "highlights": "• 營業收入達 0.45 億美元。<br>• 營業毛利為 0.06 億美元，毛利率為 13.3%。",
+  "concerns": "• 營業利益率為 0.0%，本季營業利益為 -0.00 億美元。<br>• 本期淨利為 -0.00 億美元，EPS 為 -0.02 美元，處於虧損狀態。",
+  "risks": "• 本季營業利益與本期淨利皆為負值（-0.00 億美元），且 EPS 為 -0.02 美元，顯示獲利結構仍有壓力。<br>• 營運現金流與資本支出等現金流資訊未提供，無法評估真實現金創造能力。",
+  "keyPoints": "• 本季營業收入為 0.45 億美元，營業毛利為 0.06 億美元（毛利率 13.3%）。<br>• 本季營業利益與本期淨利皆為 -0.00 億美元，營業利益率與淨利率皆為 0.0%。<br>• 每股盈餘（EPS）為 -0.02 美元，反映本季處於虧損狀態。",
+  "guidanceOfficial": "管理層預期帳單服務費（billable services fees）在該季受到關閉事件的輕微影響後，這些結果預計將在 2026 年下半年正常化，並預期對 Q2 整體營收結果影響極小。另外，CWMS 3.0 的獎項公告預期將是一個顯著的推動力，且 carrier SaaS 預期在 2026 年下半年開始提供平台服務交付並開始提升營收認列。",
+  "segments": "• IT Managed Services division: Awarded 150 萬美元 in total contract value in Q1 2026。<br>• Federal contract: Federal contract backlog was approximately 2.18 億美元 as of March 31, 2026。"
+ }
+}
