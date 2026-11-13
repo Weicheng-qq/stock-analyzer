@@ -4689,11 +4689,14 @@
   "kind": ""
  },
  "CSCO": {
-  "at": "2026-10-11T01:48:05.229Z",
+  "at": "2026-11-13T11:12:27.270Z",
   "market": "us",
   "name": "CISCO SYSTEMS, INC.",
-  "seen": "2026Q4",
-  "kind": "transcript"
+  "seen": "2027Q1",
+  "kind": "transcript",
+  "done": "2027Q1",
+  "pending": false,
+  "pendingSince": ""
  },
  "FLNC": {
   "at": "2026-11-03T07:30:36.969Z",
@@ -4710,7 +4713,7 @@
   "kind": ""
  },
  "JNJ": {
-  "at": "2026-11-10T03:45:19.314Z",
+  "at": "2026-11-13T11:10:53.418Z",
   "market": "us",
   "name": "Johnson & Johnson",
   "seen": "2026Q3",
@@ -4810,7 +4813,7 @@
   "kind": "presentation"
  },
  "CB": {
-  "at": "2026-11-10T03:45:13.771Z",
+  "at": "2026-11-13T11:10:47.947Z",
   "market": "us",
   "name": "CHUBB LIMITED",
   "done": "2026Q3",
@@ -5448,7 +5451,7 @@
   "pendingSince": "2026-10-28T10:10:10.857Z"
  },
  "ESS": {
-  "at": "2026-11-10T03:45:06.305Z",
+  "at": "2026-11-13T11:10:40.567Z",
   "market": "us",
   "name": "ESSEX PROPERTY TRUST, INC.",
   "seen": "2026Q3",
@@ -5458,7 +5461,7 @@
   "pendingSince": "2026-10-28T10:10:27.246Z"
  },
  "FFIV": {
-  "at": "2026-11-10T03:44:58.348Z",
+  "at": "2026-11-13T11:10:35.245Z",
   "market": "us",
   "name": "F5, INC.",
   "done": "2026Q4",
@@ -5628,11 +5631,14 @@
   "kind": ""
  },
  "JCI": {
-  "at": "2026-10-28T18:28:07.122Z",
+  "at": "2026-11-13T11:22:51.448Z",
   "market": "us",
   "name": "JOHNSON CONTROLS INTERNATIONAL PLC",
   "seen": "2026Q4",
-  "kind": "presentation"
+  "kind": "transcript",
+  "done": "2026Q4",
+  "pending": false,
+  "pendingSince": ""
  },
  "MRSH": {
   "at": "2026-10-28T18:28:16.277Z",
@@ -5642,7 +5648,7 @@
   "kind": ""
  },
  "OKE": {
-  "at": "2026-11-10T03:44:51.739Z",
+  "at": "2026-11-13T11:10:29.927Z",
   "market": "us",
   "name": "ONEOK, Inc.",
   "seen": "2026Q3",
@@ -6057,7 +6063,7 @@
   "kind": "presentation"
  },
  "TEL": {
-  "at": "2026-11-10T04:52:25.164Z",
+  "at": "2026-11-13T11:10:23.840Z",
   "market": "us",
   "name": "TE CONNECTIVITY PLC",
   "seen": "2026Q4",
@@ -6077,7 +6083,7 @@
   "pendingSince": ""
  },
  "SBUX": {
-  "at": "2026-10-30T10:13:01.353Z",
+  "at": "2026-11-13T11:11:01.600Z",
   "market": "us",
   "name": "Starbucks Corporation",
   "seen": "2026Q4",
@@ -6690,7 +6696,7 @@
   "kind": ""
  },
  "PEG": {
-  "at": "2026-11-10T03:44:43.578Z",
+  "at": "2026-11-13T11:10:18.544Z",
   "market": "us",
   "name": "PUBLIC SERVICE ENTERPRISE GROUP INC",
   "seen": "2026Q3",
@@ -6936,7 +6942,7 @@
   "kind": "presentation"
  },
  "KDP": {
-  "at": "2026-11-10T04:52:36.510Z",
+  "at": "2026-11-13T11:10:12.139Z",
   "market": "us",
   "name": "Keurig Dr Pepper Inc.",
   "seen": "2026Q3",
@@ -7042,9 +7048,9 @@
   "kind": ""
  },
  "AAOI": {
-  "at": "2026-11-05T07:00:29.519Z",
+  "at": "2026-11-13T11:11:07.849Z",
   "market": "us",
-  "name": "APPLIED OPTOELECTRONICS, INC.",
+  "name": "Applied Optoelectronics, Inc.",
   "seen": "沒有文件",
   "kind": ""
  },
@@ -7094,7 +7100,7 @@
   "kind": ""
  },
  "KHC": {
-  "at": "2026-11-05T07:31:26.363Z",
+  "at": "2026-11-13T11:12:37.735Z",
   "market": "us",
   "name": "Kraft Heinz Co",
   "seen": "沒有文件",
@@ -7353,9 +7359,9 @@
   "pendingSince": ""
  },
  "ROK": {
-  "at": "2026-11-06T07:01:03.911Z",
+  "at": "2026-11-13T11:11:04.572Z",
   "market": "us",
-  "name": "Rockwell Automation, Inc.",
+  "name": "Rockwell Automation, Inc",
   "seen": "沒有文件",
   "kind": ""
  },
@@ -7606,7 +7612,7 @@
   "kind": "transcript"
  },
  "BEN": {
-  "at": "2026-11-10T04:52:21.009Z",
+  "at": "2026-11-13T11:10:02.658Z",
   "market": "us",
   "name": "FRANKLIN TEMPLETON, INC.",
   "done": "2026Q4",
@@ -7705,5 +7711,12 @@
   "name": "FACTSET RESEARCH SYSTEMS INC",
   "seen": "沒有文件",
   "kind": ""
+ },
+ "NVDA": {
+  "at": "2026-11-13T11:10:57.190Z",
+  "market": "us",
+  "name": "NVIDIA CORP",
+  "seen": "2027Q2",
+  "kind": "transcript"
  }
 }
