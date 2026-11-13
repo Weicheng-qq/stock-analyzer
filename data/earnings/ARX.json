@@ -1,0 +1,48 @@
+{
+ "symbol": "ARX",
+ "market": "us",
+ "name": "ACCELERANT HOLDINGS",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "ACCELERANT HOLDINGS",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "2.79",
+  "營業毛利": null,
+  "營業利益": null,
+  "本期淨利": "-0.09",
+  "每股盈餘": -0.06,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-12",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1997350/000199735026000022/ex991accelerantearningsrel.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-13T13:17:07.195Z",
+ "result": {
+  "revenue": "營業收入為 2.79 億美元。",
+  "eps": "每股盈餘（EPS）為 -0.06 美元。",
+  "margins": "營業毛利與營業利益未提供。本期淨利為 -0.09 億美元，淨利率為 -3.2%，顯示公司處於虧損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供第四季度或全年的財測。",
+  "outlook": "本季營業收入為 2.79 億美元，本期淨利為 -0.09 億美元，淨利率為 -3.2%，每股盈餘（EPS）為 -0.06 美元。同時，公司已與 Thoma Bravo 簽署最終合併協議，預計於 2027 年上半年完成交割。",
+  "highlights": "• 營業收入為 2.79 億美元。<br>• 營業毛利與營業利益未提供。<br>• 已與 Thoma Bravo 簽署最終合併協議，預期於 2027 年上半年完成交割。",
+  "concerns": "• 本期淨利為 -0.09 億美元，淨利率為 -3.2%，顯示公司仍處於虧損。<br>• 每股盈餘（EPS）為 -0.06 美元。<br>• 營運現金流、資本支出與自由現金流皆未提供。",
+  "risks": "• 本期淨利為負值（-0.09 億美元），且淨利率為 -3.2%，呈現虧損狀態。<br>• 營運現金流與資本支出等現金流相關財務數據未提供，無法評估實際現金創造能力。",
+  "keyPoints": "• 營業收入達 2.79 億美元。<br>• 本期淨利為 -0.09 億美元，每股盈餘（EPS）為 -0.06 美元。<br>• 已與 Thoma Bravo 簽署最終合併協議，預計 2027 年上半年完成交割。",
+  "guidanceOfficial": "In light of the pending transaction, Accelerant will not host an earnings conference call in connection with the third quarter 2026 results. In addition, Accelerant will not provide guidance for the fourth quarter of 2026 or the full year of 2026 as a result of the pending transaction.",
+  "segments": "• 交換服務（Exchange Services）：營業收入 112.6 百萬美元（2026 年第三季總部門合計），調整後 EBITDA 為 73.8 百萬美元。<br>• MGA 營運（MGA Operations）：營業收入 86.5 百萬美元（2026 年第三季總部門合計），調整後 EBITDA 為 41.0 百萬美元。<br>• 保險承保（Underwriting）：營業收入 113.4 百萬美元（2026 年第三季總部門合計），調整後 EBITDA 為 -13.2 百萬美元。"
+ }
+}
