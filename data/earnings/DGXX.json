@@ -1,0 +1,48 @@
+{
+ "symbol": "DGXX",
+ "market": "us",
+ "name": "Digi Power X Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "Digi Power X Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.12",
+  "營業毛利": "-0.02",
+  "營業利益": null,
+  "本期淨利": "0.01",
+  "每股盈餘": 0.01,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-13",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1854368/000121390026119211/ea031212101ex99-1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-14T11:50:37.908Z",
+ "result": {
+  "revenue": "營業收入為 0.12 億美元。根據新聞稿節錄，營收為 1,225 萬美元，較上一會計季度成長 85%，較截至 2025 年 9 月 30 日止的季度增加 50%。",
+  "eps": "每股盈餘（EPS）為 0.01 美元。本期淨利為 0.01 億美元（新聞稿指出淨利為 1.0 百萬美元）。",
+  "margins": "營業毛利為 -0.02 億美元，毛利率為 -16.7%，顯示本季處於毛利虧損狀態。營業利益與營業利益率皆未提供。本期淨利率為 8.3%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 2027 年資本支出約 3.5 億美元，並預期於 2027 年第三季末達到約 25 億至 3 億美元的年化營收運轉率。",
+  "outlook": "本季營業毛利為負值（毛利率 -16.7%），但本期淨利錄得 0.01 億美元（淨利率 8.3%）。公司期末現金及數位貨幣總計 119.6 百萬美元，且無未償還借款。AI 相關營收佔總季營收的 46%，其中包含 Tier III 託管服務與 GPU 租賃。",
+  "highlights": "• 營業收入達 0.12 億美元（新聞稿指出 1,225 萬美元），較上一季成長 85%，較去年同期增加 50%。<br>• 本期淨利為 0.01 億美元（新聞稿指出 1.0 百萬美元，EPS 0.01 美元），期末現金與數位貨幣為 119.6 百萬美元，且無未償還借款。<br>• AI 營收達 566 萬美元，佔總季營收 46.2%，其中 GPU 租賃營收為 246 萬美元（佔 20.1%），Tier III 託管服務營收為 320 萬美元（佔 26.1%）。",
+  "concerns": "• 營業毛利為 -0.02 億美元，毛利率為 -16.7%，本季營業毛利處於虧損狀態。<br>• 營業利益、營業利益率、營運現金流以及資本支出皆未提供。<br>• 2027 年營收運轉率與資本計畫等展望皆註明受限於適足融資與市場條件等變數。",
+  "risks": "• 毛利率為負數（-16.7%），本季營業毛利為 -0.02 億美元，本業獲利能力仍面臨挑戰。<br>• 部分重大專案與擴建計畫（如 Columbiana Phase 2 及 2027 年外在融資需求）仍附帶條件，具備不確定性。",
+  "keyPoints": "• 本季營業收入為 0.12 億美元（約 1,225 萬美元），每股盈餘（EPS）為 0.01 美元，本期淨利為 0.01 億美元。<br>• 本季營業毛利為 -0.02 億美元，毛利率為 -16.7%，顯示本業面臨毛利虧損。<br>• 期末現金及數位貨幣為 119.6 百萬美元，且無未償還借款，營運資金為 103.0 百萬美元。",
+  "guidanceOfficial": "2027 Outlook : annualized revenue run-rate of approximately $250-3 億美元 anticipated by the end of Q3 2027, subject to adequate financing and market conditions. Planned 2027 capex of approximately 3.5 億美元 is expected to be funded principally through customer deposits and contract-backed debt, designed to minimize shareholder dilution.",
+  "segments": "• Tier III colocation services：3.20 M（佔總營收 26.1%）<br>• GPU rental (NeoCloudz)：2.46 M（佔總營收 20.1%）<br>• Total AI：5.66 M（佔總營收 46.2%）<br>• Energy Sales：3.29 M（佔總營收 26.9%）<br>• Legacy Bitcoin colocation：未於此處完整列出"
+ }
+}

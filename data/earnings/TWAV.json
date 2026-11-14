@@ -1,0 +1,48 @@
+{
+ "symbol": "TWAV",
+ "market": "us",
+ "name": "TaoWeave, Inc.",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "TaoWeave, Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.01",
+  "營業毛利": "0.00",
+  "營業利益": "-0.00",
+  "本期淨利": "0.02",
+  "每股盈餘": 0.39,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-05-18",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/746210/000143774926017605/ex_935817.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-14T12:03:05.239Z",
+ "result": {
+  "revenue": "TaoWeave, Inc. 會計年度 2026 Q3 的營業收入為 0.01 億美元。",
+  "eps": "本季每股盈餘（EPS）為 0.39 美元。",
+  "margins": "營業毛利為 0.00 億美元，毛利率為 0.0%；營業利益為 -0.00 億美元（呈現虧損），營業利益率為 0.0%；本期淨利為 0.02 億美元，淨利率為 200.0%。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次財報官方申報資料中提供明確的下一季或全年官方財測數據。",
+  "outlook": "根據官方財報數字，本季營業收入為 0.01 億美元，營業利益處於 -0.00 億美元的虧損狀態，但本期淨利達到 0.02 億美元，淨利率為 200.0%。由於官方未提供營運現金流與資本支出等細節，財務與營運資訊相對有限。",
+  "highlights": "• 官方公布的本季營業收入為 0.01 億美元。<br>• 本季本期淨利為 0.02 億美元，淨利率達 200.0%。<br>• 本季每股盈餘（EPS）為 0.39 美元。",
+  "concerns": "• 營業毛利為 0.00 億美元，毛利率為 0.0%。<br>• 營業利益為 -0.00 億美元，顯示本業處於虧損狀態。<br>• 營運現金流與資本支出等重要現金流數據官方均未提供。",
+  "risks": "• 本業營業利益為負數（-0.00 億美元），顯示核心營運能力仍面臨虧損壓力。<br>• 營運現金流與資本支出等關鍵流動性指標未提供，外部投資人難以完整評估其現金消耗與財務健全度。",
+  "keyPoints": "• 官方申報的營業收入為 0.01 億美元，毛利率與營業利益率均為 0.0%，本業呈現 -0.00 億美元的虧損。<br>• 本季本期淨利為 0.02 億美元，每股盈餘（EPS）為 0.39 美元，淨利率表現為 200.0%。<br>• 營運現金流、資本支出與自由現金流等關鍵財務資訊皆未提供。",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "• Digital Assets: Revenue of $86,000 from TAO staking rewards (no comparable revenue in Q1 2025), with segment gross profit of $80,000, or 93%. Segment also recognized 220 萬美元 in unrealized gains and $52,000 in realized gains on the Company’s TAO holdings during the quarter.<br>• Managed Services: Revenue of $422,000, down 17% year-over-year, reflecting customer disconnects and service-level reductions. Segment gross margin expanded to 47% from 27% in the prior-year period, primarily due to reduced personnel expenses.<br>• Collaboration Products: Revenue of $199,000, up 75% year-over-year, driven primarily by spares orders and installation revenue."
+ }
+}
