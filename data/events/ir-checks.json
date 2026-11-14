@@ -3842,7 +3842,7 @@
   "kind": ""
  },
  "3227": {
-  "at": "2026-10-15T01:25:17.393Z",
+  "at": "2026-11-14T10:38:13.765Z",
   "market": "tw",
   "name": "原相",
   "seen": "沒有文件",
@@ -4080,7 +4080,7 @@
   "kind": ""
  },
  "3529": {
-  "at": "2026-10-29T10:15:13.167Z",
+  "at": "2026-11-14T10:38:10.932Z",
   "market": "tw",
   "name": "力旺",
   "seen": "沒有文件",
@@ -4850,7 +4850,7 @@
   "kind": ""
  },
  "8358": {
-  "at": "2026-10-22T15:46:15.444Z",
+  "at": "2026-11-14T10:43:10.027Z",
   "market": "tw",
   "name": "金居",
   "seen": "沒有文件",
@@ -4954,7 +4954,7 @@
   "kind": ""
  },
  "BLK": {
-  "at": "2026-11-11T06:40:42.632Z",
+  "at": "2026-11-14T10:36:13.600Z",
   "market": "us",
   "name": "BlackRock, Inc.",
   "done": "2026Q3",
@@ -5134,11 +5134,11 @@
   "kind": "transcript"
  },
  "MCO": {
-  "at": "2026-10-22T15:45:44.905Z",
+  "at": "2026-11-14T10:38:02.143Z",
   "market": "us",
-  "name": "Moody’s Corporation",
+  "name": "MOODYS CORP /DE/",
   "seen": "2026Q3",
-  "kind": "presentation"
+  "kind": "transcript"
  },
  "ABT": {
   "at": "2026-11-05T07:31:12.624Z",
@@ -5305,7 +5305,7 @@
   "kind": "transcript"
  },
  "BR": {
-  "at": "2026-11-11T06:51:01.956Z",
+  "at": "2026-11-14T10:36:08.502Z",
   "market": "us",
   "name": "BROADRIDGE FINANCIAL SOLUTIONS, INC.",
   "done": "2026Q4",
@@ -5437,7 +5437,7 @@
   "kind": "presentation"
  },
  "VRT": {
-  "at": "2026-10-29T10:13:01.290Z",
+  "at": "2026-11-14T10:38:05.922Z",
   "market": "us",
   "name": "Vertiv Holdings Co",
   "seen": "2026Q3",
@@ -5486,7 +5486,7 @@
   "kind": ""
  },
  "NUE": {
-  "at": "2026-11-11T06:50:51.857Z",
+  "at": "2026-11-14T10:36:02.551Z",
   "market": "us",
   "name": "NUCOR CORPORATION",
   "seen": "2026Q3",
@@ -5545,7 +5545,7 @@
   "kind": ""
  },
  "CINF": {
-  "at": "2026-11-10T04:53:06.220Z",
+  "at": "2026-11-14T10:43:57.820Z",
   "market": "us",
   "name": "CINCINNATI FINANCIAL CORPORATION",
   "seen": "2026Q3",
@@ -5702,9 +5702,9 @@
   "kind": ""
  },
  "AMT": {
-  "at": "2026-11-10T04:52:59.337Z",
+  "at": "2026-11-14T10:43:49.667Z",
   "market": "us",
-  "name": "AMERICAN TOWER CORPORATION",
+  "name": "AMERICAN TOWER CORP /MA/",
   "seen": "沒有文件",
   "kind": ""
  },
@@ -6032,7 +6032,7 @@
   "kind": "release"
  },
  "HONA": {
-  "at": "2026-10-29T10:43:45.913Z",
+  "at": "2026-11-14T10:44:05.869Z",
   "market": "us",
   "name": "Honeywell Aerospace Inc.",
   "seen": "沒有文件",
@@ -6525,7 +6525,7 @@
   "kind": "presentation"
  },
  "INCY": {
-  "at": "2026-10-30T18:04:16.430Z",
+  "at": "2026-11-14T10:44:09.651Z",
   "market": "us",
   "name": "INCYTE CORPORATION",
   "seen": "沒有文件",
@@ -6864,7 +6864,7 @@
   "kind": ""
  },
  "FOX": {
-  "at": "2026-11-07T06:11:09.165Z",
+  "at": "2026-11-14T10:44:02.422Z",
   "market": "us",
   "name": "Fox Corp",
   "seen": "2027Q1",
@@ -7089,7 +7089,7 @@
   "kind": "transcript"
  },
  "BKNG": {
-  "at": "2026-11-04T07:09:12.908Z",
+  "at": "2026-11-14T10:43:53.382Z",
   "market": "us",
   "name": "Booking Holdings Inc.",
   "seen": "2026Q3",
@@ -7237,11 +7237,14 @@
   "kind": ""
  },
  "QCOM": {
-  "at": "2026-11-05T06:57:42.531Z",
+  "at": "2026-11-14T10:37:47.638Z",
   "market": "us",
   "name": "QUALCOMM INC/DE",
-  "seen": "2026Q3",
-  "kind": "transcript"
+  "seen": "2026Q4",
+  "kind": "transcript",
+  "done": "2026Q4",
+  "pending": false,
+  "pendingSince": ""
  },
  "COHR": {
   "at": "2026-11-05T06:59:08.525Z",
