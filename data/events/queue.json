@@ -1,11 +1,11 @@
 {
- "generatedAt": "2026-11-15T16:25:54.061Z",
+ "generatedAt": "2026-11-15T22:54:18.909Z",
  "lookbackDays": 3,
  "counts": {
   "high": 2,
   "medium": 725,
-  "low": 1855,
-  "total": 2582
+  "low": 1858,
+  "total": 2585
  },
  "queue": [
   {
@@ -9575,6 +9575,14 @@
   },
   {
    "market": "tw",
+   "symbol": "2231",
+   "name": "為升",
+   "reason": "站上尚無此公司資料",
+   "officialQuarter": "2026 第3季",
+   "priority": "LOW"
+  },
+  {
+   "market": "tw",
    "symbol": "2233",
    "name": "宇隆",
    "reason": "站上尚無此公司資料",
@@ -10145,6 +10153,14 @@
    "market": "tw",
    "symbol": "2405",
    "name": "輔信",
+   "reason": "站上尚無此公司資料",
+   "officialQuarter": "2026 第3季",
+   "priority": "LOW"
+  },
+  {
+   "market": "tw",
+   "symbol": "2406",
+   "name": "國碩",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -21497,6 +21513,14 @@
    "market": "tw",
    "symbol": "8440",
    "name": "綠電",
+   "reason": "站上尚無此公司資料",
+   "officialQuarter": "2026 第3季",
+   "priority": "LOW"
+  },
+  {
+   "market": "tw",
+   "symbol": "8442",
+   "name": "威宏-KY",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
