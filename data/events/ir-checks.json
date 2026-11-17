@@ -5378,7 +5378,7 @@
   "seen": "2027Q1"
  },
  "CRH": {
-  "at": "2026-11-10T04:53:09.803Z",
+  "at": "2026-11-17T05:13:23.950Z",
   "market": "us",
   "name": "CRH PUBLIC LTD CO",
   "seen": "2026Q3",
@@ -5392,7 +5392,7 @@
   "kind": "transcript"
  },
  "HRL": {
-  "at": "2026-10-31T12:47:51.225Z",
+  "at": "2026-11-17T05:13:47.814Z",
   "market": "us",
   "name": "HORMEL FOODS CORPORATION",
   "seen": "2026Q3",
@@ -5866,7 +5866,7 @@
   "kind": ""
  },
  "FCX": {
-  "at": "2026-11-13T19:49:29.459Z",
+  "at": "2026-11-17T05:13:37.642Z",
   "market": "us",
   "name": "Freeport-McMoRan Inc.",
   "seen": "2026Q3",
@@ -6137,7 +6137,7 @@
   "kind": "presentation"
  },
  "POOL": {
-  "at": "2026-11-03T23:34:23.912Z",
+  "at": "2026-11-17T05:14:03.985Z",
   "market": "us",
   "name": "POOL CORPORATION",
   "seen": "沒有文件",
@@ -6284,7 +6284,7 @@
   "kind": ""
  },
  "MAA": {
-  "at": "2026-11-13T11:44:43.821Z",
+  "at": "2026-11-17T05:13:57.290Z",
   "market": "us",
   "name": "MID-AMERICA APARTMENT COMMUNITIES, INC.",
   "seen": "2026Q3",
@@ -6700,7 +6700,7 @@
   "kind": ""
  },
  "D": {
-  "at": "2026-10-31T05:56:01.339Z",
+  "at": "2026-11-17T05:13:28.006Z",
   "market": "us",
   "name": "DOMINION ENERGY, INC",
   "seen": "沒有文件",
@@ -6819,7 +6819,7 @@
   "kind": ""
  },
  "WY": {
-  "at": "2026-11-13T12:18:21.762Z",
+  "at": "2026-11-17T05:14:22.775Z",
   "market": "us",
   "name": "WEYERHAEUSER COMPANY",
   "seen": "2026Q3",
@@ -7000,7 +7000,7 @@
   "kind": ""
  },
  "FANG": {
-  "at": "2026-11-05T07:02:21.451Z",
+  "at": "2026-11-17T05:13:31.639Z",
   "market": "us",
   "name": "Diamondback Energy, Inc.",
   "seen": "沒有文件",
@@ -7048,11 +7048,11 @@
   "pendingSince": ""
  },
  "UDR": {
-  "at": "2026-11-04T06:45:40.149Z",
+  "at": "2026-11-17T05:14:08.655Z",
   "market": "us",
   "name": "UDR, Inc.",
   "seen": "2026Q3",
-  "kind": "release"
+  "kind": "transcript"
  },
  "VRTX": {
   "at": "2026-11-04T06:45:43.351Z",
@@ -7180,11 +7180,11 @@
   "kind": ""
  },
  "HSIC": {
-  "at": "2026-11-04T07:41:12.179Z",
+  "at": "2026-11-17T05:13:42.323Z",
   "market": "us",
   "name": "HENRY SCHEIN, INC.",
   "seen": "2026Q3",
-  "kind": "presentation"
+  "kind": "transcript"
  },
  "IFF": {
   "at": "2026-11-04T07:41:15.223Z",
@@ -7509,9 +7509,9 @@
   "kind": "presentation"
  },
  "GWW": {
-  "at": "2026-11-05T08:07:18.684Z",
+  "at": "2026-11-17T05:14:17.013Z",
   "market": "us",
-  "name": "W.W. Grainger, Inc.",
+  "name": "W.W. GRAINGER, INC.",
   "seen": "2026Q3",
   "kind": "presentation"
  },
@@ -7670,7 +7670,7 @@
   "kind": "transcript"
  },
  "ED": {
-  "at": "2026-11-06T07:33:56.193Z",
+  "at": "2026-11-17T05:13:19.936Z",
   "market": "us",
   "name": "Consolidated Edison, Inc.",
   "seen": "沒有文件",
@@ -7874,7 +7874,7 @@
   "kind": ""
  },
  "VST": {
-  "at": "2026-11-10T04:52:53.089Z",
+  "at": "2026-11-17T05:14:12.813Z",
   "market": "us",
   "name": "Vistra Corp.",
   "seen": "2026Q3",
@@ -7898,7 +7898,7 @@
   "seen": "2026Q4"
  },
  "MRNA": {
-  "at": "2026-11-14T11:07:10.944Z",
+  "at": "2026-11-17T05:14:00.560Z",
   "market": "us",
   "name": "Moderna, Inc.",
   "seen": "沒有文件",
@@ -8024,5 +8024,12 @@
   "kind": "presentation",
   "pending": true,
   "pendingSince": "2026-11-17T04:11:30.116Z"
+ },
+ "J": {
+  "at": "2026-11-17T05:13:52.538Z",
+  "market": "us",
+  "name": "JACOBS SOLUTIONS INC.",
+  "seen": "2026Q3",
+  "kind": "presentation"
  }
 }
