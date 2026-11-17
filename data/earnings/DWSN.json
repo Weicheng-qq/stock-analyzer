@@ -1,0 +1,48 @@
+{
+ "symbol": "DWSN",
+ "market": "us",
+ "name": "DAWSON GEOPHYSICAL COMPANY",
+ "quarter": "2026 Q3（2026-07-01～2026-09-30）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "DAWSON GEOPHYSICAL COMPANY",
+  "currency": "億美元",
+  "periodStart": "2026-07-01",
+  "periodEnd": "2026-09-30",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "0.11",
+  "營業毛利": null,
+  "營業利益": "-0.05",
+  "本期淨利": "-0.05",
+  "每股盈餘": -0.17,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-16",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/799165/000110465926127678/dwsn-ex99d1.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-17T04:54:31.767Z",
+ "result": {
+  "revenue": "美股 DAWSON GEOPHYSICAL COMPANY（代碼 DWSN）會計年度 2026 Q3 的營業收入為 0.11 億美元。",
+  "eps": "本季每股盈餘（EPS）為 -0.17 美元，顯示處於每股虧損狀態。",
+  "margins": "本季毛利率未提供；營業利益率為 -45.5%，顯示本業出現虧損；本期淨利率同為 -45.5%，反映本季整體處於虧損狀態。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "管理層認為 2026 年將是連續第三年營收成長、毛利率改善及調整後 EBITDA 提高的一年，並預期此趨勢將延續至 2027 年。",
+  "outlook": "根據官方新聞稿，新需求的增加已強化了合約工作的待辦訂單（backlog），這將在未來的財務結果中顯現。不過本季實際營運仍面臨虧損與調整後 EBITDA 為負數的挑戰。",
+  "highlights": "• 依據管理層評論，2026年將是連續第三年實現營收增加、毛利率改善及較高調整後 EBITDA 的一年，且預期此情況將延續至2027年。<br>• 官方指出新需求的增加已強化了合約工作的待辦訂單（backlog）。<br>• 公布了各營運部門（USA Operations 與 Canada Operations）的詳細營運與費用數據。",
+  "concerns": "• 本季營業利益為 -0.05 億美元，營業利益率與淨利率皆為 -45.5%。<br>• 本季淨利為 -0.05 億美元（即淨損 5.2 百萬美元），且產生負的調整後 EBITDA（-2 百萬美元）。<br>• 美國與加拿大營運部門在三個月期間內皆處於虧損狀態（Loss from operations）。",
+  "risks": "• 本季營運出現虧損，營業利益率與淨利率皆達 -45.5%，顯示短期獲利能力承受壓力。<br>• 本季產生負的調整後 EBITDA，且本業營運成本與費用高於營業收入。",
+  "keyPoints": "• 本季營業收入為 0.11 億美元。<br>• 本季營業利益與本期淨利皆為 -0.05 億美元，營業利益率與淨利率皆為 -45.5%。<br>• 本季每股盈餘（EPS）為 -0.17 美元。",
+  "guidanceOfficial": "I evaluate the Company’s performance over the long term rather than quarterly, and 2026 will be the third year in a row of increasing top-line revenue, improved gross margins and higher Adjusted EBITDA, and I expect that to continue in 2027.",
+  "segments": "• USA Operations（三個月期間）：Fee revenue $10,840 仟美元、Reimbursable revenue $572 仟美元，合計 11,412 仟美元；Loss from operations (3,754) 仟美元。<br>• Canada Operations（三個月期間）：Fee revenue $6 仟美元、Reimbursable revenue $0 仟美元，合計 6 仟美元；Loss from operations (1,098) 仟美元。<br>• Consolidated（三個月期間）：Fee revenue $10,846 仟美元、Reimbursable revenue $572 仟美元，合計 11,418 仟美元。"
+ }
+}
