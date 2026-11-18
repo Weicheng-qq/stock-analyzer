@@ -5004,7 +5004,7 @@
   "kind": ""
  },
  "CSCO": {
-  "at": "2026-11-13T11:12:27.270Z",
+  "at": "2026-11-18T11:57:44.166Z",
   "market": "us",
   "name": "CISCO SYSTEMS, INC.",
   "seen": "2027Q1",
@@ -5045,7 +5045,7 @@
   "kind": ""
  },
  "HUM": {
-  "at": "2026-11-10T03:51:24.810Z",
+  "at": "2026-11-18T11:58:05.547Z",
   "market": "us",
   "name": "HUMANA INC",
   "seen": "沒有文件",
@@ -5121,9 +5121,9 @@
   "kind": "commentary"
  },
  "ASTS": {
-  "at": "2026-11-10T04:18:43.155Z",
+  "at": "2026-11-18T11:57:52.300Z",
   "market": "us",
-  "name": "AST SPACEMOBILE, INC.",
+  "name": "AST SpaceMobile, Inc.",
   "seen": "2026Q3",
   "kind": "presentation"
  },
@@ -5739,7 +5739,7 @@
   "pendingSince": ""
  },
  "GLW": {
-  "at": "2026-11-15T06:43:19.353Z",
+  "at": "2026-11-18T11:54:11.422Z",
   "market": "us",
   "name": "CORNING INC /NY",
   "seen": "2026Q3",
@@ -5776,9 +5776,9 @@
   "pendingSince": "2026-10-28T10:10:27.246Z"
  },
  "FFIV": {
-  "at": "2026-11-16T19:41:24.515Z",
+  "at": "2026-11-18T11:58:20.117Z",
   "market": "us",
-  "name": "F5, INC.",
+  "name": "F5, Inc.",
   "done": "2026Q4",
   "kind": "presentation",
   "pending": true,
@@ -6025,7 +6025,7 @@
   "kind": ""
  },
  "BSX": {
-  "at": "2026-11-03T07:30:32.762Z",
+  "at": "2026-11-18T11:57:56.792Z",
   "market": "us",
   "name": "BOSTON SCIENTIFIC CORPORATION",
   "seen": "季別不明",
@@ -6425,7 +6425,7 @@
   "kind": ""
  },
  "AMP": {
-  "at": "2026-11-15T06:42:57.439Z",
+  "at": "2026-11-18T11:54:01.998Z",
   "market": "us",
   "name": "AMERIPRISE FINANCIAL, INC.",
   "seen": "2026Q3",
@@ -6435,7 +6435,7 @@
   "pendingSince": "2026-10-30T10:27:50.480Z"
  },
  "AJG": {
-  "at": "2026-11-15T06:42:52.319Z",
+  "at": "2026-11-18T11:53:57.227Z",
   "market": "us",
   "name": "ARTHUR J. GALLAGHER & CO.",
   "seen": "2026Q3",
@@ -6490,7 +6490,7 @@
   "kind": "transcript"
  },
  "RIVN": {
-  "at": "2026-10-30T10:41:12.863Z",
+  "at": "2026-11-18T11:58:14.172Z",
   "market": "us",
   "name": "Rivian Automotive, Inc. / DE",
   "seen": "2026Q3",
@@ -7335,9 +7335,9 @@
   "kind": "presentation"
  },
  "MCD": {
-  "at": "2026-11-07T06:06:25.267Z",
+  "at": "2026-11-18T11:55:58.934Z",
   "market": "us",
-  "name": "McDONALD’S CORPORATION",
+  "name": "MCDONALDS CORP",
   "seen": "沒有文件",
   "kind": ""
  },
@@ -7366,9 +7366,9 @@
   "kind": ""
  },
  "AAOI": {
-  "at": "2026-11-13T11:11:07.849Z",
+  "at": "2026-11-18T11:57:48.601Z",
   "market": "us",
-  "name": "Applied Optoelectronics, Inc.",
+  "name": "APPLIED OPTOELECTRONICS, INC.",
   "seen": "沒有文件",
   "kind": ""
  },
@@ -7968,7 +7968,7 @@
   "kind": ""
  },
  "NKE": {
-  "at": "2026-11-10T03:45:25.854Z",
+  "at": "2026-11-18T11:57:39.571Z",
   "market": "us",
   "name": "NIKE, Inc.",
   "seen": "2027Q1",
@@ -8031,11 +8031,14 @@
   "kind": ""
  },
  "NVDA": {
-  "at": "2026-11-13T11:10:57.190Z",
+  "at": "2026-11-18T11:55:50.882Z",
   "market": "us",
   "name": "NVIDIA CORP",
-  "seen": "2027Q2",
-  "kind": "transcript"
+  "seen": "2027Q3",
+  "kind": "commentary",
+  "done": "2027Q3",
+  "pending": true,
+  "pendingSince": "2026-11-18T11:55:50.882Z"
  },
  "CTVA": {
   "at": "2026-11-13T11:44:07.943Z",
@@ -8072,6 +8075,23 @@
   "market": "us",
   "name": "JACOBS SOLUTIONS INC.",
   "seen": "2026Q3",
+  "kind": "presentation"
+ },
+ "DIS": {
+  "at": "2026-11-18T11:57:29.121Z",
+  "market": "us",
+  "name": "WALT DISNEY CO/",
+  "seen": "2026Q4",
+  "kind": "commentary",
+  "done": "2026Q4",
+  "pending": true,
+  "pendingSince": "2026-11-18T11:57:29.121Z"
+ },
+ "HD": {
+  "at": "2026-11-18T11:58:01.591Z",
+  "market": "us",
+  "name": "The Home Depot, Inc.",
+  "seen": "2026Q2",
   "kind": "presentation"
  }
 }
