@@ -5059,7 +5059,7 @@
   "kind": ""
  },
  "BLK": {
-  "at": "2026-11-17T16:08:50.263Z",
+  "at": "2026-11-20T20:29:23.480Z",
   "market": "us",
   "name": "BlackRock, Inc.",
   "done": "2026Q3",
@@ -5260,9 +5260,9 @@
   "kind": ""
  },
  "IBM": {
-  "at": "2026-10-23T16:00:25.008Z",
+  "at": "2026-11-20T20:30:08.834Z",
   "market": "us",
-  "name": "INTERNATIONAL BUSINESS MACHINES CORPORATION",
+  "name": "INTERNATIONAL BUSINESS MACHINES CORP",
   "seen": "2026Q1",
   "kind": "commentary"
  },
@@ -5410,7 +5410,7 @@
   "kind": "transcript"
  },
  "BR": {
-  "at": "2026-11-17T16:08:42.786Z",
+  "at": "2026-11-20T20:29:16.917Z",
   "market": "us",
   "name": "BROADRIDGE FINANCIAL SOLUTIONS, INC.",
   "done": "2026Q4",
@@ -5420,7 +5420,7 @@
   "seen": "2027Q1"
  },
  "CRH": {
-  "at": "2026-11-17T05:13:23.950Z",
+  "at": "2026-11-20T20:29:51.120Z",
   "market": "us",
   "name": "CRH PUBLIC LTD CO",
   "seen": "2026Q3",
@@ -5591,7 +5591,7 @@
   "kind": ""
  },
  "NUE": {
-  "at": "2026-11-17T16:08:36.946Z",
+  "at": "2026-11-20T20:29:12.135Z",
   "market": "us",
   "name": "NUCOR CORPORATION",
   "seen": "2026Q3",
@@ -6231,7 +6231,7 @@
   "kind": ""
  },
  "ADP": {
-  "at": "2026-11-17T04:39:02.441Z",
+  "at": "2026-11-20T20:29:36.333Z",
   "market": "us",
   "name": "AUTOMATIC DATA PROCESSING, INC.",
   "seen": "2027Q1",
@@ -6511,7 +6511,7 @@
   "kind": ""
  },
  "BAX": {
-  "at": "2026-10-30T10:41:34.994Z",
+  "at": "2026-11-20T20:29:40.860Z",
   "market": "us",
   "name": "BAXTER INTERNATIONAL INC.",
   "seen": "2026Q3",
@@ -6728,7 +6728,7 @@
   "kind": "release"
  },
  "CLX": {
-  "at": "2026-11-03T07:30:55.022Z",
+  "at": "2026-11-20T20:29:46.932Z",
   "market": "us",
   "name": "THE CLOROX COMPANY",
   "seen": "沒有文件",
@@ -7056,11 +7056,14 @@
   "kind": "presentation"
  },
  "KEYS": {
-  "at": "2026-11-03T17:14:42.948Z",
+  "at": "2026-11-20T20:31:31.010Z",
   "market": "us",
   "name": "KEYSIGHT TECHNOLOGIES, INC.",
-  "seen": "2026Q3",
-  "kind": "commentary"
+  "seen": "2026Q4",
+  "kind": "transcript",
+  "done": "2026Q4",
+  "pending": false,
+  "pendingSince": ""
  },
  "O": {
   "at": "2026-11-18T20:39:39.986Z",
@@ -7215,7 +7218,7 @@
   "kind": ""
  },
  "IT": {
-  "at": "2026-11-04T07:09:24.570Z",
+  "at": "2026-11-20T20:30:01.758Z",
   "market": "us",
   "name": "Gartner, Inc.",
   "seen": "沒有文件",
@@ -7467,10 +7470,10 @@
   "kind": ""
  },
  "EW": {
-  "at": "2026-11-05T07:32:08.106Z",
+  "at": "2026-11-20T20:29:57.022Z",
   "market": "us",
   "name": "EDWARDS LIFESCIENCES CORPORATION",
-  "seen": "季別不明",
+  "seen": "2026Q3",
   "kind": "transcript"
  },
  "FIS": {
@@ -7551,7 +7554,7 @@
   "kind": "presentation"
  },
  "GWW": {
-  "at": "2026-11-17T05:14:17.013Z",
+  "at": "2026-11-20T20:31:47.834Z",
   "market": "us",
   "name": "W.W. GRAINGER, INC.",
   "seen": "2026Q3",
@@ -8134,6 +8137,27 @@
   "at": "2026-11-20T02:30:45.674Z",
   "market": "us",
   "name": "The TJX Companies, Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "INTU": {
+  "at": "2026-11-20T20:29:31.789Z",
+  "market": "us",
+  "name": "INTUIT INC.",
+  "seen": "2027Q1",
+  "kind": "transcript"
+ },
+ "ROST": {
+  "at": "2026-11-20T20:31:43.174Z",
+  "market": "us",
+  "name": "Ross Stores, Inc.",
+  "seen": "沒有文件",
+  "kind": ""
+ },
+ "WSM": {
+  "at": "2026-11-20T20:31:51.873Z",
+  "market": "us",
+  "name": "WILLIAMS-SONOMA, INC.",
   "seen": "沒有文件",
   "kind": ""
  }
