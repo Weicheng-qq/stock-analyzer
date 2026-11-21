@@ -1,0 +1,48 @@
+{
+ "symbol": "MOG-B",
+ "market": "us",
+ "name": "MOOG Inc.",
+ "quarter": "2026 Q3（2026-03-29～2026-06-27）",
+ "quarterTag": "2026Q3",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "MOOG Inc.",
+  "currency": "億美元",
+  "periodStart": "2026-03-29",
+  "periodEnd": "2026-06-27",
+  "year": 2026,
+  "season": "Q3",
+  "form": "10-Q",
+  "營業收入": "11.17",
+  "營業毛利": "3.47",
+  "營業利益": "1.76",
+  "本期淨利": "1.52",
+  "每股盈餘": 4.74,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-20",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/67887/000162828026075170/ex991-112026.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-21T11:21:25.859Z",
+ "result": {
+  "revenue": "本會計年度 2026 Q3 營業收入為 11.17 億美元。",
+  "eps": "本期每股盈餘（EPS）為 4.74 美元。",
+  "margins": "營業毛利為 3.47 億美元，毛利率為 31.1%；營業利益為 1.76 億美元，營業利益率為 15.8%；本期淨利為 1.52 億美元，淨利率為 13.6%。這些數據展現了公司在該季度的獲利水準與成本控管能力。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司預期 2027 會計年度淨銷售額為 4,950 億美元、調整後每股盈餘為 13.30 美元，自由現金流預期為 250 億美元。",
+  "outlook": "根據官方財報數字，本季營業收入達 11.17 億美元，營業利益為 1.76 億美元，本期淨利為 1.52 億美元。整體獲利能力表現穩健，營業利益率與淨利率分別為 15.8% 與 13.6%。",
+  "highlights": "• 營業收入達 11.17 億美元。<br>• 營業利益為 1.76 億美元，營業利益率達 15.8%。<br>• 本期每股盈餘（EPS）為 4.74 美元。",
+  "concerns": "• 官方申報資料中未提供營運現金流與資本支出數據。<br>• 自由現金流相關數據未提供，無法進一步評估現金變動細節。",
+  "risks": "• 本期未提供營運現金流與資本支出數據，無法透過官方數字評估自由現金流的具體水準。<br>• 缺乏詳細的資產負債表與現金流量表細項，流動性與資本配置風險評估受限。",
+  "keyPoints": "• 本季營業收入為 11.17 億美元，表現符合官方申報之財務數據。<br>• 本季營業利益為 1.76 億美元，營業利益率為 15.8%，本期淨利為 1.52 億美元，淨利率為 13.6%。<br>• 每股盈餘（EPS）為 4.74 美元。",
+  "guidanceOfficial": "FY 2027 財務展望：預期淨銷售額為 4,950 億美元（FY 2026 為 4,523 億美元）；調整後每股盈餘為 $13.30（FY 2026 為 $12.36，預期區間正負 $0.25）；自由現金流為 250 億美元（FY 2026 為 307 億美元）。",
+  "segments": "• Space and Defense sales increased 27% to 3.89 億美元 (Three Months Ended October 3, 2026)<br>• Military Aircraft sales increased 20% to 2.83 億美元 (Three Months Ended October 3, 2026)<br>• Commercial Aircraft sales increased 13% to 2.86 億美元 (Three Months Ended October 3, 2026)<br>• Industrial sales increased 17% to 2.97 億美元 (Three Months Ended October 3, 2026)"
+ }
+}

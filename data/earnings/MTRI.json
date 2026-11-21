@@ -1,0 +1,48 @@
+{
+ "symbol": "MTRI",
+ "market": "us",
+ "name": "INMED PHARMACEUTICALS INC.",
+ "quarter": "2026 Q2（2025-10-01～2025-12-31）",
+ "quarterTag": "2026Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "INMED PHARMACEUTICALS INC.",
+  "currency": "億美元",
+  "periodStart": "2025-10-01",
+  "periodEnd": "2025-12-31",
+  "year": 2026,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.01",
+  "營業毛利": "0.00",
+  "營業利益": null,
+  "本期淨利": null,
+  "每股盈餘": null,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-11-16",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1728328/000119312526462017/d169852dex991.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-21T11:37:54.751Z",
+ "result": {
+  "revenue": "本季營業收入為 0.01 億美元。",
+  "eps": "每股盈餘（EPS）未提供。",
+  "margins": "毛利率為 0.0%，顯示公司尚未產生毛利。營業利益率與淨利率未提供，無法評估。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測。",
+  "outlook": "本季營收僅 0.01 億美元且毛利為零，顯示營運仍處於早期階段。公司報告的淨虧損為 32,242 千美元，且相關方負債合計約 52,199 千美元，顯示資金需求仍高。",
+  "highlights": "• 營業收入 0.01 億美元<br>• 毛利率 0.0%<br>• 相關方負債合計 52,199 千美元",
+  "concerns": "• 毛利為零，未產生盈利<br>• 淨虧損金額顯示高額支出<br>• 大額相關方負債可能影響財務彈性",
+  "risks": "高額相關方負債可能導致資金流動性風險。<br>持續的研發支出導致現金耗盡風險。",
+  "keyPoints": "• 營業收入僅 0.01 億美元<br>• 毛利率為 0.0%，未產生毛利<br>• 相關方非流動負債合計 52,199 千美元",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "本次資料未揭露分部營收"
+ }
+}
