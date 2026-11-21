@@ -5739,7 +5739,7 @@
   "pendingSince": ""
  },
  "GLW": {
-  "at": "2026-11-18T11:54:11.422Z",
+  "at": "2026-11-21T19:25:50.542Z",
   "market": "us",
   "name": "CORNING INC /NY",
   "seen": "2026Q3",
@@ -5776,7 +5776,7 @@
   "pendingSince": "2026-10-28T10:10:27.246Z"
  },
  "FFIV": {
-  "at": "2026-11-18T11:58:20.117Z",
+  "at": "2026-11-21T19:25:44.799Z",
   "market": "us",
   "name": "F5, Inc.",
   "done": "2026Q4",
@@ -5901,7 +5901,7 @@
   "kind": ""
  },
  "FE": {
-  "at": "2026-10-28T18:26:15.465Z",
+  "at": "2026-11-21T19:26:20.740Z",
   "market": "us",
   "name": "FIRSTENERGY CORP",
   "seen": "沒有文件",
@@ -6425,7 +6425,7 @@
   "kind": ""
  },
  "AMP": {
-  "at": "2026-11-18T11:54:01.998Z",
+  "at": "2026-11-21T19:25:35.927Z",
   "market": "us",
   "name": "AMERIPRISE FINANCIAL, INC.",
   "seen": "2026Q3",
@@ -6435,7 +6435,7 @@
   "pendingSince": "2026-10-30T10:27:50.480Z"
  },
  "AJG": {
-  "at": "2026-11-18T11:53:57.227Z",
+  "at": "2026-11-21T19:25:30.505Z",
   "market": "us",
   "name": "ARTHUR J. GALLAGHER & CO.",
   "seen": "2026Q3",
@@ -6805,7 +6805,7 @@
   "kind": ""
  },
  "LYB": {
-  "at": "2026-10-31T06:23:36.556Z",
+  "at": "2026-11-21T19:26:32.558Z",
   "market": "us",
   "name": "LYONDELLBASELL INDUSTRIES N.V.",
   "seen": "2026Q3",
@@ -6854,7 +6854,7 @@
   "kind": "commentary"
  },
  "WEC": {
-  "at": "2026-11-07T06:38:21.896Z",
+  "at": "2026-11-21T19:26:40.053Z",
   "market": "us",
   "name": "WEC ENERGY GROUP, INC.",
   "seen": "沒有文件",
@@ -7324,7 +7324,7 @@
   "pendingSince": "2026-11-04T17:33:22.571Z"
  },
  "WAB": {
-  "at": "2026-11-04T17:33:32.836Z",
+  "at": "2026-11-21T19:26:44.442Z",
   "market": "us",
   "name": "WESTINGHOUSE AIR BRAKE TECHNOLOGIES CORPORATION",
   "seen": "沒有文件",
@@ -7491,7 +7491,7 @@
   "kind": ""
  },
  "PODD": {
-  "at": "2026-11-05T08:06:33.771Z",
+  "at": "2026-11-21T19:26:26.256Z",
   "market": "us",
   "name": "INSULET CORPORATION",
   "seen": "2026Q3",
@@ -7743,7 +7743,7 @@
   "kind": "release"
  },
  "EVRG": {
-  "at": "2026-11-06T08:08:05.074Z",
+  "at": "2026-11-21T19:26:16.750Z",
   "market": "us",
   "name": "Evergy, Inc.",
   "seen": "沒有文件",
@@ -7999,7 +7999,7 @@
   "kind": ""
  },
  "TTWO": {
-  "at": "2026-11-10T04:52:43.706Z",
+  "at": "2026-11-21T19:26:36.167Z",
   "market": "us",
   "name": "TAKE-TWO INTERACTIVE SOFTWARE, INC.",
   "seen": "沒有文件",
@@ -8034,14 +8034,14 @@
   "kind": ""
  },
  "NVDA": {
-  "at": "2026-11-18T11:55:50.882Z",
+  "at": "2026-11-21T19:25:07.468Z",
   "market": "us",
   "name": "NVIDIA CORP",
   "seen": "2027Q3",
-  "kind": "commentary",
+  "kind": "transcript",
   "done": "2027Q3",
-  "pending": true,
-  "pendingSince": "2026-11-18T11:55:50.882Z"
+  "pending": false,
+  "pendingSince": ""
  },
  "CTVA": {
   "at": "2026-11-13T11:44:07.943Z",
@@ -8082,7 +8082,7 @@
   "kind": "presentation"
  },
  "DIS": {
-  "at": "2026-11-18T11:57:29.121Z",
+  "at": "2026-11-21T19:22:43.520Z",
   "market": "us",
   "name": "WALT DISNEY CO/",
   "seen": "2026Q4",
@@ -8092,9 +8092,9 @@
   "pendingSince": "2026-11-18T11:57:29.121Z"
  },
  "HD": {
-  "at": "2026-11-18T11:58:01.591Z",
+  "at": "2026-11-21T19:26:00.690Z",
   "market": "us",
-  "name": "The Home Depot, Inc.",
+  "name": "HOME DEPOT, INC.",
   "seen": "2026Q2",
   "kind": "presentation"
  },
@@ -8160,5 +8160,12 @@
   "name": "WILLIAMS-SONOMA, INC.",
   "seen": "沒有文件",
   "kind": ""
+ },
+ "A": {
+  "at": "2026-11-21T19:26:08.061Z",
+  "market": "us",
+  "name": "AGILENT TECHNOLOGIES, INC.",
+  "seen": "2026Q3",
+  "kind": "transcript"
  }
 }
