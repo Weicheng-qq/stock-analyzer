@@ -1,0 +1,48 @@
+{
+ "symbol": "HUCK",
+ "market": "us",
+ "name": "DOMO, INC.",
+ "quarter": "2027 Q2（2026-05-01～2026-07-31）",
+ "quarterTag": "2027Q2",
+ "source": "SEC EDGAR XBRL 官方申報資料",
+ "official": {
+  "market": "us",
+  "name": "DOMO, INC.",
+  "currency": "億美元",
+  "periodStart": "2026-05-01",
+  "periodEnd": "2026-07-31",
+  "year": 2027,
+  "season": "Q2",
+  "form": "10-Q",
+  "營業收入": "0.77",
+  "營業毛利": "0.59",
+  "營業利益": "-0.02",
+  "本期淨利": "-0.10",
+  "每股盈餘": -0.21,
+  "營運現金流": null,
+  "資本支出": null,
+  "自由現金流": null
+ },
+ "pressRelease": {
+  "filedAt": "2026-06-15",
+  "form": "8-K",
+  "url": "https://www.sec.gov/Archives/edgar/data/1505952/000162828026043184/domofy27q1earningsrelease.htm"
+ },
+ "docKind": "",
+ "savedAt": "2026-11-24T14:22:33.738Z",
+ "result": {
+  "revenue": "本季營業收入為 0.77 億美元。",
+  "eps": "每股盈餘為 -0.21 美元，顯示本季仍處於虧損。",
+  "margins": "毛利率 76.6%，營業利益率 -2.6%，淨利率 -13.0%，顯示毛利率仍高，但營運與淨利仍為虧損。",
+  "fcf": "未提供",
+  "capex": "未提供",
+  "guidance": "公司未於本次資料提供財測",
+  "outlook": "營業收入雖高毛利率，但營業與淨利仍為虧損，顯示公司仍在成長階段。",
+  "highlights": "• 營業收入 0.77 億美元<br>• 毛利率 76.6%<br>• 每股盈餘 -0.21 美元",
+  "concerns": "• 營業利益為虧損 -0.02 億美元<br>• 淨利為虧損 -0.10 億美元<br>• 無現金流與資本支出資訊，難以評估自由現金流",
+  "risks": "• 依賴高毛利率但營業虧損，可能需進一步投資以擴大市場<br>• 無現金流資料，無法評估資金充足性",
+  "keyPoints": "• 營業收入 0.77 億美元<br>• 毛利率 76.6%<br>• 營業虧損 -0.02 億美元",
+  "guidanceOfficial": "公司未於本次資料提供財測",
+  "segments": "本次資料未揭露分部營收"
+ }
+}
