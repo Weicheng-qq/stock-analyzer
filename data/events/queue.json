@@ -1,21 +1,451 @@
 {
- "generatedAt": "2026-11-23T12:57:35.606Z",
+ "generatedAt": "2026-11-24T02:15:45.467Z",
  "lookbackDays": 3,
  "counts": {
-  "high": 1,
+  "high": 44,
   "medium": 0,
-  "low": 1968,
-  "total": 1969
+  "low": 1928,
+  "total": 1972
  },
  "queue": [
   {
    "market": "tw",
-   "symbol": "8101",
-   "name": "華冠",
+   "symbol": "1504",
+   "name": "東元",
    "reasons": [
     "上市重大訊息：法說會/財報"
    ],
-   "eventDate": "1151122",
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "4566",
+   "name": "時碩工業",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6533",
+   "name": "晶心科",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2357",
+   "name": "華碩",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "4562",
+   "name": "穎漢",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "8499",
+   "name": "鼎炫-KY",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "3711",
+   "name": "日月光投控",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "8454",
+   "name": "富邦媒",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6024",
+   "name": "群益期",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "5285",
+   "name": "界霖",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2327",
+   "name": "國巨*",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "8940",
+   "name": "新天地",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2433",
+   "name": "互盛電",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6965",
+   "name": "中傑-KY",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2349",
+   "name": "錸德",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "1342",
+   "name": "八貫",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2355",
+   "name": "敬鵬",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "3044",
+   "name": "健鼎",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6671",
+   "name": "三能-KY",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "9921",
+   "name": "巨大",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "3022",
+   "name": "威強電",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "1466",
+   "name": "聚隆",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6830",
+   "name": "汎銓",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "3050",
+   "name": "鈺德",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "1712",
+   "name": "興農",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6141",
+   "name": "柏承",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "5880",
+   "name": "合庫金",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "1528",
+   "name": "恩德",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6456",
+   "name": "GIS-KY",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "1472",
+   "name": "三洋實業",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "1809",
+   "name": "中釉",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "8104",
+   "name": "錸寶",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6670",
+   "name": "復盛應用",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2243",
+   "name": "宏旭-KY",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2892",
+   "name": "第一金",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "6691",
+   "name": "洋基工程",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2020",
+   "name": "美亞",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "1104",
+   "name": "環泥",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2486",
+   "name": "一詮",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2880",
+   "name": "華南金",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "5522",
+   "name": "遠雄",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "7769",
+   "name": "鴻勁",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2373",
+   "name": "震旦行",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
+   "priority": "HIGH"
+  },
+  {
+   "market": "tw",
+   "symbol": "2383",
+   "name": "台光電",
+   "reasons": [
+    "上市重大訊息：法說會/財報"
+   ],
+   "eventDate": "1151123",
    "priority": "HIGH"
   },
   {
@@ -38,14 +468,6 @@
    "market": "tw",
    "symbol": "1103",
    "name": "嘉泥",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "1104",
-   "name": "環泥",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -484,14 +906,6 @@
   },
   {
    "market": "tw",
-   "symbol": "1342",
-   "name": "八貫",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "1402",
    "name": "遠東新",
    "reason": "站上尚無此公司資料",
@@ -796,14 +1210,6 @@
   },
   {
    "market": "tw",
-   "symbol": "1466",
-   "name": "聚隆",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "1467",
    "name": "南緯",
    "reason": "站上尚無此公司資料",
@@ -830,14 +1236,6 @@
    "market": "tw",
    "symbol": "1471",
    "name": "首利",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "1472",
-   "name": "三洋實業",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -886,14 +1284,6 @@
    "market": "tw",
    "symbol": "1503",
    "name": "士電",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "1504",
-   "name": "東元",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -1006,14 +1396,6 @@
    "market": "tw",
    "symbol": "1527",
    "name": "鑽全",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "1528",
-   "name": "恩德",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -1436,14 +1818,6 @@
   },
   {
    "market": "tw",
-   "symbol": "1712",
-   "name": "興農",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "1713",
    "name": "國化",
    "reason": "站上尚無此公司資料",
@@ -1772,14 +2146,6 @@
   },
   {
    "market": "tw",
-   "symbol": "1809",
-   "name": "中釉",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "1810",
    "name": "和成",
    "reason": "站上尚無此公司資料",
@@ -1942,14 +2308,6 @@
    "market": "tw",
    "symbol": "2017",
    "name": "官田鋼",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "2020",
-   "name": "美亞",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -2396,14 +2754,6 @@
   },
   {
    "market": "tw",
-   "symbol": "2243",
-   "name": "宏旭-KY",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "2247",
    "name": "汎德永業",
    "reason": "站上尚無此公司資料",
@@ -2556,14 +2906,6 @@
   },
   {
    "market": "tw",
-   "symbol": "2327",
-   "name": "國巨*",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "2328",
    "name": "廣宇",
    "reason": "站上尚無此公司資料",
@@ -2668,14 +3010,6 @@
   },
   {
    "market": "tw",
-   "symbol": "2349",
-   "name": "錸德",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "2351",
    "name": "順德",
    "reason": "站上尚無此公司資料",
@@ -2708,24 +3042,8 @@
   },
   {
    "market": "tw",
-   "symbol": "2355",
-   "name": "敬鵬",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "2356",
    "name": "英業達",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "2357",
-   "name": "華碩",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -2812,14 +3130,6 @@
   },
   {
    "market": "tw",
-   "symbol": "2373",
-   "name": "震旦行",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "2374",
    "name": "佳能",
    "reason": "站上尚無此公司資料",
@@ -2870,14 +3180,6 @@
    "market": "tw",
    "symbol": "2382",
    "name": "廣達",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "2383",
-   "name": "台光電",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -3150,14 +3452,6 @@
    "market": "tw",
    "symbol": "2432",
    "name": "倚天酷碁-創",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "2433",
-   "name": "互盛電",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -3454,14 +3748,6 @@
    "market": "tw",
    "symbol": "2485",
    "name": "兆赫",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "2486",
-   "name": "一詮",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -4700,14 +4986,6 @@
   },
   {
    "market": "tw",
-   "symbol": "3022",
-   "name": "威強電",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "3023",
    "name": "信邦",
    "reason": "站上尚無此公司資料",
@@ -4868,14 +5146,6 @@
   },
   {
    "market": "tw",
-   "symbol": "3044",
-   "name": "健鼎",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "3045",
    "name": "台灣大",
    "reason": "站上尚無此公司資料",
@@ -4910,14 +5180,6 @@
    "market": "tw",
    "symbol": "3049",
    "name": "精金",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "3050",
-   "name": "鈺德",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -6988,14 +7250,6 @@
   },
   {
    "market": "tw",
-   "symbol": "3711",
-   "name": "日月光投控",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "3712",
    "name": "永崴投控",
    "reason": "站上尚無此公司資料",
@@ -7916,14 +8170,6 @@
   },
   {
    "market": "tw",
-   "symbol": "4562",
-   "name": "穎漢",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "4563",
    "name": "百德",
    "reason": "站上尚無此公司資料",
@@ -7934,14 +8180,6 @@
    "market": "tw",
    "symbol": "4564",
    "name": "元翎",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "4566",
-   "name": "時碩工業",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -9076,14 +9314,6 @@
   },
   {
    "market": "tw",
-   "symbol": "5285",
-   "name": "界霖",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "5287",
    "name": "數字",
    "reason": "站上尚無此公司資料",
@@ -9660,14 +9890,6 @@
   },
   {
    "market": "tw",
-   "symbol": "5522",
-   "name": "遠雄",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "5523",
    "name": "豐謙",
    "reason": "站上尚無此公司資料",
@@ -9932,14 +10154,6 @@
   },
   {
    "market": "tw",
-   "symbol": "6024",
-   "name": "群益期",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "6028",
    "name": "公勝保經",
    "reason": "站上尚無此公司資料",
@@ -10182,14 +10396,6 @@
    "market": "tw",
    "symbol": "6140",
    "name": "訊達電腦",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "6141",
-   "name": "柏承",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -11332,14 +11538,6 @@
   },
   {
    "market": "tw",
-   "symbol": "6456",
-   "name": "GIS-KY",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "6461",
    "name": "益得",
    "reason": "站上尚無此公司資料",
@@ -11630,14 +11828,6 @@
    "market": "tw",
    "symbol": "6532",
    "name": "瑞耘",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "6533",
-   "name": "晶心科",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -12204,22 +12394,6 @@
   },
   {
    "market": "tw",
-   "symbol": "6670",
-   "name": "復盛應用",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "6671",
-   "name": "三能-KY",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "6672",
    "name": "騰輝電子-KY",
    "reason": "站上尚無此公司資料",
@@ -12278,14 +12452,6 @@
    "market": "tw",
    "symbol": "6690",
    "name": "安碁資訊",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "6691",
-   "name": "洋基工程",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -12766,14 +12932,6 @@
    "market": "tw",
    "symbol": "6829",
    "name": "千附精密",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "6830",
-   "name": "汎銓",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -13356,14 +13514,6 @@
   },
   {
    "market": "tw",
-   "symbol": "6965",
-   "name": "中傑-KY",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "6967",
    "name": "汎瑋材料",
    "reason": "站上尚無此公司資料",
@@ -13798,14 +13948,6 @@
    "market": "tw",
    "symbol": "7768",
    "name": "頌勝科技",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "7769",
-   "name": "鴻勁",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -14484,6 +14626,14 @@
   },
   {
    "market": "tw",
+   "symbol": "8101",
+   "name": "華冠",
+   "reason": "站上尚無此公司資料",
+   "officialQuarter": "2026 第3季",
+   "priority": "LOW"
+  },
+  {
+   "market": "tw",
    "symbol": "8102",
    "name": "傑霖科技",
    "reason": "站上尚無此公司資料",
@@ -14494,14 +14644,6 @@
    "market": "tw",
    "symbol": "8103",
    "name": "瀚荃",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "8104",
-   "name": "錸寶",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -15084,14 +15226,6 @@
   },
   {
    "market": "tw",
-   "symbol": "8454",
-   "name": "富邦媒",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "8455",
    "name": "大拓-KY",
    "reason": "站上尚無此公司資料",
@@ -15214,14 +15348,6 @@
    "market": "tw",
    "symbol": "8489",
    "name": "三貝德",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "8499",
-   "name": "鼎炫-KY",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
@@ -15388,14 +15514,6 @@
   },
   {
    "market": "tw",
-   "symbol": "8940",
-   "name": "新天地",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
    "symbol": "8941",
    "name": "關中",
    "reason": "站上尚無此公司資料",
@@ -15526,14 +15644,6 @@
    "market": "tw",
    "symbol": "9919",
    "name": "康那香",
-   "reason": "站上尚無此公司資料",
-   "officialQuarter": "2026 第3季",
-   "priority": "LOW"
-  },
-  {
-   "market": "tw",
-   "symbol": "9921",
-   "name": "巨大",
    "reason": "站上尚無此公司資料",
    "officialQuarter": "2026 第3季",
    "priority": "LOW"
